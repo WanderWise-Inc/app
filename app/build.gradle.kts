@@ -130,6 +130,7 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
      */
 
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -138,6 +139,9 @@ dependencies {
     testImplementation(libs.junit)
     globalTestImplementation(libs.androidx.junit)
     globalTestImplementation(libs.androidx.espresso.core)
+
+    // --------------- Google Maps --------------------
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
 
     // ------------- Jetpack Compose ------------------
     val composeBom = platform(libs.compose.bom)
