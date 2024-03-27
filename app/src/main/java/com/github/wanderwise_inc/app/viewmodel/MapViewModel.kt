@@ -16,6 +16,7 @@ const val LOG_DEBUG_TAG: String = "MapViewModel"
 
 /**
  * @brief ViewModel class for providing `Location`s and `Itinerary`s to the map UI
+ * test
  */
 class MapViewModel : ViewModel() {
     private val db = FirebaseFirestore.getInstance()
