@@ -34,7 +34,7 @@ class MapViewModel : ViewModel() {
     public fun getPublicItineraries(): Flow<List<Itinerary>> {
         return flow {
             val snapshot = itineraryCollection
-                .whereEqualTo("public", true)
+                .whereEqualTo("visible", true)
                 .get()
                 .await()
             val itineraryList = snapshot.map { document ->
@@ -54,6 +54,9 @@ class MapViewModel : ViewModel() {
             val snapshot = itineraryCollection
                 .whereEqualTo("associatedUserUid", currUserUid)
                 .get()
+                .addOnFailureListener{ e ->
+                    Log.d(LOG_DEBUG_TAG, "Get failure: $e")
+                }
                 .await()
             val itineraryList = snapshot.map { document ->
                 document.toObject(Itinerary::class.java)
@@ -75,8 +78,8 @@ class MapViewModel : ViewModel() {
             .addOnSuccessListener {
                 Log.d(LOG_DEBUG_TAG, "Set success")
             }
-            .addOnFailureListener {
-                Log.d(LOG_DEBUG_TAG, "Set failure")
+            .addOnFailureListener { e ->
+                Log.d(LOG_DEBUG_TAG, "Set failure: $e")
             }
     }
 }

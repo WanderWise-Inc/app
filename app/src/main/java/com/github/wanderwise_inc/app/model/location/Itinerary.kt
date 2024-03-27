@@ -11,7 +11,7 @@ package com.github.wanderwise_inc.app.model.location
  * @param visible `true` if the itinerary should be visible publicly
  */
 data class Itinerary(
-    val uid: String,
+    var uid: String = "",
     val associatedUserUid: String,
     val locations: List<Location>,
     val title: String,
