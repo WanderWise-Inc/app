@@ -10,6 +10,7 @@ object Route {
     const val SIGNIN = "SignIn"
     const val OVERVIEW = "Overview"
     const val MAP = "Map"
+    const val ITINERARY = "Itinerary"
 }
 
 sealed class TopLevelDestination(
@@ -20,12 +21,17 @@ sealed class TopLevelDestination(
     data object Overview: TopLevelDestination(
         route = Route.OVERVIEW,
         icon = R.drawable.menu_icon,
-        textId = R.string.overview_name
+        textId = R.string.overview_string
     )
     data object Map: TopLevelDestination(
         route = Route.MAP,
         icon = R.drawable.map_icon,
-        textId = R.string.app_name
+        textId = R.string.map_string
+    )
+    data object Itineraries: TopLevelDestination(
+        route = Route.ITINERARY,
+        icon = R.drawable.itinerary_icon,
+        textId = R.string.itinerary_string
     )
 }
 

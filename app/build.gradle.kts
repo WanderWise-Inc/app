@@ -148,6 +148,10 @@ dependencies {
 
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.graphics)
+    // Material components
+    implementation("androidx.compose.material:material:1.1.1")
+    implementation("androidx.compose.material3:material3:1.1.2")
+    implementation("com.google.android.material:material:1.10.0")
     // Material Design 3
     implementation(libs.compose.material3)
     // Integration with activities

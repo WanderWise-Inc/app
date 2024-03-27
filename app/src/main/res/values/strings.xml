@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">WanderWise</string>
-    <string name="map_name">Map</string>
-    <string name="overview_name">Overview</string>
+    <string name="map_string">Map</string>
+    <string name="overview_string">Overview</string>
+    <string name="itinerary_string">Itinerary</string>
 </resources>
