@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.github.wanderwise_inc.app.ui.navigation.Route
+import com.github.wanderwise_inc.app.ui.signin.SignInScreen
 
 fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
     navigation(
@@ -13,6 +14,7 @@ fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
     ) {
         composable(route = AuthScreen.SignIn.route) {
             // TODO: add signin screen like SigninScreen(navController)
+            SignInScreen(navController)
         }
     }
 }

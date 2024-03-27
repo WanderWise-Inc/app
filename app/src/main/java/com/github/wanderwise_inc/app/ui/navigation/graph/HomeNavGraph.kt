@@ -6,6 +6,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.NavHostController
 import com.github.wanderwise_inc.app.ui.navigation.TopLevelDestination
 import androidx.navigation.compose.composable
+import com.github.wanderwise_inc.app.ui.itineraries.ItineraryScreen
+import com.github.wanderwise_inc.app.ui.map.MapScreen
+import com.github.wanderwise_inc.app.ui.overview.OverviewScreen
 
 @Composable
 fun HomeNavGraph(
@@ -18,10 +21,13 @@ fun HomeNavGraph(
         startDestination = TopLevelDestination.Overview.route
     ) {
         composable(route = TopLevelDestination.Overview.route) {
-            // TODO: add overview composable
+            OverviewScreen()
+        }
+        composable(route = TopLevelDestination.Itineraries.route) {
+            ItineraryScreen()
         }
         composable(route = TopLevelDestination.Map.route) {
-            // TODO: add Map composable
+            MapScreen()
         }
     }
 }

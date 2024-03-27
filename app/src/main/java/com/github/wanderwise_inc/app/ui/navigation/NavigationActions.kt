@@ -36,8 +36,9 @@ sealed class TopLevelDestination(
 }
 
 val TOP_LEVEL_DESTINATIONS = listOf(
+    TopLevelDestination.Overview,
+    TopLevelDestination.Itineraries,
     TopLevelDestination.Map,
-    TopLevelDestination.Overview
 )
 
 class NavigationActions (private val navController: NavHostController) {
