@@ -54,4 +54,3 @@ data class Itinerary(
         return Builder()
     }
 }
-
