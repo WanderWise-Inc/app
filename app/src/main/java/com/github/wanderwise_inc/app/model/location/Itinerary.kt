@@ -1,11 +1,22 @@
 package com.github.wanderwise_inc.app.model.location
 
+/**
+ * @brief represents an itinerary
+ *
+ * @param uid a unique identifier
+ * @param associatedUserUid the UID of the user who created the itinerary
+ * @param locations an ordered list of locations
+ * @param title
+ * @param description
+ * @param visible `true` if the itinerary should be visible publicly
+ */
 data class Itinerary(
+    val uid: String,
+    val associatedUserUid: String,
     val locations: List<Location>,
-    val creator: Int,
     val title: String,
     val description: String?,
-    val visible: Boolean
+    val visible: Boolean,
 ) {
     data class Builder(
         var locations: MutableList<Location> = mutableListOf(),
