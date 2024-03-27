@@ -9,4 +9,10 @@ data class Location(
     fun toLatLng(): LatLng {
         return LatLng(lat, long)
     }
+
+    companion object {
+        fun fromLatLng(latLng: LatLng): Location {
+            return Location(latLng.latitude, latLng.longitude)
+        }
+    }
 }
