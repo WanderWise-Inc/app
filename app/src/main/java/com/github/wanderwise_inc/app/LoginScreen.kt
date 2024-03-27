@@ -74,60 +74,7 @@ fun LoginScreen() {
         // SPACE
         Spacer(modifier = Modifier.height(100.dp))
         // BUTTON
-
-        // PROVIDERS MAKES THE APP CRASHES
-        val providers = arrayListOf(AuthUI.IdpConfig.GoogleBuilder().build())
-
-        // Create and launch sign-in intent
-        val signInIntent = AuthUI.getInstance()
-            .createSignInIntentBuilder()
-            .setAvailableProviders(providers)
-            .build()
-
-        val signInLauncher = rememberLauncherForActivityResult(
-            contract = FirebaseAuthUIActivityResultContract()
-        ) {
-            val response = it.idpResponse
-            val user = FirebaseAuth.getInstance().currentUser
-            if (user != null || it.resultCode == RESULT_OK) {
-                // successful sign in
-
-                // TODO NAVIGATION
-
-                //navController.navigate(route = Screen.Detail.route)
-
-
-            } else {
-                // unsuccessful sign in
-
-            }
-        }
-
-        Button(
-            onClick = {
-                signInLauncher.launch(signInIntent)
-            },
-            modifier = Modifier
-                .padding(start = 16.dp, end = 16.dp)
-                .wrapContentSize(),
-            shape = RoundedCornerShape(16.dp),
-            border = BorderStroke(1.dp, Color.Gray),
-            colors = ButtonDefaults.buttonColors(Color.White)
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Image(
-                    painter = painterResource(id = R.drawable.google__g__logo_svg),
-                    contentDescription = null,
-                    modifier = Modifier.size(24.dp)
-                )
-                Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
-                Text(
-                    text = "Sign in with google",
-                    modifier = Modifier.padding(6.dp),
-                    color = Color.Black
-                )
-            }
-        }
+        SignInButton()
     }
 }
 
