@@ -8,6 +8,7 @@ plugins {
      */
     alias(libs.plugins.ktfmt)
     alias(libs.plugins.sonar)
+    id("com.google.gms.google-services")
     id("jacoco")
 }
 
@@ -131,6 +132,10 @@ dependencies {
      */
     // Import the Firebase BoM
     implementation(platform("com.google.firebase:firebase-bom:32.6.0"))
+    implementation("com.google.firebase:firebase-auth-ktx:22.3.0")
+    implementation("com.google.firebase:firebase-database-ktx:20.3.0")
+    implementation("com.google.firebase:firebase-database-ktx:20.3.0")
+    implementation("com.google.firebase:firebase-firestore:24.10.0")
 
     // When using the BoM, you don't specify versions in Firebase library dependencies
 
@@ -142,7 +147,7 @@ dependencies {
     // For example, add the dependencies for Firebase Authentication and Cloud Firestore
     implementation("com.google.firebase:firebase-auth")
     implementation("com.firebaseui:firebase-ui-auth:7.2.0")
-    //implementation("com.google.firebase:firebase-firestore")
+    implementation("com.google.firebase:firebase-firestore")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
