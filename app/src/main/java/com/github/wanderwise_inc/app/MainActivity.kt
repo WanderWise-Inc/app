@@ -29,6 +29,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     LoginScreen()
+                    //setContentView(R.layout.login_screen)
                 }
             }
         }

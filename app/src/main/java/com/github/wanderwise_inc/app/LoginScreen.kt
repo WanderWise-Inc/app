@@ -51,7 +51,7 @@ fun LoginScreen() {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center) {
         // IMAGE
-        Image(painter = painterResource(id = R.drawable.app_logo_figma),
+        Image(painter = painterResource(id = R.drawable.map_image),
             contentDescription = null,
             modifier = Modifier
                 .padding(15.dp)
@@ -132,4 +132,3 @@ fun SignInButton() {
         }
     }
 }
-
