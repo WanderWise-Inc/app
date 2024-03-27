@@ -69,36 +69,7 @@ fun LoginScreen() {
         // SPACE
         Spacer(modifier = Modifier.height(100.dp))
         // BUTTON
-
-        // PROVIDERS MAKES THE APP CRASHES
-        val providers = arrayListOf(AuthUI.IdpConfig.GoogleBuilder().build())
-
-        // Create and launch sign-in intent
-        val signInIntent = AuthUI.getInstance()
-            .createSignInIntentBuilder()
-            .setAvailableProviders(providers)
-            .build()
-
-        val signInLauncher = rememberLauncherForActivityResult(
-            contract = FirebaseAuthUIActivityResultContract()
-        ) {
-            val response = it.idpResponse
-            val user = FirebaseAuth.getInstance().currentUser
-            if (user != null || it.resultCode == RESULT_OK) {
-                // successful sign in
-
-                // TODO NAVIGATION
-
-                //navController.navigate(route = Screen.Detail.route)
-
-
-            } else {
-                // unsuccessful sign in
-
-            }
-        }
-
-
+        SignInButton()
     }
 
 
