@@ -35,8 +35,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    //LoginScreen(userViewModel = userViewModel)
-                    AddUser(userViewModel = userViewModel)
+                    LoginScreen(userViewModel = userViewModel)
+                    //AddUser(userViewModel = userViewModel)
                 }
             }
         }

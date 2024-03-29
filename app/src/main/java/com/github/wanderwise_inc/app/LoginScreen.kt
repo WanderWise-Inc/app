@@ -51,12 +51,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.em
 import androidx.lifecycle.ViewModelProvider
 import com.github.wanderwise_inc.app.viewmodel.HomeViewModel
-import com.github.wanderwise_inc.app.viewmodel.LoginViewModel
-
-
+import com.github.wanderwise_inc.app.viewmodel.UserViewModel
 
 @Composable
-fun LoginScreen(modifier: Modifier = Modifier) {
+fun LoginScreen(userViewModel : UserViewModel, modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
             .requiredWidth(width = 1280.dp)
@@ -162,10 +160,6 @@ fun SignInButton() {
         border = BorderStroke(1.dp, Color.Gray),
         colors = ButtonDefaults.buttonColors(Color.Transparent)
     ) {
-        Row() {
-
-
-        }
     }
 }
 
