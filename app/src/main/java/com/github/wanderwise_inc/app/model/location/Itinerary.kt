@@ -1,6 +1,18 @@
 package com.github.wanderwise_inc.app.model.location
 
 /**
+ * @brief labels for accessing itinerary information from a hashmap representation
+ */
+enum class ItineraryLabels(val dbLabel: String) {
+    UID("uid"),
+    USER_UID("user_uid"),
+    LOCATIONS("locations"),
+    TITLE("title"),
+    DESCRIPTION("description"),
+    VISIBLE("visible")
+}
+
+/**
  * @brief represents an itinerary
  *
  * @param uid a unique identifier
@@ -18,6 +30,19 @@ data class Itinerary(
     val description: String?,
     val visible: Boolean,
 ) {
+    /**
+     * @return a map representation of an itinerary
+     */
+    fun toMap(): Map<String, Any> {
+        return mapOf(
+            ItineraryLabels.UID.dbLabel to uid,
+            ItineraryLabels.USER_UID.dbLabel to userUid,
+            ItineraryLabels.LOCATIONS.dbLabel to locations.map { location -> location.toMap() },
+            ItineraryLabels.TITLE.dbLabel to title,
+            ItineraryLabels.DESCRIPTION.dbLabel to (description ?: ""),
+            ItineraryLabels.VISIBLE.dbLabel to visible,
+        )
+    }
     /**
      * @brief builder for an itinerary
      *
