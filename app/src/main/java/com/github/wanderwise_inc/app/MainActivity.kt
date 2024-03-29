@@ -1,8 +1,10 @@
 package com.github.wanderwise_inc.app
 
+import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,11 +17,14 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.firebase.ui.auth.AuthUI
+import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.github.wanderwise_inc.app.model.user.User
 import com.github.wanderwise_inc.app.ui.theme.WanderWiseTheme
 import com.github.wanderwise_inc.app.viewmodel.HomeViewModel
 import com.github.wanderwise_inc.app.viewmodel.UserViewModel
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
@@ -37,6 +42,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     LoginScreen(userViewModel = userViewModel)
                     //AddUser(userViewModel = userViewModel)
+                    //TestSignIn(userViewModel = userViewModel)
                 }
             }
         }
@@ -71,7 +77,6 @@ fun AddUser(userViewModel: UserViewModel) {
                 for(user in userList) {
                     Log.d("USERS", "USERNAME IS " + user.username)
                     Log.d("USERS", "USER ID IS " + user.userid)
-                    Log.d("USERS", "USER AGE IS " + user.age)
                 }
             }
         }
@@ -79,4 +84,52 @@ fun AddUser(userViewModel: UserViewModel) {
         Text(text = "CLICK ME")
     }
 
+}
+
+@Composable
+fun TestSignIn(userViewModel: UserViewModel) {
+    val providers = arrayListOf(AuthUI.IdpConfig.GoogleBuilder().build())
+    val coroutineScope = rememberCoroutineScope()
+    // Create and launch sign-in intent
+    val signInIntent = AuthUI.getInstance()
+        .createSignInIntentBuilder()
+        .setAvailableProviders(providers)
+        .build()
+
+    val signInLauncher = rememberLauncherForActivityResult(
+        contract = FirebaseAuthUIActivityResultContract()
+    ) {
+        val response = it.idpResponse
+        val user = FirebaseAuth.getInstance().currentUser
+        Log.d("USERS", "ABOUT TO SIGN IN")
+        if (user == null) {
+            Log.d("USERS", "USER IS NULL")
+        }
+        Log.d("USERS", "RESULT_CODE IS " + it.resultCode)
+        if (it.resultCode == Activity.RESULT_OK || user != null) {
+            // successful sign in
+
+            // DO NAVIGATION
+            Log.d("USERS", "USERS IS SIGNING IN")
+            //navController.navigate(route = Screen.Detail.route)
+            val username = user?.displayName
+            val email = user?.email
+            val uid = user?.uid
+            val phoneNumber = user?.phoneNumber
+
+            val u = User(uid!!, username!!, email!!, phoneNumber!!)
+
+            coroutineScope.launch {
+                userViewModel.setUser(u)
+            }
+
+        } else {
+            // unsuccessful sign in
+            Log.d("USERS", "UNSUCCESSFUL SIGN IN")
+        }
+    }
+    
+    Button(onClick = { signInLauncher.launch(signInIntent)}) {
+        Text(text = "SIGN IN")
+    }
 }

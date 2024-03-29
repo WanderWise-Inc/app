@@ -1,6 +1,7 @@
 package com.github.wanderwise_inc.app
 
 import android.app.Activity.RESULT_OK
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -45,13 +46,16 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.requiredWidth
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.em
 import androidx.lifecycle.ViewModelProvider
+import com.github.wanderwise_inc.app.model.user.User
 import com.github.wanderwise_inc.app.viewmodel.HomeViewModel
 import com.github.wanderwise_inc.app.viewmodel.UserViewModel
+import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(userViewModel : UserViewModel, modifier: Modifier = Modifier) {
@@ -77,7 +81,7 @@ fun LoginScreen(userViewModel : UserViewModel, modifier: Modifier = Modifier) {
                 .requiredWidth(width = 289.dp)
                 .requiredHeight(height = 39.dp)
                 .clip(shape = RoundedCornerShape(8.dp))
-                .background(color = Color(0xFF972626))){ SignInButton()}
+                .background(color = Color(0xFF972626))){ SignInButton(userViewModel)}
         Image(
             painter = painterResource(id = R.drawable.google__g__logo_svg),
             contentDescription = "google-logo-9808 1",
@@ -121,7 +125,9 @@ fun LoginScreen(userViewModel : UserViewModel, modifier: Modifier = Modifier) {
 
 
 @Composable
-fun SignInButton() {
+fun SignInButton(userViewModel: UserViewModel) {
+    // Added a coroutine because userViewModel functions are async
+    val coroutineScope = rememberCoroutineScope()
     val providers = arrayListOf(AuthUI.IdpConfig.GoogleBuilder().build())
 
     // Create and launch sign-in intent
@@ -130,22 +136,69 @@ fun SignInButton() {
         .setAvailableProviders(providers)
         .build()
 
+    // creating the launcher that will be used to signIn
     val signInLauncher = rememberLauncherForActivityResult(
         contract = FirebaseAuthUIActivityResultContract()
     ) {
         val response = it.idpResponse
         val user = FirebaseAuth.getInstance().currentUser
-        if (user != null || it.resultCode == RESULT_OK) {
-            // successful sign in
+        if (user == null) {
+            Log.d("USERS", "USER IS NULL")
 
-            // DO NAVIGATION
-
-            //navController.navigate(route = Screen.Detail.route)
-
+            // TODO Handle ERROR
+            
         } else {
-            // unsuccessful sign in
+            // If the user is not null, we must check if this user is already in the database,
+            // in which case we will not add it again
+            coroutineScope.launch {
+                // Check if the ResultCode is OK
+                if (it.resultCode == RESULT_OK) {
+                    // Get the user from database (async function)
+                    val currentUser = userViewModel.getUser(user.uid)
+                    if (currentUser != null) {
+                        Log.d("USERS", "USER ALREADY IN DATABASE")
 
+                        // TODO Navigation
+
+                    } else {
+                        Log.d("USERS", "USER NOT FOUND IN DATABASE, MUST CREATE IT")
+
+                        // We define properly the fields, because some of them could be empty
+                        val username = user.displayName
+                        val properUsername = username ?: ""
+                        val email = user.email
+                        val properEmail = email ?: ""
+                        val uid = user.uid
+                        val phoneNumber = user.phoneNumber
+                        val properPhoneNumber = phoneNumber ?: ""
+
+                        val u = User(uid, properUsername, properEmail, properPhoneNumber)
+
+                        // Trying to set the user
+                        coroutineScope.launch {
+                            val succ = userViewModel.setUser(u)
+                            if (succ) {
+                                Log.d("USERS", "USER ADDED TO DB")
+
+                                // TODO Navigation
+
+                            } else {
+                                Log.d("USERS", "USER NOT ADDED TO DB")
+
+                                // TODO Handle ERROR
+                            }
+                        }
+
+                    }
+                } else {
+                    // unsuccessful sign in
+                    Log.d("USERS", "UNSUCCESSFUL SIGN IN")
+
+                    // TODO Handle ERROR
+                }
+            }
         }
+
     }
 
     Button(

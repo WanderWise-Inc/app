@@ -14,7 +14,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "650723356892-18n367hngro2v7fmm8c6tftit6hobq6k.apps.googleusercontent.com",
+          "client_id": "650723356892-numvq65miftnji2r6frpmfui0luskml9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.github.wanderwise_inc.app",
+            "certificate_hash": "be677b11e468e136d08ea293df02e35db62ca7b9"
+          }
+        },
+        {
+          "client_id": "650723356892-nn1n279jjug29jhb6462rom9fr46pofd.apps.googleusercontent.com",
           "client_type": 3
         }
       ],

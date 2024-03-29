@@ -32,7 +32,8 @@ class UserViewModel : ViewModel() {
         val u = hashMapOf(
             "userid" to user.userid,
             "username" to user.username,
-            "age" to user.age
+            "email" to user.email,
+            "phoneNumber" to user.phoneNumber
         )
 
         // Adding the user to the collection, returning true if success and false if failure
@@ -65,8 +66,10 @@ class UserViewModel : ViewModel() {
             // Access each field of the document and create a User accordingly
             val userid = document.get("userid").toString()
             val username = document.get("username").toString()
-            val age = document.get("age").toString().toInt()
-            User(userid, username, age)
+            val email = document.get("email").toString()
+            val phoneNumber = document.get("phoneNumber").toString()
+
+            User(userid, username, email, phoneNumber)
         } catch (e: Exception) {
             Log.d(TAG, "get failed with ", e)
             null
@@ -82,10 +85,13 @@ class UserViewModel : ViewModel() {
         try {
             val querySnapshot = usersCollection.get().await()
             for (document in querySnapshot.documents) {
+
                 val userid = document.get("userid").toString()
                 val username = document.get("username").toString()
-                val age = document.get("age").toString().toInt()
-                val user = User(userid, username, age)
+                val email = document.get("email").toString()
+                val phoneNumber = document.get("phoneNumber").toString()
+
+                val user = User(userid, username, email, phoneNumber)
                 userList.add(user)
             }
         } catch (e: Exception) {

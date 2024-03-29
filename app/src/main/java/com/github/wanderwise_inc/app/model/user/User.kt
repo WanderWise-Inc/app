@@ -1,8 +1,9 @@
 package com.github.wanderwise_inc.app.model.user
 
 class User(
-    val userid: String,
+    var userid: String,
     var username : String,
-    var age : Int
+    var email : String,
+    var phoneNumber : String
 ) {
 }
