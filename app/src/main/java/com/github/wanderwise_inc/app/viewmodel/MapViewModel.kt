@@ -80,7 +80,7 @@ class MapViewModel : ViewModel() {
             itinerary.uid = genItineraryUid()
         }
         val docRef = itineraryCollection.document(itinerary.uid)
-        docRef.set(itinerary)
+        docRef.set(itinerary.toMap())
             .addOnSuccessListener {
                 Log.d(LOG_DEBUG_TAG, "Set success")
             }
