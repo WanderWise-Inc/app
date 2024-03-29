@@ -39,38 +39,87 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
 import com.google.firebase.auth.FirebaseAuth
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.requiredHeight
+import androidx.compose.foundation.layout.requiredSize
+import androidx.compose.foundation.layout.requiredWidth
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.unit.em
 import androidx.lifecycle.ViewModelProvider
 import com.github.wanderwise_inc.app.viewmodel.HomeViewModel
 import com.github.wanderwise_inc.app.viewmodel.LoginViewModel
 
+
+
 @Composable
-fun LoginScreen() {
-    Box(modifier = Modifier
-        .fillMaxSize())
-         {
-        // IMAGE
-        Image(painter = painterResource(id = R.drawable.map_image),
-            contentDescription = null,
-            contentScale = ContentScale.FillBounds,
+fun LoginScreen(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier
+            .requiredWidth(width = 1280.dp)
+            .requiredHeight(height = 1100.dp)
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.underground_2725336_1280),
+            contentDescription = "underground-2725336_1280 1",
             modifier = Modifier
-                .matchParentSize())
-        Column (modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(text = "WanderWise", fontSize = 30.sp, fontWeight = FontWeight.Bold)
-            SignInButton()
-        }
-
-
+                .requiredWidth(width = 1280.dp)
+                .requiredHeight(height = 853.dp)
+                .alpha(0.6f))
+        Box(
+            modifier = Modifier
+                .align(alignment = Alignment.TopStart)
+                .offset(
+                    x = 485.dp,
+                    y = 829.dp
+                )
+                .requiredWidth(width = 289.dp)
+                .requiredHeight(height = 39.dp)
+                .clip(shape = RoundedCornerShape(8.dp))
+                .background(color = Color(0xFF972626))){ SignInButton()}
+        Image(
+            painter = painterResource(id = R.drawable.google__g__logo_svg),
+            contentDescription = "google-logo-9808 1",
+            modifier = Modifier
+                .align(alignment = Alignment.TopStart)
+                .offset(
+                    x = 505.dp,
+                    y = 841.dp
+                )
+                .requiredSize(size = 15.dp))
+        Text(
+            text = "Sign-In with Google",
+            color = Color.White,
+            lineHeight = 1.em,
+            style = TextStyle(
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Medium),
+            modifier = Modifier
+                .align(alignment = Alignment.TopCenter)
+                .offset(
+                    x = 40.dp,
+                    y = 837.dp
+                )
+                .requiredWidth(width = 250.dp)
+                .requiredHeight(height = 35.dp))
+        Text(
+            text = "WanderWise",
+            color = Color.White,
+            lineHeight = 0.56.em,
+            style = TextStyle(
+                fontSize = 32.sp,
+                fontWeight = FontWeight.Medium),
+            modifier = Modifier
+                .align(alignment = Alignment.TopStart)
+                .offset(
+                    x = 550.dp,
+                    y = 730.dp
+                ))
     }
-
-        // TEXT
-
-        // SPACE
-        Spacer(modifier = Modifier.height(100.dp))
-        // BUTTON
-        SignInButton()
-    }
+}
 
 
 @Composable
@@ -106,24 +155,17 @@ fun SignInButton() {
             signInLauncher.launch(signInIntent)
         },
         modifier = Modifier
-            .padding(start = 16.dp, end = 16.dp)
-            .wrapContentSize(),
-        shape = RoundedCornerShape(16.dp),
+            .requiredWidth(width = 289.dp)
+            .requiredHeight(height = 39.dp)
+            ,
+        shape = RoundedCornerShape(8.dp),
         border = BorderStroke(1.dp, Color.Gray),
-        colors = ButtonDefaults.buttonColors(Color.White)
+        colors = ButtonDefaults.buttonColors(Color.Transparent)
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Image(
-                painter = painterResource(id = R.drawable.google__g__logo_svg),
-                contentDescription = null,
-                modifier = Modifier.size(24.dp)
-            )
-            Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
-            Text(
-                text = "Sign in with google",
-                modifier = Modifier.padding(6.dp),
-                color = Color.Black
-            )
+        Row() {
+
+
         }
     }
 }
+
