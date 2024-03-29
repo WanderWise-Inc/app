@@ -137,7 +137,9 @@ dependencies {
     implementation(platform(libs.compose.bom))
     implementation(libs.androidx.navigation.runtime.ktx)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.navigation.testing)
     testImplementation(libs.junit)
+    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
     globalTestImplementation(libs.androidx.junit)
     globalTestImplementation(libs.androidx.espresso.core)
 
@@ -164,6 +166,9 @@ dependencies {
     // UI Tests
     globalTestImplementation(libs.compose.test.junit)
     debugImplementation(libs.compose.test.manifest)
+    
+    // Android navigation test
+    androidTestImplementation("androidx.navigation:navigation-testing:2.7.7")
 
     // --------- Kaspresso test framework ----------
     globalTestImplementation(libs.kaspresso)
