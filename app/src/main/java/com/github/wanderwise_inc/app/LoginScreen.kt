@@ -142,11 +142,12 @@ fun SignInButton(userViewModel: UserViewModel) {
     ) {
         val response = it.idpResponse
         val user = FirebaseAuth.getInstance().currentUser
+
         if (user == null) {
             Log.d("USERS", "USER IS NULL")
 
             // TODO Handle ERROR
-            
+
         } else {
             // If the user is not null, we must check if this user is already in the database,
             // in which case we will not add it again
@@ -155,6 +156,7 @@ fun SignInButton(userViewModel: UserViewModel) {
                 if (it.resultCode == RESULT_OK) {
                     // Get the user from database (async function)
                     val currentUser = userViewModel.getUser(user.uid)
+
                     if (currentUser != null) {
                         Log.d("USERS", "USER ALREADY IN DATABASE")
 
@@ -176,8 +178,8 @@ fun SignInButton(userViewModel: UserViewModel) {
 
                         // Trying to set the user
                         coroutineScope.launch {
-                            val succ = userViewModel.setUser(u)
-                            if (succ) {
+                            val success = userViewModel.setUser(u)
+                            if (success) {
                                 Log.d("USERS", "USER ADDED TO DB")
 
                                 // TODO Navigation

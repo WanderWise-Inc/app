@@ -24,7 +24,8 @@ class UserViewModel : ViewModel() {
     }
 
     /**
-     * Create a new User and stores it in the database
+     * add a user to the database
+     * @return true if the user was added, false if not
      */
     public suspend fun setUser(user: User) : Boolean {
 
@@ -58,18 +59,22 @@ class UserViewModel : ViewModel() {
 
     /**
      * Get a user from a userID
+     * @return the user in the database with the given uid
      */
     public suspend fun getUser(uid : String) : User?{
         return try {
             // Get first the document with the given uid
             val document = usersCollection.document(uid).get().await()
-            // Access each field of the document and create a User accordingly
-            val userid = document.get("userid").toString()
-            val username = document.get("username").toString()
-            val email = document.get("email").toString()
-            val phoneNumber = document.get("phoneNumber").toString()
+            if (document.exists()) {
+                val userid = document.get("userid").toString()
+                val username = document.get("username").toString()
+                val email = document.get("email").toString()
+                val phoneNumber = document.get("phoneNumber").toString()
 
-            User(userid, username, email, phoneNumber)
+                User(userid, username, email, phoneNumber)
+            } else {
+                null
+            }
         } catch (e: Exception) {
             Log.d(TAG, "get failed with ", e)
             null
@@ -97,8 +102,67 @@ class UserViewModel : ViewModel() {
         } catch (e: Exception) {
             Log.w(TAG, "Error adding document", e)
         }
-
         return userList
+    }
+
+    /**
+     * delete a user from the database
+     * @return true if successful delete, false if an error happened
+     */
+    public fun deleteUser(user : User) : Boolean {
+        return try {
+            usersCollection.document(user.userid)
+                .delete()
+            true
+        } catch(e : Exception) {
+            Log.d(TAG, "Error deleting document", e)
+            false
+        }
+    }
+
+    /**
+     * update the userName field in the database
+     * @return true if update is successful, false if not
+     */
+    public fun updateUserName(user : User, newUserName : String) : Boolean {
+        return try {
+            usersCollection.document(user.userid)
+                .update("username", newUserName)
+            true
+        } catch(e : Exception) {
+            Log.d(TAG, "Error changing userName", e)
+            false
+        }
+    }
+
+    /**
+     * update the phoneNumber field in the database
+     * @return true if update is successful, false if not
+     */
+    public fun updatePhoneNumber(user : User, newPhoneNumber : String) : Boolean {
+        return try {
+            usersCollection.document(user.userid)
+                .update("phoneNumber", newPhoneNumber)
+            true
+        } catch(e : Exception) {
+            Log.d(TAG, "Error changing phoneNumber", e)
+            false
+        }
+    }
+
+    /**
+     * update the email field in the database
+     * @return true if update is successful, false if not
+     */
+    public fun updateEmail(user : User, newEmail : String) : Boolean {
+        return try {
+            usersCollection.document(user.userid)
+                .update("email", newEmail)
+            true
+        } catch(e : Exception) {
+            Log.d(TAG, "Error changing email", e)
+            false
+        }
     }
 
 }

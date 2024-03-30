@@ -70,14 +70,24 @@ fun AddUser(userViewModel: UserViewModel) {
     val coroutineScope = rememberCoroutineScope()
     Button(onClick = {
         coroutineScope.launch {
-            val userList = userViewModel.getAllUser()
-            if (userList.isEmpty()) {
-                Log.d("USERS", "USER NOT FOUND")
+            val id = "xasifnoiqnfi12adnadeud"
+            val user = User(id, "Jean", "jean@gmail.com", "")
+            if (userViewModel.getUser(id) == null) {
+                userViewModel.setUser(user)
+                Log.d("USERS", "USER ADDED TO DB")
             } else {
-                for(user in userList) {
-                    Log.d("USERS", "USERNAME IS " + user.username)
-                    Log.d("USERS", "USER ID IS " + user.userid)
-                }
+                userViewModel.updateUserName(user, "Theo")
+                userViewModel.updateEmail(user, "theo@gmail.com")
+                userViewModel.updatePhoneNumber(user, "0779345362")
+            }
+
+            val currentUser = userViewModel.getUser(id)
+            if (currentUser!!.username == "Theo") {
+                Log.d("USERS", "FOUND THEO")
+                userViewModel.deleteUser(currentUser)
+                Log.d("USERS", "DELETED THEO")
+            } else {
+                Log.d("USERS", "NOT FOUND THEO")
             }
         }
     }) {
