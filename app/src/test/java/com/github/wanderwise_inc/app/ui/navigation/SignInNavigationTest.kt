@@ -3,6 +3,7 @@ package com.github.wanderwise_inc.app.ui.navigation
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -43,20 +44,23 @@ class NavigationTest {
     @Test
     fun verifyStartDestinationIsSignInScreen() { 
         composeTestRule
-            .onNodeWithText("Sign in")
+            .onNodeWithText("Sign In")
             .assertIsDisplayed()
         
         val route = navController.currentBackStackEntry?.destination?.route
-        assertEquals(route, Graph.AUTHENTICATION)
+        assertEquals(Route.SIGNIN, route)
     }
     
     @Test
-    fun verifySignInLeadsToOverviewScreen() {
+    fun performClick_OnSignInButton_navigatesToOverviewScreen() {
         composeTestRule
             .onNodeWithText("Sign In")
             .performClick()
         
         val route = navController.currentBackStackEntry?.destination?.route
-        assertEquals(route, Route.OVERVIEW)
+        assertEquals(Graph.HOME, route)
     }
+    
+    @Test
+    fun 
 }
