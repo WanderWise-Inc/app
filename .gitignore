@@ -2,10 +2,10 @@
 .DS_Store
 .gradle
 /local.properties
+/secrets.properties
 app/google-services.json
 /build
 /captures
 .externalNativeBuild
 .cxx
 local.properties
-app/google-services.json
