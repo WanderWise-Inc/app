@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 
-const val DB_ITINERARY_PATH: String = "itineraries"
+// const val DB_ITINERARY_PATH: String = "itineraries"
 
 // maintain consistency across logs related to this ViewModel
 const val LOG_DEBUG_TAG: String = "MapViewModel"
@@ -25,7 +25,7 @@ const val LOG_DEBUG_TAG: String = "MapViewModel"
  */
 class MapViewModel : ViewModel() {
     private val db = FirebaseFirestore.getInstance()
-    private val itineraryCollection = db.collection(DB_ITINERARY_PATH)
+    private val itineraryCollection = db.collection("itineraries")
 
     /**
      * @returns a freshly generated itinerary UID
