@@ -17,6 +17,8 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
+import com.github.wanderwise_inc.app.ui.navigation.graph.RootNavigationGraph
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.github.wanderwise_inc.app.model.user.User
@@ -40,9 +42,11 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    LoginScreen(userViewModel = userViewModel)
-                    //AddUser(userViewModel = userViewModel)
-                    //TestSignIn(userViewModel = userViewModel)
+                    RootNavigationGraph(
+                        homeViewModel = homeViewModel,
+                        userViewModel = userViewModel, 
+                        navController = rememberNavController()
+                    )
                 }
             }
         }
