@@ -1,6 +1,11 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.gms.google-services")
+
+
+    //needed for MAPS_API_KEY
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 
     /*
     alias(libs.plugins.androidApplication)
@@ -55,6 +60,7 @@ android {
         jvmTarget = "1.8"
     }
     buildFeatures {
+        buildConfig = true
         compose = true
     }
     composeOptions {
@@ -130,6 +136,15 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
      */
 
+    implementation("com.google.firebase:firebase-database-ktx:20.3.0")
+    implementation("com.google.firebase:firebase-firestore:24.10.0")
+    implementation("com.firebaseui:firebase-ui-auth:7.2.0")
+
+    val nav_version = "2.7.7"
+    implementation("androidx.navigation:navigation-compose:$nav_version")
+
+
+    implementation("com.google.android.play:core-ktx:1.7.0")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -138,6 +153,9 @@ dependencies {
     testImplementation(libs.junit)
     globalTestImplementation(libs.androidx.junit)
     globalTestImplementation(libs.androidx.espresso.core)
+
+    // --------------- Google Maps --------------------
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
 
     // ------------- Jetpack Compose ------------------
     val composeBom = platform(libs.compose.bom)
@@ -195,4 +213,11 @@ tasks.register("jacocoTestReport", JacocoReport::class) {
         include("outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec")
         include("outputs/code_coverage/debugAndroidTest/connected/*/coverage.ec")
     })
+}
+
+secrets {
+    propertiesFileName = "secrets.properties"
+
+    // REMARK: there was more in the GoogleMaps tutorial, didnt seem important
+    //Step 3, Point 10
 }
