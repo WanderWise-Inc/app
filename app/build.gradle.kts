@@ -4,6 +4,9 @@ plugins {
     id("com.google.gms.google-services")
 
 
+    //needed for MAPS_API_KEY
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+
     /*
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
@@ -57,6 +60,7 @@ android {
         jvmTarget = "1.8"
     }
     buildFeatures {
+        buildConfig = true
         compose = true
     }
     composeOptions {
@@ -144,6 +148,9 @@ dependencies {
     globalTestImplementation(libs.androidx.junit)
     globalTestImplementation(libs.androidx.espresso.core)
 
+    // --------------- Google Maps --------------------
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
+
     // ------------- Jetpack Compose ------------------
     val composeBom = platform(libs.compose.bom)
     implementation(composeBom)
@@ -200,4 +207,11 @@ tasks.register("jacocoTestReport", JacocoReport::class) {
         include("outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec")
         include("outputs/code_coverage/debugAndroidTest/connected/*/coverage.ec")
     })
+}
+
+secrets {
+    propertiesFileName = "secrets.properties"
+
+    // REMARK: there was more in the GoogleMaps tutorial, didnt seem important
+    //Step 3, Point 10
 }
