@@ -1,17 +1,13 @@
 package com.github.wanderwise_inc.app.ui.navigation
 
-import androidx.activity.ComponentActivity
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.assertIsNotDisplayed
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
-import androidx.test.core.app.ApplicationProvider
 import com.github.wanderwise_inc.app.ui.navigation.graph.Graph
 import com.github.wanderwise_inc.app.ui.navigation.graph.RootNavigationGraph
 import org.junit.Before
@@ -19,12 +15,11 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.*
 import org.junit.runner.RunWith
-import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 
 
 @RunWith(RobolectricTestRunner::class)
-class NavigationTest {
+class SignInNavigationTest {
     
     @get:Rule
     val composeTestRule = createComposeRule()
@@ -42,9 +37,9 @@ class NavigationTest {
     }
     
     @Test
-    fun verifyStartDestinationIsSignInScreen() { 
+    fun verify_StartDestinationIsSignInScreen() { 
         composeTestRule
-            .onNodeWithText("Sign In")
+            .onNodeWithTag("Sign in button")
             .assertIsDisplayed()
         
         val route = navController.currentBackStackEntry?.destination?.route
@@ -54,13 +49,30 @@ class NavigationTest {
     @Test
     fun performClick_OnSignInButton_navigatesToOverviewScreen() {
         composeTestRule
-            .onNodeWithText("Sign In")
+            .onNodeWithTag("Sign in button")
             .performClick()
+        
+        composeTestRule
+            .onNodeWithTag("Overview screen")
+            .assertIsDisplayed()
         
         val route = navController.currentBackStackEntry?.destination?.route
         assertEquals(Graph.HOME, route)
     }
-    
+
     @Test
-    fun 
+    fun performClick_OnSignInButton_ThenClickBackButton_navigatesToSignInScreen() {
+        composeTestRule
+            .onNodeWithTag("Sign in button")
+            .performClick()
+        
+        navController.popBackStack() // simulates back button click
+
+        composeTestRule
+            .onNodeWithTag("Sign in button")
+            .assertIsDisplayed()
+
+        val route = navController.currentBackStackEntry?.destination?.route
+        assertEquals(Route.SIGNIN, route)
+    }
 }

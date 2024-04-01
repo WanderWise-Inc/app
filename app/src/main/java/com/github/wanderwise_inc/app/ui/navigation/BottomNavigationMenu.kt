@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -37,7 +38,8 @@ fun BottomNavigationMenu (
                 color = Color(0xFFEDEEF0),
                 shape = RoundedCornerShape(size = 0.dp)
             )
-            .padding(start = 8.dp, end = 8.dp),
+            .padding(start = 8.dp, end = 8.dp)
+            .testTag("Bottom navigation bar"),
     ) {
         Row (
             modifier = Modifier.background(color = Color(0xFFEDEEF0)),
@@ -49,7 +51,8 @@ fun BottomNavigationMenu (
                     modifier = Modifier
                         .width(194.dp)
                         .height(80.dp)
-                        .padding(top = 12.dp, bottom = 16.dp),
+                        .padding(top = 12.dp, bottom = 16.dp)
+                        .testTag(screen.route + " button"),
                     icon = { Icon(
                         painter = painterResource(id = screen.icon),
                         contentDescription = null,
