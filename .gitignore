@@ -8,9 +8,4 @@ app/google-services.json
 /captures
 .externalNativeBuild
 .cxx
-<<<<<<< HEAD
-local.properties
 /app/.idea/
-=======
-local.properties
->>>>>>> b62693a71e824db7d926c1e97f07652a9a1c8815
