@@ -118,7 +118,7 @@ fun DependencyHandlerScope.globalTestImplementation(dep: Any) {
 }
 
 dependencies {
-    /* DEFAULT DEPENDENCIES
+    /*// DEFAULT DEPENDENCIES
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("androidx.activity:activity-compose:1.8.2")
@@ -134,7 +134,8 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
-     */
+    debugImplementation("androidx.customview:customview-poolingcontainer:1.0.0")*/
+     
 
     implementation("com.google.firebase:firebase-database-ktx:20.3.0")
     implementation("com.google.firebase:firebase-firestore:24.10.0")
@@ -150,7 +151,11 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(platform(libs.compose.bom))
+    implementation(libs.androidx.navigation.runtime.ktx)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.navigation.testing)
     testImplementation(libs.junit)
+    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
     globalTestImplementation(libs.androidx.junit)
     globalTestImplementation(libs.androidx.espresso.core)
 
@@ -164,6 +169,10 @@ dependencies {
 
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.graphics)
+    // Material components
+    implementation("androidx.compose.material:material:1.1.1")
+    implementation("androidx.compose.material3:material3:1.1.2")
+    implementation("com.google.android.material:material:1.10.0")
     // Material Design 3
     implementation(libs.compose.material3)
     // Integration with activities
@@ -176,6 +185,9 @@ dependencies {
     // UI Tests
     globalTestImplementation(libs.compose.test.junit)
     debugImplementation(libs.compose.test.manifest)
+    
+    // Android navigation test
+    androidTestImplementation("androidx.navigation:navigation-testing:2.7.7")
 
     // --------- Kaspresso test framework ----------
     globalTestImplementation(libs.kaspresso)
