@@ -1,6 +1,8 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.gms.google-services")
+
 
     //needed for MAPS_API_KEY
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
@@ -134,6 +136,9 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
      */
 
+    implementation("com.google.firebase:firebase-database-ktx:20.3.0")
+    implementation("com.google.firebase:firebase-firestore:24.10.0")
+    implementation("com.google.android.play:core-ktx:1.7.0")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
