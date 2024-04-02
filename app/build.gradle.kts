@@ -4,6 +4,9 @@ plugins {
     id("com.google.gms.google-services")
 
 
+    //needed for MAPS_API_KEY
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+
     /*
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
@@ -57,6 +60,7 @@ android {
         jvmTarget = "1.8"
     }
     buildFeatures {
+        buildConfig = true
         compose = true
     }
     composeOptions {
@@ -114,7 +118,7 @@ fun DependencyHandlerScope.globalTestImplementation(dep: Any) {
 }
 
 dependencies {
-    /* DEFAULT DEPENDENCIES
+    /*// DEFAULT DEPENDENCIES
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("androidx.activity:activity-compose:1.8.2")
@@ -130,19 +134,33 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
-     */
+    debugImplementation("androidx.customview:customview-poolingcontainer:1.0.0")*/
+     
 
     implementation("com.google.firebase:firebase-database-ktx:20.3.0")
     implementation("com.google.firebase:firebase-firestore:24.10.0")
+    implementation("com.firebaseui:firebase-ui-auth:7.2.0")
+
+    val nav_version = "2.7.7"
+    implementation("androidx.navigation:navigation-compose:$nav_version")
+
+
     implementation("com.google.android.play:core-ktx:1.7.0")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(platform(libs.compose.bom))
+    implementation(libs.androidx.navigation.runtime.ktx)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.navigation.testing)
     testImplementation(libs.junit)
+    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
     globalTestImplementation(libs.androidx.junit)
     globalTestImplementation(libs.androidx.espresso.core)
+
+    // --------------- Google Maps --------------------
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
 
     // ------------- Jetpack Compose ------------------
     val composeBom = platform(libs.compose.bom)
@@ -151,6 +169,10 @@ dependencies {
 
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.graphics)
+    // Material components
+    implementation("androidx.compose.material:material:1.1.1")
+    implementation("androidx.compose.material3:material3:1.1.2")
+    implementation("com.google.android.material:material:1.10.0")
     // Material Design 3
     implementation(libs.compose.material3)
     // Integration with activities
@@ -163,6 +185,9 @@ dependencies {
     // UI Tests
     globalTestImplementation(libs.compose.test.junit)
     debugImplementation(libs.compose.test.manifest)
+    
+    // Android navigation test
+    androidTestImplementation("androidx.navigation:navigation-testing:2.7.7")
 
     // --------- Kaspresso test framework ----------
     globalTestImplementation(libs.kaspresso)
@@ -200,4 +225,11 @@ tasks.register("jacocoTestReport", JacocoReport::class) {
         include("outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec")
         include("outputs/code_coverage/debugAndroidTest/connected/*/coverage.ec")
     })
+}
+
+secrets {
+    propertiesFileName = "secrets.properties"
+
+    // REMARK: there was more in the GoogleMaps tutorial, didnt seem important
+    //Step 3, Point 10
 }
