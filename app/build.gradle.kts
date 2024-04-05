@@ -33,6 +33,12 @@ android {
         }
     }
 
+    signingConfigs {
+        getByName("debug") {
+            storeFile = file("external/debug.keystore")
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -41,6 +47,7 @@ android {
                 "proguard-rules.pro"
             )
         }
+
 
         debug {
             enableUnitTestCoverage = true
