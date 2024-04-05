@@ -135,7 +135,8 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     debugImplementation("androidx.customview:customview-poolingcontainer:1.0.0")*/
-     
+
+
 
     implementation("com.google.firebase:firebase-database-ktx:20.3.0")
     implementation("com.google.firebase:firebase-firestore:24.10.0")
@@ -161,6 +162,14 @@ dependencies {
 
     // --------------- Google Maps --------------------
     implementation("com.google.android.gms:play-services-maps:18.2.0")
+    implementation("com.google.maps.android:maps-compose:4.3.3")
+
+    // Optionally, you can include the Compose utils library for Clustering,
+    // Street View metadata checks, etc.
+    implementation("com.google.maps.android:maps-compose-utils:4.3.3")
+
+    // Optionally, you can include the widgets library for ScaleBar, etc.
+    implementation("com.google.maps.android:maps-compose-widgets:4.3.3")
 
     // ------------- Jetpack Compose ------------------
     val composeBom = platform(libs.compose.bom)
