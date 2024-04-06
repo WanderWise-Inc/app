@@ -13,15 +13,18 @@ import com.github.wanderwise_inc.app.ui.navigation.graph.HomeNavGraph
 fun HomeScreen(
     navController: NavHostController = rememberNavController(),
 ) {
-    val navigator = NavigationActions(navController)
+    val navigationActions = NavigationActions(navController)
     Scaffold(
         bottomBar = {
+            /*
             BottomNavigationMenu(
-                onTabSelect = {screen -> navigator.navigateTo(screen) },
+                onTabSelect = { screen -> navigator.navigateTo(screen) },
                 selectedItem = TopLevelDestination.Overview
             )
+             */
+            BottomNavigationMenu(navigationActions)
         }
-    ) {innerPadding ->
+    ) { innerPadding ->
         HomeNavGraph(navController = navController, innerPadding = innerPadding)
     }
 }
