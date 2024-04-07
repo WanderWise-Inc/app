@@ -132,4 +132,20 @@ data class Itinerary(
             visible = this@Itinerary.visible
         }
     }
+
+    /**
+     * @return the center of gravity of all locations in an itinerary. Useful for computing
+     * camera position in maps
+     */
+    fun computeCenterOfGravity(): Location {
+        var avgLat = 0.0
+        var avgLon = 0.0
+        locations.map {
+            avgLat += it.lat
+            avgLon += it.long
+        }
+        avgLat /= locations.size
+        avgLon /= locations.size
+        return Location(avgLat, avgLon)
+    }
 }
