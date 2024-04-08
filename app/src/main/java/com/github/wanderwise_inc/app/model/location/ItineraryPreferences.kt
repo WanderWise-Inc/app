@@ -5,13 +5,7 @@ package com.github.wanderwise_inc.app.model.location
  *
  * @param tags
  */
-data class ItineraryDetail (
+data class ItineraryPreferences (
     val tags: List<Tag>,
-    val upVotes: Int,
-    val downVotes: Int,
-) {
-    /**
-     * @return the rating of the itinerary which is a fraction between [0; 1]
-     */
-    fun rating(): Double = (this.upVotes.toDouble()) / (upVotes + downVotes)
-}
+    val minRating: Double   // contained in [0, 1]
+)

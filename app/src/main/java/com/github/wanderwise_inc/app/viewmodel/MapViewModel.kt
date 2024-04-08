@@ -3,6 +3,8 @@ package com.github.wanderwise_inc.app.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.github.wanderwise_inc.app.model.location.Itinerary
+import com.github.wanderwise_inc.app.model.location.ItineraryLabels
+import com.github.wanderwise_inc.app.model.location.ItineraryPreferences
 import com.github.wanderwise_inc.app.model.location.Location
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.Marker
@@ -10,7 +12,6 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.Polyline
 import com.google.android.gms.maps.model.PolylineOptions
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
@@ -72,6 +73,15 @@ class MapViewModel : ViewModel() {
     }
 
     /**
+     * @param preferences user query preferences
+     * @return a list of itineraries matching a user's query preferences
+     */
+    public fun getItinerariesFromPrefernces(preferences: ItineraryPreferences) {
+        var query = itineraryCollection
+            .whereArrayContainsAny(ItineraryLabels.TAGS, preferences.tags.map { it.str })
+    }
+
+    /**
      * @brief sets an itinerary in DB
      */
     public fun setItinerary(itinerary: Itinerary) {
@@ -88,7 +98,6 @@ class MapViewModel : ViewModel() {
                 Log.d(LOG_DEBUG_TAG, "Set failure: $e")
             }
     }
-
 
     public fun itineraryToPolyline(itinerary: Itinerary, googleMap: GoogleMap): Polyline {
         val polyline = googleMap.addPolyline(PolylineOptions()
