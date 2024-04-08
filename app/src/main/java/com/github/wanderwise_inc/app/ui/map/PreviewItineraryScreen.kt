@@ -54,10 +54,11 @@ fun PreviewItineraryScreen(itinerary: Itinerary) {
         bottomBar =  {
             ItineraryBanner(itinerary = itinerary)
         }
-    ) {
-        it
+    ) { paddingValues ->
         GoogleMap (
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues),
             cameraPositionState = cameraPositionState
         ) {
             itinerary.locations.map { location ->
