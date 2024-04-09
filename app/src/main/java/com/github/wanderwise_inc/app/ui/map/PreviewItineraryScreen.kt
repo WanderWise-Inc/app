@@ -11,6 +11,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -22,8 +23,10 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.wanderwise_inc.app.model.location.Itinerary
+import com.github.wanderwise_inc.app.model.location.ItineraryPreferences
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
 import com.github.wanderwise_inc.app.model.location.Location
+import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.maps.android.compose.AdvancedMarker
 import com.google.maps.android.compose.GoogleMap
@@ -94,21 +97,4 @@ fun ItineraryBanner(itinerary: Itinerary) {
             )
         }
     }
-}
-
-@Composable
-fun DummyPreviewItinerary() {
-    val beforeSpot = Location(46.52038535030108, 6.587104433969897)
-    val balelecEntry = Location(46.52055514700082, 6.5684791757291885)
-
-    val itinerary = Itinerary(
-        userUid = "",
-        locations = listOf(beforeSpot, balelecEntry),
-        title = "Balelec",
-        description = "Before at beach followed by balelec",
-        tags = listOf(ItineraryTags.SOCIAL),
-        visible = false
-    )
-    
-    PreviewItineraryScreen(itinerary = itinerary)
 }
