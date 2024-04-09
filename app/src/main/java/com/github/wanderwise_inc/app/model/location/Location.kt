@@ -7,13 +7,16 @@ import kotlin.math.pow
 import kotlin.math.sin
 import kotlin.math.sqrt
 
-enum class LocationLabels(val dbLabel: String) {
-    LAT("lat"),
-    LONG("long"),
+object LocationLabels {
+    const val LAT = "lat"
+    const val LONG = "long"
 }
 
 typealias Kilometers = Double
 
+/**
+ * @brief represents a location
+ */
 data class Location(
     val lat: Double,
     val long: Double,
@@ -27,8 +30,8 @@ data class Location(
      */
     fun toMap(): Map<String, Any> {
         return mapOf(
-            LocationLabels.LAT.dbLabel to lat,
-            LocationLabels.LONG.dbLabel to long
+            LocationLabels.LAT to lat,
+            LocationLabels.LONG to long
         )
     }
 
@@ -72,4 +75,9 @@ data class Location(
             return Location(latLng.latitude, latLng.longitude)
         }
     }
+
+    /**
+     * @brief no-argument constructor for firebase de-serialization
+     */
+    constructor() : this (0.0, 0.0)
 }

@@ -8,14 +8,19 @@ const val MAX_TAGS: Int = 3 // maximum number of tags allowed for an itinerary
  * @brief labels for accessing itinerary information from a hashmap representation
  */
 object ItineraryLabels {
-    const val UID = "uid"
-    const val USER_UID = "user_uid"
-    const val LOCATIONS = "locations"
-    const val TITLE = "title"
-    const val DESCRIPTION = "description"
-    const val VISIBLE = "visible"
-    const val TAGS = "tags"
+    const val UID           = "uid"
+    const val USER_UID      = "user_uid"
+    const val LOCATIONS     = "locations"
+    const val TITLE         = "title"
+    const val DESCRIPTION   = "description"
+    const val VISIBLE       = "visible"
+    const val TAGS          = "tags"
 }
+
+/**
+ * @brief score of an itinerary based on some preferences
+ */
+typealias Score = Double
 
 /**
  * @brief represents an itinerary
@@ -33,22 +38,26 @@ data class Itinerary(
     val userUid: String,
     val locations: List<Location>,
     val title: String,
-    val tags: List<Tag>,
+    var tags: List<Tag>,
     val description: String?,
     val visible: Boolean,
+    val upVotes: Int = 0,
+    val downVotes: Int = 0,
 ) {
+
+
     /**
      * @return a map representation of an itinerary
      */
     fun toMap(): Map<String, Any> {
         return mapOf(
-            ItineraryLabels.UID to uid,
-            ItineraryLabels.USER_UID to userUid,
-            ItineraryLabels.LOCATIONS to locations.map { location -> location.toMap() },
-            ItineraryLabels.TITLE to title,
-            ItineraryLabels.TAGS to tags.map { tag -> tag.str },
+            ItineraryLabels.UID         to uid,
+            ItineraryLabels.USER_UID    to userUid,
+            ItineraryLabels.LOCATIONS   to locations.map { location -> location.toMap() },
+            ItineraryLabels.TITLE       to title,
+            ItineraryLabels.TAGS        to tags,
             ItineraryLabels.DESCRIPTION to (description ?: ""),
-            ItineraryLabels.VISIBLE to visible,
+            ItineraryLabels.VISIBLE     to visible,
         )
     }
     /**
@@ -146,10 +155,25 @@ data class Itinerary(
     fun toBuilder(): Builder {
         return Builder(uid, userUid).apply {
             locations.addAll(this@Itinerary.locations)
+            tags.addAll(this@Itinerary.tags)
             title = this@Itinerary.title
             description = this@Itinerary.description
             visible = this@Itinerary.visible
         }
+    }
+
+    /**
+     * @brief Scoring algorithm for ranking an itinerary based on user preferences. Used for sorting
+     * @return the score of an itinerary
+     */
+    fun scoreFromPreferences(preferences: ItineraryPreferences): Score {
+        var score: Score = 0.0
+        for (tag in preferences.tags) {
+            if (tags.contains(tag))
+                score += 10.0
+        }
+        score *= (upVotes.toDouble())/(upVotes + downVotes)
+        return score
     }
 
     /**
@@ -167,4 +191,11 @@ data class Itinerary(
         avgLon /= locations.size
         return Location(avgLat, avgLon)
     }
+
+    /**
+     * @brief no-argument constructor for firebase de-serialization
+     */
+    constructor() : this(
+        "", "", listOf(), "", listOf(), null, false
+    )
 }

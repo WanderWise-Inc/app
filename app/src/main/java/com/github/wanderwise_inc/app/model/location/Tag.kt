@@ -11,7 +11,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
  *
  * @param str is the string representation of the tag. Used both for storage and for display
  */
-data class Tag(val str: String)
+
+typealias Tag = String
 
 /**
  * @brief itinerary tags used for filtering based on user preferences
@@ -19,8 +20,8 @@ data class Tag(val str: String)
  * String representations should consist of a single word and start with a Capital letter
  */
 object ItineraryTags {
-    val SOCIAL      = Tag("Social")
-    val CULTURAL    = Tag("Cultural")
-    val ADVENTURE   = Tag("Adventure")
-    val FOOD        = Tag("Food")
+    val SOCIAL      = "Social"
+    val CULTURAL    = "Cultural"
+    val ADVENTURE   = "Adventure"
+    val FOOD        = "Food"
 }
