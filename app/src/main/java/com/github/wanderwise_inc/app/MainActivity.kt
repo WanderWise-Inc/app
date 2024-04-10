@@ -27,9 +27,11 @@ import com.github.wanderwise_inc.app.ui.navigation.graph.RootNavigationGraph
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.github.wanderwise_inc.app.model.user.User
+import com.github.wanderwise_inc.app.ui.home.HomeScreen
 import com.github.wanderwise_inc.app.ui.map.MapScreen
 import com.github.wanderwise_inc.app.ui.theme.WanderWiseTheme
 import com.github.wanderwise_inc.app.viewmodel.HomeViewModel
+import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.UserViewModel
 
 import com.google.android.gms.maps.GoogleMap
@@ -45,6 +47,7 @@ import kotlinx.coroutines.launch
 class MainActivity : ComponentActivity() {
     private val homeViewModel by viewModels<HomeViewModel>()
     private val userViewModel by viewModels<UserViewModel>()
+    private val mapViewModel by viewModels<MapViewModel>()
     // private lateinit var analytics : FirebaseAnalytics
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,9 +58,11 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    //HomeScreen()
                     RootNavigationGraph(
                         homeViewModel = homeViewModel,
-                        userViewModel = userViewModel, 
+                        userViewModel = userViewModel,
+                        mapViewModel = mapViewModel,
                         navController = rememberNavController()
                     )
                 }

@@ -3,4 +3,7 @@
     <string name="map_string">Map</string>
     <string name="overview_string">Overview</string>
     <string name="itinerary_string">Itinerary</string>
+    <string name="itinerary_personal_string">Personal</string>
+    <string name="itinerary_liked_string">Liked</string>
+    <string name="itinerary_popular_string">Popular</string>
 </resources>

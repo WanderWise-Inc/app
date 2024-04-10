@@ -1,5 +1,6 @@
 package com.github.wanderwise_inc.app.ui.navigation
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -62,7 +63,7 @@ fun BottomNavigationMenu (
                 },
                 label = {
                     Text(
-                        text = dest.route,
+                        text = dest.name,
                         modifier = Modifier
                             .padding(4.dp),
                         style = TextStyle(
