@@ -15,13 +15,13 @@ interface ItineraryRepository {
     /**
      * @return a list of all public itineraries
      */
-    suspend fun getPublicItineraries(): Flow<List<Itinerary>>
+    fun getPublicItineraries(): Flow<List<Itinerary>>
 
     /**
      * @param userUid acts as a foreign key to user table
      * @return all itineraries created by user with uid `userUid`
      */
-    suspend fun getUserItineraries(userUid: String): Flow<List<Itinerary>>
+    fun getUserItineraries(userUid: String): Flow<List<Itinerary>>
 
     /**
      * @param tags
@@ -32,12 +32,12 @@ interface ItineraryRepository {
     /**
      * @brief sets an itinerary. If the itinerary has a blank UID, one will be generated
      */
-    suspend fun setItinerary(itinerary: Itinerary)
+    fun setItinerary(itinerary: Itinerary)
 
     /**
      * @brief deletes an itinerary
      */
-    suspend fun deleteItinerary(itinerary: Itinerary)
+    fun deleteItinerary(itinerary: Itinerary)
 }
 
 const val ITINERARY_COLLECTION_PATH: String = "itineraries"
@@ -51,7 +51,7 @@ class ItineraryRepositoryFirestoreImpl: ItineraryRepository {
      */
     private fun genItineraryUid(): String = itineraryCollection.document().id
 
-    override suspend fun getPublicItineraries(): Flow<List<Itinerary>> {
+    override fun getPublicItineraries(): Flow<List<Itinerary>> {
         return flow {
             val snapshot = itineraryCollection
                 .whereEqualTo("visible", true)
@@ -70,7 +70,7 @@ class ItineraryRepositoryFirestoreImpl: ItineraryRepository {
         }
     }
 
-    override suspend fun getUserItineraries(userUid: String): Flow<List<Itinerary>> {
+    override fun getUserItineraries(userUid: String): Flow<List<Itinerary>> {
         val currUserUid = FirebaseAuth.getInstance().currentUser?.uid
 
         return flow {
@@ -116,7 +116,7 @@ class ItineraryRepositoryFirestoreImpl: ItineraryRepository {
         }
     }
 
-    override suspend fun setItinerary(itinerary: Itinerary) {
+    override fun setItinerary(itinerary: Itinerary) {
         if (itinerary.uid.isBlank()) {
             itinerary.uid = genItineraryUid()
         }
@@ -130,7 +130,7 @@ class ItineraryRepositoryFirestoreImpl: ItineraryRepository {
             }
     }
 
-    override suspend fun deleteItinerary(itinerary: Itinerary) {
+    override fun deleteItinerary(itinerary: Itinerary) {
         val docRef = itineraryCollection.document(itinerary.uid)
         docRef.delete()
             .addOnSuccessListener {
