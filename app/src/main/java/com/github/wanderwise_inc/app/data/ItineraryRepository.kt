@@ -42,6 +42,9 @@ interface ItineraryRepository {
 
 const val ITINERARY_COLLECTION_PATH: String = "itineraries"
 
+/**
+ * repository using firestore
+ */
 class ItineraryRepositoryFirestoreImpl: ItineraryRepository {
     private val db = FirebaseFirestore.getInstance()
     private val itineraryCollection = db.collection(ITINERARY_COLLECTION_PATH)
@@ -140,4 +143,41 @@ class ItineraryRepositoryFirestoreImpl: ItineraryRepository {
                 Log.d(LOG_DEBUG_TAG, "Delete failure: uid=$itinerary.uid. err=$e")
             }
     }
+}
+
+/**
+ * repository used for testing
+ */
+class ItineraryRepositoryTestImpl: ItineraryRepository {
+    private val itineraries = mutableListOf<Itinerary>()
+    private var uidCtr = 0
+    override fun getPublicItineraries(): Flow<List<Itinerary>> {
+        return flow { emit(itineraries.filter { it.visible }) }
+    }
+
+    override fun getUserItineraries(userUid: String): Flow<List<Itinerary>> {
+        return flow {
+            emit(itineraries.filter { it.userUid == userUid })
+        }
+    }
+
+    override fun getItinerariesWithTags(tags: List<Tag>): Flow<List<Itinerary>> {
+        return flow {
+            emit( itineraries.filter {
+                it.tags.toSet().union(tags.toSet()).isNotEmpty()
+            })
+        }
+    }
+
+    override fun setItinerary(itinerary: Itinerary) {
+        if (itinerary.uid.isBlank()) {
+            itinerary.uid = uidCtr.toString()
+            uidCtr++
+        }
+    }
+
+    override fun deleteItinerary(itinerary: Itinerary) {
+        TODO("Not yet implemented")
+    }
+
 }
