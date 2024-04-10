@@ -211,6 +211,9 @@ dependencies {
 
     // ----------       Robolectric     ------------
     testImplementation(libs.robolectric)
+
+    // ----------       Mockito ------------
+    testImplementation("org.mockito.kotlin:mockito-kotlin:5.2.1")
 }
 
 tasks.register("jacocoTestReport", JacocoReport::class) {
