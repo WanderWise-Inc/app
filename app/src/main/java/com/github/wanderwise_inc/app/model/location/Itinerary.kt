@@ -41,11 +41,8 @@ data class Itinerary(
     var tags: List<Tag>,
     val description: String?,
     val visible: Boolean,
-    val upVotes: Int = 0,
-    val downVotes: Int = 0,
+    val numLikes: Int = 0
 ) {
-
-
     /**
      * @return a map representation of an itinerary
      */
@@ -60,6 +57,7 @@ data class Itinerary(
             ItineraryLabels.VISIBLE     to visible,
         )
     }
+
     /**
      * @brief builder for an itinerary
      *
@@ -172,7 +170,7 @@ data class Itinerary(
             if (tags.contains(tag))
                 score += 10.0
         }
-        score *= (upVotes.toDouble())/(upVotes + downVotes)
+        score *= (numLikes + 1) // numLikes + 1 to prevent multiplying by zero for unliked itineraries
         return score
     }
 
