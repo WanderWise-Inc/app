@@ -36,6 +36,10 @@ class UserLocationClient(
      */
     @SuppressLint("MissingPermission")
     override fun getLocationUpdates(interval: Long): Flow<Location> {
+        if(interval <= 0) {
+            throw IllegalArgumentException("Interval not strictly positive: interval=$interval")
+        }
+
         return callbackFlow {
             if(!context.hasLocationPermission()) {
                 throw LocationClient.LocationException("Location permissions denied")
