@@ -14,11 +14,26 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
 
+/**
+ * @brief client responsible for retrieving user location updates using
+ * the Fused Location Provider API.
+ *
+ * @param context the context used for retrieving system services and checking permissions.
+ * @param client the FusedLocationProviderClient instance for requesting location updates.
+ */
 class UserLocationClient(
     private val context: Context,
     private val client: FusedLocationProviderClient
 ): LocationClient {
 
+    /**
+     * @brief requests location updates at a specified interval.
+     *
+     * @param interval the interval, in milliseconds, at which location updates are requested.
+     * @throws LocationClient.LocationException if location permissions are denied or if there's
+     * no means of tracking position (e.g., GPS and network providers are disabled).
+     * @return a flow emitting the user's location updates.
+     */
     @SuppressLint("MissingPermission")
     override fun getLocationUpdates(interval: Long): Flow<Location> {
         return callbackFlow {
