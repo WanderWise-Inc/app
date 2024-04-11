@@ -4,7 +4,6 @@ import android.util.Log
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryLabels
 import com.github.wanderwise_inc.app.model.location.Tag
-import com.github.wanderwise_inc.app.viewmodel.LOG_DEBUG_TAG
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.Flow
@@ -43,12 +42,12 @@ interface ItineraryRepository {
 const val ITINERARY_COLLECTION_PATH: String = "itineraries"
 
 /**
- * repository using firestore
+ * @brief repository implementation using firestore as data source
  */
 class ItineraryRepositoryFirestoreImpl: ItineraryRepository {
+    private val LOG_DEBUG_TAG = "REPOSITORY_FIRESTORE"
     private val db = FirebaseFirestore.getInstance()
     private val itineraryCollection = db.collection(ITINERARY_COLLECTION_PATH)
-    private val DEBUG_TAG = "FirestoreRepositoryImpl"
     /**
      * @return a freshly generated UID for an itinerary
      */
@@ -92,10 +91,10 @@ class ItineraryRepositoryFirestoreImpl: ItineraryRepository {
             val snapshot = query
                 .get()
                 .addOnSuccessListener{
-                    Log.d(DEBUG_TAG, "Get success")
+                    Log.d(LOG_DEBUG_TAG, "Get success")
                 }
                 .addOnFailureListener{ e ->
-                    Log.d(DEBUG_TAG, "Get failure, err=$e")
+                    Log.d(LOG_DEBUG_TAG, "Get failure, err=$e")
                 }
                 .await()
 
@@ -146,12 +145,13 @@ class ItineraryRepositoryFirestoreImpl: ItineraryRepository {
 }
 
 /**
- * repository used for testing
+ * @brief repository used for testing viewmodel functionality
  */
 class ItineraryRepositoryTestImpl: ItineraryRepository {
     private val itineraries = mutableListOf<Itinerary>()
     private var uidCtr = 0
     override fun getPublicItineraries(): Flow<List<Itinerary>> {
+        print(itineraries)
         return flow { emit(itineraries.filter { it.visible }) }
     }
 
@@ -164,20 +164,21 @@ class ItineraryRepositoryTestImpl: ItineraryRepository {
     override fun getItinerariesWithTags(tags: List<Tag>): Flow<List<Itinerary>> {
         return flow {
             emit( itineraries.filter {
-                it.tags.toSet().union(tags.toSet()).isNotEmpty()
+                it.tags.toSet().intersect(tags.toSet()).isNotEmpty()
             })
         }
     }
 
     override fun setItinerary(itinerary: Itinerary) {
+        itineraries.remove(itinerary) // remove if the itinerary is already present
         if (itinerary.uid.isBlank()) {
             itinerary.uid = uidCtr.toString()
             uidCtr++
         }
+        itineraries.add(itinerary)
     }
 
     override fun deleteItinerary(itinerary: Itinerary) {
-        TODO("Not yet implemented")
+        itineraries.remove(itinerary)
     }
-
 }
