@@ -1,94 +1,67 @@
 package com.github.wanderwise_inc.app.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
+import com.github.wanderwise_inc.app.data.ItineraryRepository
 import com.github.wanderwise_inc.app.model.location.Itinerary
+import com.github.wanderwise_inc.app.model.location.ItineraryPreferences
 import com.github.wanderwise_inc.app.model.location.Location
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.Polyline
 import com.google.android.gms.maps.model.PolylineOptions
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.tasks.await
 
-// const val DB_ITINERARY_PATH: String = "itineraries"
-
-// maintain consistency across logs related to this ViewModel
-const val LOG_DEBUG_TAG: String = "MapViewModel"
 
 /**
  * @brief ViewModel class for providing `Location`s and `Itinerary`s to the map UI
  */
-class MapViewModel : ViewModel() {
-    private val db = FirebaseFirestore.getInstance()
-    private val itineraryCollection = db.collection("itineraries")
-
+class MapViewModel(private val itineraryRepository: ItineraryRepository) : ViewModel() {
     /**
-     * @returns a freshly generated itinerary UID
+     * @return a flow of all public itineraries
      */
-    private fun genItineraryUid(): String {
-        return itineraryCollection.document().id
+    fun getAllPublicItineraries(): Flow<List<Itinerary>> {
+        return itineraryRepository.getPublicItineraries()
     }
 
     /**
-     * @returns a flow of all public itineraries
+     * @return a flow of all `Itinerary`s associated to the currently logged in user
      */
-    public fun getPublicItineraries(): Flow<List<Itinerary>> {
-        return flow {
-            val snapshot = itineraryCollection
-                .whereEqualTo("visible", true)
-                .get()
-                .await()
-            val itineraryList = snapshot.map { document ->
-                document.toObject(Itinerary::class.java)
-            }
-            emit(itineraryList)
-        }
+    fun getUserItineraries(userUid: String): Flow<List<Itinerary>> {
+        return itineraryRepository.getUserItineraries(userUid)
     }
 
     /**
-     * @returns a flow of all `Itinerary`s associated to the currently logged in user
+     * @param preferences user query preferences
+     * @see Itinerary.scoreFromPreferences for sorting the list from View
+     * @return a list of itineraries matching a user's query preferences
      */
-    public fun getUserItineraries(): Flow<List<Itinerary>> {
-        // add current user ID with firebase auth
-        val currUserUid = 0
-        return flow {
-            val snapshot = itineraryCollection
-                .whereEqualTo("associatedUserUid", currUserUid)
-                .get()
-                .addOnFailureListener{ e ->
-                    Log.d(LOG_DEBUG_TAG, "Get failure: $e")
-                }
-                .await()
-            val itineraryList = snapshot.map { document ->
-                document.toObject(Itinerary::class.java)
-            }
-            emit(itineraryList)
-        }
+    fun getItinerariesFromPreferences(preferences: ItineraryPreferences): Flow<List<Itinerary>> {
+        return itineraryRepository.getItinerariesWithTags(preferences.tags)
+    }
+
+    /**
+     * @return a sorted list of itineraries scored based on preferences
+     */
+    fun sortItinerariesFromPreferences(itineraries: List<Itinerary>,
+                                               preferences: ItineraryPreferences): List<Itinerary> {
+        // invert the sign so that the list is sorted in descending order
+        return itineraries.sortedBy { - it.scoreFromPreferences(preferences)  }
     }
 
     /**
      * @brief sets an itinerary in DB
      */
-    public fun setItinerary(itinerary: Itinerary) {
-        // if the itinerary has a blank UID we can generate one for it
-        if (itinerary.uid.isBlank()) {
-            itinerary.uid = genItineraryUid()
-        }
-        val docRef = itineraryCollection.document(itinerary.uid)
-        docRef.set(itinerary.toMap())
-            .addOnSuccessListener {
-                Log.d(LOG_DEBUG_TAG, "Set success")
-            }
-            .addOnFailureListener { e ->
-                Log.d(LOG_DEBUG_TAG, "Set failure: $e")
-            }
+    fun setItinerary(itinerary: Itinerary) {
+        itineraryRepository.setItinerary(itinerary)
     }
 
+    /**
+     * @brief deletes an itinerary from the database
+     */
+    fun deleteItinerary(itinerary: Itinerary) {
+        itineraryRepository.deleteItinerary(itinerary)
+    }
 
     public fun itineraryToPolyline(itinerary: Itinerary, googleMap: GoogleMap): Polyline {
         val polyline = googleMap.addPolyline(PolylineOptions()
