@@ -63,7 +63,7 @@ fun BottomNavigationMenu (
                     )
                 },
                 label = {
-                    Text(
+                    /*Text(
                         text = stringResource(id = dest.textId),
                         modifier = Modifier
                             .padding(1.dp),
@@ -77,7 +77,7 @@ fun BottomNavigationMenu (
                             textAlign = TextAlign.Center,
                             letterSpacing = 0.5.sp,
                         )
-                    )
+                    )*/
                 }
             )
         }

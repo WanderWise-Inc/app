@@ -6,6 +6,8 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Tab
 import androidx.compose.material.TabRow
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Build
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -43,13 +45,18 @@ fun TopNavigationMenu (
     ) {
         tabList.forEachIndexed { index, dest ->
             Tab(
+                selected = index == selectedIndex,
+                onClick = {
+                    selectedIndex = index
+                    navigationActions.navigateTo(dest)
+                },
                 text = {
                     Text(
                     text = stringResource(id = dest.textId),
                     modifier = Modifier
-                        .padding(1.dp, 4.dp),
+                        .padding(0.dp, 2.dp),
                     style = TextStyle(
-                        fontSize = 12.sp,
+                        fontSize = 9.sp,
                         lineHeight = 16.sp,
                         //fontFamily = FontFamily(Font(R.font.roboto)),
                         fontWeight = FontWeight(600),
@@ -59,19 +66,14 @@ fun TopNavigationMenu (
                         letterSpacing = 0.5.sp,
                     ))
                 },
-                selected = index == selectedIndex,
-                onClick = {
-                    selectedIndex = index
-                    navigationActions.navigateTo(dest)
-                },
                 icon = {
                     Icon(
                         painter = painterResource(id = dest.icon),
                         contentDescription = null,
                         tint = Color(0xFF191C1E),
                         modifier = Modifier
-                            .size(width = 32.dp, height = 16.dp)
-                            .padding(horizontal = 20.dp, vertical = 4.dp)
+                            .size(30.dp)
+                            .padding(2.dp)
                     )
                 }
             )

@@ -39,7 +39,7 @@ fun HomeScreen(
     val navigationActions = NavigationActions(navController)
     Scaffold(
         topBar = {
-            TopAppBar(
+            /*TopAppBar(
                 backgroundColor = MaterialTheme.colors.surface,
                 contentColor = MaterialTheme.colors.primarySurface,
             ) {
@@ -49,7 +49,7 @@ fun HomeScreen(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     TextButton(
-                        onClick = { /*TODO*/ },
+                        onClick = { *//*TODO*//* },
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primarySurface),
                         
                     ) {
@@ -60,7 +60,7 @@ fun HomeScreen(
                     }
                     Text(text = "WanderWise")
                     TextButton(
-                        onClick = { /*TODO*/ },
+                        onClick = { *//*TODO*//* },
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primarySurface)
                     ) {
                         Icon(
@@ -71,7 +71,7 @@ fun HomeScreen(
                         )
                     }
                 }
-            }
+            }*/
         },
         bottomBar = {
             /*
