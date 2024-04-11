@@ -1,9 +1,19 @@
 package com.github.wanderwise_inc.app.viewmodel
 
 import android.content.ContentValues.TAG
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.util.Log
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
+import coil.ImageLoader
+import coil.request.ImageRequest
+import coil.request.SuccessResult
 import com.github.wanderwise_inc.app.model.user.User
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
@@ -11,13 +21,16 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
+import java.io.ByteArrayOutputStream
 
 const val DB_ITINERARY_PATH: String = "users"
 
 class UserViewModel : ViewModel() {
     private val db = FirebaseFirestore.getInstance()
     private val usersCollection = db.collection(DB_ITINERARY_PATH)
+    private val storage = FirebaseStorage.getInstance()
 
     /**
      * @return a freshly generated user id
@@ -236,6 +249,50 @@ class UserViewModel : ViewModel() {
     public suspend fun getUpVotes(uid : String) : Int {
         val user = getUser(uid)
         return if (user != null) user.upVotes else 0
+    }
+
+    private suspend fun getBitMap(context: Context, url : Uri) : Bitmap {
+        val loading = ImageLoader(context)
+        val request = ImageRequest.Builder(context)
+            .data(url)
+            .build()
+
+        Log.d("STORAGE", "REQUEST OK")
+        val result = (loading.execute(request) as SuccessResult).drawable
+        return (result as BitmapDrawable).bitmap
+    }
+
+    public suspend fun storeImage(userViewModel: UserViewModel, context: Context, profilePicture : Uri) {
+        val storageRef = storage.reference
+        val testRef = storageRef.child("images/${userViewModel.getUserId()}")
+        val bitMap = getBitMap(context, profilePicture)
+        val baos = ByteArrayOutputStream()
+        bitMap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val data = baos.toByteArray()
+
+        var uploadTask = testRef.putBytes(data)
+        uploadTask.addOnFailureListener {
+            // Handle unsuccessful uploads
+            Log.d("STORAGE", "FAIL ON UPLOAD")
+        }.addOnSuccessListener { taskSnapshot ->
+            // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
+            // ...
+            Log.d("STORAGE", "SUCCESS ON UPLOAD")
+        }
+    }
+
+    public fun fetchImage(bitMapState : MutableState<Bitmap?>, userViewModel: UserViewModel) : Bitmap? {
+        val storageRef = storage.reference
+        val profilePictureRef = storageRef.child("images/${userViewModel.getUserId()}")
+        profilePictureRef.getBytes(1024*1024)
+            .addOnSuccessListener {
+                val bitMap = BitmapFactory.decodeByteArray(it, 0, it.size)
+                bitMapState.value = bitMap
+            }
+            .addOnFailureListener { e ->
+                Log.w("BITMAP", e)
+            }
+        return bitMapState.value
     }
 
 }

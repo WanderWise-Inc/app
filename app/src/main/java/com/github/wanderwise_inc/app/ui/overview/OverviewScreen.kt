@@ -47,60 +47,16 @@ import java.net.URL
 
 @Composable
 fun OverviewScreen(userViewModel: UserViewModel, context: Context) {
-    val coroutineScope = rememberCoroutineScope()
-    val storage = FirebaseStorage.getInstance()
     Column {
         Text(text = "Welcome to the overview screen", modifier = Modifier.testTag("Overview screen"))
         val profilePicture = userViewModel.getUserProfilePicture()
         if (profilePicture != null) {
-            Log.d("STORAGE", profilePicture.toString())
-            AsyncImage(
-                model = profilePicture,
-                contentDescription = "profile picture",
-                modifier = Modifier
-                    .size(100.dp)
-                    .clip(CircleShape),
-                contentScale = ContentScale.Crop
-            )
-
-
-/*            coroutineScope.launch {
-                val storageRef = storage.reference
-                val testRef = storageRef.child("images/${userViewModel.getUserId()}")
-                val bitMap = getBitMap(context, profilePicture)
-                val baos = ByteArrayOutputStream()
-                bitMap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-                val data = baos.toByteArray()
-
-                var uploadTask = testRef.putBytes(data)
-                uploadTask.addOnFailureListener {
-                    // Handle unsuccessful uploads
-                    Log.d("STORAGE", "FAIL ON UPLOAD")
-                }.addOnSuccessListener { taskSnapshot ->
-                    // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
-                    // ...
-                    Log.d("STORAGE", "SUCCESS ON UPLOAD")
-                }
-
-            }*/
-            val storageRef = storage.reference
             val bitMapState = remember {mutableStateOf<Bitmap?>(null)}
-            val profilePictureRef = storageRef.child("images/${userViewModel.getUserId()}")
-            profilePictureRef.getBytes(1024*1024)
-                .addOnSuccessListener {
-                    val bitMap = BitmapFactory.decodeByteArray(it, 0, it.size)
-                    bitMapState.value = bitMap
+            val bitMap = userViewModel.fetchImage(bitMapState, userViewModel)
+            Image(
+                painter = BitmapPainter(bitMap!!.asImageBitmap()),
+                contentDescription = null)
 
-                }
-                .addOnFailureListener { e ->
-                    Log.w("BITMAP", e)
-                }
-
-            if (bitMapState.value != null) {
-                Image(
-                    painter = BitmapPainter(bitMapState.value!!.asImageBitmap()),
-                    contentDescription = null)
-            }
         }
         Button(onClick = { /*TODO*/ }) {
             Text("Change Username")
