@@ -7,5 +7,4 @@ package com.github.wanderwise_inc.app.model.location
  */
 data class ItineraryPreferences (
     val tags: List<Tag>,
-    val minRating: Double   // contained in [0, 1]
 )
