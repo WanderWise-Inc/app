@@ -147,6 +147,7 @@ dependencies {
 
     implementation("com.google.firebase:firebase-database-ktx:20.3.0")
     implementation("com.google.firebase:firebase-firestore:24.10.0")
+    implementation("com.google.firebase:firebase-auth:22.3.1")
     implementation("com.firebaseui:firebase-ui-auth:7.2.0")
 
     val nav_version = "2.7.7"
@@ -212,6 +213,9 @@ dependencies {
 
     // ----------       Robolectric     ------------
     testImplementation(libs.robolectric)
+
+    // ----------       Mockito ------------
+    testImplementation("org.mockito.kotlin:mockito-kotlin:5.2.1")
 }
 
 tasks.register("jacocoTestReport", JacocoReport::class) {
