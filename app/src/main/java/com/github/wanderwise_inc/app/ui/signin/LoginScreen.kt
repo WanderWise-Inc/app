@@ -1,6 +1,7 @@
 package com.github.wanderwise_inc.app.ui.signin
 
 import android.app.Activity.RESULT_OK
+import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -41,6 +42,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(
+    context: Context,
     userViewModel : UserViewModel, 
     navController: NavHostController,
     modifier: Modifier = Modifier
@@ -67,7 +69,7 @@ fun LoginScreen(
                 .requiredWidth(width = 289.dp)
                 .requiredHeight(height = 39.dp)
                 .clip(shape = RoundedCornerShape(8.dp))
-                .background(color = Color(0xFF972626))){ SignInButton(userViewModel, navController) }
+                .background(color = Color(0xFF972626))){ SignInButton(context, userViewModel, navController) }
         Image(
             painter = painterResource(id = R.drawable.google__g__logo_svg),
             contentDescription = "google-logo-9808 1",
@@ -112,7 +114,8 @@ fun LoginScreen(
 
 @Composable
 fun SignInButton(
-    userViewModel: UserViewModel, 
+    context : Context,
+    userViewModel: UserViewModel,
     navController: NavHostController,
 ) {
     // Added a coroutine because userViewModel functions are async
@@ -172,7 +175,7 @@ fun SignInButton(
                             val success = userViewModel.setUser(u)
                             if (success) {
                                 Log.d("USERS", "USER ADDED TO DB")
-
+                                userViewModel.storeImage(userViewModel, context, user.photoUrl!!)
                                 navController.navigate(Graph.HOME)
 
                             } else {

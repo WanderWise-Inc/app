@@ -25,7 +25,7 @@ fun RootNavigationGraph(
         route = Graph.ROOT,
         startDestination = Graph.AUTHENTICATION
     ) {
-        authNavGraph(userViewModel, navController)
+        authNavGraph(context, userViewModel, navController)
         composable(route = Graph.HOME) {
             HomeScreen(userViewModel, context)
         }
