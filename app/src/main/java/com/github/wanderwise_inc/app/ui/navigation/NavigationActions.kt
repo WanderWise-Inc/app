@@ -12,67 +12,113 @@ import com.github.wanderwise_inc.app.R
 object Route {
     const val SIGNIN = "SignIn"
     const val OVERVIEW = "Overview"
+    const val LIKED = "Liked"
+    const val SEARCH = "Search"
     const val MAP = "Map"
-    const val ITINERARY = "Itinerary"
-    const val ITINERARY_PERSONAL = "Itinerary/Personal"
-    const val ITINERARY_LIKED = "Itinerary/Liked"
-    const val ITINERARY_POPULAR = "Itinerary/Popular"
+    const val PROFILE = "Profile"
 }
 
+object Tags {
+    const val TRENDING = "Trending"
+    const val ADVENTURE = "Adventure"
+    const val SHOPPING = "Shopping"
+    const val SIGHT_SEEING = "Sight seeing"
+    const val DRINKS = "Drinks"
+}
+
+
+// VERY UGLY CODE -> MUST IMPROVE
 sealed class Destination(
-    val name: String,
     val route: String,
+    val icon: Int,
     @StringRes val textId: Int
 ) {
     sealed class TopLevelDestination(
-        val icon: Int, name: String, route: String, textId: Int
-    ): Destination(name, route, textId) {
+        route: String, 
+        icon: Int, 
+        textId: Int
+    ) : Destination(route, icon, textId) {
         data object Overview: TopLevelDestination(
-            name = getNameFromRoute(Route.OVERVIEW),
             route = Route.OVERVIEW,
             icon = R.drawable.menu_icon,
             textId = R.string.overview_string
         )
+        data object Liked: TopLevelDestination(
+            route = Route.LIKED,
+            icon = R.drawable.liked_icon,
+            textId = R.string.liked_string
+        )
+        data object Search: TopLevelDestination(
+            route = Route.SEARCH,
+            icon = R.drawable.search_icon,
+            textId = R.string.search_string,
+        )
         data object Map: TopLevelDestination(
-            name = getNameFromRoute(Route.MAP),
             route = Route.MAP,
             icon = R.drawable.map_icon,
             textId = R.string.map_string
         )
-        data object Itineraries: TopLevelDestination(
-            name = getNameFromRoute(Route.ITINERARY),
-            route = Route.ITINERARY,
-            icon = R.drawable.itinerary_icon,
-            textId = R.string.itinerary_string
+        data object Profile: TopLevelDestination(
+            route = Route.PROFILE,
+            icon = R.drawable.profile_icon,
+            textId = R.string.profile_string
         )
     }
 
-    sealed class ItineraryLevelDestination(
-        val icon: Int, name: String, route: String, textId: Int
-    ): Destination(name, route, textId) {
-        data object Itineraries_personal: ItineraryLevelDestination(
-            name = getNameFromRoute(Route.ITINERARY_PERSONAL),
-            route = Route.ITINERARY_PERSONAL,
-            icon = R.drawable.person_icon,
-            textId = R.string.itinerary_personal_string // MY ITINERARIES ??
+    sealed class OverviewTagLevelDestination(
+        route: String, icon: Int, textId: Int
+    ): Destination(route, icon, textId) {
+        data object Trending: OverviewTagLevelDestination(
+            route = Route.OVERVIEW + "/" + Tags.TRENDING,
+            icon = R.drawable.trending_icon,
+            textId = R.string.trending_string
         )
-        data object Itineraries_liked: ItineraryLevelDestination(
-            name = getNameFromRoute(Route.ITINERARY_LIKED),
-            route = Route.ITINERARY_LIKED,
-            icon = R.drawable.liked_icon,
-            textId = R.string.itinerary_liked_string
+        data object Adventure: OverviewTagLevelDestination(
+            route = Route.OVERVIEW + "/" + Tags.ADVENTURE,
+            icon = R.drawable.adventure_icon,
+            textId = R.string.adventure_string
         )
-        data object Itineraries_popular: ItineraryLevelDestination(
-            name = getNameFromRoute(Route.ITINERARY_POPULAR),
-            route = Route.ITINERARY_POPULAR,
-            icon = R.drawable.popular_icon,
-            textId = R.string.itinerary_popular_string // TRENDING ??
+        data object Shopping: OverviewTagLevelDestination(
+            route = Route.OVERVIEW + "/" + Tags.SHOPPING,
+            icon = R.drawable.shopping_icon,
+            textId = R.string.shopping_string
+        )
+        data object SightSeeing: OverviewTagLevelDestination(
+            route = Route.OVERVIEW + "/" + Tags.SIGHT_SEEING,
+            icon = R.drawable.sight_seeing_icon,
+            textId = R.string.sight_seeing_string
+        )
+        data object Drinks: OverviewTagLevelDestination(
+            route = Route.OVERVIEW + "/" + Tags.DRINKS,
+            icon = R.drawable.drinks_icon,
+            textId = R.string.drinks_string
         )
     }
-}
 
-fun getNameFromRoute(route: String): String {
-    return route.split("/").last()
+    sealed class LikedTagLevelDestination(
+        route: String, icon: Int, textId: Int
+    ): Destination(route, icon, textId) {
+        data object Adventure: LikedTagLevelDestination(
+            route = Route.LIKED + "/" + Tags.ADVENTURE,
+            icon = R.drawable.adventure_icon,
+            textId = R.string.adventure_string
+        )
+        data object Shopping: LikedTagLevelDestination(
+            route = Route.LIKED + "/" + Tags.SHOPPING,
+            icon = R.drawable.shopping_icon,
+            textId = R.string.shopping_string
+        )
+        data object SightSeeing: LikedTagLevelDestination(
+            route = Route.LIKED + "/" + Tags.SIGHT_SEEING,
+            icon = R.drawable.sight_seeing_icon,
+            textId = R.string.sight_seeing_string
+        )
+        data object Drinks: LikedTagLevelDestination(
+            route = Route.LIKED + "/" + Tags.DRINKS,
+            icon = R.drawable.drinks_icon,
+            textId = R.string.drinks_string
+        )
+    }
 }
 
 /*sealed class TopLevelDestination: Destination(
@@ -117,14 +163,25 @@ fun getNameFromRoute(route: String): String {
 
 val TOP_LEVEL_DESTINATIONS = listOf(
     Destination.TopLevelDestination.Overview,
-    Destination.TopLevelDestination.Itineraries,
+    Destination.TopLevelDestination.Liked,
+    Destination.TopLevelDestination.Search,
     Destination.TopLevelDestination.Map,
+    Destination.TopLevelDestination.Profile
 )
 
-val ITINERARY_LEVEL_DESTINATIONS = listOf(
-    Destination.ItineraryLevelDestination.Itineraries_personal,
-    Destination.ItineraryLevelDestination.Itineraries_liked,
-    Destination.ItineraryLevelDestination.Itineraries_popular,
+val OVERVIEW_LEVEL_DESTINATIONS = listOf(
+    Destination.OverviewTagLevelDestination.Trending,
+    Destination.OverviewTagLevelDestination.Adventure,
+    Destination.OverviewTagLevelDestination.Shopping,
+    Destination.OverviewTagLevelDestination.SightSeeing,
+    Destination.OverviewTagLevelDestination.Drinks,
+)
+
+val LIKED_LEVEL_DESTINATIONS = listOf(
+    Destination.LikedTagLevelDestination.Adventure,
+    Destination.LikedTagLevelDestination.Shopping,
+    Destination.LikedTagLevelDestination.SightSeeing,
+    Destination.LikedTagLevelDestination.Drinks,
 )
 
 class NavigationActions (private val navController: NavHostController) {

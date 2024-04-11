@@ -2,8 +2,12 @@
     <string name="app_name">WanderWise</string>
     <string name="map_string">Map</string>
     <string name="overview_string">Overview</string>
-    <string name="itinerary_string">Itinerary</string>
-    <string name="itinerary_personal_string">Personal</string>
-    <string name="itinerary_liked_string">Liked</string>
-    <string name="itinerary_popular_string">Popular</string>
+    <string name="liked_string">Liked</string>
+    <string name="profile_string">Profile</string>
+    <string name="search_string">Search</string>
+    <string name="trending_string">Trending</string>
+    <string name="adventure_string">Adventure</string>
+    <string name="shopping_string">Shopping</string>
+    <string name="sight_seeing_string">Sight seeing</string>
+    <string name="drinks_string">Drinks</string>
 </resources>

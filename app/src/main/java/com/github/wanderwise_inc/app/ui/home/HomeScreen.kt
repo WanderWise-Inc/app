@@ -6,32 +6,29 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.Button
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.TopAppBar
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
-import com.github.wanderwise_inc.app.ui.navigation.BottomNavigationMenu
-import com.github.wanderwise_inc.app.ui.navigation.NavigationActions
-import com.github.wanderwise_inc.app.ui.navigation.Destination.TopLevelDestination
-import com.github.wanderwise_inc.app.ui.navigation.graph.HomeNavGraph
-import com.github.wanderwise_inc.app.viewmodel.HomeViewModel
-import com.github.wanderwise_inc.app.viewmodel.MapViewModel
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material3.ButtonColors
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.TextButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material.primarySurface
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.github.wanderwise_inc.app.R
+import com.github.wanderwise_inc.app.ui.navigation.BottomNavigationMenu
+import com.github.wanderwise_inc.app.ui.navigation.NavigationActions
+import com.github.wanderwise_inc.app.ui.navigation.graph.HomeNavGraph
+import com.github.wanderwise_inc.app.viewmodel.HomeViewModel
+import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 
 @Composable
 fun HomeScreen(
@@ -43,8 +40,8 @@ fun HomeScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                backgroundColor = MaterialTheme.colorScheme.surfaceContainer,
-                contentColor = MaterialTheme.colorScheme.secondaryContainer,
+                backgroundColor = MaterialTheme.colors.surface,
+                contentColor = MaterialTheme.colors.primarySurface,
             ) {
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -53,7 +50,7 @@ fun HomeScreen(
                 ) {
                     TextButton(
                         onClick = { /*TODO*/ },
-                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.surfaceContainer),
+                        colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primarySurface),
                         
                     ) {
                         Icon(
@@ -64,10 +61,10 @@ fun HomeScreen(
                     Text(text = "WanderWise")
                     TextButton(
                         onClick = { /*TODO*/ },
-                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.surfaceContainer)
+                        colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primarySurface)
                     ) {
                         Icon(
-                            painter = painterResource(id = R.drawable.person_icon), 
+                            painter = painterResource(id = R.drawable.settings_icon), 
                             modifier = Modifier
                                 .size(20.dp),
                             contentDescription = null

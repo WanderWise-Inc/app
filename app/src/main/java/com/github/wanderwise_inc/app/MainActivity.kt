@@ -58,13 +58,13 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    //HomeScreen()
-                    RootNavigationGraph(
+                    HomeScreen(homeViewModel, mapViewModel)
+                    /*RootNavigationGraph(
                         homeViewModel = homeViewModel,
                         userViewModel = userViewModel,
                         mapViewModel = mapViewModel,
                         navController = rememberNavController()
-                    )
+                    )*/
                 }
             }
         }

@@ -38,5 +38,6 @@ object Graph {
     const val ROOT = "root_graph"
     const val AUTHENTICATION = "auth_graph"
     const val HOME = "home_graph"
-    const val ITINERARY = "itinerary_graph"
+    const val OVERVIEW = "overview_graph"
+    const val LIKED = "liked_graph"
 }
