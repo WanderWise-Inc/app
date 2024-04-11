@@ -1,5 +1,6 @@
 package com.github.wanderwise_inc.app.ui.navigation.graph
 
+import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
@@ -7,10 +8,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.github.wanderwise_inc.app.ui.home.HomeScreen
 import com.github.wanderwise_inc.app.viewmodel.HomeViewModel
+import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.github.wanderwise_inc.app.viewmodel.UserViewModel
 
 @Composable
 fun RootNavigationGraph(
+    context : Context,
     userViewModel: UserViewModel,
     homeViewModel: HomeViewModel,
     navController: NavHostController
@@ -24,7 +27,7 @@ fun RootNavigationGraph(
     ) {
         authNavGraph(userViewModel, navController)
         composable(route = Graph.HOME) {
-            HomeScreen()
+            HomeScreen(userViewModel, context)
         }
     }
 }

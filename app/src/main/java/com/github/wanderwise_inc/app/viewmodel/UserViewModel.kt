@@ -1,10 +1,13 @@
 package com.github.wanderwise_inc.app.viewmodel
 
 import android.content.ContentValues.TAG
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.github.wanderwise_inc.app.model.user.User
 import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject
@@ -24,6 +27,20 @@ class UserViewModel : ViewModel() {
     }
 
     /**
+     * @return the current user connected
+     */
+    public fun getUserId() : String {
+        return FirebaseAuth.getInstance().currentUser!!.uid
+    }
+
+    /**
+     * @return the profile picture of the user connected
+     */
+    public fun getUserProfilePicture() : Uri? {
+        return FirebaseAuth.getInstance().currentUser!!.photoUrl
+    }
+
+    /**
      * add a user to the database
      * @return true if the user was added, false if not
      */
@@ -34,7 +51,10 @@ class UserViewModel : ViewModel() {
             "userid" to user.userid,
             "username" to user.username,
             "email" to user.email,
-            "phoneNumber" to user.phoneNumber
+            "phoneNumber" to user.phoneNumber,
+            "country" to user.country,
+            "description" to user.description,
+            "upVotes" to user.upVotes
         )
 
         // Adding the user to the collection, returning true if success and false if failure
@@ -65,13 +85,17 @@ class UserViewModel : ViewModel() {
         return try {
             // Get first the document with the given uid
             val document = usersCollection.document(uid).get().await()
+
             if (document.exists()) {
                 val userid = document.get("userid").toString()
                 val username = document.get("username").toString()
                 val email = document.get("email").toString()
                 val phoneNumber = document.get("phoneNumber").toString()
+                val country = document.get("country").toString()
+                val description = document.get("description").toString()
+                val upVotes = 0
 
-                User(userid, username, email, phoneNumber)
+                User(userid, username, email, phoneNumber, country, description, upVotes)
             } else {
                 null
             }
@@ -90,14 +114,13 @@ class UserViewModel : ViewModel() {
         try {
             val querySnapshot = usersCollection.get().await()
             for (document in querySnapshot.documents) {
-
                 val userid = document.get("userid").toString()
-                val username = document.get("username").toString()
-                val email = document.get("email").toString()
-                val phoneNumber = document.get("phoneNumber").toString()
-
-                val user = User(userid, username, email, phoneNumber)
-                userList.add(user)
+                val user = getUser(userid)
+                if (user != null) {
+                    userList.add(user)
+                } else {
+                    // TODO ERROR
+                }
             }
         } catch (e: Exception) {
             Log.w(TAG, "Error adding document", e)
@@ -151,6 +174,36 @@ class UserViewModel : ViewModel() {
     }
 
     /**
+     * update the origin country of the user
+     * @return true if update is successful, false if not
+     */
+    public fun updateCountry(user : User, newCountry : String) : Boolean {
+        return try {
+            usersCollection.document(user.userid)
+                .update("country", newCountry)
+            true
+        } catch(e : Exception) {
+            Log.d(TAG, "Error changing country", e)
+            false
+        }
+    }
+
+    /**
+     * update the description of the user
+     * @return true if update is successful, false if not
+     */
+    public fun updateDescription(user : User, newDescription : String) : Boolean {
+        return try {
+            usersCollection.document(user.userid)
+                .update("description", newDescription)
+            true
+        } catch(e : Exception) {
+            Log.d(TAG, "Error changing country", e)
+            false
+        }
+    }
+
+    /**
      * update the email field in the database
      * @return true if update is successful, false if not
      */
@@ -163,6 +216,26 @@ class UserViewModel : ViewModel() {
             Log.d(TAG, "Error changing email", e)
             false
         }
+    }
+
+    /**
+     * update the upvotes in the database
+     * @return true if update is successful, false if not
+     */
+    public fun updateUpVotes(user : User) : Boolean {
+        return try {
+            usersCollection.document(user.userid)
+                .update("upVotes", user.upVotes+1)
+            true
+        } catch(e : Exception) {
+            Log.d(TAG, "Error changing email", e)
+            false
+        }
+    }
+
+    public suspend fun getUpVotes(uid : String) : Int {
+        val user = getUser(uid)
+        return if (user != null) user.upVotes else 0
     }
 
 }

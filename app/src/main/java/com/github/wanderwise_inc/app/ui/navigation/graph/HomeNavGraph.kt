@@ -1,5 +1,6 @@
 package com.github.wanderwise_inc.app.ui.navigation.graph
 
+import android.content.Context
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
@@ -9,11 +10,15 @@ import androidx.navigation.compose.composable
 import com.github.wanderwise_inc.app.ui.itineraries.ItineraryScreen
 import com.github.wanderwise_inc.app.ui.map.MapScreen
 import com.github.wanderwise_inc.app.ui.overview.OverviewScreen
+import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
+import com.github.wanderwise_inc.app.viewmodel.UserViewModel
 
 @Composable
 fun HomeNavGraph(
     navController: NavHostController,
-    innerPadding: PaddingValues
+    innerPadding: PaddingValues,
+    context : Context,
+    userViewModel: UserViewModel
 ) {
     NavHost(
         navController = navController,
@@ -21,7 +26,7 @@ fun HomeNavGraph(
         startDestination = TopLevelDestination.Overview.route
     ) {
         composable(route = TopLevelDestination.Overview.route) {
-            OverviewScreen()
+            OverviewScreen(userViewModel,context)
         }
         composable(route = TopLevelDestination.Itineraries.route) {
             ItineraryScreen()

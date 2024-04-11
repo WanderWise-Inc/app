@@ -161,8 +161,11 @@ fun SignInButton(
                         val uid = user.uid
                         val phoneNumber = user.phoneNumber
                         val properPhoneNumber = phoneNumber ?: ""
+                        val country = ""
+                        val description = ""
+                        val upVotes = 0
 
-                        val u = User(uid, properUsername, properEmail, properPhoneNumber)
+                        val u = User(uid, properUsername, properEmail, properPhoneNumber, country, description, upVotes)
 
                         // Trying to set the user
                         coroutineScope.launch {

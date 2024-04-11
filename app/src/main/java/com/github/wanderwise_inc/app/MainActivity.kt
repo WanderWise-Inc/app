@@ -2,7 +2,9 @@ package com.github.wanderwise_inc.app
 
 
 import android.app.Activity
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -30,6 +32,7 @@ import com.github.wanderwise_inc.app.model.user.User
 import com.github.wanderwise_inc.app.ui.map.MapScreen
 import com.github.wanderwise_inc.app.ui.theme.WanderWiseTheme
 import com.github.wanderwise_inc.app.viewmodel.HomeViewModel
+import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.github.wanderwise_inc.app.viewmodel.UserViewModel
 
 import com.google.android.gms.maps.GoogleMap
@@ -37,14 +40,19 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 // import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.storage.FirebaseStorage
 import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.rememberCameraPositionState
 import kotlinx.coroutines.launch
+import java.io.File
+import java.io.FileInputStream
+import java.util.UUID
 
 class MainActivity : ComponentActivity() {
     private val homeViewModel by viewModels<HomeViewModel>()
     private val userViewModel by viewModels<UserViewModel>()
+    private val profileViewModel by viewModels<ProfileViewModel>()
     // private lateinit var analytics : FirebaseAnalytics
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,10 +64,14 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     RootNavigationGraph(
+                        this,
                         homeViewModel = homeViewModel,
                         userViewModel = userViewModel, 
                         navController = rememberNavController()
                     )
+/*                    TestProfile(profileViewModel = profileViewModel)*/
+
+
                 }
             }
         }
@@ -82,7 +94,7 @@ fun GreetingPreview() {
     }
 }
 
-@Composable
+/*@Composable
 fun AddUser(userViewModel: UserViewModel) {
     val coroutineScope = rememberCoroutineScope()
     Button(onClick = {
@@ -111,9 +123,9 @@ fun AddUser(userViewModel: UserViewModel) {
         Text(text = "CLICK ME")
     }
 
-}
+}*/
 
-@Composable
+/*@Composable
 fun TestSignIn(userViewModel: UserViewModel) {
     val providers = arrayListOf(AuthUI.IdpConfig.GoogleBuilder().build())
     val coroutineScope = rememberCoroutineScope()
@@ -160,4 +172,9 @@ fun TestSignIn(userViewModel: UserViewModel) {
     Button(onClick = { signInLauncher.launch(signInIntent)}) {
         Text(text = "SIGN IN")
     }
+}*/
+
+@Composable
+fun TestProfile(profileViewModel : ProfileViewModel) {
+
 }
