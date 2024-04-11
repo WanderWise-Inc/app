@@ -134,7 +134,6 @@ fun SignInButton(
 
         if (user == null) {
             Log.d("USERS", "USER IS NULL")
-
             // TODO Handle ERROR
 
         } else {
