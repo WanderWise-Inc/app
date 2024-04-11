@@ -17,7 +17,6 @@ import kotlinx.coroutines.flow.Flow
  * @brief ViewModel class for providing `Location`s and `Itinerary`s to the map UI
  */
 class MapViewModel(private val itineraryRepository: ItineraryRepository) : ViewModel() {
-    val LOG_DEBUG_TAG: String = "MAP_VIEW_MODEL" // for logging consistency
     /**
      * @return a flow of all public itineraries
      */
