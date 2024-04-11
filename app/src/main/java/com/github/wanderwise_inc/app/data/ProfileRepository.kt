@@ -27,6 +27,9 @@ interface ProfileRepository {
     fun deleteProfile(profile: Profile)
 }
 
+/**
+ * @brief test implementation of repository simulating a remote data source
+ */
 class ProfileRepositoryTestImpl : ProfileRepository {
     private var profiles = mutableListOf<Profile>()
     private var uidCtr = 0 // for getting a new uid
@@ -57,5 +60,4 @@ class ProfileRepositoryTestImpl : ProfileRepository {
     override fun deleteProfile(profile: Profile) {
         profiles.remove(profile)
     }
-
 }
