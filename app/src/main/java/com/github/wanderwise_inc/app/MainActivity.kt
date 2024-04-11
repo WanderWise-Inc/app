@@ -32,8 +32,7 @@ import com.github.wanderwise_inc.app.model.location.ItineraryPreferences
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
 import com.github.wanderwise_inc.app.model.location.Location
 import com.github.wanderwise_inc.app.model.user.User
-import com.github.wanderwise_inc.app.ui.map.DummyPreviewItinerary
-import com.github.wanderwise_inc.app.ui.map.DummyPreviewItineraryViewModel
+
 import com.github.wanderwise_inc.app.ui.map.MapScreen
 import com.github.wanderwise_inc.app.ui.theme.WanderWiseTheme
 import com.github.wanderwise_inc.app.viewmodel.HomeViewModel
