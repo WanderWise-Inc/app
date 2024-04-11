@@ -4,14 +4,13 @@ object ProfileLabels {
     const val UID = "uid"
     const val USER_UID = "user_uid"
     const val BIO = "bio"
-    const val COUNTRY = "country"
 }
 
 data class Profile(
     var uid: String = "",
+    var displayName: String,
     val userUid: String,
     val bio: String,
-    val country: String,
 ) {
     /**
      * @return a map of a profile
@@ -20,13 +19,12 @@ data class Profile(
         return mapOf(
             ProfileLabels.UID to uid,
             ProfileLabels.USER_UID to userUid,
-            ProfileLabels.BIO to bio,
-            ProfileLabels.COUNTRY to country
+            ProfileLabels.BIO to bio
         )
     }
 
     /**
      * @brief no argument constructor for serialization
      */
-    constructor() : this(userUid="", bio="", country="")
+    constructor() : this(displayName="", userUid="", bio="")
 }
