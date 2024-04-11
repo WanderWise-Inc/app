@@ -30,6 +30,7 @@ class UserLocationClient(
      * @brief requests location updates at a specified interval.
      *
      * @param interval the interval, in milliseconds, at which location updates are requested.
+     * @throws IllegalArgumentException if interval is not strictly positive
      * @throws LocationClient.LocationException if location permissions are denied or if there's
      * no means of tracking position (e.g., GPS and network providers are disabled).
      * @return a flow emitting the user's location updates.
