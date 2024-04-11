@@ -32,6 +32,16 @@ class MapViewModel(private val itineraryRepository: ItineraryRepository) : ViewM
     }
 
     /**
+     * @return the total number of likes from a list of itineraries
+     */
+    fun getItineraryUpvotes(itineraries: List<Itinerary>): Int {
+        var totalLikes : Int = 0
+        for (itinerary in itineraries)
+            totalLikes += itinerary.numLikes
+        return totalLikes
+    }
+
+    /**
      * @param preferences user query preferences
      * @see Itinerary.scoreFromPreferences for sorting the list from View
      * @return a list of itineraries matching a user's query preferences
