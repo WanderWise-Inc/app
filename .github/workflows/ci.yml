@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - main
+      - ci/sonarcloud-setup
 
   pull_request:
     types:
