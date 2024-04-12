@@ -9,7 +9,7 @@ interface ProfileRepository {
      * @param userUid the uid of a user
      * @return a flow of a queried profile
      */
-    fun getProfile(userUid: String): Flow<Profile>
+    fun getProfile(userUid: String): Flow<Profile?>
 
     /**
      * @return a flow of all profiles
@@ -37,10 +37,13 @@ class ProfileRepositoryTestImpl : ProfileRepository {
     /**
      * @throws NoSuchElementException if there are no matches
      */
-    override fun getProfile(userUid: String): Flow<Profile> {
+    override fun getProfile(userUid: String): Flow<Profile?> {
         return flow {
             val filteredProfiles = profiles.filter { it.userUid == userUid }
-            emit( filteredProfiles.first() )
+            if (filteredProfiles.isEmpty())
+                emit(null)
+            else
+                emit( filteredProfiles.first() )
         }
     }
 

@@ -14,7 +14,7 @@ class ProfileViewModel(private val profileRepository: ProfileRepository,
     /**
      * @return flow of a user profile
      */
-    fun getProfile(userUid: String): Flow<Profile> {
+    fun getProfile(userUid: String): Flow<Profile?> {
         return profileRepository.getProfile(userUid)
     }
 
