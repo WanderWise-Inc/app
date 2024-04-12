@@ -1,6 +1,5 @@
 package com.github.wanderwise_inc.app
 
-
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -22,6 +21,7 @@ import com.github.wanderwise_inc.app.ui.navigation.graph.RootNavigationGraph
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.data.ImageRepositoryTestImpl
 import com.github.wanderwise_inc.app.data.ItineraryRepositoryTestImpl
+import com.github.wanderwise_inc.app.data.ProfileRepositoryTestImpl
 import com.github.wanderwise_inc.app.ui.map.MapScreen
 import com.github.wanderwise_inc.app.ui.theme.WanderWiseTheme
 import com.github.wanderwise_inc.app.viewmodel.HomeViewModel
@@ -32,9 +32,14 @@ import com.github.wanderwise_inc.app.viewmodel.UserViewModel
 class MainActivity : ComponentActivity() {
     private val homeViewModel by viewModels<HomeViewModel>()
     private val userViewModel by viewModels<UserViewModel>()
-    private val profileViewModel by viewModels<ProfileViewModel>()
+    // private val profileViewModel by viewModels<ProfileViewModel>()
+
     private val itineraryRepository = ItineraryRepositoryTestImpl()
     private val mapViewModel = MapViewModel(itineraryRepository)
+
+    private val profileRepository = ProfileRepositoryTestImpl()
+    private val imageRepository = ImageRepositoryTestImpl(application)
+    private val profileViewModel = ProfileViewModel(profileRepository, imageRepository)
 
 
     // private lateinit var analytics : FirebaseAnalytics
@@ -55,6 +60,7 @@ class MainActivity : ComponentActivity() {
                         application.applicationContext,
                         homeViewModel = homeViewModel,
                         userViewModel = userViewModel,
+                        profileViewModel = profileViewModel,
                         mapViewModel = mapViewModel,
                         navController = rememberNavController()
                     )
