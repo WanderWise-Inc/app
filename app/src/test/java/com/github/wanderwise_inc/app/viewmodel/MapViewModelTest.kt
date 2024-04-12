@@ -14,23 +14,22 @@ import org.junit.Assert.assertNotEquals
 import org.junit.Before
 import org.junit.Test
 
-// helper function for generating random latitude and longitude...
-fun randomLat(): Double = Random.nextDouble(-90.0, 90.0)
-
-fun randomLon(): Double = Random.nextDouble(-180.0, 180.0)
-
-// helper function for generating random locations
-fun randomLocations(size: Int): List<Location> {
-  // helper function for generating random locations
-  val locations = mutableListOf<Location>()
-  for (i in 0 until size) locations.add(Location(randomLat(), randomLon()))
-  return locations.toList()
-}
-
 /** @brief test class for mapview model */
 class MapViewModelTest {
   private lateinit var itineraryRepository: ItineraryRepository
   private lateinit var mapViewModel: MapViewModel
+  // helper function for generating random latitude and longitude...
+  fun randomLat(): Double = Random.nextDouble(-90.0, 90.0)
+
+  fun randomLon(): Double = Random.nextDouble(-180.0, 180.0)
+
+  // helper function for generating random locations
+  fun randomLocations(size: Int): List<Location> {
+    // helper function for generating random locations
+    val locations = mutableListOf<Location>()
+    for (i in 0 until size) locations.add(Location(randomLat(), randomLon()))
+    return locations.toList()
+  }
 
   // some public itineraries
   private val ethanItinerary =

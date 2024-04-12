@@ -7,11 +7,8 @@ import androidx.compose.ui.platform.testTag
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 
 @Composable
-fun ProfileScreen(
-    mapViewModel: MapViewModel
-) {
-    Text(
-        text = "Welcome, here you will find all the information about your profile",
-        modifier = Modifier.testTag("Profile screen")
-    )
+fun ProfileScreen(mapViewModel: MapViewModel) {
+  Text(
+      text = "Welcome, here you will find all the information about your profile",
+      modifier = Modifier.testTag("Profile screen"))
 }

@@ -16,27 +16,22 @@ import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 
 @Composable
 fun OverviewScreen(
-    mapViewModel : MapViewModel,
+    mapViewModel: MapViewModel,
     navController: NavHostController = rememberNavController()
 ) {
-    //Text(text = "Welcome to the itinerary screen", Modifier.testTag("Itinerary Screen"))
-    val navigator = NavigationActions(navController)
-    Scaffold(
-        topBar = {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                SearchBar()
-                TopNavigationMenu(navigator, Route.OVERVIEW)
+  // Text(text = "Welcome to the itinerary screen", Modifier.testTag("Itinerary Screen"))
+  val navigator = NavigationActions(navController)
+  Scaffold(
+      topBar = {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.fillMaxWidth()) {
+              SearchBar()
+              TopNavigationMenu(navigator, Route.OVERVIEW)
             }
-        },
-        modifier = Modifier.testTag("Overview screen")
-    ) {innerPadding ->
+      },
+      modifier = Modifier.testTag("Overview screen")) { innerPadding ->
         OverviewNavGraph(
-            mapViewModel = mapViewModel,
-            navController = navController,
-            innerPadding = innerPadding
-        )
-    }
+            mapViewModel = mapViewModel, navController = navController, innerPadding = innerPadding)
+      }
 }

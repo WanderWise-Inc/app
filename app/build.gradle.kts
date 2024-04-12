@@ -263,6 +263,14 @@ tasks.register("jacocoTestReport", JacocoReport::class) {
     })
 }
 
+tasks.withType<Test> {
+    // Configure Jacoco for each tests
+    configure<JacocoTaskExtension> {
+        isIncludeNoLocationClasses = true
+        excludes = listOf("jdk.internal.*")
+    }
+}
+
 secrets {
     propertiesFileName = "secrets.properties"
 
