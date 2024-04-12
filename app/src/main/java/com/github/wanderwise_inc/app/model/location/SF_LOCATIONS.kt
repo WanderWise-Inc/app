@@ -1,6 +1,7 @@
 package com.github.wanderwise_inc.app.model.location
 
-const val SF_LOCATIONS = """
+const val SF_LOCATIONS =
+    """
     [
     {
         "geometry": {

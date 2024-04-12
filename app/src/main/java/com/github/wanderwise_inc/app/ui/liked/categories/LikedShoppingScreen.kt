@@ -10,5 +10,5 @@ fun LikedShoppingScreen(
     navController: NavHostController,
     mapViewModel: MapViewModel,
 ) {
-    Text(text = "Welcome, here you will find shopping-themed itineraries")
+  Text(text = "Welcome, here you will find shopping-themed itineraries")
 }
