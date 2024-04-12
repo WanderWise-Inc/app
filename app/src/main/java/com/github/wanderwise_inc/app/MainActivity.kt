@@ -1,62 +1,54 @@
 package com.github.wanderwise_inc.app
 
-
-import android.app.Activity
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.github.wanderwise_inc.app.ui.navigation.graph.RootNavigationGraph
-import com.firebase.ui.auth.AuthUI
-import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
-import com.github.wanderwise_inc.app.model.location.Itinerary
-import com.github.wanderwise_inc.app.model.location.ItineraryPreferences
-import com.github.wanderwise_inc.app.model.location.ItineraryTags
-import com.github.wanderwise_inc.app.model.location.Location
-import com.github.wanderwise_inc.app.model.user.User
+import com.github.wanderwise_inc.app.data.ImageRepository
+import com.github.wanderwise_inc.app.data.ImageRepositoryTestImpl
+import com.github.wanderwise_inc.app.data.ItineraryRepositoryTestImpl
+import com.github.wanderwise_inc.app.data.ProfileRepositoryTestImpl
 import com.github.wanderwise_inc.app.ui.map.DummyPreviewItinerary
-
 import com.github.wanderwise_inc.app.ui.map.MapScreen
 import com.github.wanderwise_inc.app.ui.theme.WanderWiseTheme
 import com.github.wanderwise_inc.app.viewmodel.HomeViewModel
+import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.UserViewModel
-
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
-// import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.auth.FirebaseAuth
-import com.google.maps.android.compose.MapProperties
-import com.google.maps.android.compose.MapUiSettings
-import com.google.maps.android.compose.rememberCameraPositionState
-import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     private val homeViewModel by viewModels<HomeViewModel>()
     private val userViewModel by viewModels<UserViewModel>()
-    private val mapViewModel  by viewModels<MapViewModel>()
+    // private val profileViewModel by viewModels<ProfileViewModel>()
+
+    private val itineraryRepository = ItineraryRepositoryTestImpl()
+    private val mapViewModel = MapViewModel(itineraryRepository)
+
+    private lateinit var profileViewModel: ProfileViewModel
+
+
     // private lateinit var analytics : FirebaseAnalytics
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val profileRepository = ProfileRepositoryTestImpl()
+        val imageRepository = ImageRepositoryTestImpl(application)
+        profileViewModel = ProfileViewModel(profileRepository, imageRepository)
+
         setContent {
             DummyPreviewItinerary(this)
             /*
@@ -66,9 +58,13 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    // HomeScreen(homeViewModel, mapViewModel)
                     RootNavigationGraph(
+                        application.applicationContext,
                         homeViewModel = homeViewModel,
-                        userViewModel = userViewModel, 
+                        userViewModel = userViewModel,
+                        profileViewModel = profileViewModel,
+                        mapViewModel = mapViewModel,
                         navController = rememberNavController()
                     )
                 }
@@ -77,6 +73,14 @@ class MainActivity : ComponentActivity() {
              */
         }
     }
+}
+
+@Composable
+fun ImgTest(imageRepository: ImageRepository) {
+    val imageFlow = imageRepository.fetchImage(null)
+    val bitmap by imageFlow.collectAsState(initial = null)
+    if (bitmap != null)
+        Image(painter = BitmapPainter(bitmap!!.asImageBitmap()), contentDescription = "testImage")
 }
 
 @Composable
@@ -95,7 +99,7 @@ fun GreetingPreview() {
     }
 }
 
-@Composable
+/*@Composable
 fun AddUser(userViewModel: UserViewModel) {
     val coroutineScope = rememberCoroutineScope()
     Button(onClick = {
@@ -124,9 +128,9 @@ fun AddUser(userViewModel: UserViewModel) {
         Text(text = "CLICK ME")
     }
 
-}
+}*/
 
-@Composable
+/*@Composable
 fun TestSignIn(userViewModel: UserViewModel) {
     val providers = arrayListOf(AuthUI.IdpConfig.GoogleBuilder().build())
     val coroutineScope = rememberCoroutineScope()
@@ -173,4 +177,9 @@ fun TestSignIn(userViewModel: UserViewModel) {
     Button(onClick = { signInLauncher.launch(signInIntent)}) {
         Text(text = "SIGN IN")
     }
+}*/
+
+@Composable
+fun TestProfile(profileViewModel : ProfileViewModel) {
+
 }

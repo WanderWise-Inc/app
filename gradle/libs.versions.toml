@@ -19,6 +19,7 @@ navigationRuntimeKtx = "2.7.7"
 navigationCompose = "2.7.7"
 navigationTesting = "2.7.7"
 firebase-analytics = "21.6.1"
+firebase-storage = "20.3.0"
 
 
 [libraries]
@@ -49,6 +50,7 @@ androidx-navigation-runtime-ktx = { group = "androidx.navigation", name = "navig
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 androidx-navigation-testing = { group = "androidx.navigation", name = "navigation-testing", version.ref = "navigationTesting" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebase-analytics" }
+firebase-storage = { group = "com.google.firebase", name = "firebase-storage", version.ref = "firebase-storage" }
 
 
 [plugins]

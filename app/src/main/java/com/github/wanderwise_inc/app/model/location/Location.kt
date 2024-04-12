@@ -47,7 +47,7 @@ data class Location(
     /**
      * @return the distance in kilometers to another point
      */
-    private fun distTo(other: Location): Kilometers {
+    fun distTo(other: Location): Kilometers {
         if (other.lat == lat && other.long == long)
             return 0.0
 
@@ -69,6 +69,7 @@ data class Location(
         // Calculate the angular distance in radians
         val c = 2 * atan2(sqrt(a), sqrt(1 - a))
 
+        println("dist=${earthRadius*c}")
         return earthRadius * c
     }
 
