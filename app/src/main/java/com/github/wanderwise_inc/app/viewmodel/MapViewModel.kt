@@ -72,21 +72,4 @@ class MapViewModel(private val itineraryRepository: ItineraryRepository) : ViewM
     fun deleteItinerary(itinerary: Itinerary) {
         itineraryRepository.deleteItinerary(itinerary)
     }
-
-    public fun itineraryToPolyline(itinerary: Itinerary, googleMap: GoogleMap): Polyline {
-        val polyline = googleMap.addPolyline(PolylineOptions()
-            .clickable(true)
-            .addAll(itinerary.locations.map{ it.toLatLng()}))
-
-        polyline.tag = itinerary
-
-        return polyline
-    }
-
-    private fun createMarkerOption(location: Location): MarkerOptions {
-        return MarkerOptions().position(location.toLatLng())
-    }
-    private fun locationToMarker(location: Location, googleMap: GoogleMap): Marker? {
-        return googleMap.addMarker(createMarkerOption(location))
-    }
 }

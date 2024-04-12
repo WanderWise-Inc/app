@@ -29,7 +29,10 @@ class LocationTest {
     fun toMapTest() {
         val expected = mapOf(
             "lat" to epflLat,
-            "long" to epflLon
+            "long" to epflLon,
+            "title" to null,
+            "address" to null,
+            "google_rating" to null
         )
         assertEquals(expected, epflLocation.toMap())
     }

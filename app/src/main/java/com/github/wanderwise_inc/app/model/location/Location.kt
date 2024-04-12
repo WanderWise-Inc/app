@@ -34,13 +34,13 @@ data class Location(
     /**
      * @return a map representation of a location
      */
-    fun toMap(): Map<String, Any> {
+    fun toMap(): Map<String, Any?> {
         return mapOf(
             LocationLabels.LAT to lat,
             LocationLabels.LONG to long,
-            LocationLabels.TITLE to (title ?: ""),
-            LocationLabels.ADDRESS to (address ?: ""),
-            LocationLabels.GOOGLE_RATING to (googleRating ?: 0f)
+            LocationLabels.TITLE to title,
+            LocationLabels.ADDRESS to address,
+            LocationLabels.GOOGLE_RATING to googleRating
         )
     }
 

@@ -75,6 +75,8 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "META-INF/LICENSE.md"
+            excludes += "META-INF/LICENSE-notice.md"
         }
     }
     testOptions {
@@ -164,6 +166,7 @@ dependencies {
     implementation(libs.androidx.navigation.testing)
     testImplementation(libs.junit)
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
+    androidTestImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
     globalTestImplementation(libs.androidx.junit)
     globalTestImplementation(libs.androidx.espresso.core)
 
@@ -223,6 +226,7 @@ dependencies {
 
     // ----------       Robolectric     ------------
     testImplementation(libs.robolectric)
+    androidTestImplementation(libs.robolectric)
 
     // ----------       Mockito ------------
     testImplementation("org.mockito.kotlin:mockito-kotlin:5.3.1")
