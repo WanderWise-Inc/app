@@ -4,6 +4,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.github.wanderwise_inc.app.ui.home.SearchBar
@@ -28,7 +29,8 @@ fun OverviewScreen(
               SearchBar()
               TopNavigationMenu(navigator, Route.OVERVIEW)
             }
-      }) { innerPadding ->
+      },
+      modifier = Modifier.testTag("Overview screen")) { innerPadding ->
         OverviewNavGraph(
             mapViewModel = mapViewModel, navController = navController, innerPadding = innerPadding)
       }

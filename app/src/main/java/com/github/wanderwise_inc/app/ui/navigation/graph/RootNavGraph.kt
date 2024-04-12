@@ -9,12 +9,10 @@ import com.github.wanderwise_inc.app.ui.home.HomeScreen
 import com.github.wanderwise_inc.app.viewmodel.HomeViewModel
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
-import com.github.wanderwise_inc.app.viewmodel.UserViewModel
 
 @Composable
 fun RootNavigationGraph(
     context: Context,
-    userViewModel: UserViewModel,
     profileViewModel: ProfileViewModel,
     homeViewModel: HomeViewModel,
     mapViewModel: MapViewModel,
@@ -24,7 +22,7 @@ fun RootNavigationGraph(
   // var selectedScreen by remember { mutableStateOf(TOP_LEVEL_DESTINATIONS[1]) }
   NavHost(
       navController = navController, route = Graph.ROOT, startDestination = Graph.AUTHENTICATION) {
-        authNavGraph(context, userViewModel, profileViewModel, navController)
+        authNavGraph(context, profileViewModel, navController)
         composable(route = Graph.HOME) { HomeScreen(homeViewModel, mapViewModel) }
       }
 }

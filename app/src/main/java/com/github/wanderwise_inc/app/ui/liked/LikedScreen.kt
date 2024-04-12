@@ -8,6 +8,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.github.wanderwise_inc.app.ui.home.SearchBar
@@ -32,7 +33,8 @@ fun LikedScreen(
               SearchBar()
               TopNavigationMenu(navigator, Route.LIKED)
             }
-      }) { innerPadding ->
+      },
+      modifier = Modifier.testTag("Liked screen")) { innerPadding ->
         LikedNavGraph(
             mapViewModel = mapViewModel, navController = navController, innerPadding = innerPadding)
       }

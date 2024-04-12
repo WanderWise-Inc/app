@@ -1,14 +1,9 @@
 package com.github.wanderwise_inc.app.data
 
-import android.util.Log
 import com.github.wanderwise_inc.app.model.location.Itinerary
-import com.github.wanderwise_inc.app.model.location.ItineraryLabels
 import com.github.wanderwise_inc.app.model.location.Tag
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.tasks.await
 
 interface ItineraryRepository {
   /** @return a list of all public itineraries */
@@ -36,6 +31,7 @@ interface ItineraryRepository {
 const val ITINERARY_COLLECTION_PATH: String = "itineraries"
 
 /** @brief repository implementation using firestore as data source */
+/*
 class ItineraryRepositoryFirestoreImpl : ItineraryRepository {
   private val LOG_DEBUG_TAG = "REPOSITORY_FIRESTORE"
   private val db = FirebaseFirestore.getInstance()
@@ -116,6 +112,7 @@ class ItineraryRepositoryFirestoreImpl : ItineraryRepository {
         }
   }
 }
+ */
 
 /** @brief repository used for testing viewmodel functionality */
 class ItineraryRepositoryTestImpl : ItineraryRepository {

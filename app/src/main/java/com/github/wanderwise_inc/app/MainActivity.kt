@@ -4,34 +4,23 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.graphics.painter.BitmapPainter
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
-import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.data.ImageRepositoryTestImpl
 import com.github.wanderwise_inc.app.data.ItineraryRepositoryTestImpl
 import com.github.wanderwise_inc.app.data.ProfileRepositoryTestImpl
-import com.github.wanderwise_inc.app.ui.map.MapScreen
 import com.github.wanderwise_inc.app.ui.navigation.graph.RootNavigationGraph
 import com.github.wanderwise_inc.app.ui.theme.WanderWiseTheme
 import com.github.wanderwise_inc.app.viewmodel.HomeViewModel
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
-import com.github.wanderwise_inc.app.viewmodel.UserViewModel
 
 class MainActivity : ComponentActivity() {
   private val homeViewModel by viewModels<HomeViewModel>()
-  private val userViewModel by viewModels<UserViewModel>()
   // private val profileViewModel by viewModels<ProfileViewModel>()
 
   private val itineraryRepository = ItineraryRepositoryTestImpl()
@@ -55,7 +44,6 @@ class MainActivity : ComponentActivity() {
           RootNavigationGraph(
               application.applicationContext,
               homeViewModel = homeViewModel,
-              userViewModel = userViewModel,
               profileViewModel = profileViewModel,
               mapViewModel = mapViewModel,
               navController = rememberNavController())
@@ -65,6 +53,7 @@ class MainActivity : ComponentActivity() {
   }
 }
 
+/*
 @Composable
 fun ImgTest(imageRepository: ImageRepository) {
   val imageFlow = imageRepository.fetchImage(null)
@@ -72,17 +61,7 @@ fun ImgTest(imageRepository: ImageRepository) {
   if (bitmap != null)
       Image(painter = BitmapPainter(bitmap!!.asImageBitmap()), contentDescription = "testImage")
 }
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-  Text(text = "Hello $name!", modifier = modifier)
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-  WanderWiseTheme { MapScreen() }
-}
+ */
 
 /*@Composable
 fun AddUser(userViewModel: UserViewModel) {
@@ -163,5 +142,3 @@ fun TestSignIn(userViewModel: UserViewModel) {
         Text(text = "SIGN IN")
     }
 }*/
-
-@Composable fun TestProfile(profileViewModel: ProfileViewModel) {}

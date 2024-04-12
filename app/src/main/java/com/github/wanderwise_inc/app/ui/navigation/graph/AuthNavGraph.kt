@@ -8,11 +8,9 @@ import androidx.navigation.navigation
 import com.github.wanderwise_inc.app.ui.navigation.Route
 import com.github.wanderwise_inc.app.ui.signin.LoginScreen
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
-import com.github.wanderwise_inc.app.viewmodel.UserViewModel
 
 fun NavGraphBuilder.authNavGraph(
     context: Context,
-    userViewModel: UserViewModel,
     profileViewModel: ProfileViewModel,
     navController: NavHostController
 ) {
@@ -21,11 +19,7 @@ fun NavGraphBuilder.authNavGraph(
       startDestination = AuthScreen.SignIn.route,
   ) {
     composable(route = AuthScreen.SignIn.route) {
-      LoginScreen(
-          context,
-          userViewModel = userViewModel,
-          profileViewModel = profileViewModel,
-          navController = navController)
+      LoginScreen(context, profileViewModel = profileViewModel, navController = navController)
     }
   }
 }

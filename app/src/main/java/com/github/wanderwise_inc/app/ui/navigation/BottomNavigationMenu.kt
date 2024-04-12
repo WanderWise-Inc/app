@@ -14,6 +14,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 
@@ -21,7 +22,7 @@ import androidx.compose.ui.unit.dp
 fun BottomNavigationMenu(navigationActions: NavigationActions) {
   var selectedIndex by rememberSaveable { mutableIntStateOf(0) }
 
-  NavigationBar {
+  NavigationBar(modifier = Modifier.testTag("Bottom navigation bar")) {
     TOP_LEVEL_DESTINATIONS.forEachIndexed { index, dest ->
       NavigationBarItem(
           selected = index == selectedIndex,
@@ -54,7 +55,8 @@ fun BottomNavigationMenu(navigationActions: NavigationActions) {
                     letterSpacing = 0.5.sp,
                 )
             )*/
-          })
+          },
+          modifier = Modifier.testTag(dest.route))
     }
   }
 }
