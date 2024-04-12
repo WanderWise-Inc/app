@@ -100,7 +100,7 @@ jobs:
         run: echo $DEBUG_KEYSTORE > ./app/external/debug.keystore.base64
 
       - name: Format debug keystore
-        run: base64 -d -i ./app/external/debug.keystore.base64 -o ./app/external/debug.keystore
+        run: base64 -d -i ./app/external/debug.keystore.base64 > ./app/external/debug.keystore
 
       # This step runs gradle commands to build the application
       - name: Assemble
