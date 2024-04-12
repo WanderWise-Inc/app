@@ -10,9 +10,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -24,11 +26,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
+import coil.compose.rememberAsyncImagePainter
+import coil.compose.rememberImagePainter
 import com.github.wanderwise_inc.app.ui.navigation.graph.RootNavigationGraph
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
+import com.github.wanderwise_inc.app.data.ImageRepository
+import com.github.wanderwise_inc.app.data.ImageRepositoryTestImpl
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryPreferences
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
@@ -46,9 +55,14 @@ class MainActivity : ComponentActivity() {
     private val userViewModel by viewModels<UserViewModel>()
     private val profileViewModel by viewModels<ProfileViewModel>()
     private val mapViewModel  by viewModels<MapViewModel>()
+
+
     // private lateinit var analytics : FirebaseAnalytics
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val imageRepository = ImageRepositoryTestImpl(application)
+
         setContent {
             WanderWiseTheme {
                 // A surface container using the 'background' color from the theme
@@ -69,6 +83,14 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+}
+
+@Composable
+fun ImgTest(imageRepository: ImageRepository) {
+    val imageFlow = imageRepository.fetchImage(null)
+    val bitmap by imageFlow.collectAsState(initial = null)
+    if (bitmap != null)
+        Image(painter = BitmapPainter(bitmap!!.asImageBitmap()), contentDescription = "testImage")
 }
 
 @Composable
