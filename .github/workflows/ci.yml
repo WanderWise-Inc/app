@@ -76,6 +76,8 @@ jobs:
 
       # Check formatting
       - name: KTFmt Check
+        env:
+          MAPS_API_KEY: ${{ secrets.MAPS_API_KEY }}
         run: |
           ./gradlew ktfmtCheck
 
