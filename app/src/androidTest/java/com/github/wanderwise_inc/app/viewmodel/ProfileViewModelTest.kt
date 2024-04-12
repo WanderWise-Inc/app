@@ -1,5 +1,10 @@
 package com.github.wanderwise_inc.app.viewmodel
 
+import android.app.Application
+import android.content.Context
+import androidx.test.core.app.ApplicationProvider
+import com.github.wanderwise_inc.app.data.ImageRepository
+import com.github.wanderwise_inc.app.data.ImageRepositoryTestImpl
 import com.github.wanderwise_inc.app.data.ProfileRepository
 import com.github.wanderwise_inc.app.data.ProfileRepositoryTestImpl
 import com.github.wanderwise_inc.app.model.profile.Profile
@@ -8,10 +13,17 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertNotEquals
 import org.junit.Before
 import org.junit.Test
+import org.mockito.Mock
+import org.mockito.Mockito
+import org.mockito.Mockito.`when`
 
 class ProfileViewModelTest {
     private lateinit var profileRepository: ProfileRepository
+    private lateinit var imageRepository: ImageRepository
     private lateinit var profileViewModel: ProfileViewModel
+
+    @Mock
+    private lateinit var mockApplication: Application
 
     val ethanProfile = Profile(
         uid = "",
@@ -29,7 +41,9 @@ class ProfileViewModelTest {
     @Before
     fun setup() {
         profileRepository = ProfileRepositoryTestImpl()
-        profileViewModel = ProfileViewModel(profileRepository)
+        mockApplication = ApplicationProvider.getApplicationContext<Application>()
+        imageRepository = ImageRepositoryTestImpl(mockApplication)
+        profileViewModel = ProfileViewModel(profileRepository, imageRepository)
     }
 
     @Test
@@ -58,6 +72,12 @@ class ProfileViewModelTest {
 
         assert(query.size == 1)
         assert(query == listOf(ethanProfile))
+    }
+
+    @Test
+    fun getting_non_existing_profile_returns_null() = runTest {
+        val queryRes = profileViewModel.getProfile("doesn't exist").first()
+        assert(queryRes == null)
     }
 
     @Test
