@@ -91,13 +91,16 @@ jobs:
 
       # Create external/debug.keystore file
       - name: Create file debug keystore
-        run: mkdir ./app/external && touch ./app/external/debug.keystore | base64
+        run: mkdir ./app/external && touch ./app/external/debug.keystore.base64 | base64 && touch ./app/external/debug.keystore
 
       # Fetch data
       - name: Putting data debug keystore
         env:
           DEBUG_KEYSTORE: ${{ secrets.DEBUG_KEYSTORE }}
-        run: echo $DEBUG_KEYSTORE > ./app/external/debug.keystore
+        run: echo $DEBUG_KEYSTORE > ./app/external/debug.keystore.base64
+
+      - name: Format debug keystore
+        run: base64 -d -i ./app/external/debug.keystore.base64 -o ./app/external/debug.keystore
 
       # This step runs gradle commands to build the application
       - name: Assemble
