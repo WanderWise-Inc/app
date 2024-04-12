@@ -38,6 +38,8 @@ import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.data.ImageRepositoryTestImpl
+import com.github.wanderwise_inc.app.data.ItineraryRepository
+import com.github.wanderwise_inc.app.data.ItineraryRepositoryTestImpl
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryPreferences
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
@@ -55,7 +57,8 @@ class MainActivity : ComponentActivity() {
     private val homeViewModel by viewModels<HomeViewModel>()
     private val userViewModel by viewModels<UserViewModel>()
     private val profileViewModel by viewModels<ProfileViewModel>()
-    private val mapViewModel  by viewModels<MapViewModel>()
+    private val itineraryRepository = ItineraryRepositoryTestImpl()
+    private val mapViewModel = MapViewModel(itineraryRepository)
 
 
     // private lateinit var analytics : FirebaseAnalytics
