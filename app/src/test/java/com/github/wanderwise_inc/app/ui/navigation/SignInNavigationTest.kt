@@ -11,7 +11,6 @@ import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
 import com.github.wanderwise_inc.app.ui.navigation.graph.Graph
 import com.github.wanderwise_inc.app.ui.navigation.graph.RootNavigationGraph
-import com.github.wanderwise_inc.app.viewmodel.UserViewModel
 import junit.framework.TestCase.assertEquals
 import org.junit.Before
 import org.junit.Rule

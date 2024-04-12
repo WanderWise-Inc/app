@@ -15,6 +15,11 @@ import androidx.navigation.compose.composable
 import com.github.wanderwise_inc.app.ui.UnimplementedScreen
 import com.github.wanderwise_inc.app.ui.navigation.Destination
 import com.github.wanderwise_inc.app.ui.navigation.Destination.OverviewTagLevelDestination
+import com.github.wanderwise_inc.app.ui.overview.categories.OverviewAdventureScreen
+import com.github.wanderwise_inc.app.ui.overview.categories.OverviewDrinksScreen
+import com.github.wanderwise_inc.app.ui.overview.categories.OverviewShoppingScreen
+import com.github.wanderwise_inc.app.ui.overview.categories.OverviewSightSeeingScreen
+import com.github.wanderwise_inc.app.ui.overview.categories.OverviewTrendingScreen
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 
 @Composable
@@ -29,24 +34,24 @@ fun OverviewNavGraph(
       startDestination = Destination.OverviewTagLevelDestination.Trending.route,
       modifier = Modifier.padding(innerPadding)) {
         composable(route = OverviewTagLevelDestination.Trending.route) {
-          // OverviewTrendingScreen(navController, mapViewModel)
-          UnimplementedScreen()
+          OverviewTrendingScreen(navController, mapViewModel)
+          // UnimplementedScreen()
         }
         composable(route = OverviewTagLevelDestination.Adventure.route) {
-          UnimplementedScreen()
-          // OverviewAdventureScreen(navController, mapViewModel)
+          // UnimplementedScreen()
+          OverviewAdventureScreen(navController, mapViewModel)
         }
         composable(route = OverviewTagLevelDestination.Shopping.route) {
-          UnimplementedScreen()
-          // OverviewShoppingScreen(navController, mapViewModel)
+          // UnimplementedScreen()
+          OverviewShoppingScreen(navController, mapViewModel)
         }
         composable(route = OverviewTagLevelDestination.SightSeeing.route) {
-          UnimplementedScreen()
-          // OverviewSightSeeingScreen(navController, mapViewModel)
+          // UnimplementedScreen()
+          OverviewSightSeeingScreen(navController, mapViewModel)
         }
         composable(route = OverviewTagLevelDestination.Drinks.route) {
-          UnimplementedScreen()
-          // OverviewDrinksScreen(navController, mapViewModel)
+          // UnimplementedScreen()
+          OverviewDrinksScreen(navController, mapViewModel)
         }
       }
 }

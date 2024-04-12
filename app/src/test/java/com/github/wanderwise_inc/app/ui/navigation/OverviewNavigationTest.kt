@@ -15,7 +15,6 @@ import com.github.wanderwise_inc.app.data.ItineraryRepositoryTestImpl
 import com.github.wanderwise_inc.app.ui.home.HomeScreen
 import com.github.wanderwise_inc.app.viewmodel.HomeViewModel
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
-import com.github.wanderwise_inc.app.viewmodel.UserViewModel
 import com.google.firebase.FirebaseApp
 import org.junit.Before
 import org.junit.Rule
@@ -43,6 +42,13 @@ class OverviewNavigationTest {
             navController.navigatorProvider.addNavigator(ComposeNavigator())
             OverviewScreen(mapViewModel, navController)
         }
+    }
+
+    @Test
+    fun verify_OverviewScreenIsDisplayed() {
+        composeTestRule
+            .onNodeWithTag("Overview screen")
+            .assertIsDisplayed()
     }
     
     @Test

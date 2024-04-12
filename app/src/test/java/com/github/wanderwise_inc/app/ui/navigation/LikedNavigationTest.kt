@@ -16,7 +16,6 @@ import com.github.wanderwise_inc.app.ui.home.HomeScreen
 import com.github.wanderwise_inc.app.ui.liked.LikedScreen
 import com.github.wanderwise_inc.app.viewmodel.HomeViewModel
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
-import com.github.wanderwise_inc.app.viewmodel.UserViewModel
 import com.google.firebase.FirebaseApp
 import org.junit.Before
 import org.junit.Rule
