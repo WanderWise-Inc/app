@@ -10,6 +10,9 @@ import kotlin.math.sqrt
 object LocationLabels {
     const val LAT = "lat"
     const val LONG = "long"
+    const val TITLE = "title"
+    const val ADDRESS = "address"
+    const val GOOGLE_RATING = "google_rating"
 }
 
 typealias Kilometers = Double
@@ -20,6 +23,9 @@ typealias Kilometers = Double
 data class Location(
     val lat: Double,
     val long: Double,
+    val title: String? = null,
+    val address: String? = null,
+    val googleRating: Float? = null,
 ) {
     fun toLatLng(): LatLng {
         return LatLng(lat, long)
@@ -31,7 +37,10 @@ data class Location(
     fun toMap(): Map<String, Any> {
         return mapOf(
             LocationLabels.LAT to lat,
-            LocationLabels.LONG to long
+            LocationLabels.LONG to long,
+            LocationLabels.TITLE to (title ?: ""),
+            LocationLabels.ADDRESS to (address ?: ""),
+            LocationLabels.GOOGLE_RATING to (googleRating ?: 0f)
         )
     }
 
