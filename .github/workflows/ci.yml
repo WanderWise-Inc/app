@@ -91,7 +91,7 @@ jobs:
 
       # Create external/debug.keystore file
       - name: Create file debug keystore
-        run: touch ./app/external/debug.keystore | base64
+        run: mkdir ./app/external && touch ./app/external/debug.keystore | base64
 
       # Fetch data
       - name: Putting data debug keystore
