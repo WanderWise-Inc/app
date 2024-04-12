@@ -43,6 +43,7 @@ import com.github.wanderwise_inc.app.model.location.ItineraryPreferences
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
 import com.github.wanderwise_inc.app.model.location.Location
 import com.github.wanderwise_inc.app.model.user.User
+import com.github.wanderwise_inc.app.ui.home.HomeScreen
 import com.github.wanderwise_inc.app.ui.map.MapScreen
 import com.github.wanderwise_inc.app.ui.theme.WanderWiseTheme
 import com.github.wanderwise_inc.app.viewmodel.HomeViewModel
@@ -70,15 +71,14 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    // HomeScreen(homeViewModel, mapViewModel)
                     RootNavigationGraph(
-                        this,
+                        application.applicationContext,
                         homeViewModel = homeViewModel,
-                        userViewModel = userViewModel, 
+                        userViewModel = userViewModel,
+                        mapViewModel = mapViewModel,
                         navController = rememberNavController()
                     )
-/*                    TestProfile(profileViewModel = profileViewModel)*/
-
-
                 }
             }
         }
