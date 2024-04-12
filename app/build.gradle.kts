@@ -178,6 +178,7 @@ dependencies {
 
     // Optionally, you can include the widgets library for ScaleBar, etc.
     implementation("com.google.maps.android:maps-compose-widgets:4.3.3")
+    implementation ("com.google.code.gson:gson:2.8.6") //added gson
 
     // Coil
     implementation("io.coil-kt:coil:2.6.0")

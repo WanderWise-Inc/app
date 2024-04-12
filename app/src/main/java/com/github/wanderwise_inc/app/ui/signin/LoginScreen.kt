@@ -35,10 +35,12 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.em
 import androidx.navigation.NavHostController
 import com.github.wanderwise_inc.app.R
+import com.github.wanderwise_inc.app.model.profile.Profile
 import com.github.wanderwise_inc.app.model.user.User
 import com.github.wanderwise_inc.app.ui.navigation.graph.Graph
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.github.wanderwise_inc.app.viewmodel.UserViewModel
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 @Composable
@@ -145,6 +147,7 @@ fun SignInButton(
             Log.d("USERS", "USER IS NULL")
             // TODO Handle ERROR
 
+
         } else {
             // If the user is not null, we must check if this user is already in the database,
             // in which case we will not add it again
@@ -152,9 +155,9 @@ fun SignInButton(
                 // Check if the ResultCode is OK
                 if (it.resultCode == RESULT_OK) {
                     // Get the user from database (async function)
-                    val currentUser = userViewModel.getUser(user.uid)
+                    val currentProfile = profileViewModel.getProfile(user.uid).first()
 
-                    if (currentUser != null) {
+                    if (currentProfile != null) {
                         Log.d("USERS", "USER ALREADY IN DATABASE")
 
                         navController.navigate(Graph.HOME)
@@ -174,11 +177,11 @@ fun SignInButton(
                         val description = ""
                         val upVotes = 0
 
-                        val u = User(uid, properUsername, properEmail, properPhoneNumber, country, description, upVotes)
+                        val newProfile = Profile(displayName = properUsername, userUid = uid, bio = description, profilePicture = user.photoUrl)
 
                         // Trying to set the user
                         coroutineScope.launch {
-                            val success = userViewModel.setUser(u)
+/*                            val success = userViewModel.setUser(u)
                             if (success) {
                                 Log.d("USERS", "USER ADDED TO DB")
                                 // userViewModel.storeImage(userViewModel, context, user.photoUrl!!)
@@ -188,7 +191,11 @@ fun SignInButton(
                                 Log.d("USERS", "USER NOT ADDED TO DB")
 
                                 // TODO Handle ERROR
-                            }
+                            }*/
+                            profileViewModel.setProfile(newProfile)
+                            val queriedProfile = profileViewModel.getProfile(newProfile.userUid).first()
+                            Log.d("PROFILE", queriedProfile.toString())
+                            navController.navigate(Graph.HOME)
                         }
 
                     }

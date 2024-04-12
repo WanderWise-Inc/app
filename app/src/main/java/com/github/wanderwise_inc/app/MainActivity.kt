@@ -39,7 +39,6 @@ class MainActivity : ComponentActivity() {
 
     private lateinit var profileViewModel: ProfileViewModel
 
-
     // private lateinit var analytics : FirebaseAnalytics
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
