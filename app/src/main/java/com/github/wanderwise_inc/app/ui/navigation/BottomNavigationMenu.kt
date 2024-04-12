@@ -44,7 +44,9 @@ fun BottomNavigationMenu (
         mutableIntStateOf(0)
     }
 
-    NavigationBar {
+    NavigationBar(
+        modifier = Modifier.testTag("Bottom navigation bar")
+    ) {
         TOP_LEVEL_DESTINATIONS.forEachIndexed { index, dest ->
             NavigationBarItem(
                 selected = index == selectedIndex,
@@ -78,7 +80,8 @@ fun BottomNavigationMenu (
                             letterSpacing = 0.5.sp,
                         )
                     )*/
-                }
+                },
+                modifier = Modifier.testTag(dest.route)
             )
         }
     }
