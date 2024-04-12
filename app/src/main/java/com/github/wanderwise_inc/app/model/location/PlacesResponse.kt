@@ -20,7 +20,9 @@ data class PlaceResponse(
         val lng: Double
     )
 }
-
+/**
+ * @return a Location object from a PlaceResponse object
+ */
 fun PlaceResponse.toLocation(): Location = Location(
 
     lat = geometry.location.lat,

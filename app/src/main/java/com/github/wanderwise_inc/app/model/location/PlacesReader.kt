@@ -24,7 +24,7 @@ class PlacesReader(private val context: Context?) {
      * Reads the list of place JSON objects in the file places.json and returns a list of Location
      * objects
      */
-    fun read(): List<Location> {
+    fun readFromJson(): List<Location> {
         val itemType = object : TypeToken<List<PlaceResponse>>() {}.type
         val reader = InputStreamReader(inputStream)
         return gson.fromJson<List<PlaceResponse>>(reader, itemType).map {

@@ -105,7 +105,7 @@ fun ItineraryBanner(itinerary: Itinerary) {
 @Composable
 fun DummyPreviewItinerary (context : Context) {
     val placeReader = PlacesReader(context)
-    val locations = placeReader.read()
+    val locations = placeReader.readFromJson()
 
         /*listOf(
         Location(1.35, 103.87, "Marina Bay Sands", "10 Bayfront Ave, Singapore 018956", 4.7f),
