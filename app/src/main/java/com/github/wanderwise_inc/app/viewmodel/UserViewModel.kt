@@ -241,7 +241,7 @@ class UserViewModel : ViewModel() {
                 .update("upVotes", user.upVotes+1)
             true
         } catch(e : Exception) {
-            Log.d(TAG, "Error changing email", e)
+            Log.d(TAG, "Error changing upVotes", e)
             false
         }
     }
