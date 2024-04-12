@@ -9,7 +9,6 @@ import androidx.navigation.navigation
 import com.github.wanderwise_inc.app.ui.signin.LoginScreen
 import com.github.wanderwise_inc.app.ui.navigation.Route
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
-import com.github.wanderwise_inc.app.viewmodel.UserViewModel
 
 fun NavGraphBuilder.authNavGraph(
     context : Context,

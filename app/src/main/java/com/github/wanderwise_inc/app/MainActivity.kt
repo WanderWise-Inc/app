@@ -27,11 +27,9 @@ import com.github.wanderwise_inc.app.ui.theme.WanderWiseTheme
 import com.github.wanderwise_inc.app.viewmodel.HomeViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
-import com.github.wanderwise_inc.app.viewmodel.UserViewModel
 
 class MainActivity : ComponentActivity() {
     private val homeViewModel by viewModels<HomeViewModel>()
-    private val userViewModel by viewModels<UserViewModel>()
     // private val profileViewModel by viewModels<ProfileViewModel>()
 
     private val itineraryRepository = ItineraryRepositoryTestImpl()

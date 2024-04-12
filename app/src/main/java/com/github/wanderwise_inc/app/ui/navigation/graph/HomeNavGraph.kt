@@ -17,7 +17,6 @@ import com.github.wanderwise_inc.app.ui.map.PreviewItineraryScreen
 import com.github.wanderwise_inc.app.ui.profile.ProfileScreen
 import com.github.wanderwise_inc.app.ui.search.SearchScreen
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
-import com.github.wanderwise_inc.app.viewmodel.UserViewModel
 
 @Composable
 fun HomeNavGraph(

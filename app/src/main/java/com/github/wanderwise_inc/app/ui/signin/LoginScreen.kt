@@ -36,10 +36,8 @@ import androidx.compose.ui.unit.em
 import androidx.navigation.NavHostController
 import com.github.wanderwise_inc.app.R
 import com.github.wanderwise_inc.app.model.profile.Profile
-import com.github.wanderwise_inc.app.model.user.User
 import com.github.wanderwise_inc.app.ui.navigation.graph.Graph
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
-import com.github.wanderwise_inc.app.viewmodel.UserViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
