@@ -37,16 +37,16 @@ class MainActivity : ComponentActivity() {
     private val itineraryRepository = ItineraryRepositoryTestImpl()
     private val mapViewModel = MapViewModel(itineraryRepository)
 
-    private val profileRepository = ProfileRepositoryTestImpl()
-    private val imageRepository = ImageRepositoryTestImpl(application)
-    private val profileViewModel = ProfileViewModel(profileRepository, imageRepository)
+    private lateinit var profileViewModel: ProfileViewModel
 
 
     // private lateinit var analytics : FirebaseAnalytics
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val profileRepository = ProfileRepositoryTestImpl()
         val imageRepository = ImageRepositoryTestImpl(application)
+        profileViewModel = ProfileViewModel(profileRepository, imageRepository)
 
         setContent {
             WanderWiseTheme {
