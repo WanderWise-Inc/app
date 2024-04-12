@@ -40,7 +40,6 @@ class MainActivity : ComponentActivity() {
 
     private lateinit var profileViewModel: ProfileViewModel
 
-
     // private lateinit var analytics : FirebaseAnalytics
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,8 +49,6 @@ class MainActivity : ComponentActivity() {
         profileViewModel = ProfileViewModel(profileRepository, imageRepository)
 
         setContent {
-            DummyPreviewItinerary(this)
-            /*
             WanderWiseTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
@@ -69,8 +66,6 @@ class MainActivity : ComponentActivity() {
                     )
                 }
             }
-
-             */
         }
     }
 }
