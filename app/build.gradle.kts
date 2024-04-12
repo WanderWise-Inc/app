@@ -179,6 +179,16 @@ dependencies {
     // Optionally, you can include the widgets library for ScaleBar, etc.
     implementation("com.google.maps.android:maps-compose-widgets:4.3.3")
 
+    // Coil
+    implementation("io.coil-kt:coil:2.6.0")
+    implementation("io.coil-kt:coil-compose:2.6.0")
+
+    // Add the dependency for the Cloud Storage library
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    // implementation("com.google.firebase:firebase-storage")
+    implementation("com.google.firebase:firebase-storage:20.3.0")
+
+
     // ------------- Jetpack Compose ------------------
     val composeBom = platform(libs.compose.bom)
     implementation(composeBom)
@@ -214,7 +224,8 @@ dependencies {
     testImplementation(libs.robolectric)
 
     // ----------       Mockito ------------
-    testImplementation("org.mockito.kotlin:mockito-kotlin:5.2.1")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:5.3.1")
+    androidTestImplementation("org.mockito.kotlin:mockito-kotlin:5.3.1")
 }
 
 tasks.register("jacocoTestReport", JacocoReport::class) {
