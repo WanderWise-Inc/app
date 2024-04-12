@@ -1,7 +1,6 @@
 package com.github.wanderwise_inc.app.viewmodel
 
 import android.util.Log
-import androidx.activity.viewModels
 import androidx.lifecycle.ViewModel
 import com.github.wanderwise_inc.app.data.ProfileRepository
 import com.github.wanderwise_inc.app.model.profile.Profile
