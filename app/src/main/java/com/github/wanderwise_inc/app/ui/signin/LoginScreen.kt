@@ -155,9 +155,9 @@ fun SignInButton(
                 // Check if the ResultCode is OK
                 if (it.resultCode == RESULT_OK) {
                     // Get the user from database (async function)
-                    val currentUser = profileViewModel.getProfile(user.uid).first()
+                    val currentProfile = profileViewModel.getProfile(user.uid).first()
 
-                    if (currentUser != null) {
+                    if (currentProfile != null) {
                         Log.d("USERS", "USER ALREADY IN DATABASE")
 
                         navController.navigate(Graph.HOME)
