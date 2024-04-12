@@ -1,5 +1,8 @@
 package com.github.wanderwise_inc.app.model.profile
 
+import android.net.Uri
+
+
 object ProfileLabels {
     const val UID = "uid"
     const val USER_UID = "user_uid"
@@ -11,6 +14,7 @@ data class Profile(
     var displayName: String,
     val userUid: String,
     val bio: String,
+    val profilePicture: Uri? = null
 ) {
     /**
      * @return a map of a profile
