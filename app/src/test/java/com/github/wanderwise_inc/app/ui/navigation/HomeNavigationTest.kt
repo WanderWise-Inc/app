@@ -19,174 +19,122 @@ import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class HomeNavigationTest {
-    @get:Rule
-    val composeTestRule = createComposeRule()
-    private lateinit var navController: NavHostController
-    
-    @Before
-    fun setupNavHost() {
-        composeTestRule.setContent {
-            navController = TestNavHostController(LocalContext.current)
-            navController.navigatorProvider.addNavigator(ComposeNavigator())
-            HomeScreen(navController = navController)
-        }
+  @get:Rule val composeTestRule = createComposeRule()
+  private lateinit var navController: NavHostController
+
+  @Before
+  fun setupNavHost() {
+    composeTestRule.setContent {
+      navController = TestNavHostController(LocalContext.current)
+      navController.navigatorProvider.addNavigator(ComposeNavigator())
+      HomeScreen(navController = navController)
     }
-    
-    @Test
-    fun verify_BottomNavigationBarIsDisplayed() {
-        composeTestRule
-            .onNodeWithTag("Bottom navigation bar")
-            .assertIsDisplayed()
-    }
-    @Test
-    fun verify_StartDestinationIsOverviewScreen() {
-        composeTestRule
-            .onNodeWithTag("Overview screen")
-            .assertIsDisplayed()
-        
-        val route = navController.currentBackStackEntry?.destination?.route
-        assertEquals(Route.OVERVIEW, route)
-    }
-    
-    @Test
-    fun performClick_OnItineraryButton_NavigatesToItineraryScreen() {
-        composeTestRule
-            .onNodeWithTag(Route.ITINERARY + " button")
-            .performClick()
-        
-        composeTestRule
-            .onNodeWithTag("Itinerary Screen")
-            .assertIsDisplayed()
-        
-        val route = navController.currentBackStackEntry?.destination?.route
-        assertEquals(Route.ITINERARY, route)
-    }
-    
-    @Test
-    fun performClick_OnMapButton_NavigatesToMapScreen() {
-        composeTestRule
-            .onNodeWithText(Route.MAP)
-            .performClick()
+  }
 
-        composeTestRule
-            .onNodeWithTag("Map screen")
-            .assertIsDisplayed()
+  @Test
+  fun verify_BottomNavigationBarIsDisplayed() {
+    composeTestRule.onNodeWithTag("Bottom navigation bar").assertIsDisplayed()
+  }
 
-        val route = navController.currentBackStackEntry?.destination?.route
-        assertEquals(Route.MAP, route)
-    }
+  @Test
+  fun verify_StartDestinationIsOverviewScreen() {
+    composeTestRule.onNodeWithTag("Overview screen").assertIsDisplayed()
 
-    @Test
-    fun performClicks_OnItineraryThenMapButton_NavigatesToMapScreen() {
-        composeTestRule
-            .onNodeWithText(Route.ITINERARY)
-            .performClick()
-        
-        composeTestRule
-            .onNodeWithText(Route.MAP)
-            .performClick()
+    val route = navController.currentBackStackEntry?.destination?.route
+    assertEquals(Route.OVERVIEW, route)
+  }
 
-        composeTestRule
-            .onNodeWithTag("Map screen")
-            .assertIsDisplayed()
+  @Test
+  fun performClick_OnItineraryButton_NavigatesToItineraryScreen() {
+    composeTestRule.onNodeWithTag(Route.ITINERARY + " button").performClick()
 
-        val route = navController.currentBackStackEntry?.destination?.route
-        assertEquals(Route.MAP, route)
-    }
+    composeTestRule.onNodeWithTag("Itinerary Screen").assertIsDisplayed()
 
-    @Test
-    fun performClicks_OnMapThenItineraryButton_NavigatesToItineraryScreen() {
-        composeTestRule
-            .onNodeWithText(Route.MAP)
-            .performClick()
+    val route = navController.currentBackStackEntry?.destination?.route
+    assertEquals(Route.ITINERARY, route)
+  }
 
-        composeTestRule
-            .onNodeWithText(Route.ITINERARY)
-            .performClick()
+  @Test
+  fun performClick_OnMapButton_NavigatesToMapScreen() {
+    composeTestRule.onNodeWithText(Route.MAP).performClick()
 
-        composeTestRule
-            .onNodeWithTag("Itinerary Screen")
-            .assertIsDisplayed()
+    composeTestRule.onNodeWithTag("Map screen").assertIsDisplayed()
 
-        val route = navController.currentBackStackEntry?.destination?.route
-        assertEquals(Route.ITINERARY, route)
-    }
+    val route = navController.currentBackStackEntry?.destination?.route
+    assertEquals(Route.MAP, route)
+  }
 
-    @Test
-    fun performClicks_OnMapThenOverviewButton_NavigatesToOverviewScreen() {
-        composeTestRule
-            .onNodeWithText(Route.MAP)
-            .performClick()
+  @Test
+  fun performClicks_OnItineraryThenMapButton_NavigatesToMapScreen() {
+    composeTestRule.onNodeWithText(Route.ITINERARY).performClick()
 
-        composeTestRule
-            .onNodeWithText(Route.OVERVIEW)
-            .performClick()
+    composeTestRule.onNodeWithText(Route.MAP).performClick()
 
-        composeTestRule
-            .onNodeWithTag("Overview screen")
-            .assertIsDisplayed()
+    composeTestRule.onNodeWithTag("Map screen").assertIsDisplayed()
 
-        val route = navController.currentBackStackEntry?.destination?.route
-        assertEquals(Route.OVERVIEW, route)
-    }
+    val route = navController.currentBackStackEntry?.destination?.route
+    assertEquals(Route.MAP, route)
+  }
 
-    @Test
-    fun performMultipleClicks_OnNavigationBarButton_DoesNotAddToBackStack() {
-        composeTestRule
-            .onNodeWithText(Route.MAP)
-            .performClick()
+  @Test
+  fun performClicks_OnMapThenItineraryButton_NavigatesToItineraryScreen() {
+    composeTestRule.onNodeWithText(Route.MAP).performClick()
 
-        composeTestRule
-            .onNodeWithText(Route.ITINERARY)
-            .performClick()
+    composeTestRule.onNodeWithText(Route.ITINERARY).performClick()
 
-        composeTestRule
-            .onNodeWithText(Route.MAP)
-            .performClick()
+    composeTestRule.onNodeWithTag("Itinerary Screen").assertIsDisplayed()
 
-        composeTestRule
-            .onNodeWithText(Route.ITINERARY)
-            .performClick()
+    val route = navController.currentBackStackEntry?.destination?.route
+    assertEquals(Route.ITINERARY, route)
+  }
 
-        composeTestRule
-            .onNodeWithText(Route.MAP)
-            .performClick()
-        
-        navController.popBackStack() // simulates back button click
+  @Test
+  fun performClicks_OnMapThenOverviewButton_NavigatesToOverviewScreen() {
+    composeTestRule.onNodeWithText(Route.MAP).performClick()
 
-        val route = navController.currentBackStackEntry?.destination?.route
-        assertEquals(Route.OVERVIEW, route)
-        
-        composeTestRule
-            .onNodeWithTag("Overview screen")
-            .assertIsDisplayed()
-    }
+    composeTestRule.onNodeWithText(Route.OVERVIEW).performClick()
 
-    @Test
-    fun performMultipleClicks_OnNavigationBarButtonEndingOnOverviewScreen_DoesNotAddToBackStack() {
-        composeTestRule
-            .onNodeWithText(Route.MAP)
-            .performClick()
+    composeTestRule.onNodeWithTag("Overview screen").assertIsDisplayed()
 
-        composeTestRule
-            .onNodeWithText(Route.ITINERARY)
-            .performClick()
+    val route = navController.currentBackStackEntry?.destination?.route
+    assertEquals(Route.OVERVIEW, route)
+  }
 
-        composeTestRule
-            .onNodeWithText(Route.MAP)
-            .performClick()
+  @Test
+  fun performMultipleClicks_OnNavigationBarButton_DoesNotAddToBackStack() {
+    composeTestRule.onNodeWithText(Route.MAP).performClick()
 
-        composeTestRule
-            .onNodeWithText(Route.ITINERARY)
-            .performClick()
+    composeTestRule.onNodeWithText(Route.ITINERARY).performClick()
 
-        composeTestRule
-            .onNodeWithText(Route.OVERVIEW)
-            .performClick()
+    composeTestRule.onNodeWithText(Route.MAP).performClick()
 
-        navController.popBackStack() // simulates back button click
+    composeTestRule.onNodeWithText(Route.ITINERARY).performClick()
 
-        val route = navController.currentBackStackEntry?.destination?.route
-        assertEquals(null, route)
-    }
+    composeTestRule.onNodeWithText(Route.MAP).performClick()
+
+    navController.popBackStack() // simulates back button click
+
+    val route = navController.currentBackStackEntry?.destination?.route
+    assertEquals(Route.OVERVIEW, route)
+
+    composeTestRule.onNodeWithTag("Overview screen").assertIsDisplayed()
+  }
+
+  @Test
+  fun performMultipleClicks_OnNavigationBarButtonEndingOnOverviewScreen_DoesNotAddToBackStack() {
+    composeTestRule.onNodeWithText(Route.MAP).performClick()
+
+    composeTestRule.onNodeWithText(Route.ITINERARY).performClick()
+
+    composeTestRule.onNodeWithText(Route.MAP).performClick()
+
+    composeTestRule.onNodeWithText(Route.ITINERARY).performClick()
+
+    composeTestRule.onNodeWithText(Route.OVERVIEW).performClick()
+
+    navController.popBackStack() // simulates back button click
+
+    val route = navController.currentBackStackEntry?.destination?.route
+    assertEquals(null, route)
+  }
 }

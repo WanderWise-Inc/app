@@ -7,5 +7,5 @@ import androidx.compose.ui.platform.testTag
 
 @Composable
 fun OverviewScreen() {
-    Text(text = "Welcome to the overview screen", modifier = Modifier.testTag("Overview screen"))
+  Text(text = "Welcome to the overview screen", modifier = Modifier.testTag("Overview screen"))
 }

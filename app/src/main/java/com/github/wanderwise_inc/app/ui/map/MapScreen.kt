@@ -7,5 +7,5 @@ import androidx.compose.ui.platform.testTag
 
 @Composable
 fun MapScreen() {
-    Text(text = "Welcome to the map screen", Modifier.testTag("Map screen"))
+  Text(text = "Welcome to the map screen", Modifier.testTag("Map screen"))
 }

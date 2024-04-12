@@ -7,5 +7,5 @@ import androidx.compose.ui.platform.testTag
 
 @Composable
 fun ItineraryScreen() {
-    Text(text = "Welcome to the itinerary screen", Modifier.testTag("Itinerary Screen"))
+  Text(text = "Welcome to the itinerary screen", Modifier.testTag("Itinerary Screen"))
 }
