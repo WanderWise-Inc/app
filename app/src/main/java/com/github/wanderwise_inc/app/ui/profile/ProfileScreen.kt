@@ -5,8 +5,6 @@ import androidx.compose.runtime.Composable
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 
 @Composable
-fun ProfileScreen(
-    mapViewModel: MapViewModel
-) {
-    Text(text = "Welcome, here you will find all the information about your profile")
+fun ProfileScreen(mapViewModel: MapViewModel) {
+  Text(text = "Welcome, here you will find all the information about your profile")
 }

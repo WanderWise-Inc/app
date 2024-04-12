@@ -22,26 +22,25 @@ fun OverviewNavGraph(
     navController: NavHostController,
     innerPadding: PaddingValues
 ) {
-    NavHost(
-        navController = navController,
-        route = Graph.OVERVIEW,
-        startDestination = Destination.OverviewTagLevelDestination.Trending.route,
-        modifier = Modifier.padding(innerPadding)
-    ) {
+  NavHost(
+      navController = navController,
+      route = Graph.OVERVIEW,
+      startDestination = Destination.OverviewTagLevelDestination.Trending.route,
+      modifier = Modifier.padding(innerPadding)) {
         composable(route = OverviewTagLevelDestination.Trending.route) {
-            OverviewTrendingScreen(navController, mapViewModel)
+          OverviewTrendingScreen(navController, mapViewModel)
         }
         composable(route = OverviewTagLevelDestination.Adventure.route) {
-            OverviewAdventureScreen(navController, mapViewModel)
+          OverviewAdventureScreen(navController, mapViewModel)
         }
         composable(route = OverviewTagLevelDestination.Shopping.route) {
-            OverviewShoppingScreen(navController, mapViewModel)
+          OverviewShoppingScreen(navController, mapViewModel)
         }
         composable(route = OverviewTagLevelDestination.SightSeeing.route) {
-            OverviewSightSeeingScreen(navController, mapViewModel)
+          OverviewSightSeeingScreen(navController, mapViewModel)
         }
         composable(route = OverviewTagLevelDestination.Drinks.route) {
-            OverviewDrinksScreen(navController, mapViewModel)
+          OverviewDrinksScreen(navController, mapViewModel)
         }
-    }
+      }
 }

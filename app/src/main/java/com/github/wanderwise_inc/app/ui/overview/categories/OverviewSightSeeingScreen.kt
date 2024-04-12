@@ -6,9 +6,6 @@ import androidx.navigation.NavHostController
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 
 @Composable
-fun OverviewSightSeeingScreen(
-    navController: NavHostController,
-    mapViewModel: MapViewModel
-) {
-    Text(text = "Welcome, here you will find sight-seeing-themed itineraries")
+fun OverviewSightSeeingScreen(navController: NavHostController, mapViewModel: MapViewModel) {
+  Text(text = "Welcome, here you will find sight-seeing-themed itineraries")
 }
