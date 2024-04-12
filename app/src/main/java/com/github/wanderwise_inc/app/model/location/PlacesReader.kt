@@ -21,14 +21,14 @@ class PlacesReader(private val context: Context) {
         get() = context.resources.openRawResource(R.raw.places)
 
     /**
-     * Reads the list of place JSON objects in the file places.json and returns a list of Place
+     * Reads the list of place JSON objects in the file places.json and returns a list of Location
      * objects
      */
-    fun read(): List<Place> {
+    fun read(): List<Location> {
         val itemType = object : TypeToken<List<PlaceResponse>>() {}.type
         val reader = InputStreamReader(inputStream)
         return gson.fromJson<List<PlaceResponse>>(reader, itemType).map {
-            it.toPlace()
+            it.toLocation()
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.github.wanderwise_inc.app.ui.map
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryPreferences
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
+import com.github.wanderwise_inc.app.model.location.PlacesReader
 import com.github.wanderwise_inc.app.model.location.Location
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.google.android.gms.maps.model.CameraPosition
@@ -55,7 +57,8 @@ fun PreviewItineraryScreen(itinerary: Itinerary) {
         ) {
             itinerary.locations.map { location ->
                 AdvancedMarker(
-                    state = MarkerState(position = location.toLatLng())
+                    state = MarkerState(position = location.toLatLng()),
+                    title = location.title ?: "",
                 )
             }
         }
@@ -98,3 +101,42 @@ fun ItineraryBanner(itinerary: Itinerary) {
         }
     }
 }
+
+@Composable
+fun DummyPreviewItinerary (context : Context) {
+    val placeReader = PlacesReader(context)
+    val locations = placeReader.read()
+
+        /*listOf(
+        Location(1.35, 103.87, "Marina Bay Sands", "10 Bayfront Ave, Singapore 018956", 4.7f),
+        Location(1.2823, 103.8587, "Gardens by the Bay", "18 Marina Gardens Dr, Singapore 018953", 4.7f),
+        Location(1.3521, 103.8198, "Singapore Zoo", "80 Mandai Lake Rd, Singapore 729826", 4.6f),
+        Location(1.3036, 103.7852, "Jurong Bird Park", "2 Jurong Hill, Singapore 628925", 4.6f),
+        Location(1.3521, 103.8198, "Night Safari", "80 Mandai Lake Rd, Singapore 729826", 4.6f),
+        Location(1.2895, 103.8493, "Singapore Flyer", "30 Raffles Ave, Singapore 039803", 4.5f),
+        Location(1.2892, 103.8456, "Merlion Park", "1 Fullerton Rd, Singapore 049213", 4.6f),
+        Location(1.2819, 103.8631, "ArtScience Museum", "6 Bayfront Ave, Singapore 018974", 4.6f),
+        Location(1.2897, 103.8501, "Esplanade", "1 Esplanade Dr, Singapore 038981", 4.6f),
+        Location(1.2929, 103.8463, "Clarke Quay", "3 River Valley Rd, Singapore 179024", 4.5f),
+        Location(1.2829, 103.8544, "Chinatown", "Singapore", 4.5f),
+        Location(1.3007, 103.8553, "Little India", "Singapore", 4.5f),
+        Location(1.3147, 103.7652, "Pulau Ubin", "Singapore", 4.6f),
+        Location(1.3521, 103.8198, "River Safari", "80 Mandai Lake Rd, Singapore 729826", 4.6f)
+    )*/
+
+    val itinerary = Itinerary(
+        userUid = "",
+        locations = locations,
+        title = "San Francisco Bike Itinerary",
+        tags = listOf(
+            ItineraryTags.CULTURAL,
+            ItineraryTags.NATURE,
+            ItineraryTags.BUDGET
+        ),
+        description = "A 3-day itinerary to explore the best of San Francisco on a bike.",
+        visible = true
+    )
+
+    PreviewItineraryScreen(itinerary = itinerary)
+}
+

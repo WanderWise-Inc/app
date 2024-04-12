@@ -21,9 +21,11 @@ data class PlaceResponse(
     )
 }
 
-fun PlaceResponse.toPlace(): Place = Place(
-    name = name,
-    latLng = Location(geometry.location.lat, geometry.location.lng),
+fun PlaceResponse.toLocation(): Location = Location(
+
+    lat = geometry.location.lat,
+    long = geometry.location.lng,
+    title = name,
     address = vicinity,
-    rating = rating
+    googleRating = rating
 )

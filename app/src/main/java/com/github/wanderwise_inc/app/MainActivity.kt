@@ -32,6 +32,7 @@ import com.github.wanderwise_inc.app.model.location.ItineraryPreferences
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
 import com.github.wanderwise_inc.app.model.location.Location
 import com.github.wanderwise_inc.app.model.user.User
+import com.github.wanderwise_inc.app.ui.map.DummyPreviewItinerary
 
 import com.github.wanderwise_inc.app.ui.map.MapScreen
 import com.github.wanderwise_inc.app.ui.theme.WanderWiseTheme
@@ -57,6 +58,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            DummyPreviewItinerary(this)
+            /*
             WanderWiseTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
@@ -70,6 +73,8 @@ class MainActivity : ComponentActivity() {
                     )
                 }
             }
+
+             */
         }
     }
 }
