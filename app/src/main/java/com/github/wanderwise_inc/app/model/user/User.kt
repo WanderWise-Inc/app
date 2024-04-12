@@ -8,5 +8,4 @@ class User(
     var country : String,
     var description : String,
     var upVotes : Int
-) {
-}
+)
