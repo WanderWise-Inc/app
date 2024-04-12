@@ -21,60 +21,65 @@ fun HomeScreen(
     profileViewModel: ProfileViewModel,
     navController: NavHostController = rememberNavController(),
 ) {
-    val navigationActions = NavigationActions(navController)
-    Scaffold(
-        topBar = {
-            /*TopAppBar(
-                backgroundColor = MaterialTheme.colors.surface,
-                contentColor = MaterialTheme.colors.primarySurface,
+  val navigationActions = NavigationActions(navController)
+  Scaffold(
+      topBar = {
+        /*TopAppBar(
+            backgroundColor = MaterialTheme.colors.surface,
+            contentColor = MaterialTheme.colors.primarySurface,
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    TextButton(
-                        onClick = { *//*TODO*//* },
-                        colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primarySurface),
-                        
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.MoreVert,
-                            contentDescription = "Button to obtain more info",
-                        )
-                    }
-                    Text(text = "WanderWise")
-                    TextButton(
-                        onClick = { *//*TODO*//* },
-                        colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primarySurface)
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.settings_icon), 
-                            modifier = Modifier
-                                .size(20.dp),
-                            contentDescription = null
-                        )
-                    }
-                }
-            }*/
-        },
-        bottomBar = {
-            /*
-            BottomNavigationMenu(
-                onTabSelect = { screen -> navigator.navigateTo(screen) },
-                selectedItem = TopLevelDestination.Overview
+                TextButton(
+                    onClick = { */
+        /*TODO*/
+        /* },
+            colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primarySurface),
+
+        ) {
+            Icon(
+                imageVector = Icons.Default.MoreVert,
+                contentDescription = "Button to obtain more info",
             )
-             */
-            BottomNavigationMenu(navigationActions)
         }
-    ) { innerPadding ->
+        Text(text = "WanderWise")
+        TextButton(
+            onClick = { */
+        /*TODO*/
+        /* },
+                    colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primarySurface)
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.settings_icon),
+                        modifier = Modifier
+                            .size(20.dp),
+                        contentDescription = null
+                    )
+                }
+            }
+        }*/
+      },
+      bottomBar = {
+        /*
+        BottomNavigationMenu(
+            onTabSelect = { screen -> navigator.navigateTo(screen) },
+            selectedItem = TopLevelDestination.Overview
+        )
+         */
+        BottomNavigationMenu(navigationActions)
+      }) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
+
             HomeNavGraph(
                 mapViewModel,
                 navController,
                 profileViewModel
                 // innerPadding
             )
+
         }
-    }
+      }
 }

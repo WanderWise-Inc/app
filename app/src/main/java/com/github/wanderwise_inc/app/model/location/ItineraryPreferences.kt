@@ -1,10 +1,9 @@
 package com.github.wanderwise_inc.app.model.location
 
 /**
- * @brief Represents user preferences for itinerary queries
- *
  * @param tags
+ * @brief Represents user preferences for itinerary queries
  */
-data class ItineraryPreferences (
+data class ItineraryPreferences(
     val tags: List<Tag>,
 )

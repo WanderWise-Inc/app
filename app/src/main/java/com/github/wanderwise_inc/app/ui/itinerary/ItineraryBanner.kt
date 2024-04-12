@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.wanderwise_inc.app.model.location.Itinerary
 
+
 @Composable
 fun ItineraryBanner(itinerary: Itinerary) {
     var hide by remember {
@@ -54,3 +55,4 @@ fun ItineraryBanner(itinerary: Itinerary) {
         }
     }
 }
+

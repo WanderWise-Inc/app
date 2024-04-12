@@ -5,12 +5,14 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import com.github.wanderwise_inc.app.model.profile.Profile
 import com.github.wanderwise_inc.app.ui.itinerary.ItineraryBanner
+
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -63,3 +65,4 @@ fun ItinerariesScrollable(mapViewModel: MapViewModel, uid:String) {
     }
 
 }
+

@@ -3,7 +3,6 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("com.google.gms.google-services")
 
-
     //needed for MAPS_API_KEY
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 
@@ -75,6 +74,8 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "META-INF/LICENSE.md"
+            excludes += "META-INF/LICENSE-notice.md"
         }
     }
     testOptions {
@@ -104,9 +105,9 @@ android {
 
 sonar {
     properties {
-        property("sonar.projectKey", "gf_android-sample")
-        property("sonar.projectName", "Android-Sample")
-        property("sonar.organization", "gabrielfleischer")
+        property("sonar.projectKey", "WanderWise-Inc_app")
+        property("sonar.projectName", "WanderWise")
+        property("sonar.organization", "wanderwise-inc")
         property("sonar.host.url", "https://sonarcloud.io")
         // Comma-separated paths to the various directories containing the *.xml JUnit report files. Each path may be absolute or relative to the project base directory.
         property("sonar.junit.reportPaths", "${project.layout.buildDirectory.get()}/test-results/testDebugunitTest/")
@@ -164,6 +165,7 @@ dependencies {
     implementation(libs.androidx.navigation.testing)
     testImplementation(libs.junit)
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
+    androidTestImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
     globalTestImplementation(libs.androidx.junit)
     globalTestImplementation(libs.androidx.espresso.core)
 
@@ -178,6 +180,7 @@ dependencies {
 
     // Optionally, you can include the widgets library for ScaleBar, etc.
     implementation("com.google.maps.android:maps-compose-widgets:4.3.3")
+    implementation ("com.google.code.gson:gson:2.8.6") //added gson
 
     // Coil
     implementation("io.coil-kt:coil:2.6.0")
@@ -222,6 +225,7 @@ dependencies {
 
     // ----------       Robolectric     ------------
     testImplementation(libs.robolectric)
+    androidTestImplementation(libs.robolectric)
 
     // ----------       Mockito ------------
     testImplementation("org.mockito.kotlin:mockito-kotlin:5.3.1")
@@ -258,9 +262,15 @@ tasks.register("jacocoTestReport", JacocoReport::class) {
     })
 }
 
+tasks.withType<Test> {
+    // Configure Jacoco for each tests
+    configure<JacocoTaskExtension> {
+        isIncludeNoLocationClasses = true
+        excludes = listOf("jdk.internal.*")
+    }
+}
+
 secrets {
     propertiesFileName = "secrets.properties"
-
-    // REMARK: there was more in the GoogleMaps tutorial, didnt seem important
-    //Step 3, Point 10
+    defaultPropertiesFileName = "secrets.defaults.properties"
 }
