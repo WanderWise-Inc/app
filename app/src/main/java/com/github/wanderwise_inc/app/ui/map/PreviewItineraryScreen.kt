@@ -20,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -47,7 +48,8 @@ fun PreviewItineraryScreen(itinerary: Itinerary) {
     Scaffold (
         bottomBar =  {
             ItineraryBanner(itinerary = itinerary)
-        }
+        },
+        modifier = Modifier.testTag("Map screen")
     ) { paddingValues ->
         GoogleMap (
             modifier = Modifier
