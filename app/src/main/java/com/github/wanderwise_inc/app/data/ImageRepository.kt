@@ -13,8 +13,8 @@ import kotlinx.coroutines.flow.flow
  */
 interface ImageRepository {
     /**
-     * @param imageUri the queried resource's URI
-     * @return an image with given `uri` from the data source and returns its bitmap as a Flow
+     * @param imageUri the queried image's URI
+     * @return a bitmap flow of queried image
      */
     fun fetchImage(imageUri: Uri?): Flow<Bitmap>
 }
