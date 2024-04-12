@@ -3,7 +3,6 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("com.google.gms.google-services")
 
-
     //needed for MAPS_API_KEY
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 
@@ -106,9 +105,9 @@ android {
 
 sonar {
     properties {
-        property("sonar.projectKey", "gf_android-sample")
-        property("sonar.projectName", "Android-Sample")
-        property("sonar.organization", "gabrielfleischer")
+        property("sonar.projectKey", "WanderWise-Inc_app")
+        property("sonar.projectName", "WanderWise")
+        property("sonar.organization", "wanderwise-inc")
         property("sonar.host.url", "https://sonarcloud.io")
         // Comma-separated paths to the various directories containing the *.xml JUnit report files. Each path may be absolute or relative to the project base directory.
         property("sonar.junit.reportPaths", "${project.layout.buildDirectory.get()}/test-results/testDebugunitTest/")
@@ -273,7 +272,5 @@ tasks.withType<Test> {
 
 secrets {
     propertiesFileName = "secrets.properties"
-
-    // REMARK: there was more in the GoogleMaps tutorial, didnt seem important
-    //Step 3, Point 10
+    defaultPropertiesFileName = "secrets.defaults.properties"
 }
