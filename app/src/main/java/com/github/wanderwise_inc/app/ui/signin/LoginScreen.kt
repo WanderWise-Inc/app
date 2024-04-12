@@ -177,7 +177,7 @@ fun SignInButton(
                         val description = ""
                         val upVotes = 0
 
-                        val u = Profile(displayName = properUsername, userUid = uid, bio = description, profilePicture = user.photoUrl)
+                        val newProfile = Profile(displayName = properUsername, userUid = uid, bio = description, profilePicture = user.photoUrl)
 
                         // Trying to set the user
                         coroutineScope.launch {
@@ -192,8 +192,8 @@ fun SignInButton(
 
                                 // TODO Handle ERROR
                             }*/
-                            profileViewModel.setProfile(u)
-                            val queriedProfile = profileViewModel.getProfile(u.userUid).first()
+                            profileViewModel.setProfile(newProfile)
+                            val queriedProfile = profileViewModel.getProfile(newProfile.userUid).first()
                             Log.d("PROFILE", queriedProfile.toString())
                             navController.navigate(Graph.HOME)
                         }
