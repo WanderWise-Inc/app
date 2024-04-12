@@ -25,7 +25,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
+
+import com.github.wanderwise_inc.app.model.location.Location
+import com.github.wanderwise_inc.app.ui.itinerary.ItineraryBanner
+import com.github.wanderwise_inc.app.viewmodel.MapViewModel
+
 import com.github.wanderwise_inc.app.model.location.PlacesReader
+
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.maps.android.compose.AdvancedMarker
 import com.google.maps.android.compose.GoogleMap
@@ -119,3 +125,4 @@ fun DummyPreviewItinerary(context: Context) {
 
   PreviewItineraryScreen(itinerary = itinerary)
 }
+
