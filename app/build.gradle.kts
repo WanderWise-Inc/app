@@ -32,6 +32,12 @@ android {
         }
     }
 
+    signingConfigs {
+        getByName("debug") {
+            storeFile = file("external/debug.keystore")
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -138,8 +144,8 @@ dependencies {
     // ------------------- Firebase -------------------
     implementation("com.google.firebase:firebase-database-ktx:20.3.0")
     implementation("com.google.firebase:firebase-firestore:24.10.0")
-    implementation("com.firebaseui:firebase-ui-auth:7.2.0")
     implementation("com.google.firebase:firebase-auth:22.3.1")
+    implementation("com.firebaseui:firebase-ui-auth:7.2.0")
 
     // ------------------ Navigation ------------------
     val nav_version = "2.7.7"
@@ -163,6 +169,24 @@ dependencies {
     // --------------- Google Maps --------------------
     implementation("com.google.android.gms:play-services-maps:18.2.0")
     implementation("com.google.android.gms:play-services-location:21.2.0")
+    implementation("com.google.maps.android:maps-compose:4.3.3")
+
+    // Optionally, you can include the Compose utils library for Clustering,
+    // Street View metadata checks, etc.
+    implementation("com.google.maps.android:maps-compose-utils:4.3.3")
+
+    // Optionally, you can include the widgets library for ScaleBar, etc.
+    implementation("com.google.maps.android:maps-compose-widgets:4.3.3")
+
+    // Coil
+    implementation("io.coil-kt:coil:2.6.0")
+    implementation("io.coil-kt:coil-compose:2.6.0")
+
+    // Add the dependency for the Cloud Storage library
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    // implementation("com.google.firebase:firebase-storage")
+    implementation("com.google.firebase:firebase-storage:20.3.0")
+
 
     // ------------- Jetpack Compose ------------------
     val composeBom = platform(libs.compose.bom)
@@ -197,6 +221,10 @@ dependencies {
 
     // ----------       Robolectric     ------------
     testImplementation(libs.robolectric)
+
+    // ----------       Mockito ------------
+    testImplementation("org.mockito.kotlin:mockito-kotlin:5.3.1")
+    androidTestImplementation("org.mockito.kotlin:mockito-kotlin:5.3.1")
 }
 
 tasks.register("jacocoTestReport", JacocoReport::class) {
