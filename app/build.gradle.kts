@@ -231,7 +231,5 @@ tasks.register("jacocoTestReport", JacocoReport::class) {
 
 secrets {
     propertiesFileName = "secrets.properties"
-
-    // REMARK: there was more in the GoogleMaps tutorial, didnt seem important
-    //Step 3, Point 10
+    defaultPropertiesFileName = "secrets.defaults.properties"
 }
