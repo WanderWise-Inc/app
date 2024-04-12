@@ -45,25 +45,4 @@ class ProfileViewModel(private val profileRepository: ProfileRepository,
     fun getProfilePicture(profile: Profile): Flow<Bitmap> {
         return imageRepository.fetchImage(profile.profilePicture)
     }
-
-    public fun sendResetPassword() {
-        val firebaseAuth = FirebaseAuth.getInstance()
-        try {
-            firebaseAuth.sendPasswordResetEmail("ismaililekan@gmail.com")
-            Log.d("PROFILE", "EMAIL FOR RESET SENT")
-        } catch (e: Exception) {
-            Log.w("PROFILE", e)
-        }
-    }
-
-    public fun deleteUser() {
-        val firebaseAuth = FirebaseAuth.getInstance()
-        val user = firebaseAuth.currentUser!!
-        try {
-            user.delete()
-            Log.d("PROFILE", "USER DELETED FROM AUTH")
-        } catch (e: Exception) {
-            Log.w("PROFILE", e)
-        }
-    }
 }

@@ -18,7 +18,6 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.navigation.NavHostController
 import com.github.wanderwise_inc.app.MainActivity
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
-import com.github.wanderwise_inc.app.viewmodel.UserViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Assert.assertEquals
 import org.junit.Before
