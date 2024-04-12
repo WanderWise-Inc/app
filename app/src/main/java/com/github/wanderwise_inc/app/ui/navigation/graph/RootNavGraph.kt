@@ -14,7 +14,6 @@ import com.github.wanderwise_inc.app.viewmodel.UserViewModel
 @Composable
 fun RootNavigationGraph(
     context : Context,
-    userViewModel: UserViewModel,
     profileViewModel: ProfileViewModel,
     homeViewModel: HomeViewModel,
     mapViewModel: MapViewModel,
@@ -27,7 +26,7 @@ fun RootNavigationGraph(
         route = Graph.ROOT,
         startDestination = Graph.AUTHENTICATION
     ) {
-        authNavGraph(context, userViewModel, profileViewModel, navController)
+        authNavGraph(context, profileViewModel, navController)
         composable(route = Graph.HOME) {
             HomeScreen(
                 homeViewModel,

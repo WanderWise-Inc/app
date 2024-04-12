@@ -13,7 +13,6 @@ import com.github.wanderwise_inc.app.viewmodel.UserViewModel
 
 fun NavGraphBuilder.authNavGraph(
     context : Context,
-    userViewModel: UserViewModel,
     profileViewModel: ProfileViewModel,
     navController: NavHostController
 ) {
@@ -22,7 +21,7 @@ fun NavGraphBuilder.authNavGraph(
         startDestination = AuthScreen.SignIn.route,
     ) {
         composable(route = AuthScreen.SignIn.route) {
-            LoginScreen(context, userViewModel = userViewModel, profileViewModel = profileViewModel,
+            LoginScreen(context, profileViewModel = profileViewModel,
                 navController = navController)
         }
     }

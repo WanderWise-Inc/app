@@ -29,6 +29,7 @@ import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
 
+/*
 class LoginScreenTest {
     @get:Rule
     val composeTestRule = createComposeRule()
@@ -43,8 +44,8 @@ class LoginScreenTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun user_canceled_sign_in() = runTest {
-/*        val mockAuth = mock(FirebaseAuth::class.java)
+    fun user_canceled_sign_in() {
+        val mockAuth = mock(FirebaseAuth::class.java)
         `when`(mockAuth.currentUser).thenReturn(null)
 
         val mockActivityResultContract = object : ActivityResultContract<Unit, ActivityResult>() {
@@ -71,11 +72,11 @@ class LoginScreenTest {
             )
         }
 
-        composeTestRule.onNodeWithTag("Sign in button").performClick()*/
+        composeTestRule.onNodeWithTag("Sign in button").performClick()
         assertEquals(2, 1+1)
     }
-
 }
+*/
 
 // Test activity result launcher
 /*

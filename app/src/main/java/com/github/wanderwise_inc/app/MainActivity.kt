@@ -58,7 +58,6 @@ class MainActivity : ComponentActivity() {
                     RootNavigationGraph(
                         application.applicationContext,
                         homeViewModel = homeViewModel,
-                        userViewModel = userViewModel,
                         profileViewModel = profileViewModel,
                         mapViewModel = mapViewModel,
                         navController = rememberNavController()

@@ -46,7 +46,6 @@ import kotlinx.coroutines.launch
 @Composable
 fun LoginScreen(
     context: Context,
-    userViewModel : UserViewModel,
     profileViewModel: ProfileViewModel,
     navController: NavHostController,
     modifier: Modifier = Modifier
@@ -75,7 +74,7 @@ fun LoginScreen(
                 .clip(shape = RoundedCornerShape(8.dp))
                 .background(color = Color(0xFF972626))
         ) {
-            SignInButton(context, userViewModel, profileViewModel, navController)
+            SignInButton(profileViewModel, navController)
         }
         Image(
             painter = painterResource(id = R.drawable.google__g__logo_svg),
@@ -121,8 +120,6 @@ fun LoginScreen(
 
 @Composable
 fun SignInButton(
-    context : Context,
-    userViewModel: UserViewModel,
     profileViewModel: ProfileViewModel,
     navController: NavHostController,
 ) {
