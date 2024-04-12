@@ -31,7 +31,8 @@ fun RootNavigationGraph(
         composable(route = Graph.HOME) {
             HomeScreen(
                 homeViewModel,
-                mapViewModel
+                mapViewModel,
+                profileViewModel
             )
         }
     }

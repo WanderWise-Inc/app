@@ -13,12 +13,14 @@ import com.github.wanderwise_inc.app.ui.map.MapScreen
 import com.github.wanderwise_inc.app.ui.profile.ProfileScreen
 import com.github.wanderwise_inc.app.ui.search.SearchScreen
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
+import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.github.wanderwise_inc.app.viewmodel.UserViewModel
 
 @Composable
 fun HomeNavGraph(
     mapViewModel: MapViewModel,
     navController: NavHostController,
+    profileViewModel: ProfileViewModel
     // innerPadding: PaddingValues,
     // context : Context,
     // userViewModel: UserViewModel
@@ -42,7 +44,7 @@ fun HomeNavGraph(
             MapScreen()
         }
         composable(route = TopLevelDestination.Profile.route) {
-            ProfileScreen(mapViewModel)
+            ProfileScreen(mapViewModel, profileViewModel)
         }
     }
 }

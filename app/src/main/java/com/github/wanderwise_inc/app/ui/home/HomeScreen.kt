@@ -12,11 +12,13 @@ import com.github.wanderwise_inc.app.ui.navigation.NavigationActions
 import com.github.wanderwise_inc.app.ui.navigation.graph.HomeNavGraph
 import com.github.wanderwise_inc.app.viewmodel.HomeViewModel
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
+import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 
 @Composable
 fun HomeScreen(
     homeViewModel: HomeViewModel,
     mapViewModel: MapViewModel,
+    profileViewModel: ProfileViewModel,
     navController: NavHostController = rememberNavController(),
 ) {
     val navigationActions = NavigationActions(navController)
@@ -70,6 +72,7 @@ fun HomeScreen(
             HomeNavGraph(
                 mapViewModel,
                 navController,
+                profileViewModel
                 // innerPadding
             )
         }

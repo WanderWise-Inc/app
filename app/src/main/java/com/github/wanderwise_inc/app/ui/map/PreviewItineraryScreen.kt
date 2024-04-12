@@ -26,6 +26,7 @@ import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryPreferences
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
 import com.github.wanderwise_inc.app.model.location.Location
+import com.github.wanderwise_inc.app.ui.itinerary.ItineraryBanner
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.maps.android.compose.AdvancedMarker
@@ -62,39 +63,3 @@ fun PreviewItineraryScreen(itinerary: Itinerary) {
     }
 }
 
-/**
- * @brief banner for display itinerary information
- */
-@Composable
-fun ItineraryBanner(itinerary: Itinerary) {
-    var hide by remember {
-        mutableStateOf(false)
-    }
-
-    Box(
-        modifier = Modifier
-            .background(MaterialTheme.colorScheme.background)
-            .height(200.dp)
-            .clip(RoundedCornerShape(16.dp)),
-        contentAlignment = Alignment.Center,
-    ) {
-        Column (
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = itinerary.title,
-                color = MaterialTheme.colorScheme.primary,
-                fontFamily = FontFamily.Monospace,
-                fontSize = 30.sp,
-                modifier = Modifier.padding(10.dp) // Adjust padding as needed
-            )
-            Text(
-                text = itinerary.description ?: "",
-                color = MaterialTheme.colorScheme.secondary,
-                fontFamily = FontFamily.Monospace,
-                fontSize = 15.sp,
-                modifier = Modifier.padding(10.dp) // Adjust padding as needed
-            )
-        }
-    }
-}
