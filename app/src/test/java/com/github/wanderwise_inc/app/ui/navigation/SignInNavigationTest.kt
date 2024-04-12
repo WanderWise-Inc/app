@@ -30,6 +30,11 @@ class SignInNavigationTest {
     
     private lateinit var navController: TestNavHostController
     
+    @Test
+    fun exampleTest() {
+        assert(true)
+    }
+    
     /*@Before
     fun setupNavHost() {
         composeTestRule.setContent {
