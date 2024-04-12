@@ -1,13 +1,16 @@
 package com.github.wanderwise_inc.app.viewmodel
 
+import android.graphics.Bitmap
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.data.ProfileRepository
 import com.github.wanderwise_inc.app.model.profile.Profile
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.Flow
 
-class ProfileViewModel(private val profileRepository: ProfileRepository) : ViewModel() {
+class ProfileViewModel(private val profileRepository: ProfileRepository,
+                        private val imageRepository: ImageRepository) : ViewModel() {
     /**
      * @return flow of a user profile
      */
@@ -23,17 +26,24 @@ class ProfileViewModel(private val profileRepository: ProfileRepository) : ViewM
     }
 
     /**
-     * @brief sets a profile
+     * Sets a profile in data source
      */
     fun setProfile(profile: Profile) {
         profileRepository.setProfile(profile)
     }
 
     /**
-     * @brief deletes a profile from the data source
+     * Deletes a profile from the data source
      */
     fun deleteProfile(profile: Profile) {
         profileRepository.deleteProfile(profile)
+    }
+
+    /**
+     * @return the profile picture of a user as a bitmap flow for asynchronous drawing
+     */
+    fun getProfilePicture(profile: Profile): Flow<Bitmap> {
+        return imageRepository.fetchImage(profile.profilePicture)
     }
 
     public fun sendResetPassword() {
