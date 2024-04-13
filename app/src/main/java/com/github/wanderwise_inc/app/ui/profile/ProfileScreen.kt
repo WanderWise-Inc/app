@@ -6,13 +6,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
+import androidx.compose.ui.platform.testTag
 import com.github.wanderwise_inc.app.model.profile.Profile
 import com.github.wanderwise_inc.app.ui.itinerary.ItineraryBanner
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
+
+const val PROFILE_SCREEN_TEST_TAG: String = "profile_screen"
 
 @Composable
 fun ProfileScreen(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel) {
@@ -20,13 +24,13 @@ fun ProfileScreen(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel
   val profile by profileViewModel.getProfile(currentUid).collectAsState(initial = null)
 
   if (profile != null) {
-    Column {
+    Column(modifier = Modifier.testTag(PROFILE_SCREEN_TEST_TAG)) {
       Text(text = "Hello ${profile!!.displayName}!\nprofile picture: ")
       profilePicture(profileViewModel, profile!!)
       ItinerariesScrollable(mapViewModel, currentUid)
     }
   } else {
-    Text("profile not found")
+    Text("profile not found", modifier = Modifier.testTag(PROFILE_SCREEN_TEST_TAG))
   }
 }
 
