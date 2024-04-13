@@ -21,38 +21,32 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.wanderwise_inc.app.model.location.Itinerary
 
-
 @Composable
 fun ItineraryBanner(itinerary: Itinerary) {
-    var hide by remember {
-        mutableStateOf(false)
-    }
+  var hide by remember { mutableStateOf(false) }
 
-    Box(
-        modifier = Modifier
-            .background(MaterialTheme.colorScheme.background)
-            .height(200.dp)
-            .clip(RoundedCornerShape(16.dp)),
-        contentAlignment = Alignment.Center,
-    ) {
-        Column (
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = itinerary.title,
-                color = MaterialTheme.colorScheme.primary,
-                fontFamily = FontFamily.Monospace,
-                fontSize = 30.sp,
-                modifier = Modifier.padding(10.dp) // Adjust padding as needed
-            )
-            Text(
-                text = itinerary.description ?: "",
-                color = MaterialTheme.colorScheme.secondary,
-                fontFamily = FontFamily.Monospace,
-                fontSize = 15.sp,
-                modifier = Modifier.padding(10.dp) // Adjust padding as needed
-            )
-        }
+  Box(
+      modifier =
+          Modifier.background(MaterialTheme.colorScheme.background)
+              .height(200.dp)
+              .clip(RoundedCornerShape(16.dp)),
+      contentAlignment = Alignment.Center,
+  ) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+      Text(
+          text = itinerary.title,
+          color = MaterialTheme.colorScheme.primary,
+          fontFamily = FontFamily.Monospace,
+          fontSize = 30.sp,
+          modifier = Modifier.padding(10.dp) // Adjust padding as needed
+          )
+      Text(
+          text = itinerary.description ?: "",
+          color = MaterialTheme.colorScheme.secondary,
+          fontFamily = FontFamily.Monospace,
+          fontSize = 15.sp,
+          modifier = Modifier.padding(10.dp) // Adjust padding as needed
+          )
     }
+  }
 }
-
