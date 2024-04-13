@@ -14,7 +14,6 @@ import com.github.wanderwise_inc.app.data.ImageRepositoryTestImpl
 import com.github.wanderwise_inc.app.data.ItineraryRepositoryTestImpl
 import com.github.wanderwise_inc.app.data.ProfileRepositoryTestImpl
 import com.github.wanderwise_inc.app.ui.home.HomeScreen
-import com.github.wanderwise_inc.app.ui.profile.PROFILE_SCREEN_TEST_TAG
 import com.github.wanderwise_inc.app.viewmodel.HomeViewModel
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
@@ -27,7 +26,6 @@ import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
-import org.mockito.junit.MockitoJUnitRunner
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
@@ -35,11 +33,9 @@ class HomeNavigationTest {
   @get:Rule val composeTestRule = createComposeRule()
   private lateinit var navController: NavHostController
 
-  @Mock
-  private lateinit var mockApplication: Application
+  @Mock private lateinit var mockApplication: Application
 
-  @Mock
-  private lateinit var mockContext: Context
+  @Mock private lateinit var mockContext: Context
 
   @Before
   fun setupNavHost() {

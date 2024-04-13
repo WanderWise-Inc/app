@@ -24,9 +24,7 @@ fun ProfileScreen(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel
   val profile by profileViewModel.getProfile(currentUid).collectAsState(initial = null)
 
   if (profile != null) {
-    Column (
-      modifier = Modifier.testTag(PROFILE_SCREEN_TEST_TAG)
-    ){
+    Column(modifier = Modifier.testTag(PROFILE_SCREEN_TEST_TAG)) {
       Text(text = "Hello ${profile!!.displayName}!\nprofile picture: ")
       profilePicture(profileViewModel, profile!!)
       ItinerariesScrollable(mapViewModel, currentUid)
