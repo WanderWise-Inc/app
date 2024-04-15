@@ -18,12 +18,10 @@ fun RootNavigationGraph(
     mapViewModel: MapViewModel,
     navController: NavHostController
 ) {
-  // val navigator = NavigationActions(navController)
-  // var selectedScreen by remember { mutableStateOf(TOP_LEVEL_DESTINATIONS[1]) }
   NavHost(
       navController = navController, route = Graph.ROOT, startDestination = Graph.AUTHENTICATION) {
         authNavGraph(context, profileViewModel, navController)
-        composable(route = Graph.HOME) { HomeScreen(homeViewModel, mapViewModel) }
+        composable(route = Graph.HOME) { HomeScreen(homeViewModel, mapViewModel, profileViewModel) }
       }
 }
 
