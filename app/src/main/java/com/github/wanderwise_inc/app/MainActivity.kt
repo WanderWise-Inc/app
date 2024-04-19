@@ -14,6 +14,7 @@ import com.github.wanderwise_inc.app.data.ImageRepositoryTestImpl
 import com.github.wanderwise_inc.app.data.ItineraryRepositoryTestImpl
 import com.github.wanderwise_inc.app.data.ProfileRepositoryTestImpl
 import com.github.wanderwise_inc.app.ui.navigation.graph.RootNavigationGraph
+import com.github.wanderwise_inc.app.ui.profile.ProfileScreen
 import com.github.wanderwise_inc.app.ui.theme.WanderWiseTheme
 import com.github.wanderwise_inc.app.viewmodel.HomeViewModel
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
@@ -40,13 +41,14 @@ class MainActivity : ComponentActivity() {
       WanderWiseTheme {
         // A surface container using the 'background' color from the theme
         Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-          // HomeScreen(homeViewModel, mapViewModel)
-          RootNavigationGraph(
+        ProfileScreen(mapViewModel = mapViewModel, profileViewModel = profileViewModel)  
+        // HomeScreen(homeViewModel, mapViewModel)
+          /*RootNavigationGraph(
               application.applicationContext,
               homeViewModel = homeViewModel,
               profileViewModel = profileViewModel,
               mapViewModel = mapViewModel,
-              navController = rememberNavController())
+              navController = rememberNavController())*/
         }
       }
     }

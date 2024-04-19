@@ -19,7 +19,7 @@ class MapViewModel(private val itineraryRepository: ItineraryRepository) : ViewM
   }
 
   /** @return the total number of likes from a list of itineraries */
-  fun getItineraryUpvotes(itineraries: List<Itinerary>): Int {
+  fun getItineraryLikes(itineraries: List<Itinerary>): Int {
     var totalLikes: Int = 0
     for (itinerary in itineraries) totalLikes += itinerary.numLikes
     return totalLikes
