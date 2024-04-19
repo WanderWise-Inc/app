@@ -28,7 +28,7 @@ fun HomeNavGraph(
     composable(route = TopLevelDestination.Overview.route) { OverviewScreen(mapViewModel) }
     composable(route = TopLevelDestination.Liked.route) { LikedScreen(mapViewModel) }
     composable(route = TopLevelDestination.Search.route) { SearchScreen(mapViewModel) }
-    composable(route = TopLevelDestination.Map.route) { DummyPreviewItinerary() }
+    composable(route = TopLevelDestination.Map.route) { DummyPreviewItinerary(mapViewModel) }
     composable(route = TopLevelDestination.Profile.route) {
       ProfileScreen(mapViewModel, profileViewModel)
     }
