@@ -1,6 +1,7 @@
 package com.github.wanderwise_inc.app.data
 
 import com.github.wanderwise_inc.app.model.location.Itinerary
+import com.github.wanderwise_inc.app.model.location.ItineraryLabels
 import com.github.wanderwise_inc.app.model.location.Tag
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -23,15 +24,17 @@ interface ItineraryRepository {
 
   /** @brief sets an itinerary. If the itinerary has a blank UID, one will be generated */
   fun setItinerary(itinerary: Itinerary)
+  
+  /** @brief update and itinerary. */
+  fun updateItinerary(old: Itinerary, new: Map<String, Any?>)
 
   /** @brief deletes an itinerary */
   fun deleteItinerary(itinerary: Itinerary)
 }
-
+/**
 const val ITINERARY_COLLECTION_PATH: String = "itineraries"
 
 /** @brief repository implementation using firestore as data source */
-/*
 class ItineraryRepositoryFirestoreImpl : ItineraryRepository {
   private val LOG_DEBUG_TAG = "REPOSITORY_FIRESTORE"
   private val db = FirebaseFirestore.getInstance()
@@ -102,6 +105,15 @@ class ItineraryRepositoryFirestoreImpl : ItineraryRepository {
         .addOnFailureListener { e -> Log.d(LOG_DEBUG_TAG, "Set failure: err=$e") }
   }
 
+  override fun updateItinerary(old: Itinerary, new: Map<String, Any?>) {
+    assert(old.uid == new.get(ItineraryLabels.UID))
+    val docRef = itineraryCollection.document(old.uid)
+    docRef
+      .update(new)
+      .addOnSuccessListener { Log.d(LOG_DEBUG_TAG, "Update success") }
+      .addOnFailureListener { e -> Log.d(LOG_DEBUG_TAG, "Update failure: err=$e") }
+  }
+
   override fun deleteItinerary(itinerary: Itinerary) {
     val docRef = itineraryCollection.document(itinerary.uid)
     docRef
@@ -141,6 +153,12 @@ class ItineraryRepositoryTestImpl : ItineraryRepository {
       uidCtr++
     }
     itineraries.add(itinerary)
+  }
+
+  override fun updateItinerary(old: Itinerary, new: Map<String, Any?>) {
+    assert(old.uid == new[ItineraryLabels.UID])
+    itineraries.remove(old)
+    itineraries.add(Itinerary.Builder(new))
   }
 
   override fun deleteItinerary(itinerary: Itinerary) {

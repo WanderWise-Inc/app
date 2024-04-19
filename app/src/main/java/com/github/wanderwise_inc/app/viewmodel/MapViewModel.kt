@@ -3,6 +3,7 @@ package com.github.wanderwise_inc.app.viewmodel
 import androidx.lifecycle.ViewModel
 import com.github.wanderwise_inc.app.data.ItineraryRepository
 import com.github.wanderwise_inc.app.model.location.Itinerary
+import com.github.wanderwise_inc.app.model.location.ItineraryLabels
 import com.github.wanderwise_inc.app.model.location.ItineraryPreferences
 import kotlinx.coroutines.flow.Flow
 
@@ -23,6 +24,18 @@ class MapViewModel(private val itineraryRepository: ItineraryRepository) : ViewM
     var totalLikes: Int = 0
     for (itinerary in itineraries) totalLikes += itinerary.numLikes
     return totalLikes
+  }
+  
+  /** @brief increment likes of a given itinerary */
+  fun incrementItineraryLikes(itinerary: Itinerary) {
+    val new = itinerary.toMap()
+    itineraryRepository.updateItinerary(itinerary, new)
+  }
+
+  /** @brief decrement likes of a given itinerary */
+  fun decrementItineraryLikes(itinerary: Itinerary) {
+    val new = itinerary.toMap()
+    itineraryRepository.updateItinerary(itinerary, new)
   }
 
   /**
