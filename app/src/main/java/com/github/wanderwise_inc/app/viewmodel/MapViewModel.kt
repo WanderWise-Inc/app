@@ -77,10 +77,17 @@ class MapViewModel(
     val destination = itinerary.locations.last()
     val originEncoded = "${origin.lat}, ${origin.long}"
     val destinationEncoded = "${destination.lat}, ${destination.long}"
+
+    val waypoints = itinerary.locations.drop(1).dropLast(1).map { "${it.lat},${it.long}" }
+
     val key = BuildConfig.MAPS_API_KEY
     viewModelScope.launch {
       directionsRepository
-          .getPolylineWayPoints(originEncoded, destinationEncoded, key)
+          .getPolylineWayPoints(
+              origin = originEncoded,
+              destination = destinationEncoded,
+              apiKey = key,
+              waypoints = waypoints.toTypedArray())
           .observeForever { response -> _polylinePointsLiveData.value = response ?: listOf() }
     }
   }
