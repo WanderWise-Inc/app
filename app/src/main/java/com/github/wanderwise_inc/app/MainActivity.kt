@@ -5,13 +5,18 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.navigation.compose.rememberNavController
 import com.github.wanderwise_inc.app.data.DirectionsRepository
 import com.github.wanderwise_inc.app.data.ImageRepositoryTestImpl
 import com.github.wanderwise_inc.app.data.ItineraryRepositoryTestImpl
 import com.github.wanderwise_inc.app.data.ProfileRepositoryTestImpl
 import com.github.wanderwise_inc.app.network.ApiServiceFactory
-import com.github.wanderwise_inc.app.ui.map.DummyPreviewItinerary
+import com.github.wanderwise_inc.app.ui.navigation.graph.RootNavigationGraph
 import com.github.wanderwise_inc.app.ui.theme.WanderWiseTheme
 import com.github.wanderwise_inc.app.viewmodel.HomeViewModel
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
@@ -45,19 +50,16 @@ class MainActivity : ComponentActivity() {
 
     setContent {
       WanderWiseTheme {
-        DummyPreviewItinerary(mapViewModel)
-        /*
-         // A surface container using the 'background' color from the theme
-         Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-           // HomeScreen(homeViewModel, mapViewModel)
-           RootNavigationGraph(
-               application.applicationContext,
-               homeViewModel = homeViewModel,
-               profileViewModel = profileViewModel,
-               mapViewModel = mapViewModel,
-               navController = rememberNavController())
-         }
-        */
+        // A surface container using the 'background' color from the theme
+        Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
+          // HomeScreen(homeViewModel, mapViewModel)
+          RootNavigationGraph(
+              application.applicationContext,
+              homeViewModel = homeViewModel,
+              profileViewModel = profileViewModel,
+              mapViewModel = mapViewModel,
+              navController = rememberNavController())
+        }
       }
     }
   }
