@@ -11,33 +11,26 @@ import retrofit2.http.Query
 interface DirectionsApiService {
   @GET("json?")
   fun getPolylineWayPoints(
-    @Query("origin") origin: String,
-    @Query("destination") destination: String,
-    @Query("key") key: String
+      @Query("origin") origin: String,
+      @Query("destination") destination: String,
+      @Query("key") key: String
   ): Call<DirectionsResponseBody>
 }
 
-/**
- * format of google maps response for de-serialization
- */
-data class DirectionsResponseBody (
-  val routes: List<Route>
-) {
+/** format of google maps response for de-serialization */
+data class DirectionsResponseBody(val routes: List<Route>) {
   data class Route(val legs: List<Leg>) {
     data class Leg(val steps: List<Step>) {
       data class Step(
-        @SerializedName("start_location") val startLocation: RespLocation,
-        @SerializedName("end_location") val endLocation: RespLocation)
-        data class RespLocation(
-          val lat: Double,
-          val lng: Double
-        )
+          @SerializedName("start_location") val startLocation: RespLocation,
+          @SerializedName("end_location") val endLocation: RespLocation
+      )
+
+      data class RespLocation(val lat: Double, val lng: Double)
     }
   }
 
-  /**
-   * returns the parsed response waypoints as a list of `LatLng`
-   */
+  /** returns the parsed response waypoints as a list of `LatLng` */
   fun toLatLngList(): List<LatLng> {
     var out: List<LatLng> = listOf()
     for (route in routes) {
@@ -51,18 +44,16 @@ data class DirectionsResponseBody (
   }
 }
 
-/**
- * Factory for creating `ApiService`
- * design patterns uwu
- */
+/** Factory for creating `ApiService` design patterns uwu */
 object ApiServiceFactory {
   private const val BASE_URL = "https://maps.googleapis.com/maps/api/directions/"
 
   fun createDirectionsApiService(): DirectionsApiService {
-    val retrofit = Retrofit.Builder()
-      .baseUrl(BASE_URL)
-      .addConverterFactory(GsonConverterFactory.create())
-      .build()
+    val retrofit =
+        Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
 
     return retrofit.create(DirectionsApiService::class.java)
   }
