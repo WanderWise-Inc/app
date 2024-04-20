@@ -10,7 +10,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
-import com.github.wanderwise_inc.app.data.ImageRepositoryTestImpl
+import com.github.wanderwise_inc.app.data.ImageRepositoryImpl
+//import com.github.wanderwise_inc.app.data.ImageRepositoryTestImpl
 import com.github.wanderwise_inc.app.data.ItineraryRepositoryTestImpl
 import com.github.wanderwise_inc.app.data.ProfileRepositoryTestImpl
 import com.github.wanderwise_inc.app.ui.navigation.graph.RootNavigationGraph
@@ -33,7 +34,7 @@ class MainActivity : ComponentActivity() {
     super.onCreate(savedInstanceState)
 
     val profileRepository = ProfileRepositoryTestImpl()
-    val imageRepository = ImageRepositoryTestImpl(application)
+    val imageRepository = ImageRepositoryImpl(application)
     profileViewModel = ProfileViewModel(profileRepository, imageRepository)
 
     setContent {

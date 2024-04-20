@@ -17,6 +17,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,45 +50,55 @@ fun LoginScreen(
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
-  Box(modifier = modifier.requiredWidth(width = 1280.dp).requiredHeight(height = 1100.dp)) {
+  Box(modifier = modifier
+      .requiredWidth(width = 1280.dp)
+      .requiredHeight(height = 1100.dp)) {
     Image(
         painter = painterResource(id = R.drawable.underground_2725336_1280),
         contentDescription = "underground-2725336_1280 1",
         modifier =
-            Modifier.requiredWidth(width = 1280.dp).requiredHeight(height = 853.dp).alpha(0.6f))
+        Modifier
+            .requiredWidth(width = 1280.dp)
+            .requiredHeight(height = 853.dp)
+            .alpha(0.6f))
     Box(
         modifier =
-            Modifier.align(alignment = Alignment.TopStart)
-                .offset(x = 485.dp, y = 829.dp)
-                .requiredWidth(width = 289.dp)
-                .requiredHeight(height = 39.dp)
-                .clip(shape = RoundedCornerShape(8.dp))
-                .background(color = Color(0xFF972626))) {
+        Modifier
+            .align(alignment = Alignment.TopStart)
+            .offset(x = 485.dp, y = 829.dp)
+            .requiredWidth(width = 289.dp)
+            .requiredHeight(height = 39.dp)
+            .clip(shape = RoundedCornerShape(8.dp))
+            .background(color = Color(0xFF972626))) {
           SignInButton(profileViewModel, navController)
         }
     Image(
         painter = painterResource(id = R.drawable.google__g__logo_svg),
         contentDescription = "google-logo-9808 1",
         modifier =
-            Modifier.align(alignment = Alignment.TopStart)
-                .offset(x = 505.dp, y = 841.dp)
-                .requiredSize(size = 15.dp))
+        Modifier
+            .align(alignment = Alignment.TopStart)
+            .offset(x = 505.dp, y = 841.dp)
+            .requiredSize(size = 15.dp))
     Text(
         text = "Sign-In with Google",
         color = Color.White,
         lineHeight = 1.em,
         style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.Medium),
         modifier =
-            Modifier.align(alignment = Alignment.TopCenter)
-                .offset(x = 40.dp, y = 837.dp)
-                .requiredWidth(width = 250.dp)
-                .requiredHeight(height = 35.dp))
+        Modifier
+            .align(alignment = Alignment.TopCenter)
+            .offset(x = 40.dp, y = 837.dp)
+            .requiredWidth(width = 250.dp)
+            .requiredHeight(height = 35.dp))
     Text(
         text = "WanderWise",
         color = Color.White,
         lineHeight = 0.56.em,
         style = TextStyle(fontSize = 32.sp, fontWeight = FontWeight.Medium),
-        modifier = Modifier.align(alignment = Alignment.TopStart).offset(x = 550.dp, y = 730.dp))
+        modifier = Modifier
+            .align(alignment = Alignment.TopStart)
+            .offset(x = 550.dp, y = 730.dp))
   }
 }
 
@@ -149,23 +161,11 @@ fun SignInButton(
                         profilePicture = user.photoUrl)
 
                 // Trying to set the user
-                coroutineScope.launch {
-                  /*                            val success = userViewModel.setUser(u)
-                  if (success) {
-                      Log.d("USERS", "USER ADDED TO DB")
-                      // userViewModel.storeImage(userViewModel, context, user.photoUrl!!)
-                      navController.navigate(Graph.HOME)
+                profileViewModel.setProfile(newProfile)
+/*                val queriedProfile = profileViewModel.getProfile(newProfile.userUid).first()
+                Log.d("PROFILE", queriedProfile.toString())*/
+                navController.navigate(Graph.HOME)
 
-                  } else {
-                      Log.d("USERS", "USER NOT ADDED TO DB")
-
-                      // TODO Handle ERROR
-                  }*/
-                  profileViewModel.setProfile(newProfile)
-                  val queriedProfile = profileViewModel.getProfile(newProfile.userUid).first()
-                  Log.d("PROFILE", queriedProfile.toString())
-                  navController.navigate(Graph.HOME)
-                }
               }
             } else {
               // unsuccessful sign in
@@ -180,9 +180,10 @@ fun SignInButton(
   Button(
       onClick = { signInLauncher.launch(signInIntent) },
       modifier =
-          Modifier.requiredWidth(width = 289.dp)
-              .requiredHeight(height = 39.dp)
-              .testTag("Sign in button"),
+      Modifier
+          .requiredWidth(width = 289.dp)
+          .requiredHeight(height = 39.dp)
+          .testTag("Sign in button"),
       shape = RoundedCornerShape(8.dp),
       border = BorderStroke(1.dp, Color.Gray),
       colors = ButtonDefaults.buttonColors(Color.Transparent)) {}
