@@ -22,7 +22,7 @@ class ProfileViewModel(
   }
 
   /** Sets a profile in data source */
-  fun setProfile(profile: Profile) {
+  suspend fun setProfile(profile: Profile) {
     profileRepository.setProfile(profile)
   }
 

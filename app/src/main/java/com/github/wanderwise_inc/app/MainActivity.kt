@@ -13,6 +13,7 @@ import androidx.navigation.compose.rememberNavController
 import com.github.wanderwise_inc.app.data.ImageRepositoryImpl
 //import com.github.wanderwise_inc.app.data.ImageRepositoryTestImpl
 import com.github.wanderwise_inc.app.data.ItineraryRepositoryTestImpl
+import com.github.wanderwise_inc.app.data.ProfileRepositoryImpl
 import com.github.wanderwise_inc.app.data.ProfileRepositoryTestImpl
 import com.github.wanderwise_inc.app.ui.navigation.graph.RootNavigationGraph
 import com.github.wanderwise_inc.app.ui.theme.WanderWiseTheme
@@ -33,7 +34,7 @@ class MainActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
-    val profileRepository = ProfileRepositoryTestImpl()
+    val profileRepository = ProfileRepositoryImpl()
     val imageRepository = ImageRepositoryImpl(application)
     profileViewModel = ProfileViewModel(profileRepository, imageRepository)
 

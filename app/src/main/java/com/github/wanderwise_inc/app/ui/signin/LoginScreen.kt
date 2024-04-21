@@ -144,14 +144,8 @@ fun SignInButton(
                 // We define properly the fields, because some of them could be empty
                 val username = user.displayName
                 val properUsername = username ?: ""
-                val email = user.email
-                val properEmail = email ?: ""
                 val uid = user.uid
-                val phoneNumber = user.phoneNumber
-                val properPhoneNumber = phoneNumber ?: ""
-                val country = ""
                 val description = ""
-                val upVotes = 0
 
                 val newProfile =
                     Profile(
@@ -162,8 +156,6 @@ fun SignInButton(
 
                 // Trying to set the user
                 profileViewModel.setProfile(newProfile)
-/*                val queriedProfile = profileViewModel.getProfile(newProfile.userUid).first()
-                Log.d("PROFILE", queriedProfile.toString())*/
                 navController.navigate(Graph.HOME)
 
               }
