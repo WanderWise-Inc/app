@@ -32,9 +32,9 @@ class ProfileViewModel(
   }
 
   /** @return the profile picture of a user as a bitmap flow for asynchronous drawing */
-/*  fun getProfilePicture(profile: Profile): Flow<Bitmap?> {
-    return imageRepository.fetchImage(profile.profilePicture)
-  }*/
+  fun getProfilePicture(profile: Profile): Flow<Bitmap?> {
+    return imageRepository.fetchImage("profilePicture/${profile.userUid}")
+  }
 
   fun getBitMap(profile: Profile) : Flow<Bitmap?> {
     return imageRepository.getBitMap(profile.profilePicture)

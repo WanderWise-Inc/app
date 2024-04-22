@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.ui.home.HomeScreen
 import com.github.wanderwise_inc.app.viewmodel.HomeViewModel
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
@@ -16,12 +17,13 @@ fun RootNavigationGraph(
     profileViewModel: ProfileViewModel,
     homeViewModel: HomeViewModel,
     mapViewModel: MapViewModel,
+    imageRepository: ImageRepository,
     navController: NavHostController
 ) {
   NavHost(
       navController = navController, route = Graph.ROOT, startDestination = Graph.AUTHENTICATION) {
         authNavGraph(context, profileViewModel, navController)
-        composable(route = Graph.HOME) { HomeScreen(homeViewModel, mapViewModel, profileViewModel) }
+        composable(route = Graph.HOME) { HomeScreen(imageRepository, homeViewModel, mapViewModel, profileViewModel) }
       }
 }
 

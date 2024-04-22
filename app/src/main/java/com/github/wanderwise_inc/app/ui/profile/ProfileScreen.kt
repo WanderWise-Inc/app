@@ -1,17 +1,25 @@
 package com.github.wanderwise_inc.app.ui.profile
 
+import android.content.Intent
+import android.graphics.Bitmap
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.platform.testTag
 import coil.compose.AsyncImage
+import com.github.wanderwise_inc.app.data.ImageRepository
+import com.github.wanderwise_inc.app.data.ImageRepositoryImpl
 import com.github.wanderwise_inc.app.model.profile.Profile
 import com.github.wanderwise_inc.app.ui.itinerary.ItineraryBanner
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
@@ -21,13 +29,31 @@ import com.google.firebase.auth.FirebaseAuth
 const val PROFILE_SCREEN_TEST_TAG: String = "profile_screen"
 
 @Composable
-fun ProfileScreen(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel) {
+fun ProfileScreen(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel, imageRepository: ImageRepository) {
   val currentUid = FirebaseAuth.getInstance().currentUser!!.uid
   val profile by profileViewModel.getProfile(currentUid).collectAsState(initial = null)
   Log.d("CRASHED", "IN PROFILESCREEN")
+  var picture by remember {mutableStateOf<Bitmap?>(null)}
 
   if (profile != null) {
     Column(modifier = Modifier.testTag(PROFILE_SCREEN_TEST_TAG)) {
+      
+      Button(onClick = {
+        Intent(Intent.ACTION_GET_CONTENT).also {
+          // we will get only images (filter)
+          it.type = "image/*"
+          imageRepository.launchActivity(it)
+        }
+      }) {
+        Text(text = "SEARCH PHOTO")
+      }
+      
+      Button(onClick = {
+        imageRepository.uploadImageToStorage("profilePicture/${profile!!.userUid}")
+      }) {
+        Text(text = "UPLOAD PHOTO")
+      }
+      
       Text(text = "Hello ${profile!!.displayName}!\nprofile picture: ")
       Log.d("CRASHED", "BEFORE PROFILE PICTURE")
       ProfilePicture(profileViewModel, profile!!)
@@ -40,11 +66,13 @@ fun ProfileScreen(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel
 
 @Composable
 fun ProfilePicture(profileViewModel: ProfileViewModel, profile: Profile) {
-  val picture by profileViewModel.getBitMap(profile).collectAsState(initial = null)
+  Log.d("FETCH IMAGE", "IN PROFILE PICTURE")
+  val picture by profileViewModel.getProfilePicture(profile).collectAsState(initial = null)
   if (picture != null) {
     Image(painter = BitmapPainter(picture!!.asImageBitmap()), contentDescription = null)
     Log.d("CRASHED", "PICTURE DISPLAYED")
   } else {
+    Text(text = "No profile Picture")
     Log.d("CRASHED", "PICTURE IS NULL")
   }
 }

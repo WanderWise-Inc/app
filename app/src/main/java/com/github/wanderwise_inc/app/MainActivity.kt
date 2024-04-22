@@ -64,100 +64,34 @@ class MainActivity : ComponentActivity() {
     super.onCreate(savedInstanceState)
 
     val profileRepository = ProfileRepositoryImpl()
-    imageRepository = ImageRepositoryImpl(application)
+    imageRepository = ImageRepositoryImpl(application, imageLauncher)
     profileViewModel = ProfileViewModel(profileRepository, imageRepository)
 
     setContent {
       WanderWiseTheme {
         // A surface container using the 'background' color from the theme
         Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-          Column {
-            Text("HELLO WORLD")
-            Button(onClick = {
-              Intent(Intent.ACTION_GET_CONTENT).also {
-                // we will get only images (filter)
-                it.type = "image/*"
-                imageLauncher.launch(it)
-              }
-
-            }) {
-              Text(text = "SEARCH IMAGE")
-            }
-
-            Button(onClick = {
-              uploadImageToStorage("1")
-            }) {
-              Text(text = "UPLOAD IMAGE")
-            }
-          }
-
-
 
           // HomeScreen(homeViewModel, mapViewModel)
-/*          RootNavigationGraph(
-              application.applicationContext,
-              homeViewModel = homeViewModel,
-              profileViewModel = profileViewModel,
-              mapViewModel = mapViewModel,
-              navController = rememberNavController())*/
+          RootNavigationGraph(
+            application.applicationContext,
+            homeViewModel = homeViewModel,
+            profileViewModel = profileViewModel,
+            mapViewModel = mapViewModel,
+            imageRepository = imageRepository,
+            navController = rememberNavController())
         }
       }
     }
-
   }
-  @Composable
-  fun Greeting() {
-    Text(text = "HELLO")
-  }
-  
-  @Composable
-  fun showPic(bitmap: Bitmap) {
-    Image(painter = BitmapPainter(bitmap.asImageBitmap()), contentDescription = null)
-  }
-  
-  suspend fun getBitMap(url : Uri?) : Bitmap? {
-    if (url != null) {
-      val loading = ImageLoader(this)
-      val request = ImageRequest.Builder(this)
-        .data(url)
-        .build()
-
-      Log.d("STORAGE", "REQUEST OK")
-      val result = (loading.execute(request) as SuccessResult).drawable
-      return (result as BitmapDrawable).bitmap
-    } else {
-      Log.d("BITMAP", "URL IS NULL")
-      return null
-    }
-  }
-
 
   private val imageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {result ->
     if (result.resultCode == RESULT_OK) {
       result?.data?.data.let {
         //use the global variable for access
-        currentFile = it
-        runBlocking {
-
-        }
+        imageRepository.setCurrentFile(it)
+        Log.d("STORE IMAGE", "CURRENTFILE SELECTED")
       }
-    }
-  }
-
-  private fun uploadImageToStorage(fileName : String) {
-    try {
-      currentFile?.let {
-        imageReference.child("images/${fileName}").putFile(it)
-          .addOnSuccessListener {
-            Log.d("STORE IMAGE", "STORE SUCCESS")
-          }
-          .addOnFailureListener {
-            Log.d("STORE IMAGE", "STORE FAILED")
-          }
-      }
-
-    } catch (e : Exception) {
-      Log.w("STORE IMAGE", e)
     }
   }
 }

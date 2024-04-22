@@ -1,12 +1,19 @@
 package com.github.wanderwise_inc.app.data
 
+import android.app.Activity.RESULT_OK
 import android.app.Application
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.util.Log
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.ActivityResultRegistry
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import coil.ImageLoader
@@ -17,6 +24,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.suspendCancellableCoroutine
 import java.io.ByteArrayOutputStream
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -27,7 +36,7 @@ interface ImageRepository {
   /**
    * @return a bitmap flow of queried image
    */
-  fun fetchImage(): Flow<Bitmap?>
+  fun fetchImage(pathToProfilePic : String): Flow<Bitmap?>
 
   /**
    * @param bitMap the image's bitMap we want to store
@@ -36,6 +45,12 @@ interface ImageRepository {
   fun storeImage(bitMap: Bitmap)
 
   fun getBitMap(url: Uri?) : Flow<Bitmap?>
+
+  fun uploadImageToStorage(fileName : String)
+
+  fun launchActivity(it : Intent)
+
+  fun setCurrentFile(uri: Uri?)
 }
 
 /** test image repository... Always returns the same static image resource */
@@ -58,10 +73,12 @@ interface ImageRepository {
 /**
  * A class implementation of the Image Repository
  */
-class ImageRepositoryImpl(private val application: Application) : ImageRepository {
+class ImageRepositoryImpl(private val application: Application, private val activityLauncher: ActivityResultLauncher<Intent>) : ImageRepository {
 
     private val storage = FirebaseStorage.getInstance()
     private val context = application.baseContext
+    private var currentFile : Uri? = null
+    private var imageReference = storage.reference
 
     /**
      * Store image function. This function will create a reference in Firebase to store a bitmap
@@ -94,36 +111,57 @@ class ImageRepositoryImpl(private val application: Application) : ImageRepositor
      * Fetch image Function. This function will fetch the profile picture
      * @return a flow of the bitMap representation of the profile picture
      */
-    override fun fetchImage(): Flow<Bitmap?> {
+    override fun fetchImage(pathToProfilePic: String): Flow<Bitmap?> {
         return flow {
-          val storageRef = storage.reference
-          val currentUser = FirebaseAuth.getInstance()
-          val profilePictureRef = storageRef.child("images/profilePicture/${currentUser.uid}")
+            val storageRef = storage.reference
+            val profilePictureRef = storageRef.child("images/${pathToProfilePic}")
+            Log.d("FETCH IMAGE", "STORAGE REF IS " + profilePictureRef.toString())
 
-          try {
-              val byteResult = suspendCoroutine<ByteArray?> { continuation ->
-                  profilePictureRef.getBytes(1024 * 1024)
-                      .addOnSuccessListener { byteResult ->
-                          continuation.resume(byteResult)
-                      }
-                      .addOnFailureListener { exception ->
-                          continuation.resumeWithException(exception)
-                      }
-              }
-              Log.d("BITMAP", "BYTE RESULT IS " + byteResult.toString())
-              // Decode bitmap if bytes are not null
-              val bitmap = if (byteResult != null) {
-                  Log.d("BITMAP", "BYTE RESULT NOT NULL")
-                  BitmapFactory.decodeByteArray(byteResult, 0, byteResult.size)
-              } else {
-                  null
-              }
-              Log.d("BITMAP", bitmap.toString())
-              emit(bitmap)
-          } catch (e: Exception) {
-              Log.e("BITMAP", "Error fetching image", e)
-              emit(null)
-          }
+            try {
+                Log.d("FETCH IMAGE", "IN TRY")
+                val byteResult = suspendCancellableCoroutine<ByteArray?> { continuation ->
+                    profilePictureRef.getBytes(1024 * 1024)
+                        .addOnSuccessListener { byteResult ->
+                            continuation.resume(byteResult) // Resume with byte array
+                        }
+                        .addOnFailureListener { exception ->
+                            continuation.resumeWithException(exception) // Resume with exception
+                        }
+                }
+
+                Log.d("FETCH IMAGE", "BYTE RESULT IS " + byteResult.toString())
+
+                // Decode bitmap if bytes are not null
+                val bitmap = byteResult?.let {
+                    BitmapFactory.decodeByteArray(it, 0, it.size)
+                }
+
+                Log.d("FETCH IMAGE", "BITMAP IS " + bitmap.toString())
+
+                emit(bitmap) // Emit bitmap
+            } catch (e: Exception) {
+                Log.e("FETCH IMAGE", "Error fetching image: ${e.message}", e) // Log detailed error message
+                emit(null) // Emit null in case of error
+            }
+        }
+    }
+
+
+    override fun uploadImageToStorage(fileName : String) {
+        Log.d("STORE IMAGE", "IN UPLOAD IMAGE TO STORAGE")
+        try {
+            currentFile?.let {
+                imageReference.child("images/${fileName}").putFile(it)
+                    .addOnSuccessListener {
+                        Log.d("STORE IMAGE", "STORE SUCCESS")
+                    }
+                    .addOnFailureListener {
+                        Log.d("STORE IMAGE", "STORE FAILED")
+                    }
+            }
+
+        } catch (e : Exception) {
+            Log.w("STORE IMAGE", e)
         }
     }
 
@@ -149,5 +187,13 @@ class ImageRepositoryImpl(private val application: Application) : ImageRepositor
                 emit(null)
             }
         }
+    }
+
+    override fun launchActivity(it : Intent) {
+        activityLauncher.launch(it)
+    }
+
+    override fun setCurrentFile(uri : Uri?) {
+        currentFile = uri
     }
 }

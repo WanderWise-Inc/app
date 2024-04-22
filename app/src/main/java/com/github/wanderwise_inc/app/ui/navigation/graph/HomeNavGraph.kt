@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.ui.liked.LikedScreen
 import com.github.wanderwise_inc.app.ui.map.DummyPreviewItinerary
 import com.github.wanderwise_inc.app.ui.navigation.Destination.TopLevelDestination
@@ -17,7 +18,8 @@ import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 fun HomeNavGraph(
     mapViewModel: MapViewModel,
     navController: NavHostController,
-    profileViewModel: ProfileViewModel
+    profileViewModel: ProfileViewModel,
+    imageRepository: ImageRepository
 ) {
   NavHost(
       navController = navController,
@@ -30,10 +32,10 @@ fun HomeNavGraph(
     composable(route = TopLevelDestination.Search.route) { SearchScreen(mapViewModel) }
     composable(route = TopLevelDestination.Map.route) { DummyPreviewItinerary() }
     composable(route = TopLevelDestination.Profile.route) {
-      ProfileScreen(mapViewModel, profileViewModel)
+      ProfileScreen(mapViewModel, profileViewModel, imageRepository)
     }
     composable(route = TopLevelDestination.Profile.route) {
-      ProfileScreen(mapViewModel, profileViewModel)
+      ProfileScreen(mapViewModel, profileViewModel, imageRepository)
     }
   }
 }
