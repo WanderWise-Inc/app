@@ -1,6 +1,7 @@
 package com.github.wanderwise_inc.app.viewmodel
 
 import android.graphics.Bitmap
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.data.ProfileRepository
@@ -34,12 +35,5 @@ class ProfileViewModel(
   /** @return the profile picture of a user as a bitmap flow for asynchronous drawing */
   fun getProfilePicture(profile: Profile): Flow<Bitmap?> {
     return imageRepository.fetchImage("profilePicture/${profile.userUid}")
-  }
-
-  fun getBitMap(profile: Profile) : Flow<Bitmap?> {
-    return imageRepository.getBitMap(profile.profilePicture)
-  }
-  fun storeProfilePicture(bitMap : Bitmap) {
-    imageRepository.storeImage(bitMap)
   }
 }

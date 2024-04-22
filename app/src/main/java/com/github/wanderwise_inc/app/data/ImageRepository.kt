@@ -44,12 +44,26 @@ interface ImageRepository {
    */
   fun storeImage(bitMap: Bitmap)
 
-  fun getBitMap(url: Uri?) : Flow<Bitmap?>
+    /**
+     * @param uri the current Uri that we want to convert to a bitmap
+     * @return a flow of a bitmap, that can be use to be stored or to be displayed
+     */
+  fun getBitMap(uri: Uri?) : Flow<Bitmap?>
 
+    /**
+     * @param fileName the fileName (path) that we want to store to the storage
+     */
   fun uploadImageToStorage(fileName : String)
 
+    /**
+     * @brief used to launch the activity to open the photo gallery
+     */
   fun launchActivity(it : Intent)
 
+    /**
+     * @brief set the currentFile to this the Uri given, useful for other functions
+     * that will use the currentFile
+     */
   fun setCurrentFile(uri: Uri?)
 }
 
@@ -115,16 +129,18 @@ class ImageRepositoryImpl(private val application: Application, private val acti
         return flow {
             val storageRef = storage.reference
             val profilePictureRef = storageRef.child("images/${pathToProfilePic}")
-            Log.d("FETCH IMAGE", "STORAGE REF IS " + profilePictureRef.toString())
 
             try {
                 Log.d("FETCH IMAGE", "IN TRY")
                 val byteResult = suspendCancellableCoroutine<ByteArray?> { continuation ->
                     profilePictureRef.getBytes(1024 * 1024)
                         .addOnSuccessListener { byteResult ->
+                            Log.d("FETCH IMAGE", "GOT THE BYTES")
                             continuation.resume(byteResult) // Resume with byte array
                         }
                         .addOnFailureListener { exception ->
+                            Log.d("FETCH IMAGE", "FETCH FAILED")
+                            Log.w("FETCH IMAGE", exception)
                             continuation.resumeWithException(exception) // Resume with exception
                         }
                 }
@@ -146,10 +162,15 @@ class ImageRepositoryImpl(private val application: Application, private val acti
         }
     }
 
-
+    /**
+     * Upload to the storage. This function will upload the currentFile
+     * (which will be the one selected by the user in the photo gallery)
+     * @param fileName the fileName (path) where we want to store the currentFile
+     */
     override fun uploadImageToStorage(fileName : String) {
-        Log.d("STORE IMAGE", "IN UPLOAD IMAGE TO STORAGE")
         try {
+            // The currentFile is set with the "setCurrentFile()" function
+            // This will put the given file (the one selected by the user) to store in storage
             currentFile?.let {
                 imageReference.child("images/${fileName}").putFile(it)
                     .addOnSuccessListener {
@@ -159,7 +180,6 @@ class ImageRepositoryImpl(private val application: Application, private val acti
                         Log.d("STORE IMAGE", "STORE FAILED")
                     }
             }
-
         } catch (e : Exception) {
             Log.w("STORE IMAGE", e)
         }
@@ -167,15 +187,15 @@ class ImageRepositoryImpl(private val application: Application, private val acti
 
     /**
      * Get bit map function. This function will create a Bitmap representation given a Uri
-     * @param url the Uri link to the image
+     * @param uri the Uri link to the image
      * @return a flow of the bitMap representation of the image
      */
-    override fun getBitMap(url : Uri?) : Flow<Bitmap?> {
+    override fun getBitMap(uri : Uri?) : Flow<Bitmap?> {
         return flow {
-            if (url != null) {
+            if (uri != null) {
                 val loading = ImageLoader(context)
                 val request = ImageRequest.Builder(context)
-                    .data(url)
+                    .data(uri)
                     .build()
 
                 Log.d("STORAGE", "REQUEST OK")
@@ -189,10 +209,17 @@ class ImageRepositoryImpl(private val application: Application, private val acti
         }
     }
 
+    /**
+     * @brief used to launch the activity to open the photo gallery
+     */
     override fun launchActivity(it : Intent) {
         activityLauncher.launch(it)
     }
 
+    /**
+     * @brief set the currentFile to this the Uri given, useful for other functions
+     * that will use the currentFile
+     */
     override fun setCurrentFile(uri : Uri?) {
         currentFile = uri
     }
