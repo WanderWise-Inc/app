@@ -28,7 +28,7 @@ fun SearchBar() {
       placeholder = { Text(text = "Wander where?") },
       leadingIcon = {
         Icon( // TODO: make icon appear
-            painter = painterResource(id = R.drawable.more_icon),
+            painter = painterResource(id = R.drawable.les_controles),
             contentDescription = null,
             tint = Color.Black,
             modifier =
@@ -36,7 +36,8 @@ fun SearchBar() {
                       // TODO: add filters in drop down menu
                     }
                     .padding(2.dp)
-                    .size(30.dp))
+                    .size(30.dp)
+                    )
       },
       singleLine = true,
       shape = RoundedCornerShape(30.dp),
