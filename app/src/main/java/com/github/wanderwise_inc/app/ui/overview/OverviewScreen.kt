@@ -26,7 +26,7 @@ fun OverviewScreen(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxWidth()) {
-              SearchBar()
+              SearchBar({})
               TopNavigationMenu(navigator, Route.OVERVIEW)
             }
       },
