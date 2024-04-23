@@ -49,4 +49,7 @@ class ProfileViewModel(
   fun checkIfItineraryIsLiked(userUid: String, itineraryUid: String): Boolean {
     return profileRepository.checkIfItineraryIsLiked(userUid, itineraryUid)
   }
+  fun getLikedItineraries(userUid: String): Flow<List<String>> {
+    return profileRepository.getLikedItineraries(userUid)
+  }
 }

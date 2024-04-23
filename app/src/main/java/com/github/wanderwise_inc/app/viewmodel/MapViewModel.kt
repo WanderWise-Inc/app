@@ -6,6 +6,7 @@ import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryLabels
 import com.github.wanderwise_inc.app.model.location.ItineraryPreferences
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 /** @brief ViewModel class for providing `Location`s and `Itinerary`s to the map UI */
 class MapViewModel(private val itineraryRepository: ItineraryRepository) : ViewModel() {
@@ -55,6 +56,13 @@ class MapViewModel(private val itineraryRepository: ItineraryRepository) : ViewM
     // invert the sign so that the list is sorted in descending order
     return itineraries.sortedBy { -it.scoreFromPreferences(preferences) }
   }
+  
+  /*fun getItinerary(itinerary: Itinerary): Flow<Itinerary> {
+    return flow { 
+      
+      itineraryRepository.getItinerary(itinerary) 
+    }
+  }*/
 
   /** @brief sets an itinerary in DB */
   fun setItinerary(itinerary: Itinerary) {

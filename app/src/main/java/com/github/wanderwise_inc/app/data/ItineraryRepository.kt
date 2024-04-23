@@ -1,5 +1,6 @@
 package com.github.wanderwise_inc.app.data
 
+import android.util.Log
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryLabels
 import com.github.wanderwise_inc.app.model.location.Tag
@@ -159,6 +160,7 @@ class ItineraryRepositoryTestImpl : ItineraryRepository {
     assert(oldUid == new.uid)
     itineraries.removeIf{it.uid == oldUid}
     itineraries.add(new)
+    Log.d("ITINERARY_UPDATE", "$new")
   }
 
   override fun deleteItinerary(itinerary: Itinerary) {

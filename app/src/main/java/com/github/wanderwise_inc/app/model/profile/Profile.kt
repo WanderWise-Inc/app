@@ -25,4 +25,7 @@ data class Profile(
 
   /** @brief no argument constructor for serialization */
   constructor() : this(displayName = "", userUid = "", bio = "")
+    
+  /** @brief constructor with userUid for testing */
+  constructor(userUid: String, ) : this(displayName = "", userUid = userUid, bio = "")
 }

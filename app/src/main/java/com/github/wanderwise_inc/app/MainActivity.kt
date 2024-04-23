@@ -13,6 +13,9 @@ import androidx.navigation.compose.rememberNavController
 import com.github.wanderwise_inc.app.data.ImageRepositoryTestImpl
 import com.github.wanderwise_inc.app.data.ItineraryRepositoryTestImpl
 import com.github.wanderwise_inc.app.data.ProfileRepositoryTestImpl
+import com.github.wanderwise_inc.app.model.location.Itinerary
+import com.github.wanderwise_inc.app.model.location.Location
+import com.github.wanderwise_inc.app.model.profile.Profile
 import com.github.wanderwise_inc.app.ui.liked.LikedScreen
 import com.github.wanderwise_inc.app.ui.navigation.graph.RootNavigationGraph
 import com.github.wanderwise_inc.app.ui.profile.ProfileScreen
@@ -33,10 +36,19 @@ class MainActivity : ComponentActivity() {
   // private lateinit var analytics : FirebaseAnalytics
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    
+    itineraryRepository.setItinerary(
+      Itinerary
+        .Builder(uid = "0", userUid = "0", title = "Initial test itinerary 1")
+        .addLocation(Location(0.0, 0.0))
+        .build()
+    )
 
     val profileRepository = ProfileRepositoryTestImpl()
     val imageRepository = ImageRepositoryTestImpl(application)
     profileViewModel = ProfileViewModel(profileRepository, imageRepository)
+    
+    profileRepository.setProfile(Profile(userUid = "0"))
 
     setContent {
       WanderWiseTheme {

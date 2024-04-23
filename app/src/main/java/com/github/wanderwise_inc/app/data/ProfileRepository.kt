@@ -29,6 +29,9 @@ interface ProfileRepository {
 
   /** @brief checks if the given Itinerary is contained in the user's liked itineraries */
   fun checkIfItineraryIsLiked(userUid: String, itineraryUid: String): Boolean
+  
+  /** @brief returns list of user's liked itineraries */
+  fun getLikedItineraries(userUid: String): Flow<List<String>>
 }
 
 /** @brief test implementation of repository simulating a remote data source */
@@ -71,5 +74,12 @@ class ProfileRepositoryTestImpl : ProfileRepository {
 
   override fun checkIfItineraryIsLiked(userUid: String, itineraryUid: String): Boolean {
     return profiles.filter{ it.userUid == userUid }.first().likedItinerariesUid.contains(itineraryUid)
+  }
+
+  override fun getLikedItineraries(userUid: String): Flow<List<String>> {
+    return flow {
+      val filteredProfiles = profiles.filter { it.userUid == userUid }
+      if (filteredProfiles.isEmpty()) emit(emptyList()) else emit(filteredProfiles.first().likedItinerariesUid)
+    }
   }
 }
