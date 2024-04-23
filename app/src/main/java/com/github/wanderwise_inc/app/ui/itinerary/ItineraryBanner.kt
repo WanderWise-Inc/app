@@ -21,6 +21,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,34 +37,13 @@ import com.github.wanderwise_inc.app.R
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
 import com.github.wanderwise_inc.app.model.location.Tag
+import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 
-
-//@Preview()
-//@Composable
-//fun WanderHub() {
-//    //Gets all itineraries
-//    //val itineraries by viewModel.getAllPublicItineraries().collectAsState(initial = listOf())
-//    val itineraries = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
-//
-//
-//    //Scrollable Column that only composes items on Screen
-//    LazyColumn(
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .background(MaterialTheme.colorScheme.background)
-//            .padding(16.dp, 8.dp)
-//        ,
-//        verticalArrangement = Arrangement.spacedBy(15.dp),)
-//    {
-//        items(itineraries, key = {it}) {itinerary ->
-//            ItineraryBanner2()
-//        }
-//    }
-//}
+//HomeScreen.kt + Itinerary.kt + this
 
 //@Preview(showBackground = true, backgroundColor = 0x00000000)
 @Composable
-fun ItineraryBanner(itinerary: Itinerary) {
+fun ItineraryBanner(itinerary: Itinerary, onClick : (Itinerary) -> Unit) {
 //    var hide by remember { mutableStateOf(false) }
 
     //for testing
@@ -80,7 +61,8 @@ fun ItineraryBanner(itinerary: Itinerary) {
             .cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant,),
         elevation = CardDefaults
             .cardElevation(defaultElevation = 6.dp),
-        shape = RoundedCornerShape(13.dp)
+        shape = RoundedCornerShape(13.dp),
+        onClick = {onClick(itinerary)}
     ) {
         Column(
             modifier = Modifier
@@ -188,8 +170,6 @@ fun ItineraryBanner(itinerary: Itinerary) {
                             tint = MaterialTheme.colorScheme.secondary,
                             modifier =
                             Modifier.size(width = 40.dp, height = 40.dp)
-
-
                         )
 
                         Text(
