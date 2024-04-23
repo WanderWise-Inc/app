@@ -1,4 +1,4 @@
-package com.github.wanderwise_inc.app.ui.liked
+package com.github.wanderwise_inc.app.ui.list_itineraries
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -36,7 +36,6 @@ import com.github.wanderwise_inc.app.model.location.Tag
 import com.github.wanderwise_inc.app.ui.home.SearchBar
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
-import kotlinx.coroutines.flow.flow
 
 /** @brief Search categories displayed on the top bar. */
 data class SearchCategory(
@@ -113,62 +112,6 @@ fun DisplayLikedItineraries(mapViewModel: MapViewModel, profileViewModel: Profil
         }
         ItinerariesListScrollable(itineraries = filtered, paddingValues = innerPadding)
       }
-}
-
-/**
- * @brief top bar of the liked screen that allows for category selection
- */
-@Composable
-fun CategorySelector(
-    selectedIndex: Int,
-    categoriesList: List<SearchCategory>,
-    onCategorySelected: (Int) -> Unit
-) {
-  TabRow(
-      selectedTabIndex = selectedIndex,
-      backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
-  ) {
-    categoriesList.forEachIndexed { index, category ->
-      Tab(
-          selected = index == selectedIndex,
-          onClick = { onCategorySelected(index) },
-          text = {
-            Text(
-                text = category.title,
-                modifier = Modifier.padding(0.dp, 2.dp),
-                style =
-                    TextStyle(
-                        fontSize = 9.sp,
-                        lineHeight = 16.sp,
-                        // fontFamily = FontFamily(Font(R.font.roboto)),
-                        fontWeight = FontWeight(600),
-                        color = Color(0xFF191C1E),
-                        textAlign = TextAlign.Center,
-                        letterSpacing = 0.5.sp,
-                    ))
-          },
-          icon = {
-            Icon(
-                painter = painterResource(id = category.icon),
-                contentDescription = null,
-                tint = Color(0xFF191C1E),
-                modifier = Modifier
-                  .size(30.dp)
-                  .padding(2.dp))
-          })
-    }
-  }
-}
-
-@Composable
-fun ItinerariesListScrollable(itineraries: List<Itinerary>, paddingValues: PaddingValues) {
-  LazyColumn (
-    modifier = Modifier.padding(paddingValues)
-  ) {
-    this.items(itineraries) { itinerary ->
-      Text(text = "${itinerary.title}, tags = ${itinerary.tags}")
-    }
-  }
 }
 
 @Composable
