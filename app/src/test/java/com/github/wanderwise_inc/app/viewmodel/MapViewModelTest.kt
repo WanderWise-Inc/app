@@ -1,30 +1,44 @@
 package com.github.wanderwise_inc.app.viewmodel
 
+import com.github.wanderwise_inc.app.data.DirectionsRepository
 import com.github.wanderwise_inc.app.data.ItineraryRepository
 import com.github.wanderwise_inc.app.data.ItineraryRepositoryTestImpl
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryPreferences
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
 import com.github.wanderwise_inc.app.model.location.Location
+import com.github.wanderwise_inc.app.network.DirectionsApiService
+import com.github.wanderwise_inc.app.network.DirectionsResponseBody
 import junit.framework.TestCase.assertEquals
 import kotlin.random.Random
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
+import okhttp3.Request
+import okio.Timeout
 import org.junit.Assert.assertNotEquals
 import org.junit.Before
 import org.junit.Test
+import org.mockito.ArgumentMatchers.anyString
+import org.mockito.Mock
+import org.mockito.Mockito.mock
+import org.mockito.Mockito.`when`
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 /** @brief test class for mapview model */
 class MapViewModelTest {
   private lateinit var itineraryRepository: ItineraryRepository
+  @Mock private lateinit var mockApiService: DirectionsApiService
+  private lateinit var directionsRepository: DirectionsRepository
   private lateinit var mapViewModel: MapViewModel
   // helper function for generating random latitude and longitude...
-  fun randomLat(): Double = Random.nextDouble(-90.0, 90.0)
+  private fun randomLat(): Double = Random.nextDouble(-90.0, 90.0)
 
-  fun randomLon(): Double = Random.nextDouble(-180.0, 180.0)
+  private fun randomLon(): Double = Random.nextDouble(-180.0, 180.0)
 
   // helper function for generating random locations
-  fun randomLocations(size: Int): List<Location> {
+  private fun randomLocations(size: Int): List<Location> {
     // helper function for generating random locations
     val locations = mutableListOf<Location>()
     for (i in 0 until size) locations.add(Location(randomLat(), randomLon()))
@@ -57,10 +71,72 @@ class MapViewModelTest {
           description = null,
           visible = true)
 
+  val mockLocations = randomLocations(4)
+  private val mockResponse =
+      DirectionsResponseBody(
+          listOf(
+              DirectionsResponseBody.Route(
+                  listOf(
+                      DirectionsResponseBody.Route.Leg(
+                          listOf(
+                              DirectionsResponseBody.Route.Leg.Step(
+                                  DirectionsResponseBody.Route.Leg.RespLocation(
+                                      mockLocations[0].lat, mockLocations[0].long),
+                                  DirectionsResponseBody.Route.Leg.RespLocation(
+                                      mockLocations[1].lat, mockLocations[1].long)),
+                              DirectionsResponseBody.Route.Leg.Step(
+                                  DirectionsResponseBody.Route.Leg.RespLocation(
+                                      mockLocations[2].lat, mockLocations[2].long),
+                                  DirectionsResponseBody.Route.Leg.RespLocation(
+                                      mockLocations[3].lat, mockLocations[3].long))))))))
+
   @Before
   fun setup() {
+    mockApiService = mock(DirectionsApiService::class.java)
+    // Mock the directionsApiService so that we don't get billed by Google
+    `when`(
+            mockApiService.getPolylineWayPoints(
+                origin = anyString(),
+                destination = anyString(),
+                waypoints = listOf(anyString()).toTypedArray(),
+                key = anyString()))
+        .thenReturn(
+            object : Call<DirectionsResponseBody> {
+              override fun enqueue(callback: Callback<DirectionsResponseBody>) {
+                // Simulate a successful response
+                callback.onResponse(this, Response.success(mockResponse))
+              }
+
+              // Other overridden methods can be added as necessary for your test
+              override fun isExecuted(): Boolean = false
+
+              override fun clone(): Call<DirectionsResponseBody> = this
+
+              override fun execute(): Response<DirectionsResponseBody> {
+                throw UnsupportedOperationException("execute() is not supported for async calls")
+              }
+
+              override fun isCanceled(): Boolean = false
+
+              override fun request(): Request {
+                TODO("shouldn't be needed for mock")
+              }
+
+              override fun timeout(): Timeout {
+                throw UnsupportedOperationException("timeout() is not supported for async calls")
+              }
+
+              override fun cancel() {
+                TODO("shouldn't be needed for mock")
+              }
+            })
+
+    directionsRepository = DirectionsRepository(mockApiService)
+
     itineraryRepository = ItineraryRepositoryTestImpl()
-    mapViewModel = MapViewModel(itineraryRepository)
+    mapViewModel =
+        MapViewModel(
+            itineraryRepository = itineraryRepository, directionsRepository = directionsRepository)
   }
 
   @Test

@@ -7,22 +7,27 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
+import com.github.wanderwise_inc.app.data.DirectionsRepository
 import com.github.wanderwise_inc.app.data.ImageRepositoryTestImpl
 import com.github.wanderwise_inc.app.data.ItineraryRepositoryTestImpl
 import com.github.wanderwise_inc.app.data.ProfileRepositoryTestImpl
+import com.github.wanderwise_inc.app.model.location.Location
 import com.github.wanderwise_inc.app.ui.home.HomeScreen
 import com.github.wanderwise_inc.app.viewmodel.HomeViewModel
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.firebase.FirebaseApp
+import kotlin.random.Random
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.runner.RunWith
+import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mock
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
@@ -36,6 +41,36 @@ class HomeNavigationTest {
   @Mock private lateinit var mockApplication: Application
 
   @Mock private lateinit var mockContext: Context
+
+  @Mock private lateinit var mockDirectionsRepository: DirectionsRepository
+
+  @Before
+  fun `setup mockDirectionsRepository`() {
+    fun randomLat(): Double = Random.nextDouble(-90.0, 90.0)
+
+    fun randomLon(): Double = Random.nextDouble(-180.0, 180.0)
+
+    // helper function for generating random locations
+    fun randomLocations(size: Int): List<Location> {
+      // helper function for generating random locations
+      val locations = mutableListOf<Location>()
+      for (i in 0 until size) locations.add(Location(randomLat(), randomLon()))
+      return locations.toList()
+    }
+
+    val mockLocations = randomLocations(4)
+    val mockResonse = MutableLiveData(mockLocations.map { it.toLatLng() })
+
+    mockDirectionsRepository = mock(DirectionsRepository::class.java)
+
+    `when`(
+            mockDirectionsRepository.getPolylineWayPoints(
+                origin = anyString(),
+                destination = anyString(),
+                waypoints = listOf(anyString()).toTypedArray(),
+                anyString()))
+        .thenReturn(mockResonse)
+  }
 
   @Before
   fun setupNavHost() {
@@ -51,7 +86,7 @@ class HomeNavigationTest {
       val profileViewModel = ProfileViewModel(profileRepository, imageRepository)
 
       val itineraryRepository = ItineraryRepositoryTestImpl()
-      val mapViewModel = MapViewModel(itineraryRepository)
+      val mapViewModel = MapViewModel(itineraryRepository, mockDirectionsRepository)
       FirebaseApp.initializeApp(LocalContext.current)
       navController = TestNavHostController(LocalContext.current)
       navController.navigatorProvider.addNavigator(ComposeNavigator())
