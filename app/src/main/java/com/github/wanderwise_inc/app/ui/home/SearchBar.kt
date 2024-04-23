@@ -20,11 +20,14 @@ import androidx.compose.ui.unit.dp
 import com.github.wanderwise_inc.app.R
 
 @Composable
-fun SearchBar() {
+fun SearchBar(onSearchChange: (String) -> Unit) {
   var query by remember { mutableStateOf("") }
   OutlinedTextField(
       value = query,
-      onValueChange = { s: String -> query = s },
+      onValueChange = { s: String ->
+        query = s
+        onSearchChange(s)
+      },
       placeholder = { Text(text = "Wander where?") },
       leadingIcon = {
         Icon( // TODO: make icon appear
