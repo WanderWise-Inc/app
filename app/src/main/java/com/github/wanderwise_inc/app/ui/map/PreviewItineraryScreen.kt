@@ -1,5 +1,6 @@
 package com.github.wanderwise_inc.app.ui.map
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,7 +26,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.github.wanderwise_inc.app.data.ItineraryRepositoryTestImpl
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
 import com.github.wanderwise_inc.app.model.location.PlacesReader
@@ -44,10 +44,8 @@ fun PreviewItineraryScreen(itinerary: Itinerary, mapViewModel: MapViewModel) {
   val cameraPositionState = rememberCameraPositionState {
     position = CameraPosition.fromLatLngZoom(itinerary.computeCenterOfGravity().toLatLng(), 13f)
   }
-  val itineraryRepository = ItineraryRepositoryTestImpl()
 
   LaunchedEffect(Unit) { mapViewModel.fetchPolylineLocations(itinerary) }
-
   val polylinePoints by mapViewModel.polylinePointsLiveData.observeAsState()
 
   Scaffold(

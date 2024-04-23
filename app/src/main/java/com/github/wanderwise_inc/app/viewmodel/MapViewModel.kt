@@ -66,7 +66,6 @@ class MapViewModel(
 
   private val _polylinePointsLiveData = MutableLiveData<List<LatLng>>()
   val polylinePointsLiveData: LiveData<List<LatLng>> = _polylinePointsLiveData // gettable from view
-
   /**
    * fetches Polyline points encoded as `LatLng` and updates a `LiveData` variable observed by some
    * composable function
