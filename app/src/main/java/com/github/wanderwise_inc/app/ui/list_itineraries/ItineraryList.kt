@@ -20,6 +20,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.wanderwise_inc.app.model.location.Itinerary
+import com.github.wanderwise_inc.app.ui.map.ItineraryBanner
 
 /** @brief reusable UI elements for displaying a list of itineraries */
 
@@ -28,7 +29,7 @@ import com.github.wanderwise_inc.app.model.location.Itinerary
 fun ItinerariesListScrollable(itineraries: List<Itinerary>, paddingValues: PaddingValues) {
   LazyColumn(modifier = Modifier.padding(paddingValues)) {
     this.items(itineraries) { itinerary ->
-      Text(text = "${itinerary.title}, tags = ${itinerary.tags}")
+      ItineraryBanner(itinerary = itinerary)
     }
   }
 }
@@ -68,7 +69,9 @@ fun CategorySelector(
                 painter = painterResource(id = category.icon),
                 contentDescription = null,
                 tint = Color(0xFF191C1E),
-                modifier = Modifier.size(30.dp).padding(2.dp))
+                modifier = Modifier
+                  .size(30.dp)
+                  .padding(2.dp))
           })
     }
   }
