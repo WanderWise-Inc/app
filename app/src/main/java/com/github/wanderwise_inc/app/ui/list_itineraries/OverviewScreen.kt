@@ -31,12 +31,12 @@ fun DisplayOverviewItineraries(mapViewModel: MapViewModel) {
 
   /* the categories that can be selected by the user during filtering */
   val categoriesList =
-    listOf(
-      SearchCategory(ItineraryTags.ADVENTURE, R.drawable.adventure_icon, "Adventure"),
-      SearchCategory(ItineraryTags.LUXURY, R.drawable.adventure_icon, "Shopping"),
-      SearchCategory(ItineraryTags.PHOTOGRAPHY, R.drawable.sight_seeing_icon, "Sight Seeing"),
-      SearchCategory(ItineraryTags.FOODIE, R.drawable.drinks_icon, "Drinks"),
-    )
+      listOf(
+          SearchCategory(ItineraryTags.ADVENTURE, R.drawable.adventure_icon, "Adventure"),
+          SearchCategory(ItineraryTags.LUXURY, R.drawable.adventure_icon, "Shopping"),
+          SearchCategory(ItineraryTags.PHOTOGRAPHY, R.drawable.sight_seeing_icon, "Sight Seeing"),
+          SearchCategory(ItineraryTags.FOODIE, R.drawable.drinks_icon, "Drinks"),
+      )
 
   var selectedIndex by remember { mutableIntStateOf(0) }
   var searchQuery by remember { mutableStateOf("") }
@@ -44,50 +44,51 @@ fun DisplayOverviewItineraries(mapViewModel: MapViewModel) {
   // TODO fetch liked itineraries from profileViewModel
 
   // for testing purposes
-  val itineraryAdventureAndLuxury = Itinerary(
-    uid = "0",
-    userUid = "0",
-    locations = listOf(),
-    title = "Shopping then adventure",
-    tags = listOf(ItineraryTags.ADVENTURE, ItineraryTags.LUXURY),
-    description = "gucci",
-    visible = true,
-  )
+  val itineraryAdventureAndLuxury =
+      Itinerary(
+          uid = "0",
+          userUid = "0",
+          locations = listOf(),
+          title = "Shopping then adventure",
+          tags = listOf(ItineraryTags.ADVENTURE, ItineraryTags.LUXURY),
+          description = "gucci",
+          visible = true,
+      )
 
-  val itineraryAdventure = Itinerary(
-    uid = "1",
-    userUid = "0",
-    locations = listOf(),
-    title = "Hike",
-    tags = listOf(ItineraryTags.ADVENTURE),
-    description = null,
-    visible = true,
-  )
+  val itineraryAdventure =
+      Itinerary(
+          uid = "1",
+          userUid = "0",
+          locations = listOf(),
+          title = "Hike",
+          tags = listOf(ItineraryTags.ADVENTURE),
+          description = null,
+          visible = true,
+      )
 
   val itineraries = listOf(itineraryAdventure, itineraryAdventureAndLuxury)
 
   androidx.compose.material.Scaffold(
-    topBar = {
-      Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxWidth()
-      ) {
-        SearchBar(onSearchChange = { searchQuery = it })
-        CategorySelector(
-          selectedIndex = selectedIndex,
-          categoriesList = categoriesList,
-          onCategorySelected = { selectedIndex = it })
+      topBar = {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.fillMaxWidth()) {
+              SearchBar(onSearchChange = { searchQuery = it })
+              CategorySelector(
+                  selectedIndex = selectedIndex,
+                  categoriesList = categoriesList,
+                  onCategorySelected = { selectedIndex = it })
+            }
+      },
+      modifier = Modifier.testTag("Liked screen")) { innerPadding ->
+        val filtered =
+            itineraries
+                .filter { itinerary -> itinerary.tags.contains(categoriesList[selectedIndex].tag) }
+                .filter { itinerary ->
+                  searchQuery.isBlank() ||
+                      itinerary.title.contains(searchQuery, ignoreCase = true) ||
+                      itinerary.description?.contains(searchQuery, ignoreCase = true) ?: false
+                }
+        ItinerariesListScrollable(itineraries = filtered, paddingValues = innerPadding)
       }
-    },
-    modifier = Modifier.testTag("Liked screen")
-  ) { innerPadding ->
-    val filtered = itineraries.filter { itinerary ->
-      itinerary.tags.contains(categoriesList[selectedIndex].tag)
-    }.filter { itinerary ->
-      searchQuery.isBlank() ||
-              itinerary.title.contains(searchQuery, ignoreCase = true) ||
-              itinerary.description?.contains(searchQuery, ignoreCase = true) ?: false
-    }
-    ItinerariesListScrollable(itineraries = filtered, paddingValues = innerPadding)
-  }
 }

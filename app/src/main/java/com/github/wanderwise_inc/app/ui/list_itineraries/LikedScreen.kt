@@ -1,18 +1,9 @@
 package com.github.wanderwise_inc.app.ui.list_itineraries
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Tab
-import androidx.compose.material.TabRow
 import androidx.compose.material.Text
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -21,14 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.github.wanderwise_inc.app.R
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
@@ -68,25 +52,27 @@ fun DisplayLikedItineraries(mapViewModel: MapViewModel, profileViewModel: Profil
   // TODO fetch liked itineraries from profileViewModel
 
   // for testing purposes
-  val itineraryAdventureAndLuxury = Itinerary(
-    uid = "0",
-    userUid = "0",
-    locations = listOf(),
-    title = "Shopping then adventure",
-    tags = listOf(ItineraryTags.ADVENTURE, ItineraryTags.LUXURY),
-    description = "gucci",
-    visible = true,
-  )
+  val itineraryAdventureAndLuxury =
+      Itinerary(
+          uid = "0",
+          userUid = "0",
+          locations = listOf(),
+          title = "Shopping then adventure",
+          tags = listOf(ItineraryTags.ADVENTURE, ItineraryTags.LUXURY),
+          description = "gucci",
+          visible = true,
+      )
 
-  val itineraryAdventure = Itinerary(
-    uid = "1",
-    userUid = "0",
-    locations = listOf(),
-    title = "Hike",
-    tags = listOf(ItineraryTags.ADVENTURE),
-    description = null,
-    visible = true,
-  )
+  val itineraryAdventure =
+      Itinerary(
+          uid = "1",
+          userUid = "0",
+          locations = listOf(),
+          title = "Hike",
+          tags = listOf(ItineraryTags.ADVENTURE),
+          description = null,
+          visible = true,
+      )
 
   val itineraries = listOf(itineraryAdventure, itineraryAdventureAndLuxury)
 
@@ -103,13 +89,14 @@ fun DisplayLikedItineraries(mapViewModel: MapViewModel, profileViewModel: Profil
             }
       },
       modifier = Modifier.testTag("Liked screen")) { innerPadding ->
-        val filtered = itineraries.filter { itinerary ->
-          itinerary.tags.contains(categoriesList[selectedIndex].tag)
-        }.filter { itinerary ->
-          searchQuery.isBlank() ||
-                  itinerary.title.contains(searchQuery, ignoreCase = true) ||
-                  itinerary.description?.contains(searchQuery, ignoreCase = true) ?: false
-        }
+        val filtered =
+            itineraries
+                .filter { itinerary -> itinerary.tags.contains(categoriesList[selectedIndex].tag) }
+                .filter { itinerary ->
+                  searchQuery.isBlank() ||
+                      itinerary.title.contains(searchQuery, ignoreCase = true) ||
+                      itinerary.description?.contains(searchQuery, ignoreCase = true) ?: false
+                }
         ItinerariesListScrollable(itineraries = filtered, paddingValues = innerPadding)
       }
 }
