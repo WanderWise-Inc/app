@@ -2,6 +2,7 @@ package com.github.wanderwise_inc.app.ui.itinerary
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,9 +28,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.wanderwise_inc.app.R
 import com.github.wanderwise_inc.app.model.location.Itinerary
+import com.github.wanderwise_inc.app.viewmodel.MapViewModel
+import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 
 @Composable
-fun ItineraryBanner(itinerary: Itinerary) {
+fun ItineraryBanner(
+    mapViewModel: MapViewModel,
+    profileViewModel: ProfileViewModel,
+    userUid: String, 
+    itinerary: Itinerary
+) {
   var hide by remember { mutableStateOf(false) }
 
   Box(
@@ -61,16 +69,21 @@ fun ItineraryBanner(itinerary: Itinerary) {
           
           // Right side information (stars, likes, tags)
           Column(verticalArrangement = Arrangement.Bottom) { // Must change arrangement when adding more info
+              var liked by remember { mutableStateOf(profileViewModel.checkIfItineraryIsLiked(userUid, itinerary.uid)) }
               LikeButton(
                   onClick = {
-                      // TODO
+                      if (liked) { // The Itinerary is already liked by the current user
+                          mapViewModel.incrementItineraryLikes(itinerary)
+                      } else {
+                          mapViewModel.decrementItineraryLikes(itinerary)
+                      }
+                      liked = !liked
                   },
+                  liked = liked,
                   numLikes = remember {
                       itinerary.numLikes
                   }
-              ) {
-                  
-              }
+              )
           }
       }
   }
@@ -79,16 +92,20 @@ fun ItineraryBanner(itinerary: Itinerary) {
 @Composable
 fun LikeButton(
     onClick: () -> Unit,
-    numLikes: Int,
-    content: () -> Unit
+    liked: Boolean,
+    numLikes: Int
 ) {
     Box(
         modifier = Modifier
-            .size(30.dp),
+            .size(30.dp)
+            .clickable{ onClick },
         contentAlignment = Alignment.Center
     ) {
         Image(
-            painter = painterResource(id = R.drawable.liked_icon), 
-            contentDescription = "Liked button fow Itinerary")
+            painter = painterResource(id = R.drawable.liked_icon),
+            contentDescription = "Liked button fow Itinerary",
+            alpha = if (liked) { 1f } else { 0.5f }
+        )
+        Text(text = numLikes.toString())
     }
 }

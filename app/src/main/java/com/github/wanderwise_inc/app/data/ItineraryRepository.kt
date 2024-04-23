@@ -26,7 +26,7 @@ interface ItineraryRepository {
   fun setItinerary(itinerary: Itinerary)
   
   /** @brief update and itinerary. */
-  fun updateItinerary(old: Itinerary, new: Map<String, Any?>)
+  fun updateItinerary(oldUid: String, new: Itinerary)
 
   /** @brief deletes an itinerary */
   fun deleteItinerary(itinerary: Itinerary)
@@ -105,9 +105,9 @@ class ItineraryRepositoryFirestoreImpl : ItineraryRepository {
         .addOnFailureListener { e -> Log.d(LOG_DEBUG_TAG, "Set failure: err=$e") }
   }
 
-  override fun updateItinerary(old: Itinerary, new: Map<String, Any?>) {
-    assert(old.uid == new.get(ItineraryLabels.UID))
-    val docRef = itineraryCollection.document(old.uid)
+  override fun updateItinerary(oldUid: String, new: Itinerary) {
+    assert(oldUid == new.uid)
+    val docRef = itineraryCollection.document(oldUid)
     docRef
       .update(new)
       .addOnSuccessListener { Log.d(LOG_DEBUG_TAG, "Update success") }
@@ -155,10 +155,10 @@ class ItineraryRepositoryTestImpl : ItineraryRepository {
     itineraries.add(itinerary)
   }
 
-  override fun updateItinerary(old: Itinerary, new: Map<String, Any?>) {
-    assert(old.uid == new[ItineraryLabels.UID])
-    itineraries.remove(old)
-    itineraries.add(Itinerary.Builder(new))
+  override fun updateItinerary(oldUid: String, new: Itinerary) {
+    assert(oldUid == new.uid)
+    itineraries.removeIf{it.uid == oldUid}
+    itineraries.add(new)
   }
 
   override fun deleteItinerary(itinerary: Itinerary) {

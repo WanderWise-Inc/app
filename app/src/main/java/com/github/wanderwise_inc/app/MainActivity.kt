@@ -13,6 +13,7 @@ import androidx.navigation.compose.rememberNavController
 import com.github.wanderwise_inc.app.data.ImageRepositoryTestImpl
 import com.github.wanderwise_inc.app.data.ItineraryRepositoryTestImpl
 import com.github.wanderwise_inc.app.data.ProfileRepositoryTestImpl
+import com.github.wanderwise_inc.app.ui.liked.LikedScreen
 import com.github.wanderwise_inc.app.ui.navigation.graph.RootNavigationGraph
 import com.github.wanderwise_inc.app.ui.profile.ProfileScreen
 import com.github.wanderwise_inc.app.ui.theme.WanderWiseTheme
@@ -41,8 +42,8 @@ class MainActivity : ComponentActivity() {
       WanderWiseTheme {
         // A surface container using the 'background' color from the theme
         Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-        ProfileScreen(mapViewModel = mapViewModel, profileViewModel = profileViewModel)  
-        // HomeScreen(homeViewModel, mapViewModel)
+          ProfileScreen(mapViewModel = mapViewModel, profileViewModel = profileViewModel)
+          // HomeScreen(homeViewModel, mapViewModel)
           /*RootNavigationGraph(
               application.applicationContext,
               homeViewModel = homeViewModel,

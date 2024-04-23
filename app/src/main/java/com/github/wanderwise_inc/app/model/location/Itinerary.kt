@@ -36,7 +36,7 @@ data class Itinerary(
     var tags: List<Tag>,
     val description: String?,
     val visible: Boolean,
-    val numLikes: Int = 0
+    var numLikes: Int = 0
 ) {
   /** @return a map representation of an itinerary */
   fun toMap(): Map<String, Any> {
@@ -50,6 +50,10 @@ data class Itinerary(
         ItineraryLabels.VISIBLE to visible,
     )
   }
+    
+  /*fun copy(): Itinerary {
+      val builder = Itinerary.Builder(uid = this.uid)
+  }*/
 
   /**
    * @param uid a unique identifier

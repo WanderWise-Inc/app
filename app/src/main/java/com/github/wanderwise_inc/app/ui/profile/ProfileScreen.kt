@@ -27,7 +27,7 @@ fun ProfileScreen(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel
     Column(modifier = Modifier.testTag(PROFILE_SCREEN_TEST_TAG)) {
       Text(text = "Hello ${profile!!.displayName}!\nprofile picture: ")
       profilePicture(profileViewModel, profile!!)
-      ItinerariesScrollable(mapViewModel, currentUid)
+      ItinerariesScrollable(mapViewModel, profileViewModel, currentUid)
     }
   } else {
     Text("profile not found", modifier = Modifier.testTag(PROFILE_SCREEN_TEST_TAG))
@@ -47,12 +47,12 @@ fun profilePicture(profileViewModel: ProfileViewModel, profile: Profile) {
 }
 
 @Composable
-fun ItinerariesScrollable(mapViewModel: MapViewModel, uid: String) {
+fun ItinerariesScrollable(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel, uid: String) {
   val itineraries by mapViewModel.getUserItineraries(uid).collectAsState(initial = emptyList())
   if (itineraries.isNotEmpty()) {
     Column {
       Text("Your Itineraries:")
-      itineraries.forEach { itinerary -> ItineraryBanner(itinerary = itinerary) }
+    itineraries.forEach { itinerary -> ItineraryBanner(profileViewModel, uid, itinerary) }
     }
   } else {
     Text("You have not created any itineraries yet.")

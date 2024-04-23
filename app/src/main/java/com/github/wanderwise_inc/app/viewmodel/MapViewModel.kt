@@ -28,14 +28,14 @@ class MapViewModel(private val itineraryRepository: ItineraryRepository) : ViewM
   
   /** @brief increment likes of a given itinerary */
   fun incrementItineraryLikes(itinerary: Itinerary) {
-    val new = itinerary.toMap()
-    itineraryRepository.updateItinerary(itinerary, new)
+    itinerary.numLikes++
+    itineraryRepository.updateItinerary(itinerary.uid, itinerary)
   }
 
   /** @brief decrement likes of a given itinerary */
   fun decrementItineraryLikes(itinerary: Itinerary) {
-    val new = itinerary.toMap()
-    itineraryRepository.updateItinerary(itinerary, new)
+    itinerary.numLikes--
+    itineraryRepository.updateItinerary(itinerary.uid, itinerary)
   }
 
   /**
