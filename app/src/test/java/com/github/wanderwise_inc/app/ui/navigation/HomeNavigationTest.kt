@@ -2,6 +2,7 @@ package com.github.wanderwise_inc.app.ui.navigation
 
 import android.app.Application
 import android.content.Context
+import android.location.Location
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -19,12 +20,14 @@ import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.github.wanderwise_inc.app.viewmodel.UserLocationClient
 import com.google.firebase.FirebaseApp
+import kotlinx.coroutines.flow.flow
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.runner.RunWith
 import org.mockito.Mock
+import org.mockito.Mockito.anyLong
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
 import org.mockito.junit.MockitoJUnit
@@ -36,7 +39,6 @@ class HomeNavigationTest {
   @get:Rule val composeTestRule = createComposeRule()
   private lateinit var navController: NavHostController
 
-
   @get:Rule val mockitoRule: MockitoRule = MockitoJUnit.rule()
 
   @Mock private lateinit var userLocationClient: UserLocationClient
@@ -44,6 +46,9 @@ class HomeNavigationTest {
   @Mock private lateinit var mockApplication: Application
 
   @Mock private lateinit var mockContext: Context
+
+  private val epflLat = 46.519126741544575
+  private val epflLon = 6.5676006970802145
 
   @Before
   fun setupNavHost() {
@@ -53,6 +58,17 @@ class HomeNavigationTest {
       mockContext = mock(Context::class.java)
 
       `when`(mockApplication.applicationContext).thenReturn(mockContext)
+
+      `when`(userLocationClient.getLocationUpdates(anyLong())).thenReturn(
+        flow {
+          emit(
+            Location("TestProvider").apply {
+              latitude = epflLat
+              longitude = epflLon
+            }
+          )
+        }
+      )
 
       val imageRepository = ImageRepositoryTestImpl(mockApplication)
       val profileRepository = ProfileRepositoryTestImpl()

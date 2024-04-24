@@ -21,12 +21,9 @@ import org.mockito.junit.MockitoRule
 /** @brief test class for mapview model */
 class MapViewModelTest {
 
+  @get:Rule val mockitoRule: MockitoRule = MockitoJUnit.rule()
 
-    @get:Rule
-    val mockitoRule: MockitoRule = MockitoJUnit.rule()
-
-    @Mock
-    private lateinit var userLocationClient: UserLocationClient
+  @Mock private lateinit var userLocationClient: UserLocationClient
 
   private lateinit var itineraryRepository: ItineraryRepository
   private lateinit var mapViewModel: MapViewModel
