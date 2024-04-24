@@ -71,9 +71,7 @@ fun PreviewItineraryScreen(
     }
 }
 
-/**
- * @brief button to center on the user position
- */
+/** @brief button to center on the user position */
 @Composable
 fun CenterButton(cameraPositionState: CameraPositionState, currentLocation: Location?) {
     FloatingActionButton(
