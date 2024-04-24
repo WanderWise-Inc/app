@@ -46,7 +46,7 @@ fun HomeScreen(
           verticalArrangement = Arrangement.spacedBy(15.dp),
       ) {
         items(itineraries, key = { it }) { itinerary ->
-          ItineraryBanner(itinerary) {} // <-- TODO should add real expression
+          ItineraryBanner(itinerary, onBannerClick = {}, onLikeButtonClick = { _, _ -> })
         }
       }
     }

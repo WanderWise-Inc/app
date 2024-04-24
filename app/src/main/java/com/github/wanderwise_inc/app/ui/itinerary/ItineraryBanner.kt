@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -46,6 +47,141 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.wanderwise_inc.app.R
 import com.github.wanderwise_inc.app.model.location.Itinerary
+
+@Composable
+fun ItineraryBanner(
+    itinerary: Itinerary,
+    onLikeButtonClick: (Itinerary, Boolean) -> Unit,
+    onBannerClick: () -> Unit,
+    isLikedInitially: Boolean = false
+) {
+
+  val imageId = R.drawable.underground_2725336_1280
+
+  var isLiked by remember { mutableStateOf(isLikedInitially) }
+  var numLikes by remember { mutableIntStateOf(itinerary.numLikes) }
+
+  ElevatedCard(
+      colors =
+          CardDefaults.cardColors(
+              containerColor = MaterialTheme.colorScheme.surfaceVariant,
+          ),
+      elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+      shape = RoundedCornerShape(13.dp),
+      onClick = { onBannerClick() }) {
+        Column(
+            modifier =
+                Modifier.background(MaterialTheme.colorScheme.primaryContainer)
+                    .fillMaxWidth()
+                    .aspectRatio(1.34f),
+            horizontalAlignment = Alignment.CenterHorizontally) {
+
+              // Image of the itinerary
+              Image(
+                  painter = painterResource(id = imageId),
+                  contentDescription = itinerary.description,
+                  modifier =
+                      Modifier.fillMaxWidth().fillMaxHeight(0.55f).clip(RoundedCornerShape(13.dp)),
+                  contentScale = ContentScale.Crop,
+                  alignment = Alignment.TopCenter)
+
+              Row(modifier = Modifier.fillMaxSize()) {
+                Column(
+                    modifier =
+                        Modifier.fillMaxHeight().weight(0.6f).padding(10.dp, 8.dp, 4.dp, 15.dp),
+                    verticalArrangement = Arrangement.SpaceAround) {
+
+                      // Primary Text Field
+                      Text(
+                          text = itinerary.title,
+                          color = MaterialTheme.colorScheme.primary,
+                          fontFamily = FontFamily.Monospace,
+                          fontSize = 16.sp,
+                          fontWeight = FontWeight.Bold,
+                          modifier = Modifier.padding(5.dp)
+                          // textDecoration = TextDecoration.Underline
+                          )
+
+                      // Secondary indicator fields
+                      Text(
+                          text = "Wandered by - ",
+                          color = MaterialTheme.colorScheme.secondary,
+                          fontFamily = FontFamily.Monospace,
+                          fontSize = 12.sp,
+                          modifier = Modifier.padding(10.dp, 0.dp))
+
+                      Text(
+                          text = "Estimated time : - hours",
+                          color = MaterialTheme.colorScheme.secondary,
+                          fontFamily = FontFamily.Monospace,
+                          fontSize = 12.sp,
+                          modifier = Modifier.padding(10.dp, 0.dp))
+
+                      Text(
+                          text = "Average Expense : -",
+                          color = MaterialTheme.colorScheme.secondary,
+                          fontFamily = FontFamily.Monospace,
+                          fontSize = 12.sp,
+                          modifier = Modifier.padding(10.dp, 0.dp))
+                    }
+                Column(
+                    modifier =
+                        Modifier.weight(0.3f).fillMaxSize().padding(4.dp, 8.dp, 10.dp, 15.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.SpaceBetween) {
+                      LazyHorizontalStaggeredGrid(
+                          rows = StaggeredGridCells.Adaptive(20.dp),
+                          horizontalItemSpacing = 10.dp,
+                          verticalArrangement = Arrangement.spacedBy(4.dp),
+                          content = {
+                            items(itinerary.tags) {
+                              Card(
+                                  colors =
+                                      CardDefaults.cardColors(
+                                          containerColor = MaterialTheme.colorScheme.secondary,
+                                      ),
+                                  modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Max)) {
+                                    Text(
+                                        text = it,
+                                        textAlign = TextAlign.Center,
+                                        color = MaterialTheme.colorScheme.onSecondary,
+                                        fontFamily = FontFamily.Monospace,
+                                        fontSize = 12.sp,
+                                        modifier = Modifier.padding(4.dp))
+                                  }
+                            }
+                          },
+                          modifier = Modifier.fillMaxWidth().weight(0.4f).padding(2.dp))
+
+                      Column(
+                          modifier = Modifier.fillMaxWidth().weight(0.5f),
+                          horizontalAlignment = Alignment.CenterHorizontally) {
+                            // Like Icon
+                            Icon(
+                                painter = painterResource(id = R.drawable.liked_icon),
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.secondary,
+                                modifier =
+                                    Modifier.size(width = 40.dp, height = 40.dp)
+                                        .clickable(
+                                            onClick = {
+                                              if (isLiked) numLikes-- else numLikes++
+                                              onLikeButtonClick(itinerary, isLiked)
+                                              isLiked = !isLiked
+                                            }))
+
+                            Text(
+                                text = "$numLikes Likes",
+                                color = MaterialTheme.colorScheme.secondary,
+                                fontFamily = FontFamily.Monospace,
+                                fontSize = 12.sp,
+                                modifier = Modifier.padding(2.dp))
+                          }
+                    }
+              }
+            }
+      }
+}
 
 /**
  * @param onLikeClick callback that is called when the like button is pressed
@@ -122,124 +258,6 @@ fun ItineraryBanner__(
                       }
                     }
               }
-        }
-  }
-}
-
-@Composable
-fun ItineraryBanner(itinerary: Itinerary, onClick: (Itinerary) -> Unit) {
-
-  val imageId = R.drawable.underground_2725336_1280
-
-  ElevatedCard(
-      colors =
-          CardDefaults.cardColors(
-              containerColor = MaterialTheme.colorScheme.surfaceVariant,
-          ),
-      elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
-      shape = RoundedCornerShape(13.dp),
-  ) {
-    Column(
-        modifier =
-            Modifier.background(MaterialTheme.colorScheme.primaryContainer)
-                .fillMaxWidth()
-                .aspectRatio(1.34f),
-        horizontalAlignment = Alignment.CenterHorizontally) {
-
-          // Image of the itinerary
-          Image(
-              painter = painterResource(id = imageId),
-              contentDescription = itinerary.description,
-              modifier =
-                  Modifier.fillMaxWidth().fillMaxHeight(0.55f).clip(RoundedCornerShape(13.dp)),
-              contentScale = ContentScale.Crop,
-              alignment = Alignment.TopCenter)
-
-          Row(modifier = Modifier.fillMaxSize()) {
-            Column(
-                modifier = Modifier.fillMaxHeight().weight(0.6f).padding(10.dp, 8.dp, 4.dp, 15.dp),
-                verticalArrangement = Arrangement.SpaceAround) {
-
-                  // Primary Text Field
-                  Text(
-                      text = itinerary.title,
-                      color = MaterialTheme.colorScheme.primary,
-                      fontFamily = FontFamily.Monospace,
-                      fontSize = 16.sp,
-                      fontWeight = FontWeight.Bold,
-                      modifier = Modifier.padding(5.dp)
-                      // textDecoration = TextDecoration.Underline
-                      )
-
-                  // Secondary indicator fields
-                  Text(
-                      text = "Wandered by - ",
-                      color = MaterialTheme.colorScheme.secondary,
-                      fontFamily = FontFamily.Monospace,
-                      fontSize = 12.sp,
-                      modifier = Modifier.padding(10.dp, 0.dp))
-
-                  Text(
-                      text = "Estimated time : - hours",
-                      color = MaterialTheme.colorScheme.secondary,
-                      fontFamily = FontFamily.Monospace,
-                      fontSize = 12.sp,
-                      modifier = Modifier.padding(10.dp, 0.dp))
-
-                  Text(
-                      text = "Average Expense : -",
-                      color = MaterialTheme.colorScheme.secondary,
-                      fontFamily = FontFamily.Monospace,
-                      fontSize = 12.sp,
-                      modifier = Modifier.padding(10.dp, 0.dp))
-                }
-            Column(
-                modifier = Modifier.weight(0.3f).fillMaxSize().padding(4.dp, 8.dp, 10.dp, 15.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.SpaceBetween) {
-                  LazyHorizontalStaggeredGrid(
-                      rows = StaggeredGridCells.Adaptive(20.dp),
-                      horizontalItemSpacing = 10.dp,
-                      verticalArrangement = Arrangement.spacedBy(4.dp),
-                      content = {
-                        items(itinerary.tags) {
-                          Card(
-                              colors =
-                                  CardDefaults.cardColors(
-                                      containerColor = MaterialTheme.colorScheme.secondary,
-                                  ),
-                              modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Max)) {
-                                Text(
-                                    text = it,
-                                    textAlign = TextAlign.Center,
-                                    color = MaterialTheme.colorScheme.onSecondary,
-                                    fontFamily = FontFamily.Monospace,
-                                    fontSize = 12.sp,
-                                    modifier = Modifier.padding(4.dp))
-                              }
-                        }
-                      },
-                      modifier = Modifier.fillMaxWidth().weight(0.4f).padding(2.dp))
-
-                  Column(
-                      modifier = Modifier.fillMaxWidth().weight(0.5f),
-                      horizontalAlignment = Alignment.CenterHorizontally) {
-                        // Like Icon
-                        Icon(
-                            painter = painterResource(id = R.drawable.liked_icon),
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.secondary,
-                            modifier = Modifier.size(width = 40.dp, height = 40.dp))
-
-                        Text(
-                            text = " - Likes",
-                            color = MaterialTheme.colorScheme.secondary,
-                            fontFamily = FontFamily.Monospace,
-                            fontSize = 12.sp,
-                            modifier = Modifier.padding(2.dp))
-                      }
-                }
-          }
         }
   }
 }

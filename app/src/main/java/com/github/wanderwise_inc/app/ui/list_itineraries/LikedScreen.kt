@@ -55,12 +55,6 @@ fun DisplayLikedItineraries(mapViewModel: MapViewModel, profileViewModel: Profil
   val itineraries by
       mapViewModel.getItineraryFromUids(itineraryUids).collectAsState(initial = listOf())
 
-  // TODO fetch liked itineraries from profileViewModel
-
-  // for testing purposes
-
-  // val itineraries = listOf(itineraryAdventure, itineraryAdventureAndLuxury)
-
   Scaffold(
       topBar = {
         Column(

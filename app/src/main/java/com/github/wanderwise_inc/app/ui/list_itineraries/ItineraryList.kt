@@ -48,9 +48,21 @@ fun ItinerariesListScrollable(
         }
       }
       val isLikedInitially = profileViewModel.checkIfItineraryIsLiked(uid, itinerary.uid)
+      val onLikeButtonClick = { it: Itinerary, isLiked: Boolean ->
+        if (isLiked) {
+          mapViewModel.decrementItineraryLikes(it)
+          profileViewModel.removeLikedItinerary(uid, it.uid)
+        } else {
+          mapViewModel.incrementItineraryLikes(it)
+          profileViewModel.addLikedItinerary(uid, it.uid)
+        }
+      }
+      val onBannerClick = {}
       ItineraryBanner(
           itinerary = itinerary,
-      ) {}
+          onLikeButtonClick = onLikeButtonClick,
+          onBannerClick = onBannerClick,
+          isLikedInitially = isLikedInitially)
     }
   }
 }

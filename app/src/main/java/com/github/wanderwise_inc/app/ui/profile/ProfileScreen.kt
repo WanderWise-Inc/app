@@ -70,7 +70,9 @@ fun ItinerariesScrollable(
   if (itineraries.isNotEmpty()) {
     Column {
       Text("Your Itineraries:")
-      itineraries.forEach { itinerary -> ItineraryBanner(itinerary = itinerary) {} }
+      itineraries.forEach { itinerary ->
+        ItineraryBanner(itinerary = itinerary, onBannerClick = {}, onLikeButtonClick = { _, _ -> })
+      }
     }
   } else {
     Text("You have not created any itineraries yet.")
