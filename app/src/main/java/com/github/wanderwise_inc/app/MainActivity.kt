@@ -14,7 +14,6 @@ import com.github.wanderwise_inc.app.data.ItineraryRepositoryTestImpl
 import com.github.wanderwise_inc.app.data.ProfileRepositoryTestImpl
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
-import com.github.wanderwise_inc.app.model.location.Location
 import com.github.wanderwise_inc.app.model.profile.Profile
 import com.github.wanderwise_inc.app.ui.navigation.graph.RootNavigationGraph
 import com.github.wanderwise_inc.app.ui.theme.WanderWiseTheme
@@ -35,11 +34,6 @@ class MainActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
-    itineraryRepository.setItinerary(
-        Itinerary.Builder(uid = "0", userUid = "0", title = "Initial test itinerary 1")
-            .addLocation(Location(0.0, 0.0))
-            .build())
-
     val profileRepository = ProfileRepositoryTestImpl()
     val imageRepository = ImageRepositoryTestImpl(application)
     profileViewModel = ProfileViewModel(profileRepository, imageRepository)
@@ -49,7 +43,7 @@ class MainActivity : ComponentActivity() {
     // START: viewmodel initialization (default data for demoing)
     val itineraryAdventureAndLuxury =
         Itinerary(
-            userUid = "0",
+            userUid = "1",
             locations = listOf(),
             title = "Shopping then adventure",
             tags = listOf(ItineraryTags.ADVENTURE, ItineraryTags.LUXURY),
@@ -58,15 +52,26 @@ class MainActivity : ComponentActivity() {
         )
     val itineraryAdventure =
         Itinerary(
-            userUid = "0",
+            userUid = "1",
             locations = listOf(),
             title = "Hike",
             tags = listOf(ItineraryTags.ADVENTURE),
             description = null,
             visible = true,
         )
+
+    val privateItinerary =
+      Itinerary(
+        userUid = "0", // my UID!
+        locations = listOf(),
+        title = "My test itinerary",
+        tags = listOf(ItineraryTags.ADVENTURE),
+        description = null,
+        visible = false,
+      )
     mapViewModel.setItinerary(itineraryAdventure)
     mapViewModel.setItinerary(itineraryAdventureAndLuxury)
+    mapViewModel.setItinerary(privateItinerary)
     // END: Viewmodel initialization
 
     setContent {
