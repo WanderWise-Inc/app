@@ -233,6 +233,9 @@ dependencies {
     testImplementation("app.cash.turbine:turbine:1.1.0")
     testImplementation("com.google.truth:truth:1.3.0")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.0")
+    testImplementation("io.mockk:mockk:1.12.0")
+    testImplementation("org.mockito:mockito-core:5.7.0")
+
 }
 
 tasks.register("jacocoTestReport", JacocoReport::class) {

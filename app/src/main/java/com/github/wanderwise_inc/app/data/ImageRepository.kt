@@ -43,18 +43,18 @@ interface ImageRepository {
    * @param bitMap the image's bitMap we want to store
    * @return a boolean, true if the operation succeed, false if an error occurred
    */
-  fun storeImage(bitMap: Bitmap)
+/*  fun storeImage(bitMap: Bitmap, currentUser: FirebaseAuth)*/
 
     /**
      * @param uri the current Uri that we want to convert to a bitmap
      * @return a flow of a bitmap, that can be use to be stored or to be displayed
      */
-  fun getBitMap(uri: Uri?) : Flow<Bitmap?>
+  /*fun getBitMap(uri: Uri?) : Flow<Bitmap?>*/
 
     /**
      * @param fileName the fileName (path) that we want to store to the storage
      */
-  fun uploadImageToStorage(fileName : String)
+  fun uploadImageToStorage(fileName : String) : Boolean
 
     /**
      * @brief used to launch the activity to open the photo gallery
@@ -65,7 +65,8 @@ interface ImageRepository {
      * @brief set the currentFile to this the Uri given, useful for other functions
      * that will use the currentFile
      */
-  fun setCurrentFile(uri: Uri?) : Uri?
+  fun setCurrentFile(uri: Uri?)
+  fun getCurrentFile() : Uri?
 }
 
 /** test image repository... Always returns the same static image resource */
@@ -88,11 +89,11 @@ interface ImageRepository {
 /**
  * A class implementation of the Image Repository
  */
-class ImageRepositoryImpl(private val application: Application, private val activityLauncher: ActivityResultLauncher<Intent>, private val imageReference : StorageReference) : ImageRepository {
+class ImageRepositoryImpl(private val activityLauncher: ActivityResultLauncher<Intent>, private val imageReference : StorageReference, uri: Uri?) : ImageRepository {
 
     //private val storage = FirebaseStorage.getInstance()
-    private val context = application.baseContext
-    private var currentFile : Uri? = null
+    //private val context = application.baseContext
+    private var currentFile : Uri? = uri
     //private var imageReference = storage.reference
 
     /**
@@ -101,9 +102,9 @@ class ImageRepositoryImpl(private val application: Application, private val acti
      *
      * @param bitMap a Bitmap that will be stored in the Firebase Storage
      */
-    override fun storeImage(bitMap : Bitmap) {
-        // We get the uid to create a reference (a path) to the image using the uid
-        val currentUser = FirebaseAuth.getInstance()
+/*    override fun storeImage(bitMap : Bitmap, currentUser : FirebaseAuth) {
+        // We get the uid to create a referegnce (a path) to the image using the uid
+        //val currentUser = FirebaseAuth.getInstance()
         val storageRef = imageReference
         val userProfilePictureRef = storageRef.child("images/profilePicture/${currentUser.uid}")
         val baos = ByteArrayOutputStream()
@@ -120,7 +121,7 @@ class ImageRepositoryImpl(private val application: Application, private val acti
             // ...
             Log.d("STORAGE", "SUCCESS ON UPLOAD")
         }
-    }
+    }*/
 
     /**
      * Fetch image Function. This function will fetch the profile picture
@@ -128,37 +129,42 @@ class ImageRepositoryImpl(private val application: Application, private val acti
      */
     override fun fetchImage(pathToProfilePic: String): Flow<Bitmap?> {
         return flow {
-            val storageRef = imageReference
-            val profilePictureRef = storageRef.child("images/${pathToProfilePic}")
 
-            try {
-                Log.d("FETCH IMAGE", "IN TRY")
-                val byteResult = suspendCancellableCoroutine<ByteArray?> { continuation ->
-                    profilePictureRef.getBytes(1024 * 1024)
-                        .addOnSuccessListener { byteResult ->
-                            Log.d("FETCH IMAGE", "GOT THE BYTES")
-                            continuation.resume(byteResult) // Resume with byte array
-                        }
-                        .addOnFailureListener { exception ->
-                            Log.d("FETCH IMAGE", "FETCH FAILED")
-                            Log.w("FETCH IMAGE", exception)
-                            continuation.resumeWithException(exception) // Resume with exception
-                        }
+            if (pathToProfilePic == "") {
+                emit(null)
+            } else {
+                val storageRef = imageReference
+                val profilePictureRef = storageRef.child("images/${pathToProfilePic}")
+
+                try {
+                    Log.d("FETCH IMAGE", "IN TRY")
+                    val byteResult = suspendCancellableCoroutine<ByteArray?> { continuation ->
+                        profilePictureRef.getBytes(1024 * 1024)
+                            .addOnSuccessListener { byteResult ->
+                                Log.d("FETCH IMAGE", "GOT THE BYTES")
+                                continuation.resume(byteResult) // Resume with byte array
+                            }
+                            .addOnFailureListener { exception ->
+                                Log.d("FETCH IMAGE", "FETCH FAILED")
+                                Log.w("FETCH IMAGE", exception)
+                                continuation.resumeWithException(exception) // Resume with exception
+                            }
+                    }
+
+                    Log.d("FETCH IMAGE", "BYTE RESULT IS " + byteResult.toString())
+
+                    // Decode bitmap if bytes are not null
+                    val bitmap = byteResult?.let {
+                        BitmapFactory.decodeByteArray(it, 0, it.size)
+                    }
+
+                    Log.d("FETCH IMAGE", "BITMAP IS " + bitmap.toString())
+
+                    emit(bitmap) // Emit bitmap
+                } catch (e: Exception) {
+                    Log.e("FETCH IMAGE", "Error fetching image: ${e.message}", e) // Log detailed error message
+                    emit(null) // Emit null in case of error
                 }
-
-                Log.d("FETCH IMAGE", "BYTE RESULT IS " + byteResult.toString())
-
-                // Decode bitmap if bytes are not null
-                val bitmap = byteResult?.let {
-                    BitmapFactory.decodeByteArray(it, 0, it.size)
-                }
-
-                Log.d("FETCH IMAGE", "BITMAP IS " + bitmap.toString())
-
-                emit(bitmap) // Emit bitmap
-            } catch (e: Exception) {
-                Log.e("FETCH IMAGE", "Error fetching image: ${e.message}", e) // Log detailed error message
-                emit(null) // Emit null in case of error
             }
         }
     }
@@ -168,7 +174,11 @@ class ImageRepositoryImpl(private val application: Application, private val acti
      * (which will be the one selected by the user in the photo gallery)
      * @param fileName the fileName (path) where we want to store the currentFile
      */
-    override fun uploadImageToStorage(fileName : String) {
+    override fun uploadImageToStorage(fileName : String) : Boolean {
+        if (fileName == "") {
+            throw Exception("fileName is empty")
+        }
+
         try {
             // The currentFile is set with the "setCurrentFile()" function
             // This will put the given file (the one selected by the user) to store in storage
@@ -181,8 +191,10 @@ class ImageRepositoryImpl(private val application: Application, private val acti
                         Log.d("STORE IMAGE", "STORE FAILED")
                     }
             }
+            return currentFile != null
         } catch (e : Exception) {
             Log.w("STORE IMAGE", e)
+            return false
         }
     }
 
@@ -191,10 +203,10 @@ class ImageRepositoryImpl(private val application: Application, private val acti
      * @param uri the Uri link to the image
      * @return a flow of the bitMap representation of the image
      */
-    override fun getBitMap(uri : Uri?) : Flow<Bitmap?> {
-        Log.d("TEST CASE", "BEFORE FLOW")
+/*    override fun getBitMap(uri : Uri?) : Flow<Bitmap?> {
         return flow {
             if (uri != null) {
+                val context = application.baseContext
                 Log.d("TEST CASE", "URI NOT NULL")
                 val loading = ImageLoader(context)
                 val request = ImageRequest.Builder(context)
@@ -202,14 +214,13 @@ class ImageRepositoryImpl(private val application: Application, private val acti
                     .build()
 
                 val result = (loading.execute(request) as SuccessResult).drawable
-                Log.d("TEST CASE", (result as BitmapDrawable).bitmap.toString())
                 emit((result as BitmapDrawable).bitmap)
             } else {
                 Log.d("TEST CASE", "URI NULL")
                 emit(null)
             }
         }
-    }
+    }*/
 
     /**
      * @brief used to launch the activity to open the photo gallery
@@ -222,8 +233,11 @@ class ImageRepositoryImpl(private val application: Application, private val acti
      * @brief set the currentFile to this the Uri given, useful for other functions
      * that will use the currentFile
      */
-    override fun setCurrentFile(uri : Uri?) : Uri?{
+    override fun setCurrentFile(uri : Uri?) {
         currentFile = uri
+    }
+
+    override fun getCurrentFile(): Uri? {
         return currentFile
     }
 }

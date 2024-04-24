@@ -58,14 +58,14 @@ class MainActivity : ComponentActivity() {
   private var imageReference = storage.reference
 
   private lateinit var profileViewModel: ProfileViewModel
-  private var bitMap by mutableStateOf<Bitmap?>(null)
+
 
   // private lateinit var analytics : FirebaseAnalytics
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
     val profileRepository = ProfileRepositoryImpl()
-    imageRepository = ImageRepositoryImpl(application, imageLauncher, imageReference)
+    imageRepository = ImageRepositoryImpl(imageLauncher, imageReference, null)
     profileViewModel = ProfileViewModel(profileRepository, imageRepository)
 
     setContent {

@@ -7,9 +7,17 @@ import android.net.Uri
 import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 import app.cash.turbine.test
+import coil.request.SuccessResult
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.FirebaseApp
+import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.UploadTask
+import io.mockk.mockkStatic
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
@@ -17,9 +25,13 @@ import org.junit.Assert.*
 import org.junit.Rule
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.runner.RunWith
+import org.mockito.Mockito.any
+import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
+import org.mockito.kotlin.verify
+import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
@@ -27,25 +39,22 @@ class ImageRepositoryTest {
 
     @get:Rule val mockitoRule : MockitoRule = MockitoJUnit.rule()
 
-    @Mock private lateinit var application: Application
-
-    @Mock private lateinit var context : Context
-
     @Mock private lateinit var imageReference : StorageReference
-
+    @Mock private lateinit var storageReference: StorageReference
+    @Mock private lateinit var onSuccessListener: OnSuccessListener<Void>
+    @Mock private lateinit var onFailureListener: OnFailureListener
     @Mock private lateinit var activityLauncher : ActivityResultLauncher<Intent>
+    @Mock private lateinit var uploadTask: UploadTask
 
     private lateinit var imageRepositoryImpl: ImageRepositoryImpl
 
     private val testPathFile = "https://lh3.googleusercontent.com/a/ACg8ocKuSpafO1jmH65vDl5SZ35E9NwFv07kyiO7tL110QRdwzRnSz5X=s96-c"
 
+    private val  uri = Uri.parse(testPathFile)
+
     @Before
     fun setup() {
-        imageRepositoryImpl = ImageRepositoryImpl(application, activityLauncher, imageReference)
-    }
-    @Test
-    fun dummy() {
-        assertEquals(5, (2+3))
+        imageRepositoryImpl = ImageRepositoryImpl(activityLauncher, imageReference, uri)
     }
 
     /**
@@ -54,43 +63,79 @@ class ImageRepositoryTest {
     @Test
     fun `set Current File To A Value`() {
         val newFile = Uri.parse(testPathFile)
-        assertEquals(newFile, imageRepositoryImpl.setCurrentFile(newFile))
+        imageRepositoryImpl.setCurrentFile(newFile)
+        assertEquals(newFile, imageRepositoryImpl.getCurrentFile())
     }
 
     @Test
     fun `set Current File To null`() {
         val newFile : Uri? = null
-        assertEquals(newFile, imageRepositoryImpl.setCurrentFile(newFile))
+        imageRepositoryImpl.setCurrentFile(newFile)
+        assertEquals(null, newFile)
     }
 
-    /**
-     * Test for getBitMap
-     */
     @Test
-    fun `bitmap is null for a null Uri`() = runBlocking {
-        val uri = null
+    fun `upload image should correctly store the Uri in storage`() {
+        val testPath = "testPath"
 
-        imageRepositoryImpl.getBitMap(uri).test {
-            val emission = awaitItem()
-            assertEquals(null, emission)
-
-            awaitComplete()
+        `when`(imageReference.child(any(String::class.java))).thenReturn(storageReference)
+        `when`(storageReference.putFile(any(Uri::class.java))).thenReturn(uploadTask)
+        `when`(uploadTask.addOnSuccessListener(any())).thenAnswer {
+            onSuccessListener.onSuccess(null)
+            uploadTask
         }
+
+        val success = imageRepositoryImpl.uploadImageToStorage(testPath)
+
+        verify(imageReference).child("images/${testPath}")
+        verify(storageReference).putFile(uri)
+        assertEquals(true, success)
     }
 
-    /**
-     * Test for getBitMap
-     */
     @Test
-    fun `bitmap should not be null if Uri isn't null`() = runBlocking {
-        val uri = Uri.parse(testPathFile)
+    fun `upload image when putFile failed should return false`() {
+        val testPath = "testPath"
 
-        imageRepositoryImpl.getBitMap(uri).test {
-            val emission = awaitItem()
-            assertNotEquals(null, emission)
-
-            awaitComplete()
+        `when`(imageReference.child(any(String::class.java))).thenReturn(storageReference)
+        `when`(storageReference.putFile(any(Uri::class.java))).thenReturn(uploadTask)
+        `when`(uploadTask.addOnFailureListener(any())).thenAnswer {
+            onFailureListener.onFailure(Exception("putFile throws an exception"))
+            uploadTask
         }
+
+        val success = imageRepositoryImpl.uploadImageToStorage(testPath)
+
+        verify(imageReference).child("images/${testPath}")
+        verify(storageReference).putFile(uri)
+        assertEquals(false, success)
     }
 
+    @Test(expected=Exception::class)
+    fun `if path is empty, uploadImageToStorage should throw an exception`() {
+        val testPath = ""
+        imageRepositoryImpl.uploadImageToStorage(testPath)
+    }
+
+    @Test
+    fun `if file is null, uploadImageToStorage should return false`() {
+        val testPath = "random"
+        imageRepositoryImpl.setCurrentFile(null)
+        assertEquals(false, imageRepositoryImpl.uploadImageToStorage(testPath))
+    }
+
+    @Test(expected=Exception::class)
+    fun `if putFile throws an exception, the method should return false`() {
+        val testPath = "random"
+
+        `when`(imageReference.child(any(String::class.java))).thenReturn(storageReference)
+        `when`(storageReference.putFile(any(Uri::class.java))).thenThrow(Exception("putFile throws an exception"))
+        val success = imageRepositoryImpl.uploadImageToStorage(testPath)
+        assertEquals(false, success)
+    }
+
+    @Test
+    fun `fetch image with an empty string should return null`() = runTest {
+        val bitMap = imageRepositoryImpl.fetchImage("").first()
+        assertEquals(null, bitMap)
+    }
 }
