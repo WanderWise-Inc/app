@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.github.wanderwise_inc.app.ui.liked.LikedScreen
+import com.github.wanderwise_inc.app.ui.list_itineraries.LikedScreen
 import com.github.wanderwise_inc.app.ui.map.DummyPreviewItinerary
 import com.github.wanderwise_inc.app.ui.navigation.Destination.TopLevelDestination
 import com.github.wanderwise_inc.app.ui.profile.ProfileScreen
@@ -15,9 +15,9 @@ import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 
 @Composable
 fun HomeNavGraph(
-    mapViewModel: MapViewModel,
     navController: NavHostController,
-    profileViewModel: ProfileViewModel
+    mapViewModel: MapViewModel,
+    profileViewModel: ProfileViewModel,
 ) {
   NavHost(
       navController = navController,
@@ -25,8 +25,12 @@ fun HomeNavGraph(
       startDestination = TopLevelDestination.Overview.route,
       // modifier = Modifier.padding(innerPadding)
   ) {
-    composable(route = TopLevelDestination.Overview.route) { OverviewScreen(mapViewModel) }
-    composable(route = TopLevelDestination.Liked.route) { LikedScreen(mapViewModel) }
+    composable(route = TopLevelDestination.Overview.route) {
+      OverviewScreen(mapViewModel, profileViewModel)
+    }
+    composable(route = TopLevelDestination.Liked.route) {
+      LikedScreen(mapViewModel, profileViewModel)
+    }
     composable(route = TopLevelDestination.Search.route) { SearchScreen(mapViewModel) }
     composable(route = TopLevelDestination.Map.route) { DummyPreviewItinerary() }
     composable(route = TopLevelDestination.Profile.route) {
