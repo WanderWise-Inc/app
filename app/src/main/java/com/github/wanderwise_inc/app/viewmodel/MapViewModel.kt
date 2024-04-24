@@ -57,7 +57,7 @@ class MapViewModel(
         itineraryRepository.deleteItinerary(itinerary)
     }
 
-  /** @brief get a Flow of the user location updated every second */
+    /** @brief get a Flow of the user location updated every second */
     fun getUserLocation(): Flow<Location> {
         return userLocationClient.getLocationUpdates(1000)
     }
