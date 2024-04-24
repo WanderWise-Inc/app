@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -14,12 +15,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import com.github.wanderwise_inc.app.R
-import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
 import com.github.wanderwise_inc.app.model.location.Tag
 import com.github.wanderwise_inc.app.ui.home.SearchBar
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
+import com.google.firebase.auth.FirebaseAuth
 
 /** @brief Search categories displayed on the top bar. */
 data class SearchCategory(
@@ -46,35 +47,19 @@ fun DisplayLikedItineraries(mapViewModel: MapViewModel, profileViewModel: Profil
           SearchCategory(ItineraryTags.FOODIE, R.drawable.drinks_icon, "Drinks"),
       )
 
+  val uid = FirebaseAuth.getInstance().uid!!
   var selectedIndex by remember { mutableIntStateOf(0) }
   var searchQuery by remember { mutableStateOf("") }
+
+  val itineraryUids by profileViewModel.getLikedItineraries(uid).collectAsState(initial = listOf())
+  val itineraries by
+      mapViewModel.getItineraryFromUids(itineraryUids).collectAsState(initial = listOf())
 
   // TODO fetch liked itineraries from profileViewModel
 
   // for testing purposes
-  val itineraryAdventureAndLuxury =
-      Itinerary(
-          uid = "0",
-          userUid = "0",
-          locations = listOf(),
-          title = "Shopping then adventure",
-          tags = listOf(ItineraryTags.ADVENTURE, ItineraryTags.LUXURY),
-          description = "gucci",
-          visible = true,
-      )
 
-  val itineraryAdventure =
-      Itinerary(
-          uid = "1",
-          userUid = "0",
-          locations = listOf(),
-          title = "Hike",
-          tags = listOf(ItineraryTags.ADVENTURE),
-          description = null,
-          visible = true,
-      )
-
-  val itineraries = listOf(itineraryAdventure, itineraryAdventureAndLuxury)
+  // val itineraries = listOf(itineraryAdventure, itineraryAdventureAndLuxury)
 
   Scaffold(
       topBar = {
@@ -97,7 +82,11 @@ fun DisplayLikedItineraries(mapViewModel: MapViewModel, profileViewModel: Profil
                       itinerary.title.contains(searchQuery, ignoreCase = true) ||
                       itinerary.description?.contains(searchQuery, ignoreCase = true) ?: false
                 }
-        ItinerariesListScrollable(itineraries = filtered, paddingValues = innerPadding)
+        ItinerariesListScrollable(
+            itineraries = filtered,
+            paddingValues = innerPadding,
+            mapViewModel = mapViewModel,
+            profileViewModel = profileViewModel)
       }
 }
 

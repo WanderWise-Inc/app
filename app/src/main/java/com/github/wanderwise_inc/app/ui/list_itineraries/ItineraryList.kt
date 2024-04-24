@@ -20,16 +20,39 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.wanderwise_inc.app.model.location.Itinerary
-import com.github.wanderwise_inc.app.ui.map.ItineraryBanner
+import com.github.wanderwise_inc.app.ui.itinerary.ItineraryBanner
+import com.github.wanderwise_inc.app.viewmodel.MapViewModel
+import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
+import com.google.firebase.auth.FirebaseAuth
 
 /** @brief reusable UI elements for displaying a list of itineraries */
 
 /** @brief a scrollable list of itineraries */
 @Composable
-fun ItinerariesListScrollable(itineraries: List<Itinerary>, paddingValues: PaddingValues) {
+fun ItinerariesListScrollable(
+    itineraries: List<Itinerary>,
+    mapViewModel: MapViewModel,
+    profileViewModel: ProfileViewModel,
+    paddingValues: PaddingValues
+) {
   LazyColumn(modifier = Modifier.padding(paddingValues)) {
     this.items(itineraries) { itinerary ->
-      ItineraryBanner(itinerary = itinerary)
+      val uid = FirebaseAuth.getInstance().uid!!
+      val onLikeClick = { it: Itinerary, isLiked: Boolean ->
+        if (isLiked) {
+          mapViewModel.decrementItineraryLikes(it)
+          profileViewModel.removeLikedItinerary(uid, it.uid)
+        } else {
+          mapViewModel.incrementItineraryLikes(it)
+          profileViewModel.addLikedItinerary(uid, it.uid)
+        }
+      }
+      val isLikedInitially = profileViewModel.checkIfItineraryIsLiked(uid, itinerary.uid)
+      ItineraryBanner(
+          onLikeClick,
+          isLikedInitially,
+          itinerary = itinerary,
+      )
     }
   }
 }
@@ -69,9 +92,7 @@ fun CategorySelector(
                 painter = painterResource(id = category.icon),
                 contentDescription = null,
                 tint = Color(0xFF191C1E),
-                modifier = Modifier
-                  .size(30.dp)
-                  .padding(2.dp))
+                modifier = Modifier.size(30.dp).padding(2.dp))
           })
     }
   }
