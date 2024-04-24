@@ -4,20 +4,28 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.staggeredgrid.LazyHorizontalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
@@ -30,9 +38,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.HorizontalAlignmentLine
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -44,7 +54,7 @@ import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 
 //HomeScreen.kt + Itinerary.kt + this
 
-//@Preview(showBackground = true, backgroundColor = 0x00000000)
+@Preview(showBackground = true, backgroundColor = 0x00000000)
 @Composable
 fun ItineraryBanner(itinerary: Itinerary, onClick : (Itinerary) -> Unit) {
 //fun ItineraryBanner() {
@@ -57,7 +67,10 @@ fun ItineraryBanner(itinerary: Itinerary, onClick : (Itinerary) -> Unit) {
 //            ItineraryTags.ADVENTURE,
 //            ItineraryTags.NATURE,
 //            ItineraryTags.PHOTOGRAPHY,
-//            ItineraryTags.CULTURAL))
+//            ItineraryTags.CULTURAL,
+//            ItineraryTags.FOOD,
+//            ItineraryTags.ROMANCE,
+//            ItineraryTags.ADVENTURE))
 
     val imageId = R.drawable.underground_2725336_1280
 
@@ -107,8 +120,9 @@ fun ItineraryBanner(itinerary: Itinerary, onClick : (Itinerary) -> Unit) {
                         text = itinerary.title,
                         color = MaterialTheme.colorScheme.primary,
                         fontFamily = FontFamily.Monospace,
-                        fontSize = 14.sp,
+                        fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(5.dp)
                         //textDecoration = TextDecoration.Underline
                     )
 
@@ -117,7 +131,7 @@ fun ItineraryBanner(itinerary: Itinerary, onClick : (Itinerary) -> Unit) {
                         text = "Wandered by - ",
                         color = MaterialTheme.colorScheme.secondary,
                         fontFamily = FontFamily.Monospace,
-                        fontSize = 13.sp,
+                        fontSize = 12.sp,
                         modifier = Modifier.padding(10.dp, 0.dp)
                     )
 
@@ -125,7 +139,7 @@ fun ItineraryBanner(itinerary: Itinerary, onClick : (Itinerary) -> Unit) {
                         text = "Estimated time : - hours",
                         color = MaterialTheme.colorScheme.secondary,
                         fontFamily = FontFamily.Monospace,
-                        fontSize = 13.sp,
+                        fontSize = 12.sp,
                         modifier = Modifier.padding(10.dp, 0.dp)
                     )
 
@@ -133,29 +147,54 @@ fun ItineraryBanner(itinerary: Itinerary, onClick : (Itinerary) -> Unit) {
                         text = "Average Expense : -",
                         color = MaterialTheme.colorScheme.secondary,
                         fontFamily = FontFamily.Monospace,
-                        fontSize = 13.sp,
+                        fontSize = 12.sp,
                         modifier = Modifier.padding(10.dp, 0.dp)
                     )
 
                 }
                 Column(modifier = Modifier
                     .weight(0.3f)
-                    .fillMaxHeight()
+                    .fillMaxSize()
                     .padding(4.dp, 8.dp, 10.dp, 15.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.SpaceBetween
                 ) {
                         //Composes Tags of the itinerary
-                        val tagsJoined = itinerary.tags.joinToString(separator = " ")
+//                        val tagsJoined = itinerary.tags.joinToString(separator = " ")
+//
+//                        Text(
+//                            tefillMaxHeight(0.5f)xt = tagsJoined,
+//                            softWrap = true,
+//                            color = MaterialTheme.colorScheme.secondary,
+//                            fontFamily = FontFamily.Monospace,
+//                            fontSize = 10.sp,
+//                            modifier = Modifier.padding(1.dp)
+//                        )
+                    LazyHorizontalStaggeredGrid(
+                        rows = StaggeredGridCells.Adaptive(20.dp),
+                        horizontalItemSpacing = 10.dp,
+                        verticalArrangement = Arrangement.spacedBy(4.dp),
+                        content = {
+                            items(itinerary.tags){
+                                Card(
+                                    colors = CardDefaults
+                                        .cardColors(containerColor = MaterialTheme.colorScheme.secondary,),
+                                    modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Max)
+                                ) {
+                                    Text(
+                                        text = it,
+                                        textAlign = TextAlign.Center,
+                                        color = MaterialTheme.colorScheme.onSecondary,
+                                        fontFamily = FontFamily.Monospace,
+                                        fontSize = 12.sp,
+                                        modifier = Modifier.padding(4.dp)
+                                    )
+                                }
+                            }
+                        },
+                        modifier = Modifier.fillMaxWidth().weight(0.4f).padding(2.dp))
+                        
 
-                        Text(
-                            text = tagsJoined,
-                            softWrap = true,
-                            color = MaterialTheme.colorScheme.secondary,
-                            fontFamily = FontFamily.Monospace,
-                            fontSize = 10.sp,
-                            modifier = Modifier.padding(1.dp)
-                        )
 
 //                        Row(
 //                            verticalAlignment = Alignment.CenterVertically,
@@ -173,7 +212,9 @@ fun ItineraryBanner(itinerary: Itinerary, onClick : (Itinerary) -> Unit) {
 //                                )
 //                            }
 //                        }
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Column(
+                        modifier = Modifier.fillMaxWidth().weight(0.5f),
+                        horizontalAlignment = Alignment.CenterHorizontally) {
                         //Like Icon
                         Icon(
                             painter = painterResource(id = R.drawable.liked_icon),

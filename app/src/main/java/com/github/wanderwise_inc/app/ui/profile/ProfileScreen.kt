@@ -52,7 +52,7 @@ fun ItinerariesScrollable(mapViewModel: MapViewModel, uid: String) {
   if (itineraries.isNotEmpty()) {
     Column {
       Text("Your Itineraries:")
-      itineraries.forEach { itinerary -> ItineraryBanner(itinerary = itinerary) }
+      itineraries.forEach { itinerary -> ItineraryBanner(itinerary = itinerary){} }
     }
   } else {
     Text("You have not created any itineraries yet.")
