@@ -14,6 +14,7 @@ import com.github.wanderwise_inc.app.ui.navigation.NavigationActions
 import com.github.wanderwise_inc.app.ui.navigation.Route
 import com.github.wanderwise_inc.app.ui.navigation.TopNavigationMenu
 import com.github.wanderwise_inc.app.ui.navigation.graph.OverviewNavGraph
+import com.github.wanderwise_inc.app.ui.search.ChipsScreen
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 
 @Composable
@@ -28,7 +29,8 @@ fun OverviewScreen(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxWidth()) {
-              SearchBar()
+            SearchBar()
+            ChipsScreen()
               TopNavigationMenu(navigator, Route.OVERVIEW)
             }
       },
