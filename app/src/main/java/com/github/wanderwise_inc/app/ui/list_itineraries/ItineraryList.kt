@@ -49,10 +49,8 @@ fun ItinerariesListScrollable(
       }
       val isLikedInitially = profileViewModel.checkIfItineraryIsLiked(uid, itinerary.uid)
       ItineraryBanner(
-          onLikeClick,
-          isLikedInitially,
           itinerary = itinerary,
-      )
+      ) {}
     }
   }
 }

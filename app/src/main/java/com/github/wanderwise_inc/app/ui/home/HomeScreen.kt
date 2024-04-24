@@ -16,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.ui.itinerary.ItineraryBanner
 import com.github.wanderwise_inc.app.ui.navigation.BottomNavigationMenu
 import com.github.wanderwise_inc.app.ui.navigation.NavigationActions
@@ -24,7 +23,6 @@ import com.github.wanderwise_inc.app.ui.navigation.graph.HomeNavGraph
 import com.github.wanderwise_inc.app.viewmodel.HomeViewModel
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
-
 
 @Composable
 fun HomeScreen(
@@ -35,24 +33,23 @@ fun HomeScreen(
 ) {
   val navigationActions = NavigationActions(navController)
   Scaffold(topBar = {}, bottomBar = { BottomNavigationMenu(navigationActions) }) { innerPadding ->
-      @Composable
-      fun ScrollableList(viewModel: MapViewModel) {
-          //Gets all itineraries
-          val itineraries by viewModel.getAllPublicItineraries().collectAsState(initial = listOf())
-          //Scrollable Column that only composes items on Screen
-          LazyColumn(
-              modifier = Modifier
-                  .fillMaxSize()
+    @Composable
+    fun ScrollableList(viewModel: MapViewModel) {
+      // Gets all itineraries
+      val itineraries by viewModel.getAllPublicItineraries().collectAsState(initial = listOf())
+      // Scrollable Column that only composes items on Screen
+      LazyColumn(
+          modifier =
+              Modifier.fillMaxSize()
                   .background(MaterialTheme.colorScheme.background)
                   .padding(16.dp, 8.dp),
-              verticalArrangement = Arrangement.spacedBy(15.dp),
-          )
-          {
-              items(itineraries, key = {it}) {itinerary ->
-                  ItineraryBanner(itinerary) { } //<-- TODO should add real expression
-              }
-          }
+          verticalArrangement = Arrangement.spacedBy(15.dp),
+      ) {
+        items(itineraries, key = { it }) { itinerary ->
+          ItineraryBanner(itinerary) {} // <-- TODO should add real expression
+        }
       }
+    }
     Box(modifier = Modifier.padding(innerPadding)) {
       HomeNavGraph(navController, mapViewModel, profileViewModel)
     }

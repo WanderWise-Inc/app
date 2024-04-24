@@ -61,14 +61,14 @@ class MainActivity : ComponentActivity() {
         )
 
     val privateItinerary =
-      Itinerary(
-        userUid = "0", // my UID!
-        locations = listOf(),
-        title = "My test itinerary",
-        tags = listOf(ItineraryTags.ADVENTURE),
-        description = null,
-        visible = false,
-      )
+        Itinerary(
+            userUid = "0", // my UID!
+            locations = listOf(),
+            title = "My test itinerary",
+            tags = listOf(ItineraryTags.ADVENTURE),
+            description = null,
+            visible = false,
+        )
     mapViewModel.setItinerary(itineraryAdventure)
     mapViewModel.setItinerary(itineraryAdventureAndLuxury)
     mapViewModel.setItinerary(privateItinerary)
