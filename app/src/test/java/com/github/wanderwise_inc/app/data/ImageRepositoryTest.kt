@@ -34,7 +34,7 @@ class ImageRepositoryTest {
 
     private lateinit var imageRepositoryImpl: ImageRepositoryImpl
 
-    private val testPathFile = "https://firebasestorage.googleapis.com/v0/b/wanderwise-d8d36.appspot.com/o/images%2FprofilePicture%2FdefaultProfilePicture.jpg?alt=media&token=4137ad42-8b48-43f2-b6bf-8d814afbad01"
+    private val testPathFile = "https://lh3.googleusercontent.com/a/ACg8ocKuSpafO1jmH65vDl5SZ35E9NwFv07kyiO7tL110QRdwzRnSz5X=s96-c"
 
     @Before
     fun setup() {
