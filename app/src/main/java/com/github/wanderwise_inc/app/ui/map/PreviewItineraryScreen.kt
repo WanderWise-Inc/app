@@ -31,64 +31,53 @@ import com.google.maps.android.compose.rememberCameraPositionState
 
 /** @brief previews an itinerary */
 @Composable
-fun PreviewItineraryScreen(
-    itinerary: Itinerary,
-    mapViewModel: MapViewModel
-) {
-    val userLocation by mapViewModel.getUserLocation().collectAsState(null)
+fun PreviewItineraryScreen(itinerary: Itinerary, mapViewModel: MapViewModel) {
+  val userLocation by mapViewModel.getUserLocation().collectAsState(null)
 
-    val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(itinerary.computeCenterOfGravity().toLatLng(), 13f)
-    }
+  val cameraPositionState = rememberCameraPositionState {
+    position = CameraPosition.fromLatLngZoom(itinerary.computeCenterOfGravity().toLatLng(), 13f)
+  }
 
-    Scaffold(
-        bottomBar = { ItineraryBanner(itinerary = itinerary) },
-        modifier = Modifier.testTag("Map screen"),
-        floatingActionButton = {
-            CenterButton(cameraPositionState = cameraPositionState, currentLocation = userLocation)
-        },
-        floatingActionButtonPosition = FabPosition.EndOverlay
-    ) { paddingValues ->
+  Scaffold(
+      bottomBar = { ItineraryBanner(itinerary = itinerary) },
+      modifier = Modifier.testTag("Map screen"),
+      floatingActionButton = {
+        CenterButton(cameraPositionState = cameraPositionState, currentLocation = userLocation)
+      },
+      floatingActionButtonPosition = FabPosition.EndOverlay) { paddingValues ->
         GoogleMap(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .testTag("Google Maps"),
-            cameraPositionState = cameraPositionState
-        ) {
-            userLocation?.let {
+            modifier = Modifier.fillMaxSize().padding(paddingValues).testTag("Google Maps"),
+            cameraPositionState = cameraPositionState) {
+              userLocation?.let {
                 Marker(
                     state = MarkerState(position = LatLng(it.latitude, it.longitude)),
-                    icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)
-                )
-            }
-            itinerary.locations.map { location ->
+                    icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+              }
+              itinerary.locations.map { location ->
                 AdvancedMarker(
                     state = MarkerState(position = location.toLatLng()),
                     title = location.title ?: "",
                 )
+              }
             }
-        }
-    }
+      }
 }
 
 /** @brief button to center on the user position */
 @Composable
 fun CenterButton(cameraPositionState: CameraPositionState, currentLocation: Location?) {
-    FloatingActionButton(
-        onClick = {
-            currentLocation?.let {
-                val latLng = LatLng(it.latitude, it.longitude)
-                cameraPositionState.move(CameraUpdateFactory.newLatLngZoom(latLng, 13f))
-            }
-        },
-        modifier = Modifier.testTag("Center Button"),
-        containerColor = Color.White
-    ) {
+  FloatingActionButton(
+      onClick = {
+        currentLocation?.let {
+          val latLng = LatLng(it.latitude, it.longitude)
+          cameraPositionState.move(CameraUpdateFactory.newLatLngZoom(latLng, 13f))
+        }
+      },
+      modifier = Modifier.testTag("Center Button"),
+      containerColor = Color.White) {
         Icon(
             imageVector = Icons.Default.Place,
             contentDescription = "Center on Me",
-            tint = Color.DarkGray
-        )
-    }
+            tint = Color.DarkGray)
+      }
 }

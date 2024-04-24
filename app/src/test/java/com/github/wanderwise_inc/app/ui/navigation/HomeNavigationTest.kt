@@ -59,16 +59,15 @@ class HomeNavigationTest {
 
       `when`(mockApplication.applicationContext).thenReturn(mockContext)
 
-      `when`(userLocationClient.getLocationUpdates(anyLong())).thenReturn(
-        flow {
-          emit(
-            Location("TestProvider").apply {
-              latitude = epflLat
-              longitude = epflLon
-            }
-          )
-        }
-      )
+      `when`(userLocationClient.getLocationUpdates(anyLong()))
+          .thenReturn(
+              flow {
+                emit(
+                    Location("TestProvider").apply {
+                      latitude = epflLat
+                      longitude = epflLon
+                    })
+              })
 
       val imageRepository = ImageRepositoryTestImpl(mockApplication)
       val profileRepository = ProfileRepositoryTestImpl()

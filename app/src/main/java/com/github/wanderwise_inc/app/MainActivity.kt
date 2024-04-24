@@ -23,53 +23,45 @@ import com.github.wanderwise_inc.app.viewmodel.UserLocationClient
 import com.google.android.gms.location.LocationServices
 
 class MainActivity : ComponentActivity() {
-    private val homeViewModel by viewModels<HomeViewModel>()
+  private val homeViewModel by viewModels<HomeViewModel>()
 
-    private lateinit var mapViewModel: MapViewModel
+  private lateinit var mapViewModel: MapViewModel
 
-    private lateinit var profileViewModel: ProfileViewModel
+  private lateinit var profileViewModel: ProfileViewModel
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
 
-        // Ask for location permissions
-        ActivityCompat.requestPermissions(
-            this,
-            arrayOf(
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ),
-            0
-        )
+    // Ask for location permissions
+    ActivityCompat.requestPermissions(
+        this,
+        arrayOf(
+            Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION),
+        0)
 
-        val itineraryRepository = ItineraryRepositoryTestImpl()
-        val userLocationClient = UserLocationClient(
-                applicationContext,
-                LocationServices.getFusedLocationProviderClient(applicationContext)
-        )
-        mapViewModel = MapViewModel(itineraryRepository, userLocationClient)
+    val itineraryRepository = ItineraryRepositoryTestImpl()
+    val userLocationClient =
+        UserLocationClient(
+            applicationContext, LocationServices.getFusedLocationProviderClient(applicationContext))
+    mapViewModel = MapViewModel(itineraryRepository, userLocationClient)
 
-        val profileRepository = ProfileRepositoryTestImpl()
-        val imageRepository = ImageRepositoryTestImpl(application)
-        profileViewModel = ProfileViewModel(profileRepository, imageRepository)
+    val profileRepository = ProfileRepositoryTestImpl()
+    val imageRepository = ImageRepositoryTestImpl(application)
+    profileViewModel = ProfileViewModel(profileRepository, imageRepository)
 
-        setContent {
-            WanderWiseTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    // HomeScreen(homeViewModel, mapViewModel)
-                    RootNavigationGraph(
-                        application.applicationContext,
-                        homeViewModel = homeViewModel,
-                        profileViewModel = profileViewModel,
-                        mapViewModel = mapViewModel,
-                        navController = rememberNavController()
-                    )
-                }
-            }
+    setContent {
+      WanderWiseTheme {
+        // A surface container using the 'background' color from the theme
+        Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
+          // HomeScreen(homeViewModel, mapViewModel)
+          RootNavigationGraph(
+              application.applicationContext,
+              homeViewModel = homeViewModel,
+              profileViewModel = profileViewModel,
+              mapViewModel = mapViewModel,
+              navController = rememberNavController())
         }
+      }
     }
+  }
 }

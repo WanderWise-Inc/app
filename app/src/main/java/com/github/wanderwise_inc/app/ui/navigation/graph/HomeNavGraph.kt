@@ -20,23 +20,23 @@ fun HomeNavGraph(
     navController: NavHostController,
     profileViewModel: ProfileViewModel
 ) {
-    NavHost(
-        navController = navController,
-        route = Graph.HOME,
-        startDestination = TopLevelDestination.Overview.route,
-        // modifier = Modifier.padding(innerPadding)
-    ) {
-        composable(route = TopLevelDestination.Overview.route) { OverviewScreen(mapViewModel) }
-        composable(route = TopLevelDestination.Liked.route) { LikedScreen(mapViewModel) }
-        composable(route = TopLevelDestination.Search.route) { SearchScreen(mapViewModel) }
-        composable(route = TopLevelDestination.Map.route) {
-            PreviewItineraryScreen(Itinerary(), mapViewModel)
-        }
-        composable(route = TopLevelDestination.Profile.route) {
-            ProfileScreen(mapViewModel, profileViewModel)
-        }
-        composable(route = TopLevelDestination.Profile.route) {
-            ProfileScreen(mapViewModel, profileViewModel)
-        }
+  NavHost(
+      navController = navController,
+      route = Graph.HOME,
+      startDestination = TopLevelDestination.Overview.route,
+      // modifier = Modifier.padding(innerPadding)
+  ) {
+    composable(route = TopLevelDestination.Overview.route) { OverviewScreen(mapViewModel) }
+    composable(route = TopLevelDestination.Liked.route) { LikedScreen(mapViewModel) }
+    composable(route = TopLevelDestination.Search.route) { SearchScreen(mapViewModel) }
+    composable(route = TopLevelDestination.Map.route) {
+      PreviewItineraryScreen(Itinerary(), mapViewModel)
     }
+    composable(route = TopLevelDestination.Profile.route) {
+      ProfileScreen(mapViewModel, profileViewModel)
+    }
+    composable(route = TopLevelDestination.Profile.route) {
+      ProfileScreen(mapViewModel, profileViewModel)
+    }
+  }
 }
