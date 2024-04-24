@@ -5,14 +5,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Place
-import androidx.compose.material3.Button
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -40,21 +37,18 @@ fun PreviewItineraryScreen(
 ) {
     val userLocation by mapViewModel.getUserLocation().collectAsState(null)
 
-  val cameraPositionState = rememberCameraPositionState {
-    position = CameraPosition.fromLatLngZoom(itinerary.computeCenterOfGravity().toLatLng(), 13f)
-  }
+    val cameraPositionState = rememberCameraPositionState {
+        position = CameraPosition.fromLatLngZoom(itinerary.computeCenterOfGravity().toLatLng(), 13f)
+    }
 
-  Scaffold(
-      bottomBar = { ItineraryBanner(itinerary = itinerary) },
-      modifier = Modifier.testTag("Map screen"),
-      floatingActionButton = {
-          CenterButton(
-              cameraPositionState = cameraPositionState,
-              currentLocation = userLocation
-          )
-      },
-      floatingActionButtonPosition = FabPosition.EndOverlay
-  ) { paddingValues ->
+    Scaffold(
+        bottomBar = { ItineraryBanner(itinerary = itinerary) },
+        modifier = Modifier.testTag("Map screen"),
+        floatingActionButton = {
+            CenterButton(cameraPositionState = cameraPositionState, currentLocation = userLocation)
+        },
+        floatingActionButtonPosition = FabPosition.EndOverlay
+    ) { paddingValues ->
         GoogleMap(
             modifier = Modifier
                 .fillMaxSize()
@@ -67,21 +61,21 @@ fun PreviewItineraryScreen(
                     icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)
                 )
             }
-              itinerary.locations.map { location ->
+            itinerary.locations.map { location ->
                 AdvancedMarker(
                     state = MarkerState(position = location.toLatLng()),
                     title = location.title ?: "",
                 )
-              }
             }
-      }
+        }
+    }
 }
 
+/**
+ * @brief button to center on the user position
+ */
 @Composable
-fun CenterButton(
-    cameraPositionState: CameraPositionState,
-    currentLocation: Location?
-) {
+fun CenterButton(cameraPositionState: CameraPositionState, currentLocation: Location?) {
     FloatingActionButton(
         onClick = {
             currentLocation?.let {
@@ -97,55 +91,4 @@ fun CenterButton(
             tint = Color.DarkGray
         )
     }
-
 }
-
-/** @brief banner for display itinerary information */
-/*@Composable
-fun ItineraryBanner(itinerary: Itinerary) {
-  var hide by remember { mutableStateOf(false) }
-
-  Box(
-      modifier =
-      Modifier
-          .background(MaterialTheme.colorScheme.background)
-          .height(200.dp)
-          .clip(RoundedCornerShape(16.dp)),
-      contentAlignment = Alignment.Center,
-  ) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-      Text(
-          text = itinerary.title,
-          color = MaterialTheme.colorScheme.primary,
-          fontFamily = FontFamily.Monospace,
-          fontSize = 30.sp,
-          modifier = Modifier.padding(10.dp) // Adjust padding as needed
-          )
-      Text(
-          text = itinerary.description ?: "",
-          color = MaterialTheme.colorScheme.secondary,
-          fontFamily = FontFamily.Monospace,
-          fontSize = 15.sp,
-          modifier = Modifier.padding(10.dp) // Adjust padding as needed
-          )
-    }
-  }
-}*/
-
-/** Previews a hardcoded itinerary from a JSON file */
-/*@Composable
-fun DummyPreviewItinerary() {
-  val placeReader = PlacesReader(null)
-  val locations = placeReader.readFromString()
-
-  val itinerary =
-      Itinerary(
-          userUid = "",
-          locations = locations,
-          title = "San Francisco Bike Itinerary",
-          tags = listOf(ItineraryTags.CULTURAL, ItineraryTags.NATURE, ItineraryTags.BUDGET),
-          description = "A 3-day itinerary to explore the best of San Francisco on a bike.",
-          visible = true)
-
-  PreviewItineraryScreen(itinerary, null)
-}*/
