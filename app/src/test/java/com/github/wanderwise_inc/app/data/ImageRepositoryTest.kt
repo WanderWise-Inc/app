@@ -16,10 +16,13 @@ import org.mockito.Mock
 import org.junit.Assert.*
 import org.junit.Rule
 import org.junit.jupiter.api.extension.ExtendWith
+import org.junit.runner.RunWith
 import org.mockito.MockitoAnnotations
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
+import org.robolectric.RobolectricTestRunner
 
+@RunWith(RobolectricTestRunner::class)
 class ImageRepositoryTest {
 
     @get:Rule val mockitoRule : MockitoRule = MockitoJUnit.rule()
@@ -65,11 +68,26 @@ class ImageRepositoryTest {
      */
     @Test
     fun `bitmap is null for a null Uri`() = runBlocking {
-        val uri = Uri.parse(testPathFile)
+        val uri = null
 
         imageRepositoryImpl.getBitMap(uri).test {
             val emission = awaitItem()
             assertEquals(null, emission)
+
+            awaitComplete()
+        }
+    }
+
+    /**
+     * Test for getBitMap
+     */
+    @Test
+    fun `bitmap should not be null if Uri isn't null`() = runBlocking {
+        val uri = Uri.parse(testPathFile)
+
+        imageRepositoryImpl.getBitMap(uri).test {
+            val emission = awaitItem()
+            assertNotEquals(null, emission)
 
             awaitComplete()
         }
