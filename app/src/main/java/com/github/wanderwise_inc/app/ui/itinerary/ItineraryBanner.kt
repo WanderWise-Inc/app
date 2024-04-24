@@ -5,16 +5,19 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
@@ -44,15 +47,17 @@ import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 //@Preview(showBackground = true, backgroundColor = 0x00000000)
 @Composable
 fun ItineraryBanner(itinerary: Itinerary, onClick : (Itinerary) -> Unit) {
+//fun ItineraryBanner() {
 //    var hide by remember { mutableStateOf(false) }
 
-    //for testing
+//    for testing
 //    val itinerary = Foo("Wonderful London subway trip", "description",
 //        creator = "your mom", timeEstimate = 2, price = 200,
 //        tags = listOf(ItineraryTags.ACTIVE,
 //            ItineraryTags.ADVENTURE,
 //            ItineraryTags.NATURE,
-//            ItineraryTags.PHOTOGRAPHY))
+//            ItineraryTags.PHOTOGRAPHY,
+//            ItineraryTags.CULTURAL))
 
     val imageId = R.drawable.underground_2725336_1280
 
@@ -62,7 +67,7 @@ fun ItineraryBanner(itinerary: Itinerary, onClick : (Itinerary) -> Unit) {
         elevation = CardDefaults
             .cardElevation(defaultElevation = 6.dp),
         shape = RoundedCornerShape(13.dp),
-        onClick = {onClick(itinerary)}
+//        onClick = {onClick(itinerary)}
     ) {
         Column(
             modifier = Modifier
@@ -92,9 +97,9 @@ fun ItineraryBanner(itinerary: Itinerary, onClick : (Itinerary) -> Unit) {
                 Column(
                     modifier = Modifier
                         .fillMaxHeight()
-                        .weight(0.7f)
+                        .weight(0.6f)
                         .padding(10.dp, 8.dp, 4.dp, 15.dp),
-                    verticalArrangement = Arrangement.SpaceEvenly
+                    verticalArrangement = Arrangement.SpaceAround
                 ) {
 
                     //Primary Text Field
@@ -135,33 +140,39 @@ fun ItineraryBanner(itinerary: Itinerary, onClick : (Itinerary) -> Unit) {
                 }
                 Column(modifier = Modifier
                     .weight(0.3f)
+                    .fillMaxHeight()
                     .padding(4.dp, 8.dp, 10.dp, 15.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
+                    verticalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Row(
-                        modifier = Modifier
-                            .weight(0.4f),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceAround
-                    ) {
                         //Composes Tags of the itinerary
-                        LazyRow(
-                            modifier = Modifier.weight(0.1f)
-                        ) {
-                            val weight: Float = 1f / itinerary.tags.size
-                            items(itinerary.tags) {
-                                Text(
-                                    text = it,
-                                    softWrap = false,
-                                    color = MaterialTheme.colorScheme.secondary,
-                                    fontFamily = FontFamily.Monospace,
-                                    fontSize = 10.sp,
-                                    modifier = Modifier.weight(weight).padding(2.dp)
-                                )
-                            }
-                        }
-                    }
+                        val tagsJoined = itinerary.tags.joinToString(separator = " ")
+
+                        Text(
+                            text = tagsJoined,
+                            softWrap = true,
+                            color = MaterialTheme.colorScheme.secondary,
+                            fontFamily = FontFamily.Monospace,
+                            fontSize = 10.sp,
+                            modifier = Modifier.padding(1.dp)
+                        )
+
+//                        Row(
+//                            verticalAlignment = Alignment.CenterVertically,
+//                            modifier = Modifier.weight(0.1f)
+//                        ) {
+//                            val weight: Float = 1f / itinerary.tags.size
+//                            itinerary.tags.forEach {
+//                                Text(
+//                                    text = it,
+//                                    softWrap = false,
+//                                    color = MaterialTheme.colorScheme.secondary,
+//                                    fontFamily = FontFamily.Monospace,
+//                                    fontSize = 10.sp,
+//                                    modifier = Modifier.weight(weight).padding(2.dp)
+//                                )
+//                            }
+//                        }
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         //Like Icon
                         Icon(
