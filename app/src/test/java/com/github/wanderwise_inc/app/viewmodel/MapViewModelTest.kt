@@ -10,9 +10,16 @@ import com.github.wanderwise_inc.app.model.location.Location
 import com.github.wanderwise_inc.app.network.DirectionsApiService
 import com.github.wanderwise_inc.app.network.DirectionsResponseBody
 import junit.framework.TestCase.assertEquals
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlin.random.Random
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.createTestCoroutineScope
+import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
+import kotlinx.coroutines.withContext
 import okhttp3.Request
 import okio.Timeout
 import org.junit.Assert.assertNotEquals
@@ -71,7 +78,7 @@ class MapViewModelTest {
           description = null,
           visible = true)
 
-  val mockLocations = randomLocations(4)
+  private val mockLocations = randomLocations(4)
   private val mockResponse =
       DirectionsResponseBody(
           listOf(
@@ -90,8 +97,11 @@ class MapViewModelTest {
                                   DirectionsResponseBody.Route.Leg.RespLocation(
                                       mockLocations[3].lat, mockLocations[3].long))))))))
 
+  @OptIn(ExperimentalCoroutinesApi::class)
   @Before
   fun setup() {
+    Dispatchers.setMain(Dispatchers.Unconfined)
+
     mockApiService = mock(DirectionsApiService::class.java)
     // Mock the directionsApiService so that we don't get billed by Google
     `when`(
@@ -140,7 +150,7 @@ class MapViewModelTest {
   }
 
   @Test
-  fun itinerary_add_and_retrieve() = runTest {
+  fun `itinerary add and retrieve`() = runTest {
     // insert in shuffled order for next test that tests sorting algorithm
     mapViewModel.setItinerary(yofiItinerary)
     mapViewModel.setItinerary(thomasItinerary)
@@ -153,7 +163,7 @@ class MapViewModelTest {
   }
 
   @Test
-  fun itinerary_filtering_from_preferences_outputs_correct_elements_1() = runTest {
+  fun `itinerary filtering from preferences outputs correct elements 1`() = runTest {
     mapViewModel.setItinerary(yofiItinerary)
     mapViewModel.setItinerary(thomasItinerary)
     mapViewModel.setItinerary(ethanItinerary)
@@ -170,7 +180,7 @@ class MapViewModelTest {
   }
 
   @Test
-  fun itinerary_filtering_from_preferences_outputs_correct_elements_2() = runTest {
+  fun `itinerary filtering from preferences outputs correct elements 2`() = runTest {
     mapViewModel.setItinerary(yofiItinerary)
     mapViewModel.setItinerary(thomasItinerary)
     mapViewModel.setItinerary(ethanItinerary)
@@ -187,7 +197,7 @@ class MapViewModelTest {
   }
 
   @Test
-  fun itinerary_filtering_from_preferences_outputs_correct_elements_3() = runTest {
+  fun `itinerary filtering from preferences outputs correct elements 3`() = runTest {
     mapViewModel.setItinerary(yofiItinerary)
     mapViewModel.setItinerary(thomasItinerary)
     mapViewModel.setItinerary(ethanItinerary)
@@ -204,7 +214,7 @@ class MapViewModelTest {
   }
 
   @Test
-  fun itinerary_sorting_from_preferences_outputs_correct_order() = runTest {
+  fun `itinerary sorting from preferences outputs correct order`() = runTest {
     mapViewModel.setItinerary(yofiItinerary)
     mapViewModel.setItinerary(thomasItinerary)
     mapViewModel.setItinerary(ethanItinerary)
@@ -226,7 +236,7 @@ class MapViewModelTest {
   }
 
   @Test
-  fun getting_itinerary_from_username_works_correctly() = runTest {
+  fun `getting itinerary from username works correctly`() = runTest {
     mapViewModel.setItinerary(ethanItinerary)
     mapViewModel.setItinerary(yofiItinerary)
     mapViewModel.setItinerary(thomasItinerary)
@@ -246,7 +256,7 @@ class MapViewModelTest {
   }
 
   @Test
-  fun deleting_an_itinerary_works_correctly() = runTest {
+  fun `deleting an itinerary works correctly`() = runTest {
     mapViewModel.setItinerary(ethanItinerary)
     mapViewModel.setItinerary(yofiItinerary)
     mapViewModel.setItinerary(thomasItinerary)
@@ -264,5 +274,18 @@ class MapViewModelTest {
 
     val secondQuery = mapViewModel.getAllPublicItineraries().first()
     assertEquals(listOf<Itinerary>(), secondQuery)
+  }
+
+  @Test
+  fun `getPolyLineWaypoints() should return a correctly parsed list of Locations`() { // this isn't used by the mock, but must be passed as argument
+    val placeHolderItinerary = yofiItinerary
+
+    runTest{
+      withContext(Dispatchers.Main) {
+        mapViewModel.fetchPolylineLocations(placeHolderItinerary)
+      }
+    }
+
+    assertEquals(mockLocations.map { it.toLatLng() }, mapViewModel.polylinePointsLiveData.value)
   }
 }
