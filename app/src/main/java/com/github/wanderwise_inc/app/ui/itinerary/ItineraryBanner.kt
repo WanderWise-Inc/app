@@ -54,7 +54,7 @@ import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 
 //HomeScreen.kt + Itinerary.kt + this
 
-@Preview(showBackground = true, backgroundColor = 0x00000000)
+//@Preview(showBackground = true, backgroundColor = 0x00000000)
 @Composable
 fun ItineraryBanner(itinerary: Itinerary, onClick : (Itinerary) -> Unit) {
 //fun ItineraryBanner() {
