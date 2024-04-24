@@ -12,10 +12,22 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertNotEquals
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import org.mockito.Mock
+import org.mockito.junit.MockitoJUnit
+import org.mockito.junit.MockitoRule
 
 /** @brief test class for mapview model */
 class MapViewModelTest {
+
+
+    @get:Rule
+    val mockitoRule: MockitoRule = MockitoJUnit.rule()
+
+    @Mock
+    private lateinit var userLocationClient: UserLocationClient
+
   private lateinit var itineraryRepository: ItineraryRepository
   private lateinit var mapViewModel: MapViewModel
   // helper function for generating random latitude and longitude...
@@ -60,7 +72,7 @@ class MapViewModelTest {
   @Before
   fun setup() {
     itineraryRepository = ItineraryRepositoryTestImpl()
-    mapViewModel = MapViewModel(itineraryRepository)
+    mapViewModel = MapViewModel(itineraryRepository, userLocationClient)
   }
 
   @Test

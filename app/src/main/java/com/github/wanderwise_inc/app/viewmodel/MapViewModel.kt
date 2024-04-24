@@ -1,5 +1,6 @@
 package com.github.wanderwise_inc.app.viewmodel
 
+import android.location.Location
 import androidx.lifecycle.ViewModel
 import com.github.wanderwise_inc.app.data.ItineraryRepository
 import com.github.wanderwise_inc.app.model.location.Itinerary
@@ -7,7 +8,10 @@ import com.github.wanderwise_inc.app.model.location.ItineraryPreferences
 import kotlinx.coroutines.flow.Flow
 
 /** @brief ViewModel class for providing `Location`s and `Itinerary`s to the map UI */
-class MapViewModel(private val itineraryRepository: ItineraryRepository) : ViewModel() {
+class MapViewModel(
+  private val itineraryRepository: ItineraryRepository,
+  private val userLocationClient: UserLocationClient
+) : ViewModel() {
   /** @return a flow of all public itineraries */
   fun getAllPublicItineraries(): Flow<List<Itinerary>> {
     return itineraryRepository.getPublicItineraries()
@@ -51,5 +55,9 @@ class MapViewModel(private val itineraryRepository: ItineraryRepository) : ViewM
   /** @brief deletes an itinerary from the database */
   fun deleteItinerary(itinerary: Itinerary) {
     itineraryRepository.deleteItinerary(itinerary)
+  }
+
+  fun getUserLocation(): Flow<Location> {
+    return userLocationClient.getLocationUpdates(1000)
   }
 }

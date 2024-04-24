@@ -17,6 +17,7 @@ import com.github.wanderwise_inc.app.ui.home.HomeScreen
 import com.github.wanderwise_inc.app.viewmodel.HomeViewModel
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
+import com.github.wanderwise_inc.app.viewmodel.UserLocationClient
 import com.google.firebase.FirebaseApp
 import org.junit.Before
 import org.junit.Rule
@@ -26,12 +27,19 @@ import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
+import org.mockito.junit.MockitoJUnit
+import org.mockito.junit.MockitoRule
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class HomeNavigationTest {
   @get:Rule val composeTestRule = createComposeRule()
   private lateinit var navController: NavHostController
+
+
+  @get:Rule val mockitoRule: MockitoRule = MockitoJUnit.rule()
+
+  @Mock private lateinit var userLocationClient: UserLocationClient
 
   @Mock private lateinit var mockApplication: Application
 
@@ -51,7 +59,7 @@ class HomeNavigationTest {
       val profileViewModel = ProfileViewModel(profileRepository, imageRepository)
 
       val itineraryRepository = ItineraryRepositoryTestImpl()
-      val mapViewModel = MapViewModel(itineraryRepository)
+      val mapViewModel = MapViewModel(itineraryRepository, userLocationClient)
       FirebaseApp.initializeApp(LocalContext.current)
       navController = TestNavHostController(LocalContext.current)
       navController.navigatorProvider.addNavigator(ComposeNavigator())
