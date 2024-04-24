@@ -277,8 +277,8 @@ class MapViewModelTest {
   }
 
   @Test
-  fun `getPolyLineWaypoints() should return a correctly parsed list of Locations`() { // this isn't used by the mock, but must be passed as argument
-    val placeHolderItinerary = yofiItinerary
+  fun `getPolyLineWaypoints() should return a correctly parsed list of Locations`() {
+    val placeHolderItinerary = ethanItinerary
 
     runTest{
       withContext(Dispatchers.Main) {
