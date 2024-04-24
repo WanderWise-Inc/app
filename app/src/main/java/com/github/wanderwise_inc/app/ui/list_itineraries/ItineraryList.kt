@@ -38,15 +38,6 @@ fun ItinerariesListScrollable(
   LazyColumn(modifier = Modifier.padding(paddingValues)) {
     this.items(itineraries) { itinerary ->
       val uid = FirebaseAuth.getInstance().uid!!
-      val onLikeClick = { it: Itinerary, isLiked: Boolean ->
-        if (isLiked) {
-          mapViewModel.decrementItineraryLikes(it)
-          profileViewModel.removeLikedItinerary(uid, it.uid)
-        } else {
-          mapViewModel.incrementItineraryLikes(it)
-          profileViewModel.addLikedItinerary(uid, it.uid)
-        }
-      }
       val isLikedInitially = profileViewModel.checkIfItineraryIsLiked(uid, itinerary.uid)
       val onLikeButtonClick = { it: Itinerary, isLiked: Boolean ->
         if (isLiked) {
