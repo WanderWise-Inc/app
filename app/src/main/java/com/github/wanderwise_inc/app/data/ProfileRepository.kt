@@ -19,6 +19,19 @@ interface ProfileRepository {
 
   /** @brief deletes a user profile. Use sparingly */
   fun deleteProfile(profile: Profile)
+
+
+  /** @brief add an Itinerary to the user's liked itineraries */
+  fun addItineraryToLiked(userUid: String, itineraryUid: String)
+
+  /** @brief remove an Itinerary to the user's liked itineraries */
+  fun removeItineraryFromLiked(userUid: String, itineraryUid: String)
+
+  /** @brief checks if the given Itinerary is contained in the user's liked itineraries */
+  fun checkIfItineraryIsLiked(userUid: String, itineraryUid: String): Boolean
+  
+  /** @brief returns list of user's liked itineraries */
+  fun getLikedItineraries(userUid: String): Flow<List<String>>
 }
 
 /** @brief test implementation of repository simulating a remote data source */
@@ -49,5 +62,24 @@ class ProfileRepositoryTestImpl : ProfileRepository {
 
   override fun deleteProfile(profile: Profile) {
     profiles.remove(profile)
+  }
+
+  override fun addItineraryToLiked(userUid: String, itineraryUid: String) {
+    profiles.filter{ it.userUid == userUid }.first().likedItinerariesUid.add(itineraryUid)
+  }
+
+  override fun removeItineraryFromLiked(userUid: String, itineraryUid: String) {
+    profiles.filter{ it.userUid == userUid }.first().likedItinerariesUid.remove(itineraryUid)
+  }
+
+  override fun checkIfItineraryIsLiked(userUid: String, itineraryUid: String): Boolean {
+    return profiles.filter{ it.userUid == userUid }.first().likedItinerariesUid.contains(itineraryUid)
+  }
+
+  override fun getLikedItineraries(userUid: String): Flow<List<String>> {
+    return flow {
+      val filteredProfiles = profiles.filter { it.userUid == userUid }
+      if (filteredProfiles.isEmpty()) emit(emptyList()) else emit(filteredProfiles.first().likedItinerariesUid)
+    }
   }
 }
