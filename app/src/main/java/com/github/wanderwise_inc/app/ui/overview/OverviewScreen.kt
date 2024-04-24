@@ -8,6 +8,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.github.wanderwise_inc.app.ui.WanderHub
+import com.github.wanderwise_inc.app.ui.home.HomeScreen
 import com.github.wanderwise_inc.app.ui.home.SearchBar
 import com.github.wanderwise_inc.app.ui.navigation.NavigationActions
 import com.github.wanderwise_inc.app.ui.navigation.Route
@@ -27,7 +28,7 @@ fun OverviewScreen(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxWidth()) {
-              WanderHub(mapViewModel)
+              SearchBar()
               TopNavigationMenu(navigator, Route.OVERVIEW)
             }
       },
