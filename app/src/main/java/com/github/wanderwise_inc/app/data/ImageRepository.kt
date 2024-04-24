@@ -22,6 +22,7 @@ import coil.request.SuccessResult
 import com.github.wanderwise_inc.app.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
@@ -64,7 +65,7 @@ interface ImageRepository {
      * @brief set the currentFile to this the Uri given, useful for other functions
      * that will use the currentFile
      */
-  fun setCurrentFile(uri: Uri?)
+  fun setCurrentFile(uri: Uri?) : Uri?
 }
 
 /** test image repository... Always returns the same static image resource */
@@ -87,12 +88,12 @@ interface ImageRepository {
 /**
  * A class implementation of the Image Repository
  */
-class ImageRepositoryImpl(private val application: Application, private val activityLauncher: ActivityResultLauncher<Intent>) : ImageRepository {
+class ImageRepositoryImpl(private val application: Application, private val activityLauncher: ActivityResultLauncher<Intent>, private val imageReference : StorageReference) : ImageRepository {
 
-    private val storage = FirebaseStorage.getInstance()
+    //private val storage = FirebaseStorage.getInstance()
     private val context = application.baseContext
     private var currentFile : Uri? = null
-    private var imageReference = storage.reference
+    //private var imageReference = storage.reference
 
     /**
      * Store image function. This function will create a reference in Firebase to store a bitmap
@@ -103,7 +104,7 @@ class ImageRepositoryImpl(private val application: Application, private val acti
     override fun storeImage(bitMap : Bitmap) {
         // We get the uid to create a reference (a path) to the image using the uid
         val currentUser = FirebaseAuth.getInstance()
-        val storageRef = storage.reference
+        val storageRef = imageReference
         val userProfilePictureRef = storageRef.child("images/profilePicture/${currentUser.uid}")
         val baos = ByteArrayOutputStream()
         bitMap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
@@ -127,7 +128,7 @@ class ImageRepositoryImpl(private val application: Application, private val acti
      */
     override fun fetchImage(pathToProfilePic: String): Flow<Bitmap?> {
         return flow {
-            val storageRef = storage.reference
+            val storageRef = imageReference
             val profilePictureRef = storageRef.child("images/${pathToProfilePic}")
 
             try {
@@ -191,19 +192,20 @@ class ImageRepositoryImpl(private val application: Application, private val acti
      * @return a flow of the bitMap representation of the image
      */
     override fun getBitMap(uri : Uri?) : Flow<Bitmap?> {
+        Log.d("TEST CASE", "BEFORE FLOW")
         return flow {
             if (uri != null) {
+                Log.d("TEST CASE", "URI NOT NULL")
                 val loading = ImageLoader(context)
                 val request = ImageRequest.Builder(context)
                     .data(uri)
                     .build()
 
-                Log.d("STORAGE", "REQUEST OK")
                 val result = (loading.execute(request) as SuccessResult).drawable
-                Log.d("BITMAP", "BITMAP IS : " + (result as BitmapDrawable).bitmap.toString())
+                Log.d("TEST CASE", (result as BitmapDrawable).bitmap.toString())
                 emit((result as BitmapDrawable).bitmap)
             } else {
-                Log.d("BITMAP", "URL IS NULL")
+                Log.d("TEST CASE", "URI NULL")
                 emit(null)
             }
         }
@@ -220,7 +222,8 @@ class ImageRepositoryImpl(private val application: Application, private val acti
      * @brief set the currentFile to this the Uri given, useful for other functions
      * that will use the currentFile
      */
-    override fun setCurrentFile(uri : Uri?) {
+    override fun setCurrentFile(uri : Uri?) : Uri?{
         currentFile = uri
+        return currentFile
     }
 }

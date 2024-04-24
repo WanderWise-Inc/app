@@ -54,7 +54,8 @@ class MainActivity : ComponentActivity() {
 
   // declaration for use of storage
   private var currentFile : Uri? = null
-  private var imageReference = FirebaseStorage.getInstance().reference
+  private val storage = FirebaseStorage.getInstance()
+  private var imageReference = storage.reference
 
   private lateinit var profileViewModel: ProfileViewModel
   private var bitMap by mutableStateOf<Bitmap?>(null)
@@ -64,7 +65,7 @@ class MainActivity : ComponentActivity() {
     super.onCreate(savedInstanceState)
 
     val profileRepository = ProfileRepositoryImpl()
-    imageRepository = ImageRepositoryImpl(application, imageLauncher)
+    imageRepository = ImageRepositoryImpl(application, imageLauncher, imageReference)
     profileViewModel = ProfileViewModel(profileRepository, imageRepository)
 
     setContent {
