@@ -1,6 +1,7 @@
 package com.github.wanderwise_inc.app.ui.search
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -11,6 +12,8 @@ import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Place
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -44,7 +47,7 @@ data class ChipsModel(
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnrememberedMutableState")
 @Composable
-fun TutorialFilterChip() {
+fun FilterChip() {
     val filterList = listOf(
         ChipsModel(
             name = "Test",
@@ -54,8 +57,9 @@ fun TutorialFilterChip() {
         ChipsModel(
             name = "Price Range",
             subList = listOf("0-20$", "20-40$", "40-+$"),
-            trailingIcon = Icons.Default.ArrowDropDown,
-            selectedIcon = Icons.Default.Check
+            leadingIcon = Icons.Default.Check,
+            selectedIcon = Icons.Default.Place,
+
         ),
         ChipsModel(
             name = "Test2",
@@ -87,20 +91,22 @@ fun TutorialFilterChip() {
                             true -> selectedItems.remove(item.name)
                             false -> selectedItems.add(item.name)
                         }
+                        Log.d("Clicked", "BUTTON WAS CLICKED")
                     },
                     label = { Text(text = item.name) },
                     leadingIcon = {
-                        if (item.leadingIcon != null)
-                            Icon(item.leadingIcon, contentDescription = item.name)
-                    },
-                    /*selectedIcon = {
-                        if (item.selectedIcon != null) {
+                        if (isSelected && item.selectedIcon != null) {
                             Icon(item.selectedIcon, contentDescription = item.name)
+                        } else if (item.leadingIcon != null) {
+                            Icon(item.leadingIcon, contentDescription = item.name)
                         }
-                    }*/
+                        Log.d("Clicked", "ENTERED ICON")
+                    },
+
                     trailingIcon = {
                         if (item.trailingIcon != null && isSelected)
                             Icon(item.trailingIcon, contentDescription = item.name)
+                        Log.d("Clicked", "ENTERED TRAILING ICON")
                     }
                 )
             }
@@ -112,7 +118,7 @@ fun TutorialFilterChip() {
 fun ChipWithSubItems(chipLabel: String, chipItems: List<String>) {
     var isSelected by remember { mutableStateOf(false) }
     var showSubList by remember { mutableStateOf(false) }
-    var filterName by remember { mutableStateOf("") }
+    var filterName by remember { mutableStateOf(chipLabel) }
 
     ExposedDropdownMenuBox(
         expanded = showSubList,
@@ -122,6 +128,7 @@ fun ChipWithSubItems(chipLabel: String, chipItems: List<String>) {
             selected = isSelected,
             onClick = {
                 isSelected = true
+                //showSubList = ! showSubList
             },
             label = { Text(text = filterName.ifEmpty { chipLabel }) },
             trailingIcon = {
