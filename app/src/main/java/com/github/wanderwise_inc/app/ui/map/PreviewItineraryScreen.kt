@@ -52,7 +52,8 @@ fun PreviewItineraryScreen(
         GoogleMap(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues),
+                .padding(paddingValues)
+                .testTag("Google Maps"),
             cameraPositionState = cameraPositionState
         ) {
             userLocation?.let {
@@ -81,6 +82,7 @@ fun CenterButton(cameraPositionState: CameraPositionState, currentLocation: Loca
                 cameraPositionState.move(CameraUpdateFactory.newLatLngZoom(latLng, 13f))
             }
         },
+        modifier = Modifier.testTag("Center Button"),
         containerColor = Color.White
     ) {
         Icon(
