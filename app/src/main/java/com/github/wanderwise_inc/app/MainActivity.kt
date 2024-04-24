@@ -13,11 +13,10 @@ import com.github.wanderwise_inc.app.data.ImageRepositoryTestImpl
 import com.github.wanderwise_inc.app.data.ItineraryRepositoryTestImpl
 import com.github.wanderwise_inc.app.data.ProfileRepositoryTestImpl
 import com.github.wanderwise_inc.app.model.location.Itinerary
+import com.github.wanderwise_inc.app.model.location.ItineraryTags
 import com.github.wanderwise_inc.app.model.location.Location
 import com.github.wanderwise_inc.app.model.profile.Profile
-import com.github.wanderwise_inc.app.ui.liked.LikedScreen
 import com.github.wanderwise_inc.app.ui.navigation.graph.RootNavigationGraph
-import com.github.wanderwise_inc.app.ui.profile.ProfileScreen
 import com.github.wanderwise_inc.app.ui.theme.WanderWiseTheme
 import com.github.wanderwise_inc.app.viewmodel.HomeViewModel
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
@@ -35,32 +34,51 @@ class MainActivity : ComponentActivity() {
   // private lateinit var analytics : FirebaseAnalytics
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    
+
     itineraryRepository.setItinerary(
-      Itinerary
-        .Builder(uid = "0", userUid = "0", title = "Initial test itinerary 1")
-        .addLocation(Location(0.0, 0.0))
-        .build()
-    )
+        Itinerary.Builder(uid = "0", userUid = "0", title = "Initial test itinerary 1")
+            .addLocation(Location(0.0, 0.0))
+            .build())
 
     val profileRepository = ProfileRepositoryTestImpl()
     val imageRepository = ImageRepositoryTestImpl(application)
     profileViewModel = ProfileViewModel(profileRepository, imageRepository)
-    
+
     profileRepository.setProfile(Profile(userUid = "0"))
+
+    // START: viewmodel initialization (default data for demoing)
+    val itineraryAdventureAndLuxury =
+        Itinerary(
+            userUid = "0",
+            locations = listOf(),
+            title = "Shopping then adventure",
+            tags = listOf(ItineraryTags.ADVENTURE, ItineraryTags.LUXURY),
+            description = "gucci",
+            visible = true,
+        )
+    val itineraryAdventure =
+        Itinerary(
+            userUid = "0",
+            locations = listOf(),
+            title = "Hike",
+            tags = listOf(ItineraryTags.ADVENTURE),
+            description = null,
+            visible = true,
+        )
+    mapViewModel.setItinerary(itineraryAdventure)
+    mapViewModel.setItinerary(itineraryAdventureAndLuxury)
+    // END: Viewmodel initialization
 
     setContent {
       WanderWiseTheme {
         // A surface container using the 'background' color from the theme
         Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-          ProfileScreen(mapViewModel = mapViewModel, profileViewModel = profileViewModel)
-          // HomeScreen(homeViewModel, mapViewModel)
-          /*RootNavigationGraph(
+          RootNavigationGraph(
               application.applicationContext,
               homeViewModel = homeViewModel,
               profileViewModel = profileViewModel,
               mapViewModel = mapViewModel,
-              navController = rememberNavController())*/
+              navController = rememberNavController())
         }
       }
     }

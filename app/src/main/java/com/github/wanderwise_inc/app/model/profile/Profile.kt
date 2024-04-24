@@ -1,7 +1,6 @@
 package com.github.wanderwise_inc.app.model.profile
 
 import android.net.Uri
-import com.github.wanderwise_inc.app.model.location.Itinerary
 
 object ProfileLabels {
   const val UID = "uid"
@@ -25,7 +24,9 @@ data class Profile(
 
   /** @brief no argument constructor for serialization */
   constructor() : this(displayName = "", userUid = "", bio = "")
-    
+
   /** @brief constructor with userUid for testing */
-  constructor(userUid: String, ) : this(displayName = "", userUid = userUid, bio = "")
+  constructor(
+      userUid: String,
+  ) : this(displayName = "", userUid = userUid, bio = "")
 }

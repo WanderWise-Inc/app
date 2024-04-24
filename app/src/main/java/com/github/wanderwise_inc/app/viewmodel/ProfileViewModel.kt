@@ -36,7 +36,7 @@ class ProfileViewModel(
     return imageRepository.fetchImage(profile.profilePicture)
   }
 
-  /** @brief add an Itinerary to the user's liked itineraries */ 
+  /** @brief add an Itinerary to the user's liked itineraries */
   fun addLikedItinerary(userUid: String, itineraryUid: String) {
     profileRepository.addItineraryToLiked(userUid, itineraryUid)
   }
@@ -45,10 +45,11 @@ class ProfileViewModel(
   fun removeLikedItinerary(userUid: String, itineraryUid: String) {
     profileRepository.removeItineraryFromLiked(userUid, itineraryUid)
   }
-  
+
   fun checkIfItineraryIsLiked(userUid: String, itineraryUid: String): Boolean {
     return profileRepository.checkIfItineraryIsLiked(userUid, itineraryUid)
   }
+
   fun getLikedItineraries(userUid: String): Flow<List<String>> {
     return profileRepository.getLikedItineraries(userUid)
   }

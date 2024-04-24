@@ -50,7 +50,7 @@ data class Itinerary(
         ItineraryLabels.VISIBLE to visible,
     )
   }
-    
+
   /*fun copy(): Itinerary {
       val builder = Itinerary.Builder(uid = this.uid)
   }*/
