@@ -34,7 +34,6 @@ class HomeNavigationTest {
   private lateinit var navController: NavHostController
 
   @Mock private lateinit var mockApplication: Application
-
   @Mock private lateinit var mockContext: Context
 
   @Before
