@@ -32,7 +32,7 @@ fun DisplayOverviewItineraries(mapViewModel: MapViewModel, profileViewModel: Pro
   val categoriesList =
       listOf(
           SearchCategory(ItineraryTags.ADVENTURE, R.drawable.adventure_icon, "Adventure"),
-          SearchCategory(ItineraryTags.LUXURY, R.drawable.adventure_icon, "Shopping"),
+          SearchCategory(ItineraryTags.LUXURY, R.drawable.shopping_icon, "Shopping"),
           SearchCategory(ItineraryTags.PHOTOGRAPHY, R.drawable.sight_seeing_icon, "Sight Seeing"),
           SearchCategory(ItineraryTags.FOODIE, R.drawable.drinks_icon, "Drinks"),
       )
