@@ -1,6 +1,7 @@
 package com.github.wanderwise_inc.app.ui.list_itineraries
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -14,6 +15,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.unit.dp
 import com.github.wanderwise_inc.app.R
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
 import com.github.wanderwise_inc.app.model.location.Tag
@@ -78,7 +80,7 @@ fun DisplayLikedItineraries(mapViewModel: MapViewModel, profileViewModel: Profil
                 }
         ItinerariesListScrollable(
             itineraries = filtered,
-            paddingValues = innerPadding,
+            paddingValues = PaddingValues(8.dp),
             mapViewModel = mapViewModel,
             profileViewModel = profileViewModel)
       }

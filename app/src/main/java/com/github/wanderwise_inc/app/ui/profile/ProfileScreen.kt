@@ -7,6 +7,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -86,7 +87,8 @@ fun ProfileScreen(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel
             ItinerariesListScrollable(itineraries = userItineraries,
               mapViewModel = mapViewModel,
               profileViewModel = profileViewModel,
-              paddingValues = androidx.compose.foundation.layout.PaddingValues(8.dp))
+              paddingValues = PaddingValues(8.dp)
+            )
 
           }
         }

@@ -69,7 +69,7 @@ fun ItineraryBanner(
   ElevatedCard(
       colors =
           CardDefaults.cardColors(
-              containerColor = MaterialTheme.colorScheme.surfaceVariant,
+              containerColor = MaterialTheme.colorScheme.primaryContainer,
           ),
       elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
       shape = RoundedCornerShape(13.dp),
@@ -99,7 +99,7 @@ fun ItineraryBanner(
                       // Primary Text Field
                       Text(
                           text = itinerary.title,
-                          color = MaterialTheme.colorScheme.primary,
+                          color = MaterialTheme.colorScheme.onPrimaryContainer,
                           fontFamily = FontFamily.Monospace,
                           fontSize = 16.sp,
                           fontWeight = FontWeight.Bold,
@@ -110,7 +110,7 @@ fun ItineraryBanner(
                       // Secondary indicator fields
                       Text(
                           text = "Wandered by - ",
-                          color = MaterialTheme.colorScheme.secondary,
+                          color = MaterialTheme.colorScheme.onPrimaryContainer,
                           fontFamily = FontFamily.Monospace,
                           fontSize = 12.sp,
                           modifier = Modifier.padding(10.dp, 0.dp))

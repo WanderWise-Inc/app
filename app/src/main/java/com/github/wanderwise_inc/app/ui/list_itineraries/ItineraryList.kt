@@ -1,5 +1,6 @@
 package com.github.wanderwise_inc.app.ui.list_itineraries
 
+import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -35,7 +36,9 @@ fun ItinerariesListScrollable(
     profileViewModel: ProfileViewModel,
     paddingValues: PaddingValues
 ) {
-  LazyColumn(modifier = Modifier.padding(paddingValues)) {
+  LazyColumn(modifier = Modifier
+      .padding(paddingValues),
+      verticalArrangement = spacedBy(15.dp)) {
     this.items(itineraries) { itinerary ->
       val uid = FirebaseAuth.getInstance().uid!!
       val isLikedInitially = profileViewModel.checkIfItineraryIsLiked(uid, itinerary.uid)
