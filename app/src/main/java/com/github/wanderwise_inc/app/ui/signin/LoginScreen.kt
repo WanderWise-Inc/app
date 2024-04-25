@@ -110,11 +110,9 @@ fun SignInButton(
   // Added a coroutine because userViewModel functions are async
   val coroutineScope = rememberCoroutineScope()
   val providers = arrayListOf(AuthUI.IdpConfig.GoogleBuilder().build())
-
   // Create and launch sign-in intent
   val signInIntent =
       AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers).build()
-
   // creating the launcher that will be used to signIn
   val signInLauncher =
       rememberLauncherForActivityResult(contract = FirebaseAuthUIActivityResultContract()) {
@@ -122,7 +120,6 @@ fun SignInButton(
         val user = FirebaseAuth.getInstance().currentUser
 
         if (user == null) {
-          Log.d("USERS", "USER IS NULL")
           // TODO Handle ERROR
 
         } else {

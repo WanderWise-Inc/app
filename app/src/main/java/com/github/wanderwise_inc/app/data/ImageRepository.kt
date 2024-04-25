@@ -1,36 +1,17 @@
 package com.github.wanderwise_inc.app.data
 
-import android.app.Activity.RESULT_OK
-import android.app.Application
-import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.util.Log
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.ActivityResultRegistry
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import coil.ImageLoader
-import coil.request.ImageRequest
-import coil.request.SuccessResult
-import com.github.wanderwise_inc.app.R
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.suspendCancellableCoroutine
-import java.io.ByteArrayOutputStream
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
 
 /** @brief data source for fetching and retrieving images */
 interface ImageRepository {
@@ -133,32 +114,24 @@ class ImageRepositoryImpl(private val activityLauncher: ActivityResultLauncher<I
             if (pathToProfilePic == "") {
                 emit(null)
             } else {
-                val storageRef = imageReference
-                val profilePictureRef = storageRef.child("images/${pathToProfilePic}")
+                //val storageRef = imageReference
+                val profilePictureRef = imageReference.child("images/${pathToProfilePic}")
 
                 try {
-                    Log.d("FETCH IMAGE", "IN TRY")
                     val byteResult = suspendCancellableCoroutine<ByteArray?> { continuation ->
                         profilePictureRef.getBytes(1024 * 1024)
                             .addOnSuccessListener { byteResult ->
-                                Log.d("FETCH IMAGE", "GOT THE BYTES")
                                 continuation.resume(byteResult) // Resume with byte array
                             }
                             .addOnFailureListener { exception ->
-                                Log.d("FETCH IMAGE", "FETCH FAILED")
-                                Log.w("FETCH IMAGE", exception)
                                 continuation.resumeWithException(exception) // Resume with exception
                             }
                     }
-
-                    Log.d("FETCH IMAGE", "BYTE RESULT IS " + byteResult.toString())
 
                     // Decode bitmap if bytes are not null
                     val bitmap = byteResult?.let {
                         BitmapFactory.decodeByteArray(it, 0, it.size)
                     }
-
-                    Log.d("FETCH IMAGE", "BITMAP IS " + bitmap.toString())
 
                     emit(bitmap) // Emit bitmap
                 } catch (e: Exception) {
