@@ -5,11 +5,13 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
 import com.github.wanderwise_inc.app.model.location.PlacesReader
 import com.github.wanderwise_inc.app.ui.liked.LikedScreen
 import com.github.wanderwise_inc.app.ui.map.PreviewItineraryScreen
+
 import com.github.wanderwise_inc.app.ui.navigation.Destination.TopLevelDestination
 import com.github.wanderwise_inc.app.ui.profile.ProfileScreen
 import com.github.wanderwise_inc.app.ui.search.SearchScreen
@@ -18,9 +20,9 @@ import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 
 @Composable
 fun HomeNavGraph(
-    mapViewModel: MapViewModel,
     navController: NavHostController,
-    profileViewModel: ProfileViewModel
+    mapViewModel: MapViewModel,
+    profileViewModel: ProfileViewModel,
 ) {
   val placeReader = PlacesReader(null)
   val locations = placeReader.readFromString()
@@ -40,8 +42,12 @@ fun HomeNavGraph(
       startDestination = TopLevelDestination.Overview.route,
       // modifier = Modifier.padding(innerPadding)
   ) {
-    composable(route = TopLevelDestination.Overview.route) { OverviewScreen(mapViewModel) }
-    composable(route = TopLevelDestination.Liked.route) { LikedScreen(mapViewModel) }
+    composable(route = TopLevelDestination.Overview.route) {
+      OverviewScreen(mapViewModel, profileViewModel)
+    }
+    composable(route = TopLevelDestination.Liked.route) {
+      LikedScreen(mapViewModel, profileViewModel)
+    }
     composable(route = TopLevelDestination.Search.route) { SearchScreen(mapViewModel) }
     composable(route = TopLevelDestination.Map.route) {
       PreviewItineraryScreen(itinerary, mapViewModel)

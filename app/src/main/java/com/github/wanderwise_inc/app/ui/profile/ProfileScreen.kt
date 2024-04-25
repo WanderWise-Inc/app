@@ -1,60 +1,134 @@
 package com.github.wanderwise_inc.app.ui.profile
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeight
+import androidx.compose.foundation.layout.requiredWidth
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
-import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import com.github.wanderwise_inc.app.R
 import com.github.wanderwise_inc.app.model.profile.Profile
-import com.github.wanderwise_inc.app.ui.itinerary.ItineraryBanner
+import com.github.wanderwise_inc.app.ui.list_itineraries.ItinerariesListScrollable
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
-import com.google.firebase.auth.FirebaseAuth
 
 const val PROFILE_SCREEN_TEST_TAG: String = "profile_screen"
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel) {
-  val currentUid = FirebaseAuth.getInstance().currentUser!!.uid
+  val currentUid = "testing" // FirebaseAuth.getInstance().currentUser!!.uid
   val profile by profileViewModel.getProfile(currentUid).collectAsState(initial = null)
 
+  val userItineraries by
+      mapViewModel.getUserItineraries(currentUid).collectAsState(initial = emptyList())
+
   if (profile != null) {
-    Column(modifier = Modifier.testTag(PROFILE_SCREEN_TEST_TAG)) {
-      Text(text = "Hello ${profile!!.displayName}!\nprofile picture: ")
-      profilePicture(profileViewModel, profile!!)
-      ItinerariesScrollable(mapViewModel, currentUid)
+    androidx.compose.material.Scaffold(
+        /*Top bar composable*/
+        topBar = {
+          TopAppBar(
+              title = { Text("Profile") },
+              actions = {
+                FloatingActionButton(onClick = { /*Go to Edit Profile Screen*/}) {
+                  Image(
+                      painter = painterResource(id = R.drawable.settings_icon),
+                      contentDescription = "Edit Profile",
+                      modifier = Modifier.requiredWidth(35.dp).requiredHeight(35.dp))
+                }
+              },
+              colors =
+                  TopAppBarDefaults.topAppBarColors(
+                      containerColor = MaterialTheme.colorScheme.primaryContainer,
+                      titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                      navigationIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                      actionIconContentColor = MaterialTheme.colorScheme.onSecondary),
+              modifier = Modifier.padding(bottom = 20.dp))
+        },
+        modifier = Modifier.fillMaxSize(),
+    ) { innerPadding ->
+      Box(
+          modifier = Modifier.padding(innerPadding).fillMaxSize(),
+          contentAlignment = Alignment.TopCenter) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+              profilePicture(profileViewModel, profile!!, modifier = Modifier.padding(100.dp))
+              Username(profile!!, modifier = Modifier.padding(100.dp))
+              WanderScore(profile!!)
+              ItinerariesListScrollable(
+                  itineraries = userItineraries,
+                  mapViewModel = mapViewModel,
+                  profileViewModel = profileViewModel,
+                  paddingValues = PaddingValues(8.dp))
+            }
+          }
     }
-  } else {
-    Text("profile not found", modifier = Modifier.testTag(PROFILE_SCREEN_TEST_TAG))
   }
 }
 
 @Composable
-fun profilePicture(profileViewModel: ProfileViewModel, profile: Profile) {
+fun profilePicture(profileViewModel: ProfileViewModel, profile: Profile, modifier: Modifier) {
   val picture by profileViewModel.getProfilePicture(profile).collectAsState(initial = null)
 
   if (picture != null) {
     Image(
-        painter = BitmapPainter(picture!!.asImageBitmap()), contentDescription = "Profile picture")
+        painter = BitmapPainter(picture!!.asImageBitmap()),
+        contentDescription = "Profile picture",
+        modifier =
+            Modifier.size(100.dp)
+                .clip(MaterialTheme.shapes.small)
+                .border(BorderStroke(1.dp, Color.Black)),
+        contentScale = ContentScale.FillBounds)
   } else {
     Text("No Picture")
   }
 }
 
 @Composable
-fun ItinerariesScrollable(mapViewModel: MapViewModel, uid: String) {
-  val itineraries by mapViewModel.getUserItineraries(uid).collectAsState(initial = emptyList())
-  if (itineraries.isNotEmpty()) {
+fun Username(profile: Profile, modifier: Modifier) {
+  Text(
+      text = "${profile.displayName}",
+      modifier = Modifier.padding(8.dp),
+      style = MaterialTheme.typography.headlineSmall)
+}
+
+@Composable
+fun WanderScore(profile: Profile) {
+  Box(modifier = Modifier.background(MaterialTheme.colorScheme.secondary)) {
+    Text(text = "WanderScore: Not Implemented Yet")
+  }
+}
+
+@Composable
+fun ItineraryCard() {
+  Card(modifier = Modifier.padding(8.dp)) /*onClick = { TODO* OPEN PREVIEW OF ITINERARY}*/ {
     Column {
-      Text("Your Itineraries:")
-      itineraries.forEach { itinerary -> ItineraryBanner(itinerary = itinerary) }
+      Text("Itinerary Name")
+      Text("Itinerary Description")
     }
-  } else {
-    Text("You have not created any itineraries yet.")
   }
 }

@@ -12,7 +12,11 @@ import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryPreferences
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.flow.Flow
+
 import kotlinx.coroutines.launch
+
+import kotlinx.coroutines.flow.flow
+
 
 private const val DEBUG_TAG: String = "MAP_VIEWMODEL"
 /** @brief ViewModel class for providing `Location`s and `Itinerary`s to the map UI */
@@ -33,9 +37,23 @@ class MapViewModel(
 
   /** @return the total number of likes from a list of itineraries */
   fun getItineraryLikes(itineraries: List<Itinerary>): Int {
-    var totalLikes = 0
+
+    var totalLikes: Int = 0
+
     for (itinerary in itineraries) totalLikes += itinerary.numLikes
     return totalLikes
+  }
+
+  /** @brief increment likes of a given itinerary */
+  fun incrementItineraryLikes(itinerary: Itinerary) {
+    itinerary.numLikes++
+    itineraryRepository.updateItinerary(itinerary.uid, itinerary)
+  }
+
+  /** @brief decrement likes of a given itinerary */
+  fun decrementItineraryLikes(itinerary: Itinerary) {
+    itinerary.numLikes--
+    itineraryRepository.updateItinerary(itinerary.uid, itinerary)
   }
 
   /**
@@ -54,6 +72,14 @@ class MapViewModel(
   ): List<Itinerary> {
     // invert the sign so that the list is sorted in descending order
     return itineraries.sortedBy { -it.scoreFromPreferences(preferences) }
+  }
+
+  /** @return list of itineraries queried based on their UIDs */
+  fun getItineraryFromUids(uidList: List<String>): Flow<List<Itinerary>> {
+    return flow {
+      val result = uidList.map { uid -> itineraryRepository.getItinerary(uid) }
+      emit(result)
+    }
   }
 
   /** @brief sets an itinerary in DB */

@@ -1,13 +1,15 @@
 package com.github.wanderwise_inc.app.ui.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -20,12 +22,17 @@ import androidx.compose.ui.unit.dp
 import com.github.wanderwise_inc.app.R
 
 @Composable
-fun SearchBar() {
+fun SearchBar(onSearchChange: (String) -> Unit) {
   var query by remember { mutableStateOf("") }
   OutlinedTextField(
       value = query,
-      onValueChange = { s: String -> query = s },
-      placeholder = { Text(text = "Wander where?") },
+      onValueChange = { s: String ->
+        query = s
+        onSearchChange(s)
+      },
+      placeholder = {
+        Text(text = "Wander where?", color = MaterialTheme.colorScheme.onPrimaryContainer)
+      },
       leadingIcon = {
         Icon( // TODO: make icon appear
             painter = painterResource(id = R.drawable.more_icon),
@@ -41,8 +48,7 @@ fun SearchBar() {
       singleLine = true,
       shape = RoundedCornerShape(30.dp),
       modifier =
-          Modifier
-              // .padding(5.dp)
+          Modifier.background(MaterialTheme.colorScheme.primaryContainer)
               .fillMaxWidth()
               .padding(5.dp))
 }
