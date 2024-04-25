@@ -31,6 +31,10 @@ data class SearchCategory(
     val title: String,
 )
 
+object LikedScreenTestTags {
+  const val CATEGORY_SELECTOR = "category selector"
+}
+
 @Composable
 fun LikedScreen(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel) {
   DisplayLikedItineraries(mapViewModel = mapViewModel, profileViewModel = profileViewModel)
@@ -49,7 +53,7 @@ fun DisplayLikedItineraries(mapViewModel: MapViewModel, profileViewModel: Profil
           SearchCategory(ItineraryTags.FOODIE, R.drawable.drinks_icon, "Drinks"),
       )
 
-  val uid = FirebaseAuth.getInstance().uid!!
+  val uid = FirebaseAuth.getInstance().uid ?: ""
   var selectedIndex by remember { mutableIntStateOf(0) }
   var searchQuery by remember { mutableStateOf("") }
 
@@ -61,7 +65,7 @@ fun DisplayLikedItineraries(mapViewModel: MapViewModel, profileViewModel: Profil
       topBar = {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxWidth()) {
+            modifier = Modifier.fillMaxWidth().testTag(LikedScreenTestTags.CATEGORY_SELECTOR)) {
               SearchBar(onSearchChange = { searchQuery = it })
               CategorySelector(
                   selectedIndex = selectedIndex,
@@ -84,9 +88,4 @@ fun DisplayLikedItineraries(mapViewModel: MapViewModel, profileViewModel: Profil
             mapViewModel = mapViewModel,
             profileViewModel = profileViewModel)
       }
-}
-
-@Composable
-fun NoLikedItinerariesScreen() {
-  Text(text = "Nothing to see here! Try liking some Wanders")
 }

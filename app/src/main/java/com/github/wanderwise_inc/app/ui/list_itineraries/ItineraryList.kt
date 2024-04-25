@@ -14,6 +14,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -37,7 +38,8 @@ fun ItinerariesListScrollable(
     paddingValues: PaddingValues
 ) {
   LazyColumn(modifier = Modifier
-      .padding(paddingValues),
+      .padding(paddingValues)
+    .testTag("Scrollable itineraries"),
       verticalArrangement = spacedBy(15.dp)) {
     this.items(itineraries) { itinerary ->
       val uid = FirebaseAuth.getInstance().uid!!
