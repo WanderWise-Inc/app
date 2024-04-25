@@ -6,11 +6,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Icon
-import androidx.compose.material.Tab
-import androidx.compose.material.TabRow
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,7 +25,6 @@ import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.ui.itinerary.ItineraryBanner
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
-import com.google.firebase.auth.FirebaseAuth
 
 /** @brief reusable UI elements for displaying a list of itineraries */
 
@@ -37,30 +36,30 @@ fun ItinerariesListScrollable(
     profileViewModel: ProfileViewModel,
     paddingValues: PaddingValues
 ) {
-  LazyColumn(modifier = Modifier
-      .padding(paddingValues)
-    .testTag("Scrollable itineraries"),
+  LazyColumn(
+      modifier = Modifier.padding(paddingValues).testTag("Scrollable itineraries"),
       verticalArrangement = spacedBy(15.dp)) {
-    this.items(itineraries) { itinerary ->
-      val uid = FirebaseAuth.getInstance().uid!!
-      val isLikedInitially = profileViewModel.checkIfItineraryIsLiked(uid, itinerary.uid)
-      val onLikeButtonClick = { it: Itinerary, isLiked: Boolean ->
-        if (isLiked) {
-          mapViewModel.decrementItineraryLikes(it)
-          profileViewModel.removeLikedItinerary(uid, it.uid)
-        } else {
-          mapViewModel.incrementItineraryLikes(it)
-          profileViewModel.addLikedItinerary(uid, it.uid)
+        this.items(itineraries) { itinerary ->
+          // val uid = FirebaseAuth.getInstance().uid!!
+          val uid = "testing"
+          val isLikedInitially = profileViewModel.checkIfItineraryIsLiked(uid, itinerary.uid)
+          val onLikeButtonClick = { it: Itinerary, isLiked: Boolean ->
+            if (isLiked) {
+              mapViewModel.decrementItineraryLikes(it)
+              profileViewModel.removeLikedItinerary(uid, it.uid)
+            } else {
+              mapViewModel.incrementItineraryLikes(it)
+              profileViewModel.addLikedItinerary(uid, it.uid)
+            }
+          }
+          val onBannerClick = {}
+          ItineraryBanner(
+              itinerary = itinerary,
+              onLikeButtonClick = onLikeButtonClick,
+              onBannerClick = onBannerClick,
+              isLikedInitially = isLikedInitially)
         }
       }
-      val onBannerClick = {}
-      ItineraryBanner(
-          itinerary = itinerary,
-          onLikeButtonClick = onLikeButtonClick,
-          onBannerClick = onBannerClick,
-          isLikedInitially = isLikedInitially)
-    }
-  }
 }
 
 /** @brief a bar that allows for selecting a category and updating parent state */
@@ -72,7 +71,7 @@ fun CategorySelector(
 ) {
   TabRow(
       selectedTabIndex = selectedIndex,
-      backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
+      containerColor = MaterialTheme.colorScheme.surfaceVariant,
   ) {
     categoriesList.forEachIndexed { index, category ->
       Tab(

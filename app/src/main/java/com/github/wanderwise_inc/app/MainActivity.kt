@@ -55,10 +55,16 @@ class MainActivity : ComponentActivity() {
             userUid = "1",
             locations = listOf(),
             title = "Hike",
-            tags = listOf(ItineraryTags.ACTIVE, ItineraryTags.PHOTOGRAPHY,
-                ItineraryTags.NATURE, ItineraryTags.ADVENTURE,
-                ItineraryTags.FOODIE, ItineraryTags.RURAL, ItineraryTags.WILDLIFE,
-                ItineraryTags.WELLNESS),
+            tags =
+                listOf(
+                    ItineraryTags.ACTIVE,
+                    ItineraryTags.PHOTOGRAPHY,
+                    ItineraryTags.NATURE,
+                    ItineraryTags.ADVENTURE,
+                    ItineraryTags.FOODIE,
+                    ItineraryTags.RURAL,
+                    ItineraryTags.WILDLIFE,
+                    ItineraryTags.WELLNESS),
             description = null,
             visible = true,
         )

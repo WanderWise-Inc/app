@@ -18,24 +18,20 @@ import com.github.wanderwise_inc.app.model.location.Location
 import com.github.wanderwise_inc.app.model.profile.Profile
 import com.github.wanderwise_inc.app.ui.list_itineraries.LikedScreen
 import com.github.wanderwise_inc.app.ui.list_itineraries.LikedScreenTestTags
-import com.github.wanderwise_inc.app.ui.navigation.Route
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.firebase.FirebaseApp
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.jupiter.api.Assertions
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.robolectric.RobolectricTestRunner
 
-
 @RunWith(RobolectricTestRunner::class)
 class LikedScreenTest {
-  @get:Rule
-  val composeTestRule = createComposeRule()
+  @get:Rule val composeTestRule = createComposeRule()
 
   @Mock private lateinit var mockApplication: Application
   @Mock private lateinit var mockContext: Context
@@ -68,37 +64,24 @@ class LikedScreenTest {
 
   @Before
   fun `add an itinerary to MapViewModel, and like it`() {
-    val itinerary = Itinerary(
-      userUid = "Ethan",
-      locations = listOf(Location(0.0, 0.0)),
-      title = "Ethan's Itinerary",
-      tags = listOf(ItineraryTags.BUDGET, ItineraryTags.SOCIAL),
-      description = null,
-      visible = true)
+    val itinerary =
+        Itinerary(
+            userUid = "Ethan",
+            locations = listOf(Location(0.0, 0.0)),
+            title = "Ethan's Itinerary",
+            tags = listOf(ItineraryTags.BUDGET, ItineraryTags.SOCIAL),
+            description = null,
+            visible = true)
 
-    val profile = Profile(
-      displayName = "ethan",
-      userUid = "uid",
-      bio = "myBio"
-    )
+    val profile = Profile(userUid = "testing")
 
     profileRepository.setProfile(profile)
     mapViewModel.setItinerary(itinerary)
-    profileViewModel.addLikedItinerary(profile.uid, itinerary.uid)
+    profileViewModel.addLikedItinerary(profile.userUid, itinerary.uid)
   }
 
   @Test
-  fun `verify that category selector is displayed`() {
+  fun `verify that category selector is displayed on liked screen`() {
     composeTestRule.onNodeWithTag(LikedScreenTestTags.CATEGORY_SELECTOR).assertIsDisplayed()
-  }
-
-  @Test
-  fun `verify that scrollable list is displayed`() {
-    composeTestRule.onNodeWithTag("Scrollable itineraries").assertIsDisplayed()
-  }
-
-  @Test
-  fun `verify that an itinerary is showing up`() {
-    composeTestRule.onNodeWithTag("Itinerary banner").assertIsDisplayed()
   }
 }

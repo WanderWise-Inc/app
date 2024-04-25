@@ -20,7 +20,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.github.wanderwise_inc.app.R
-import com.google.android.gms.common.SignInButton.ColorScheme
 
 @Composable
 fun SearchBar(onSearchChange: (String) -> Unit) {
@@ -31,15 +30,16 @@ fun SearchBar(onSearchChange: (String) -> Unit) {
         query = s
         onSearchChange(s)
       },
-      placeholder = { Text(text = "Wander where?", color = MaterialTheme.colorScheme.onPrimaryContainer) },
+      placeholder = {
+        Text(text = "Wander where?", color = MaterialTheme.colorScheme.onPrimaryContainer)
+      },
       leadingIcon = {
         Icon( // TODO: make icon appear
             painter = painterResource(id = R.drawable.more_icon),
             contentDescription = null,
             tint = Color.Black,
             modifier =
-                Modifier
-                    .clickable {
+                Modifier.clickable {
                       // TODO: add filters in drop down menu
                     }
                     .padding(2.dp)
@@ -48,8 +48,7 @@ fun SearchBar(onSearchChange: (String) -> Unit) {
       singleLine = true,
       shape = RoundedCornerShape(30.dp),
       modifier =
-          Modifier
-              .background(MaterialTheme.colorScheme.primaryContainer)
+          Modifier.background(MaterialTheme.colorScheme.primaryContainer)
               .fillMaxWidth()
               .padding(5.dp))
 }

@@ -1,4 +1,5 @@
 package com.github.wanderwise_inc.app.ui.theme
+
 import androidx.compose.ui.graphics.Color
 
 val Blue10 = Color(0xff002633)

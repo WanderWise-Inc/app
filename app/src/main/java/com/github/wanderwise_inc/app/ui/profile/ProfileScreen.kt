@@ -5,16 +5,13 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
-
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -35,11 +32,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.github.wanderwise_inc.app.R
-import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.profile.Profile
+import com.github.wanderwise_inc.app.ui.list_itineraries.ItinerariesListScrollable
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
-import com.github.wanderwise_inc.app.ui.list_itineraries.ItinerariesListScrollable
 
 const val PROFILE_SCREEN_TEST_TAG: String = "profile_screen"
 
@@ -49,136 +45,90 @@ fun ProfileScreen(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel
   val currentUid = "0" // FirebaseAuth.getInstance().currentUser!!.uid
   val profile by profileViewModel.getProfile(currentUid).collectAsState(initial = null)
 
-    val userItineraries by
-    mapViewModel.getUserItineraries(currentUid).collectAsState(initial = emptyList())
+  val userItineraries by
+      mapViewModel.getUserItineraries(currentUid).collectAsState(initial = emptyList())
 
-    if (profile != null) {
-      androidx.compose.material.Scaffold(
+  if (profile != null) {
+    androidx.compose.material.Scaffold(
         /*Top bar composable*/
         topBar = {
           TopAppBar(
-            title = {Text("Profile")},
-            actions= {
-              FloatingActionButton(onClick = { /*Go to Edit Profile Screen*/ }) {
-                Image(painter = painterResource(id = R.drawable.settings_icon), contentDescription = "Edit Profile", modifier = Modifier
-                  .requiredWidth(35.dp)
-                  .requiredHeight(35.dp))
-              }
-            },
-            colors = TopAppBarDefaults.topAppBarColors(
-              containerColor = MaterialTheme.colorScheme.primaryContainer,
-              titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-              navigationIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-              actionIconContentColor = MaterialTheme.colorScheme.onSecondary
-            ),
-            modifier = Modifier.padding(bottom = 20.dp))
+              title = { Text("Profile") },
+              actions = {
+                FloatingActionButton(onClick = { /*Go to Edit Profile Screen*/}) {
+                  Image(
+                      painter = painterResource(id = R.drawable.settings_icon),
+                      contentDescription = "Edit Profile",
+                      modifier = Modifier.requiredWidth(35.dp).requiredHeight(35.dp))
+                }
+              },
+              colors =
+                  TopAppBarDefaults.topAppBarColors(
+                      containerColor = MaterialTheme.colorScheme.primaryContainer,
+                      titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                      navigationIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                      actionIconContentColor = MaterialTheme.colorScheme.onSecondary),
+              modifier = Modifier.padding(bottom = 20.dp))
         },
-        modifier = Modifier
-          .fillMaxSize(),
-      ) { innerPadding ->
-        Box(modifier = Modifier
-          .padding(innerPadding)
-          .fillMaxSize(),
-          contentAlignment =  Alignment.TopCenter) {
-          Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            profilePicture(profileViewModel, profile!!, modifier=Modifier.padding(100.dp))
-            username(profile!!, modifier=Modifier.padding(100.dp))
-            WanderScore(profile!!)
-            ItinerariesListScrollable(itineraries = userItineraries,
-              mapViewModel = mapViewModel,
-              profileViewModel = profileViewModel,
-              paddingValues = PaddingValues(8.dp)
-            )
-
+        modifier = Modifier.fillMaxSize(),
+    ) { innerPadding ->
+      Box(
+          modifier = Modifier.padding(innerPadding).fillMaxSize(),
+          contentAlignment = Alignment.TopCenter) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+              profilePicture(profileViewModel, profile!!, modifier = Modifier.padding(100.dp))
+              Username(profile!!, modifier = Modifier.padding(100.dp))
+              WanderScore(profile!!)
+              ItinerariesListScrollable(
+                  itineraries = userItineraries,
+                  mapViewModel = mapViewModel,
+                  profileViewModel = profileViewModel,
+                  paddingValues = PaddingValues(8.dp))
+            }
           }
-        }
-      }
     }
-
+  }
 }
 
-
-
 @Composable
-fun profilePicture(profileViewModel: ProfileViewModel, profile: Profile, modifier:Modifier) {
+fun profilePicture(profileViewModel: ProfileViewModel, profile: Profile, modifier: Modifier) {
   val picture by profileViewModel.getProfilePicture(profile).collectAsState(initial = null)
 
   if (picture != null) {
     Image(
-      painter = BitmapPainter(picture!!.asImageBitmap()), contentDescription = "Profile picture", modifier= Modifier
-        .size(100.dp)
-        .clip(MaterialTheme.shapes.small)
-        .border(BorderStroke(1.dp, Color.Black)),
-      contentScale = ContentScale.FillBounds)
+        painter = BitmapPainter(picture!!.asImageBitmap()),
+        contentDescription = "Profile picture",
+        modifier =
+            Modifier.size(100.dp)
+                .clip(MaterialTheme.shapes.small)
+                .border(BorderStroke(1.dp, Color.Black)),
+        contentScale = ContentScale.FillBounds)
   } else {
     Text("No Picture")
   }
 }
 
-/** @brief scrollable list of itineraries *//*
 @Composable
-fun ItinerariesScrollable(
-    mapViewModel: MapViewModel,
-    profileViewModel: ProfileViewModel,
-    uid: String
-) {
-  val itineraries by mapViewModel.getUserItineraries(uid).collectAsState(initial = emptyList())
-  if (itineraries.isNotEmpty()) {
-    Column {
-      Text("Your Itineraries:")
-      itineraries.forEach { itinerary ->
-        ItineraryBanner(itinerary = itinerary, onBannerClick = {}, onLikeButtonClick = { _, _ -> })
-      }
-    }
-  } else {
-    Text("You have not created any itineraries yet.")
-  }}*/
-
-@Composable
-fun username(profile: Profile, modifier: Modifier) {
-  Text(text = "${profile.displayName}", modifier = Modifier
-    .padding(8.dp),
-    style = MaterialTheme.typography.headlineSmall)
+fun Username(profile: Profile, modifier: Modifier) {
+  Text(
+      text = "${profile.displayName}",
+      modifier = Modifier.padding(8.dp),
+      style = MaterialTheme.typography.headlineSmall)
 }
 
 @Composable
 fun WanderScore(profile: Profile) {
-  Box(modifier=Modifier.background(MaterialTheme.colorScheme.secondary)){
+  Box(modifier = Modifier.background(MaterialTheme.colorScheme.secondary)) {
     Text(text = "WanderScore: Not Implemented Yet")
   }
 }
 
-//@Composable
-//fun ItinerariesScrollable(mapViewModel: MapViewModel, uid: String) {
-//  val itineraries by mapViewModel.getUserItineraries(uid).collectAsState(initial = emptyList())
-//  if (itineraries.isNotEmpty()) {
-//    Column {
-//      Text("Your Itineraries:")
-//      itineraries.forEach { itinerary -> ItineraryBanner(itinerary = itinerary) }
-//    }
-//  } else {
-//    Text("You have not created any itineraries yet.")
-//  }
-//}
-
-@Composable
-fun ItineraryList(itineraries: List<Itinerary>) {
-  LazyColumn {
-    items(itineraries.count()) { it ->
-      ItineraryCard()
-    }
-  }
-}
 @Composable
 fun ItineraryCard() {
-  Card(modifier = Modifier.padding(8.dp))/*onClick = { TODO* OPEN PREVIEW OF ITINERARY}*/
-  {
+  Card(modifier = Modifier.padding(8.dp)) /*onClick = { TODO* OPEN PREVIEW OF ITINERARY}*/ {
     Column {
       Text("Itinerary Name")
       Text("Itinerary Description")
     }
   }
-
 }
-
-
