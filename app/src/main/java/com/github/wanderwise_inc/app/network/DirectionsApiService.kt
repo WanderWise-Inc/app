@@ -13,7 +13,7 @@ interface DirectionsApiService {
   fun getPolylineWayPoints(
       @Query("origin") origin: String,
       @Query("destination") destination: String,
-      @Query("waypoints") vararg waypoints: String,
+      @Query("waypoints") waypoints: List<String>,
       @Query("key") key: String
   ): Call<DirectionsResponseBody>
 }

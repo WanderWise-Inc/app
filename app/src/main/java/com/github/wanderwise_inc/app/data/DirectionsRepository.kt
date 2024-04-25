@@ -17,7 +17,7 @@ class DirectionsRepository(private val directionsApiService: DirectionsApiServic
   fun getPolylineWayPoints(
       origin: String,
       destination: String,
-      vararg waypoints: String,
+      waypoints: List<String>,
       apiKey: String
   ): LiveData<List<LatLng>?> {
     val resultLiveData = MutableLiveData<List<LatLng>?>()

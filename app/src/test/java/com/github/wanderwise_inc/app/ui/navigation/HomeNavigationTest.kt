@@ -30,6 +30,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.runner.RunWith
+import org.mockito.ArgumentMatchers.anyList
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mock
 import org.mockito.Mockito.anyLong
@@ -77,7 +78,7 @@ class HomeNavigationTest {
             mockDirectionsRepository.getPolylineWayPoints(
                 origin = anyString(),
                 destination = anyString(),
-                waypoints = listOf(anyString()).toTypedArray(),
+                waypoints = anyList(),
                 anyString()))
         .thenReturn(mockResonse)
   }

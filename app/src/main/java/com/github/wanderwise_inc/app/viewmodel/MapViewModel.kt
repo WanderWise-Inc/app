@@ -67,7 +67,8 @@ class MapViewModel(
   }
 
   private val _polylinePointsLiveData = MutableLiveData<List<LatLng>>()
-  private val polylinePointsLiveData: LiveData<List<LatLng>> = _polylinePointsLiveData // gettable from view
+  private val polylinePointsLiveData: LiveData<List<LatLng>> =
+      _polylinePointsLiveData // gettable from view
   /**
    * fetches Polyline points encoded as `LatLng` and updates a `LiveData` variable observed by some
    * composable function
@@ -88,7 +89,7 @@ class MapViewModel(
               origin = originEncoded,
               destination = destinationEncoded,
               apiKey = key,
-              waypoints = waypoints.toTypedArray())
+              waypoints = waypoints)
           .observeForever { response -> _polylinePointsLiveData.value = response ?: listOf() }
     }
   }

@@ -24,6 +24,7 @@ import org.junit.Assert.assertNotEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.mockito.ArgumentMatchers.anyList
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mock
 import org.mockito.Mockito
@@ -147,7 +148,7 @@ class MapViewModelTest {
             mockApiService.getPolylineWayPoints(
                 origin = anyString(),
                 destination = anyString(),
-                waypoints = listOf(anyString()).toTypedArray(),
+                waypoints = anyList(),
                 key = anyString()))
         .thenReturn(mockCall)
 
