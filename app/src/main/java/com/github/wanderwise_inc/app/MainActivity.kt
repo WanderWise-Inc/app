@@ -28,7 +28,6 @@ import com.google.android.gms.location.LocationServices
 class MainActivity : ComponentActivity() {
   private val homeViewModel by viewModels<HomeViewModel>()
 
-  private val itineraryRepository = ItineraryRepositoryTestImpl()
   private val directionsApiService = ApiServiceFactory.createDirectionsApiService()
   private val directionsRepository = DirectionsRepository(directionsApiService)
   private lateinit var mapViewModel: MapViewModel
@@ -54,9 +53,6 @@ class MainActivity : ComponentActivity() {
     val profileRepository = ProfileRepositoryTestImpl()
     val imageRepository = ImageRepositoryTestImpl(application)
     profileViewModel = ProfileViewModel(profileRepository, imageRepository)
-
-    val placeReader = PlacesReader(null)
-    val locations = placeReader.readFromString()
 
     setContent {
       WanderWiseTheme {
