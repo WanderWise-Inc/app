@@ -1,10 +1,8 @@
 package com.github.wanderwise_inc.app
 
-
 // import com.github.wanderwise_inc.app.data.ImageRepositoryTestImpl
 
 import android.Manifest
-
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -16,18 +14,17 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.app.ActivityCompat
 import androidx.navigation.compose.rememberNavController
+import com.github.wanderwise_inc.app.data.DirectionsRepository
 import com.github.wanderwise_inc.app.data.ImageRepositoryImpl
 import com.github.wanderwise_inc.app.data.ItineraryRepositoryTestImpl
 import com.github.wanderwise_inc.app.data.ProfileRepositoryImpl
-import com.github.wanderwise_inc.app.viewmodel.UserLocationClient
-import com.google.android.gms.location.LocationServices
-import com.github.wanderwise_inc.app.data.DirectionsRepository
-
 import com.github.wanderwise_inc.app.network.ApiServiceFactory
 import com.github.wanderwise_inc.app.ui.navigation.graph.RootNavigationGraph
 import com.github.wanderwise_inc.app.ui.theme.WanderWiseTheme
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
+import com.github.wanderwise_inc.app.viewmodel.UserLocationClient
+import com.google.android.gms.location.LocationServices
 import com.google.firebase.storage.FirebaseStorage
 
 class MainActivity : ComponentActivity() {
