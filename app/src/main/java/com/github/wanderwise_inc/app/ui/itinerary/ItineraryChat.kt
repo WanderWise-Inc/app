@@ -17,6 +17,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -45,7 +46,8 @@ fun ItineraryChat() {
                     }
                 }
             )
-        }
+        },
+        containerColor = Color.White
     ) { innerPadding ->
         Column(
             modifier = Modifier.padding(innerPadding)
@@ -65,7 +67,8 @@ fun MessagesList(messages: List<String>, listState: LazyListState) {
         state = listState,
         modifier = Modifier
             .verticalScroll(rememberScrollState())
-            .height(1000.dp)
+            .height(LocalConfiguration.current.screenHeightDp.dp)
+            .fillMaxWidth()
     ) {
         items(messages.size) { index ->
             Box(
@@ -74,7 +77,7 @@ fun MessagesList(messages: List<String>, listState: LazyListState) {
                     .padding(horizontal = 8.dp, vertical = 4.dp)
             ) {
                 // Bubble style for messages
-                MessageBubble(text = messages[index], isUserMessage = index % 2 == 0)  // Assume alternating messages for demo
+                MessageBubble(text = messages[index], isUserMessage = true)  // Assume alternating messages for demo
             }
         }
     }
@@ -110,16 +113,16 @@ fun InputBar(
             onValueChange = onTextChange,
             modifier = Modifier.weight(1f),
             placeholder = { Text("Type a message...") },
+            trailingIcon = { Icon(imageVector = Icons.AutoMirrored.Default.Send, contentDescription = null) },
             keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
             keyboardActions = KeyboardActions(onDone = { onSend() }),
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = Color(0xFFDCF8C6),
+                unfocusedContainerColor = Color(0xFFDCF8C6),
+                focusedIndicatorColor = Color.DarkGray,
+                unfocusedIndicatorColor = Color.DarkGray
+            )
         )
-        Button(
-            onClick = { onSend() },
-            modifier = Modifier.padding(start = 8.dp),
-            enabled = textState.isNotBlank()
-        ) {
-            Icon(imageVector = Icons.AutoMirrored.Default.Send, contentDescription = null)
-        }
     }
 }
 
