@@ -50,6 +50,7 @@ fun DisplayLikedItineraries(mapViewModel: MapViewModel, profileViewModel: Profil
   val uid = FirebaseAuth.getInstance().uid!!
   var selectedIndex by remember { mutableIntStateOf(0) }
   var searchQuery by remember { mutableStateOf("") }
+    var priceRange by remember { mutableStateOf(0f) }
 
   val itineraryUids by profileViewModel.getLikedItineraries(uid).collectAsState(initial = listOf())
   val itineraries by
@@ -60,7 +61,7 @@ fun DisplayLikedItineraries(mapViewModel: MapViewModel, profileViewModel: Profil
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxWidth()) {
-              SearchBar(onSearchChange = { searchQuery = it })
+            SearchBar(onSearchChange = { searchQuery = it }, onPriceChange = { priceRange = it })
               CategorySelector(
                   selectedIndex = selectedIndex,
                   categoriesList = categoriesList,

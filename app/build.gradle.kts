@@ -230,6 +230,7 @@ dependencies {
     // ----------       Mockito ------------
     testImplementation("org.mockito.kotlin:mockito-kotlin:5.3.1")
     androidTestImplementation("org.mockito.kotlin:mockito-kotlin:5.3.1")
+    testImplementation ("io.mockk:mockk:1.12.0")
 }
 
 tasks.register("jacocoTestReport", JacocoReport::class) {

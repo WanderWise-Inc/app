@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
@@ -18,35 +19,77 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.github.wanderwise_inc.app.R
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.RangeSlider
+import androidx.compose.material3.Slider
+import androidx.compose.ui.platform.testTag
 
 @Composable
-fun SearchBar(onSearchChange: (String) -> Unit) {
-  var query by remember { mutableStateOf("") }
-  OutlinedTextField(
-      value = query,
-      onValueChange = { s: String ->
-        query = s
-        onSearchChange(s)
-      },
-      placeholder = { Text(text = "Wander where?") },
-      leadingIcon = {
-        Icon( // TODO: make icon appear
-            painter = painterResource(id = R.drawable.les_controles),
-            contentDescription = null,
-            tint = Color.Black,
-            modifier =
-                Modifier.clickable {
-                      // TODO: add filters in drop down menu
+
+fun SearchBar(onSearchChange: (String) -> Unit, onPriceChange: (Float) -> Unit) {
+    var query by remember { mutableStateOf("") }
+    var isDropdownOpen by remember { mutableStateOf(false) }
+ var sliderPosition by remember { mutableStateOf(0f .. 100f) }
+    var sliderPositionTime by remember { mutableStateOf(0f .. 24f) }
+
+
+    OutlinedTextField(
+        value = query,
+        onValueChange = { s: String ->
+            query = s
+            onSearchChange(s)
+        },
+        placeholder = { Text(text = "Wander where?") },
+        leadingIcon = {
+            Icon(
+                painter = painterResource(id = R.drawable.les_controles),
+                contentDescription = null,
+                tint = Color.Black,
+                modifier = Modifier
+                    .clickable {
+                        isDropdownOpen = true
                     }
                     .padding(2.dp)
                     .size(30.dp)
-                    )
-      },
-      singleLine = true,
-      shape = RoundedCornerShape(30.dp),
-      modifier =
-          Modifier
-              // .padding(5.dp)
-              .fillMaxWidth()
-              .padding(5.dp))
+            )
+        },
+        singleLine = true,
+        shape = RoundedCornerShape(30.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(5.dp)
+            .testTag("SearchBar")
+    )
+
+    DropdownMenu(
+        expanded = isDropdownOpen,
+        onDismissRequest = { isDropdownOpen = false },
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Text("How much do I want to spend ?")
+        RangeSlider(
+            value = sliderPosition,
+            steps = 50,
+            onValueChange = { range ->
+                sliderPosition = range },
+            valueRange = 0f..100f, // Adjust this range according to your needs
+            onValueChangeFinished = {
+                //launch something
+            },
+        )
+        Text(text = sliderPosition.toString())
+
+        Text("How Long to I want to wander ?")
+        RangeSlider(
+            value = sliderPositionTime,
+            steps = 24,
+            onValueChange = { range ->
+                sliderPositionTime = range },
+            valueRange = 0f..24f, // Adjust this range according to your needs
+            onValueChangeFinished = {
+                //launch something
+            },
+        )
+        Text(text = sliderPositionTime.toString())
+    }
 }

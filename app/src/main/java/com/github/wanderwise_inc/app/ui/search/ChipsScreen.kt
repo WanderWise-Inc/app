@@ -19,7 +19,7 @@ fun ChipsScreen() {
     Column(Modifier.fillMaxSize()) {
 
 
-        Text(text = "Filter Chip", fontSize = 24.sp, fontWeight = FontWeight.Bold)
+        Text(text = "Filter Your Itinerary", fontSize = 24.sp, fontWeight = FontWeight.Bold)
         FilterChip()
         //ChipWithSubItems(chipLabel = "Price Range", chipItems = listOf("0-20$", "20-40$", "40-+$"))
         Spacer(modifier = Modifier.padding(vertical = 10.dp))
