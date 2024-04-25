@@ -11,9 +11,11 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.app.ActivityCompat
 import androidx.navigation.compose.rememberNavController
+import com.github.wanderwise_inc.app.data.DirectionsRepository
 import com.github.wanderwise_inc.app.data.ImageRepositoryTestImpl
 import com.github.wanderwise_inc.app.data.ItineraryRepositoryTestImpl
 import com.github.wanderwise_inc.app.data.ProfileRepositoryTestImpl
+import com.github.wanderwise_inc.app.network.ApiServiceFactory
 import com.github.wanderwise_inc.app.ui.navigation.graph.RootNavigationGraph
 import com.github.wanderwise_inc.app.ui.theme.WanderWiseTheme
 import com.github.wanderwise_inc.app.viewmodel.HomeViewModel
@@ -25,6 +27,8 @@ import com.google.android.gms.location.LocationServices
 class MainActivity : ComponentActivity() {
   private val homeViewModel by viewModels<HomeViewModel>()
 
+  private val directionsApiService = ApiServiceFactory.createDirectionsApiService()
+  private val directionsRepository = DirectionsRepository(directionsApiService)
   private lateinit var mapViewModel: MapViewModel
 
   private lateinit var profileViewModel: ProfileViewModel
@@ -43,8 +47,8 @@ class MainActivity : ComponentActivity() {
     val userLocationClient =
         UserLocationClient(
             applicationContext, LocationServices.getFusedLocationProviderClient(applicationContext))
-    mapViewModel = MapViewModel(itineraryRepository, userLocationClient)
 
+    mapViewModel = MapViewModel(itineraryRepository, directionsRepository, userLocationClient)
     val profileRepository = ProfileRepositoryTestImpl()
     val imageRepository = ImageRepositoryTestImpl(application)
     profileViewModel = ProfileViewModel(profileRepository, imageRepository)

@@ -1,16 +1,25 @@
 package com.github.wanderwise_inc.app.viewmodel
 
 import android.location.Location
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.github.wanderwise_inc.app.BuildConfig
+import com.github.wanderwise_inc.app.data.DirectionsRepository
 import com.github.wanderwise_inc.app.data.ItineraryRepository
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryPreferences
+import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 
+private const val DEBUG_TAG: String = "MAP_VIEWMODEL"
 /** @brief ViewModel class for providing `Location`s and `Itinerary`s to the map UI */
 class MapViewModel(
     private val itineraryRepository: ItineraryRepository,
-    private val userLocationClient: UserLocationClient
+    private val directionsRepository: DirectionsRepository,
+    private val userLocationClient: UserLocationClient,
 ) : ViewModel() {
   /** @return a flow of all public itineraries */
   fun getAllPublicItineraries(): Flow<List<Itinerary>> {
@@ -55,6 +64,38 @@ class MapViewModel(
   /** @brief deletes an itinerary from the database */
   fun deleteItinerary(itinerary: Itinerary) {
     itineraryRepository.deleteItinerary(itinerary)
+  }
+
+  private val _polylinePointsLiveData = MutableLiveData<List<LatLng>>()
+  private val polylinePointsLiveData: LiveData<List<LatLng>> =
+      _polylinePointsLiveData // gettable from view
+  /**
+   * fetches Polyline points encoded as `LatLng` and updates a `LiveData` variable observed by some
+   * composable function
+   */
+  fun fetchPolylineLocations(itinerary: Itinerary) {
+    assert(itinerary.locations.size >= 2)
+    val origin = itinerary.locations.first()
+    val destination = itinerary.locations.last()
+    val originEncoded = "${origin.lat}, ${origin.long}"
+    val destinationEncoded = "${destination.lat}, ${destination.long}"
+
+    val waypoints = itinerary.locations.drop(1).dropLast(1).map { "${it.lat},${it.long}" }
+
+    val key = BuildConfig.MAPS_API_KEY
+    viewModelScope.launch {
+      directionsRepository
+          .getPolylineWayPoints(
+              origin = originEncoded,
+              destination = destinationEncoded,
+              apiKey = key,
+              waypoints = waypoints)
+          .observeForever { response -> _polylinePointsLiveData.value = response ?: listOf() }
+    }
+  }
+
+  fun getPolylinePointsLiveData(): LiveData<List<LatLng>> {
+    return polylinePointsLiveData
   }
 
   /** @brief get a Flow of the user location updated every second */

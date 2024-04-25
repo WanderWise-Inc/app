@@ -10,8 +10,10 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
@@ -27,6 +29,7 @@ import com.google.maps.android.compose.CameraPositionState
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
+import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
 
 /** @brief previews an itinerary */
@@ -37,6 +40,9 @@ fun PreviewItineraryScreen(itinerary: Itinerary, mapViewModel: MapViewModel) {
   val cameraPositionState = rememberCameraPositionState {
     position = CameraPosition.fromLatLngZoom(itinerary.computeCenterOfGravity().toLatLng(), 13f)
   }
+
+  LaunchedEffect(Unit) { mapViewModel.fetchPolylineLocations(itinerary) }
+  val polylinePoints by mapViewModel.getPolylinePointsLiveData().observeAsState()
 
   Scaffold(
       bottomBar = { ItineraryBanner(itinerary = itinerary) },
@@ -58,12 +64,14 @@ fun PreviewItineraryScreen(itinerary: Itinerary, mapViewModel: MapViewModel) {
                     state = MarkerState(position = location.toLatLng()),
                     title = location.title ?: "",
                 )
+                if (polylinePoints != null) {
+                  Polyline(points = polylinePoints!!, color = Color.Red)
+                }
               }
             }
       }
 }
 
-/** @brief button to center on the user position */
 @Composable
 fun CenterButton(cameraPositionState: CameraPositionState, currentLocation: Location?) {
   FloatingActionButton(

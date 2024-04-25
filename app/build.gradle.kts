@@ -143,6 +143,9 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     debugImplementation("androidx.customview:customview-poolingcontainer:1.0.0")*/
 
+    // for live data
+    // implementation ("androidx.compose.runtime:runtime-livedata:2.7.0")
+
     // ------------------- Firebase -------------------
     implementation("com.google.firebase:firebase-database-ktx:20.3.0")
     implementation("com.google.firebase:firebase-firestore:24.10.0")
@@ -230,6 +233,17 @@ dependencies {
     // ----------       Mockito ------------
     testImplementation("org.mockito.kotlin:mockito-kotlin:5.3.1")
     androidTestImplementation("org.mockito.kotlin:mockito-kotlin:5.3.1")
+
+    // ----------       Retrofit ------------
+    // Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    // Retrofit with Scalar Converter
+    implementation("com.squareup.retrofit2:converter-scalars:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    implementation("androidx.compose.runtime:runtime-livedata:1.0.0-beta01")
+
+
 }
 
 tasks.register("jacocoTestReport", JacocoReport::class) {
