@@ -42,7 +42,7 @@ const val PROFILE_SCREEN_TEST_TAG: String = "profile_screen"
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel) {
-  val currentUid = "0" // FirebaseAuth.getInstance().currentUser!!.uid
+  val currentUid = "testing" // FirebaseAuth.getInstance().currentUser!!.uid
   val profile by profileViewModel.getProfile(currentUid).collectAsState(initial = null)
 
   val userItineraries by
