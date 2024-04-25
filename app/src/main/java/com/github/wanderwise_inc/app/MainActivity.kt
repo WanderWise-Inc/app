@@ -15,8 +15,6 @@ import com.github.wanderwise_inc.app.data.DirectionsRepository
 import com.github.wanderwise_inc.app.data.ImageRepositoryTestImpl
 import com.github.wanderwise_inc.app.data.ItineraryRepositoryTestImpl
 import com.github.wanderwise_inc.app.data.ProfileRepositoryTestImpl
-import com.github.wanderwise_inc.app.model.location.Itinerary
-import com.github.wanderwise_inc.app.model.location.ItineraryTags
 import com.github.wanderwise_inc.app.model.location.PlacesReader
 import com.github.wanderwise_inc.app.network.ApiServiceFactory
 import com.github.wanderwise_inc.app.ui.navigation.graph.RootNavigationGraph
@@ -59,15 +57,6 @@ class MainActivity : ComponentActivity() {
 
     val placeReader = PlacesReader(null)
     val locations = placeReader.readFromString()
-
-    val itinerary =
-        Itinerary(
-            userUid = "",
-            locations = locations,
-            title = "San Francisco Bike Itinerary",
-            tags = listOf(ItineraryTags.CULTURAL, ItineraryTags.NATURE, ItineraryTags.BUDGET),
-            description = "A 3-day itinerary to explore the best of San Francisco on a bike.",
-            visible = true)
 
     setContent {
       WanderWiseTheme {
