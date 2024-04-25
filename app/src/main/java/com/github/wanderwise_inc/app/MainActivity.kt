@@ -1,6 +1,9 @@
 package com.github.wanderwise_inc.app
 
+
 // import com.github.wanderwise_inc.app.data.ImageRepositoryTestImpl
+
+import android.Manifest
 
 import android.os.Bundle
 import android.util.Log
@@ -11,10 +14,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import androidx.core.app.ActivityCompat
 import androidx.navigation.compose.rememberNavController
 import com.github.wanderwise_inc.app.data.ImageRepositoryImpl
 import com.github.wanderwise_inc.app.data.ItineraryRepositoryTestImpl
 import com.github.wanderwise_inc.app.data.ProfileRepositoryImpl
+import com.github.wanderwise_inc.app.viewmodel.UserLocationClient
+import com.google.android.gms.location.LocationServices
+import com.github.wanderwise_inc.app.data.DirectionsRepository
+
+import com.github.wanderwise_inc.app.network.ApiServiceFactory
 import com.github.wanderwise_inc.app.ui.navigation.graph.RootNavigationGraph
 import com.github.wanderwise_inc.app.ui.theme.WanderWiseTheme
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
@@ -22,9 +31,10 @@ import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.firebase.storage.FirebaseStorage
 
 class MainActivity : ComponentActivity() {
-  private val itineraryRepository = ItineraryRepositoryTestImpl()
-  private val mapViewModel = MapViewModel(itineraryRepository)
   private lateinit var imageRepository: ImageRepositoryImpl
+  private val directionsApiService = ApiServiceFactory.createDirectionsApiService()
+  private val directionsRepository = DirectionsRepository(directionsApiService)
+  private lateinit var mapViewModel: MapViewModel
 
   // declaration for use of storage
   private val storage = FirebaseStorage.getInstance()
@@ -32,12 +42,26 @@ class MainActivity : ComponentActivity() {
 
   private lateinit var profileViewModel: ProfileViewModel
 
-  // private lateinit var analytics : FirebaseAnalytics
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
     val profileRepository = ProfileRepositoryImpl()
     imageRepository = ImageRepositoryImpl(imageLauncher, imageReference, null)
+
+    // Ask for location permissions
+    ActivityCompat.requestPermissions(
+        this,
+        arrayOf(
+            Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION),
+        0)
+
+    val itineraryRepository = ItineraryRepositoryTestImpl()
+    val userLocationClient =
+        UserLocationClient(
+            applicationContext, LocationServices.getFusedLocationProviderClient(applicationContext))
+
+    mapViewModel = MapViewModel(itineraryRepository, directionsRepository, userLocationClient)
+
     profileViewModel = ProfileViewModel(profileRepository, imageRepository)
 
     setContent {
