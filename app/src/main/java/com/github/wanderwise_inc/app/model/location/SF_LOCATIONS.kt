@@ -7,6 +7,27 @@ const val SF_LOCATIONS =
     {
         "geometry": {
             "location": {
+                "lat": 37.7557557,
+                "lng": -122.4208508
+            },
+            "viewport": {
+                "northeast": {
+                    "lat": 37.7571005802915,
+                    "lng": -122.4195916697085
+                },
+                "southwest": {
+                    "lat": 37.75440261970851,
+                    "lng": -122.4222896302915
+                }
+            }
+        },
+        "name": "Valencia Cyclery",
+        "rating": 4.2,
+        "vicinity": "1077 Valencia Street, San Francisco"
+    },
+    {
+        "geometry": {
+            "location": {
                 "lat": 37.80764569999999,
                 "lng": -122.4195251
             },
