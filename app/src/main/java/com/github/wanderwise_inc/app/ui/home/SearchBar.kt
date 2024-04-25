@@ -25,6 +25,10 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.github.wanderwise_inc.app.R
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.RangeSlider
+import androidx.compose.material3.Slider
+import androidx.compose.ui.platform.testTag
 
 @Composable
 

@@ -238,6 +238,7 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
     implementation("androidx.compose.runtime:runtime-livedata:1.0.0-beta01")
+    testImplementation ("io.mockk:mockk:1.12.0")
 }
 
 tasks.register("jacocoTestReport", JacocoReport::class) {
