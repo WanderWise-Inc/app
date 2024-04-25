@@ -39,6 +39,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -68,7 +69,8 @@ fun ItineraryBanner(
           ),
       elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
       shape = RoundedCornerShape(13.dp),
-      onClick = { onBannerClick() }) {
+      onClick = { onBannerClick() },
+      modifier = Modifier.testTag("Itinerary banner")) {
         Column(
             modifier =
                 Modifier.background(MaterialTheme.colorScheme.primaryContainer)
@@ -181,83 +183,4 @@ fun ItineraryBanner(
               }
             }
       }
-}
-
-/**
- * @param onLikeClick callback that is called when the like button is pressed
- * @brief pretty display for an itinerary
- */
-@Composable
-@Deprecated("Old implementation")
-fun ItineraryBanner__(
-    onLikeClick: (Itinerary, Boolean) -> Unit,
-    isLikedInitially: Boolean,
-    itinerary: Itinerary,
-) {
-  Box(
-      modifier =
-          Modifier.background(MaterialTheme.colorScheme.background)
-              .height(200.dp)
-              .clip(RoundedCornerShape(16.dp)),
-      contentAlignment = Alignment.Center,
-  ) {
-    Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically) {
-          // Left side text (title, description, time, ...)
-          Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(
-                text = itinerary.title,
-                color = MaterialTheme.colorScheme.primary,
-                fontFamily = FontFamily.Monospace,
-                fontSize = 20.sp,
-                modifier = Modifier.padding(10.dp) // Adjust padding as needed
-                )
-            Text(
-                text = itinerary.description ?: "",
-                color = MaterialTheme.colorScheme.secondary,
-                fontFamily = FontFamily.Monospace,
-                fontSize = 10.sp,
-                modifier = Modifier.padding(10.dp) // Adjust padding as needed
-                )
-          }
-
-          // Right side information (stars, likes, tags)
-          Column(
-              verticalArrangement =
-                  Arrangement.Bottom) { // Must change arrangement when adding more info
-                var liked by remember { mutableStateOf(isLikedInitially) }
-                var numLikes by remember { mutableIntStateOf(itinerary.numLikes) }
-
-                OutlinedButton(
-                    onClick = {
-                      onLikeClick(itinerary, liked)
-
-                      if (!liked) { // The Itinerary is already liked by the current user
-                        numLikes++
-                        Log.d("LIKES_INCREMENTED", "number of likes = $numLikes")
-                      } else {
-                        numLikes--
-                        Log.d("LIKES_DECREMENTED", "number of likes = $numLikes")
-                      }
-                      liked = !liked
-                    },
-                    border = BorderStroke(0.dp, MaterialTheme.colorScheme.background)) {
-                      Box(modifier = Modifier.size(30.dp), contentAlignment = Alignment.Center) {
-                        val alpha =
-                            if (liked) {
-                              1f
-                            } else {
-                              0.5f
-                            }
-                        Image(
-                            painter = painterResource(id = R.drawable.liked_icon),
-                            contentDescription = "Liked button fow Itinerary",
-                            alpha = alpha)
-                        Text(text = numLikes.toString(), modifier = Modifier.alpha(alpha))
-                      }
-                    }
-              }
-        }
-  }
 }
