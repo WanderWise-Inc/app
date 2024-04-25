@@ -9,22 +9,37 @@ import com.github.wanderwise_inc.app.model.location.Location
 import junit.framework.TestCase.assertEquals
 import kotlin.random.Random
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertNotEquals
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import org.mockito.Mock
+import org.mockito.Mockito
+import org.mockito.Mockito.anyLong
+import org.mockito.Mockito.`when`
+import org.mockito.junit.MockitoJUnit
+import org.mockito.junit.MockitoRule
 
 /** @brief test class for mapview model */
 class MapViewModelTest {
+
+  @get:Rule val mockitoRule: MockitoRule = MockitoJUnit.rule()
+
+  @Mock private lateinit var userLocationClient: UserLocationClient
+
   private lateinit var itineraryRepository: ItineraryRepository
   private lateinit var mapViewModel: MapViewModel
-  // helper function for generating random latitude and longitude...
-  fun randomLat(): Double = Random.nextDouble(-90.0, 90.0)
 
-  fun randomLon(): Double = Random.nextDouble(-180.0, 180.0)
+  // helper function for generating random latitude and longitude...
+  private fun randomLat(): Double = Random.nextDouble(-90.0, 90.0)
+
+  private fun randomLon(): Double = Random.nextDouble(-180.0, 180.0)
 
   // helper function for generating random locations
-  fun randomLocations(size: Int): List<Location> {
+  private fun randomLocations(size: Int): List<Location> {
     // helper function for generating random locations
     val locations = mutableListOf<Location>()
     for (i in 0 until size) locations.add(Location(randomLat(), randomLon()))
@@ -57,10 +72,13 @@ class MapViewModelTest {
           description = null,
           visible = true)
 
+  private val epflLat = 46.519126741544575
+  private val epflLon = 6.5676006970802145
+
   @Before
   fun setup() {
     itineraryRepository = ItineraryRepositoryTestImpl()
-    mapViewModel = MapViewModel(itineraryRepository)
+    mapViewModel = MapViewModel(itineraryRepository, userLocationClient)
   }
 
   @Test
@@ -188,5 +206,19 @@ class MapViewModelTest {
 
     val secondQuery = mapViewModel.getAllPublicItineraries().first()
     assertEquals(listOf<Itinerary>(), secondQuery)
+  }
+
+  @Test
+  fun `getUserLocation returns a flow containing the user location`() = runBlocking {
+    val epflLocation = Mockito.mock(android.location.Location::class.java)
+    epflLocation.latitude = epflLat
+    epflLocation.longitude = epflLon
+
+    `when`(userLocationClient.getLocationUpdates(anyLong())).thenReturn(flow { emit(epflLocation) })
+
+    val userLocationFlow = mapViewModel.getUserLocation()
+    val emittedLocation = userLocationFlow.first()
+
+    assertEquals(epflLocation, emittedLocation)
   }
 }
