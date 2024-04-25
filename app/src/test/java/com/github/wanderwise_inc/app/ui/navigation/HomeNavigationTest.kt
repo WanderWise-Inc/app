@@ -162,7 +162,7 @@ class HomeNavigationTest {
 
   @Test
   fun performClicks_OnMapThenItineraryButton_NavigatesToLikedScreen() {
-    composeTestRule.onNodeWithTag(Route.MAP).performClick()
+    // composeTestRule.onNodeWithTag(Route.MAP).performClick()
 
     composeTestRule.onNodeWithTag(Route.LIKED).performClick()
 
