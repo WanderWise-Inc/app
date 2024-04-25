@@ -10,7 +10,7 @@ import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.first
 
 interface SignInRepository {
-  public suspend fun signIn(
+  suspend fun signIn(
       result: FirebaseAuthUIAuthenticationResult,
       navController: NavController,
       profileViewModel: ProfileViewModel,
@@ -33,10 +33,13 @@ class SignInRepositoryImpl : SignInRepository {
     } else {
       // If the user is not null, we must check if this user is already in the database,
       // in which case we will not add it again
+      // ACTIVITY.RESULT_OK == -1
       if (resultCode == -1) {
-        // Get the user from database (async function)
+        // Get the user from database (function that returns a flow)
         val currentProfile = profileViewModel.getProfile(user.uid).first()
 
+        // User was already present in the database, in which case we only
+        // navigate to the Home page
         if (currentProfile != null) {
           Log.d("USERS", "USER ALREADY IN DATABASE")
           navController.navigate(Graph.HOME)
@@ -56,7 +59,7 @@ class SignInRepositoryImpl : SignInRepository {
                   bio = description,
                   profilePicture = user.photoUrl)
 
-          // Trying to set the user
+          // We set the user to the database
           profileViewModel.setProfile(newProfile)
           navController.navigate(Graph.HOME)
         }

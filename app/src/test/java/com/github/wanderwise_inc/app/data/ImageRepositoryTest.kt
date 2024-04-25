@@ -69,6 +69,25 @@ class ImageRepositoryTest {
   }
 
   @Test
+  fun `get current file should return null if the currentFile is null`() {
+    imageRepositoryImpl.setCurrentFile(null)
+    assertNull(imageRepositoryImpl.getCurrentFile())
+  }
+
+  @Test
+  fun `get current file should return the currentFile if it isn't null`() {
+    imageRepositoryImpl.setCurrentFile(uri)
+    assertNotNull(imageRepositoryImpl.getCurrentFile())
+  }
+
+  @Test
+  fun `launch activity should called the launch function with the intent`() {
+    val it = Intent()
+    imageRepositoryImpl.launchActivity(it)
+    verify(activityLauncher).launch(it)
+  }
+
+  @Test
   fun `upload image should correctly store the Uri in storage`() {
     val testPath = "testPath"
 

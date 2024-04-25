@@ -56,7 +56,6 @@ fun ProfileScreen(
           }
 
       Text(text = "Hello ${profile!!.displayName}!\nprofile picture: ")
-      Log.d("CRASHED", "BEFORE PROFILE PICTURE")
       ProfilePicture(profileViewModel, profile!!, imageRepository)
       ItinerariesScrollable(mapViewModel, currentUid)
     }

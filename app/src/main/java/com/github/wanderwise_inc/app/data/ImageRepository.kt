@@ -45,23 +45,6 @@ interface ImageRepository {
   fun getCurrentFile(): Uri?
 }
 
-/** test image repository... Always returns the same static image resource */
-/*class ImageRepositoryTestImpl(private val application: Application) : ImageRepository {
-  override fun fetchImage(imageUri: Uri?): Flow<Bitmap> {
-    return flow {
-      // that app logo image from bootcamp. Doesn't matter much at this point in time
-      val bitmap =
-          BitmapFactory.decodeResource(
-              application.applicationContext.resources, R.drawable.app_logo_figma)
-      emit(bitmap)
-    }
-  }
-
-  override fun storeImage(imageUri: Uri) {
-    TODO("Not yet implemented")
-  }
-}*/
-
 /** A class implementation of the Image Repository */
 class ImageRepositoryImpl(
     private val activityLauncher: ActivityResultLauncher<Intent>,
@@ -102,19 +85,21 @@ class ImageRepositoryImpl(
   }*/
 
   /**
-   * Fetch image Function. This function will fetch the profile picture
+   * Fetch image Function. This function will fetch the profile picture from the Storage at a given
+   * path
    *
    * @return a flow of the bitMap representation of the profile picture
    */
   override fun fetchImage(pathToProfilePic: String): Flow<Bitmap?> {
     return flow {
       if (pathToProfilePic == "") {
+        // the path is empty, there should be no profilePicture at this path
         emit(null)
       } else {
-        // val storageRef = imageReference
         val profilePictureRef = imageReference.child("images/${pathToProfilePic}")
 
         try {
+          // the byte array that is at the given path (if any)
           val byteResult =
               suspendCancellableCoroutine<ByteArray?> { continuation ->
                 profilePictureRef
@@ -127,7 +112,7 @@ class ImageRepositoryImpl(
                     }
               }
 
-          // Decode bitmap if bytes are not null
+          // Decode bitmap if byte are is not null
           val bitmap = byteResult?.let { BitmapFactory.decodeByteArray(it, 0, it.size) }
 
           emit(bitmap) // Emit bitmap
@@ -206,6 +191,7 @@ class ImageRepositoryImpl(
     currentFile = uri
   }
 
+  /** @return the currentFile */
   override fun getCurrentFile(): Uri? {
     return currentFile
   }
