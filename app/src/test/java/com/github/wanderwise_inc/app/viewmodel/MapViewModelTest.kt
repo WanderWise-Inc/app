@@ -1,8 +1,5 @@
 package com.github.wanderwise_inc.app.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.github.wanderwise_inc.app.BuildConfig
 import com.github.wanderwise_inc.app.data.DirectionsRepository
 import com.github.wanderwise_inc.app.data.ItineraryRepository
 import com.github.wanderwise_inc.app.data.ItineraryRepositoryTestImpl
@@ -12,37 +9,40 @@ import com.github.wanderwise_inc.app.model.location.ItineraryTags
 import com.github.wanderwise_inc.app.model.location.Location
 import com.github.wanderwise_inc.app.network.DirectionsApiService
 import com.github.wanderwise_inc.app.network.DirectionsResponseBody
-import com.google.android.gms.maps.model.LatLng
 import junit.framework.TestCase.assertEquals
+import kotlin.random.Random
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlin.random.Random
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.advanceUntilIdle
-import kotlinx.coroutines.test.createTestCoroutineScope
-import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
-import kotlinx.coroutines.withContext
 import okhttp3.Request
 import okio.Timeout
 import org.junit.Assert.assertNotEquals
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mock
+import org.mockito.Mockito
+import org.mockito.Mockito.anyLong
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
-import org.mockito.kotlin.anyArray
-import org.mockito.kotlin.anyVararg
-import org.mockito.kotlin.whenever
+import org.mockito.junit.MockitoJUnit
+import org.mockito.junit.MockitoRule
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 /** @brief test class for mapview model */
 class MapViewModelTest {
+
+  @get:Rule val mockitoRule: MockitoRule = MockitoJUnit.rule()
+
+  @Mock private lateinit var userLocationClient: UserLocationClient
+
   private lateinit var itineraryRepository: ItineraryRepository
   @Mock private lateinit var mockApiService: DirectionsApiService
   @Mock private lateinit var directionsRepository: DirectionsRepository
@@ -112,51 +112,54 @@ class MapViewModelTest {
 
     mockApiService = mock(DirectionsApiService::class.java)
 
-    val mockCall = object : Call<DirectionsResponseBody> {
-      override fun enqueue(callback: Callback<DirectionsResponseBody>) {
-        // Simulate a successful response
-        callback.onResponse(this, Response.success(mockResponse))
-      }
+    val mockCall =
+        object : Call<DirectionsResponseBody> {
+          override fun enqueue(callback: Callback<DirectionsResponseBody>) {
+            // Simulate a successful response
+            callback.onResponse(this, Response.success(mockResponse))
+          }
 
-      // Other overridden methods can be added as necessary for your test
-      override fun isExecuted(): Boolean = false
+          // Other overridden methods can be added as necessary for your test
+          override fun isExecuted(): Boolean = false
 
-      override fun clone(): Call<DirectionsResponseBody> = this
+          override fun clone(): Call<DirectionsResponseBody> = this
 
-      override fun execute(): Response<DirectionsResponseBody> {
-        throw UnsupportedOperationException("execute() is not supported for async calls")
-      }
+          override fun execute(): Response<DirectionsResponseBody> {
+            throw UnsupportedOperationException("execute() is not supported for async calls")
+          }
 
-      override fun isCanceled(): Boolean = false
+          override fun isCanceled(): Boolean = false
 
-      override fun request(): Request {
-        TODO("shouldn't be needed for mock")
-      }
+          override fun request(): Request {
+            TODO("shouldn't be needed for mock")
+          }
 
-      override fun timeout(): Timeout {
-        throw UnsupportedOperationException("timeout() is not supported for async calls")
-      }
+          override fun timeout(): Timeout {
+            throw UnsupportedOperationException("timeout() is not supported for async calls")
+          }
 
-      override fun cancel() {
-        TODO("shouldn't be needed for mock")
-      }
-    }
+          override fun cancel() {
+            TODO("shouldn't be needed for mock")
+          }
+        }
     // Mock the directionsApiService so that we don't get billed by Google
     `when`(
-      mockApiService.getPolylineWayPoints(
-        origin = anyString(),
-        destination = anyString(),
-        waypoints = listOf(anyString()).toTypedArray(),
-        key = anyString()))
-      .thenReturn(mockCall)
+            mockApiService.getPolylineWayPoints(
+                origin = anyString(),
+                destination = anyString(),
+                waypoints = listOf(anyString()).toTypedArray(),
+                key = anyString()))
+        .thenReturn(mockCall)
 
-    //directionsRepository = DirectionsRepository(mockApiService)
+    // directionsRepository = DirectionsRepository(mockApiService)
     directionsRepository = mock(DirectionsRepository::class.java)
 
     itineraryRepository = ItineraryRepositoryTestImpl()
     mapViewModel =
         MapViewModel(
-            itineraryRepository = itineraryRepository, directionsRepository = directionsRepository)
+            itineraryRepository = itineraryRepository,
+            directionsRepository = directionsRepository,
+            userLocationClient = userLocationClient)
   }
 
   @Test
@@ -286,7 +289,6 @@ class MapViewModelTest {
     assertEquals(listOf<Itinerary>(), secondQuery)
   }
 
-
   /*
   @OptIn(ExperimentalCoroutinesApi::class)
   @Test
@@ -316,4 +318,18 @@ class MapViewModelTest {
     assertEquals(listOf(LatLng(0.0, 0.0)), mapViewModel.polylinePointsLiveData.value)
   }
    */
+
+  @Test
+  fun `getUserLocation returns a flow containing the user location`() = runBlocking {
+    val epflLocation = Mockito.mock(android.location.Location::class.java)
+    epflLocation.latitude = randomLat()
+    epflLocation.longitude = randomLon()
+
+    `when`(userLocationClient.getLocationUpdates(anyLong())).thenReturn(flow { emit(epflLocation) })
+
+    val userLocationFlow = mapViewModel.getUserLocation()
+    val emittedLocation = userLocationFlow.first()
+
+    assertEquals(epflLocation, emittedLocation)
+  }
 }

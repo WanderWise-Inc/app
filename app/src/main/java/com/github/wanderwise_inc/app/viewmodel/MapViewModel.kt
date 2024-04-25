@@ -1,5 +1,6 @@
 package com.github.wanderwise_inc.app.viewmodel
 
+import android.location.Location
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -17,7 +18,8 @@ private const val DEBUG_TAG: String = "MAP_VIEWMODEL"
 /** @brief ViewModel class for providing `Location`s and `Itinerary`s to the map UI */
 class MapViewModel(
     private val itineraryRepository: ItineraryRepository,
-    private val directionsRepository: DirectionsRepository
+    private val directionsRepository: DirectionsRepository,
+    private val userLocationClient: UserLocationClient,
 ) : ViewModel() {
   /** @return a flow of all public itineraries */
   fun getAllPublicItineraries(): Flow<List<Itinerary>> {
@@ -30,8 +32,8 @@ class MapViewModel(
   }
 
   /** @return the total number of likes from a list of itineraries */
-  fun getItineraryUpvotes(itineraries: List<Itinerary>): Int {
-    var totalLikes: Int = 0
+  fun getItineraryLikes(itineraries: List<Itinerary>): Int {
+    var totalLikes = 0
     for (itinerary in itineraries) totalLikes += itinerary.numLikes
     return totalLikes
   }
@@ -89,5 +91,10 @@ class MapViewModel(
               waypoints = waypoints.toTypedArray())
           .observeForever { response -> _polylinePointsLiveData.value = response ?: listOf() }
     }
+  }
+
+  /** @brief get a Flow of the user location updated every second */
+  fun getUserLocation(): Flow<Location> {
+    return userLocationClient.getLocationUpdates(1000)
   }
 }
