@@ -64,8 +64,10 @@ fun DisplayLikedItineraries(mapViewModel: MapViewModel, profileViewModel: Profil
       topBar = {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
+
             modifier = Modifier.fillMaxWidth().testTag(LikedScreenTestTags.CATEGORY_SELECTOR)) {
-              SearchBar(onSearchChange = { searchQuery = it })
+            SearchBar(onSearchChange = { searchQuery = it }, onPriceChange = { priceRange = it })
+
               CategorySelector(
                   selectedIndex = selectedIndex,
                   categoriesList = categoriesList,
