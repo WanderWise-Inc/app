@@ -48,11 +48,13 @@ fun DisplayOverviewItineraries(mapViewModel: MapViewModel, profileViewModel: Pro
       topBar = {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxWidth()) {
+
+            modifier = Modifier.fillMaxWidth().testTag("Overview screen")) {
             SearchBar(
                 onSearchChange = { searchQuery = it },
                 onPriceChange = { priceRange = it }
             )
+
               CategorySelector(
                   selectedIndex = selectedIndex,
                   categoriesList = categoriesList,

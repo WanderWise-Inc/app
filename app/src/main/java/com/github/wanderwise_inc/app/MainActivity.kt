@@ -38,7 +38,7 @@ class MainActivity : ComponentActivity() {
     val imageRepository = ImageRepositoryTestImpl(application)
     profileViewModel = ProfileViewModel(profileRepository, imageRepository)
 
-    profileRepository.setProfile(Profile(userUid = "0"))
+    profileRepository.setProfile(Profile(userUid = "testing"))
 
     // START: viewmodel initialization (default data for demoing)
     val itineraryAdventureAndLuxury =
@@ -55,14 +55,23 @@ class MainActivity : ComponentActivity() {
             userUid = "1",
             locations = listOf(),
             title = "Hike",
-            tags = listOf(ItineraryTags.ADVENTURE),
+            tags =
+                listOf(
+                    ItineraryTags.ACTIVE,
+                    ItineraryTags.PHOTOGRAPHY,
+                    ItineraryTags.NATURE,
+                    ItineraryTags.ADVENTURE,
+                    ItineraryTags.FOODIE,
+                    ItineraryTags.RURAL,
+                    ItineraryTags.WILDLIFE,
+                    ItineraryTags.WELLNESS),
             description = null,
             visible = true,
         )
 
     val privateItinerary =
         Itinerary(
-            userUid = "0", // my UID!
+            userUid = "testing", // my UID!
             locations = listOf(),
             title = "My test itinerary",
             tags = listOf(ItineraryTags.ADVENTURE),

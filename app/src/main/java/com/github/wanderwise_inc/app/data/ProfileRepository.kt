@@ -64,19 +64,15 @@ class ProfileRepositoryTestImpl : ProfileRepository {
   }
 
   override fun addItineraryToLiked(userUid: String, itineraryUid: String) {
-    profiles.filter { it.userUid == userUid }.first().likedItinerariesUid.add(itineraryUid)
+    profiles.first { it.userUid == userUid }.likedItinerariesUid.add(itineraryUid)
   }
 
   override fun removeItineraryFromLiked(userUid: String, itineraryUid: String) {
-    profiles.filter { it.userUid == userUid }.first().likedItinerariesUid.remove(itineraryUid)
+    profiles.first { it.userUid == userUid }.likedItinerariesUid.remove(itineraryUid)
   }
 
   override fun checkIfItineraryIsLiked(userUid: String, itineraryUid: String): Boolean {
-    return profiles
-        .filter { it.userUid == userUid }
-        .first()
-        .likedItinerariesUid
-        .contains(itineraryUid)
+    return profiles.first { it.userUid == userUid }.likedItinerariesUid.contains(itineraryUid)
   }
 
   override fun getLikedItineraries(userUid: String): Flow<List<String>> {

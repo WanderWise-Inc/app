@@ -1,9 +1,9 @@
 package com.github.wanderwise_inc.app.ui.list_itineraries
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -14,6 +14,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.unit.dp
 import com.github.wanderwise_inc.app.R
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
 import com.github.wanderwise_inc.app.model.location.Tag
@@ -28,6 +29,10 @@ data class SearchCategory(
     val icon: Int,
     val title: String,
 )
+
+object LikedScreenTestTags {
+  const val CATEGORY_SELECTOR = "category selector"
+}
 
 @Composable
 fun LikedScreen(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel) {
@@ -47,7 +52,7 @@ fun DisplayLikedItineraries(mapViewModel: MapViewModel, profileViewModel: Profil
           SearchCategory(ItineraryTags.FOODIE, R.drawable.drinks_icon, "Drinks"),
       )
 
-  val uid = FirebaseAuth.getInstance().uid!!
+  val uid = FirebaseAuth.getInstance().uid ?: ""
   var selectedIndex by remember { mutableIntStateOf(0) }
   var searchQuery by remember { mutableStateOf("") }
     var priceRange by remember { mutableStateOf(0f) }
@@ -60,15 +65,17 @@ fun DisplayLikedItineraries(mapViewModel: MapViewModel, profileViewModel: Profil
       topBar = {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxWidth()) {
+
+            modifier = Modifier.fillMaxWidth().testTag(LikedScreenTestTags.CATEGORY_SELECTOR)) {
             SearchBar(onSearchChange = { searchQuery = it }, onPriceChange = { priceRange = it })
+
               CategorySelector(
                   selectedIndex = selectedIndex,
                   categoriesList = categoriesList,
                   onCategorySelected = { selectedIndex = it })
             }
       },
-      modifier = Modifier.testTag("Liked screen")) { innerPadding ->
+      modifier = Modifier.testTag("Liked screen")) { _ ->
         val filtered =
             itineraries
                 .filter { itinerary -> itinerary.tags.contains(categoriesList[selectedIndex].tag) }
@@ -79,13 +86,8 @@ fun DisplayLikedItineraries(mapViewModel: MapViewModel, profileViewModel: Profil
                 }
         ItinerariesListScrollable(
             itineraries = filtered,
-            paddingValues = innerPadding,
+            paddingValues = PaddingValues(8.dp),
             mapViewModel = mapViewModel,
             profileViewModel = profileViewModel)
       }
-}
-
-@Composable
-fun NoLikedItinerariesScreen() {
-  Text(text = "Nothing to see here! Try liking some Wanders")
 }
