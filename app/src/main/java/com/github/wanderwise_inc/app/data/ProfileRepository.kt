@@ -1,7 +1,6 @@
 package com.github.wanderwise_inc.app.data
 
 import android.net.Uri
-import android.util.Log
 import com.github.wanderwise_inc.app.model.profile.Profile
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.Flow
@@ -9,6 +8,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 
 const val DB_USERS_PATH = "users"
+
 interface ProfileRepository {
   /**
    * @param userUid the uid of a user
@@ -57,15 +57,14 @@ class ProfileRepositoryTestImpl : ProfileRepository {
   }
 }
 
-/**
- * class implementation of the ProfileRepository
- */
+/** class implementation of the ProfileRepository */
 class ProfileRepositoryImpl : ProfileRepository {
   private val db = FirebaseFirestore.getInstance()
   private val usersCollection = db.collection(DB_USERS_PATH)
 
   /**
    * get profile function. This function gets the user Profile given the userUid
+   *
    * @param userUid the uid of a user
    * @return a flow of the Profile model of a user
    */
@@ -91,18 +90,15 @@ class ProfileRepositoryImpl : ProfileRepository {
 
   /**
    * set profile function. This function adds a user to the database
+   *
    * @param profile the profile of a user that should be added to the database
    */
   override suspend fun setProfile(profile: Profile) {
     val profileMap = profile.toMap()
-    usersCollection
-      .document(profile.userUid)
-      .set(profileMap)
-      .await()
+    usersCollection.document(profile.userUid).set(profileMap).await()
   }
 
   override fun deleteProfile(profile: Profile) {
     TODO("Not yet implemented")
   }
-
 }

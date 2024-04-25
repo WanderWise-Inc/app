@@ -20,7 +20,13 @@ class ProfileTest {
     val displayName = "display_name"
     val profilePicture = "profile_picture"
 
-    val map = mapOf(uid to p.uid, user_uid to p.userUid, bio to p.bio, displayName to p.displayName, profilePicture to p.profilePicture)
+    val map =
+        mapOf(
+            uid to p.uid,
+            user_uid to p.userUid,
+            bio to p.bio,
+            displayName to p.displayName,
+            profilePicture to p.profilePicture)
 
     val profileMap = p.toMap()
 
