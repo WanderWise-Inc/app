@@ -42,7 +42,7 @@ fun PreviewItineraryScreen(itinerary: Itinerary, mapViewModel: MapViewModel) {
   }
 
   LaunchedEffect(Unit) { mapViewModel.fetchPolylineLocations(itinerary) }
-  val polylinePoints by mapViewModel.polylinePointsLiveData.observeAsState()
+  val polylinePoints by mapViewModel.getPolylinePointsLiveData().observeAsState()
 
   Scaffold(
       bottomBar = { ItineraryBanner(itinerary = itinerary) },
