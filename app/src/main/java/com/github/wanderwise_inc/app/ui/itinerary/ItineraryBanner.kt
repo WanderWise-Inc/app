@@ -4,9 +4,11 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -17,6 +19,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.staggeredgrid.LazyHorizontalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
@@ -145,41 +149,37 @@ fun ItineraryBanner(
 
                 }
                 Column(modifier = Modifier
-                    .weight(0.3f)
+                    .weight(0.5f)
                     .fillMaxSize()
                     .padding(4.dp, 8.dp, 10.dp, 15.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.SpaceBetween) {
-                    LazyHorizontalStaggeredGrid(
-                        rows = StaggeredGridCells.Adaptive(20.dp),
-                        horizontalItemSpacing = 10.dp,
-                        verticalArrangement = Arrangement.spacedBy(4.dp),
-                        content = {
+                    verticalArrangement = Arrangement.SpaceBetween,) {
+                    LazyRow(
+                        modifier = Modifier.fillMaxWidth().weight(0.3f).padding(2.dp),
+                        contentPadding = PaddingValues(horizontal = 2.dp, vertical = 5.dp),
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+
+                    ){
                             items(itinerary.tags) {
                                 OutlinedCard(
                                     colors =
                                     CardDefaults.cardColors(
                                         containerColor = MaterialTheme.colorScheme.secondaryContainer,
                                     ),
-                                    modifier = Modifier.fillMaxSize())
+                                    modifier = Modifier.fillMaxWidth())
                                 {
-                                    Box(
-                                        modifier = Modifier.fillMaxSize().padding(2.dp),
-                                        contentAlignment = Alignment.Center
-                                    ) {
                                         Text(
                                             text = it,
                                             textAlign = TextAlign.Center,
                                             color = MaterialTheme.colorScheme.onSecondaryContainer,
                                             fontFamily = FontFamily.Monospace,
-                                            fontSize = 10.sp,
-                                            modifier = Modifier.padding(0.dp)
+                                            fontSize = 12.sp,
+                                            modifier = Modifier
+                                                .padding(horizontal = 8.dp, vertical = 2.dp)
                                         )
-                                    }
                                 }
                             }
-                        },
-                        modifier = Modifier.fillMaxWidth().weight(0.4f).padding(2.dp))
+                    }
 
                       Column(
                           modifier = Modifier.fillMaxWidth().weight(0.5f),
