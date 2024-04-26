@@ -12,11 +12,8 @@ import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryPreferences
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.flow.Flow
-
-import kotlinx.coroutines.launch
-
 import kotlinx.coroutines.flow.flow
-
+import kotlinx.coroutines.launch
 
 private const val DEBUG_TAG: String = "MAP_VIEWMODEL"
 /** @brief ViewModel class for providing `Location`s and `Itinerary`s to the map UI */

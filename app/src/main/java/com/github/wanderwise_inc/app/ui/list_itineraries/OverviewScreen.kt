@@ -39,8 +39,7 @@ fun DisplayOverviewItineraries(mapViewModel: MapViewModel, profileViewModel: Pro
 
   var selectedIndex by remember { mutableIntStateOf(0) }
   var searchQuery by remember { mutableStateOf("") }
-    var priceRange by remember { mutableStateOf(0f) }
-
+  var priceRange by remember { mutableStateOf(0f) }
 
   val itineraries by mapViewModel.getAllPublicItineraries().collectAsState(initial = listOf())
 
@@ -48,12 +47,8 @@ fun DisplayOverviewItineraries(mapViewModel: MapViewModel, profileViewModel: Pro
       topBar = {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-
             modifier = Modifier.fillMaxWidth().testTag("Overview screen")) {
-            SearchBar(
-                onSearchChange = { searchQuery = it },
-                onPriceChange = { priceRange = it }
-            )
+              SearchBar(onSearchChange = { searchQuery = it }, onPriceChange = { priceRange = it })
               CategorySelector(
                   selectedIndex = selectedIndex,
                   categoriesList = categoriesList,

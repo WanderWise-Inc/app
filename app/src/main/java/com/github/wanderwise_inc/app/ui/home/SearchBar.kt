@@ -6,8 +6,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-
-import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -25,63 +23,50 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.github.wanderwise_inc.app.R
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.RangeSlider
-import androidx.compose.material3.Slider
-import androidx.compose.ui.platform.testTag
 
 @Composable
-
 fun SearchBar(onSearchChange: (String) -> Unit, onPriceChange: (Float) -> Unit) {
-    var query by remember { mutableStateOf("") }
-    var isDropdownOpen by remember { mutableStateOf(false) }
- var sliderPosition by remember { mutableStateOf(0f .. 100f) }
-    var sliderPositionTime by remember { mutableStateOf(0f .. 24f) }
+  var query by remember { mutableStateOf("") }
+  var isDropdownOpen by remember { mutableStateOf(false) }
+  var sliderPosition by remember { mutableStateOf(0f..100f) }
+  var sliderPositionTime by remember { mutableStateOf(0f..24f) }
 
+  OutlinedTextField(
+      value = query,
+      onValueChange = { s: String ->
+        query = s
+        onSearchChange(s)
+      },
+      placeholder = {
+        Text(text = "Wander where?", color = MaterialTheme.colorScheme.onPrimaryContainer)
+      },
+      leadingIcon = {
+        Icon(
+            painter = painterResource(id = R.drawable.les_controles),
+            contentDescription = null,
+            tint = Color.Black,
+            modifier = Modifier.clickable { isDropdownOpen = true }.padding(2.dp).size(30.dp))
+      },
+      singleLine = true,
+      shape = RoundedCornerShape(30.dp),
+      modifier =
+          Modifier.background(MaterialTheme.colorScheme.primaryContainer)
+              .fillMaxWidth()
+              .padding(5.dp)
+              .testTag("SearchBar"))
 
-    OutlinedTextField(
-        value = query,
-        onValueChange = { s: String ->
-            query = s
-            onSearchChange(s)
-        },
-        placeholder = { Text(text = "Wander where?", color = MaterialTheme.colorScheme.onPrimaryContainer) },
-        leadingIcon = {
-            Icon(
-                painter = painterResource(id = R.drawable.les_controles),
-                contentDescription = null,
-                tint = Color.Black,
-                modifier = Modifier
-                    .clickable {
-                        isDropdownOpen = true
-                    }
-                    .padding(2.dp)
-                    .size(30.dp)
-            )
-        },
-        singleLine = true,
-        shape = RoundedCornerShape(30.dp),
-        modifier =
-        Modifier.background(MaterialTheme.colorScheme.primaryContainer)
-            .fillMaxWidth()
-            .padding(5.dp)
-            .testTag("SearchBar")
-    )
-
-    DropdownMenu(
-        expanded = isDropdownOpen,
-        onDismissRequest = { isDropdownOpen = false },
-        modifier = Modifier.fillMaxWidth()
-    ) {
+  DropdownMenu(
+      expanded = isDropdownOpen,
+      onDismissRequest = { isDropdownOpen = false },
+      modifier = Modifier.fillMaxWidth()) {
         Text("How much do I want to spend ?")
         RangeSlider(
             value = sliderPosition,
             steps = 50,
-            onValueChange = { range ->
-                sliderPosition = range },
+            onValueChange = { range -> sliderPosition = range },
             valueRange = 0f..100f, // Adjust this range according to your needs
             onValueChangeFinished = {
-                //launch something
+              // launch something
             },
         )
         Text(text = sliderPosition.toString())
@@ -90,12 +75,12 @@ fun SearchBar(onSearchChange: (String) -> Unit, onPriceChange: (Float) -> Unit) 
         RangeSlider(
             value = sliderPositionTime,
             steps = 24,
-            onValueChange = { range ->
-                sliderPositionTime = range },
+            onValueChange = { range -> sliderPositionTime = range },
             valueRange = 0f..24f, // Adjust this range according to your needs
             onValueChangeFinished = {
-                //launch something
+              // launch something
             },
         )
         Text(text = sliderPositionTime.toString())
-    }  }
+      }
+}
