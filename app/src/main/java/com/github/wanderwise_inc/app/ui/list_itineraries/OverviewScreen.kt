@@ -1,5 +1,8 @@
+package com.github.wanderwise_inc.app.ui.list_itineraries
+
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -13,9 +16,6 @@ import androidx.compose.ui.platform.testTag
 import com.github.wanderwise_inc.app.R
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
 import com.github.wanderwise_inc.app.ui.home.SearchBar
-import com.github.wanderwise_inc.app.ui.list_itineraries.CategorySelector
-import com.github.wanderwise_inc.app.ui.list_itineraries.ItinerariesListScrollable
-import com.github.wanderwise_inc.app.ui.list_itineraries.SearchCategory
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 
@@ -43,7 +43,7 @@ fun DisplayOverviewItineraries(mapViewModel: MapViewModel, profileViewModel: Pro
 
   val itineraries by mapViewModel.getAllPublicItineraries().collectAsState(initial = listOf())
 
-  androidx.compose.material.Scaffold(
+  Scaffold(
       topBar = {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
