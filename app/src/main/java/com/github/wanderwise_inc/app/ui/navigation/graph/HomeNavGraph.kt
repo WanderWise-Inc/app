@@ -1,15 +1,16 @@
 package com.github.wanderwise_inc.app.ui.navigation.graph
 
-import OverviewScreen
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.github.wanderwise_inc.app.data.ImageRepository
+import com.github.wanderwise_inc.app.demoSetup
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
 import com.github.wanderwise_inc.app.model.location.PlacesReader
 import com.github.wanderwise_inc.app.ui.list_itineraries.LikedScreen
+import com.github.wanderwise_inc.app.ui.list_itineraries.OverviewScreen
 import com.github.wanderwise_inc.app.ui.map.PreviewItineraryScreen
 import com.github.wanderwise_inc.app.ui.navigation.Destination.TopLevelDestination
 import com.github.wanderwise_inc.app.ui.profile.ProfileScreen
@@ -35,6 +36,9 @@ fun HomeNavGraph(
           tags = listOf(ItineraryTags.CULTURAL, ItineraryTags.NATURE, ItineraryTags.BUDGET),
           description = "A 3-day itinerary to explore the best of San Francisco on a bike.",
           visible = true)
+
+  // setup the demo
+  demoSetup(mapViewModel, profileViewModel)
 
   NavHost(
       navController = navController,
