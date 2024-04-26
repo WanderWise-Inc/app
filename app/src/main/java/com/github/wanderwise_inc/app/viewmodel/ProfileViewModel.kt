@@ -22,7 +22,7 @@ class ProfileViewModel(
   }
 
   /** Sets a profile in data source */
-  fun setProfile(profile: Profile) {
+  suspend fun setProfile(profile: Profile) {
     profileRepository.setProfile(profile)
   }
 
@@ -32,8 +32,8 @@ class ProfileViewModel(
   }
 
   /** @return the profile picture of a user as a bitmap flow for asynchronous drawing */
-  fun getProfilePicture(profile: Profile): Flow<Bitmap> {
-    return imageRepository.fetchImage(profile.profilePicture)
+  fun getProfilePicture(profile: Profile): Flow<Bitmap?> {
+    return imageRepository.fetchImage("profilePicture/${profile.userUid}")
   }
 
   /** @brief add an Itinerary to the user's liked itineraries */

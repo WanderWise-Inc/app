@@ -230,6 +230,13 @@ dependencies {
     // ----------       Mockito ------------
     testImplementation("org.mockito.kotlin:mockito-kotlin:5.3.1")
     androidTestImplementation("org.mockito.kotlin:mockito-kotlin:5.3.1")
+
+    testImplementation("app.cash.turbine:turbine:1.1.0")
+    testImplementation("com.google.truth:truth:1.3.0")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.0")
+    testImplementation("io.mockk:mockk:1.12.0")
+    testImplementation("org.mockito:mockito-core:5.7.0")
+
     // ----------       Retrofit ------------
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
@@ -238,6 +245,7 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
     implementation("androidx.compose.runtime:runtime-livedata:1.0.0-beta01")
+
     testImplementation ("io.mockk:mockk:1.12.0")
 }
 
