@@ -4,8 +4,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -14,15 +15,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.staggeredgrid.LazyHorizontalStaggeredGrid
-import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -81,100 +83,96 @@ fun ItineraryBanner(
                       Modifier.fillMaxWidth().fillMaxHeight(0.55f).clip(RoundedCornerShape(13.dp)),
                   contentScale = ContentScale.Crop,
                   alignment = Alignment.TopCenter)
+              // Primary Text Field
+              Text(
+                  text = itinerary.title,
+                  color = MaterialTheme.colorScheme.onPrimaryContainer,
+                  fontFamily = FontFamily.Monospace,
+                  fontSize = 14.sp,
+                  fontWeight = FontWeight.Bold,
+                  modifier = Modifier.padding(2.dp)
+                  // textDecoration = TextDecoration.Underline
+                  )
 
               Row(modifier = Modifier.fillMaxSize()) {
                 Column(
                     modifier =
-                        Modifier.fillMaxHeight().weight(0.6f).padding(10.dp, 8.dp, 4.dp, 15.dp),
+                        Modifier.fillMaxHeight().weight(0.7f).padding(10.dp, 4.dp, 4.dp, 15.dp),
                     verticalArrangement = Arrangement.SpaceAround) {
-
-                      // Primary Text Field
-                      Text(
-                          text = itinerary.title,
-                          color = MaterialTheme.colorScheme.onPrimaryContainer,
-                          fontFamily = FontFamily.Monospace,
-                          fontSize = 16.sp,
-                          fontWeight = FontWeight.Bold,
-                          modifier = Modifier.padding(5.dp)
-                          // textDecoration = TextDecoration.Underline
-                          )
-
                       // Secondary indicator fields
                       Text(
                           text = "Wandered by - ",
-                          color = MaterialTheme.colorScheme.onPrimaryContainer,
+                          color = MaterialTheme.colorScheme.secondary,
                           fontFamily = FontFamily.Monospace,
                           fontSize = 12.sp,
-                          modifier = Modifier.padding(10.dp, 0.dp))
+                          modifier = Modifier.padding(4.dp, 0.dp))
 
                       Text(
                           text = "Estimated time : - hours",
                           color = MaterialTheme.colorScheme.secondary,
                           fontFamily = FontFamily.Monospace,
                           fontSize = 12.sp,
-                          modifier = Modifier.padding(10.dp, 0.dp))
+                          modifier = Modifier.padding(4.dp, 0.dp))
 
                       Text(
                           text = "Average Expense : -",
                           color = MaterialTheme.colorScheme.secondary,
                           fontFamily = FontFamily.Monospace,
                           fontSize = 12.sp,
-                          modifier = Modifier.padding(10.dp, 0.dp))
+                          modifier = Modifier.padding(4.dp, 0.dp))
                     }
                 Column(
-                    modifier =
-                        Modifier.weight(0.3f).fillMaxSize().padding(4.dp, 8.dp, 10.dp, 15.dp),
+                    modifier = Modifier.weight(0.3f).fillMaxSize().padding(4.dp, 2.dp, 10.dp, 2.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.SpaceBetween) {
-                      LazyHorizontalStaggeredGrid(
-                          rows = StaggeredGridCells.Adaptive(20.dp),
-                          horizontalItemSpacing = 10.dp,
-                          verticalArrangement = Arrangement.spacedBy(4.dp),
-                          content = {
-                            items(itinerary.tags) {
-                              Card(
-                                  colors =
-                                      CardDefaults.cardColors(
-                                          containerColor = MaterialTheme.colorScheme.secondary,
-                                      ),
-                                  modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Max)) {
-                                    Text(
-                                        text = it,
-                                        textAlign = TextAlign.Center,
-                                        color = MaterialTheme.colorScheme.onSecondary,
-                                        fontFamily = FontFamily.Monospace,
-                                        fontSize = 12.sp,
-                                        modifier = Modifier.padding(4.dp))
-                                  }
-                            }
-                          },
-                          modifier = Modifier.fillMaxWidth().weight(0.4f).padding(2.dp))
+                    verticalArrangement = Arrangement.SpaceBetween,
+                ) {
+                  LazyRow(
+                      modifier = Modifier.fillMaxWidth().weight(0.3f).padding(2.dp),
+                      contentPadding = PaddingValues(horizontal = 2.dp, vertical = 5.dp),
+                      horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                        items(itinerary.tags) {
+                          OutlinedCard(
+                              colors =
+                                  CardDefaults.cardColors(
+                                      containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                                  ),
+                              modifier = Modifier.fillMaxWidth()) {
+                                Text(
+                                    text = it,
+                                    textAlign = TextAlign.Center,
+                                    color = MaterialTheme.colorScheme.onSecondaryContainer,
+                                    fontFamily = FontFamily.Monospace,
+                                    fontSize = 12.sp,
+                                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp))
+                              }
+                        }
+                      }
 
-                      Column(
-                          modifier = Modifier.fillMaxWidth().weight(0.5f),
-                          horizontalAlignment = Alignment.CenterHorizontally) {
-                            // Like Icon
-                            Icon(
-                                painter = painterResource(id = R.drawable.liked_icon),
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.secondary,
-                                modifier =
-                                    Modifier.size(width = 40.dp, height = 40.dp)
-                                        .clickable(
-                                            onClick = {
-                                              if (isLiked) numLikes-- else numLikes++
-                                              onLikeButtonClick(itinerary, isLiked)
-                                              isLiked = !isLiked
-                                            }))
+                  Column(
+                      modifier = Modifier.fillMaxWidth().weight(0.5f),
+                      horizontalAlignment = Alignment.CenterHorizontally) {
+                        // Like Icon
+                        Icon(
+                            painter = painterResource(id = R.drawable.liked_icon),
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.secondary,
+                            modifier =
+                                Modifier.size(width = 40.dp, height = 40.dp)
+                                    .clickable(
+                                        onClick = {
+                                          if (isLiked) numLikes-- else numLikes++
+                                          onLikeButtonClick(itinerary, isLiked)
+                                          isLiked = !isLiked
+                                        }))
 
-                            Text(
-                                text = "$numLikes Likes",
-                                color = MaterialTheme.colorScheme.secondary,
-                                fontFamily = FontFamily.Monospace,
-                                fontSize = 12.sp,
-                                modifier = Modifier.padding(2.dp))
-                          }
-                    }
+                        Text(
+                            text = "$numLikes Likes",
+                            color = MaterialTheme.colorScheme.primary,
+                            fontFamily = FontFamily.Monospace,
+                            fontSize = 12.sp,
+                            modifier = Modifier.padding(2.dp))
+                      }
+                }
               }
             }
       }
