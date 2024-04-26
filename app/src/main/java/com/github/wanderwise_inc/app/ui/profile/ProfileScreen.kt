@@ -35,12 +35,14 @@ import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.github.wanderwise_inc.app.DEFAULT_USER_UID
 import com.github.wanderwise_inc.app.R
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.model.profile.Profile
 import com.github.wanderwise_inc.app.ui.list_itineraries.ItinerariesListScrollable
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
+import com.google.firebase.auth.FirebaseAuth
 
 const val PROFILE_SCREEN_TEST_TAG: String = "profile_screen"
 
@@ -52,9 +54,9 @@ fun ProfileScreen(
     imageRepository: ImageRepository
 ) {
   // val currentUid = FirebaseAuth.getInstance().currentUser!!.uid
-  val currentUid = "testing" // TODO remove the hardcoded value
+  val currentUid = FirebaseAuth.getInstance().currentUser?.uid ?: DEFAULT_USER_UID
+
   val profile by profileViewModel.getProfile(currentUid).collectAsState(initial = null)
-  Log.d("CRASHED", "IN PROFILESCREEN")
 
   val userItineraries by
       mapViewModel.getUserItineraries(currentUid).collectAsState(initial = emptyList())
