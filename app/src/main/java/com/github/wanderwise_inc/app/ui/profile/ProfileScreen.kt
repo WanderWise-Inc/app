@@ -1,5 +1,6 @@
 package com.github.wanderwise_inc.app.ui.profile
 
+import android.content.Intent
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -93,7 +95,22 @@ fun ProfileScreen(
           modifier = Modifier.padding(innerPadding).fillMaxSize(),
           contentAlignment = Alignment.TopCenter) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-              ProfilePictureStatic(profileViewModel, profile!!, modifier = Modifier.padding(100.dp))
+              ProfilePicture(profileViewModel, profile!!, imageRepository)
+              Button(
+                  onClick = {
+                    Intent(Intent.ACTION_GET_CONTENT).also {
+                      it.type = "image/*"
+                      imageRepository.launchActivity(it)
+                    }
+                  }) {
+                    Text(text = "SEARCH PHOTO")
+                  }
+              Button(
+                  onClick = {
+                    imageRepository.uploadImageToStorage("profilePicture/${profile!!.userUid}")
+                  }) {
+                    Text(text = "UPLOAD PHOTO")
+                  }
               Username(profile!!, modifier = Modifier.padding(100.dp))
               WanderScore(profile!!)
               ItinerariesListScrollable(
@@ -161,7 +178,7 @@ fun ProfilePicture(
 @Composable
 fun Username(profile: Profile, modifier: Modifier) {
   Text(
-      text = "${profile.displayName}",
+      text = profile.displayName,
       modifier = Modifier.padding(8.dp),
       style = MaterialTheme.typography.headlineSmall)
 }
