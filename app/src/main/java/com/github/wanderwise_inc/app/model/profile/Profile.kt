@@ -15,7 +15,8 @@ data class Profile(
     val displayName: String,
     val userUid: String,
     val bio: String,
-    val profilePicture: Uri? = null
+    val profilePicture: Uri? = null,
+    val likedItinerariesUid: MutableList<String> = mutableListOf()
 ) {
   /** @return a map of a profile */
   fun toMap(): Map<String, Any?> {
@@ -28,5 +29,10 @@ data class Profile(
   }
 
   /** @brief no argument constructor for serialization */
-  // constructor() : this(displayName = "", userUid = "", bio = "")
+  constructor() : this(displayName = "", userUid = "", bio = "")
+
+  /** @brief constructor with userUid for testing */
+  constructor(
+      userUid: String,
+  ) : this(displayName = "", userUid = userUid, bio = "")
 }

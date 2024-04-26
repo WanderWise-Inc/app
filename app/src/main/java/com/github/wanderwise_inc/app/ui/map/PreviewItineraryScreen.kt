@@ -45,7 +45,10 @@ fun PreviewItineraryScreen(itinerary: Itinerary, mapViewModel: MapViewModel) {
   val polylinePoints by mapViewModel.getPolylinePointsLiveData().observeAsState()
 
   Scaffold(
-      bottomBar = { ItineraryBanner(itinerary = itinerary) },
+      // TODO implement the real like button click and banner click functionality with viewmodels
+      bottomBar = {
+        ItineraryBanner(itinerary = itinerary, onLikeButtonClick = { _, _ -> }, onBannerClick = {})
+      },
       modifier = Modifier.testTag("Map screen"),
       floatingActionButton = {
         CenterButton(cameraPositionState = cameraPositionState, currentLocation = userLocation)

@@ -143,9 +143,6 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     debugImplementation("androidx.customview:customview-poolingcontainer:1.0.0")*/
 
-    // for live data
-    // implementation ("androidx.compose.runtime:runtime-livedata:2.7.0")
-
     // ------------------- Firebase -------------------
     implementation("com.google.firebase:firebase-database-ktx:20.3.0")
     implementation("com.google.firebase:firebase-firestore:24.10.0")
@@ -233,7 +230,7 @@ dependencies {
     // ----------       Mockito ------------
     testImplementation("org.mockito.kotlin:mockito-kotlin:5.3.1")
     androidTestImplementation("org.mockito.kotlin:mockito-kotlin:5.3.1")
-    
+
     testImplementation("app.cash.turbine:turbine:1.1.0")
     testImplementation("com.google.truth:truth:1.3.0")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.0")
@@ -249,6 +246,7 @@ dependencies {
 
     implementation("androidx.compose.runtime:runtime-livedata:1.0.0-beta01")
 
+    testImplementation ("io.mockk:mockk:1.12.0")
 }
 
 tasks.register("jacocoTestReport", JacocoReport::class) {

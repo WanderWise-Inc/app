@@ -18,6 +18,7 @@ import com.github.wanderwise_inc.app.data.ImageRepositoryTestImpl
 import com.github.wanderwise_inc.app.data.ItineraryRepositoryTestImpl
 import com.github.wanderwise_inc.app.data.ProfileRepositoryTestImpl
 import com.github.wanderwise_inc.app.model.location.Location
+import com.github.wanderwise_inc.app.model.profile.Profile
 import com.github.wanderwise_inc.app.ui.home.HomeScreen
 import com.github.wanderwise_inc.app.viewmodel.HomeViewModel
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
@@ -51,7 +52,6 @@ class HomeNavigationTest {
   @Mock private lateinit var userLocationClient: UserLocationClient
 
   @Mock private lateinit var mockApplication: Application
-
   @Mock private lateinit var mockContext: Context
 
   @Mock private lateinit var mockDirectionsRepository: DirectionsRepository
@@ -109,6 +109,8 @@ class HomeNavigationTest {
       val imageRepository = ImageRepositoryTestImpl(mockApplication)
       val profileRepository = ProfileRepositoryTestImpl()
       val profileViewModel = ProfileViewModel(profileRepository, imageRepository)
+
+      profileViewModel.setProfile(Profile("0"))
 
       val itineraryRepository = ItineraryRepositoryTestImpl()
       val mapViewModel =
@@ -239,6 +241,8 @@ class HomeNavigationTest {
     composeTestRule.onNodeWithTag(Route.MAP).performClick()
 
     composeTestRule.onNodeWithTag(Route.LIKED).performClick()
+
+    composeTestRule.onNodeWithTag(Route.PROFILE).performClick()
 
     composeTestRule.onNodeWithTag(Route.OVERVIEW).performClick()
 
