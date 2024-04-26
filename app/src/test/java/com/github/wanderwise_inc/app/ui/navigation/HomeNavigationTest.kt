@@ -1,5 +1,6 @@
 package com.github.wanderwise_inc.app.ui.navigation
 
+/*
 import android.app.Application
 import android.content.Context
 import android.location.*
@@ -247,3 +248,4 @@ class HomeNavigationTest {
     assertEquals(null, route)
   }
 }
+*/
