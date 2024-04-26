@@ -5,8 +5,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.ui.home.HomeScreen
-import com.github.wanderwise_inc.app.viewmodel.HomeViewModel
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 
@@ -14,28 +14,17 @@ import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 fun RootNavigationGraph(
     context: Context,
     profileViewModel: ProfileViewModel,
-    homeViewModel: HomeViewModel,
     mapViewModel: MapViewModel,
+    imageRepository: ImageRepository,
     navController: NavHostController
 ) {
-
-    //val navigator = NavigationActions(navController)
-    //var selectedScreen by remember { mutableStateOf(TOP_LEVEL_DESTINATIONS[1]) }
-    NavHost(
-        navController = navController,
-        route = Graph.ROOT,
-        startDestination = Graph.AUTHENTICATION
-    ) {
-        authNavGraph(context, userViewModel, profileViewModel, navController)
+  NavHost(
+      navController = navController, route = Graph.ROOT, startDestination = Graph.AUTHENTICATION) {
+        authNavGraph(context, profileViewModel, navController)
         composable(route = Graph.HOME) {
-            HomeScreen(
-                homeViewModel,
-                mapViewModel,
-                profileViewModel
-            )
+          HomeScreen(imageRepository, mapViewModel, profileViewModel)
         }
-    }
-
+      }
 }
 
 object Graph {
