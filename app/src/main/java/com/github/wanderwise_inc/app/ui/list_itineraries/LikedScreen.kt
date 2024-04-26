@@ -74,7 +74,7 @@ fun DisplayLikedItineraries(mapViewModel: MapViewModel, profileViewModel: Profil
                   onCategorySelected = { selectedIndex = it })
             }
       },
-      modifier = Modifier.testTag("Liked screen")) { _ ->
+      modifier = Modifier.testTag("Liked screen")) { innerPadding ->
         val filtered =
             itineraries
                 .filter { itinerary -> itinerary.tags.contains(categoriesList[selectedIndex].tag) }
@@ -85,7 +85,7 @@ fun DisplayLikedItineraries(mapViewModel: MapViewModel, profileViewModel: Profil
                 }
         ItinerariesListScrollable(
             itineraries = filtered,
-            paddingValues = PaddingValues(8.dp),
+            paddingValues = innerPadding,
             mapViewModel = mapViewModel,
             profileViewModel = profileViewModel)
       }
