@@ -71,17 +71,13 @@ fun ProfileScreen(
                     Image(
                         painter = painterResource(id = R.drawable.settings_icon),
                         contentDescription = "Edit Profile",
-                        modifier = Modifier
-                            .requiredWidth(35.dp)
-                            .requiredHeight(35.dp))
+                        modifier = Modifier.requiredWidth(35.dp).requiredHeight(35.dp))
                   }
                   FloatingActionButton(onClick = { /*Go to Edit Profile Screen*/}) {
                     Image(
                         painter = painterResource(id = R.drawable.settings_icon),
                         contentDescription = "Edit Profile",
-                        modifier = Modifier
-                            .requiredWidth(35.dp)
-                            .requiredHeight(35.dp))
+                        modifier = Modifier.requiredWidth(35.dp).requiredHeight(35.dp))
                   }
                 }
               },
@@ -96,25 +92,25 @@ fun ProfileScreen(
         modifier = Modifier.fillMaxSize(),
     ) { innerPadding ->
       Box(
-          modifier = Modifier
-              .padding(innerPadding)
-              .fillMaxSize(),
+          modifier = Modifier.padding(innerPadding).fillMaxSize(),
           contentAlignment = Alignment.TopCenter) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
               ProfilePicture(profileViewModel, profile!!, imageRepository)
-                Button(onClick = {
+              Button(
+                  onClick = {
                     Intent(Intent.ACTION_GET_CONTENT).also {
-                        it.type = "image/*"
-                        imageRepository.launchActivity(it)
+                      it.type = "image/*"
+                      imageRepository.launchActivity(it)
                     }
-                }) {
+                  }) {
                     Text(text = "SEARCH PHOTO")
-                }
-                Button(onClick = {
+                  }
+              Button(
+                  onClick = {
                     imageRepository.uploadImageToStorage("profilePicture/${profile!!.userUid}")
-                }) {
+                  }) {
                     Text(text = "UPLOAD PHOTO")
-                }
+                  }
               Username(profile!!, modifier = Modifier.padding(100.dp))
               WanderScore(profile!!)
               ItinerariesListScrollable(
@@ -137,10 +133,9 @@ fun ProfilePictureStatic(profileViewModel: ProfileViewModel, profile: Profile, m
         painter = BitmapPainter(picture!!.asImageBitmap()),
         contentDescription = "Profile picture",
         modifier =
-        Modifier
-            .size(100.dp)
-            .clip(MaterialTheme.shapes.small)
-            .border(BorderStroke(1.dp, Color.Black)),
+            Modifier.size(100.dp)
+                .clip(MaterialTheme.shapes.small)
+                .border(BorderStroke(1.dp, Color.Black)),
         contentScale = ContentScale.FillBounds)
   } else {
     Text("No Picture")
