@@ -21,7 +21,6 @@ import com.github.wanderwise_inc.app.model.location.Tag
 import com.github.wanderwise_inc.app.ui.home.SearchBar
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
-import com.google.firebase.auth.FirebaseAuth
 
 /** @brief Search categories displayed on the top bar. */
 data class SearchCategory(
@@ -52,7 +51,8 @@ fun DisplayLikedItineraries(mapViewModel: MapViewModel, profileViewModel: Profil
           SearchCategory(ItineraryTags.FOODIE, R.drawable.drinks_icon, "Drinks"),
       )
 
-  val uid = FirebaseAuth.getInstance().uid ?: ""
+  // val uid = FirebaseAuth.getInstance().uid ?: ""
+  val uid = "testing"
   var selectedIndex by remember { mutableIntStateOf(0) }
   var searchQuery by remember { mutableStateOf("") }
   var priceRange by remember { mutableStateOf(0f) }
