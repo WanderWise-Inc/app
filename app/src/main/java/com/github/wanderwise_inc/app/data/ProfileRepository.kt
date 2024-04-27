@@ -1,8 +1,11 @@
 package com.github.wanderwise_inc.app.data
 
+import android.net.Uri
 import com.github.wanderwise_inc.app.model.profile.Profile
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.tasks.await
 
 const val DB_USERS_PATH = "users"
 
@@ -87,7 +90,6 @@ class ProfileRepositoryTestImpl : ProfileRepository {
 }
 
 /** class implementation of the ProfileRepository */
-/*
 class ProfileRepositoryImpl : ProfileRepository {
   private val db = FirebaseFirestore.getInstance()
   private val usersCollection = db.collection(DB_USERS_PATH)
@@ -131,5 +133,20 @@ class ProfileRepositoryImpl : ProfileRepository {
   override fun deleteProfile(profile: Profile) {
     TODO("Not yet implemented")
   }
+
+  override fun addItineraryToLiked(userUid: String, itineraryUid: String) {
+    TODO("Not yet implemented")
+  }
+
+  override fun removeItineraryFromLiked(userUid: String, itineraryUid: String) {
+    TODO("Not yet implemented")
+  }
+
+  override fun checkIfItineraryIsLiked(userUid: String, itineraryUid: String): Boolean {
+    TODO("Not yet implemented")
+  }
+
+  override fun getLikedItineraries(userUid: String): Flow<List<String>> {
+    TODO("Not yet implemented")
+  }
 }
- */
