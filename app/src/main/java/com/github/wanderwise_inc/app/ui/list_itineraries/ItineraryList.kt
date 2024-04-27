@@ -21,10 +21,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.github.wanderwise_inc.app.DEFAULT_USER_UID
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.ui.itinerary.ItineraryBanner
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
+import com.google.firebase.auth.FirebaseAuth
 
 /** @brief reusable UI elements for displaying a list of itineraries */
 
@@ -40,8 +42,7 @@ fun ItinerariesListScrollable(
       modifier = Modifier.padding(paddingValues).testTag("Scrollable itineraries"),
       verticalArrangement = spacedBy(15.dp)) {
         this.items(itineraries) { itinerary ->
-          // val uid = FirebaseAuth.getInstance().uid!!
-          val uid = "testing"
+          val uid = FirebaseAuth.getInstance().uid ?: DEFAULT_USER_UID
           val isLikedInitially = profileViewModel.checkIfItineraryIsLiked(uid, itinerary.uid)
           val onLikeButtonClick = { it: Itinerary, isLiked: Boolean ->
             if (isLiked) {
