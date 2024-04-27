@@ -1,8 +1,6 @@
 package com.github.wanderwise_inc.app.ui.map
 
-import android.graphics.Bitmap
 import android.location.Location
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -39,9 +37,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -64,8 +64,6 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 
 /** @brief previews an itinerary */
 @Composable
@@ -112,6 +110,10 @@ fun PreviewItineraryScreen(
       }
 }
 
+/**
+ * @brief displayed beneath `Maps` composable in `PreviewItineraryScreen`. Variable height with
+ *   different modes depending on whether it is minimized or maximized
+ */
 @Composable
 fun PreviewItineraryBanner(
     itinerary: Itinerary,
@@ -132,7 +134,6 @@ fun PreviewItineraryBanner(
           profileViewModel = profileViewModel)
 }
 
-/** Banner displayed beneath the maps composable in `PreviewItineraryScreen` */
 @Composable
 private fun PreviewItineraryBannerMaximized(
     onMinimizedClick: () -> Unit,
@@ -140,20 +141,10 @@ private fun PreviewItineraryBannerMaximized(
     mapViewModel: MapViewModel,
     profileViewModel: ProfileViewModel
 ) {
-
-  val profile by profileViewModel.getProfile(itinerary.userUid).collectAsState(initial = null)
-  val profilePicFlow: Flow<Bitmap?> =
-      if (profile == null) flow { emit(null) } else profileViewModel.getProfilePicture(profile!!)
-
-  val defaultProfilePic by
-      profileViewModel.getDefaultProfilePicture().collectAsState(initial = null)
-
-  val profilePic by profilePicFlow.collectAsState(initial = null)
-  Log.d("PREVIEW_ITINERARY", "profilePic = $profilePic")
-
   val titleFontSize = 32.sp
   val innerFontSize = 16.sp
 
+  val profile by profileViewModel.getProfile(itinerary.userUid).collectAsState(initial = null)
   ElevatedCard(
       colors =
           CardDefaults.cardColors(
@@ -169,6 +160,7 @@ private fun PreviewItineraryBannerMaximized(
                     .aspectRatio(1.2f)
                     .padding(30.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top,
         ) {
           Row {
             // minimize button
@@ -208,110 +200,122 @@ private fun PreviewItineraryBannerMaximized(
                           fontFamily = MaterialTheme.typography.displayMedium.fontFamily,
                           fontSize = innerFontSize,
                           fontWeight = FontWeight.Normal,
-                          modifier = Modifier.padding(2.dp),
+                          modifier = Modifier.padding(5.dp),
                           textAlign = TextAlign.Center,
                       )
                     }
 
-                Spacer(modifier = Modifier.width(10.dp))
+                Spacer(modifier = Modifier.width(15.dp))
 
                 // DURATION
                 Row(
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically) {
                       Icon(
-                          painter = painterResource(id = R.drawable.trending_icon),
+                          painter = painterResource(id = R.drawable.hourglass),
                           contentDescription = "duration",
                           tint = MaterialTheme.colorScheme.secondary,
-                          modifier = Modifier.size(width = 20.dp, height = 20.dp))
+                          modifier = Modifier.size(width = 25.dp, height = 25.dp))
                       Text(
-                          text = "NULL hours",
+                          text = "N/A hours",
                           color = MaterialTheme.colorScheme.secondary,
                           fontFamily = MaterialTheme.typography.displayMedium.fontFamily,
                           fontSize = innerFontSize,
                           fontWeight = FontWeight.Normal,
-                          modifier = Modifier.padding(2.dp),
+                          modifier = Modifier.padding(3.dp),
                           textAlign = TextAlign.Center,
                       )
                     }
 
-                Spacer(modifier = Modifier.width(10.dp))
+                Spacer(modifier = Modifier.width(15.dp))
 
                 // COST
                 Row(
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically) {
                       Icon(
-                          painter = painterResource(id = R.drawable.drinks_icon),
+                          painter = painterResource(id = R.drawable.money),
                           contentDescription = "cost",
                           tint = MaterialTheme.colorScheme.secondary,
                           modifier = Modifier.size(width = 20.dp, height = 20.dp))
                       Text(
-                          text = "null - null $",
+                          text = "\$N/A - \$N/A",
                           color = MaterialTheme.colorScheme.secondary,
                           fontFamily = MaterialTheme.typography.displayMedium.fontFamily,
                           fontSize = innerFontSize,
                           fontWeight = FontWeight.Normal,
-                          modifier = Modifier.padding(2.dp),
+                          modifier = Modifier.padding(3.dp),
                           textAlign = TextAlign.Center,
                       )
                     }
               }
 
-          Spacer(modifier = Modifier.height(10.dp))
+          Spacer(modifier = Modifier.height(20.dp))
 
           // Profile details
           Row(
               horizontalArrangement = Arrangement.Center,
               verticalAlignment = Alignment.CenterVertically,
-              modifier = Modifier.height(50.dp)) {
-                ProfilePicture(profile = profile, profileViewModel = profileViewModel)
-              }
+              modifier = Modifier.height(50.dp),
+          ) {
+            ProfilePicture(profile = profile, profileViewModel = profileViewModel)
 
-          Spacer(modifier = Modifier.width(10.dp))
+            Spacer(modifier = Modifier.width(10.dp))
 
-          Column(
-              verticalArrangement = Arrangement.Center,
-              horizontalAlignment = Alignment.Start,
-              modifier = Modifier.fillMaxHeight()) {
-                Text(
-                    text = profile?.displayName ?: "John Doe",
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                    fontFamily = MaterialTheme.typography.displayMedium.fontFamily,
-                    fontSize = innerFontSize,
-                    fontWeight = FontWeight.SemiBold,
-                    // modifier = Modifier.padding(2.dp),
-                    textAlign = TextAlign.Center,
-                )
-                Text(
-                    text = "Local WanderGuide",
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                    fontFamily = MaterialTheme.typography.displayMedium.fontFamily,
-                    fontSize = innerFontSize,
-                    fontWeight = FontWeight.Light,
-                    // modifier = Modifier.padding(2.dp),
-                    textAlign = TextAlign.Center,
-                )
-              }
+            // NAME + local WanderGuide label
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.Start,
+            ) {
+              Text(
+                  text = profile?.displayName ?: "John Doe",
+                  color = MaterialTheme.colorScheme.onPrimaryContainer,
+                  fontFamily = MaterialTheme.typography.displayMedium.fontFamily,
+                  fontSize = innerFontSize,
+                  fontWeight = FontWeight.SemiBold,
+                  // modifier = Modifier.padding(2.dp),
+                  textAlign = TextAlign.Center,
+              )
+
+              Text(
+                  text = "Local WanderGuide",
+                  color = MaterialTheme.colorScheme.onPrimaryContainer,
+                  fontFamily = MaterialTheme.typography.displayMedium.fontFamily,
+                  fontSize = innerFontSize,
+                  fontWeight = FontWeight.Light,
+                  modifier = Modifier.padding(2.dp).fillMaxHeight(),
+                  textAlign = TextAlign.Center,
+              )
+            }
+          }
+
+          Spacer(modifier = Modifier.height(20.dp))
+
+          // Itinerary Description
+          Row(
+              modifier = Modifier.fillMaxWidth(),
+              verticalAlignment = Alignment.Top,
+          ) {
+            Text(
+                text = itinerary.description ?: "Looks like this Wander has no description!",
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                fontFamily = MaterialTheme.typography.displayMedium.fontFamily,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Normal,
+                modifier = Modifier.padding(2.dp),
+                textAlign = TextAlign.Center)
+          }
         }
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        Text(
-            text = itinerary.description ?: "Looks like this Wander has no description!",
-            color = MaterialTheme.colorScheme.onPrimaryContainer,
-            fontFamily = MaterialTheme.typography.displayMedium.fontFamily,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Normal,
-            modifier = Modifier.padding(2.dp),
-            textAlign = TextAlign.Center)
       }
 }
 
 @Composable
 fun ProfilePicture(profile: Profile?, profileViewModel: ProfileViewModel) {
+  val imageModifier = Modifier.clip(RoundedCornerShape(5.dp)).size(50.dp)
+
   val defaultProfilePicture by
       profileViewModel.getDefaultProfilePicture().collectAsState(initial = null)
+
   if (profile == null) {
     if (defaultProfilePicture == null) {
       Icon(
@@ -320,31 +324,35 @@ fun ProfilePicture(profile: Profile?, profileViewModel: ProfileViewModel) {
     } else {
       Image(
           painter = BitmapPainter(defaultProfilePicture!!.asImageBitmap()),
+          contentScale = ContentScale.FillHeight,
           contentDescription = "profile_pic",
-          modifier = Modifier.size(30.dp))
+          modifier = imageModifier)
     }
   } else {
     val profilePicture by profileViewModel.getProfilePicture(profile).collectAsState(initial = null)
     if (profilePicture != null) {
       Image(
           painter = BitmapPainter(profilePicture!!.asImageBitmap()),
+          contentScale = ContentScale.FillHeight,
           contentDescription = "profile_pic",
-          modifier = Modifier.size(30.dp))
+          modifier = imageModifier)
     } else if (defaultProfilePicture != null) {
       Image(
           painter = BitmapPainter(defaultProfilePicture!!.asImageBitmap()),
-          contentDescription = "profile_pic",
-          modifier = Modifier.size(30.dp))
+          contentScale = ContentScale.FillHeight,
+          contentDescription = "default_profile_pic",
+          modifier = imageModifier)
     } else {
       Icon(
           painter = painterResource(id = R.drawable.profile_icon),
+          modifier = Modifier.size(50.dp),
           contentDescription = "profile_icon")
     }
   }
 }
 
 @Composable
-fun PreviewItineraryBannerMinimized(onMinimizedClick: () -> Unit, itinerary: Itinerary) {
+private fun PreviewItineraryBannerMinimized(onMinimizedClick: () -> Unit, itinerary: Itinerary) {
   val titleFontSize = 32.sp
 
   ElevatedCard(
@@ -384,7 +392,7 @@ fun PreviewItineraryBannerMinimized(onMinimizedClick: () -> Unit, itinerary: Iti
 }
 
 @Composable
-fun CenterButton(cameraPositionState: CameraPositionState, currentLocation: Location?) {
+private fun CenterButton(cameraPositionState: CameraPositionState, currentLocation: Location?) {
   FloatingActionButton(
       onClick = {
         currentLocation?.let {
