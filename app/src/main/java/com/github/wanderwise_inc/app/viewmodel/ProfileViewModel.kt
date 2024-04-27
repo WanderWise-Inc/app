@@ -1,6 +1,7 @@
 package com.github.wanderwise_inc.app.viewmodel
 
 import android.graphics.Bitmap
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.data.ProfileRepository
@@ -13,6 +14,7 @@ class ProfileViewModel(
 ) : ViewModel() {
   /** @return flow of a user profile */
   fun getProfile(userUid: String): Flow<Profile?> {
+    Log.d("USER SIGN IN", "CALLING GET PROFILE")
     return profileRepository.getProfile(userUid)
   }
 
