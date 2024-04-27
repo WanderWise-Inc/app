@@ -146,6 +146,7 @@ private fun PreviewItineraryBannerMaximized(
   val innerFontSize = 16.sp
 
   val profile by profileViewModel.getProfile(itinerary.userUid).collectAsState(initial = null)
+
   ElevatedCard(
       colors =
           CardDefaults.cardColors(
@@ -393,7 +394,7 @@ private fun PreviewItineraryBannerMinimized(onMinimizedClick: () -> Unit, itiner
 }
 
 @Composable
-private fun CenterButton(cameraPositionState: CameraPositionState, currentLocation: Location?) {
+fun CenterButton(cameraPositionState: CameraPositionState, currentLocation: Location?) {
   FloatingActionButton(
       onClick = {
         currentLocation?.let {
