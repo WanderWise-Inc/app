@@ -2,6 +2,7 @@ package com.github.wanderwise_inc.app.ui.map
 
 import android.graphics.Bitmap
 import android.location.Location
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -49,6 +50,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.wanderwise_inc.app.R
 import com.github.wanderwise_inc.app.model.location.Itinerary
+import com.github.wanderwise_inc.app.model.profile.Profile
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -143,7 +145,11 @@ private fun PreviewItineraryBannerMaximized(
   val profilePicFlow: Flow<Bitmap?> =
       if (profile == null) flow { emit(null) } else profileViewModel.getProfilePicture(profile!!)
 
+  val defaultProfilePic by
+      profileViewModel.getDefaultProfilePicture().collectAsState(initial = null)
+
   val profilePic by profilePicFlow.collectAsState(initial = null)
+  Log.d("PREVIEW_ITINERARY", "profilePic = $profilePic")
 
   val titleFontSize = 32.sp
   val innerFontSize = 16.sp
@@ -259,56 +265,82 @@ private fun PreviewItineraryBannerMaximized(
               horizontalArrangement = Arrangement.Center,
               verticalAlignment = Alignment.CenterVertically,
               modifier = Modifier.height(50.dp)) {
-                if (profilePic != null) {
-                  Image(
-                      painter = BitmapPainter(profilePic!!.asImageBitmap()),
-                      contentDescription = "profile_pic",
-                      modifier = Modifier.size(30.dp))
-                } else {
-                  Icon(
-                      painter = painterResource(id = R.drawable.profile_icon),
-                      contentDescription = "profile_icon")
-                }
-
-                Spacer(modifier = Modifier.width(10.dp))
-
-                Column(
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.Start,
-                    modifier = Modifier.fillMaxHeight()) {
-                      Text(
-                          text = profile?.displayName ?: "John Doe",
-                          color = MaterialTheme.colorScheme.onPrimaryContainer,
-                          fontFamily = MaterialTheme.typography.displayMedium.fontFamily,
-                          fontSize = innerFontSize,
-                          fontWeight = FontWeight.SemiBold,
-                          // modifier = Modifier.padding(2.dp),
-                          textAlign = TextAlign.Center,
-                      )
-                      Text(
-                          text = "Local WanderGuide",
-                          color = MaterialTheme.colorScheme.onPrimaryContainer,
-                          fontFamily = MaterialTheme.typography.displayMedium.fontFamily,
-                          fontSize = innerFontSize,
-                          fontWeight = FontWeight.Light,
-                          // modifier = Modifier.padding(2.dp),
-                          textAlign = TextAlign.Center,
-                      )
-                    }
+                ProfilePicture(profile = profile, profileViewModel = profileViewModel)
               }
 
-          Spacer(modifier = Modifier.height(20.dp))
+          Spacer(modifier = Modifier.width(10.dp))
 
-          Text(
-              text = itinerary.description ?: "Looks like this Wander has no description!",
-              color = MaterialTheme.colorScheme.onPrimaryContainer,
-              fontFamily = MaterialTheme.typography.displayMedium.fontFamily,
-              fontSize = 16.sp,
-              fontWeight = FontWeight.Normal,
-              modifier = Modifier.padding(2.dp),
-              textAlign = TextAlign.Center)
+          Column(
+              verticalArrangement = Arrangement.Center,
+              horizontalAlignment = Alignment.Start,
+              modifier = Modifier.fillMaxHeight()) {
+                Text(
+                    text = profile?.displayName ?: "John Doe",
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    fontFamily = MaterialTheme.typography.displayMedium.fontFamily,
+                    fontSize = innerFontSize,
+                    fontWeight = FontWeight.SemiBold,
+                    // modifier = Modifier.padding(2.dp),
+                    textAlign = TextAlign.Center,
+                )
+                Text(
+                    text = "Local WanderGuide",
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    fontFamily = MaterialTheme.typography.displayMedium.fontFamily,
+                    fontSize = innerFontSize,
+                    fontWeight = FontWeight.Light,
+                    // modifier = Modifier.padding(2.dp),
+                    textAlign = TextAlign.Center,
+                )
+              }
         }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Text(
+            text = itinerary.description ?: "Looks like this Wander has no description!",
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
+            fontFamily = MaterialTheme.typography.displayMedium.fontFamily,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Normal,
+            modifier = Modifier.padding(2.dp),
+            textAlign = TextAlign.Center)
       }
+}
+
+@Composable
+fun ProfilePicture(profile: Profile?, profileViewModel: ProfileViewModel) {
+  val defaultProfilePicture by
+      profileViewModel.getDefaultProfilePicture().collectAsState(initial = null)
+  if (profile == null) {
+    if (defaultProfilePicture == null) {
+      Icon(
+          painter = painterResource(id = R.drawable.profile_icon),
+          contentDescription = "profile_icon")
+    } else {
+      Image(
+          painter = BitmapPainter(defaultProfilePicture!!.asImageBitmap()),
+          contentDescription = "profile_pic",
+          modifier = Modifier.size(30.dp))
+    }
+  } else {
+    val profilePicture by profileViewModel.getProfilePicture(profile).collectAsState(initial = null)
+    if (profilePicture != null) {
+      Image(
+          painter = BitmapPainter(profilePicture!!.asImageBitmap()),
+          contentDescription = "profile_pic",
+          modifier = Modifier.size(30.dp))
+    } else if (defaultProfilePicture != null) {
+      Image(
+          painter = BitmapPainter(defaultProfilePicture!!.asImageBitmap()),
+          contentDescription = "profile_pic",
+          modifier = Modifier.size(30.dp))
+    } else {
+      Icon(
+          painter = painterResource(id = R.drawable.profile_icon),
+          contentDescription = "profile_icon")
+    }
+  }
 }
 
 @Composable
