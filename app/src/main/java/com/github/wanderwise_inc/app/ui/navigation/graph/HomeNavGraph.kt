@@ -4,11 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.github.wanderwise_inc.app.PREVIEW_ITINERARY_DEMO_UID
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.demoSetup
 import com.github.wanderwise_inc.app.model.location.Itinerary
-import com.github.wanderwise_inc.app.model.location.ItineraryTags
-import com.github.wanderwise_inc.app.model.location.PlacesReader
 import com.github.wanderwise_inc.app.ui.list_itineraries.LikedScreen
 import com.github.wanderwise_inc.app.ui.list_itineraries.OverviewScreen
 import com.github.wanderwise_inc.app.ui.map.PreviewItineraryScreen
@@ -17,6 +16,8 @@ import com.github.wanderwise_inc.app.ui.profile.ProfileScreen
 import com.github.wanderwise_inc.app.ui.search.SearchScreen
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 
 @Composable
 fun HomeNavGraph(
@@ -25,20 +26,14 @@ fun HomeNavGraph(
     profileViewModel: ProfileViewModel,
     imageRepository: ImageRepository
 ) {
-  val placeReader = PlacesReader(null)
-  val locations = placeReader.readFromString()
 
-  val itinerary =
-      Itinerary(
-          userUid = "",
-          locations = locations,
-          title = "San Francisco Bike Itinerary",
-          tags = listOf(ItineraryTags.CULTURAL, ItineraryTags.NATURE, ItineraryTags.BUDGET),
-          description = "A 3-day itinerary to explore the best of San Francisco on a bike.",
-          visible = true)
-
-  // setup the demo
+  // BEGIN DEMO SETUP
   demoSetup(mapViewModel, profileViewModel)
+  var itinerary: Itinerary? = null
+  runBlocking {
+    itinerary = mapViewModel.getItineraryFromUids(listOf(PREVIEW_ITINERARY_DEMO_UID)).first()[0]
+  }
+  // END DEMO SETUP
 
   NavHost(
       navController = navController,
@@ -54,10 +49,7 @@ fun HomeNavGraph(
     }
     composable(route = TopLevelDestination.Search.route) { SearchScreen(mapViewModel) }
     composable(route = TopLevelDestination.Map.route) {
-      PreviewItineraryScreen(itinerary, mapViewModel)
-    }
-    composable(route = TopLevelDestination.Profile.route) {
-      ProfileScreen(mapViewModel, profileViewModel, imageRepository)
+      PreviewItineraryScreen(itinerary!!, mapViewModel, profileViewModel)
     }
     composable(route = TopLevelDestination.Profile.route) {
       ProfileScreen(mapViewModel, profileViewModel, imageRepository)
