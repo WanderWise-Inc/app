@@ -144,4 +144,64 @@ class ProfileRepositoryTest {
         }
     }
 
+    @Test
+    fun `remove itinerary for liked should correctly remove those itineraries`() = runTest {
+        val iti = listOf("i0", "i1", "i2")
+        profileRepositoryTestImpl.setProfile(profile0)
+
+        for (i in iti.indices) {
+            profileRepositoryTestImpl.addItineraryToLiked(profile0.userUid, iti[i])
+        }
+
+        val itineraries = profileRepositoryTestImpl.getLikedItineraries(profile0.userUid).first()
+        /**
+         * Remove the itineraries from the list
+         */
+        for (i in itineraries.indices) {
+            profileRepositoryTestImpl.removeItineraryFromLiked(profile0.userUid, iti[i])
+            assertEquals(2-i, itineraries.size)
+            assertFalse(itineraries.contains(iti[i]))
+        }
+    }
+
+    @Test
+    fun `if an itinerary is liked, it should be added to the list`() = runTest {
+        val iti = listOf("i0", "i1", "i2")
+        profileRepositoryTestImpl.setProfile(profile0)
+
+        for (i in iti.indices) {
+            profileRepositoryTestImpl.addItineraryToLiked(profile0.userUid, iti[i])
+            assertTrue(profileRepositoryTestImpl.checkIfItineraryIsLiked(profile0.userUid, iti[i]))
+        }
+    }
+
+    @Test
+    fun `if an itinerary isn't liked, it should not be in the list`() = runTest {
+        val notInList = listOf("n0", "n1", "n2")
+        profileRepositoryTestImpl.setProfile(profile0)
+        for (i in notInList.indices) {
+            assertFalse(profileRepositoryTestImpl.checkIfItineraryIsLiked(profile0.userUid, notInList[i]))
+        }
+    }
+
+    @Test
+    fun `getLikedItineraries should return an empty list if no like happened`() = runTest {
+        profileRepositoryTestImpl.setProfile(profile0)
+        val itineraries = profileRepositoryTestImpl.getLikedItineraries(profile0.userUid).first()
+        assertTrue(itineraries.isEmpty())
+    }
+
+    @Test
+    fun `getLikedItineraries should return the list of liked itineraries`() = runTest {
+        profileRepositoryTestImpl.setProfile(profile0)
+        val iti = listOf("i0", "i1", "i2")
+        for (i in iti.indices) {
+            profileRepositoryTestImpl.addItineraryToLiked(profile0.userUid, iti[i])
+        }
+        val getItineraries = profileRepositoryTestImpl.getLikedItineraries(profile0.userUid).first()
+        for (i in 0..2) {
+            assertEquals(iti[i], getItineraries[i])
+        }
+    }
+
 }
