@@ -2,7 +2,9 @@ package com.github.wanderwise_inc.app.ui.map
 
 import android.graphics.Bitmap
 import android.location.Location
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,6 +19,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Place
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
@@ -27,12 +31,16 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -41,7 +49,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.wanderwise_inc.app.R
 import com.github.wanderwise_inc.app.model.location.Itinerary
-import com.github.wanderwise_inc.app.model.profile.Profile
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -55,7 +62,8 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 /** @brief previews an itinerary */
 @Composable
@@ -75,23 +83,14 @@ fun PreviewItineraryScreen(
   val polylinePoints = null
 
   Scaffold(
-      // TODO implement the real like button click and banner click functionality with viewmodels
-      bottomBar = {
-        PreviewItineraryBanner(itinerary, mapViewModel, profileViewModel)
-        // ItineraryBanner(itinerary = itinerary, onLikeButtonClick = { _, _ -> }, onBannerClick =
-        // {})
-      },
+      bottomBar = { PreviewItineraryBanner(itinerary, mapViewModel, profileViewModel) },
       modifier = Modifier.testTag("Map screen"),
-      /*
       floatingActionButton = {
         CenterButton(cameraPositionState = cameraPositionState, currentLocation = userLocation)
-      },*/
-      floatingActionButtonPosition = FabPosition.EndOverlay) { paddingValues ->
+      },
+      floatingActionButtonPosition = FabPosition.Start) { paddingValues ->
         GoogleMap(
-            modifier = Modifier
-              .fillMaxSize()
-              .padding(paddingValues)
-              .testTag("Google Maps"),
+            modifier = Modifier.fillMaxSize().padding(paddingValues).testTag("Google Maps"),
             cameraPositionState = cameraPositionState) {
               userLocation?.let {
                 Marker(
@@ -118,11 +117,36 @@ fun PreviewItineraryBanner(
     profileViewModel: ProfileViewModel
 ) {
 
+  var isMinimized by remember { mutableStateOf(false) }
+  val onMinimizedClick = { isMinimized = !isMinimized }
+
+  if (isMinimized)
+      PreviewItineraryBannerMinimized(onMinimizedClick = onMinimizedClick, itinerary = itinerary)
+  else
+      PreviewItineraryBannerMaximized(
+          onMinimizedClick = onMinimizedClick,
+          itinerary = itinerary,
+          mapViewModel = mapViewModel,
+          profileViewModel = profileViewModel)
+}
+
+/** Banner displayed beneath the maps composable in `PreviewItineraryScreen` */
+@Composable
+private fun PreviewItineraryBannerMaximized(
+    onMinimizedClick: () -> Unit,
+    itinerary: Itinerary,
+    mapViewModel: MapViewModel,
+    profileViewModel: ProfileViewModel
+) {
+
   val profile by profileViewModel.getProfile(itinerary.userUid).collectAsState(initial = null)
+  val profilePicFlow: Flow<Bitmap?> =
+      if (profile == null) flow { emit(null) } else profileViewModel.getProfilePicture(profile!!)
+
+  val profilePic by profilePicFlow.collectAsState(initial = null)
 
   val titleFontSize = 32.sp
   val innerFontSize = 16.sp
-
 
   ElevatedCard(
       colors =
@@ -134,22 +158,28 @@ fun PreviewItineraryBanner(
       modifier = Modifier.testTag("Itinerary banner")) {
         Column(
             modifier =
-            Modifier
-              .background(MaterialTheme.colorScheme.primaryContainer)
-              .fillMaxWidth()
-              .aspectRatio(1.2f)
-              .padding(30.dp),
+                Modifier.background(MaterialTheme.colorScheme.primaryContainer)
+                    .fillMaxWidth()
+                    .aspectRatio(1.2f)
+                    .padding(30.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-          // Itinerary Title
-          Text(
-              text = itinerary.title,
-              color = MaterialTheme.colorScheme.onPrimaryContainer,
-              fontFamily = MaterialTheme.typography.displayLarge.fontFamily,
-              fontSize = titleFontSize,
-              fontWeight = FontWeight.Normal,
-              modifier = Modifier.padding(2.dp),
-              textAlign = TextAlign.Center)
+          Row {
+            // minimize button
+            Icon(
+                imageVector = Icons.Filled.KeyboardArrowDown,
+                contentDescription = "minimize_button",
+                modifier = Modifier.clickable { onMinimizedClick() })
+            // Itinerary Title
+            Text(
+                text = itinerary.title,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                fontFamily = MaterialTheme.typography.displayLarge.fontFamily,
+                fontSize = titleFontSize,
+                fontWeight = FontWeight.Normal,
+                modifier = Modifier.padding(2.dp),
+                textAlign = TextAlign.Center)
+          }
 
           Spacer(modifier = Modifier.height(10.dp))
 
@@ -225,37 +255,49 @@ fun PreviewItineraryBanner(
           Spacer(modifier = Modifier.height(10.dp))
 
           // Profile details
-          Row (horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.height(50.dp)){
-            Icon(painter = painterResource(id = R.drawable.profile_icon), contentDescription = "Profile",
-              modifier = Modifier.fillMaxHeight())
+          Row(
+              horizontalArrangement = Arrangement.Center,
+              verticalAlignment = Alignment.CenterVertically,
+              modifier = Modifier.height(50.dp)) {
+                if (profilePic != null) {
+                  Image(
+                      painter = BitmapPainter(profilePic!!.asImageBitmap()),
+                      contentDescription = "profile_pic",
+                      modifier = Modifier.size(30.dp))
+                } else {
+                  Icon(
+                      painter = painterResource(id = R.drawable.profile_icon),
+                      contentDescription = "profile_icon")
+                }
 
-            Spacer(modifier = Modifier.width(10.dp))
+                Spacer(modifier = Modifier.width(10.dp))
 
-            Column (verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.Start,
-              modifier = Modifier.fillMaxHeight()){
-              Text(
-                text = profile?.displayName ?: "John Doe",
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                fontFamily = MaterialTheme.typography.displayMedium.fontFamily,
-                fontSize = innerFontSize,
-                fontWeight = FontWeight.SemiBold,
-                // modifier = Modifier.padding(2.dp),
-                textAlign = TextAlign.Center,
-              )
-              Text(
-                text = "Local WanderGuide",
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                fontFamily = MaterialTheme.typography.displayMedium.fontFamily,
-                fontSize = innerFontSize,
-                fontWeight = FontWeight.Light,
-                // modifier = Modifier.padding(2.dp),
-                textAlign = TextAlign.Center,
-              )
-            }
-          }
-          
-          Spacer(modifier = Modifier.height(10.dp))
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.Start,
+                    modifier = Modifier.fillMaxHeight()) {
+                      Text(
+                          text = profile?.displayName ?: "John Doe",
+                          color = MaterialTheme.colorScheme.onPrimaryContainer,
+                          fontFamily = MaterialTheme.typography.displayMedium.fontFamily,
+                          fontSize = innerFontSize,
+                          fontWeight = FontWeight.SemiBold,
+                          // modifier = Modifier.padding(2.dp),
+                          textAlign = TextAlign.Center,
+                      )
+                      Text(
+                          text = "Local WanderGuide",
+                          color = MaterialTheme.colorScheme.onPrimaryContainer,
+                          fontFamily = MaterialTheme.typography.displayMedium.fontFamily,
+                          fontSize = innerFontSize,
+                          fontWeight = FontWeight.Light,
+                          // modifier = Modifier.padding(2.dp),
+                          textAlign = TextAlign.Center,
+                      )
+                    }
+              }
+
+          Spacer(modifier = Modifier.height(20.dp))
 
           Text(
               text = itinerary.description ?: "Looks like this Wander has no description!",
@@ -265,6 +307,46 @@ fun PreviewItineraryBanner(
               fontWeight = FontWeight.Normal,
               modifier = Modifier.padding(2.dp),
               textAlign = TextAlign.Center)
+        }
+      }
+}
+
+@Composable
+fun PreviewItineraryBannerMinimized(onMinimizedClick: () -> Unit, itinerary: Itinerary) {
+  val titleFontSize = 32.sp
+
+  ElevatedCard(
+      colors =
+          CardDefaults.cardColors(
+              containerColor = MaterialTheme.colorScheme.primaryContainer,
+          ),
+      elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+      shape = RoundedCornerShape(13.dp),
+      modifier = Modifier.testTag("Itinerary banner")) {
+        Column(
+            modifier =
+                Modifier.background(MaterialTheme.colorScheme.primaryContainer)
+                    .fillMaxWidth()
+                    .aspectRatio(3f)
+                    .padding(30.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+          Row {
+            // minimize button
+            Icon(
+                imageVector = Icons.Filled.KeyboardArrowUp,
+                contentDescription = "minimize_button",
+                modifier = Modifier.clickable { onMinimizedClick() })
+            // Itinerary Title
+            Text(
+                text = itinerary.title,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                fontFamily = MaterialTheme.typography.displayLarge.fontFamily,
+                fontSize = titleFontSize,
+                fontWeight = FontWeight.Normal,
+                modifier = Modifier.padding(2.dp),
+                textAlign = TextAlign.Center)
+          }
         }
       }
 }
