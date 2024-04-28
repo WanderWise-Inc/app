@@ -1,6 +1,5 @@
 package com.github.wanderwise_inc.app.ui.navigation
 
-/*
 import android.app.Application
 import android.content.Context
 import android.location.*
@@ -14,13 +13,17 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
 import com.github.wanderwise_inc.app.data.DirectionsRepository
-import com.github.wanderwise_inc.app.data.ImageRepositoryTestImpl
+import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.data.ItineraryRepositoryTestImpl
 import com.github.wanderwise_inc.app.data.ProfileRepositoryTestImpl
+import com.github.wanderwise_inc.app.demoSetup
 import com.github.wanderwise_inc.app.model.location.Location
 import com.github.wanderwise_inc.app.model.profile.Profile
+import com.github.wanderwise_inc.app.ui.creation.CreationScreenTestTags
 import com.github.wanderwise_inc.app.ui.home.HomeScreen
-import com.github.wanderwise_inc.app.viewmodel.HomeViewModel
+import com.github.wanderwise_inc.app.ui.list_itineraries.LikedScreenTestTags
+import com.github.wanderwise_inc.app.ui.list_itineraries.OverviewScreenTestTags
+import com.github.wanderwise_inc.app.ui.map.MapScreenTestTag
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.github.wanderwise_inc.app.viewmodel.UserLocationClient
@@ -45,18 +48,20 @@ import org.robolectric.RobolectricTestRunner
 @RunWith(RobolectricTestRunner::class)
 class HomeNavigationTest {
   @get:Rule val composeTestRule = createComposeRule()
+  @get:Rule val mockitoRule: MockitoRule = MockitoJUnit.rule()
+    
   private lateinit var navController: NavHostController
 
-  @get:Rule val mockitoRule: MockitoRule = MockitoJUnit.rule()
-
-  @Mock private lateinit var userLocationClient: UserLocationClient
-
+  /*@Mock private lateinit var userLocationClient: UserLocationClient
   @Mock private lateinit var mockApplication: Application
   @Mock private lateinit var mockContext: Context
+  @Mock private lateinit var mockDirectionsRepository: DirectionsRepository*/
+  
+  @Mock private lateinit var imageRepository: ImageRepository
+  @Mock private lateinit var mapViewModel: MapViewModel
+  @Mock private lateinit var profileViewModel: ProfileViewModel
 
-  @Mock private lateinit var mockDirectionsRepository: DirectionsRepository
-
-  @Before
+  /*@Before
   fun `setup mockDirectionsRepository`() {
     fun randomLat(): Double = Random.nextDouble(-90.0, 90.0)
 
@@ -82,7 +87,7 @@ class HomeNavigationTest {
                 waypoints = anyList(),
                 anyString()))
         .thenReturn(mockResonse)
-  }
+  }*/
 
   private val epflLat = 46.519126741544575
   private val epflLon = 6.5676006970802145
@@ -90,7 +95,7 @@ class HomeNavigationTest {
   @Before
   fun setupNavHost() {
     composeTestRule.setContent {
-      val homeViewModel = HomeViewModel()
+      /*val homeViewModel = HomeViewModel()
       mockApplication = mock(Application::class.java)
       mockContext = mock(Context::class.java)
 
@@ -114,11 +119,14 @@ class HomeNavigationTest {
 
       val itineraryRepository = ItineraryRepositoryTestImpl()
       val mapViewModel =
-          MapViewModel(itineraryRepository, mockDirectionsRepository, userLocationClient)
+          MapViewModel(itineraryRepository, mockDirectionsRepository, userLocationClient)*/
+      
+      `when`(demoSetup(mapViewModel, profileViewModel)).then { /* do nothing */ }
+      
       FirebaseApp.initializeApp(LocalContext.current)
       navController = TestNavHostController(LocalContext.current)
       navController.navigatorProvider.addNavigator(ComposeNavigator())
-      HomeScreen(homeViewModel, mapViewModel, profileViewModel, navController)
+      HomeScreen(imageRepository, mapViewModel, profileViewModel, navController)
     }
   }
 
@@ -129,7 +137,7 @@ class HomeNavigationTest {
 
   @Test
   fun verify_StartDestinationIsOverviewScreen() {
-    composeTestRule.onNodeWithTag("Overview screen").assertIsDisplayed()
+    composeTestRule.onNodeWithTag(OverviewScreenTestTags.SCREEN).assertIsDisplayed()
 
     val route = navController.currentBackStackEntry?.destination?.route
     assertEquals(Route.OVERVIEW, route)
@@ -139,27 +147,27 @@ class HomeNavigationTest {
   fun performClick_OnItineraryButton_NavigatesToLikedScreen() {
     composeTestRule.onNodeWithTag(Route.LIKED).performClick()
 
-    composeTestRule.onNodeWithTag("Liked screen").assertIsDisplayed()
+    composeTestRule.onNodeWithTag(LikedScreenTestTags.SCREEN).assertIsDisplayed()
 
     val route = navController.currentBackStackEntry?.destination?.route
     assertEquals(Route.LIKED, route)
   }
 
   @Test
-  fun performClick_OnItineraryButton_NavigatesToSearchScreen() {
-    composeTestRule.onNodeWithTag(Route.SEARCH).performClick()
+  fun performClick_OnItineraryButton_NavigatesToCreationScreen() {
+    composeTestRule.onNodeWithTag(Route.CREATION).performClick()
 
-    composeTestRule.onNodeWithTag("Search screen").assertIsDisplayed()
+    composeTestRule.onNodeWithTag(CreationScreenTestTags.SCREEN).assertIsDisplayed()
 
     val route = navController.currentBackStackEntry?.destination?.route
-    assertEquals(Route.SEARCH, route)
+    assertEquals(Route.CREATION, route)
   }
 
   @Test
   fun performClick_OnMapButton_NavigatesToMapScreen() {
     composeTestRule.onNodeWithTag(Route.MAP).performClick()
 
-    composeTestRule.onNodeWithTag("Map screen").assertIsDisplayed()
+    composeTestRule.onNodeWithTag(MapScreenTestTag.SCREEN).assertIsDisplayed()
 
     val route = navController.currentBackStackEntry?.destination?.route
     assertEquals(Route.MAP, route)
@@ -182,7 +190,7 @@ class HomeNavigationTest {
 
     composeTestRule.onNodeWithTag(Route.MAP).performClick()
 
-    composeTestRule.onNodeWithTag("Map screen").assertIsDisplayed()
+    composeTestRule.onNodeWithTag(MapScreenTestTag.SCREEN).assertIsDisplayed()
 
     val route = navController.currentBackStackEntry?.destination?.route
     assertEquals(Route.MAP, route)
@@ -194,7 +202,7 @@ class HomeNavigationTest {
 
     composeTestRule.onNodeWithTag(Route.LIKED).performClick()
 
-    composeTestRule.onNodeWithTag("Liked screen").assertIsDisplayed()
+    composeTestRule.onNodeWithTag(LikedScreenTestTags.SCREEN).assertIsDisplayed()
 
     val route = navController.currentBackStackEntry?.destination?.route
     assertEquals(Route.LIKED, route)
@@ -206,7 +214,7 @@ class HomeNavigationTest {
 
     composeTestRule.onNodeWithTag(Route.OVERVIEW).performClick()
 
-    composeTestRule.onNodeWithTag("Overview screen").assertIsDisplayed()
+    composeTestRule.onNodeWithTag(OverviewScreenTestTags.SCREEN).assertIsDisplayed()
 
     val route = navController.currentBackStackEntry?.destination?.route
     assertEquals(Route.OVERVIEW, route)
@@ -229,7 +237,7 @@ class HomeNavigationTest {
     val route = navController.currentBackStackEntry?.destination?.route
     assertEquals(Route.OVERVIEW, route)
 
-    composeTestRule.onNodeWithTag("Overview screen").assertIsDisplayed()
+    composeTestRule.onNodeWithTag(OverviewScreenTestTags.SCREEN).assertIsDisplayed()
   }
 
   @Test
@@ -252,4 +260,3 @@ class HomeNavigationTest {
     assertEquals(null, route)
   }
 }
-*/

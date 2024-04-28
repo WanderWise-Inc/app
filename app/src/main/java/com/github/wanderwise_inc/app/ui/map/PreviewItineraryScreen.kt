@@ -32,6 +32,10 @@ import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
 
+object MapScreenTestTag {
+    const val SCREEN = "Overview Screen"
+}
+
 /** @brief previews an itinerary */
 @Composable
 fun PreviewItineraryScreen(itinerary: Itinerary, mapViewModel: MapViewModel) {
@@ -49,7 +53,7 @@ fun PreviewItineraryScreen(itinerary: Itinerary, mapViewModel: MapViewModel) {
       bottomBar = {
         ItineraryBanner(itinerary = itinerary, onLikeButtonClick = { _, _ -> }, onBannerClick = {})
       },
-      modifier = Modifier.testTag("Map screen"),
+      modifier = Modifier.testTag(MapScreenTestTag.SCREEN),
       floatingActionButton = {
         CenterButton(cameraPositionState = cameraPositionState, currentLocation = userLocation)
       },
