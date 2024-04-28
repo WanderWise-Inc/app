@@ -21,8 +21,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Place
+import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -147,13 +147,11 @@ private fun PreviewItineraryBannerMaximized(
 
   val profile by profileViewModel.getProfile(itinerary.userUid).collectAsState(initial = null)
 
-  ElevatedCard(
+  Card(
       colors =
           CardDefaults.cardColors(
               containerColor = MaterialTheme.colorScheme.primaryContainer,
           ),
-      elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
-      shape = RoundedCornerShape(13.dp),
       modifier = Modifier.testTag("Itinerary banner")) {
         Column(
             modifier =
@@ -357,13 +355,11 @@ fun ProfilePicture(profile: Profile?, profileViewModel: ProfileViewModel) {
 private fun PreviewItineraryBannerMinimized(onMinimizedClick: () -> Unit, itinerary: Itinerary) {
   val titleFontSize = 32.sp
 
-  ElevatedCard(
+  Card(
       colors =
           CardDefaults.cardColors(
               containerColor = MaterialTheme.colorScheme.primaryContainer,
           ),
-      elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
-      shape = RoundedCornerShape(13.dp),
       modifier = Modifier.testTag("Itinerary banner")) {
         Column(
             modifier =
@@ -403,7 +399,7 @@ fun CenterButton(cameraPositionState: CameraPositionState, currentLocation: Loca
         }
       },
       modifier = Modifier.testTag("Center Button"),
-      containerColor = Color.White) {
+      containerColor = MaterialTheme.colorScheme.surfaceContainer) {
         Icon(
             imageVector = Icons.Default.Place,
             contentDescription = "Center on Me",
