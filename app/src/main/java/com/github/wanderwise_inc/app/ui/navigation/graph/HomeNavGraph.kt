@@ -17,13 +17,15 @@ import com.github.wanderwise_inc.app.ui.navigation.Destination.TopLevelDestinati
 import com.github.wanderwise_inc.app.ui.profile.ProfileScreen
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun HomeNavGraph(
     navController: NavHostController,
     mapViewModel: MapViewModel,
     profileViewModel: ProfileViewModel,
-    imageRepository: ImageRepository
+    imageRepository: ImageRepository,
+    firebaseAuth: FirebaseAuth
 ) {
   val placeReader = PlacesReader(null)
   val locations = placeReader.readFromString()
@@ -38,7 +40,7 @@ fun HomeNavGraph(
           visible = true)
 
   // setup the demo
-  demoSetup(mapViewModel, profileViewModel)
+  demoSetup(mapViewModel, profileViewModel, firebaseAuth)
 
   NavHost(
       navController = navController,
@@ -50,16 +52,16 @@ fun HomeNavGraph(
       OverviewScreen(mapViewModel, profileViewModel)
     }
     composable(route = TopLevelDestination.Liked.route) {
-      LikedScreen(mapViewModel, profileViewModel)
+      LikedScreen(mapViewModel, profileViewModel, firebaseAuth)
     }
     composable(route = TopLevelDestination.Creation.route) { 
-        CreationScreen(mapViewModel) 
+      CreationScreen(mapViewModel) 
     }
     composable(route = TopLevelDestination.Map.route) {
       PreviewItineraryScreen(itinerary, mapViewModel)
     }
     composable(route = TopLevelDestination.Profile.route) {
-      ProfileScreen(mapViewModel, profileViewModel, imageRepository)
+      ProfileScreen(mapViewModel, profileViewModel, imageRepository, firebaseAuth)
     }
   }
 }

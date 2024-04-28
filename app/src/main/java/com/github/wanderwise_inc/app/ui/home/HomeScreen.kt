@@ -23,6 +23,7 @@ import com.github.wanderwise_inc.app.ui.navigation.NavigationActions
 import com.github.wanderwise_inc.app.ui.navigation.graph.HomeNavGraph
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun HomeScreen(
@@ -30,6 +31,7 @@ fun HomeScreen(
     mapViewModel: MapViewModel,
     profileViewModel: ProfileViewModel,
     navController: NavHostController = rememberNavController(),
+    firebaseAuth: FirebaseAuth,
 ) {
   val navigationActions = NavigationActions(navController)
   Scaffold(topBar = {}, bottomBar = { BottomNavigationMenu(navigationActions) }) { innerPadding ->
@@ -51,7 +53,7 @@ fun HomeScreen(
       }
     }
     Box(modifier = Modifier.padding(innerPadding)) {
-      HomeNavGraph(navController, mapViewModel, profileViewModel, imageRepository)
+      HomeNavGraph(navController, mapViewModel, profileViewModel, imageRepository, firebaseAuth)
     }
   }
 }

@@ -54,10 +54,11 @@ const val PROFILE_SCREEN_TEST_TAG: String = "profile_screen"
 fun ProfileScreen(
     mapViewModel: MapViewModel,
     profileViewModel: ProfileViewModel,
-    imageRepository: ImageRepository
+    imageRepository: ImageRepository,
+    firebaseAuth: FirebaseAuth
 ) {
   // val currentUid = FirebaseAuth.getInstance().currentUser!!.uid
-  val currentUid = FirebaseAuth.getInstance().currentUser?.uid ?: DEFAULT_USER_UID
+  val currentUid = firebaseAuth.uid ?: DEFAULT_USER_UID
 
   val profile by profileViewModel.getProfile(currentUid).collectAsState(initial = null)
 

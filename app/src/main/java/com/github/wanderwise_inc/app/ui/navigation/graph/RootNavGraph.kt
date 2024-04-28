@@ -9,6 +9,7 @@ import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.ui.home.HomeScreen
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun RootNavigationGraph(
@@ -16,13 +17,14 @@ fun RootNavigationGraph(
     profileViewModel: ProfileViewModel,
     mapViewModel: MapViewModel,
     imageRepository: ImageRepository,
-    navController: NavHostController
+    navController: NavHostController,
+    firebaseAuth: FirebaseAuth
 ) {
   NavHost(
       navController = navController, route = Graph.ROOT, startDestination = Graph.AUTHENTICATION) {
         authNavGraph(context, profileViewModel, navController)
         composable(route = Graph.HOME) {
-          HomeScreen(imageRepository, mapViewModel, profileViewModel)
+          HomeScreen(imageRepository, mapViewModel, profileViewModel, firebaseAuth = firebaseAuth)
         }
       }
 }

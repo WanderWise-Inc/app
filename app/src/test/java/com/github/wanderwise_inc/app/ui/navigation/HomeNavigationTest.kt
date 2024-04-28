@@ -2,7 +2,6 @@ package com.github.wanderwise_inc.app.ui.navigation
 
 import android.app.Application
 import android.content.Context
-import android.location.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -28,7 +27,7 @@ import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.github.wanderwise_inc.app.viewmodel.UserLocationClient
 import com.google.firebase.FirebaseApp
-import kotlin.random.Random
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.flow
 import org.junit.Before
 import org.junit.Rule
@@ -36,32 +35,35 @@ import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.anyList
+import org.mockito.ArgumentMatchers.anyLong
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mock
-import org.mockito.Mockito.anyLong
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
 import org.robolectric.RobolectricTestRunner
+import kotlin.random.Random
 
 @RunWith(RobolectricTestRunner::class)
 class HomeNavigationTest {
   @get:Rule val composeTestRule = createComposeRule()
   @get:Rule val mockitoRule: MockitoRule = MockitoJUnit.rule()
-    
+  
   private lateinit var navController: NavHostController
 
-  /*@Mock private lateinit var userLocationClient: UserLocationClient
+  @Mock private lateinit var userLocationClient: UserLocationClient
   @Mock private lateinit var mockApplication: Application
   @Mock private lateinit var mockContext: Context
-  @Mock private lateinit var mockDirectionsRepository: DirectionsRepository*/
+  @Mock private lateinit var mockDirectionsRepository: DirectionsRepository
   
-  @Mock private lateinit var imageRepository: ImageRepository
+  /*@Mock private lateinit var imageRepository: ImageRepository
   @Mock private lateinit var mapViewModel: MapViewModel
   @Mock private lateinit var profileViewModel: ProfileViewModel
+  @Mock private lateinit var firebaseAuth: FirebaseAuth*/
 
-  /*@Before
+
+  @Before
   fun `setup mockDirectionsRepository`() {
     fun randomLat(): Double = Random.nextDouble(-90.0, 90.0)
 
@@ -87,7 +89,7 @@ class HomeNavigationTest {
                 waypoints = anyList(),
                 anyString()))
         .thenReturn(mockResonse)
-  }*/
+  }
 
   private val epflLat = 46.519126741544575
   private val epflLon = 6.5676006970802145
@@ -95,7 +97,6 @@ class HomeNavigationTest {
   @Before
   fun setupNavHost() {
     composeTestRule.setContent {
-      /*val homeViewModel = HomeViewModel()
       mockApplication = mock(Application::class.java)
       mockContext = mock(Context::class.java)
 
@@ -119,14 +120,16 @@ class HomeNavigationTest {
 
       val itineraryRepository = ItineraryRepositoryTestImpl()
       val mapViewModel =
-          MapViewModel(itineraryRepository, mockDirectionsRepository, userLocationClient)*/
+          MapViewModel(itineraryRepository, mockDirectionsRepository, userLocationClient)
       
-      `when`(demoSetup(mapViewModel, profileViewModel)).then { /* do nothing */ }
+      /*`when`(demoSetup(mapViewModel, profileViewModel, firebaseAuth)).then {  }
       
-      FirebaseApp.initializeApp(LocalContext.current)
+      `when`(firebaseAuth.uid).thenReturn("0")*/
+      
+      FirebaseApp.initializeApp(LocalContext.current)      
       navController = TestNavHostController(LocalContext.current)
       navController.navigatorProvider.addNavigator(ComposeNavigator())
-      HomeScreen(imageRepository, mapViewModel, profileViewModel, navController)
+      HomeScreen(imageRepository, mapViewModel, profileViewModel, navController, firebaseAuth)
     }
   }
 

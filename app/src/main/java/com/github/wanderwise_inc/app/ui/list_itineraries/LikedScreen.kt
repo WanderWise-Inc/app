@@ -3,11 +3,9 @@ package com.github.wanderwise_inc.app.ui.list_itineraries
 import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -44,13 +42,21 @@ object LikedScreenTestTags {
 }
 
 @Composable
-fun LikedScreen(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel) {
-  DisplayLikedItineraries(mapViewModel = mapViewModel, profileViewModel = profileViewModel)
+fun LikedScreen(
+    mapViewModel: MapViewModel,
+    profileViewModel: ProfileViewModel,
+    firebaseAuth: FirebaseAuth
+) {
+  DisplayLikedItineraries(mapViewModel, profileViewModel, firebaseAuth)
 }
 
 /** Displays itineraries liked by the user */
 @Composable
-fun DisplayLikedItineraries(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel) {
+fun DisplayLikedItineraries(
+    mapViewModel: MapViewModel,
+    profileViewModel: ProfileViewModel,
+    firebaseAuth: FirebaseAuth
+) {
 
   /* the categories that can be selected by the user during filtering */
   val categoriesList =
@@ -61,7 +67,7 @@ fun DisplayLikedItineraries(mapViewModel: MapViewModel, profileViewModel: Profil
           SearchCategory(ItineraryTags.FOODIE, R.drawable.drinks_icon, "Drinks"),
       )
 
-  val uid = FirebaseAuth.getInstance().uid ?: DEFAULT_USER_UID
+  val uid = firebaseAuth.uid ?: DEFAULT_USER_UID
   var selectedIndex by remember { mutableIntStateOf(0) }
   var searchQuery by remember { mutableStateOf("") }
   var priceRange by remember { mutableStateOf(0f) }

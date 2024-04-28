@@ -1,5 +1,6 @@
 package com.github.wanderwise_inc.app
 
+import android.util.Log
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
 import com.github.wanderwise_inc.app.model.location.PlacesReader
@@ -16,18 +17,19 @@ private const val OTHER_USER_UID = "OTHER_UID"
 private var DEMO_CALLED = false
 
 /** @brief isolates demo-related setup */
-fun demoSetup(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel) {
+fun demoSetup(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel, firebaseAuth: FirebaseAuth) {
   // was being called multiple times for some reason. The condition prevents this
+  Log.d("DEMO_SETUP", "demo setup started")
   if (!DEMO_CALLED) {
-    addProfiles(mapViewModel, profileViewModel)
+    addProfiles(mapViewModel, profileViewModel, firebaseAuth)
     addItineraries(mapViewModel, profileViewModel)
     DEMO_CALLED = true
   }
 }
 
 /** @brief adds some profiles to ProfileViewModel */
-fun addProfiles(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel) {
-  val currentUser = FirebaseAuth.getInstance().currentUser
+fun addProfiles(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel, firebaseAuth: FirebaseAuth) {
+  val currentUser = firebaseAuth.currentUser
   val currentUserUid = currentUser?.uid ?: DEFAULT_USER_UID
 
   val someOtherProfile =
