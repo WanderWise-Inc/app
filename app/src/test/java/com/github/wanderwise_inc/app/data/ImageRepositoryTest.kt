@@ -7,7 +7,6 @@ import androidx.activity.result.ActivityResultLauncher
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
-import com.google.android.gms.tasks.Tasks
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 import kotlinx.coroutines.CancellableContinuation
@@ -157,25 +156,54 @@ class ImageRepositoryTest {
 
   @Test
   fun `fetch image with a correct path should correctly return a bitMap`() = runTest {
-      val byteArray = byteArrayOf(1, 2, 3)
+    val byteArray = byteArrayOf(1, 2, 3)
     println(byteArray)
-      `when`(imageReference.child(any(String::class.java))).thenReturn(storageReference)
-      `when`(storageReference.getBytes(any(Long::class.java))).thenReturn(taskByteArray)
-      `when`(taskByteArray.addOnSuccessListener(any())).thenAnswer {
-        val listener = it.arguments[0] as OnSuccessListener<ByteArray>
-        listener.onSuccess(byteArray)
-        taskByteArray
-      }
+    `when`(imageReference.child(any(String::class.java))).thenReturn(storageReference)
+    `when`(storageReference.getBytes(any(Long::class.java))).thenReturn(taskByteArray)
+    `when`(taskByteArray.addOnSuccessListener(any())).thenAnswer {
+      val listener = it.arguments[0] as OnSuccessListener<ByteArray>
+      listener.onSuccess(byteArray)
+      taskByteArray
+    }
 
-      val byteR = imageRepositoryImpl.fetchImage("testPath").first()
-      val bitMap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
-      assertNotNull(byteR)
-      assertEquals(bitMap.width, byteR!!.width)
+    val byteR = imageRepositoryImpl.fetchImage("testPath").first()
+    val bitMap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+    assertNotNull(byteR)
+    assertEquals(bitMap.width, byteR!!.width)
     assertEquals(bitMap.height, byteR.height)
     for (x in 0 until bitMap.width) {
       for (y in 0 until bitMap.height) {
         assertEquals(bitMap.getPixel(x, y), byteR.getPixel(x, y))
       }
     }
+  }
+
+  @Test
+  fun `fetch image with an error for while getting the bytes should return a null bitmap`() =
+      runTest {
+        `when`(imageReference.child(any(String::class.java))).thenReturn(storageReference)
+        `when`(storageReference.getBytes(any(Long::class.java))).thenReturn(taskByteArray)
+        `when`(uploadTask.addOnFailureListener(any())).thenAnswer {
+          val listener = it.arguments[0] as OnFailureListener
+          listener.onFailure(Exception("Get bytes return an exception"))
+          taskByteArray
+        }
+
+        val bitmap = imageRepositoryImpl.fetchImage("testPath").first()
+        assertNull(bitmap)
+      }
+
+  @Test
+  fun `fetch image with getBytes that returns null should return a null bitmap`() = runTest {
+    `when`(imageReference.child(any(String::class.java))).thenReturn(storageReference)
+    `when`(storageReference.getBytes(any(Long::class.java))).thenReturn(taskByteArray)
+    `when`(uploadTask.addOnSuccessListener(any())).thenAnswer {
+      val listener = it.arguments[0] as OnSuccessListener<ByteArray>
+      listener.onSuccess(null)
+      taskByteArray
+    }
+
+    val bitmap = imageRepositoryImpl.fetchImage("testPath").first()
+    assertNull(bitmap)
   }
 }

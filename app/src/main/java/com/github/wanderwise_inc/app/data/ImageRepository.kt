@@ -93,43 +93,32 @@ class ImageRepositoryImpl(
    */
   override fun fetchImage(pathToProfilePic: String): Flow<Bitmap?> {
     return flow {
-      if (pathToProfilePic == "") {
-        // the path is empty, there should be no profilePicture at this path
-        emit(null)
-      } else {
-        val profilePictureRef = imageReference.child("images/${pathToProfilePic}")
+          if (pathToProfilePic.isBlank()) {
+            // the path is empty, there should be no profilePicture at this path
+            emit(null)
+          } else {
+            val profilePictureRef = imageReference.child("images/${pathToProfilePic}")
 
-          // the byte array that is at the given path (if any)
-            println("BEFORE BYTE RESULT")
-          val byteResult =
-              suspendCancellableCoroutine<ByteArray?> { continuation ->
-                  println("INT SUSPEND CALL")
-                profilePictureRef
-                    .getBytes(1024 * 1024)
-                    .addOnSuccessListener { byteResult ->
-                        println("NOT EXECUTED ?")
-                      continuation.resume(byteResult) // Resume with byte array
-                    }
-                    .addOnFailureListener { exception ->
-                        println("NOT EXECUTED ?")
-                      continuation.resumeWithException(exception) // Resume with exception
-                    }
-              }
+            // the byte array that is at the given path (if any)
+            val byteResult =
+                suspendCancellableCoroutine<ByteArray?> { continuation ->
+                  profilePictureRef
+                      .getBytes(1024 * 1024)
+                      .addOnSuccessListener { byteResult ->
+                        continuation.resume(byteResult) // Resume with byte array
+                      }
+                      .addOnFailureListener { exception ->
+                        continuation.resumeWithException(exception) // Resume with exception
+                      }
+                }
 
-            println("AFTER BYTE RESULT")
+            // Decode bitmap if byte are is not null
+            val bitmap = byteResult?.let { BitmapFactory.decodeByteArray(it, 0, it.size) }
 
-          // Decode bitmap if byte are is not null
-          val bitmap = byteResult?.let {
-              BitmapFactory.decodeByteArray(it, 0, it.size)
+            emit(bitmap) // Emit bitmap
           }
-            println(bitmap)
-
-          emit(bitmap) // Emit bitmap
-
-      }
-    }.catch {
-        emit(null)
-    }
+        }
+        .catch { emit(null) }
   }
 
   /**
