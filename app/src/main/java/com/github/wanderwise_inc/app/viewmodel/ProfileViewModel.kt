@@ -36,6 +36,11 @@ class ProfileViewModel(
     return imageRepository.fetchImage("profilePicture/${profile.userUid}")
   }
 
+  /** @return the default profile picture asset */
+  fun getDefaultProfilePicture(): Flow<Bitmap?> {
+    return imageRepository.fetchImage("profilePicture/defaultProfilePicture.jpg")
+  }
+
   /** @brief add an Itinerary to the user's liked itineraries */
   fun addLikedItinerary(userUid: String, itineraryUid: String) {
     profileRepository.addItineraryToLiked(userUid, itineraryUid)

@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
 const val DEFAULT_USER_UID = "TEST_UID"
+const val PREVIEW_ITINERARY_DEMO_UID = "DEMO" // Can be called from somewhere else
 private const val OTHER_USER_UID = "OTHER_UID"
 
 private var DEMO_CALLED = false
@@ -92,18 +93,20 @@ fun addItineraries(mapViewModel: MapViewModel, profileViewModel: ProfileViewMode
 
   val publicItinerary =
       Itinerary(
-          userUid = currentUserUid,
+          uid = PREVIEW_ITINERARY_DEMO_UID,
+          userUid = FirebaseAuth.getInstance().currentUser?.uid ?: "NULL_UID",
           locations = defaultLocations,
-          title = "My public itinerary",
-          tags = listOf(ItineraryTags.LUXURY),
-          description = null,
-          visible = true,
-      )
+          title = "San Francisco Bike Itinerary",
+          tags = listOf(ItineraryTags.CULTURAL, ItineraryTags.NATURE, ItineraryTags.BUDGET),
+          description = "A 3-day itinerary to explore the best of San Francisco on a bike.",
+          visible = true)
 
   mapViewModel.setItinerary(itineraryAdventure)
   mapViewModel.setItinerary(itineraryAdventureAndLuxury)
   mapViewModel.setItinerary(privateItinerary)
   mapViewModel.setItinerary(publicItinerary)
+
+  for (i in 0..1023) mapViewModel.incrementItineraryLikes(publicItinerary)
 
   // other profile likes their own itinerary
   profileViewModel.addLikedItinerary(OTHER_USER_UID, itineraryAdventure.uid)
