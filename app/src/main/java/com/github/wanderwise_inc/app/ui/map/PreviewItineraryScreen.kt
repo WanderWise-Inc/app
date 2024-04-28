@@ -120,7 +120,7 @@ fun PreviewItineraryScreen(
                     title = location.title ?: "",
                 )
                 if (polylinePoints != null) {
-                  Polyline(points = polylinePoints!!, color = Color.Red)
+                  Polyline(points = polylinePoints!!, color = MaterialTheme.colorScheme.primary)
                 }
               }
             }
