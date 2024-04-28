@@ -10,6 +10,7 @@ import com.google.firebase.storage.StorageReference
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.suspendCancellableCoroutine
 
@@ -98,30 +99,36 @@ class ImageRepositoryImpl(
       } else {
         val profilePictureRef = imageReference.child("images/${pathToProfilePic}")
 
-        try {
           // the byte array that is at the given path (if any)
+            println("BEFORE BYTE RESULT")
           val byteResult =
               suspendCancellableCoroutine<ByteArray?> { continuation ->
+                  println("INT SUSPEND CALL")
                 profilePictureRef
                     .getBytes(1024 * 1024)
                     .addOnSuccessListener { byteResult ->
+                        println("NOT EXECUTED ?")
                       continuation.resume(byteResult) // Resume with byte array
                     }
                     .addOnFailureListener { exception ->
+                        println("NOT EXECUTED ?")
                       continuation.resumeWithException(exception) // Resume with exception
                     }
               }
 
+            println("AFTER BYTE RESULT")
+
           // Decode bitmap if byte are is not null
-          val bitmap = byteResult?.let { BitmapFactory.decodeByteArray(it, 0, it.size) }
+          val bitmap = byteResult?.let {
+              BitmapFactory.decodeByteArray(it, 0, it.size)
+          }
+            println(bitmap)
 
           emit(bitmap) // Emit bitmap
-        } catch (e: Exception) {
-          Log.e(
-              "FETCH IMAGE", "Error fetching image: ${e.message}", e) // Log detailed error message
-          emit(null) // Emit null in case of error
-        }
+
       }
+    }.catch {
+        emit(null)
     }
   }
 
