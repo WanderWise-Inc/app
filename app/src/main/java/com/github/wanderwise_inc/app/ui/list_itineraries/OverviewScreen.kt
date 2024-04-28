@@ -19,6 +19,10 @@ import com.github.wanderwise_inc.app.ui.home.SearchBar
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 
+object OverviewScreenTestTags {
+    const val SCREEN = "Overview Screen"
+}
+
 @Composable
 fun OverviewScreen(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel) {
   DisplayOverviewItineraries(mapViewModel = mapViewModel, profileViewModel = profileViewModel)
@@ -47,7 +51,8 @@ fun DisplayOverviewItineraries(mapViewModel: MapViewModel, profileViewModel: Pro
       topBar = {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxWidth().testTag("Overview screen")) {
+            modifier = Modifier.fillMaxWidth()
+        ) {
               SearchBar(onSearchChange = { searchQuery = it }, onPriceChange = { priceRange = it })
               CategorySelector(
                   selectedIndex = selectedIndex,
@@ -55,7 +60,7 @@ fun DisplayOverviewItineraries(mapViewModel: MapViewModel, profileViewModel: Pro
                   onCategorySelected = { selectedIndex = it })
             }
       },
-      modifier = Modifier.testTag("Liked screen")) { innerPadding ->
+      modifier = Modifier.testTag(OverviewScreenTestTags.SCREEN)) { innerPadding ->
         val filtered =
             itineraries
                 .filter { itinerary -> itinerary.tags.contains(categoriesList[selectedIndex].tag) }

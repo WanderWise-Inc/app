@@ -1,8 +1,15 @@
 package com.github.wanderwise_inc.app.ui.list_itineraries
 
+import android.util.Log
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -13,6 +20,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import com.github.wanderwise_inc.app.DEFAULT_USER_UID
 import com.github.wanderwise_inc.app.R
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
@@ -30,7 +39,8 @@ data class SearchCategory(
 )
 
 object LikedScreenTestTags {
-  const val CATEGORY_SELECTOR = "category selector"
+    const val SCREEN = "Liked Screen"
+    const val CATEGORY_SELECTOR = "category selector"
 }
 
 @Composable
@@ -73,7 +83,7 @@ fun DisplayLikedItineraries(mapViewModel: MapViewModel, profileViewModel: Profil
                   onCategorySelected = { selectedIndex = it })
             }
       },
-      modifier = Modifier.testTag("Liked screen")) { innerPadding ->
+      modifier = Modifier.testTag(LikedScreenTestTags.SCREEN)) { innerPadding ->
         val filtered =
             itineraries
                 .filter { itinerary -> itinerary.tags.contains(categoriesList[selectedIndex].tag) }
@@ -82,10 +92,27 @@ fun DisplayLikedItineraries(mapViewModel: MapViewModel, profileViewModel: Profil
                       itinerary.title.contains(searchQuery, ignoreCase = true) ||
                       itinerary.description?.contains(searchQuery, ignoreCase = true) ?: false
                 }
-        ItinerariesListScrollable(
-            itineraries = filtered,
-            paddingValues = innerPadding,
-            mapViewModel = mapViewModel,
-            profileViewModel = profileViewModel)
+
+        if (filtered.isEmpty()) {
+          Log.d("EMPTY_ITINERARIES", "there are no liked itineraries")
+          Box(
+              contentAlignment = Alignment.Center,
+              modifier = Modifier.padding(innerPadding).fillMaxWidth().height(100.dp)
+          ) {
+              Text(
+                  text = "You have not liked any corresponding itineraries yet",
+                  //color = MaterialTheme.colorScheme.
+                  textAlign = TextAlign.Center,
+                  modifier = Modifier.padding(5.dp, 10.dp)
+              )
+          } //PaModifier.padding(5.dp, 10.dp))
+        } else {
+            ItinerariesListScrollable(
+                itineraries = filtered,
+                paddingValues = innerPadding,
+                mapViewModel = mapViewModel,
+                profileViewModel = profileViewModel
+            )
+        }
       }
 }

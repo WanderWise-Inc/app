@@ -9,12 +9,12 @@ import com.github.wanderwise_inc.app.demoSetup
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
 import com.github.wanderwise_inc.app.model.location.PlacesReader
+import com.github.wanderwise_inc.app.ui.creation.CreationScreen
 import com.github.wanderwise_inc.app.ui.list_itineraries.LikedScreen
 import com.github.wanderwise_inc.app.ui.list_itineraries.OverviewScreen
 import com.github.wanderwise_inc.app.ui.map.PreviewItineraryScreen
 import com.github.wanderwise_inc.app.ui.navigation.Destination.TopLevelDestination
 import com.github.wanderwise_inc.app.ui.profile.ProfileScreen
-import com.github.wanderwise_inc.app.ui.search.SearchScreen
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 
@@ -52,12 +52,11 @@ fun HomeNavGraph(
     composable(route = TopLevelDestination.Liked.route) {
       LikedScreen(mapViewModel, profileViewModel)
     }
-    composable(route = TopLevelDestination.Search.route) { SearchScreen(mapViewModel) }
+    composable(route = TopLevelDestination.Creation.route) { 
+        CreationScreen(mapViewModel) 
+    }
     composable(route = TopLevelDestination.Map.route) {
       PreviewItineraryScreen(itinerary, mapViewModel)
-    }
-    composable(route = TopLevelDestination.Profile.route) {
-      ProfileScreen(mapViewModel, profileViewModel, imageRepository)
     }
     composable(route = TopLevelDestination.Profile.route) {
       ProfileScreen(mapViewModel, profileViewModel, imageRepository)

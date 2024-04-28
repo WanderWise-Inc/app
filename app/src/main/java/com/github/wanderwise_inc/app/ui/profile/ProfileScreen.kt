@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.requiredWidth
@@ -34,6 +36,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.github.wanderwise_inc.app.DEFAULT_USER_UID
 import com.github.wanderwise_inc.app.R
@@ -73,13 +76,17 @@ fun ProfileScreen(
                     Image(
                         painter = painterResource(id = R.drawable.settings_icon),
                         contentDescription = "Edit Profile",
-                        modifier = Modifier.requiredWidth(35.dp).requiredHeight(35.dp))
+                        modifier = Modifier
+                            .requiredWidth(35.dp)
+                            .requiredHeight(35.dp))
                   }
                   FloatingActionButton(onClick = { /*Go to Edit Profile Screen*/}) {
                     Image(
                         painter = painterResource(id = R.drawable.settings_icon),
                         contentDescription = "Edit Profile",
-                        modifier = Modifier.requiredWidth(35.dp).requiredHeight(35.dp))
+                        modifier = Modifier
+                            .requiredWidth(35.dp)
+                            .requiredHeight(35.dp))
                   }
                 }
               },
@@ -94,7 +101,9 @@ fun ProfileScreen(
         modifier = Modifier.fillMaxSize(),
     ) { innerPadding ->
       Box(
-          modifier = Modifier.padding(innerPadding).fillMaxSize(),
+          modifier = Modifier
+              .padding(innerPadding)
+              .fillMaxSize(),
           contentAlignment = Alignment.TopCenter) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
               ProfilePicture(profileViewModel, profile!!, imageRepository)
@@ -115,11 +124,27 @@ fun ProfileScreen(
                   }
               Username(profile!!, modifier = Modifier.padding(100.dp))
               WanderScore(profile!!)
-              ItinerariesListScrollable(
-                  itineraries = userItineraries,
-                  mapViewModel = mapViewModel,
-                  profileViewModel = profileViewModel,
-                  paddingValues = PaddingValues(8.dp))
+              if (userItineraries.isEmpty()) {
+                  Log.d("EMPTY_ITINERARIES", "there are no created itineraries")
+                  Box(
+                      contentAlignment = Alignment.Center,
+                      modifier = Modifier.padding(innerPadding).fillMaxWidth().height(100.dp)
+                  ) {
+                      Text(
+                          text = "You have not created any itineraries yet",
+                          //color = MaterialTheme.colorScheme.
+                          textAlign = TextAlign.Center,
+                          modifier = Modifier.padding(5.dp, 10.dp)
+                      )
+                  } //PaModifier.padding(5.dp, 10.dp))              
+              } else {
+                  ItinerariesListScrollable(
+                      itineraries = userItineraries,
+                      mapViewModel = mapViewModel,
+                      profileViewModel = profileViewModel,
+                      paddingValues = PaddingValues(8.dp)
+                  )
+              }
             }
           }
     }
@@ -135,9 +160,10 @@ fun ProfilePictureStatic(profileViewModel: ProfileViewModel, profile: Profile, m
         painter = BitmapPainter(picture!!.asImageBitmap()),
         contentDescription = "Profile picture",
         modifier =
-            Modifier.size(100.dp)
-                .clip(MaterialTheme.shapes.small)
-                .border(BorderStroke(1.dp, Color.Black)),
+        Modifier
+            .size(100.dp)
+            .clip(MaterialTheme.shapes.small)
+            .border(BorderStroke(1.dp, Color.Black)),
         contentScale = ContentScale.FillBounds)
   } else {
     Text("No Picture")
@@ -188,7 +214,10 @@ fun Username(profile: Profile, modifier: Modifier) {
 @Composable
 fun WanderScore(profile: Profile) {
   Box(modifier = Modifier.background(MaterialTheme.colorScheme.secondary)) {
-    Text(text = "WanderScore: Not Implemented Yet")
+    Text(
+        text = "WanderScore: Not Implemented Yet", 
+        color = MaterialTheme.colorScheme.surface // added white color to increase visibility
+    )
   }
 }
 
