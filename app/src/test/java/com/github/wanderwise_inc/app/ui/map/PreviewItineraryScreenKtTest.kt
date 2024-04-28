@@ -108,9 +108,7 @@ class PreviewItineraryScreenKtTest {
     composeTestRule
         .onNodeWithTag(PreviewItineraryScreenTestTags.CENTER_CAMERA_BUTTON)
         .assertIsDisplayed()
-    composeTestRule
-        .onNodeWithTag(PreviewItineraryScreenTestTags.NULL_PROFILE_PIC)
-        .assertIsDisplayed()
+    composeTestRule.onNodeWithTag(PreviewItineraryScreenTestTags.PROFILE_PIC).assertIsDisplayed()
   }
 
   @Test

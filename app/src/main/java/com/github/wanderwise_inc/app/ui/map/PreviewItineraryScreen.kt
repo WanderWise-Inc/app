@@ -43,7 +43,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -66,6 +66,7 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
+import kotlinx.coroutines.flow.flow
 
 /* helps us avoid typos / inconsistencies between the test files and this file */
 object PreviewItineraryScreenTestTags {
@@ -73,9 +74,7 @@ object PreviewItineraryScreenTestTags {
   const val GOOGLE_MAPS = "google_maps"
   const val MAXIMIZED_BANNER = "maximized_banner"
   const val MINIMIZED_BANNER = "minimized_banner"
-  const val USER_PROFILE_PIC = "user_profile_pic"
-  const val DEFAULT_PROFILE_PIC = "default_profile_pic"
-  const val NULL_PROFILE_PIC = "null_profile_picture"
+  const val PROFILE_PIC = "profile_picture"
   const val CENTER_CAMERA_BUTTON = "center_camera_button"
   const val BANNER_BUTTON = "banner_button"
   const val ITINERARY_TITLE = "itinerary_title"
@@ -336,45 +335,25 @@ private fun PreviewItineraryBannerMaximized(
 
 @Composable
 fun ProfilePicture(profile: Profile?, profileViewModel: ProfileViewModel) {
-  val imageModifier = Modifier.clip(RoundedCornerShape(5.dp)).size(50.dp)
+  val imageModifier =
+      Modifier.clip(RoundedCornerShape(5.dp))
+          .size(50.dp)
+          .testTag(PreviewItineraryScreenTestTags.PROFILE_PIC)
 
   val defaultProfilePicture by
       profileViewModel.getDefaultProfilePicture().collectAsState(initial = null)
 
-  if (profile == null) {
-    if (defaultProfilePicture == null) {
-      Icon(
-          painter = painterResource(id = R.drawable.profile_icon),
-          contentDescription = "profile_icon",
-          modifier = Modifier.size(50.dp).testTag(PreviewItineraryScreenTestTags.NULL_PROFILE_PIC))
-    } else {
-      Image(
-          painter = BitmapPainter(defaultProfilePicture!!.asImageBitmap()),
-          contentScale = ContentScale.FillHeight,
-          contentDescription = "profile_pic",
-          modifier = imageModifier.testTag(PreviewItineraryScreenTestTags.DEFAULT_PROFILE_PIC))
-    }
-  } else {
-    val profilePicture by profileViewModel.getProfilePicture(profile).collectAsState(initial = null)
-    if (profilePicture != null) {
-      Image(
-          painter = BitmapPainter(profilePicture!!.asImageBitmap()),
-          contentScale = ContentScale.FillHeight,
-          contentDescription = "profile_pic",
-          modifier = imageModifier.testTag(PreviewItineraryScreenTestTags.USER_PROFILE_PIC))
-    } else if (defaultProfilePicture != null) {
-      Image(
-          painter = BitmapPainter(defaultProfilePicture!!.asImageBitmap()),
-          contentScale = ContentScale.FillHeight,
-          contentDescription = "default_profile_pic",
-          modifier = imageModifier.testTag(PreviewItineraryScreenTestTags.DEFAULT_PROFILE_PIC))
-    } else {
-      Icon(
-          painter = painterResource(id = R.drawable.profile_icon),
-          modifier = Modifier.size(50.dp).testTag(PreviewItineraryScreenTestTags.NULL_PROFILE_PIC),
-          contentDescription = "profile_icon")
-    }
-  }
+  val profilePictureFlow =
+      if (profile != null) profileViewModel.getProfilePicture(profile) else flow { emit(null) }
+
+  val profilePicture by profilePictureFlow.collectAsState(initial = null)
+
+  val painter: Painter =
+      if (profilePicture != null) BitmapPainter(profilePicture!!.asImageBitmap())
+      else if (defaultProfilePicture != null) BitmapPainter(defaultProfilePicture!!.asImageBitmap())
+      else painterResource(id = R.drawable.profile_icon)
+
+  Image(painter = painter, contentDescription = "profile_icon", modifier = imageModifier)
 }
 
 @Composable
