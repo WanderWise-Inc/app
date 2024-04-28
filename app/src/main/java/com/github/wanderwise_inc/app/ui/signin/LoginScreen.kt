@@ -104,7 +104,7 @@ fun SignInButton(
   val signInLauncher =
       rememberLauncherForActivityResult(contract = FirebaseAuthUIActivityResultContract()) {
         coroutineScope.launch {
-            Log.d("USER SIGN IN", "IN SIGN IN LAUNCHER")
+          Log.d("USER SIGN IN", "IN SIGN IN LAUNCHER")
           val user = FirebaseAuth.getInstance().currentUser
           signInRepositoryImpl.signIn(it, navController, profileViewModel, user, it.resultCode)
         }

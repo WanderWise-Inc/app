@@ -28,20 +28,20 @@ class SignInRepositoryImpl : SignInRepository {
       user: FirebaseUser?,
       resultCode: Int
   ) {
-      Log.d("USER SIGN IN", "CHECKING")
+    Log.d("USER SIGN IN", "CHECKING")
     if (user == null) {
       // TODO Handle ERROR
-        Log.d("USER SIGN IN", "USER NULL")
+      Log.d("USER SIGN IN", "USER NULL")
       throw Exception("User is Null")
     } else {
       // If the user is not null, we must check if this user is already in the database,
       // in which case we will not add it again
       // ACTIVITY.RESULT_OK == -1
       if (resultCode == Activity.RESULT_OK) {
-          Log.d("USER SIGN IN", "RESULT_OK")
+        Log.d("USER SIGN IN", "RESULT_OK")
         // Get the user from database (function that returns a flow)
         val currentProfile = profileViewModel.getProfile(user.uid).first()
-          Log.d("USER SIGN IN", "GET PROFILE PASSED")
+        Log.d("USER SIGN IN", "GET PROFILE PASSED")
 
         // User was already present in the database, in which case we only
         // navigate to the Home page
