@@ -72,12 +72,15 @@ object PreviewItineraryScreenTestTags {
   const val MAIN_SCREEN = "preview_itinerary_screen"
   const val GOOGLE_MAPS = "google_maps"
   const val MAXIMIZED_BANNER = "maximized_banner"
-  const val MINIMIZED_BANNER = "maximized_banner"
+  const val MINIMIZED_BANNER = "minimized_banner"
   const val USER_PROFILE_PIC = "user_profile_pic"
   const val DEFAULT_PROFILE_PIC = "default_profile_pic"
   const val NULL_PROFILE_PIC = "null_profile_picture"
   const val CENTER_CAMERA_BUTTON = "center_camera_button"
   const val BANNER_BUTTON = "banner_button"
+  const val ITINERARY_TITLE = "itinerary_title"
+  const val ITINERARY_DESCRIPTION = "itinerary_description"
+  const val USER_LOCATION = "user_location"
 }
 
 /** @brief previews an itinerary */
@@ -111,6 +114,7 @@ fun PreviewItineraryScreen(
             cameraPositionState = cameraPositionState) {
               userLocation?.let {
                 Marker(
+                    tag = PreviewItineraryScreenTestTags.USER_LOCATION,
                     state = MarkerState(position = LatLng(it.latitude, it.longitude)),
                     icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
               }
@@ -193,7 +197,8 @@ private fun PreviewItineraryBannerMaximized(
                 fontFamily = MaterialTheme.typography.displayLarge.fontFamily,
                 fontSize = titleFontSize,
                 fontWeight = FontWeight.Normal,
-                modifier = Modifier.padding(2.dp),
+                modifier =
+                    Modifier.padding(2.dp).testTag(PreviewItineraryScreenTestTags.ITINERARY_TITLE),
                 textAlign = TextAlign.Center)
           }
 
@@ -320,7 +325,9 @@ private fun PreviewItineraryBannerMaximized(
                 fontFamily = MaterialTheme.typography.displayMedium.fontFamily,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Normal,
-                modifier = Modifier.padding(2.dp),
+                modifier =
+                    Modifier.padding(2.dp)
+                        .testTag(PreviewItineraryScreenTestTags.ITINERARY_DESCRIPTION),
                 textAlign = TextAlign.Center)
           }
         }
@@ -403,7 +410,8 @@ private fun PreviewItineraryBannerMinimized(onMinimizedClick: () -> Unit, itiner
                 fontFamily = MaterialTheme.typography.displayLarge.fontFamily,
                 fontSize = titleFontSize,
                 fontWeight = FontWeight.Normal,
-                modifier = Modifier.padding(2.dp),
+                modifier =
+                    Modifier.padding(2.dp).testTag(PreviewItineraryScreenTestTags.ITINERARY_TITLE),
                 textAlign = TextAlign.Center)
           }
         }
