@@ -67,6 +67,19 @@ import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
 
+/* helps us avoid typos / inconsistencies between the test files and this file */
+object PreviewItineraryScreenTestTags {
+  const val MAIN_SCREEN = "preview_itinerary_screen"
+  const val GOOGLE_MAPS = "google_maps"
+  const val MAXIMIZED_BANNER = "maximized_banner"
+  const val MINIMIZED_BANNER = "maximized_banner"
+  const val USER_PROFILE_PIC = "user_profile_pic"
+  const val DEFAULT_PROFILE_PIC = "default_profile_pic"
+  const val NULL_PROFILE_PIC = "null_profile_picture"
+  const val CENTER_CAMERA_BUTTON = "center_camera_button"
+  const val BANNER_BUTTON = "banner_button"
+}
+
 /** @brief previews an itinerary */
 @Composable
 fun PreviewItineraryScreen(
@@ -85,13 +98,16 @@ fun PreviewItineraryScreen(
 
   Scaffold(
       bottomBar = { PreviewItineraryBanner(itinerary, mapViewModel, profileViewModel) },
-      modifier = Modifier.testTag("Map screen"),
+      modifier = Modifier.testTag(PreviewItineraryScreenTestTags.MAIN_SCREEN),
       floatingActionButton = {
         CenterButton(cameraPositionState = cameraPositionState, currentLocation = userLocation)
       },
       floatingActionButtonPosition = FabPosition.Start) { paddingValues ->
         GoogleMap(
-            modifier = Modifier.fillMaxSize().padding(paddingValues).testTag("Google Maps"),
+            modifier =
+                Modifier.fillMaxSize()
+                    .padding(paddingValues)
+                    .testTag(PreviewItineraryScreenTestTags.GOOGLE_MAPS),
             cameraPositionState = cameraPositionState) {
               userLocation?.let {
                 Marker(
@@ -152,7 +168,7 @@ private fun PreviewItineraryBannerMaximized(
           CardDefaults.cardColors(
               containerColor = MaterialTheme.colorScheme.primaryContainer,
           ),
-      modifier = Modifier.testTag("Itinerary banner")) {
+      modifier = Modifier.testTag(PreviewItineraryScreenTestTags.MAXIMIZED_BANNER)) {
         Column(
             modifier =
                 Modifier.background(MaterialTheme.colorScheme.primaryContainer)
@@ -167,7 +183,9 @@ private fun PreviewItineraryBannerMaximized(
             Icon(
                 imageVector = Icons.Filled.KeyboardArrowDown,
                 contentDescription = "minimize_button",
-                modifier = Modifier.clickable { onMinimizedClick() })
+                modifier =
+                    Modifier.clickable { onMinimizedClick() }
+                        .testTag(PreviewItineraryScreenTestTags.BANNER_BUTTON))
             // Itinerary Title
             Text(
                 text = itinerary.title,
@@ -320,13 +338,14 @@ fun ProfilePicture(profile: Profile?, profileViewModel: ProfileViewModel) {
     if (defaultProfilePicture == null) {
       Icon(
           painter = painterResource(id = R.drawable.profile_icon),
-          contentDescription = "profile_icon")
+          contentDescription = "profile_icon",
+          modifier = Modifier.size(50.dp).testTag(PreviewItineraryScreenTestTags.NULL_PROFILE_PIC))
     } else {
       Image(
           painter = BitmapPainter(defaultProfilePicture!!.asImageBitmap()),
           contentScale = ContentScale.FillHeight,
           contentDescription = "profile_pic",
-          modifier = imageModifier)
+          modifier = imageModifier.testTag(PreviewItineraryScreenTestTags.DEFAULT_PROFILE_PIC))
     }
   } else {
     val profilePicture by profileViewModel.getProfilePicture(profile).collectAsState(initial = null)
@@ -335,17 +354,17 @@ fun ProfilePicture(profile: Profile?, profileViewModel: ProfileViewModel) {
           painter = BitmapPainter(profilePicture!!.asImageBitmap()),
           contentScale = ContentScale.FillHeight,
           contentDescription = "profile_pic",
-          modifier = imageModifier)
+          modifier = imageModifier.testTag(PreviewItineraryScreenTestTags.USER_PROFILE_PIC))
     } else if (defaultProfilePicture != null) {
       Image(
           painter = BitmapPainter(defaultProfilePicture!!.asImageBitmap()),
           contentScale = ContentScale.FillHeight,
           contentDescription = "default_profile_pic",
-          modifier = imageModifier)
+          modifier = imageModifier.testTag(PreviewItineraryScreenTestTags.DEFAULT_PROFILE_PIC))
     } else {
       Icon(
           painter = painterResource(id = R.drawable.profile_icon),
-          modifier = Modifier.size(50.dp),
+          modifier = Modifier.size(50.dp).testTag(PreviewItineraryScreenTestTags.NULL_PROFILE_PIC),
           contentDescription = "profile_icon")
     }
   }
@@ -360,7 +379,7 @@ private fun PreviewItineraryBannerMinimized(onMinimizedClick: () -> Unit, itiner
           CardDefaults.cardColors(
               containerColor = MaterialTheme.colorScheme.primaryContainer,
           ),
-      modifier = Modifier.testTag("Itinerary banner")) {
+      modifier = Modifier.testTag(PreviewItineraryScreenTestTags.MINIMIZED_BANNER)) {
         Column(
             modifier =
                 Modifier.background(MaterialTheme.colorScheme.primaryContainer)
@@ -374,7 +393,9 @@ private fun PreviewItineraryBannerMinimized(onMinimizedClick: () -> Unit, itiner
             Icon(
                 imageVector = Icons.Filled.KeyboardArrowUp,
                 contentDescription = "minimize_button",
-                modifier = Modifier.clickable { onMinimizedClick() })
+                modifier =
+                    Modifier.clickable { onMinimizedClick() }
+                        .testTag(PreviewItineraryScreenTestTags.BANNER_BUTTON))
             // Itinerary Title
             Text(
                 text = itinerary.title,
@@ -398,7 +419,7 @@ fun CenterButton(cameraPositionState: CameraPositionState, currentLocation: Loca
           cameraPositionState.move(CameraUpdateFactory.newLatLngZoom(latLng, 13f))
         }
       },
-      modifier = Modifier.testTag("Center Button"),
+      modifier = Modifier.testTag(PreviewItineraryScreenTestTags.CENTER_CAMERA_BUTTON),
       containerColor = MaterialTheme.colorScheme.surfaceContainer) {
         Icon(
             imageVector = Icons.Default.Place,
