@@ -111,10 +111,8 @@ class ImageRepositoryImpl(
                         continuation.resumeWithException(exception) // Resume with exception
                       }
                 }
-
             // Decode bitmap if byte are is not null
             val bitmap = byteResult?.let { BitmapFactory.decodeByteArray(it, 0, it.size) }
-
             emit(bitmap) // Emit bitmap
           }
         }
