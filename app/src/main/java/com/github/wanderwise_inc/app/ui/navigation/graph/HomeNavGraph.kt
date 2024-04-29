@@ -4,8 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.github.wanderwise_inc.app.DemoSetup
 import com.github.wanderwise_inc.app.data.ImageRepository
-import com.github.wanderwise_inc.app.demoSetup
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
 import com.github.wanderwise_inc.app.model.location.PlacesReader
@@ -40,7 +40,8 @@ fun HomeNavGraph(
           visible = true)
 
   // setup the demo
-  demoSetup(mapViewModel, profileViewModel, firebaseAuth)
+  val demoSetup = DemoSetup()
+  demoSetup.demoSetup(mapViewModel, profileViewModel, firebaseAuth)
 
   NavHost(
       navController = navController,

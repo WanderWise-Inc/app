@@ -9,8 +9,8 @@ import androidx.compose.ui.test.performClick
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
+import com.github.wanderwise_inc.app.DemoSetup
 import com.github.wanderwise_inc.app.data.ImageRepository
-import com.github.wanderwise_inc.app.demoSetup
 import com.github.wanderwise_inc.app.model.profile.Profile
 import com.github.wanderwise_inc.app.ui.creation.CreationScreenTestTags
 import com.github.wanderwise_inc.app.ui.home.HomeScreen
@@ -29,14 +29,15 @@ import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.runner.RunWith
 import org.mockito.Mock
-import org.mockito.Mockito.any
-import org.mockito.Mockito.anyString
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.mockStatic
 import org.mockito.Mockito.`when`
+import org.mockito.kotlin.whenever
+import org.mockito.kotlin.any
+import org.mockito.kotlin.mock
 import org.mockito.junit.MockitoJUnit
+import org.mockito.junit.MockitoJUnitRunner
 import org.mockito.junit.MockitoRule
-import org.mockito.kotlin.doNothing
+import org.mockito.kotlin.any
+import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
@@ -48,95 +49,17 @@ class HomeNavigationTest {
   @Mock private lateinit var mapViewModel: MapViewModel
   @Mock private lateinit var profileViewModel: ProfileViewModel
   @Mock private lateinit var firebaseAuth: FirebaseAuth
+  @Mock private lateinit var demoSetup: DemoSetup
   
   private lateinit var navController: NavHostController
-
-  /*@Mock private lateinit var userLocationClient: UserLocationClient
-  @Mock private lateinit var mockApplication: Application
-  @Mock private lateinit var mockContext: Context
-  @Mock private lateinit var mockDirectionsRepository: DirectionsRepository*/
-  
-
-
-  /*@Before
-  fun `setup mockDirectionsRepository`() {
-    fun randomLat(): Double = Random.nextDouble(-90.0, 90.0)
-
-    fun randomLon(): Double = Random.nextDouble(-180.0, 180.0)
-
-    // helper function for generating random locations
-    fun randomLocations(size: Int): List<Location> {
-      // helper function for generating random locations
-      val locations = mutableListOf<Location>()
-      for (i in 0 until size) locations.add(Location(randomLat(), randomLon()))
-      return locations.toList()
-    }
-
-    val mockLocations = randomLocations(4)
-    val mockResonse = MutableLiveData(mockLocations.map { it.toLatLng() })
-
-    mockDirectionsRepository = mock(DirectionsRepository::class.java)
-
-    `when`(
-            mockDirectionsRepository.getPolylineWayPoints(
-                origin = anyString(),
-                destination = anyString(),
-                waypoints = anyList(),
-                anyString()))
-        .thenReturn(mockResonse)
-  }
-
-  private val epflLat = 46.519126741544575
-  private val epflLon = 6.5676006970802145*/
 
   @Before
   fun setupNavHost() {
     composeTestRule.setContent {
-      /*mockApplication = mock(Application::class.java)
-      mockContext = mock(Context::class.java)
-
-      `when`(mockApplication.applicationContext).thenReturn(mockContext)
-
-      `when`(userLocationClient.getLocationUpdates(anyLong()))
-          .thenReturn(
-              flow {
-                emit(
-                    Location("TestProvider").apply {
-                      latitude = epflLat
-                      longitude = epflLon
-                    })
-              })
-
-      val imageRepository = ImageRepositoryTestImpl(mockApplication)
-      val profileRepository = ProfileRepositoryTestImpl()
-      val profileViewModel = ProfileViewModel(profileRepository, imageRepository)
-
-      profileViewModel.setProfile(Profile("0"))
-
-      val itineraryRepository = ItineraryRepositoryTestImpl()
-      val mapViewModel =
-          MapViewModel(itineraryRepository, mockDirectionsRepository, userLocationClient)*/
-      
-      mapViewModel = mock(MapViewModel::class.java)
-      profileViewModel = mock(ProfileViewModel::class.java)
-      firebaseAuth = mock(FirebaseAuth::class.java)
-      
-      //val demoSetupMock = mock<(MapViewModel, )
-      
-      //demoSetup = mock(DemoSetup::class.java)
-        
-      // `when`(demoSetup(mapViewModel, profileViewModel, firebaseAuth)).then { Log.d("DEMO_SKIPPED", "demo skipped") }
-      // doNothing().`when`(demoSetup(mapViewModel, profileViewModel, firebaseAuth))
-      
-      `when`(mapViewModel.setItinerary(any())).then{}
-        
-      `when`(profileViewModel.getProfile(anyString())).thenReturn(flow { emit(Profile("0")) })
-      //`when`(profileViewModel.setProfile(any())).then {  }
-      `when`(profileViewModel.addLikedItinerary(anyString(), anyString())).then {}
+      `when`(demoSetup.demoSetup(mapViewModel, profileViewModel, firebaseAuth)).then {  }
       
       `when`(firebaseAuth.uid).thenReturn("0")
-      `when`(firebaseAuth.currentUser?.uid).thenReturn(null)
-          
+      
       navController = TestNavHostController(LocalContext.current)
       navController.navigatorProvider.addNavigator(ComposeNavigator())
       HomeScreen(imageRepository, mapViewModel, profileViewModel, navController, firebaseAuth)
