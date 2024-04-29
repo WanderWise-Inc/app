@@ -13,6 +13,8 @@ object ItineraryLabels {
   const val DESCRIPTION = "description"
   const val VISIBLE = "visible"
   const val TAGS = "tags"
+  const val PRICE = "price"
+  const val TIME = "time"
 }
 
 /** @brief score of an itinerary based on some preferences */
@@ -36,7 +38,9 @@ data class Itinerary(
     var tags: List<Tag>,
     val description: String?,
     val visible: Boolean,
-    var numLikes: Int = 0
+    var numLikes: Int = 0,
+    val price: Float = 0f,
+    val time: Int = 0
 ) {
   /** @return a map representation of an itinerary */
   fun toMap(): Map<String, Any> {
@@ -48,6 +52,9 @@ data class Itinerary(
         ItineraryLabels.TAGS to tags,
         ItineraryLabels.DESCRIPTION to (description ?: ""),
         ItineraryLabels.VISIBLE to visible,
+        ItineraryLabels.PRICE to price,
+        ItineraryLabels.TIME to time
+
     )
   }
 
@@ -71,7 +78,9 @@ data class Itinerary(
       var title: String = "",
       val tags: MutableList<Tag> = mutableListOf(),
       var description: String? = null,
-      var visible: Boolean = false
+      var visible: Boolean = false,
+      val price: Float = 0f,
+      val time: Int = 0
   ) {
     /**
      * @param location the location to be added

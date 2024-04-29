@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -35,12 +36,13 @@ object LikedScreenTestTags {
 
 @Composable
 fun LikedScreen(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel) {
-  DisplayLikedItineraries(mapViewModel = mapViewModel, profileViewModel = profileViewModel)
+    val sliderPositionState = remember { mutableStateOf(0f..100f)}
+  DisplayLikedItineraries(mapViewModel = mapViewModel, profileViewModel = profileViewModel, sliderPositionState = sliderPositionState)
 }
 
 /** Displays itineraries liked by the user */
 @Composable
-fun DisplayLikedItineraries(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel) {
+fun DisplayLikedItineraries(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel, sliderPositionState: MutableState<ClosedFloatingPointRange<Float>>) {
 
   /* the categories that can be selected by the user during filtering */
   val categoriesList =
@@ -65,7 +67,7 @@ fun DisplayLikedItineraries(mapViewModel: MapViewModel, profileViewModel: Profil
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxWidth().testTag(LikedScreenTestTags.CATEGORY_SELECTOR)) {
-              SearchBar(onSearchChange = { searchQuery = it }, onPriceChange = { priceRange = it })
+              SearchBar(onSearchChange = { searchQuery = it }, onPriceChange = { priceRange = it }, sliderPositionState = sliderPositionState)
 
               CategorySelector(
                   selectedIndex = selectedIndex,
