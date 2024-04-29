@@ -24,12 +24,13 @@ import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 @Composable
 fun OverviewScreen(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel) {
     val sliderPositionState = remember { mutableStateOf(0f..100f)}
-  DisplayOverviewItineraries(mapViewModel = mapViewModel, profileViewModel = profileViewModel, sliderPositionState = sliderPositionState)
+    val sliderPositionTimeState = remember { mutableStateOf(0f..24f)}
+  DisplayOverviewItineraries(mapViewModel = mapViewModel, profileViewModel = profileViewModel, sliderPositionState = sliderPositionState, sliderPositionTimeState = sliderPositionTimeState)
 }
 
 /** Displays global itineraries filtered on some predicates */
 @Composable
-fun DisplayOverviewItineraries(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel, sliderPositionState: MutableState<ClosedFloatingPointRange<Float>>) {
+fun DisplayOverviewItineraries(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel, sliderPositionState: MutableState<ClosedFloatingPointRange<Float>>, sliderPositionTimeState: MutableState<ClosedFloatingPointRange<Float>>) {
 
   /* the categories that can be selected by the user during filtering */
   val categoriesList =
@@ -52,7 +53,7 @@ fun DisplayOverviewItineraries(mapViewModel: MapViewModel, profileViewModel: Pro
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxWidth().testTag("Overview screen")) {
-              SearchBar(onSearchChange = { searchQuery = it }, onPriceChange = { priceRange = it }, sliderPositionState = sliderPositionState)
+              SearchBar(onSearchChange = { searchQuery = it }, onPriceChange = { priceRange = it }, sliderPositionState = sliderPositionState, sliderPositionTimeState = sliderPositionTimeState)
               CategorySelector(
                   selectedIndex = selectedIndex,
                   categoriesList = categoriesList,
@@ -70,7 +71,9 @@ fun DisplayOverviewItineraries(mapViewModel: MapViewModel, profileViewModel: Pro
                 }.filter { itinerary ->
                     val price = itinerary.price.toFloat()
                     price in sliderPositionState.value.start..sliderPositionState.value.endInclusive
-                }
+                }.filter { itinerary ->
+                    val time = itinerary.time.toFloat()
+                    time in sliderPositionTimeState.value.start..sliderPositionTimeState.value.endInclusive }
         ItinerariesListScrollable(
             itineraries = filtered,
             paddingValues = innerPadding,
