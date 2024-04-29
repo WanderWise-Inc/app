@@ -1,6 +1,7 @@
 package com.github.wanderwise_inc.app.ui.signin
 
 import android.content.Context
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -103,6 +104,7 @@ fun SignInButton(
   val signInLauncher =
       rememberLauncherForActivityResult(contract = FirebaseAuthUIActivityResultContract()) {
         coroutineScope.launch {
+          Log.d("USER SIGN IN", "IN SIGN IN LAUNCHER")
           val user = FirebaseAuth.getInstance().currentUser
           signInRepositoryImpl.signIn(it, navController, profileViewModel, user, it.resultCode)
         }
