@@ -84,6 +84,6 @@ fun SearchBar(onSearchChange: (String) -> Unit, onPriceChange: (Float) -> Unit, 
               // launch something
             },
         )
-      Text(text = String.format("%.2f - %.2f", sliderPositionState.value.start, sliderPositionState.value.endInclusive))
+      Text(text = String.format("%.2f - %.2f", sliderPositionTimeState.value.start, sliderPositionTimeState.value.endInclusive))
       }
 }
