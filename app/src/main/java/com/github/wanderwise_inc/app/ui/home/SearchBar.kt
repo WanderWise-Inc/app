@@ -1,6 +1,5 @@
 package com.github.wanderwise_inc.app.ui.home
 
-import androidx.annotation.FloatRange
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,7 +26,12 @@ import androidx.compose.ui.unit.dp
 import com.github.wanderwise_inc.app.R
 
 @Composable
-fun SearchBar(onSearchChange: (String) -> Unit, onPriceChange: (Float) -> Unit, sliderPositionState : MutableState<ClosedFloatingPointRange<Float>>, sliderPositionTimeState : MutableState<ClosedFloatingPointRange<Float>>) {
+fun SearchBar(
+    onSearchChange: (String) -> Unit,
+    onPriceChange: (Float) -> Unit,
+    sliderPositionState: MutableState<ClosedFloatingPointRange<Float>>,
+    sliderPositionTimeState: MutableState<ClosedFloatingPointRange<Float>>
+) {
   var query by remember { mutableStateOf("") }
   var isDropdownOpen by remember { mutableStateOf(false) }
   var sliderPosition by remember { mutableStateOf(0f..100f) }
@@ -71,8 +75,13 @@ fun SearchBar(onSearchChange: (String) -> Unit, onPriceChange: (Float) -> Unit, 
               // launch something
             },
         )
-      Text(text = String.format("%.2f - %.2f", sliderPositionState.value.start, sliderPositionState.value.endInclusive))
-      //sliderPosition.contains()
+        Text(
+            text =
+                String.format(
+                    "%.2f - %.2f",
+                    sliderPositionState.value.start,
+                    sliderPositionState.value.endInclusive))
+        // sliderPosition.contains()
 
         Text("How Long do I want to wander ?")
         RangeSlider(
@@ -84,6 +93,11 @@ fun SearchBar(onSearchChange: (String) -> Unit, onPriceChange: (Float) -> Unit, 
               // launch something
             },
         )
-      Text(text = String.format("%.2f - %.2f", sliderPositionTimeState.value.start, sliderPositionTimeState.value.endInclusive))
+        Text(
+            text =
+                String.format(
+                    "%.2f - %.2f",
+                    sliderPositionTimeState.value.start,
+                    sliderPositionTimeState.value.endInclusive))
       }
 }

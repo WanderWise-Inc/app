@@ -32,7 +32,6 @@ interface ItineraryRepository {
 
   /** @brief deletes an itinerary */
   fun deleteItinerary(itinerary: Itinerary)
-
 }
 /**
  * const val ITINERARY_COLLECTION_PATH: String = "itineraries"

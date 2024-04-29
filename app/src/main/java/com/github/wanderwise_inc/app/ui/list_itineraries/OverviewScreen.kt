@@ -17,20 +17,28 @@ import androidx.compose.ui.platform.testTag
 import com.github.wanderwise_inc.app.R
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
 import com.github.wanderwise_inc.app.ui.home.SearchBar
-
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 
 @Composable
 fun OverviewScreen(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel) {
-    val sliderPositionState = remember { mutableStateOf(0f..100f)}
-    val sliderPositionTimeState = remember { mutableStateOf(0f..24f)}
-  DisplayOverviewItineraries(mapViewModel = mapViewModel, profileViewModel = profileViewModel, sliderPositionState = sliderPositionState, sliderPositionTimeState = sliderPositionTimeState)
+  val sliderPositionState = remember { mutableStateOf(0f..100f) }
+  val sliderPositionTimeState = remember { mutableStateOf(0f..24f) }
+  DisplayOverviewItineraries(
+      mapViewModel = mapViewModel,
+      profileViewModel = profileViewModel,
+      sliderPositionState = sliderPositionState,
+      sliderPositionTimeState = sliderPositionTimeState)
 }
 
 /** Displays global itineraries filtered on some predicates */
 @Composable
-fun DisplayOverviewItineraries(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel, sliderPositionState: MutableState<ClosedFloatingPointRange<Float>>, sliderPositionTimeState: MutableState<ClosedFloatingPointRange<Float>>) {
+fun DisplayOverviewItineraries(
+    mapViewModel: MapViewModel,
+    profileViewModel: ProfileViewModel,
+    sliderPositionState: MutableState<ClosedFloatingPointRange<Float>>,
+    sliderPositionTimeState: MutableState<ClosedFloatingPointRange<Float>>
+) {
 
   /* the categories that can be selected by the user during filtering */
   val categoriesList =
@@ -45,7 +53,6 @@ fun DisplayOverviewItineraries(mapViewModel: MapViewModel, profileViewModel: Pro
   var searchQuery by remember { mutableStateOf("") }
   var priceRange by remember { mutableStateOf(0f) }
 
-
   val itineraries by mapViewModel.getAllPublicItineraries().collectAsState(initial = listOf())
 
   Scaffold(
@@ -53,7 +60,11 @@ fun DisplayOverviewItineraries(mapViewModel: MapViewModel, profileViewModel: Pro
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxWidth().testTag("Overview screen")) {
-              SearchBar(onSearchChange = { searchQuery = it }, onPriceChange = { priceRange = it }, sliderPositionState = sliderPositionState, sliderPositionTimeState = sliderPositionTimeState)
+              SearchBar(
+                  onSearchChange = { searchQuery = it },
+                  onPriceChange = { priceRange = it },
+                  sliderPositionState = sliderPositionState,
+                  sliderPositionTimeState = sliderPositionTimeState)
               CategorySelector(
                   selectedIndex = selectedIndex,
                   categoriesList = categoriesList,
@@ -68,12 +79,17 @@ fun DisplayOverviewItineraries(mapViewModel: MapViewModel, profileViewModel: Pro
                   searchQuery.isBlank() ||
                       itinerary.title.contains(searchQuery, ignoreCase = true) ||
                       itinerary.description?.contains(searchQuery, ignoreCase = true) ?: false
-                }.filter { itinerary ->
-                    val price = itinerary.price.toFloat()
-                    price in sliderPositionState.value.start..sliderPositionState.value.endInclusive
-                }.filter { itinerary ->
-                    val time = itinerary.time.toFloat()
-                    time in sliderPositionTimeState.value.start..sliderPositionTimeState.value.endInclusive }
+                }
+                .filter { itinerary ->
+                  val price = itinerary.price.toFloat()
+                  price in sliderPositionState.value.start..sliderPositionState.value.endInclusive
+                }
+                .filter { itinerary ->
+                  val time = itinerary.time.toFloat()
+                  time in
+                      sliderPositionTimeState.value.start..sliderPositionTimeState.value
+                              .endInclusive
+                }
         ItinerariesListScrollable(
             itineraries = filtered,
             paddingValues = innerPadding,

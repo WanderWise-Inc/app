@@ -53,9 +53,7 @@ data class Itinerary(
         ItineraryLabels.DESCRIPTION to (description ?: ""),
         ItineraryLabels.VISIBLE to visible,
         ItineraryLabels.PRICE to price,
-        ItineraryLabels.TIME to time
-
-    )
+        ItineraryLabels.TIME to time)
   }
 
   /*fun copy(): Itinerary {

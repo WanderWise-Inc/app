@@ -1,7 +1,6 @@
 package com.github.wanderwise_inc.app.viewmodel
 
 import android.location.Location
-import androidx.annotation.FloatRange
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -127,7 +126,7 @@ class MapViewModel(
     return userLocationClient.getLocationUpdates(1000)
   }
 
- /* fun filterItinerariesByPrice(priceRange: FloatRange): List<Itinerary> {
+  /* fun filterItinerariesByPrice(priceRange: FloatRange): List<Itinerary> {
     return allItineraries.filter { it.price in priceRange }
   }*/
 }
