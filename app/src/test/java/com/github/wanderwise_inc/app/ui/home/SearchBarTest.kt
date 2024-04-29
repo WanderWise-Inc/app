@@ -1,7 +1,5 @@
 package com.github.wanderwise_inc.app.ui.home
 
-import androidx.compose.ui.test.*
-
 
 /*
 class SearchBarTest {

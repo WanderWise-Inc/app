@@ -1,7 +1,5 @@
 package com.github.wanderwise_inc.app.ui.navigation
 
-import org.junit.jupiter.api.Assertions.*
-
 
 /*
 @RunWith(RobolectricTestRunner::class)
