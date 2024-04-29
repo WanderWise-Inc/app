@@ -12,11 +12,15 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenu
@@ -41,6 +45,8 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
@@ -109,6 +115,7 @@ fun ProfileScreen(
               ProfilePicture(profileViewModel, profile!!, imageRepository)
               Username(profile!!, modifier = Modifier.padding(100.dp))
               WanderScore(profile!!)
+              WanderBadges()
               ItinerariesListScrollable(
                   itineraries = userItineraries,
                   mapViewModel = mapViewModel,
@@ -165,6 +172,7 @@ fun ProfilePicture(
           painter = BitmapPainter(picture!!.asImageBitmap()),
           contentDescription = null,
           modifier = Modifier
+              .clip(MaterialTheme.shapes.medium)
               .size(100.dp)
               .clickable { isProfilePictureChangeDropdownOpen = true })
       Log.d("CRASHED", "PICTURE DISPLAYED")
@@ -173,6 +181,7 @@ fun ProfilePicture(
           painter = BitmapPainter(bitmap!!.asImageBitmap()),
           contentDescription = null,
           modifier = Modifier
+              .clip(MaterialTheme.shapes.medium)
               .size(100.dp)
               .clickable { isProfilePictureChangeDropdownOpen = true })
       Log.d("CRASHED", "PICTURE IS NULL")
@@ -192,6 +201,18 @@ fun Username(profile: Profile, modifier: Modifier) {
 }
 
 @Composable
+fun WanderBadges() {
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .height(175.dp)
+        .padding(8.dp)
+        .clip(MaterialTheme.shapes.extraLarge)
+        .background(MaterialTheme.colorScheme.primaryContainer)) {
+        Text(text = "WanderBadges", style = MaterialTheme.typography.headlineSmall, modifier = Modifier.padding(16.dp))
+    }
+}
+
+@Composable
 fun WanderScore(profile: Profile) {
   Box(modifier = Modifier
       .clip(MaterialTheme.shapes.extraLarge)
@@ -200,7 +221,7 @@ fun WanderScore(profile: Profile) {
           BorderStroke(1.dp, MaterialTheme.colorScheme.inverseOnSurface),
           shape = MaterialTheme.shapes.extraLarge
       )) {
-    Text(text = "WanderScore: Not Implemented Yet", modifier = Modifier.padding(8.dp))
+    Text(text = "369 WanderPoints", modifier = Modifier.padding(8.dp), fontWeight = FontWeight.Bold)
   }
 }
 
