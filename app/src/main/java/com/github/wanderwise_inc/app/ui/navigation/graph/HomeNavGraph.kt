@@ -42,17 +42,17 @@ fun HomeNavGraph(
       // modifier = Modifier.padding(innerPadding)
   ) {
     composable(route = TopLevelDestination.Overview.route) {
-      OverviewScreen(mapViewModel, profileViewModel)
+      OverviewScreen(mapViewModel, profileViewModel, navController)
     }
     composable(route = TopLevelDestination.Liked.route) {
-      LikedScreen(mapViewModel, profileViewModel)
+      LikedScreen(mapViewModel, profileViewModel, navController)
     }
     composable(route = TopLevelDestination.Search.route) { SearchScreen(mapViewModel) }
     composable(route = TopLevelDestination.Map.route) {
       PreviewItineraryScreen(itinerary!!, mapViewModel, profileViewModel)
     }
     composable(route = TopLevelDestination.Profile.route) {
-      ProfileScreen(mapViewModel, profileViewModel, imageRepository)
+      ProfileScreen(mapViewModel, profileViewModel, imageRepository, navController)
     }
   }
 }

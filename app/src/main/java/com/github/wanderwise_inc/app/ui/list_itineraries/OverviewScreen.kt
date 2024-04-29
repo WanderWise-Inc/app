@@ -13,6 +13,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.navigation.NavHostController
 import com.github.wanderwise_inc.app.R
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
 import com.github.wanderwise_inc.app.ui.home.SearchBar
@@ -20,13 +21,24 @@ import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 
 @Composable
-fun OverviewScreen(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel) {
-  DisplayOverviewItineraries(mapViewModel = mapViewModel, profileViewModel = profileViewModel)
+fun OverviewScreen(
+    mapViewModel: MapViewModel,
+    profileViewModel: ProfileViewModel,
+    navController: NavHostController
+) {
+  DisplayOverviewItineraries(
+      mapViewModel = mapViewModel,
+      profileViewModel = profileViewModel,
+      navController = navController)
 }
 
 /** Displays global itineraries filtered on some predicates */
 @Composable
-fun DisplayOverviewItineraries(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel) {
+fun DisplayOverviewItineraries(
+    mapViewModel: MapViewModel,
+    profileViewModel: ProfileViewModel,
+    navController: NavHostController
+) {
 
   /* the categories that can be selected by the user during filtering */
   val categoriesList =
@@ -68,6 +80,7 @@ fun DisplayOverviewItineraries(mapViewModel: MapViewModel, profileViewModel: Pro
             itineraries = filtered,
             paddingValues = innerPadding,
             mapViewModel = mapViewModel,
-            profileViewModel = profileViewModel)
+            profileViewModel = profileViewModel,
+            navController = navController)
       }
 }

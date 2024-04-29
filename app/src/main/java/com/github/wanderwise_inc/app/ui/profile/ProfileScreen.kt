@@ -35,6 +35,7 @@ import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.github.wanderwise_inc.app.DEFAULT_USER_UID
 import com.github.wanderwise_inc.app.R
 import com.github.wanderwise_inc.app.data.ImageRepository
@@ -51,7 +52,8 @@ const val PROFILE_SCREEN_TEST_TAG: String = "profile_screen"
 fun ProfileScreen(
     mapViewModel: MapViewModel,
     profileViewModel: ProfileViewModel,
-    imageRepository: ImageRepository
+    imageRepository: ImageRepository,
+    navHostController: NavHostController
 ) {
   // val currentUid = FirebaseAuth.getInstance().currentUser!!.uid
   val currentUid = FirebaseAuth.getInstance().currentUser?.uid ?: DEFAULT_USER_UID
@@ -119,7 +121,8 @@ fun ProfileScreen(
                   itineraries = userItineraries,
                   mapViewModel = mapViewModel,
                   profileViewModel = profileViewModel,
-                  paddingValues = PaddingValues(8.dp))
+                  paddingValues = PaddingValues(8.dp),
+                  navController = navHostController)
             }
           }
     }

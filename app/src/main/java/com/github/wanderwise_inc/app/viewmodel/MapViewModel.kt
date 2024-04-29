@@ -22,15 +22,15 @@ class MapViewModel(
     private val directionsRepository: DirectionsRepository,
     private val userLocationClient: UserLocationClient,
 ) : ViewModel() {
-  private var focusedItinerary: Itinerary? = null;
+  private var focusedItinerary: Itinerary? = null
 
- /** @return the itinerary the user has clicked on */
-  fun getFocusedItinerary(): Itinerary?{
+  /** @return the itinerary the user has clicked on */
+  fun getFocusedItinerary(): Itinerary? {
     return focusedItinerary
   }
 
   /** changes the focused itinerary to a new one */
-  fun setFocusedItinerary(itinerary: Itinerary?){
+  fun setFocusedItinerary(itinerary: Itinerary?) {
     focusedItinerary = itinerary
   }
 

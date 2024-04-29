@@ -13,6 +13,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.navigation.NavHostController
 import com.github.wanderwise_inc.app.DEFAULT_USER_UID
 import com.github.wanderwise_inc.app.R
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
@@ -34,13 +35,24 @@ object LikedScreenTestTags {
 }
 
 @Composable
-fun LikedScreen(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel) {
-  DisplayLikedItineraries(mapViewModel = mapViewModel, profileViewModel = profileViewModel)
+fun LikedScreen(
+    mapViewModel: MapViewModel,
+    profileViewModel: ProfileViewModel,
+    navController: NavHostController
+) {
+  DisplayLikedItineraries(
+      mapViewModel = mapViewModel,
+      profileViewModel = profileViewModel,
+      navController = navController)
 }
 
 /** Displays itineraries liked by the user */
 @Composable
-fun DisplayLikedItineraries(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel) {
+fun DisplayLikedItineraries(
+    mapViewModel: MapViewModel,
+    profileViewModel: ProfileViewModel,
+    navController: NavHostController
+) {
 
   /* the categories that can be selected by the user during filtering */
   val categoriesList =
@@ -86,6 +98,7 @@ fun DisplayLikedItineraries(mapViewModel: MapViewModel, profileViewModel: Profil
             itineraries = filtered,
             paddingValues = innerPadding,
             mapViewModel = mapViewModel,
-            profileViewModel = profileViewModel)
+            profileViewModel = profileViewModel,
+            navController = navController)
       }
 }
