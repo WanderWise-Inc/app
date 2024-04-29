@@ -5,6 +5,10 @@ import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.data.ProfileRepository
 import com.github.wanderwise_inc.app.model.location.FakeItinerary
 import com.github.wanderwise_inc.app.model.profile.Profile
+import io.mockk.MockKAnnotations
+import io.mockk.coEvery
+import io.mockk.every
+import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
@@ -12,23 +16,14 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
-import org.mockito.Mock
-import org.mockito.Mockito.anyString
-import org.mockito.Mockito.`when`
-import org.mockito.junit.MockitoJUnit
-import org.mockito.junit.MockitoRule
 
 class ProfileViewModelTest {
 
-    @get:Rule
-    val mockitoRule: MockitoRule = MockitoJUnit.rule()
-
-    @Mock
+    @MockK
     private lateinit var profileRepository: ProfileRepository
 
-    @Mock
+    @MockK
     private lateinit var imageRepository: ImageRepository
 
     private lateinit var profileViewModel: ProfileViewModel
@@ -44,12 +39,13 @@ class ProfileViewModelTest {
 
     @Before
     fun setup() {
+        MockKAnnotations.init(this)
         profileViewModel = ProfileViewModel(profileRepository, imageRepository)
     }
 
     @Test
     fun getProfile() = runBlocking {
-        `when`(profileRepository.getProfile(anyString())).thenReturn(flow { emit(testProfile) })
+        every { profileRepository.getProfile(any()) } returns flow { emit(testProfile) }
 
         val emittedProfile = profileViewModel.getProfile("oscarduong").first()
         assertEquals(testProfile, emittedProfile)
@@ -57,7 +53,7 @@ class ProfileViewModelTest {
 
     @Test
     fun getAllProfiles() = runBlocking {
-        `when`(profileRepository.getAllProfiles()).thenReturn(flow { emit(listOf(testProfile)) })
+        every { profileRepository.getAllProfiles() } returns flow { emit(listOf(testProfile)) }
 
         val emittedProfileList = profileViewModel.getAllProfiles().first()
         assertEquals(listOf(testProfile), emittedProfileList)
@@ -67,9 +63,9 @@ class ProfileViewModelTest {
     fun setProfile() = runBlocking {
         val repo = mutableListOf<Profile>()
 
-        `when`(profileRepository.setProfile(testProfile)).thenAnswer {
-            val storedProfile = it.arguments[0] as Profile
-            repo.add(storedProfile)
+        coEvery { profileRepository.setProfile(any()) } answers {
+            val profile = invocation.args[0] as Profile
+            repo.add(profile)
         }
 
         profileViewModel.setProfile(testProfile)
@@ -80,9 +76,9 @@ class ProfileViewModelTest {
     fun deleteProfile() {
         val repo = mutableListOf(testProfile)
 
-        `when`(profileRepository.deleteProfile(testProfile)).thenAnswer {
-            val storedProfile = it.arguments[0] as Profile
-            repo.remove(storedProfile)
+        coEvery { profileRepository.deleteProfile(any()) } answers {
+            val profile = invocation.args[0] as Profile
+            repo.remove(profile)
         }
 
         profileViewModel.deleteProfile(testProfile)
@@ -91,7 +87,7 @@ class ProfileViewModelTest {
 
     @Test
     fun getProfilePicture() = runBlocking {
-        `when`(imageRepository.fetchImage(anyString())).thenReturn(flow { emit(null) })
+        every { imageRepository.fetchImage(any()) } returns flow { emit(null) }
 
         val emittedProfilePicture = profileViewModel.getProfilePicture(testProfile).first()
         assertNull(emittedProfilePicture)
@@ -99,7 +95,7 @@ class ProfileViewModelTest {
 
     @Test
     fun getDefaultProfilePicture() = runBlocking {
-        `when`(imageRepository.fetchImage(anyString())).thenReturn(flow { emit(null) })
+        every { imageRepository.fetchImage(any()) } returns flow { emit(null) }
 
         val emittedProfilePicture = profileViewModel.getDefaultProfilePicture().first()
         assertNull(emittedProfilePicture)
@@ -109,10 +105,10 @@ class ProfileViewModelTest {
     fun addLikedItinerary() {
         val repo = mutableMapOf<String, List<String>>()
 
-        `when`(profileRepository.addItineraryToLiked(anyString(), anyString())).thenAnswer {
-            val user = it.arguments[0] as String
-            val itinerary = it.arguments[1] as String
-            repo.put(user, listOf(itinerary))
+        every { profileRepository.addItineraryToLiked(any(), any()) } answers {
+            val user = invocation.args[0] as String
+            val itinerary = invocation.args[1] as String
+            repo[user] = listOf(itinerary)
         }
 
         profileViewModel.addLikedItinerary(testProfile.uid, FakeItinerary.TOKYO.uid)
@@ -123,9 +119,9 @@ class ProfileViewModelTest {
     fun removeLikedItinerary() {
         val repo = mutableMapOf(testProfile.uid to mutableListOf(FakeItinerary.TOKYO.uid))
 
-        `when`(profileRepository.removeItineraryFromLiked(anyString(), anyString())).thenAnswer {
-            val user = it.arguments[0] as String
-            val itinerary = it.arguments[1] as String
+        every { profileRepository.removeItineraryFromLiked(any(), any()) } answers {
+            val user = invocation.args[0] as String
+            val itinerary = invocation.args[1] as String
             repo[user]!!.remove(itinerary)
         }
 
@@ -137,9 +133,9 @@ class ProfileViewModelTest {
     fun checkIfItineraryIsLiked() {
         val repo = mutableMapOf(testProfile.uid to mutableListOf(FakeItinerary.TOKYO.uid))
 
-        `when`(profileRepository.checkIfItineraryIsLiked(anyString(), anyString())).thenAnswer {
-            val user = it.arguments[0] as String
-            val itinerary = it.arguments[1] as String
+        every { profileRepository.checkIfItineraryIsLiked(any(), any()) } answers {
+            val user = invocation.args[0] as String
+            val itinerary = invocation.args[1] as String
             repo[user]!!.contains(itinerary)
         }
 
@@ -149,9 +145,7 @@ class ProfileViewModelTest {
 
     @Test
     fun getLikedItineraries() = runBlocking {
-        `when`(profileRepository.getLikedItineraries(anyString())).thenReturn(
-            flow { emit(listOf(FakeItinerary.TOKYO.uid)) }
-        )
+        every { profileRepository.getLikedItineraries(any()) } returns flow { emit(listOf(FakeItinerary.TOKYO.uid)) }
 
         val emittedLikedItineraryList = profileViewModel.getLikedItineraries(testProfile.uid).first()
         assertEquals(listOf(FakeItinerary.TOKYO.uid), emittedLikedItineraryList)
