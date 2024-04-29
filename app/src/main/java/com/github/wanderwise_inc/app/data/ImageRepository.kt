@@ -10,6 +10,7 @@ import com.google.firebase.storage.StorageReference
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.suspendCancellableCoroutine
 
@@ -92,37 +93,30 @@ class ImageRepositoryImpl(
    */
   override fun fetchImage(pathToProfilePic: String): Flow<Bitmap?> {
     return flow {
-      if (pathToProfilePic == "") {
-        // the path is empty, there should be no profilePicture at this path
-        emit(null)
-      } else {
-        val profilePictureRef = imageReference.child("images/${pathToProfilePic}")
+          if (pathToProfilePic.isBlank()) {
+            // the path is empty, there should be no profilePicture at this path
+            emit(null)
+          } else {
+            val profilePictureRef = imageReference.child("images/${pathToProfilePic}")
 
-        try {
-          // the byte array that is at the given path (if any)
-          val byteResult =
-              suspendCancellableCoroutine<ByteArray?> { continuation ->
-                profilePictureRef
-                    .getBytes(1024 * 1024)
-                    .addOnSuccessListener { byteResult ->
-                      continuation.resume(byteResult) // Resume with byte array
-                    }
-                    .addOnFailureListener { exception ->
-                      continuation.resumeWithException(exception) // Resume with exception
-                    }
-              }
-
-          // Decode bitmap if byte are is not null
-          val bitmap = byteResult?.let { BitmapFactory.decodeByteArray(it, 0, it.size) }
-
-          emit(bitmap) // Emit bitmap
-        } catch (e: Exception) {
-          Log.e(
-              "FETCH IMAGE", "Error fetching image: ${e.message}", e) // Log detailed error message
-          emit(null) // Emit null in case of error
+            // the byte array that is at the given path (if any)
+            val byteResult =
+                suspendCancellableCoroutine<ByteArray?> { continuation ->
+                  profilePictureRef
+                      .getBytes(1024 * 1024)
+                      .addOnSuccessListener { byteResult ->
+                        continuation.resume(byteResult) // Resume with byte array
+                      }
+                      .addOnFailureListener { exception ->
+                        continuation.resumeWithException(exception) // Resume with exception
+                      }
+                }
+            // Decode bitmap if byte are is not null
+            val bitmap = byteResult?.let { BitmapFactory.decodeByteArray(it, 0, it.size) }
+            emit(bitmap) // Emit bitmap
+          }
         }
-      }
-    }
+        .catch { emit(null) }
   }
 
   /**
