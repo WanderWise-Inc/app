@@ -28,7 +28,7 @@ sealed class Destination(val route: String, val icon: Int, @StringRes val textId
     data object Creation :
         TopLevelDestination(
             route = Route.CREATION,
-            icon = R.drawable.pencil_icon,
+            icon = R.drawable.add_icon,
             textId = R.string.creation_string,
         )
 
