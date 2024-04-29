@@ -1,82 +1,159 @@
 package com.github.wanderwise_inc.app.viewmodel
 
-/*
+import com.github.wanderwise_inc.app.DEFAULT_USER_UID
+import com.github.wanderwise_inc.app.data.ImageRepository
+import com.github.wanderwise_inc.app.data.ProfileRepository
+import com.github.wanderwise_inc.app.model.location.FakeItinerary
+import com.github.wanderwise_inc.app.model.profile.Profile
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.runBlocking
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
+import org.mockito.Mock
+import org.mockito.Mockito.anyString
+import org.mockito.Mockito.`when`
+import org.mockito.junit.MockitoJUnit
+import org.mockito.junit.MockitoRule
+
 class ProfileViewModelTest {
-  private lateinit var profileRepository: ProfileRepository
-  private lateinit var imageRepository: ImageRepository
-  private lateinit var profileViewModel: ProfileViewModel
 
-  @Mock private lateinit var mockApplication: Application
+    @get:Rule
+    val mockitoRule: MockitoRule = MockitoJUnit.rule()
 
-  val ethanProfile =
-      Profile(
-          uid = "",
-          displayName = "Ethan g",
-          userUid = "ethan",
-          bio = "",
-      )
-  val engjellProfile =
-      Profile(
-          uid = "",
-          displayName = "engjell uwu",
-          userUid = "engjell",
-          bio = "",
-      )
+    @Mock
+    private lateinit var profileRepository: ProfileRepository
 
-  @Before
-  fun setup() {
-    profileRepository = ProfileRepositoryTestImpl()
-    mockApplication = ApplicationProvider.getApplicationContext<Application>()
-    imageRepository = ImageRepositoryTestImpl(mockApplication)
-    profileViewModel = ProfileViewModel(profileRepository, imageRepository)
-  }
+    @Mock
+    private lateinit var imageRepository: ImageRepository
 
-  @Test
-  fun adding_profiles_test() = runTest {
-    // set profiles
-    profileViewModel.setProfile(ethanProfile)
-    profileViewModel.setProfile(engjellProfile)
+    private lateinit var profileViewModel: ProfileViewModel
 
-    val query = profileViewModel.getAllProfiles().first()
+    private val testProfile = Profile(
+        uid = DEFAULT_USER_UID,
+        displayName = "276746",
+        userUid = "oscarduong",
+        bio = "testing",
+        profilePicture = null,
+        likedItinerariesUid = mutableListOf(FakeItinerary.TOKYO.uid)
+    )
 
-    assert(query.contains(ethanProfile))
-    assert(query.contains(engjellProfile))
-
-    for (profile in query) {
-      // UID's must not be blank after setting in DB
-      assert(profile.uid.isNotBlank())
+    @Before
+    fun setup() {
+        profileViewModel = ProfileViewModel(profileRepository, imageRepository)
     }
-  }
 
-  @Test
-  fun adding_profile_twice_test() = runTest {
-    profileViewModel.setProfile(ethanProfile)
-    profileViewModel.setProfile(ethanProfile)
+    @Test
+    fun getProfile() = runBlocking {
+        `when`(profileRepository.getProfile(anyString())).thenReturn(flow { emit(testProfile) })
 
-    val query = profileViewModel.getAllProfiles().first()
+        val emittedProfile = profileViewModel.getProfile("oscarduong").first()
+        assertEquals(testProfile, emittedProfile)
+    }
 
-    assert(query.size == 1)
-    assert(query == listOf(ethanProfile))
-  }
+    @Test
+    fun getAllProfiles() = runBlocking {
+        `when`(profileRepository.getAllProfiles()).thenReturn(flow { emit(listOf(testProfile)) })
 
-  @Test
-  fun getting_non_existing_profile_returns_null() = runTest {
-    val queryRes = profileViewModel.getProfile("doesn't exist").first()
-    assert(queryRes == null)
-  }
+        val emittedProfileList = profileViewModel.getAllProfiles().first()
+        assertEquals(listOf(testProfile), emittedProfileList)
+    }
 
-  @Test
-  fun delete_profile_test() = runTest {
-    profileViewModel.setProfile(ethanProfile)
-    profileViewModel.setProfile(engjellProfile)
-    assert(ethanProfile.uid.isNotBlank())
+    @Test
+    fun setProfile() = runBlocking {
+        val repo = mutableListOf<Profile>()
 
-    profileViewModel.deleteProfile(ethanProfile)
-    val allProfiles = profileViewModel.getAllProfiles().first()
+        `when`(profileRepository.setProfile(testProfile)).thenAnswer {
+            val storedProfile = it.arguments[0] as Profile
+            repo.add(storedProfile)
+        }
 
-    assert(!allProfiles.contains(ethanProfile))
-    assert(allProfiles.contains(engjellProfile))
-    assert(allProfiles.size == 1)
-  }
+        profileViewModel.setProfile(testProfile)
+        assertEquals(testProfile, repo[0])
+    }
+
+    @Test
+    fun deleteProfile() {
+        val repo = mutableListOf(testProfile)
+
+        `when`(profileRepository.deleteProfile(testProfile)).thenAnswer {
+            val storedProfile = it.arguments[0] as Profile
+            repo.remove(storedProfile)
+        }
+
+        profileViewModel.deleteProfile(testProfile)
+        assertEquals(0, repo.size)
+    }
+
+    @Test
+    fun getProfilePicture() = runBlocking {
+        `when`(imageRepository.fetchImage(anyString())).thenReturn(flow { emit(null) })
+
+        val emittedProfilePicture = profileViewModel.getProfilePicture(testProfile).first()
+        assertNull(emittedProfilePicture)
+    }
+
+    @Test
+    fun getDefaultProfilePicture() = runBlocking {
+        `when`(imageRepository.fetchImage(anyString())).thenReturn(flow { emit(null) })
+
+        val emittedProfilePicture = profileViewModel.getDefaultProfilePicture().first()
+        assertNull(emittedProfilePicture)
+    }
+
+    @Test
+    fun addLikedItinerary() {
+        val repo = mutableMapOf<String, List<String>>()
+
+        `when`(profileRepository.addItineraryToLiked(anyString(), anyString())).thenAnswer {
+            val user = it.arguments[0] as String
+            val itinerary = it.arguments[1] as String
+            repo.put(user, listOf(itinerary))
+        }
+
+        profileViewModel.addLikedItinerary(testProfile.uid, FakeItinerary.TOKYO.uid)
+        assertEquals(listOf(FakeItinerary.TOKYO.uid), repo[testProfile.uid])
+    }
+
+    @Test
+    fun removeLikedItinerary() {
+        val repo = mutableMapOf(testProfile.uid to mutableListOf(FakeItinerary.TOKYO.uid))
+
+        `when`(profileRepository.removeItineraryFromLiked(anyString(), anyString())).thenAnswer {
+            val user = it.arguments[0] as String
+            val itinerary = it.arguments[1] as String
+            repo[user]!!.remove(itinerary)
+        }
+
+        profileViewModel.removeLikedItinerary(testProfile.uid, FakeItinerary.TOKYO.uid)
+        assertEquals(0, repo[testProfile.uid]!!.size)
+    }
+
+    @Test
+    fun checkIfItineraryIsLiked() {
+        val repo = mutableMapOf(testProfile.uid to mutableListOf(FakeItinerary.TOKYO.uid))
+
+        `when`(profileRepository.checkIfItineraryIsLiked(anyString(), anyString())).thenAnswer {
+            val user = it.arguments[0] as String
+            val itinerary = it.arguments[1] as String
+            repo[user]!!.contains(itinerary)
+        }
+
+        val isLiked = profileViewModel.checkIfItineraryIsLiked(testProfile.uid, FakeItinerary.TOKYO.uid)
+        assertTrue(isLiked)
+    }
+
+    @Test
+    fun getLikedItineraries() = runBlocking {
+        `when`(profileRepository.getLikedItineraries(anyString())).thenReturn(
+            flow { emit(listOf(FakeItinerary.TOKYO.uid)) }
+        )
+
+        val emittedLikedItineraryList = profileViewModel.getLikedItineraries(testProfile.uid).first()
+        assertEquals(listOf(FakeItinerary.TOKYO.uid), emittedLikedItineraryList)
+    }
 }
-*/
