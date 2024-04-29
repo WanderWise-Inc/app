@@ -5,11 +5,11 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import com.github.wanderwise_inc.app.R
 
-object Route { 
+object Route {
   const val SIGNIN = "SignIn"
   const val OVERVIEW = "Overview"
   const val LIKED = "Liked"
-  const val CREATION = "Creation" 
+  const val CREATION = "Creation"
   const val MAP = "Map"
   const val PROFILE = "Profile"
 }
@@ -27,7 +27,10 @@ sealed class Destination(val route: String, val icon: Int, @StringRes val textId
 
     data object Creation :
         TopLevelDestination(
-            route = Route.CREATION, icon = R.drawable.pencil_icon, textId = R.string.creation_string,)
+            route = Route.CREATION,
+            icon = R.drawable.pencil_icon,
+            textId = R.string.creation_string,
+        )
 
     data object Map :
         TopLevelDestination(
@@ -35,7 +38,9 @@ sealed class Destination(val route: String, val icon: Int, @StringRes val textId
 
     data object Profile :
         TopLevelDestination(
-            route = Route.PROFILE, icon = R.drawable.profile_icon, textId = R.string.profile_string)
+            route = Route.PROFILE,
+            icon = R.drawable.profile_icon,
+            textId = R.string.profile_string)
   }
 }
 

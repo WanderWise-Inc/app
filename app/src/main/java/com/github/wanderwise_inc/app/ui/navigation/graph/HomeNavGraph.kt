@@ -55,9 +55,7 @@ fun HomeNavGraph(
     composable(route = TopLevelDestination.Liked.route) {
       LikedScreen(mapViewModel, profileViewModel, firebaseAuth)
     }
-    composable(route = TopLevelDestination.Creation.route) { 
-      CreationScreen(mapViewModel) 
-    }
+    composable(route = TopLevelDestination.Creation.route) { CreationScreen(mapViewModel) }
     composable(route = TopLevelDestination.Map.route) {
       PreviewItineraryScreen(itinerary, mapViewModel)
     }

@@ -7,7 +7,7 @@ import androidx.compose.ui.platform.testTag
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 
 object CreationScreenTestTags {
-    const val SCREEN = "Creation Screen"
+  const val SCREEN = "Creation Screen"
 }
 
 @Composable

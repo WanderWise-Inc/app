@@ -37,8 +37,8 @@ data class SearchCategory(
 )
 
 object LikedScreenTestTags {
-    const val SCREEN = "Liked Screen"
-    const val CATEGORY_SELECTOR = "category selector"
+  const val SCREEN = "Liked Screen"
+  const val CATEGORY_SELECTOR = "category selector"
 }
 
 @Composable
@@ -103,22 +103,19 @@ fun DisplayLikedItineraries(
           Log.d("EMPTY_ITINERARIES", "there are no liked itineraries")
           Box(
               contentAlignment = Alignment.Center,
-              modifier = Modifier.padding(innerPadding).fillMaxWidth().height(100.dp)
-          ) {
-              Text(
-                  text = "You have not liked any corresponding itineraries yet",
-                  //color = MaterialTheme.colorScheme.
-                  textAlign = TextAlign.Center,
-                  modifier = Modifier.padding(5.dp, 10.dp)
-              )
-          } //PaModifier.padding(5.dp, 10.dp))
+              modifier = Modifier.padding(innerPadding).fillMaxWidth().height(100.dp)) {
+                Text(
+                    text = "You have not liked any corresponding itineraries yet",
+                    // color = MaterialTheme.colorScheme.
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(5.dp, 10.dp))
+              } // PaModifier.padding(5.dp, 10.dp))
         } else {
-            ItinerariesListScrollable(
-                itineraries = filtered,
-                paddingValues = innerPadding,
-                mapViewModel = mapViewModel,
-                profileViewModel = profileViewModel
-            )
+          ItinerariesListScrollable(
+              itineraries = filtered,
+              paddingValues = innerPadding,
+              mapViewModel = mapViewModel,
+              profileViewModel = profileViewModel)
         }
       }
 }

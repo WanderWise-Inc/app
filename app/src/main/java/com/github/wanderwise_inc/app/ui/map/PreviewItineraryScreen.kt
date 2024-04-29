@@ -33,7 +33,7 @@ import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
 
 object MapScreenTestTag {
-    const val SCREEN = "Overview Screen"
+  const val SCREEN = "Overview Screen"
 }
 
 /** @brief previews an itinerary */
