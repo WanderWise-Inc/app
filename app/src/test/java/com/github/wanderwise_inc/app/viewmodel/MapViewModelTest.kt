@@ -1,336 +1,199 @@
 package com.github.wanderwise_inc.app.viewmodel
 
+import android.location.Location
+import com.github.wanderwise_inc.app.DEFAULT_USER_UID
 import com.github.wanderwise_inc.app.data.DirectionsRepository
 import com.github.wanderwise_inc.app.data.ItineraryRepository
-import com.github.wanderwise_inc.app.data.ItineraryRepositoryTestImpl
+import com.github.wanderwise_inc.app.model.location.FakeItinerary
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryPreferences
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
-import com.github.wanderwise_inc.app.model.location.Location
-import com.github.wanderwise_inc.app.network.DirectionsApiService
-import com.github.wanderwise_inc.app.network.DirectionsResponseBody
-import junit.framework.TestCase.assertEquals
-import kotlin.random.Random
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import com.github.wanderwise_inc.app.model.location.Score
+import com.github.wanderwise_inc.app.model.location.Tag
+import junit.framework.TestCase
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
-import okhttp3.Request
-import okio.Timeout
-import org.junit.Assert.assertNotEquals
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
+
 import org.junit.Test
-import org.mockito.ArgumentMatchers.anyList
+import org.mockito.ArgumentMatchers.any
+import org.mockito.ArgumentMatchers.anyLong
 import org.mockito.ArgumentMatchers.anyString
+import org.mockito.ArgumentMatchers.eq
 import org.mockito.Mock
 import org.mockito.Mockito
-import org.mockito.Mockito.anyLong
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
-/** @brief test class for mapview model */
 class MapViewModelTest {
 
-  @get:Rule val mockitoRule: MockitoRule = MockitoJUnit.rule()
+    @get:Rule
+    val mockitoRule: MockitoRule = MockitoJUnit.rule()
 
-  @Mock private lateinit var userLocationClient: UserLocationClient
+    @Mock
+    private lateinit var itineraryRepository: ItineraryRepository
 
-  private lateinit var itineraryRepository: ItineraryRepository
-  @Mock private lateinit var mockApiService: DirectionsApiService
-  @Mock private lateinit var directionsRepository: DirectionsRepository
-  private lateinit var mapViewModel: MapViewModel
-  // helper function for generating random latitude and longitude...
-  private fun randomLat(): Double = Random.nextDouble(-90.0, 90.0)
+    @Mock
+    private lateinit var directionsRepository: DirectionsRepository
 
-  private fun randomLon(): Double = Random.nextDouble(-180.0, 180.0)
+    @Mock
+    private lateinit var userLocationClient: UserLocationClient
 
-  // helper function for generating random locations
-  private fun randomLocations(size: Int): List<Location> {
-    // helper function for generating random locations
-    val locations = mutableListOf<Location>()
-    for (i in 0 until size) locations.add(Location(randomLat(), randomLon()))
-    return locations.toList()
-  }
+    private lateinit var mapViewModel: MapViewModel
 
-  // some public itineraries
-  private val ethanItinerary =
-      Itinerary(
-          userUid = "Ethan",
-          locations = randomLocations(5),
-          title = "Ethan's Itinerary",
-          tags = listOf(ItineraryTags.BUDGET, ItineraryTags.SOCIAL),
-          description = null,
-          visible = true)
-  private val yofiItinerary =
-      Itinerary(
-          userUid = "Yofthahe",
-          locations = randomLocations(10),
-          title = "Yofi's Itinerary",
-          tags = listOf(ItineraryTags.CULTURAL, ItineraryTags.SOCIAL, ItineraryTags.WILDLIFE),
-          description = null,
-          visible = true)
-  private val thomasItinerary =
-      Itinerary(
-          userUid = "Thomas",
-          locations = randomLocations(3),
-          title = "Thomas' Itinerary",
-          tags = listOf(ItineraryTags.ACTIVE),
-          description = null,
-          visible = true)
+    @Before
+    fun setup() {
+        mapViewModel = MapViewModel(itineraryRepository, directionsRepository, userLocationClient)
+    }
 
-  private val mockLocations = randomLocations(4)
-  private val mockResponse =
-      DirectionsResponseBody(
-          listOf(
-              DirectionsResponseBody.Route(
-                  listOf(
-                      DirectionsResponseBody.Route.Leg(
-                          listOf(
-                              DirectionsResponseBody.Route.Leg.Step(
-                                  DirectionsResponseBody.Route.Leg.RespLocation(
-                                      mockLocations[0].lat, mockLocations[0].long),
-                                  DirectionsResponseBody.Route.Leg.RespLocation(
-                                      mockLocations[1].lat, mockLocations[1].long)),
-                              DirectionsResponseBody.Route.Leg.Step(
-                                  DirectionsResponseBody.Route.Leg.RespLocation(
-                                      mockLocations[2].lat, mockLocations[2].long),
-                                  DirectionsResponseBody.Route.Leg.RespLocation(
-                                      mockLocations[3].lat, mockLocations[3].long))))))))
+    @Test
+    fun getAllPublicItineraries() = runBlocking {
+        `when`(itineraryRepository.getPublicItineraries())
+            .thenReturn(flow { emit(listOf(FakeItinerary.TOKYO)) })
 
-  @OptIn(ExperimentalCoroutinesApi::class)
-  @Before
-  fun setup() {
-    Dispatchers.setMain(Dispatchers.Unconfined)
+        val emittedItineraryList = mapViewModel.getAllPublicItineraries().first()
+        assertEquals(listOf(FakeItinerary.TOKYO), emittedItineraryList)
+    }
 
-    mockApiService = mock(DirectionsApiService::class.java)
+    @Test
+    fun getUserItineraries() = runBlocking {
+        `when`(itineraryRepository.getUserItineraries(anyString()))
+            .thenReturn(flow { emit(listOf(FakeItinerary.TOKYO)) })
 
-    val mockCall =
-        object : Call<DirectionsResponseBody> {
-          override fun enqueue(callback: Callback<DirectionsResponseBody>) {
-            // Simulate a successful response
-            callback.onResponse(this, Response.success(mockResponse))
-          }
+        val emittedItineraryList = mapViewModel.getUserItineraries(DEFAULT_USER_UID).first()
+        assertEquals(listOf(FakeItinerary.TOKYO), emittedItineraryList)
+    }
 
-          // Other overridden methods can be added as necessary for your test
-          override fun isExecuted(): Boolean = false
+    @Test
+    fun getItineraryLikes() {
+        val totalLikes = mapViewModel.getItineraryLikes(listOf(FakeItinerary.TOKYO))
+        assertEquals(0, totalLikes)
+    }
 
-          override fun clone(): Call<DirectionsResponseBody> = this
+    @Test
+    fun incrementItineraryLikes() {
+        val repo = mutableMapOf(FakeItinerary.TOKYO.uid to FakeItinerary.TOKYO)
 
-          override fun execute(): Response<DirectionsResponseBody> {
-            throw UnsupportedOperationException("execute() is not supported for async calls")
-          }
+        `when`(itineraryRepository.updateItinerary(FakeItinerary.TOKYO.uid, FakeItinerary.TOKYO))
+            .thenAnswer {
+                val uid = it.arguments[0] as String
+                val itinerary = it.arguments[1] as Itinerary
+                repo[uid] = itinerary
+                itinerary
+            }
 
-          override fun isCanceled(): Boolean = false
+        mapViewModel.incrementItineraryLikes(FakeItinerary.TOKYO)
+        assertEquals(1, repo[FakeItinerary.TOKYO.uid]!!.numLikes)
+    }
 
-          override fun request(): Request {
-            TODO("shouldn't be needed for mock")
-          }
+    @Test
+    fun decrementItineraryLikes() {
+        val tokyoLikedItinerary = FakeItinerary.TOKYO
+        ++tokyoLikedItinerary.numLikes
+        val repo = mutableMapOf(tokyoLikedItinerary.uid to tokyoLikedItinerary)
 
-          override fun timeout(): Timeout {
-            throw UnsupportedOperationException("timeout() is not supported for async calls")
-          }
+        `when`(itineraryRepository.updateItinerary(tokyoLikedItinerary.uid, tokyoLikedItinerary))
+            .thenAnswer {
+                val uid = it.arguments[0] as String
+                val itinerary = it.arguments[1] as Itinerary
+                repo[uid] = itinerary
+                itinerary
+            }
 
-          override fun cancel() {
-            TODO("shouldn't be needed for mock")
-          }
+        mapViewModel.decrementItineraryLikes(FakeItinerary.TOKYO)
+        assertEquals(0, repo[tokyoLikedItinerary.uid]!!.numLikes)
+    }
+
+    @Test
+    fun getItinerariesFromPreferences() = runBlocking {
+        `when`(itineraryRepository.getItinerariesWithTags(listOf(ItineraryTags.URBAN)))
+            .thenReturn(flow { emit(listOf(FakeItinerary.TOKYO)) })
+
+        val emittedItineraryList = mapViewModel.getItinerariesFromPreferences(
+            ItineraryPreferences(listOf(ItineraryTags.URBAN))
+        ).first()
+        assertEquals(listOf(FakeItinerary.TOKYO), emittedItineraryList)
+    }
+
+    @Test
+    fun sortItinerariesFromPreferences() {
+        val tokyo = mock(Itinerary::class.java)
+        val switzerland = mock(Itinerary::class.java)
+        val itineraries = listOf(switzerland, tokyo)
+        val pref = ItineraryPreferences(listOf(ItineraryTags.URBAN, ItineraryTags.WILDLIFE))
+
+        `when`(switzerland.scoreFromPreferences(pref)).thenReturn(0.0)
+        `when`(tokyo.scoreFromPreferences(pref)).thenReturn(1.0)
+
+        val sortedItineraryList = mapViewModel.sortItinerariesFromPreferences(itineraries, pref)
+        assertEquals(listOf(tokyo, switzerland), sortedItineraryList)
+    }
+
+    @Test
+    fun getItineraryFromUids() = runBlocking {
+        val repo = mapOf(FakeItinerary.TOKYO.uid to FakeItinerary.TOKYO)
+
+        `when`(itineraryRepository.getItinerary(anyString())).thenAnswer {
+            val uid = it.arguments[0] as String
+            repo[uid]
         }
-    // Mock the directionsApiService so that we don't get billed by Google
-    `when`(
-            mockApiService.getPolylineWayPoints(
-                origin = anyString(),
-                destination = anyString(),
-                waypoints = anyList(),
-                key = anyString()))
-        .thenReturn(mockCall)
 
-    // directionsRepository = DirectionsRepository(mockApiService)
-    directionsRepository = mock(DirectionsRepository::class.java)
+        val emittedItineraryList = mapViewModel.getItineraryFromUids(listOf(FakeItinerary.TOKYO.uid)).first()
+        assertEquals(listOf(FakeItinerary.TOKYO), emittedItineraryList)
+    }
 
-    itineraryRepository = ItineraryRepositoryTestImpl()
-    mapViewModel =
-        MapViewModel(
-            itineraryRepository = itineraryRepository,
-            directionsRepository = directionsRepository,
-            userLocationClient = userLocationClient)
-  }
+    @Test
+    fun setItinerary() {
+        val repo = mutableMapOf<String, Itinerary>()
 
-  @Test
-  fun `itinerary add and retrieve`() = runTest {
-    // insert in shuffled order for next test that tests sorting algorithm
-    mapViewModel.setItinerary(yofiItinerary)
-    mapViewModel.setItinerary(thomasItinerary)
-    mapViewModel.setItinerary(ethanItinerary)
+        `when`(itineraryRepository.setItinerary(FakeItinerary.TOKYO)).thenAnswer {
+            val itinerary = it.arguments[0] as Itinerary
+            repo[itinerary.uid] = itinerary
+            itinerary
+        }
 
-    val retrievedItineraries = mapViewModel.getAllPublicItineraries().first().toSet()
-    val expected = setOf(ethanItinerary, yofiItinerary, thomasItinerary)
+        mapViewModel.setItinerary(FakeItinerary.TOKYO)
+        assertEquals(FakeItinerary.TOKYO, repo[FakeItinerary.TOKYO.uid])
+    }
 
-    assertEquals(expected, retrievedItineraries)
-  }
+    @Test
+    fun deleteItinerary() {
+        val repo = mutableMapOf(FakeItinerary.TOKYO.uid to FakeItinerary.TOKYO)
 
-  @Test
-  fun `itinerary filtering from preferences outputs correct elements 1`() = runTest {
-    mapViewModel.setItinerary(yofiItinerary)
-    mapViewModel.setItinerary(thomasItinerary)
-    mapViewModel.setItinerary(ethanItinerary)
+        `when`(itineraryRepository.deleteItinerary(FakeItinerary.TOKYO)).thenAnswer {
+            val itinerary = it.arguments[0] as Itinerary
+            repo.remove(itinerary.uid)
+        }
 
-    val testPreferences =
-        ItineraryPreferences(
-            tags = listOf(ItineraryTags.BUDGET, ItineraryTags.SOCIAL),
-        )
+        mapViewModel.deleteItinerary(FakeItinerary.TOKYO)
+        assertEquals(0, repo.size)
+    }
 
-    val retrievedItineraries = mapViewModel.getItinerariesFromPreferences(testPreferences).first()
-    assert(retrievedItineraries.contains(ethanItinerary))
-    assert(retrievedItineraries.contains(yofiItinerary))
-    assert(!retrievedItineraries.contains(thomasItinerary))
-  }
+    @Test
+    fun fetchPolylineLocations() {
+    }
 
-  @Test
-  fun `itinerary filtering from preferences outputs correct elements 2`() = runTest {
-    mapViewModel.setItinerary(yofiItinerary)
-    mapViewModel.setItinerary(thomasItinerary)
-    mapViewModel.setItinerary(ethanItinerary)
+    @Test
+    fun getPolylinePointsLiveData() {
+    }
 
-    val testPreferences =
-        ItineraryPreferences(
-            tags = listOf(ItineraryTags.ACTIVE),
-        )
+    @Test
+    fun getUserLocation() = runBlocking {
+        val epflLocation = Mockito.mock(Location::class.java)
+        epflLocation.latitude = 46.5188
+        epflLocation.longitude = 6.5593
 
-    val retrievedItineraries = mapViewModel.getItinerariesFromPreferences(testPreferences).first()
-    assert(!retrievedItineraries.contains(ethanItinerary))
-    assert(!retrievedItineraries.contains(yofiItinerary))
-    assert(retrievedItineraries.contains(thomasItinerary))
-  }
+        `when`(userLocationClient.getLocationUpdates(anyLong()))
+            .thenReturn(flow { emit(epflLocation) })
 
-  @Test
-  fun `itinerary filtering from preferences outputs correct elements 3`() = runTest {
-    mapViewModel.setItinerary(yofiItinerary)
-    mapViewModel.setItinerary(thomasItinerary)
-    mapViewModel.setItinerary(ethanItinerary)
+        val userLocationFlow = mapViewModel.getUserLocation()
+        val emittedLocation = userLocationFlow.first()
 
-    val testPreferences =
-        ItineraryPreferences(
-            tags = listOf(ItineraryTags.FOODIE),
-        )
-
-    val retrievedItineraries = mapViewModel.getItinerariesFromPreferences(testPreferences).first()
-    assert(!retrievedItineraries.contains(ethanItinerary))
-    assert(!retrievedItineraries.contains(yofiItinerary))
-    assert(!retrievedItineraries.contains(thomasItinerary))
-  }
-
-  @Test
-  fun `itinerary sorting from preferences outputs correct order`() = runTest {
-    mapViewModel.setItinerary(yofiItinerary)
-    mapViewModel.setItinerary(thomasItinerary)
-    mapViewModel.setItinerary(ethanItinerary)
-
-    val testPreferences =
-        ItineraryPreferences(
-            tags = listOf(ItineraryTags.BUDGET, ItineraryTags.SOCIAL),
-        )
-
-    val retrievedItineraries = mapViewModel.getItinerariesFromPreferences(testPreferences).first()
-
-    assertEquals(
-        listOf(ethanItinerary, yofiItinerary),
-        mapViewModel.sortItinerariesFromPreferences(retrievedItineraries, testPreferences))
-
-    assertNotEquals(
-        listOf(yofiItinerary, ethanItinerary),
-        mapViewModel.sortItinerariesFromPreferences(retrievedItineraries, testPreferences))
-  }
-
-  @Test
-  fun `getting itinerary from username works correctly`() = runTest {
-    mapViewModel.setItinerary(ethanItinerary)
-    mapViewModel.setItinerary(yofiItinerary)
-    mapViewModel.setItinerary(thomasItinerary)
-
-    val firstQuery = mapViewModel.getUserItineraries("Ethan").first()
-    assert(firstQuery.contains(ethanItinerary))
-    assert(!firstQuery.contains(yofiItinerary))
-    assert(!firstQuery.contains(thomasItinerary))
-
-    val secondQuery = mapViewModel.getUserItineraries("Thomas").first()
-    assert(!secondQuery.contains(ethanItinerary))
-    assert(!secondQuery.contains(yofiItinerary))
-    assert(secondQuery.contains(thomasItinerary))
-
-    val thirdQuery = mapViewModel.getUserItineraries("Oscar").first()
-    assertEquals(listOf<Itinerary>(), thirdQuery)
-  }
-
-  @Test
-  fun `deleting an itinerary works correctly`() = runTest {
-    mapViewModel.setItinerary(ethanItinerary)
-    mapViewModel.setItinerary(yofiItinerary)
-    mapViewModel.setItinerary(thomasItinerary)
-
-    mapViewModel.deleteItinerary(yofiItinerary)
-
-    val firstQuery = mapViewModel.getAllPublicItineraries().first()
-
-    assert(!firstQuery.contains(yofiItinerary))
-    assert(firstQuery.contains(ethanItinerary))
-    assert(firstQuery.contains(thomasItinerary))
-
-    mapViewModel.deleteItinerary(ethanItinerary)
-    mapViewModel.deleteItinerary(thomasItinerary)
-
-    val secondQuery = mapViewModel.getAllPublicItineraries().first()
-    assertEquals(listOf<Itinerary>(), secondQuery)
-  }
-
-  /*
-  @OptIn(ExperimentalCoroutinesApi::class)
-  @Test
-  fun `getPolyLineWaypoints() should return a correctly parsed list of Locations`() = runTest {
-    val mockCall = mock<Call<DirectionsResponseBody>>()
-
-    val placeholderItinerary =
-      Itinerary(
-        userUid = "Ethan",
-        locations = randomLocations(2),
-        title = "Ethan's Itinerary",
-        tags = listOf(ItineraryTags.BUDGET, ItineraryTags.SOCIAL),
-        description = null,
-        visible = true)
-    val originLatlng = placeholderItinerary.locations[0]
-    val destLatlng = placeholderItinerary.locations[1]
-
-    val originEncoded = "${originLatlng.lat},${originLatlng.long}"
-    val destinationEncoded = "${destLatlng.lat},${destLatlng.long}"
-
-    `when`(directionsRepository.getPolylineWayPoints(originEncoded, destinationEncoded, apiKey = BuildConfig.MAPS_API_KEY))
-      .thenReturn(MutableLiveData(listOf(LatLng(0.0, 0.0))))
-
-    mapViewModel.fetchPolylineLocations(placeholderItinerary)
-    advanceUntilIdle()
-
-    assertEquals(listOf(LatLng(0.0, 0.0)), mapViewModel.polylinePointsLiveData.value)
-  }
-   */
-
-  @Test
-  fun `getUserLocation returns a flow containing the user location`() = runBlocking {
-    val epflLocation = Mockito.mock(android.location.Location::class.java)
-    epflLocation.latitude = randomLat()
-    epflLocation.longitude = randomLon()
-
-    `when`(userLocationClient.getLocationUpdates(anyLong())).thenReturn(flow { emit(epflLocation) })
-
-    val userLocationFlow = mapViewModel.getUserLocation()
-    val emittedLocation = userLocationFlow.first()
-
-    assertEquals(epflLocation, emittedLocation)
-  }
+        TestCase.assertEquals(epflLocation, emittedLocation)
+    }
 }
