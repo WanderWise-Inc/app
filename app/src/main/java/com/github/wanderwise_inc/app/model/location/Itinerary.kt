@@ -177,40 +177,29 @@ data class Itinerary(
     return Location(avgLat, avgLon)
   }
 
-    /**
-     * @return the Locations of the itinerary
-     */
-    fun getItineraryLocations(): List<Location> {
-        return locations
-    }
+  /** @return the Locations of the itinerary */
+  fun getItineraryLocations(): List<Location> {
+    return locations
+  }
 
-    /**
-     * @return the UID of the itinerary
-     */
-    fun getItineraryUid(): String {
-        return uid
-    }
+  /** @return the UID of the itinerary */
+  fun getItineraryUid(): String {
+    return uid
+  }
 
-    /**
-     * @param newUid the new UID of the itinerary
-     */
-    fun setItineraryUid(newUid: String) {
-        uid = newUid
-    }
+  /** @param newUid the new UID of the itinerary */
+  fun setItineraryUid(newUid: String) {
+    uid = newUid
+  }
 
-    /**
-     * @return the number of likes of the itinerary
+  /** @return the number of likes of the itinerary */
+  fun getLikes() = numLikes
 
-     */
-    fun getLikes() =  numLikes
+  /** Add a like to the itinerary */
+  fun incrementLike() {
+    numLikes++
+  }
 
-    /**
-     * Add a like to the itinerary
-     */
-    fun incrementLike() {
-        numLikes++
-    }
-
-    /** @brief no-argument constructor for firebase de-serialization */
+  /** @brief no-argument constructor for firebase de-serialization */
   constructor() : this("", "", listOf(), "", listOf(), null, false)
 }
