@@ -12,6 +12,7 @@ import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.ui.navigation.BottomNavigationMenu
 import com.github.wanderwise_inc.app.ui.navigation.NavigationActions
 import com.github.wanderwise_inc.app.ui.navigation.graph.HomeNavGraph
+import com.github.wanderwise_inc.app.viewmodel.BottomNavigationViewModel
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 
@@ -19,13 +20,14 @@ import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 fun HomeScreen(
     imageRepository: ImageRepository,
     mapViewModel: MapViewModel,
+    bottomNavigationViewModel: BottomNavigationViewModel,
     profileViewModel: ProfileViewModel,
     navController: NavHostController = rememberNavController(),
 ) {
   val navigationActions = NavigationActions(navController)
-  Scaffold(topBar = {}, bottomBar = { BottomNavigationMenu(navigationActions) }) { innerPadding ->
+  Scaffold(topBar = {}, bottomBar = { BottomNavigationMenu(navigationActions, bottomNavigationViewModel) }) { innerPadding ->
     Box(modifier = Modifier.padding(innerPadding)) {
-      HomeNavGraph(navController, mapViewModel, profileViewModel, imageRepository)
+      HomeNavGraph(navController, mapViewModel, profileViewModel, bottomNavigationViewModel, imageRepository)
     }
   }
 }
