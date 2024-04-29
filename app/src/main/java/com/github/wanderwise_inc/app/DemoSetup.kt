@@ -22,15 +22,14 @@ fun demoSetup(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel, fi
   Log.d("DEMO_SETUP", "demo setup started")
   if (!DEMO_CALLED) {
     addProfiles(mapViewModel, profileViewModel, firebaseAuth)
-    addItineraries(mapViewModel, profileViewModel)
+    addItineraries(mapViewModel, profileViewModel, firebaseAuth)
     DEMO_CALLED = true
   }
 }
 
 /** @brief adds some profiles to ProfileViewModel */
 fun addProfiles(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel, firebaseAuth: FirebaseAuth) {
-  val currentUser = firebaseAuth.currentUser
-  val currentUserUid = currentUser?.uid ?: DEFAULT_USER_UID
+  val currentUserUid = firebaseAuth.currentUser?.uid ?: DEFAULT_USER_UID
 
   val someOtherProfile =
       Profile(
@@ -48,7 +47,7 @@ fun addProfiles(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel, 
 }
 
 /** @brief adds some itineraries to MapViewModel */
-fun addItineraries(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel) {
+fun addItineraries(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel, firebaseAuth: FirebaseAuth) {
   val defaultLocations = PlacesReader(null).readFromString()
 
   val itineraryAdventureAndLuxury =
@@ -79,8 +78,8 @@ fun addItineraries(mapViewModel: MapViewModel, profileViewModel: ProfileViewMode
           description = null,
           visible = true,
       )
-  val currentUser = FirebaseAuth.getInstance().currentUser
-  val currentUserUid = currentUser?.uid ?: DEFAULT_USER_UID
+    
+  val currentUserUid = firebaseAuth.currentUser?.uid ?: DEFAULT_USER_UID
 
   val privateItinerary =
       Itinerary(
