@@ -17,8 +17,10 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.github.wanderwise_inc.app.data.ImageRepository
+import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.ui.itinerary.ItineraryBanner
 import com.github.wanderwise_inc.app.ui.navigation.BottomNavigationMenu
+import com.github.wanderwise_inc.app.ui.navigation.Destination
 import com.github.wanderwise_inc.app.ui.navigation.NavigationActions
 import com.github.wanderwise_inc.app.ui.navigation.graph.HomeNavGraph
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
@@ -38,6 +40,11 @@ fun HomeScreen(
       // Gets all itineraries
       val itineraries by viewModel.getAllPublicItineraries().collectAsState(initial = listOf())
       // Scrollable Column that only composes items on Screen
+
+      val onBannerClick = { itinerary: Itinerary ->
+          mapViewModel.setFocusedItinerary(itinerary)
+          navController.navigate(Destination.TopLevelDestination.Map.route)
+      }
       LazyColumn(
           modifier =
               Modifier.fillMaxSize()

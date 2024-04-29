@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.sp
 import com.github.wanderwise_inc.app.DEFAULT_USER_UID
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.ui.itinerary.ItineraryBanner
+import com.github.wanderwise_inc.app.ui.navigation.Destination
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -53,7 +54,10 @@ fun ItinerariesListScrollable(
               profileViewModel.addLikedItinerary(uid, it.uid)
             }
           }
-          val onBannerClick = {}
+          val onBannerClick = { itinerary: Itinerary ->
+            mapViewModel.setFocusedItinerary(itinerary)
+            navController.navigate(Destination.TopLevelDestination.Map.route)
+        }
           ItineraryBanner(
               itinerary = itinerary,
               onLikeButtonClick = onLikeButtonClick,

@@ -85,49 +85,65 @@ object PreviewItineraryScreenTestTags {
 /** @brief previews an itinerary */
 @Composable
 fun PreviewItineraryScreen(
-    itinerary: Itinerary,
+    _itinerary: Itinerary,
     mapViewModel: MapViewModel,
     profileViewModel: ProfileViewModel
 ) {
   val userLocation by mapViewModel.getUserLocation().collectAsState(null)
+    val itinerary = mapViewModel.getFocusedItinerary()
 
+    if (itinerary == null)
+        Text("nothing here") else {
   val cameraPositionState = rememberCameraPositionState {
     position = CameraPosition.fromLatLngZoom(itinerary.computeCenterOfGravity().toLatLng(), 13f)
   }
 
+
   LaunchedEffect(Unit) { mapViewModel.fetchPolylineLocations(itinerary) }
   val polylinePoints by mapViewModel.getPolylinePointsLiveData().observeAsState()
 
-  Scaffold(
-      bottomBar = { PreviewItineraryBanner(itinerary, mapViewModel, profileViewModel) },
-      modifier = Modifier.testTag(PreviewItineraryScreenTestTags.MAIN_SCREEN),
-      floatingActionButton = {
-        CenterButton(cameraPositionState = cameraPositionState, currentLocation = userLocation)
-      },
-      floatingActionButtonPosition = FabPosition.Start) { paddingValues ->
-        GoogleMap(
-            modifier =
+
+
+        Scaffold(
+            bottomBar = { PreviewItineraryBanner(itinerary, mapViewModel, profileViewModel) },
+            modifier = Modifier.testTag(PreviewItineraryScreenTestTags.MAIN_SCREEN),
+            floatingActionButton = {
+                CenterButton(
+                    cameraPositionState = cameraPositionState,
+                    currentLocation = userLocation
+                )
+            },
+            floatingActionButtonPosition = FabPosition.Start
+        ) { paddingValues ->
+            GoogleMap(
+                modifier =
                 Modifier.fillMaxSize()
                     .padding(paddingValues)
                     .testTag(PreviewItineraryScreenTestTags.GOOGLE_MAPS),
-            cameraPositionState = cameraPositionState) {
-              userLocation?.let {
-                Marker(
-                    tag = PreviewItineraryScreenTestTags.USER_LOCATION,
-                    state = MarkerState(position = LatLng(it.latitude, it.longitude)),
-                    icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
-              }
-              itinerary.locations.map { location ->
-                AdvancedMarker(
-                    state = MarkerState(position = location.toLatLng()),
-                    title = location.title ?: "",
-                )
-                if (polylinePoints != null) {
-                  Polyline(points = polylinePoints!!, color = MaterialTheme.colorScheme.primary)
+                cameraPositionState = cameraPositionState
+            ) {
+                userLocation?.let {
+                    Marker(
+                        tag = PreviewItineraryScreenTestTags.USER_LOCATION,
+                        state = MarkerState(position = LatLng(it.latitude, it.longitude)),
+                        icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)
+                    )
                 }
-              }
+                itinerary.locations.map { location ->
+                    AdvancedMarker(
+                        state = MarkerState(position = location.toLatLng()),
+                        title = location.title ?: "",
+                    )
+                    if (polylinePoints != null) {
+                        Polyline(
+                            points = polylinePoints!!,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                }
             }
-      }
+        }
+    }
 }
 
 /**
