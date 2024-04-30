@@ -1,7 +1,6 @@
 package com.github.wanderwise_inc.app.ui.map
 
 import android.location.Location
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -41,9 +40,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.graphics.painter.BitmapPainter
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -52,7 +48,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.wanderwise_inc.app.R
 import com.github.wanderwise_inc.app.model.location.Itinerary
-import com.github.wanderwise_inc.app.model.profile.Profile
+import com.github.wanderwise_inc.app.ui.profile.ProfilePicture
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -66,12 +62,12 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
-import kotlinx.coroutines.flow.flow
 
 /* helps us avoid typos / inconsistencies between the test files and this file */
 object PreviewItineraryScreenTestTags {
   const val MAIN_SCREEN = "preview_itinerary_screen"
   const val GOOGLE_MAPS = "google_maps"
+  const val NULL_ITINERARY = "null_itinerary"
   const val MAXIMIZED_BANNER = "maximized_banner"
   const val MINIMIZED_BANNER = "minimized_banner"
   const val PROFILE_PIC = "profile_picture"
@@ -84,50 +80,52 @@ object PreviewItineraryScreenTestTags {
 
 /** @brief previews an itinerary */
 @Composable
-fun PreviewItineraryScreen(
-    itinerary: Itinerary,
-    mapViewModel: MapViewModel,
-    profileViewModel: ProfileViewModel
-) {
+fun PreviewItineraryScreen(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel) {
   val userLocation by mapViewModel.getUserLocation().collectAsState(null)
+  val itinerary = mapViewModel.getFocusedItinerary()
 
-  val cameraPositionState = rememberCameraPositionState {
-    position = CameraPosition.fromLatLngZoom(itinerary.computeCenterOfGravity().toLatLng(), 13f)
-  }
+  if (itinerary == null) {
+    NullItinerary(userLocation)
+  } else {
+    val cameraPositionState = rememberCameraPositionState {
+      position = CameraPosition.fromLatLngZoom(itinerary.computeCenterOfGravity().toLatLng(), 13f)
+    }
 
-  LaunchedEffect(Unit) { mapViewModel.fetchPolylineLocations(itinerary) }
-  val polylinePoints by mapViewModel.getPolylinePointsLiveData().observeAsState()
+    LaunchedEffect(Unit) { mapViewModel.fetchPolylineLocations(itinerary) }
+    val polylinePoints by mapViewModel.getPolylinePointsLiveData().observeAsState()
 
-  Scaffold(
-      bottomBar = { PreviewItineraryBanner(itinerary, mapViewModel, profileViewModel) },
-      modifier = Modifier.testTag(PreviewItineraryScreenTestTags.MAIN_SCREEN),
-      floatingActionButton = {
-        CenterButton(cameraPositionState = cameraPositionState, currentLocation = userLocation)
-      },
-      floatingActionButtonPosition = FabPosition.Start) { paddingValues ->
-        GoogleMap(
-            modifier =
-                Modifier.fillMaxSize()
-                    .padding(paddingValues)
-                    .testTag(PreviewItineraryScreenTestTags.GOOGLE_MAPS),
-            cameraPositionState = cameraPositionState) {
-              userLocation?.let {
-                Marker(
-                    tag = PreviewItineraryScreenTestTags.USER_LOCATION,
-                    state = MarkerState(position = LatLng(it.latitude, it.longitude)),
-                    icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
-              }
-              itinerary.locations.map { location ->
-                AdvancedMarker(
-                    state = MarkerState(position = location.toLatLng()),
-                    title = location.title ?: "",
-                )
-                if (polylinePoints != null) {
-                  Polyline(points = polylinePoints!!, color = MaterialTheme.colorScheme.primary)
+    Scaffold(
+        bottomBar = { PreviewItineraryBanner(itinerary, mapViewModel, profileViewModel) },
+        modifier = Modifier.testTag(PreviewItineraryScreenTestTags.MAIN_SCREEN),
+        floatingActionButton = {
+          CenterButton(cameraPositionState = cameraPositionState, currentLocation = userLocation)
+        },
+        floatingActionButtonPosition = FabPosition.Start) { paddingValues ->
+          GoogleMap(
+              modifier =
+                  Modifier.fillMaxSize()
+                      .padding(paddingValues)
+                      .testTag(PreviewItineraryScreenTestTags.GOOGLE_MAPS),
+              cameraPositionState = cameraPositionState) {
+                userLocation?.let {
+                  Marker(
+                      tag = PreviewItineraryScreenTestTags.USER_LOCATION,
+                      state = MarkerState(position = LatLng(it.latitude, it.longitude)),
+                      icon =
+                          BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+                }
+                itinerary.locations.map { location ->
+                  AdvancedMarker(
+                      state = MarkerState(position = location.toLatLng()),
+                      title = location.title ?: "",
+                  )
+                  if (polylinePoints != null) {
+                    Polyline(points = polylinePoints!!, color = MaterialTheme.colorScheme.primary)
+                  }
                 }
               }
-            }
-      }
+        }
+  }
 }
 
 /**
@@ -163,6 +161,11 @@ private fun PreviewItineraryBannerMaximized(
 ) {
   val titleFontSize = 32.sp
   val innerFontSize = 16.sp
+
+  val profilePictureModifier =
+      Modifier.clip(RoundedCornerShape(5.dp))
+          .size(50.dp)
+          .testTag(PreviewItineraryScreenTestTags.PROFILE_PIC)
 
   val profile by profileViewModel.getProfile(itinerary.userUid).collectAsState(initial = null)
 
@@ -280,7 +283,10 @@ private fun PreviewItineraryBannerMaximized(
               verticalAlignment = Alignment.CenterVertically,
               modifier = Modifier.height(50.dp),
           ) {
-            ProfilePicture(profile = profile, profileViewModel = profileViewModel)
+            ProfilePicture(
+                profile = profile,
+                profileViewModel = profileViewModel,
+                modifier = profilePictureModifier)
 
             Spacer(modifier = Modifier.width(10.dp))
 
@@ -331,29 +337,6 @@ private fun PreviewItineraryBannerMaximized(
           }
         }
       }
-}
-
-@Composable
-fun ProfilePicture(profile: Profile?, profileViewModel: ProfileViewModel) {
-  val imageModifier =
-      Modifier.clip(RoundedCornerShape(5.dp))
-          .size(50.dp)
-          .testTag(PreviewItineraryScreenTestTags.PROFILE_PIC)
-
-  val defaultProfilePicture by
-      profileViewModel.getDefaultProfilePicture().collectAsState(initial = null)
-
-  val profilePictureFlow =
-      if (profile != null) profileViewModel.getProfilePicture(profile) else flow { emit(null) }
-
-  val profilePicture by profilePictureFlow.collectAsState(initial = null)
-
-  val painter: Painter =
-      if (profilePicture != null) BitmapPainter(profilePicture!!.asImageBitmap())
-      else if (defaultProfilePicture != null) BitmapPainter(defaultProfilePicture!!.asImageBitmap())
-      else painterResource(id = R.drawable.profile_icon)
-
-  Image(painter = painter, contentDescription = "profile_icon", modifier = imageModifier)
 }
 
 @Composable
@@ -413,4 +396,35 @@ fun CenterButton(cameraPositionState: CameraPositionState, currentLocation: Loca
             contentDescription = "Center on Me",
             tint = Color.DarkGray)
       }
+}
+
+@Composable
+fun NullItinerary(userLocation: Location?) {
+  // for now doesn't do anything, would be nice to center on location
+  if (userLocation == null) {
+    Column(
+        modifier =
+            Modifier.testTag(PreviewItineraryScreenTestTags.NULL_ITINERARY)
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center) {
+          Text(
+              "Loading...",
+              modifier = Modifier.testTag(PreviewItineraryScreenTestTags.NULL_ITINERARY))
+        }
+  } else {
+    val userLocationLatLng = LatLng(userLocation!!.latitude, userLocation!!.longitude)
+    val cameraPositionState = rememberCameraPositionState {
+      position = CameraPosition.fromLatLngZoom(userLocationLatLng, 13f)
+    }
+    GoogleMap(
+        modifier = Modifier.fillMaxSize().testTag(PreviewItineraryScreenTestTags.NULL_ITINERARY),
+        cameraPositionState = cameraPositionState) {
+          Marker(
+              tag = PreviewItineraryScreenTestTags.USER_LOCATION,
+              state = MarkerState(position = userLocationLatLng),
+              icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+        }
+  }
 }

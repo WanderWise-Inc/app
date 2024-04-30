@@ -14,7 +14,9 @@ import com.github.wanderwise_inc.app.ui.map.PreviewItineraryScreen
 import com.github.wanderwise_inc.app.ui.navigation.Destination.TopLevelDestination
 import com.github.wanderwise_inc.app.ui.profile.ProfileScreen
 import com.github.wanderwise_inc.app.ui.search.SearchScreen
+import com.github.wanderwise_inc.app.viewmodel.BottomNavigationViewModel
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
+import com.github.wanderwise_inc.app.viewmodel.NavigationItem
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -24,7 +26,8 @@ fun HomeNavGraph(
     navController: NavHostController,
     mapViewModel: MapViewModel,
     profileViewModel: ProfileViewModel,
-    imageRepository: ImageRepository
+    bottomNavigationViewModel: BottomNavigationViewModel,
+    imageRepository: ImageRepository,
 ) {
 
   // BEGIN DEMO SETUP
@@ -42,17 +45,24 @@ fun HomeNavGraph(
       // modifier = Modifier.padding(innerPadding)
   ) {
     composable(route = TopLevelDestination.Overview.route) {
-      OverviewScreen(mapViewModel, profileViewModel)
+      bottomNavigationViewModel.setSelected(NavigationItem.OVERVIEW.ordinal)
+      OverviewScreen(mapViewModel, profileViewModel, navController)
     }
     composable(route = TopLevelDestination.Liked.route) {
-      LikedScreen(mapViewModel, profileViewModel)
+      bottomNavigationViewModel.setSelected(NavigationItem.LIKED.ordinal)
+      LikedScreen(mapViewModel, profileViewModel, navController)
     }
-    composable(route = TopLevelDestination.Search.route) { SearchScreen(mapViewModel) }
+    composable(route = TopLevelDestination.Search.route) {
+      bottomNavigationViewModel.setSelected(NavigationItem.CREATE.ordinal)
+      SearchScreen(mapViewModel)
+    }
     composable(route = TopLevelDestination.Map.route) {
-      PreviewItineraryScreen(itinerary!!, mapViewModel, profileViewModel)
+      bottomNavigationViewModel.setSelected(NavigationItem.MAP.ordinal)
+      PreviewItineraryScreen(mapViewModel, profileViewModel)
     }
     composable(route = TopLevelDestination.Profile.route) {
-      ProfileScreen(mapViewModel, profileViewModel, imageRepository)
+      bottomNavigationViewModel.setSelected(NavigationItem.PROFILE.ordinal)
+      ProfileScreen(mapViewModel, profileViewModel, imageRepository, navController)
     }
   }
 }

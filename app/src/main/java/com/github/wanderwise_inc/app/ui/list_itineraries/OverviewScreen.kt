@@ -14,6 +14,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.navigation.NavHostController
 import com.github.wanderwise_inc.app.R
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
 import com.github.wanderwise_inc.app.ui.home.SearchBar
@@ -21,12 +22,17 @@ import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 
 @Composable
-fun OverviewScreen(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel) {
+fun OverviewScreen(
+    mapViewModel: MapViewModel,
+    profileViewModel: ProfileViewModel,
+    navController: NavHostController
+) {
   val sliderPositionPriceState = remember { mutableStateOf(0f..100f) }
   val sliderPositionTimeState = remember { mutableStateOf(0f..24f) }
   DisplayOverviewItineraries(
       mapViewModel = mapViewModel,
       profileViewModel = profileViewModel,
+      navController = navController,
       sliderPositionPriceState = sliderPositionPriceState,
       sliderPositionTimeState = sliderPositionTimeState)
 }
@@ -36,6 +42,7 @@ fun OverviewScreen(mapViewModel: MapViewModel, profileViewModel: ProfileViewMode
 fun DisplayOverviewItineraries(
     mapViewModel: MapViewModel,
     profileViewModel: ProfileViewModel,
+    navController: NavHostController,
     sliderPositionPriceState: MutableState<ClosedFloatingPointRange<Float>>,
     sliderPositionTimeState: MutableState<ClosedFloatingPointRange<Float>>
 ) {
@@ -82,7 +89,9 @@ fun DisplayOverviewItineraries(
                 }
                 .filter { itinerary ->
                   val price = itinerary.price.toFloat()
-                  price in sliderPositionPriceState.value.start..sliderPositionPriceState.value.endInclusive
+                  price in
+                      sliderPositionPriceState.value.start..sliderPositionPriceState.value
+                              .endInclusive
                 }
                 .filter { itinerary ->
                   val time = itinerary.time.toFloat()
@@ -94,6 +103,7 @@ fun DisplayOverviewItineraries(
             itineraries = filtered,
             paddingValues = innerPadding,
             mapViewModel = mapViewModel,
-            profileViewModel = profileViewModel)
+            profileViewModel = profileViewModel,
+            navController = navController)
       }
 }

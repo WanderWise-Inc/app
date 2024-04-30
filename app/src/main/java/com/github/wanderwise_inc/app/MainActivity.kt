@@ -20,6 +20,7 @@ import com.github.wanderwise_inc.app.data.ProfileRepositoryTestImpl
 import com.github.wanderwise_inc.app.network.ApiServiceFactory
 import com.github.wanderwise_inc.app.ui.navigation.graph.RootNavigationGraph
 import com.github.wanderwise_inc.app.ui.theme.WanderWiseTheme
+import com.github.wanderwise_inc.app.viewmodel.BottomNavigationViewModel
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.github.wanderwise_inc.app.viewmodel.UserLocationClient
@@ -37,6 +38,7 @@ class MainActivity : ComponentActivity() {
   private var imageReference = storage.reference
 
   private lateinit var profileViewModel: ProfileViewModel
+  private lateinit var bottomNavigationViewModel: BottomNavigationViewModel
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -58,6 +60,7 @@ class MainActivity : ComponentActivity() {
 
     mapViewModel = MapViewModel(itineraryRepository, directionsRepository, userLocationClient)
     profileViewModel = ProfileViewModel(profileRepository, imageRepository)
+    bottomNavigationViewModel = BottomNavigationViewModel()
 
     setContent {
       WanderWiseTheme {
@@ -67,6 +70,7 @@ class MainActivity : ComponentActivity() {
               application.applicationContext,
               profileViewModel = profileViewModel,
               mapViewModel = mapViewModel,
+              bottomNavigationViewModel = bottomNavigationViewModel,
               imageRepository = imageRepository,
               navController = rememberNavController())
         }

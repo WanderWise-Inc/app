@@ -1,11 +1,8 @@
 package com.github.wanderwise_inc.app.ui.profile
 
 import android.content.Intent
-import android.util.Log
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -28,13 +25,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.graphics.painter.BitmapPainter
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.github.wanderwise_inc.app.DEFAULT_USER_UID
 import com.github.wanderwise_inc.app.R
 import com.github.wanderwise_inc.app.data.ImageRepository
@@ -51,7 +44,8 @@ const val PROFILE_SCREEN_TEST_TAG: String = "profile_screen"
 fun ProfileScreen(
     mapViewModel: MapViewModel,
     profileViewModel: ProfileViewModel,
-    imageRepository: ImageRepository
+    imageRepository: ImageRepository,
+    navHostController: NavHostController
 ) {
   // val currentUid = FirebaseAuth.getInstance().currentUser!!.uid
   val currentUid = FirebaseAuth.getInstance().currentUser?.uid ?: DEFAULT_USER_UID
@@ -60,6 +54,8 @@ fun ProfileScreen(
 
   val userItineraries by
       mapViewModel.getUserItineraries(currentUid).collectAsState(initial = emptyList())
+
+  val profilePictureModifier = Modifier.size(100.dp)
 
   if (profile != null) {
     androidx.compose.material.Scaffold(
@@ -97,7 +93,7 @@ fun ProfileScreen(
           modifier = Modifier.padding(innerPadding).fillMaxSize(),
           contentAlignment = Alignment.TopCenter) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-              ProfilePicture(profileViewModel, profile!!, imageRepository)
+              ProfilePicture(profile, profileViewModel, profilePictureModifier)
               Button(
                   onClick = {
                     Intent(Intent.ACTION_GET_CONTENT).also {
@@ -119,60 +115,10 @@ fun ProfileScreen(
                   itineraries = userItineraries,
                   mapViewModel = mapViewModel,
                   profileViewModel = profileViewModel,
-                  paddingValues = PaddingValues(8.dp))
+                  paddingValues = PaddingValues(8.dp),
+                  navController = navHostController)
             }
           }
-    }
-  }
-}
-
-@Composable
-fun ProfilePictureStatic(profileViewModel: ProfileViewModel, profile: Profile, modifier: Modifier) {
-  val picture by profileViewModel.getProfilePicture(profile).collectAsState(initial = null)
-
-  if (picture != null) {
-    Image(
-        painter = BitmapPainter(picture!!.asImageBitmap()),
-        contentDescription = "Profile picture",
-        modifier =
-            Modifier.size(100.dp)
-                .clip(MaterialTheme.shapes.small)
-                .border(BorderStroke(1.dp, Color.Black)),
-        contentScale = ContentScale.FillBounds)
-  } else {
-    Text("No Picture")
-  }
-}
-
-@Composable
-fun ProfilePicture(
-    profileViewModel: ProfileViewModel,
-    profile: Profile,
-    imageRepository: ImageRepository
-) {
-  // We will first fetch the default picture that is stored in the storage
-  val bitmap by
-      imageRepository
-          .fetchImage("profilePicture/defaultProfilePicture.jpg")
-          .collectAsState(initial = null)
-
-  if (bitmap != null) {
-    // When the default picture is fetched, we will try to get the profilePicture of the user.
-    // If the profile picture isn't present in the Storage, then the default picture will be loaded
-    // instead
-    val picture by profileViewModel.getProfilePicture(profile).collectAsState(initial = null)
-    if (picture != null) {
-      Image(
-          painter = BitmapPainter(picture!!.asImageBitmap()),
-          contentDescription = null,
-          modifier = Modifier.size(100.dp))
-      Log.d("CRASHED", "PICTURE DISPLAYED")
-    } else {
-      Image(
-          painter = BitmapPainter(bitmap!!.asImageBitmap()),
-          contentDescription = null,
-          modifier = Modifier.size(100.dp))
-      Log.d("CRASHED", "PICTURE IS NULL")
     }
   }
 }

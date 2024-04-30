@@ -51,7 +51,7 @@ import com.github.wanderwise_inc.app.model.location.Itinerary
 fun ItineraryBanner(
     itinerary: Itinerary,
     onLikeButtonClick: (Itinerary, Boolean) -> Unit,
-    onBannerClick: () -> Unit,
+    onBannerClick: (Itinerary) -> Unit,
     isLikedInitially: Boolean = false
 ) {
 
@@ -69,7 +69,7 @@ fun ItineraryBanner(
           ),
       elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
       shape = RoundedCornerShape(13.dp),
-      onClick = { onBannerClick() },
+      onClick = { onBannerClick(itinerary) },
       modifier = Modifier.testTag("Itinerary banner")) {
         Column(
             modifier =

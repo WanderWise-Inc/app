@@ -21,9 +21,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.github.wanderwise_inc.app.DEFAULT_USER_UID
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.ui.itinerary.ItineraryBanner
+import com.github.wanderwise_inc.app.ui.navigation.Destination
+import com.github.wanderwise_inc.app.ui.navigation.NavigationActions
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -36,7 +39,8 @@ fun ItinerariesListScrollable(
     itineraries: List<Itinerary>,
     mapViewModel: MapViewModel,
     profileViewModel: ProfileViewModel,
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
+    navController: NavHostController,
 ) {
   LazyColumn(
       modifier = Modifier.padding(paddingValues).testTag("Scrollable itineraries"),
@@ -53,7 +57,11 @@ fun ItinerariesListScrollable(
               profileViewModel.addLikedItinerary(uid, it.uid)
             }
           }
-          val onBannerClick = {}
+          val navigationActions = NavigationActions(navController)
+          val onBannerClick = { it: Itinerary ->
+            mapViewModel.setFocusedItinerary(it)
+            navigationActions.navigateTo(Destination.TopLevelDestination.Map)
+          }
           ItineraryBanner(
               itinerary = itinerary,
               onLikeButtonClick = onLikeButtonClick,

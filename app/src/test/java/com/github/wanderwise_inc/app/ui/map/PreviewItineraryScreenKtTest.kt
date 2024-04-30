@@ -93,17 +93,19 @@ class PreviewItineraryScreenKtTest {
     `when`(imageRepository.fetchImage(anyString())).thenReturn(flow { emit(null) })
 
     mapViewModel = MapViewModel(itineraryRepository, directionsRepository, userLocationClient)
+    mapViewModel.setFocusedItinerary(itinerary)
     profileViewModel = ProfileViewModel(profileRepository, imageRepository)
   }
 
   @Test
   fun `initial elements are displayed correctly`() {
-    composeTestRule.setContent { PreviewItineraryScreen(itinerary, mapViewModel, profileViewModel) }
+    composeTestRule.setContent { PreviewItineraryScreen(mapViewModel, profileViewModel) }
 
     composeTestRule.onNodeWithTag(PreviewItineraryScreenTestTags.MAIN_SCREEN).assertIsDisplayed()
     composeTestRule
         .onNodeWithTag(PreviewItineraryScreenTestTags.MAXIMIZED_BANNER)
         .assertIsDisplayed()
+
     composeTestRule.onNodeWithTag(PreviewItineraryScreenTestTags.BANNER_BUTTON).assertIsDisplayed()
     composeTestRule
         .onNodeWithTag(PreviewItineraryScreenTestTags.CENTER_CAMERA_BUTTON)
@@ -113,7 +115,7 @@ class PreviewItineraryScreenKtTest {
 
   @Test
   fun `pressing banner button should minimize and maximize the banner`() {
-    composeTestRule.setContent { PreviewItineraryScreen(itinerary, mapViewModel, profileViewModel) }
+    composeTestRule.setContent { PreviewItineraryScreen(mapViewModel, profileViewModel) }
 
     composeTestRule
         .onNodeWithTag(PreviewItineraryScreenTestTags.MAXIMIZED_BANNER)
@@ -156,6 +158,28 @@ class PreviewItineraryScreenKtTest {
   }
 
   @Test
+  fun `NullItineraryScreen is displayed when focusedItinerary is null`() {
+    mapViewModel.setFocusedItinerary(null)
+    composeTestRule.setContent { PreviewItineraryScreen(mapViewModel, profileViewModel) }
+
+    composeTestRule.onNodeWithTag(PreviewItineraryScreenTestTags.NULL_ITINERARY).assertIsDisplayed()
+
+    // this shouldn't be displayed
+    composeTestRule
+        .onNodeWithTag(PreviewItineraryScreenTestTags.MAXIMIZED_BANNER)
+        .assertIsNotDisplayed()
+    composeTestRule
+        .onNodeWithTag(PreviewItineraryScreenTestTags.MINIMIZED_BANNER)
+        .assertIsNotDisplayed()
+    composeTestRule
+        .onNodeWithTag(PreviewItineraryScreenTestTags.ITINERARY_TITLE)
+        .assertIsNotDisplayed()
+    composeTestRule
+        .onNodeWithTag(PreviewItineraryScreenTestTags.ITINERARY_DESCRIPTION)
+        .assertIsNotDisplayed()
+  }
+
+  @Test
   fun `pressing center button should update camera position`() {
     val epflLocation = Mockito.mock(android.location.Location::class.java)
     epflLocation.latitude = epflLat
@@ -190,6 +214,6 @@ class PreviewItineraryScreenKtTest {
       assertEquals(it.position.target.latitude, epflLat, delta)
       assertEquals(it.position.target.longitude, epflLon, delta)
     }
-     */
+    */
   }
 }
