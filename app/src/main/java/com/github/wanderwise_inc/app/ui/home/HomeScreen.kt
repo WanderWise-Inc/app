@@ -25,9 +25,17 @@ fun HomeScreen(
     navController: NavHostController = rememberNavController(),
 ) {
   val navigationActions = NavigationActions(navController)
-  Scaffold(topBar = {}, bottomBar = { BottomNavigationMenu(navigationActions, bottomNavigationViewModel) }) { innerPadding ->
-    Box(modifier = Modifier.padding(innerPadding)) {
-      HomeNavGraph(navController, mapViewModel, profileViewModel, bottomNavigationViewModel, imageRepository)
-    }
-  }
+  Scaffold(
+      topBar = {},
+      bottomBar = { BottomNavigationMenu(navigationActions, bottomNavigationViewModel) }) {
+          innerPadding ->
+        Box(modifier = Modifier.padding(innerPadding)) {
+          HomeNavGraph(
+              navController,
+              mapViewModel,
+              profileViewModel,
+              bottomNavigationViewModel,
+              imageRepository)
+        }
+      }
 }
