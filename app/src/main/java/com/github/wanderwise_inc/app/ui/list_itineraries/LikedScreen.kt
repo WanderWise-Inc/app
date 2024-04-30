@@ -100,7 +100,9 @@ fun DisplayLikedItineraries(
                 }
                 .filter { itinerary ->
                   val price = itinerary.price.toFloat()
-                  price in sliderPositionPriceState.value.start..sliderPositionPriceState.value.endInclusive
+                  price in
+                      sliderPositionPriceState.value.start..sliderPositionPriceState.value
+                              .endInclusive
                 }
                 .filter { itinerary ->
                   val time = itinerary.time.toFloat()
