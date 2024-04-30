@@ -11,8 +11,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.requiredWidth
@@ -38,7 +36,6 @@ import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.github.wanderwise_inc.app.DEFAULT_USER_UID
 import com.github.wanderwise_inc.app.R
@@ -97,8 +94,7 @@ fun ProfileScreen(
                       actionIconContentColor = MaterialTheme.colorScheme.onSecondary),
               modifier = Modifier.padding(bottom = 20.dp))
         },
-        modifier = Modifier.fillMaxSize()
-            .testTag(TestTags.PROFILE_SCREEN),
+        modifier = Modifier.fillMaxSize().testTag(TestTags.PROFILE_SCREEN),
     ) { innerPadding ->
       Box(
           modifier = Modifier.padding(innerPadding).fillMaxSize(),
@@ -123,11 +119,11 @@ fun ProfileScreen(
               Username(profile!!, modifier = Modifier.padding(100.dp))
               WanderScore(profile!!)
               ItinerariesListScrollable(
-                itineraries = userItineraries,
-                mapViewModel = mapViewModel,
-                profileViewModel = profileViewModel,
-                paddingValues = PaddingValues(8.dp),
-                parent = ItineraryListParent.PROFILE)
+                  itineraries = userItineraries,
+                  mapViewModel = mapViewModel,
+                  profileViewModel = profileViewModel,
+                  paddingValues = PaddingValues(8.dp),
+                  parent = ItineraryListParent.PROFILE)
             }
           }
     }

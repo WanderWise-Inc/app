@@ -7,7 +7,6 @@ import androidx.compose.ui.platform.testTag
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 
-
 @Composable
 fun CreationScreen(
     // navController: NavHostController,

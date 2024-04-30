@@ -4,9 +4,9 @@ import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.Kilometers
 import com.github.wanderwise_inc.app.model.location.Location
 import com.google.android.gms.maps.model.LatLng
+import kotlin.math.abs
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import kotlin.math.abs
 
 class LocationTest {
   private val epflLat = 46.519126741544575

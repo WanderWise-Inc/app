@@ -10,6 +10,7 @@ import com.github.wanderwise_inc.app.model.location.Location
 import com.github.wanderwise_inc.app.network.DirectionsApiService
 import com.github.wanderwise_inc.app.network.DirectionsResponseBody
 import junit.framework.TestCase.assertEquals
+import kotlin.random.Random
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -35,7 +36,6 @@ import org.mockito.junit.MockitoRule
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import kotlin.random.Random
 
 /** @brief test class for mapview model */
 class MapViewModelTest {

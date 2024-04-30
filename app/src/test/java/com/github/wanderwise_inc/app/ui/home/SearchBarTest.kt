@@ -1,6 +1,5 @@
 package com.github.wanderwise_inc.app.ui.home
 
-
 /*
 class SearchBarTest {
 
