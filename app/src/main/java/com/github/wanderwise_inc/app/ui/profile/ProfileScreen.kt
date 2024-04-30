@@ -63,6 +63,8 @@ fun ProfileScreen(
   val userItineraries by
       mapViewModel.getUserItineraries(currentUid).collectAsState(initial = emptyList())
 
+  val profilePictureModifier = Modifier.size(100.dp)
+
   if (profile != null) {
     androidx.compose.material.Scaffold(
         /*Top bar composable*/
@@ -99,7 +101,7 @@ fun ProfileScreen(
           modifier = Modifier.padding(innerPadding).fillMaxSize(),
           contentAlignment = Alignment.TopCenter) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-              ProfilePicture(profileViewModel, profile!!, imageRepository)
+              ProfilePicture(profile, profileViewModel, profilePictureModifier)
               Button(
                   onClick = {
                     Intent(Intent.ACTION_GET_CONTENT).also {
@@ -125,57 +127,6 @@ fun ProfileScreen(
                   navController = navHostController)
             }
           }
-    }
-  }
-}
-
-@Composable
-fun ProfilePictureStatic(profileViewModel: ProfileViewModel, profile: Profile, modifier: Modifier) {
-  val picture by profileViewModel.getProfilePicture(profile).collectAsState(initial = null)
-
-  if (picture != null) {
-    Image(
-        painter = BitmapPainter(picture!!.asImageBitmap()),
-        contentDescription = "Profile picture",
-        modifier =
-            Modifier.size(100.dp)
-                .clip(MaterialTheme.shapes.small)
-                .border(BorderStroke(1.dp, Color.Black)),
-        contentScale = ContentScale.FillBounds)
-  } else {
-    Text("No Picture")
-  }
-}
-
-@Composable
-fun ProfilePicture(
-    profileViewModel: ProfileViewModel,
-    profile: Profile,
-    imageRepository: ImageRepository
-) {
-  // We will first fetch the default picture that is stored in the storage
-  val bitmap by
-      imageRepository
-          .fetchImage("profilePicture/defaultProfilePicture.jpg")
-          .collectAsState(initial = null)
-
-  if (bitmap != null) {
-    // When the default picture is fetched, we will try to get the profilePicture of the user.
-    // If the profile picture isn't present in the Storage, then the default picture will be loaded
-    // instead
-    val picture by profileViewModel.getProfilePicture(profile).collectAsState(initial = null)
-    if (picture != null) {
-      Image(
-          painter = BitmapPainter(picture!!.asImageBitmap()),
-          contentDescription = null,
-          modifier = Modifier.size(100.dp))
-      Log.d("CRASHED", "PICTURE DISPLAYED")
-    } else {
-      Image(
-          painter = BitmapPainter(bitmap!!.asImageBitmap()),
-          contentDescription = null,
-          modifier = Modifier.size(100.dp))
-      Log.d("CRASHED", "PICTURE IS NULL")
     }
   }
 }
