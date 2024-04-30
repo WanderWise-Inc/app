@@ -215,7 +215,7 @@ dependencies {
     // UI Tests
     globalTestImplementation(libs.compose.test.junit)
     debugImplementation(libs.compose.test.manifest)
-    
+
     // Android navigation test
     androidTestImplementation("androidx.navigation:navigation-testing:2.7.7")
 
@@ -227,7 +227,7 @@ dependencies {
     testImplementation(libs.robolectric)
     androidTestImplementation(libs.robolectric)
 
-    // ----------       Mockito ------------
+    // ----------       Mock ------------
     testImplementation("org.mockito.kotlin:mockito-kotlin:5.3.1")
     androidTestImplementation("org.mockito.kotlin:mockito-kotlin:5.3.1")
 
@@ -245,8 +245,7 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
     implementation("androidx.compose.runtime:runtime-livedata:1.0.0-beta01")
-
-    testImplementation ("io.mockk:mockk:1.12.0")
+    testImplementation("androidx.arch.core:core-testing:2.2.0")
 }
 
 tasks.register("jacocoTestReport", JacocoReport::class) {
