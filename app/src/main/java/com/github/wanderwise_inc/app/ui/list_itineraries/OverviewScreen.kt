@@ -20,6 +20,10 @@ import com.github.wanderwise_inc.app.ui.home.SearchBar
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 
+object OverviewScreenTestTags {
+  const val CATEGORY_SELECTOR = "category selector"
+}
+
 @Composable
 fun OverviewScreen(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel) {
   val sliderPositionPriceState = remember { mutableStateOf(0f..100f) }
@@ -59,7 +63,7 @@ fun DisplayOverviewItineraries(
       topBar = {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxWidth().testTag("Overview screen")) {
+            modifier = Modifier.fillMaxWidth().testTag(OverviewScreenTestTags.CATEGORY_SELECTOR)) {
               SearchBar(
                   onSearchChange = { searchQuery = it },
                   onPriceChange = { priceRange = it },
@@ -82,7 +86,9 @@ fun DisplayOverviewItineraries(
                 }
                 .filter { itinerary ->
                   val price = itinerary.price.toFloat()
-                  price in sliderPositionPriceState.value.start..sliderPositionPriceState.value.endInclusive
+                  price in
+                      sliderPositionPriceState.value.start..sliderPositionPriceState.value
+                              .endInclusive
                 }
                 .filter { itinerary ->
                   val time = itinerary.time.toFloat()
