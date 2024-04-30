@@ -125,4 +125,8 @@ class MapViewModel(
   fun getUserLocation(): Flow<Location> {
     return userLocationClient.getLocationUpdates(1000)
   }
+
+  /* fun filterItinerariesByPrice(priceRange: FloatRange): List<Itinerary> {
+    return allItineraries.filter { it.price in priceRange }
+  }*/
 }

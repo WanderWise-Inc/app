@@ -243,7 +243,7 @@ dependencies {
     testImplementation(libs.robolectric)
     //androidTestImplementation(libs.robolectric)
 
-    // ----------       Mockito ------------
+    // ----------       Mock ------------
     testImplementation("org.mockito.kotlin:mockito-kotlin:5.3.1")
     androidTestImplementation("org.mockito.kotlin:mockito-kotlin:5.3.1")
 
@@ -267,6 +267,7 @@ dependencies {
     androidTestImplementation("io.mockk:mockk-android:1.13.10")
     androidTestImplementation("androidx.arch.core:core-testing:2.1.0")
 
+    testImplementation("androidx.arch.core:core-testing:2.2.0")
 }
 
 tasks.register("jacocoTestReport", JacocoReport::class) {

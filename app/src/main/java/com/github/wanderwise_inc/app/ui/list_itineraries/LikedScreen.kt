@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -35,12 +36,23 @@ object LikedScreenTestTags {
 
 @Composable
 fun LikedScreen(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel) {
-  DisplayLikedItineraries(mapViewModel = mapViewModel, profileViewModel = profileViewModel)
+  val sliderPositionPriceState = remember { mutableStateOf(0f..100f) }
+  val sliderPositionTimeState = remember { mutableStateOf(0f..24f) }
+  DisplayLikedItineraries(
+      mapViewModel = mapViewModel,
+      profileViewModel = profileViewModel,
+      sliderPositionPriceState = sliderPositionPriceState,
+      sliderPositionTimeState = sliderPositionTimeState)
 }
 
 /** Displays itineraries liked by the user */
 @Composable
-fun DisplayLikedItineraries(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel) {
+fun DisplayLikedItineraries(
+    mapViewModel: MapViewModel,
+    profileViewModel: ProfileViewModel,
+    sliderPositionPriceState: MutableState<ClosedFloatingPointRange<Float>>,
+    sliderPositionTimeState: MutableState<ClosedFloatingPointRange<Float>>
+) {
 
   /* the categories that can be selected by the user during filtering */
   val categoriesList =
@@ -65,7 +77,11 @@ fun DisplayLikedItineraries(mapViewModel: MapViewModel, profileViewModel: Profil
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxWidth().testTag(LikedScreenTestTags.CATEGORY_SELECTOR)) {
-              SearchBar(onSearchChange = { searchQuery = it }, onPriceChange = { priceRange = it })
+              SearchBar(
+                  onSearchChange = { searchQuery = it },
+                  onPriceChange = { priceRange = it },
+                  sliderPositionPriceState = sliderPositionPriceState,
+                  sliderPositionTimeState = sliderPositionTimeState)
 
               CategorySelector(
                   selectedIndex = selectedIndex,
@@ -81,6 +97,16 @@ fun DisplayLikedItineraries(mapViewModel: MapViewModel, profileViewModel: Profil
                   searchQuery.isBlank() ||
                       itinerary.title.contains(searchQuery, ignoreCase = true) ||
                       itinerary.description?.contains(searchQuery, ignoreCase = true) ?: false
+                }
+                .filter { itinerary ->
+                  val price = itinerary.price.toFloat()
+                  price in sliderPositionPriceState.value.start..sliderPositionPriceState.value.endInclusive
+                }
+                .filter { itinerary ->
+                  val time = itinerary.time.toFloat()
+                  time in
+                      sliderPositionTimeState.value.start..sliderPositionTimeState.value
+                              .endInclusive
                 }
         ItinerariesListScrollable(
             itineraries = filtered,
