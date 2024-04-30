@@ -13,6 +13,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RangeSlider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,7 +26,12 @@ import androidx.compose.ui.unit.dp
 import com.github.wanderwise_inc.app.R
 
 @Composable
-fun SearchBar(onSearchChange: (String) -> Unit, onPriceChange: (Float) -> Unit) {
+fun SearchBar(
+    onSearchChange: (String) -> Unit,
+    onPriceChange: (Float) -> Unit,
+    sliderPositionPriceState: MutableState<ClosedFloatingPointRange<Float>>,
+    sliderPositionTimeState: MutableState<ClosedFloatingPointRange<Float>>
+) {
   var query by remember { mutableStateOf("") }
   var isDropdownOpen by remember { mutableStateOf(false) }
   var sliderPosition by remember { mutableStateOf(0f..100f) }
@@ -61,26 +67,37 @@ fun SearchBar(onSearchChange: (String) -> Unit, onPriceChange: (Float) -> Unit) 
       modifier = Modifier.fillMaxWidth()) {
         Text("How much do I want to spend ?")
         RangeSlider(
-            value = sliderPosition,
+            value = sliderPositionPriceState.value,
             steps = 50,
-            onValueChange = { range -> sliderPosition = range },
+            onValueChange = { range -> sliderPositionPriceState.value = range },
             valueRange = 0f..100f, // Adjust this range according to your needs
             onValueChangeFinished = {
               // launch something
             },
         )
-        Text(text = sliderPosition.toString())
+        Text(
+            text =
+                String.format(
+                    "%.2f - %.2f",
+                    sliderPositionPriceState.value.start,
+                    sliderPositionPriceState.value.endInclusive))
+        // sliderPosition.contains()
 
-        Text("How Long to I want to wander ?")
+        Text("How Long do I want to wander ?")
         RangeSlider(
-            value = sliderPositionTime,
+            value = sliderPositionTimeState.value,
             steps = 24,
-            onValueChange = { range -> sliderPositionTime = range },
+            onValueChange = { range -> sliderPositionTimeState.value = range },
             valueRange = 0f..24f, // Adjust this range according to your needs
             onValueChangeFinished = {
               // launch something
             },
         )
-        Text(text = sliderPositionTime.toString())
+        Text(
+            text =
+                String.format(
+                    "%.2f - %.2f",
+                    sliderPositionTimeState.value.start,
+                    sliderPositionTimeState.value.endInclusive))
       }
 }

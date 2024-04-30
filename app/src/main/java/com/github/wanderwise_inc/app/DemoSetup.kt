@@ -77,6 +77,8 @@ fun addItineraries(mapViewModel: MapViewModel, profileViewModel: ProfileViewMode
                   ItineraryTags.WELLNESS),
           description = null,
           visible = true,
+          time = 3,
+          price = 25.0f,
       )
   val currentUser = FirebaseAuth.getInstance().currentUser
   val currentUserUid = currentUser?.uid ?: DEFAULT_USER_UID
