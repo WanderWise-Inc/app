@@ -31,7 +31,11 @@ fun demoSetup(
 }
 
 /** @brief adds some profiles to ProfileViewModel */
-fun addProfiles(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel, firebaseAuth: FirebaseAuth) {
+fun addProfiles(
+    mapViewModel: MapViewModel,
+    profileViewModel: ProfileViewModel,
+    firebaseAuth: FirebaseAuth
+) {
   val currentUserUid = firebaseAuth.currentUser?.uid ?: DEFAULT_USER_UID
 
   val someOtherProfile =
@@ -87,7 +91,7 @@ fun addItineraries(
           time = 3,
           price = 25.0f,
       )
-    
+
   val currentUserUid = firebaseAuth.currentUser?.uid ?: DEFAULT_USER_UID
 
   val privateItinerary =

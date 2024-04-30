@@ -1,37 +1,35 @@
 package com.github.wanderwise_inc.app.ui.navigation
 
-import android.util.Log
+import android.location.Location
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
-import androidx.navigation.NavHostController
+import androidx.lifecycle.liveData
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.model.location.FakeItinerary
-import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.profile.Profile
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.home.HomeScreen
+import com.github.wanderwise_inc.app.viewmodel.BottomNavigationViewModel
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.runner.RunWith
+import org.mockito.kotlin.or
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
@@ -41,6 +39,7 @@ class HomeNavigationTest {
   @MockK private lateinit var imageRepository: ImageRepository
   @MockK private lateinit var mapViewModel: MapViewModel
   @MockK private lateinit var profileViewModel: ProfileViewModel
+  @MockK private lateinit var bottomNavigationViewModel: BottomNavigationViewModel
   @MockK private lateinit var firebaseAuth: FirebaseAuth
 
   private lateinit var navController: TestNavHostController
@@ -48,25 +47,43 @@ class HomeNavigationTest {
   @Before
   fun setupNavHost() {
     MockKAnnotations.init(this)
-    
+
     composeTestRule.setContent {
       val mockProfile = Profile("", "Test", "0", "Bio", null)
       val mockItinerary = FakeItinerary.SAN_FRANCISCO
-        
+      val mockLocation = Location("")
+
       every { profileViewModel.getProfile(any()) } returns flow { emit(mockProfile) }
       coEvery { profileViewModel.setProfile(any()) } returns Unit
       every { profileViewModel.addLikedItinerary(any(), any()) } returns Unit
-      
+      every { profileViewModel.getLikedItineraries(any()) } returns flow { emit(emptyList()) }
+      every { profileViewModel.getDefaultProfilePicture() } returns flow { emit(null) }
+      every { profileViewModel.getProfilePicture(any()) } returns flow { emit(null) }
+
       every { mapViewModel.setItinerary(any()) } returns Unit
       every { mapViewModel.incrementItineraryLikes(any()) } returns Unit
-      coEvery { mapViewModel.getItineraryFromUids(any()) } returns flow { listOf(mockItinerary) }
-      
-      every {firebaseAuth.currentUser?.uid } returns null
+      every { mapViewModel.getAllPublicItineraries() } returns flow { emit(emptyList()) }
+      every { mapViewModel.getUserLocation() } returns flow { emit(Location("")) }
+      every { mapViewModel.getUserItineraries(any()) } returns flow { emit(emptyList()) }
+      every { mapViewModel.getItineraryFromUids(any()) } returns flow { emit(emptyList()) }
+      every { mapViewModel.getFocusedItinerary() } returns null
+      // coEvery { mapViewModel.getItineraryFromUids(any()) } returns flow { listOf(mockItinerary) }
+
+      every { bottomNavigationViewModel.setSelected(any()) } returns Unit
+      every { bottomNavigationViewModel.selected } returns liveData { 0 }
+
+      every { firebaseAuth.currentUser?.uid } returns null
 
       FirebaseApp.initializeApp(LocalContext.current)
       navController = TestNavHostController(LocalContext.current)
       navController.navigatorProvider.addNavigator(ComposeNavigator())
-      HomeScreen(imageRepository, mapViewModel, profileViewModel, navController, firebaseAuth)
+      HomeScreen(
+          imageRepository,
+          mapViewModel,
+          bottomNavigationViewModel,
+          profileViewModel,
+          navController,
+          firebaseAuth)
     }
   }
 
@@ -107,7 +124,7 @@ class HomeNavigationTest {
   fun performClick_OnMapButton_NavigatesToMapScreen() {
     composeTestRule.onNodeWithTag(Route.MAP).performClick()
 
-    composeTestRule.onNodeWithTag(TestTags.MAP_PREVIEW_ITINERARY_SCREEN).assertIsDisplayed()
+    composeTestRule.onNodeWithTag(TestTags.MAP_NULL_ITINERARY).assertIsDisplayed()
 
     val route = navController.currentBackStackEntry?.destination?.route
     assertEquals(Route.MAP, route)
@@ -129,7 +146,7 @@ class HomeNavigationTest {
 
     composeTestRule.onNodeWithTag(Route.MAP).performClick()
 
-    composeTestRule.onNodeWithTag(TestTags.MAP_PREVIEW_ITINERARY_SCREEN).assertIsDisplayed()
+    composeTestRule.onNodeWithTag(TestTags.MAP_NULL_ITINERARY).assertIsDisplayed()
 
     val route = navController.currentBackStackEntry?.destination?.route
     assertEquals(Route.MAP, route)

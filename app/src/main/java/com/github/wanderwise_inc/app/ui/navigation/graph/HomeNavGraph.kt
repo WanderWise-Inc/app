@@ -4,10 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.github.wanderwise_inc.app.PREVIEW_ITINERARY_DEMO_UID
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.demoSetup
-import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.ui.creation.CreationScreen
 import com.github.wanderwise_inc.app.ui.list_itineraries.LikedScreen
 import com.github.wanderwise_inc.app.ui.list_itineraries.OverviewScreen
@@ -19,8 +17,6 @@ import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.NavigationItem
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
 
 @Composable
 fun HomeNavGraph(
@@ -34,10 +30,10 @@ fun HomeNavGraph(
 
   // BEGIN DEMO SETUP
   demoSetup(mapViewModel, profileViewModel, firebaseAuth)
-  var itinerary: Itinerary? = null
+  /*var itinerary: Itinerary? = null
   runBlocking {
     itinerary = mapViewModel.getItineraryFromUids(listOf(PREVIEW_ITINERARY_DEMO_UID)).first()[0]
-  }
+  }*/
   // END DEMO SETUP
 
   NavHost(

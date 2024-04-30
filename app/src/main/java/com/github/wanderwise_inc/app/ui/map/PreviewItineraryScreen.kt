@@ -48,7 +48,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.wanderwise_inc.app.R
 import com.github.wanderwise_inc.app.model.location.Itinerary
-import com.github.wanderwise_inc.app.model.profile.Profile
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.profile.ProfilePicture
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
@@ -68,60 +67,49 @@ import com.google.maps.android.compose.rememberCameraPositionState
 /** @brief previews an itinerary */
 @Composable
 fun PreviewItineraryScreen(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel) {
-    val userLocation by mapViewModel.getUserLocation().collectAsState(null)
-    val itinerary = mapViewModel.getFocusedItinerary()
+  val userLocation by mapViewModel.getUserLocation().collectAsState(null)
+  val itinerary = mapViewModel.getFocusedItinerary()
 
-    if (itinerary == null) {
-        NullItinerary(userLocation)
-    } else {
-        val cameraPositionState = rememberCameraPositionState {
-            position =
-                CameraPosition.fromLatLngZoom(itinerary.computeCenterOfGravity().toLatLng(), 13f)
-        }
+  if (itinerary == null) {
+    NullItinerary(userLocation)
+  } else {
+    val cameraPositionState = rememberCameraPositionState {
+      position = CameraPosition.fromLatLngZoom(itinerary.computeCenterOfGravity().toLatLng(), 13f)
+    }
 
-        LaunchedEffect(Unit) { mapViewModel.fetchPolylineLocations(itinerary) }
-        val polylinePoints by mapViewModel.getPolylinePointsLiveData().observeAsState()
+    LaunchedEffect(Unit) { mapViewModel.fetchPolylineLocations(itinerary) }
+    val polylinePoints by mapViewModel.getPolylinePointsLiveData().observeAsState()
 
-        Scaffold(
-            bottomBar = { PreviewItineraryBanner(itinerary, mapViewModel, profileViewModel) },
-            modifier = Modifier.testTag(TestTags.MAP_PREVIEW_ITINERARY_SCREEN),
-            floatingActionButton = {
-                CenterButton(
-                    cameraPositionState = cameraPositionState,
-                    currentLocation = userLocation
-                )
-            },
-            floatingActionButtonPosition = FabPosition.Start
-        ) { paddingValues ->
-            GoogleMap(
-                modifier =
-                Modifier.fillMaxSize()
-                    .padding(paddingValues)
-                    .testTag(TestTags.MAP_GOOGLE_MAPS),
-                cameraPositionState = cameraPositionState
-            ) {
+    Scaffold(
+        bottomBar = { PreviewItineraryBanner(itinerary, mapViewModel, profileViewModel) },
+        modifier = Modifier.testTag(TestTags.MAP_PREVIEW_ITINERARY_SCREEN),
+        floatingActionButton = {
+          CenterButton(cameraPositionState = cameraPositionState, currentLocation = userLocation)
+        },
+        floatingActionButtonPosition = FabPosition.Start) { paddingValues ->
+          GoogleMap(
+              modifier =
+                  Modifier.fillMaxSize().padding(paddingValues).testTag(TestTags.MAP_GOOGLE_MAPS),
+              cameraPositionState = cameraPositionState) {
                 userLocation?.let {
-                    Marker(
-                        tag = TestTags.MAP_USER_LOCATION,
-                        state = MarkerState(position = LatLng(it.latitude, it.longitude)),
-                        icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)
-                    )
+                  Marker(
+                      tag = TestTags.MAP_USER_LOCATION,
+                      state = MarkerState(position = LatLng(it.latitude, it.longitude)),
+                      icon =
+                          BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
                 }
                 itinerary.locations.map { location ->
-                    AdvancedMarker(
-                        state = MarkerState(position = location.toLatLng()),
-                        title = location.title ?: "",
-                    )
-                    if (polylinePoints != null) {
-                        Polyline(
-                            points = polylinePoints!!,
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                    }
+                  AdvancedMarker(
+                      state = MarkerState(position = location.toLatLng()),
+                      title = location.title ?: "",
+                  )
+                  if (polylinePoints != null) {
+                    Polyline(points = polylinePoints!!, color = MaterialTheme.colorScheme.primary)
+                  }
                 }
-            }
+              }
         }
-    }
+  }
 }
 
 /**
@@ -159,9 +147,7 @@ private fun PreviewItineraryBannerMaximized(
   val innerFontSize = 16.sp
 
   val profilePictureModifier =
-      Modifier.clip(RoundedCornerShape(5.dp))
-          .size(50.dp)
-          .testTag(TestTags.MAP_PROFILE_PIC)
+      Modifier.clip(RoundedCornerShape(5.dp)).size(50.dp).testTag(TestTags.MAP_PROFILE_PIC)
 
   val profile by profileViewModel.getProfile(itinerary.userUid).collectAsState(initial = null)
 
@@ -186,8 +172,7 @@ private fun PreviewItineraryBannerMaximized(
                 imageVector = Icons.Filled.KeyboardArrowDown,
                 contentDescription = "minimize_button",
                 modifier =
-                    Modifier.clickable { onMinimizedClick() }
-                        .testTag(TestTags.MAP_BANNER_BUTTON))
+                    Modifier.clickable { onMinimizedClick() }.testTag(TestTags.MAP_BANNER_BUTTON))
             // Itinerary Title
             Text(
                 text = itinerary.title,
@@ -195,8 +180,7 @@ private fun PreviewItineraryBannerMaximized(
                 fontFamily = MaterialTheme.typography.displayLarge.fontFamily,
                 fontSize = titleFontSize,
                 fontWeight = FontWeight.Normal,
-                modifier =
-                    Modifier.padding(2.dp).testTag(TestTags.MAP_ITINERARY_TITLE),
+                modifier = Modifier.padding(2.dp).testTag(TestTags.MAP_ITINERARY_TITLE),
                 textAlign = TextAlign.Center)
           }
 
@@ -326,9 +310,7 @@ private fun PreviewItineraryBannerMaximized(
                 fontFamily = MaterialTheme.typography.displayMedium.fontFamily,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Normal,
-                modifier =
-                    Modifier.padding(2.dp)
-                        .testTag(TestTags.MAP_ITINERARY_DESCRIPTION),
+                modifier = Modifier.padding(2.dp).testTag(TestTags.MAP_ITINERARY_DESCRIPTION),
                 textAlign = TextAlign.Center)
           }
         }
@@ -359,8 +341,7 @@ private fun PreviewItineraryBannerMinimized(onMinimizedClick: () -> Unit, itiner
                 imageVector = Icons.Filled.KeyboardArrowUp,
                 contentDescription = "minimize_button",
                 modifier =
-                    Modifier.clickable { onMinimizedClick() }
-                        .testTag(TestTags.MAP_BANNER_BUTTON))
+                    Modifier.clickable { onMinimizedClick() }.testTag(TestTags.MAP_BANNER_BUTTON))
             // Itinerary Title
             Text(
                 text = itinerary.title,
@@ -368,8 +349,7 @@ private fun PreviewItineraryBannerMinimized(onMinimizedClick: () -> Unit, itiner
                 fontFamily = MaterialTheme.typography.displayLarge.fontFamily,
                 fontSize = titleFontSize,
                 fontWeight = FontWeight.Normal,
-                modifier =
-                    Modifier.padding(2.dp).testTag(TestTags.MAP_ITINERARY_TITLE),
+                modifier = Modifier.padding(2.dp).testTag(TestTags.MAP_ITINERARY_TITLE),
                 textAlign = TextAlign.Center)
           }
         }
@@ -405,9 +385,7 @@ fun NullItinerary(userLocation: Location?) {
                 .background(MaterialTheme.colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center) {
-          Text(
-              "Loading...",
-              modifier = Modifier.testTag(TestTags.MAP_NULL_ITINERARY))
+          Text("Loading...", modifier = Modifier.testTag(TestTags.MAP_NULL_ITINERARY))
         }
   } else {
     val userLocationLatLng = LatLng(userLocation!!.latitude, userLocation!!.longitude)
