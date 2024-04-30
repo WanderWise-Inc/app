@@ -158,6 +158,28 @@ class PreviewItineraryScreenKtTest {
   }
 
   @Test
+  fun `NullItineraryScreen is displayed when focusedItinerary is null`() {
+    mapViewModel.setFocusedItinerary(null)
+    composeTestRule.setContent { PreviewItineraryScreen(mapViewModel, profileViewModel) }
+
+    composeTestRule.onNodeWithTag(PreviewItineraryScreenTestTags.NULL_ITINERARY).assertIsDisplayed()
+
+    // this shouldn't be displayed
+    composeTestRule
+        .onNodeWithTag(PreviewItineraryScreenTestTags.MAXIMIZED_BANNER)
+        .assertIsNotDisplayed()
+    composeTestRule
+        .onNodeWithTag(PreviewItineraryScreenTestTags.MINIMIZED_BANNER)
+        .assertIsNotDisplayed()
+    composeTestRule
+        .onNodeWithTag(PreviewItineraryScreenTestTags.ITINERARY_TITLE)
+        .assertIsNotDisplayed()
+    composeTestRule
+        .onNodeWithTag(PreviewItineraryScreenTestTags.ITINERARY_DESCRIPTION)
+        .assertIsNotDisplayed()
+  }
+
+  @Test
   fun `pressing center button should update camera position`() {
     val epflLocation = Mockito.mock(android.location.Location::class.java)
     epflLocation.latitude = epflLat

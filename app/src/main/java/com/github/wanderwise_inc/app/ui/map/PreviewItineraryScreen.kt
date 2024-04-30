@@ -67,6 +67,7 @@ import com.google.maps.android.compose.rememberCameraPositionState
 object PreviewItineraryScreenTestTags {
   const val MAIN_SCREEN = "preview_itinerary_screen"
   const val GOOGLE_MAPS = "google_maps"
+  const val NULL_ITINERARY = "null_itinerary"
   const val MAXIMIZED_BANNER = "maximized_banner"
   const val MINIMIZED_BANNER = "minimized_banner"
   const val PROFILE_PIC = "profile_picture"
@@ -402,10 +403,15 @@ fun NullItinerary(userLocation: Location?) {
   // for now doesn't do anything, would be nice to center on location
   if (userLocation == null) {
     Column(
-        modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
+        modifier =
+            Modifier.testTag(PreviewItineraryScreenTestTags.NULL_ITINERARY)
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center) {
-          Text("Loading...")
+          Text(
+              "Loading...",
+              modifier = Modifier.testTag(PreviewItineraryScreenTestTags.NULL_ITINERARY))
         }
   } else {
     val userLocationLatLng = LatLng(userLocation!!.latitude, userLocation!!.longitude)
@@ -413,7 +419,7 @@ fun NullItinerary(userLocation: Location?) {
       position = CameraPosition.fromLatLngZoom(userLocationLatLng, 13f)
     }
     GoogleMap(
-        modifier = Modifier.fillMaxSize().testTag(PreviewItineraryScreenTestTags.GOOGLE_MAPS),
+        modifier = Modifier.fillMaxSize().testTag(PreviewItineraryScreenTestTags.NULL_ITINERARY),
         cameraPositionState = cameraPositionState) {
           Marker(
               tag = PreviewItineraryScreenTestTags.USER_LOCATION,
