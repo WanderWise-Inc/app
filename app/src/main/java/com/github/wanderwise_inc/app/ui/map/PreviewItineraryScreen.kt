@@ -1,7 +1,6 @@
 package com.github.wanderwise_inc.app.ui.map
 
 import android.location.Location
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -41,9 +40,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.graphics.painter.BitmapPainter
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -52,7 +48,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.wanderwise_inc.app.R
 import com.github.wanderwise_inc.app.model.location.Itinerary
-import com.github.wanderwise_inc.app.model.profile.Profile
+import com.github.wanderwise_inc.app.ui.profile.ProfilePicture
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -66,7 +62,6 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
-import kotlinx.coroutines.flow.flow
 
 /* helps us avoid typos / inconsistencies between the test files and this file */
 object PreviewItineraryScreenTestTags {
@@ -165,6 +160,11 @@ private fun PreviewItineraryBannerMaximized(
 ) {
   val titleFontSize = 32.sp
   val innerFontSize = 16.sp
+
+  val profilePictureModifier =
+      Modifier.clip(RoundedCornerShape(5.dp))
+          .size(50.dp)
+          .testTag(PreviewItineraryScreenTestTags.PROFILE_PIC)
 
   val profile by profileViewModel.getProfile(itinerary.userUid).collectAsState(initial = null)
 
@@ -282,7 +282,10 @@ private fun PreviewItineraryBannerMaximized(
               verticalAlignment = Alignment.CenterVertically,
               modifier = Modifier.height(50.dp),
           ) {
-            ProfilePicture(profile = profile, profileViewModel = profileViewModel)
+            ProfilePicture(
+                profile = profile,
+                profileViewModel = profileViewModel,
+                modifier = profilePictureModifier)
 
             Spacer(modifier = Modifier.width(10.dp))
 
@@ -333,29 +336,6 @@ private fun PreviewItineraryBannerMaximized(
           }
         }
       }
-}
-
-@Composable
-fun ProfilePicture(profile: Profile?, profileViewModel: ProfileViewModel) {
-  val imageModifier =
-      Modifier.clip(RoundedCornerShape(5.dp))
-          .size(50.dp)
-          .testTag(PreviewItineraryScreenTestTags.PROFILE_PIC)
-
-  val defaultProfilePicture by
-      profileViewModel.getDefaultProfilePicture().collectAsState(initial = null)
-
-  val profilePictureFlow =
-      if (profile != null) profileViewModel.getProfilePicture(profile) else flow { emit(null) }
-
-  val profilePicture by profilePictureFlow.collectAsState(initial = null)
-
-  val painter: Painter =
-      if (profilePicture != null) BitmapPainter(profilePicture!!.asImageBitmap())
-      else if (defaultProfilePicture != null) BitmapPainter(defaultProfilePicture!!.asImageBitmap())
-      else painterResource(id = R.drawable.profile_icon)
-
-  Image(painter = painter, contentDescription = "profile_icon", modifier = imageModifier)
 }
 
 @Composable

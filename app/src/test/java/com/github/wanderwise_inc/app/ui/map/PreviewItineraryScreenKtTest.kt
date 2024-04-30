@@ -1,48 +1,48 @@
 package com.github.wanderwise_inc.app.ui.map
 //
-//import androidx.compose.foundation.layout.Box
-//import androidx.compose.foundation.layout.padding
-//import androidx.compose.material3.Scaffold
-//import androidx.compose.ui.Modifier
-//import androidx.compose.ui.test.assertIsDisplayed
-//import androidx.compose.ui.test.assertIsNotDisplayed
-//import androidx.compose.ui.test.junit4.createComposeRule
-//import androidx.compose.ui.test.onNodeWithTag
-//import androidx.compose.ui.test.performClick
-//import androidx.lifecycle.MutableLiveData
-//import androidx.test.ext.junit.runners.AndroidJUnit4
-//import com.github.wanderwise_inc.app.data.DirectionsRepository
-//import com.github.wanderwise_inc.app.data.ImageRepository
-//import com.github.wanderwise_inc.app.data.ItineraryRepository
-//import com.github.wanderwise_inc.app.data.ProfileRepository
-//import com.github.wanderwise_inc.app.model.location.Itinerary
-//import com.github.wanderwise_inc.app.model.location.ItineraryTags
-//import com.github.wanderwise_inc.app.model.location.PlacesReader
-//import com.github.wanderwise_inc.app.model.profile.Profile
-//import com.github.wanderwise_inc.app.viewmodel.MapViewModel
-//import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
-//import com.github.wanderwise_inc.app.viewmodel.UserLocationClient
-//import com.google.android.gms.maps.model.CameraPosition
-//import com.google.android.gms.maps.model.LatLng
-//import com.google.maps.android.compose.CameraPositionState
-//import com.google.maps.android.compose.GoogleMap
-//import com.google.maps.android.compose.rememberCameraPositionState
-//import kotlinx.coroutines.flow.flow
-//import org.junit.Before
-//import org.junit.Rule
-//import org.junit.Test
-//import org.junit.runner.RunWith
-//import org.mockito.ArgumentMatchers.anyList
-//import org.mockito.ArgumentMatchers.anyString
-//import org.mockito.Mock
-//import org.mockito.Mockito
-//import org.mockito.Mockito.mock
-//import org.mockito.Mockito.`when`
-//import org.mockito.junit.MockitoJUnit
-//import org.mockito.junit.MockitoRule
+// import androidx.compose.foundation.layout.Box
+// import androidx.compose.foundation.layout.padding
+// import androidx.compose.material3.Scaffold
+// import androidx.compose.ui.Modifier
+// import androidx.compose.ui.test.assertIsDisplayed
+// import androidx.compose.ui.test.assertIsNotDisplayed
+// import androidx.compose.ui.test.junit4.createComposeRule
+// import androidx.compose.ui.test.onNodeWithTag
+// import androidx.compose.ui.test.performClick
+// import androidx.lifecycle.MutableLiveData
+// import androidx.test.ext.junit.runners.AndroidJUnit4
+// import com.github.wanderwise_inc.app.data.DirectionsRepository
+// import com.github.wanderwise_inc.app.data.ImageRepository
+// import com.github.wanderwise_inc.app.data.ItineraryRepository
+// import com.github.wanderwise_inc.app.data.ProfileRepository
+// import com.github.wanderwise_inc.app.model.location.Itinerary
+// import com.github.wanderwise_inc.app.model.location.ItineraryTags
+// import com.github.wanderwise_inc.app.model.location.PlacesReader
+// import com.github.wanderwise_inc.app.model.profile.Profile
+// import com.github.wanderwise_inc.app.viewmodel.MapViewModel
+// import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
+// import com.github.wanderwise_inc.app.viewmodel.UserLocationClient
+// import com.google.android.gms.maps.model.CameraPosition
+// import com.google.android.gms.maps.model.LatLng
+// import com.google.maps.android.compose.CameraPositionState
+// import com.google.maps.android.compose.GoogleMap
+// import com.google.maps.android.compose.rememberCameraPositionState
+// import kotlinx.coroutines.flow.flow
+// import org.junit.Before
+// import org.junit.Rule
+// import org.junit.Test
+// import org.junit.runner.RunWith
+// import org.mockito.ArgumentMatchers.anyList
+// import org.mockito.ArgumentMatchers.anyString
+// import org.mockito.Mock
+// import org.mockito.Mockito
+// import org.mockito.Mockito.mock
+// import org.mockito.Mockito.`when`
+// import org.mockito.junit.MockitoJUnit
+// import org.mockito.junit.MockitoRule
 //
-//@RunWith(AndroidJUnit4::class)
-//class PreviewItineraryScreenKtTest {
+// @RunWith(AndroidJUnit4::class)
+// class PreviewItineraryScreenKtTest {
 //
 //  @get:Rule val composeTestRule = createComposeRule()
 //
@@ -98,13 +98,15 @@ package com.github.wanderwise_inc.app.ui.map
 //
 //  @Test
 //  fun `initial elements are displayed correctly`() {
-//    composeTestRule.setContent { PreviewItineraryScreen(itinerary, mapViewModel, profileViewModel) }
+//    composeTestRule.setContent { PreviewItineraryScreen(itinerary, mapViewModel, profileViewModel)
+// }
 //
 //    composeTestRule.onNodeWithTag(PreviewItineraryScreenTestTags.MAIN_SCREEN).assertIsDisplayed()
 //    composeTestRule
 //        .onNodeWithTag(PreviewItineraryScreenTestTags.MAXIMIZED_BANNER)
 //        .assertIsDisplayed()
-//    composeTestRule.onNodeWithTag(PreviewItineraryScreenTestTags.BANNER_BUTTON).assertIsDisplayed()
+//
+// composeTestRule.onNodeWithTag(PreviewItineraryScreenTestTags.BANNER_BUTTON).assertIsDisplayed()
 //    composeTestRule
 //        .onNodeWithTag(PreviewItineraryScreenTestTags.CENTER_CAMERA_BUTTON)
 //        .assertIsDisplayed()
@@ -113,7 +115,8 @@ package com.github.wanderwise_inc.app.ui.map
 //
 //  @Test
 //  fun `pressing banner button should minimize and maximize the banner`() {
-//    composeTestRule.setContent { PreviewItineraryScreen(itinerary, mapViewModel, profileViewModel) }
+//    composeTestRule.setContent { PreviewItineraryScreen(itinerary, mapViewModel, profileViewModel)
+// }
 //
 //    composeTestRule
 //        .onNodeWithTag(PreviewItineraryScreenTestTags.MAXIMIZED_BANNER)
@@ -175,7 +178,8 @@ package com.github.wanderwise_inc.app.ui.map
 //        Scaffold(floatingActionButton = { CenterButton(cameraPositionState, epflLocation) }) {
 //            paddingValues ->
 //          GoogleMap(
-//              modifier = Modifier.padding(paddingValues), cameraPositionState = cameraPositionState)
+//              modifier = Modifier.padding(paddingValues), cameraPositionState =
+// cameraPositionState)
 //        }
 //      }
 //    }
@@ -192,4 +196,4 @@ package com.github.wanderwise_inc.app.ui.map
 //    }
 //     */
 //  }
-//}
+// }

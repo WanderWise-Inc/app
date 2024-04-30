@@ -23,6 +23,7 @@ fun BottomNavigationMenu(
     navigationActions: NavigationActions,
     bottomNavigationViewModel: BottomNavigationViewModel
 ) {
+
   val _selectedIndex by bottomNavigationViewModel.selected.observeAsState()
   val selectedIndex = _selectedIndex ?: 0
 
