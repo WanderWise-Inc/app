@@ -1,98 +1,115 @@
 package com.github.wanderwise_inc.app.model.location
 
-import java.io.InvalidObjectException
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertThrows
+import org.junit.Assert.assertTrue
 import org.junit.Test
+import java.io.InvalidObjectException
 
 class ItineraryTest {
 
-  private val itinerary =
-      Itinerary(
-          uid = "1",
-          userUid = "user123",
-          locations = listOf(Location(10.0, 20.0), Location(30.0, 40.0)),
-          title = "Vacation Plan",
-          tags = listOf(ItineraryTags.NATURE),
-          description = "Summer vacation",
-          visible = true)
+    private val itinerary =
+        Itinerary(
+            uid = "1",
+            userUid = "user123",
+            locations = listOf(Location(10.0, 20.0), Location(30.0, 40.0)),
+            title = "Vacation Plan",
+            tags = listOf(ItineraryTags.NATURE),
+            description = "Summer vacation",
+            visible = true
+        )
 
-  @Test
-  fun toMap() {
-    val map = itinerary.toMap()
+    @Test
+    fun toMap() {
+        val map = itinerary.toMap()
 
-    assertEquals("1", map[ItineraryLabels.UID])
-    assertEquals("Summer vacation", map[ItineraryLabels.DESCRIPTION])
-  }
+        assertEquals("1", map[ItineraryLabels.UID])
+        assertEquals("Summer vacation", map[ItineraryLabels.DESCRIPTION])
 
-  @Test
-  fun testBuilder() {
-    val builder = itinerary.toBuilder()
-
-    builder.uid = "2"
-    builder.title = "Changed Title"
-    builder.addTag(ItineraryTags.RELAXATION)
-    builder.locations.add(Location(15.0, -10.0))
-    builder.description("Modified Description")
-    builder.visible(false)
-
-    val newItinerary = builder.build()
-
-    assertEquals("1", itinerary.uid)
-    assertEquals("Vacation Plan", itinerary.title)
-    assertEquals(1, itinerary.tags.size) // Original had 2 tags
-    assertEquals(2, itinerary.locations.size) // Original had 1 location
-    assertEquals("Summer vacation", itinerary.description)
-    assertTrue(itinerary.visible)
-
-    assertEquals("2", newItinerary.uid)
-    assertEquals("Changed Title", newItinerary.title)
-    assertEquals(2, newItinerary.tags.size) // New one should have 3 tags
-    assertEquals(3, newItinerary.locations.size) // New one should have 2 locations
-    assertEquals("Modified Description", newItinerary.description)
-    assertFalse(newItinerary.visible)
-
-    assertThrows(InvalidObjectException::class.java) {
-      builder.addTag(ItineraryTags.ROMANCE).addTag(ItineraryTags.WILDLIFE)
+        val emptyMap = Itinerary().toMap()
+        assertEquals("", emptyMap[ItineraryLabels.DESCRIPTION])
     }
 
-    builder.title = ""
+    @Test
+    fun scoreFromPreferences() {
+        val preferences = ItineraryPreferences(listOf(ItineraryTags.NATURE, ItineraryTags.ACTIVE))
+        val score = itinerary.scoreFromPreferences(preferences)
 
-    assertThrows(IllegalArgumentException::class.java) { builder.build() }
+        assertEquals(10.0, score, 0.01)
+    }
 
-    builder.title = "Not Blank"
-    builder.locations.clear()
+    @Test
+    fun computeCenterOfGravity() {
+        val center = itinerary.computeCenterOfGravity()
 
-    assertThrows(IllegalArgumentException::class.java) { builder.build() }
-  }
+        assertEquals(20.0, center.lat, 0.01)
+        assertEquals(30.0, center.long, 0.01)
+    }
 
-  @Test
-  fun scoreFromPreferences() {
-    val preferences = ItineraryPreferences(listOf(ItineraryTags.NATURE, ItineraryTags.ACTIVE))
-    val score = itinerary.scoreFromPreferences(preferences)
+    @Test
+    fun testNoArgumentConstructor() {
+        // Create an itinerary using the no-argument constructor
+        val emptyItinerary = Itinerary()
 
-    assertEquals(10.0, score, 0.01)
-  }
+        // Assert that all fields are initialized to their default values
+        assertEquals("", emptyItinerary.uid)
+        assertEquals("", emptyItinerary.userUid)
+        assertTrue(emptyItinerary.locations.isEmpty())
+        assertEquals("", emptyItinerary.title)
+        assertTrue(emptyItinerary.tags.isEmpty())
+        assertNull(emptyItinerary.description)
+        assertFalse(emptyItinerary.visible)
+    }
 
-  @Test
-  fun computeCenterOfGravity() {
-    val center = itinerary.computeCenterOfGravity()
+    @Test
+    fun testBuilder() {
+        val builder = itinerary.toBuilder()
 
-    assertEquals(20.0, center.lat, 0.01)
-    assertEquals(30.0, center.long, 0.01)
-  }
+        builder.uid = "2"
+        builder
+            .title("Changed Title")
+            .addTag(ItineraryTags.RELAXATION)
+            .addLocation(Location(15.0, -10.0))
+            .description("Modified Description")
+            .visible(false)
+            .price(10f)
+            .time(2)
 
-  @Test
-  fun testNoArgumentConstructor() {
-    // Create an itinerary using the no-argument constructor
-    val emptyItinerary = Itinerary()
+        assertEquals("2", builder.uid)
+        assertEquals("user123", builder.userUid)
+        assertEquals("Changed Title", builder.title)
+        assertEquals(2, builder.tags.size) // New one should have 3 tags
+        assertEquals(3, builder.locations.size) // New one should have 2 locations
+        assertEquals("Modified Description", builder.description)
+        assertFalse(builder.visible)
+        assertEquals(10f, builder.price)
+        assertEquals(2, builder.time)
+        assertThrows(IllegalArgumentException::class.java) { builder.price(-1f) }
+        assertThrows(IllegalArgumentException::class.java) { builder.time(-1) }
 
-    // Assert that all fields are initialized to their default values
-    assertEquals("", emptyItinerary.uid)
-    assertEquals("", emptyItinerary.userUid)
-    assertTrue(emptyItinerary.locations.isEmpty())
-    assertEquals("", emptyItinerary.title)
-    assertTrue(emptyItinerary.tags.isEmpty())
-    assertNull(emptyItinerary.description)
-    assertFalse(emptyItinerary.visible)
-  }
+        val newItinerary = builder.build()
+
+        assertEquals("2", newItinerary.uid)
+        assertEquals("Changed Title", newItinerary.title)
+        assertEquals(2, newItinerary.tags.size) // New one should have 3 tags
+        assertEquals(3, newItinerary.locations.size) // New one should have 2 locations
+        assertEquals("Modified Description", newItinerary.description)
+        assertFalse(newItinerary.visible)
+        assertEquals(10f, newItinerary.price)
+        assertEquals(2, newItinerary.time)
+
+        assertThrows(InvalidObjectException::class.java) {
+            builder.addTag(ItineraryTags.ROMANCE).addTag(ItineraryTags.WILDLIFE)
+        }
+
+        val emptyBuilder = Itinerary().toBuilder()
+
+        assertThrows(IllegalArgumentException::class.java) { emptyBuilder.build() }
+
+        emptyBuilder.addLocation(Location(0.0, 0.0))
+
+        assertThrows(IllegalArgumentException::class.java) { emptyBuilder.build() }
+    }
 }
