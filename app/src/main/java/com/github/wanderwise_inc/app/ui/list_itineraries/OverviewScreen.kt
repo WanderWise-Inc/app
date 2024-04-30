@@ -22,7 +22,11 @@ import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 
 @Composable
-fun OverviewScreen(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel, navController: NavHostController) {
+fun OverviewScreen(
+    mapViewModel: MapViewModel,
+    profileViewModel: ProfileViewModel,
+    navController: NavHostController
+) {
   val sliderPositionPriceState = remember { mutableStateOf(0f..100f) }
   val sliderPositionTimeState = remember { mutableStateOf(0f..24f) }
   DisplayOverviewItineraries(
@@ -85,7 +89,9 @@ fun DisplayOverviewItineraries(
                 }
                 .filter { itinerary ->
                   val price = itinerary.price.toFloat()
-                  price in sliderPositionPriceState.value.start..sliderPositionPriceState.value.endInclusive
+                  price in
+                      sliderPositionPriceState.value.start..sliderPositionPriceState.value
+                              .endInclusive
                 }
                 .filter { itinerary ->
                   val time = itinerary.time.toFloat()

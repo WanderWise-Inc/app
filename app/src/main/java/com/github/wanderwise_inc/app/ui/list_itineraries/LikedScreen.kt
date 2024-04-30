@@ -36,7 +36,11 @@ object LikedScreenTestTags {
 }
 
 @Composable
-fun LikedScreen(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel,navController: NavHostController) {
+fun LikedScreen(
+    mapViewModel: MapViewModel,
+    profileViewModel: ProfileViewModel,
+    navController: NavHostController
+) {
   val sliderPositionPriceState = remember { mutableStateOf(0f..100f) }
   val sliderPositionTimeState = remember { mutableStateOf(0f..24f) }
   DisplayLikedItineraries(
@@ -52,6 +56,7 @@ fun LikedScreen(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel,n
 fun DisplayLikedItineraries(
     mapViewModel: MapViewModel,
     profileViewModel: ProfileViewModel,
+    navController: NavHostController,
     sliderPositionPriceState: MutableState<ClosedFloatingPointRange<Float>>,
     sliderPositionTimeState: MutableState<ClosedFloatingPointRange<Float>>
 ) {
@@ -102,7 +107,9 @@ fun DisplayLikedItineraries(
                 }
                 .filter { itinerary ->
                   val price = itinerary.price.toFloat()
-                  price in sliderPositionPriceState.value.start..sliderPositionPriceState.value.endInclusive
+                  price in
+                      sliderPositionPriceState.value.start..sliderPositionPriceState.value
+                              .endInclusive
                 }
                 .filter { itinerary ->
                   val time = itinerary.time.toFloat()
