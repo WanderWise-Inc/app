@@ -68,49 +68,60 @@ import com.google.maps.android.compose.rememberCameraPositionState
 /** @brief previews an itinerary */
 @Composable
 fun PreviewItineraryScreen(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel) {
-  val userLocation by mapViewModel.getUserLocation().collectAsState(null)
-  val itinerary = mapViewModel.getFocusedItinerary()
+    val userLocation by mapViewModel.getUserLocation().collectAsState(null)
+    val itinerary = mapViewModel.getFocusedItinerary()
 
-  if (itinerary == null) {
-    NullItinerary(userLocation)
-  } else {
-    val cameraPositionState = rememberCameraPositionState {
-      position = CameraPosition.fromLatLngZoom(itinerary.computeCenterOfGravity().toLatLng(), 13f)
-    }
+    if (itinerary == null) {
+        NullItinerary(userLocation)
+    } else {
+        val cameraPositionState = rememberCameraPositionState {
+            position =
+                CameraPosition.fromLatLngZoom(itinerary.computeCenterOfGravity().toLatLng(), 13f)
+        }
 
-    LaunchedEffect(Unit) { mapViewModel.fetchPolylineLocations(itinerary) }
-    val polylinePoints by mapViewModel.getPolylinePointsLiveData().observeAsState()
+        LaunchedEffect(Unit) { mapViewModel.fetchPolylineLocations(itinerary) }
+        val polylinePoints by mapViewModel.getPolylinePointsLiveData().observeAsState()
 
-  Scaffold(
-      bottomBar = { PreviewItineraryBanner(itinerary, mapViewModel, profileViewModel) },
-      modifier = Modifier.testTag(TestTags.MAP_PREVIEW_ITINERARY_SCREEN),
-      floatingActionButton = {
-        CenterButton(cameraPositionState = cameraPositionState, currentLocation = userLocation)
-      },
-      floatingActionButtonPosition = FabPosition.Start) { paddingValues ->
-        GoogleMap(
-            modifier =
+        Scaffold(
+            bottomBar = { PreviewItineraryBanner(itinerary, mapViewModel, profileViewModel) },
+            modifier = Modifier.testTag(TestTags.MAP_PREVIEW_ITINERARY_SCREEN),
+            floatingActionButton = {
+                CenterButton(
+                    cameraPositionState = cameraPositionState,
+                    currentLocation = userLocation
+                )
+            },
+            floatingActionButtonPosition = FabPosition.Start
+        ) { paddingValues ->
+            GoogleMap(
+                modifier =
                 Modifier.fillMaxSize()
                     .padding(paddingValues)
                     .testTag(TestTags.MAP_GOOGLE_MAPS),
-            cameraPositionState = cameraPositionState) {
-              userLocation?.let {
-                Marker(
-                    tag = TestTags.MAP_USER_LOCATION,
-                    state = MarkerState(position = LatLng(it.latitude, it.longitude)),
-                    icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
-              }
-              itinerary.locations.map { location ->
-                AdvancedMarker(
-                    state = MarkerState(position = location.toLatLng()),
-                    title = location.title ?: "",
-                )
-                if (polylinePoints != null) {
-                  Polyline(points = polylinePoints!!, color = MaterialTheme.colorScheme.primary)
+                cameraPositionState = cameraPositionState
+            ) {
+                userLocation?.let {
+                    Marker(
+                        tag = TestTags.MAP_USER_LOCATION,
+                        state = MarkerState(position = LatLng(it.latitude, it.longitude)),
+                        icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)
+                    )
                 }
-              }
+                itinerary.locations.map { location ->
+                    AdvancedMarker(
+                        state = MarkerState(position = location.toLatLng()),
+                        title = location.title ?: "",
+                    )
+                    if (polylinePoints != null) {
+                        Polyline(
+                            points = polylinePoints!!,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                }
+            }
         }
-  }
+    }
 }
 
 /**
@@ -389,14 +400,14 @@ fun NullItinerary(userLocation: Location?) {
   if (userLocation == null) {
     Column(
         modifier =
-            Modifier.testTag(PreviewItineraryScreenTestTags.NULL_ITINERARY)
+            Modifier.testTag(TestTags.MAP_NULL_ITINERARY)
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center) {
           Text(
               "Loading...",
-              modifier = Modifier.testTag(PreviewItineraryScreenTestTags.NULL_ITINERARY))
+              modifier = Modifier.testTag(TestTags.MAP_NULL_ITINERARY))
         }
   } else {
     val userLocationLatLng = LatLng(userLocation!!.latitude, userLocation!!.longitude)
@@ -404,10 +415,10 @@ fun NullItinerary(userLocation: Location?) {
       position = CameraPosition.fromLatLngZoom(userLocationLatLng, 13f)
     }
     GoogleMap(
-        modifier = Modifier.fillMaxSize().testTag(PreviewItineraryScreenTestTags.NULL_ITINERARY),
+        modifier = Modifier.fillMaxSize().testTag(TestTags.MAP_NULL_ITINERARY),
         cameraPositionState = cameraPositionState) {
           Marker(
-              tag = PreviewItineraryScreenTestTags.USER_LOCATION,
+              tag = TestTags.MAP_USER_LOCATION,
               state = MarkerState(position = userLocationLatLng),
               icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
         }

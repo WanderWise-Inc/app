@@ -17,5 +17,6 @@ object TestTags {
   const val MAP_ITINERARY_TITLE = "itinerary_title"
   const val MAP_ITINERARY_DESCRIPTION = "itinerary_description"
   const val MAP_USER_LOCATION = "user_location"
+  const val MAP_NULL_ITINERARY = "null_location"
   const val PROFILE_SCREEN = "Profile Screen"
 }

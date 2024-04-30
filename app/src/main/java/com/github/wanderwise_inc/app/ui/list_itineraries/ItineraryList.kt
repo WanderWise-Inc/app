@@ -47,52 +47,55 @@ fun ItinerariesListScrollable(
     paddingValues: PaddingValues,
     parent: ItineraryListParent
 ) {
-  if (itineraries.isEmpty()) {
-    val parentVerb =
-        when (parent) {
-          ItineraryListParent.OVERVIEW -> "searched"
-          ItineraryListParent.LIKED -> "liked"
-          ItineraryListParent.PROFILE -> "created"
-        }
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier.padding(paddingValues).fillMaxWidth().height(100.dp)) {
-          Text(
-              text = "You have not $parentVerb any itineraries yet",
-              // color = MaterialTheme.colorScheme.
-              textAlign = TextAlign.Center,
-              modifier = Modifier.padding(5.dp, 10.dp))
+    if (itineraries.isEmpty()) {
+        val parentVerb =
+            when (parent) {
+                ItineraryListParent.OVERVIEW -> "searched"
+                ItineraryListParent.LIKED -> "liked"
+                ItineraryListParent.PROFILE -> "created"
+            }
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier.padding(paddingValues).fillMaxWidth().height(100.dp)
+        ) {
+            Text(
+                text = "You have not $parentVerb any itineraries yet",
+                // color = MaterialTheme.colorScheme.
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(5.dp, 10.dp)
+            )
         } // PaModifier.padding(5.dp, 10.dp))
-  } else {
-      LazyColumn(
-          modifier = Modifier.padding(paddingValues).testTag("Scrollable itineraries"),
-          verticalArrangement = spacedBy(15.dp)
-      ) {
-          this.items(itineraries) { itinerary ->
-              val uid = FirebaseAuth.getInstance().uid ?: DEFAULT_USER_UID
-              val isLikedInitially = profileViewModel.checkIfItineraryIsLiked(uid, itinerary.uid)
-              val onLikeButtonClick = { it: Itinerary, isLiked: Boolean ->
-                  if (isLiked) {
-                      mapViewModel.decrementItineraryLikes(it)
-                      profileViewModel.removeLikedItinerary(uid, it.uid)
-                  } else {
-                      mapViewModel.incrementItineraryLikes(it)
-                      profileViewModel.addLikedItinerary(uid, it.uid)
-                  }
-              }
-              val navigationActions = NavigationActions(navController)
-              val onBannerClick = { it: Itinerary ->
-                  mapViewModel.setFocusedItinerary(it)
-                  navigationActions.navigateTo(Destination.TopLevelDestination.Map)
-              }
-              ItineraryBanner(
-                  itinerary = itinerary,
-                  onLikeButtonClick = onLikeButtonClick,
-                  onBannerClick = onBannerClick,
-                  isLikedInitially = isLikedInitially
-              )
-          }
-  }
+    } else {
+        LazyColumn(
+            modifier = Modifier.padding(paddingValues).testTag("Scrollable itineraries"),
+            verticalArrangement = spacedBy(15.dp)
+        ) {
+            this.items(itineraries) { itinerary ->
+                val uid = FirebaseAuth.getInstance().uid ?: DEFAULT_USER_UID
+                val isLikedInitially = profileViewModel.checkIfItineraryIsLiked(uid, itinerary.uid)
+                val onLikeButtonClick = { it: Itinerary, isLiked: Boolean ->
+                    if (isLiked) {
+                        mapViewModel.decrementItineraryLikes(it)
+                        profileViewModel.removeLikedItinerary(uid, it.uid)
+                    } else {
+                        mapViewModel.incrementItineraryLikes(it)
+                        profileViewModel.addLikedItinerary(uid, it.uid)
+                    }
+                }
+                val navigationActions = NavigationActions(navController)
+                val onBannerClick = { it: Itinerary ->
+                    mapViewModel.setFocusedItinerary(it)
+                    navigationActions.navigateTo(Destination.TopLevelDestination.Map)
+                }
+                ItineraryBanner(
+                    itinerary = itinerary,
+                    onLikeButtonClick = onLikeButtonClick,
+                    onBannerClick = onBannerClick,
+                    isLikedInitially = isLikedInitially
+                )
+            }
+        }
+    }
 }
 
 /** @brief a bar that allows for selecting a category and updating parent state */
