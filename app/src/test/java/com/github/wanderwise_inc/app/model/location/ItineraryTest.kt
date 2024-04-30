@@ -20,7 +20,8 @@ class ItineraryTest {
             ItineraryLabels.TAGS to sfObject.tags,
             ItineraryLabels.DESCRIPTION to (sfObject.description ?: ""),
             ItineraryLabels.VISIBLE to sfObject.visible,
-        )
+            ItineraryLabels.PRICE to sfObject.price,
+            ItineraryLabels.TIME to sfObject.time)
     assertEquals(expected, sfObject.toMap())
   }
 

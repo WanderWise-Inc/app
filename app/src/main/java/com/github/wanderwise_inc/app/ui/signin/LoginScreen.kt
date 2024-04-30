@@ -91,7 +91,7 @@ fun SignInButton(
     profileViewModel: ProfileViewModel,
     navController: NavHostController,
 ) {
-    Log.d("TESTING SIGN IN BUTTON", "IN SIGN IN BUTTON")
+  Log.d("TESTING SIGN IN BUTTON", "IN SIGN IN BUTTON")
   // Added a coroutine because userViewModel functions are async
   val signInRepositoryImpl = SignInRepositoryImpl()
   val coroutineScope = rememberCoroutineScope()
@@ -100,11 +100,10 @@ fun SignInButton(
   val signInIntent =
       AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers).build()
   // creating the launcher that will be used to signIn
-    Log.d("TESTING SIGN IN BUTTON", "BEFORE LAUNCHER")
+  Log.d("TESTING SIGN IN BUTTON", "BEFORE LAUNCHER")
   val signInLauncher =
       rememberLauncherForActivityResult(contract = FirebaseAuthUIActivityResultContract()) {
         coroutineScope.launch {
-
           Log.d("TESTING SIGN IN BUTTON", "IN SIGN IN LAUNCHER")
           val user = FirebaseAuth.getInstance().currentUser
           signInRepositoryImpl.signIn(it, navController, profileViewModel, user, it.resultCode)
