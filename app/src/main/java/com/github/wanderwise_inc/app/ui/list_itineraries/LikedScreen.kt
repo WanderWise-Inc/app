@@ -14,6 +14,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.navigation.NavHostController
 import com.github.wanderwise_inc.app.DEFAULT_USER_UID
 import com.github.wanderwise_inc.app.R
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
@@ -39,6 +40,7 @@ object LikedScreenTestTags {
 fun LikedScreen(
     mapViewModel: MapViewModel,
     profileViewModel: ProfileViewModel,
+    navController: NavHostController,
     firebaseAuth: FirebaseAuth
 ) {
   val sliderPositionPriceState = remember { mutableStateOf(0f..100f) }
@@ -46,6 +48,7 @@ fun LikedScreen(
   DisplayLikedItineraries(
       mapViewModel = mapViewModel,
       profileViewModel = profileViewModel,
+      navController = navController,
       sliderPositionPriceState = sliderPositionPriceState,
       sliderPositionTimeState = sliderPositionTimeState,
       firebaseAuth = firebaseAuth)
@@ -56,6 +59,7 @@ fun LikedScreen(
 fun DisplayLikedItineraries(
     mapViewModel: MapViewModel,
     profileViewModel: ProfileViewModel,
+    navController: NavHostController,
     sliderPositionPriceState: MutableState<ClosedFloatingPointRange<Float>>,
     sliderPositionTimeState: MutableState<ClosedFloatingPointRange<Float>>,
     firebaseAuth: FirebaseAuth
@@ -122,6 +126,7 @@ fun DisplayLikedItineraries(
             paddingValues = innerPadding,
             mapViewModel = mapViewModel,
             profileViewModel = profileViewModel,
+            navController = navController,
             parent = ItineraryListParent.LIKED)
       }
 }

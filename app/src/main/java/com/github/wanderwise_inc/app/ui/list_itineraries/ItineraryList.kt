@@ -25,9 +25,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.github.wanderwise_inc.app.DEFAULT_USER_UID
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.ui.itinerary.ItineraryBanner
+import com.github.wanderwise_inc.app.ui.navigation.Destination
+import com.github.wanderwise_inc.app.ui.navigation.NavigationActions
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -40,6 +43,7 @@ fun ItinerariesListScrollable(
     itineraries: List<Itinerary>,
     mapViewModel: MapViewModel,
     profileViewModel: ProfileViewModel,
+    navController: NavHostController,
     paddingValues: PaddingValues,
     parent: ItineraryListParent
 ) {
@@ -60,29 +64,34 @@ fun ItinerariesListScrollable(
               modifier = Modifier.padding(5.dp, 10.dp))
         } // PaModifier.padding(5.dp, 10.dp))
   } else {
-    LazyColumn(
-        modifier = Modifier.padding(paddingValues).testTag("Scrollable itineraries"),
-        verticalArrangement = spacedBy(15.dp)) {
+      LazyColumn(
+          modifier = Modifier.padding(paddingValues).testTag("Scrollable itineraries"),
+          verticalArrangement = spacedBy(15.dp)
+      ) {
           this.items(itineraries) { itinerary ->
-            val uid = FirebaseAuth.getInstance().uid ?: DEFAULT_USER_UID
-            val isLikedInitially = profileViewModel.checkIfItineraryIsLiked(uid, itinerary.uid)
-            val onLikeButtonClick = { it: Itinerary, isLiked: Boolean ->
-              if (isLiked) {
-                mapViewModel.decrementItineraryLikes(it)
-                profileViewModel.removeLikedItinerary(uid, it.uid)
-              } else {
-                mapViewModel.incrementItineraryLikes(it)
-                profileViewModel.addLikedItinerary(uid, it.uid)
+              val uid = FirebaseAuth.getInstance().uid ?: DEFAULT_USER_UID
+              val isLikedInitially = profileViewModel.checkIfItineraryIsLiked(uid, itinerary.uid)
+              val onLikeButtonClick = { it: Itinerary, isLiked: Boolean ->
+                  if (isLiked) {
+                      mapViewModel.decrementItineraryLikes(it)
+                      profileViewModel.removeLikedItinerary(uid, it.uid)
+                  } else {
+                      mapViewModel.incrementItineraryLikes(it)
+                      profileViewModel.addLikedItinerary(uid, it.uid)
+                  }
               }
-            }
-            val onBannerClick = {}
-            ItineraryBanner(
-                itinerary = itinerary,
-                onLikeButtonClick = onLikeButtonClick,
-                onBannerClick = onBannerClick,
-                isLikedInitially = isLikedInitially)
+              val navigationActions = NavigationActions(navController)
+              val onBannerClick = { it: Itinerary ->
+                  mapViewModel.setFocusedItinerary(it)
+                  navigationActions.navigateTo(Destination.TopLevelDestination.Map)
+              }
+              ItineraryBanner(
+                  itinerary = itinerary,
+                  onLikeButtonClick = onLikeButtonClick,
+                  onBannerClick = onBannerClick,
+                  isLikedInitially = isLikedInitially
+              )
           }
-        }
   }
 }
 
