@@ -58,14 +58,16 @@ import com.google.firebase.auth.FirebaseAuth
 
 const val PROFILE_SCREEN_TEST_TAG: String = "profile_screen"
 
+// Opt-in annotation for experimental Material 3 API usage.
 @OptIn(ExperimentalMaterial3Api::class)
+
+// Declare a composable function for the profile screen.
 @Composable
 fun ProfileScreen(
     mapViewModel: MapViewModel,
     profileViewModel: ProfileViewModel,
     imageRepository: ImageRepository
 ) {
-  // val currentUid = FirebaseAuth.getInstance().currentUser!!.uid
   val currentUid = FirebaseAuth.getInstance().currentUser?.uid ?: DEFAULT_USER_UID
 
   val profile by profileViewModel.getProfile(currentUid).collectAsState(initial = null)
@@ -75,13 +77,13 @@ fun ProfileScreen(
 
   if (profile != null) {
     Scaffold(
-        /*Top bar composable*/
         topBar = {
           TopAppBar(
               title = { Text("Profile") },
               actions = {
                 Row {
-                  FloatingActionButton(onClick = { /*Go to Edit Profile Screen*/}) {
+                  // Floating action button to navigate to the Edit Profile Screen.
+                  FloatingActionButton(onClick = { /* Go to Edit Profile Screen */}) {
                     Image(
                         painter = painterResource(id = R.drawable.settings_icon),
                         contentDescription = "Edit Profile",
@@ -89,6 +91,7 @@ fun ProfileScreen(
                   }
                 }
               },
+              // Define color scheme for the top app bar using MaterialTheme.
               colors =
                   TopAppBarDefaults.topAppBarColors(
                       containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -99,14 +102,21 @@ fun ProfileScreen(
         },
         modifier = Modifier.fillMaxSize(),
     ) { innerPadding ->
+      // Box container to manage padding and alignment of the profile content.
       Box(
           modifier = Modifier.padding(innerPadding).fillMaxSize(),
           contentAlignment = Alignment.TopCenter) {
+            // Column to layout profile details vertically and centered.
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
+              // Display the user's profile picture.
               ProfilePicture(profileViewModel, profile!!, imageRepository)
+              // Display the user's username with top padding.
               Username(profile!!, modifier = Modifier.padding(100.dp))
+              // Display the user's "Wander Score".
               WanderScore(profile!!)
+              // Display badges the user has earned.
               WanderBadges()
+              // List scrollable itineraries associated with the user.
               ItinerariesListScrollable(
                   itineraries = userItineraries,
                   mapViewModel = mapViewModel,
@@ -233,6 +243,7 @@ fun ItineraryCard() {
   }
 }
 
+// Composable function for displaying a dropdown menu for changing the profile picture.
 @Composable
 fun ProfilePictureChangeDropdownMenu(
     expanded: Boolean,
@@ -244,17 +255,29 @@ fun ProfilePictureChangeDropdownMenu(
     properties: PopupProperties = PopupProperties(focusable = true),
     content: @Composable ColumnScope.() -> Unit
 ) {
-  DropdownMenu(expanded = expanded, onDismissRequest = onDismissRequest) {
-    DropdownMenuItem(
-        text = { Text("SEARCH PHOTO") },
-        onClick = {
-          Intent(Intent.ACTION_GET_CONTENT).also {
-            it.type = "image/*"
-            imageRepository.launchActivity(it)
-          }
-        })
-    DropdownMenuItem(
-        text = { Text("UPLOAD PHOTO") },
-        onClick = { imageRepository.uploadImageToStorage("profilePicture/${profile.userUid}") })
-  }
+
+  DropdownMenu(
+      expanded = expanded,
+      onDismissRequest = onDismissRequest,
+      offset = offset,
+      properties = properties,
+      modifier = modifier) {
+        // Dropdown menu item for searching and selecting a photo from the device.
+        DropdownMenuItem(
+            text = { Text("SEARCH PHOTO") },
+            onClick = {
+              // Intent for selecting an image from the device storage.
+              Intent(Intent.ACTION_GET_CONTENT).also {
+                it.type = "image/*" // Set type to any image format.
+                imageRepository.launchActivity(it) // Launch activity to select an image.
+              }
+            })
+
+        DropdownMenuItem(
+            text = { Text("UPLOAD PHOTO") },
+            onClick = {
+              // Call to upload image to storage with a specific path.
+              imageRepository.uploadImageToStorage("profilePicture/${profile.userUid}")
+            })
+      }
 }
