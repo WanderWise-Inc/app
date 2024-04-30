@@ -1,59 +1,103 @@
 package com.github.wanderwise_inc.app.model.location
 
 import org.junit.Assert.*
+
 import org.junit.Test
+import java.io.InvalidObjectException
 
 class ItineraryTest {
 
-  @Test fun toMap() {}
+    private val itinerary = Itinerary(
+        uid = "1",
+        userUid = "user123",
+        locations = listOf(Location(10.0, 20.0), Location(30.0, 40.0)),
+        title = "Vacation Plan",
+        tags = listOf(ItineraryTags.NATURE),
+        description = "Summer vacation",
+        visible = true
+    )
 
-  @Test fun toBuilder() {}
+    @Test
+    fun toMap() {
+        val map = itinerary.toMap()
 
-  @Test fun scoreFromPreferences() {}
+        assertEquals("1", map[ItineraryLabels.UID])
+        assertEquals("Summer vacation", map[ItineraryLabels.DESCRIPTION])
+    }
 
-  @Test fun computeCenterOfGravity() {}
+    @Test
+    fun testBuilder() {
+        val builder = itinerary.toBuilder()
 
-  @Test fun getUid() {}
+        builder.uid = "2"
+        builder.title = "Changed Title"
+        builder.addTag(ItineraryTags.RELAXATION)
+        builder.locations.add(Location(15.0, -10.0))
+        builder.description("Modified Description")
+        builder.visible(false)
 
-  @Test fun setUid() {}
+        val newItinerary = builder.build()
 
-  @Test fun getUserUid() {}
+        assertEquals("1", itinerary.uid)
+        assertEquals("Vacation Plan", itinerary.title)
+        assertEquals(1, itinerary.tags.size) // Original had 2 tags
+        assertEquals(2, itinerary.locations.size) // Original had 1 location
+        assertEquals("Summer vacation", itinerary.description)
+        assertTrue(itinerary.visible)
 
-  @Test fun getLocations() {}
+        assertEquals("2", newItinerary.uid)
+        assertEquals("Changed Title", newItinerary.title)
+        assertEquals(2, newItinerary.tags.size) // New one should have 3 tags
+        assertEquals(3, newItinerary.locations.size) // New one should have 2 locations
+        assertEquals("Modified Description", newItinerary.description)
+        assertFalse(newItinerary.visible)
 
-  @Test fun getTitle() {}
+        assertThrows(InvalidObjectException::class.java) {
+            builder.addTag(ItineraryTags.ROMANCE).addTag(ItineraryTags.WILDLIFE)
+        }
 
-  @Test fun getTags() {}
+        builder.title = ""
 
-  @Test fun setTags() {}
+        assertThrows(IllegalArgumentException::class.java) {
+            builder.build()
+        }
 
-  @Test fun getDescription() {}
+        builder.title = "Not Blank"
+        builder.locations.clear()
 
-  @Test fun getVisible() {}
+        assertThrows(IllegalArgumentException::class.java) {
+            builder.build()
+        }
+    }
 
-  @Test fun getNumLikes() {}
+    @Test
+    fun scoreFromPreferences() {
+        val preferences = ItineraryPreferences(listOf(ItineraryTags.NATURE, ItineraryTags.ACTIVE))
+        val score = itinerary.scoreFromPreferences(preferences)
 
-  @Test operator fun component1() {}
+        assertEquals(10.0, score, 0.01)
+    }
 
-  @Test operator fun component2() {}
+    @Test
+    fun computeCenterOfGravity() {
+        val center = itinerary.computeCenterOfGravity()
 
-  @Test operator fun component3() {}
+        assertEquals(20.0, center.lat, 0.01)
+        assertEquals(30.0, center.long, 0.01)
+    }
 
-  @Test operator fun component4() {}
+    @Test
+    fun testNoArgumentConstructor() {
+        // Create an itinerary using the no-argument constructor
+        val emptyItinerary = Itinerary()
 
-  @Test operator fun component5() {}
-
-  @Test operator fun component6() {}
-
-  @Test operator fun component7() {}
-
-  @Test operator fun component8() {}
-
-  @Test fun copy() {}
-
-  @Test fun testToString() {}
-
-  @Test fun testHashCode() {}
-
-  @Test fun testEquals() {}
+        // Assert that all fields are initialized to their default values
+        assertEquals("", emptyItinerary.uid)
+        assertEquals("", emptyItinerary.userUid)
+        assertTrue(emptyItinerary.locations.isEmpty())
+        assertEquals("", emptyItinerary.title)
+        assertTrue(emptyItinerary.tags.isEmpty())
+        assertNull(emptyItinerary.description)
+        assertFalse(emptyItinerary.visible)
+    }
 }
