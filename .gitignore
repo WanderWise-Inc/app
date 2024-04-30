@@ -13,3 +13,4 @@ app/local.properties
 app/src/main/java/com/github/wanderwise_inc/app/viewmodel/LoginViewModel.kt
 app/external/debug.keystore
 gradle/wrapper/gradle-wrapper.properties
+app/src/main/AndroidManifest.xml

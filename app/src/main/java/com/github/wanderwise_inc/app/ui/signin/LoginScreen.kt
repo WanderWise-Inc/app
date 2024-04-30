@@ -1,6 +1,5 @@
 package com.github.wanderwise_inc.app.ui.signin
 
-import android.content.Context
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.BorderStroke
@@ -41,11 +40,11 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(
-    context: Context,
     profileViewModel: ProfileViewModel,
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
+  Log.d("LoginScreen", "LoginScreen")
   Box(modifier = modifier.requiredWidth(width = 1280.dp).requiredHeight(height = 1100.dp)) {
     Image(
         painter = painterResource(id = R.drawable.underground_2725336_1280),
