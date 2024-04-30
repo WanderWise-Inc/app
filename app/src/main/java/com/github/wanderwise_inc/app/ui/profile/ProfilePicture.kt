@@ -15,26 +15,23 @@ import com.github.wanderwise_inc.app.model.profile.Profile
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import kotlinx.coroutines.flow.flow
 
-/**
- * @brief profile picture composable and coroutine friendly uwu rawr
- */
+/** @brief profile picture composable and coroutine friendly uwu rawr */
 @Composable
 fun ProfilePicture(profile: Profile?, profileViewModel: ProfileViewModel, modifier: Modifier) {
   // calling `remember` limits recomposition to `Profile` changes
-  val defaultProfilePictureFlow = remember(profile) {
-    profileViewModel.getDefaultProfilePicture()
-  }
-  val profilePictureFlow = remember(profile) {
-    if (profile != null) profileViewModel.getProfilePicture(profile) else flow { emit(null) }
-  }
+  val defaultProfilePictureFlow = remember(profile) { profileViewModel.getDefaultProfilePicture() }
+  val profilePictureFlow =
+      remember(profile) {
+        if (profile != null) profileViewModel.getProfilePicture(profile) else flow { emit(null) }
+      }
 
   val defaultProfilePicture by defaultProfilePictureFlow.collectAsState(initial = null)
   val profilePicture by profilePictureFlow.collectAsState(initial = null)
 
   val painter: Painter =
-    if (profilePicture != null) BitmapPainter(profilePicture!!.asImageBitmap())
-    else if (defaultProfilePicture != null) BitmapPainter(defaultProfilePicture!!.asImageBitmap())
-    else painterResource(id = R.drawable.profile_icon)
+      if (profilePicture != null) BitmapPainter(profilePicture!!.asImageBitmap())
+      else if (defaultProfilePicture != null) BitmapPainter(defaultProfilePicture!!.asImageBitmap())
+      else painterResource(id = R.drawable.profile_icon)
 
   Image(painter = painter, contentDescription = "profile_icon", modifier = modifier)
 }

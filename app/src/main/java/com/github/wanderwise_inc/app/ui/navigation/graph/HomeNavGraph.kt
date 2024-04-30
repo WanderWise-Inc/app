@@ -45,22 +45,23 @@ fun HomeNavGraph(
       // modifier = Modifier.padding(innerPadding)
   ) {
     composable(route = TopLevelDestination.Overview.route) {
-        bottomNavigationViewModel.setSelected(NavigationItem.OVERVIEW.ordinal)
+      bottomNavigationViewModel.setSelected(NavigationItem.OVERVIEW.ordinal)
       OverviewScreen(mapViewModel, profileViewModel, navController)
     }
     composable(route = TopLevelDestination.Liked.route) {
-        bottomNavigationViewModel.setSelected(NavigationItem.LIKED.ordinal)
+      bottomNavigationViewModel.setSelected(NavigationItem.LIKED.ordinal)
       LikedScreen(mapViewModel, profileViewModel, navController)
     }
     composable(route = TopLevelDestination.Search.route) {
-        bottomNavigationViewModel.setSelected(NavigationItem.CREATE.ordinal)
-        SearchScreen(mapViewModel) }
+      bottomNavigationViewModel.setSelected(NavigationItem.CREATE.ordinal)
+      SearchScreen(mapViewModel)
+    }
     composable(route = TopLevelDestination.Map.route) {
-        bottomNavigationViewModel.setSelected(NavigationItem.MAP.ordinal)
+      bottomNavigationViewModel.setSelected(NavigationItem.MAP.ordinal)
       PreviewItineraryScreen(itinerary!!, mapViewModel, profileViewModel)
     }
     composable(route = TopLevelDestination.Profile.route) {
-        bottomNavigationViewModel.setSelected(NavigationItem.PROFILE.ordinal)
+      bottomNavigationViewModel.setSelected(NavigationItem.PROFILE.ordinal)
       ProfileScreen(mapViewModel, profileViewModel, imageRepository, navController)
     }
   }

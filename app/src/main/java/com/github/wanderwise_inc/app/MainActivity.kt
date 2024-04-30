@@ -60,7 +60,7 @@ class MainActivity : ComponentActivity() {
 
     mapViewModel = MapViewModel(itineraryRepository, directionsRepository, userLocationClient)
     profileViewModel = ProfileViewModel(profileRepository, imageRepository)
-      bottomNavigationViewModel = BottomNavigationViewModel()
+    bottomNavigationViewModel = BottomNavigationViewModel()
 
     setContent {
       WanderWiseTheme {
