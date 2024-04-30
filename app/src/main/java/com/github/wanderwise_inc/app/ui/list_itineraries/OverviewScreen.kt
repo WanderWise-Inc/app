@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -22,12 +23,23 @@ import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 
 @Composable
 fun OverviewScreen(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel) {
-  DisplayOverviewItineraries(mapViewModel = mapViewModel, profileViewModel = profileViewModel)
+  val sliderPositionPriceState = remember { mutableStateOf(0f..100f) }
+  val sliderPositionTimeState = remember { mutableStateOf(0f..24f) }
+  DisplayOverviewItineraries(
+      mapViewModel = mapViewModel,
+      profileViewModel = profileViewModel,
+      sliderPositionPriceState = sliderPositionPriceState,
+      sliderPositionTimeState = sliderPositionTimeState)
 }
 
 /** Displays global itineraries filtered on some predicates */
 @Composable
-fun DisplayOverviewItineraries(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel) {
+fun DisplayOverviewItineraries(
+    mapViewModel: MapViewModel,
+    profileViewModel: ProfileViewModel,
+    sliderPositionPriceState: MutableState<ClosedFloatingPointRange<Float>>,
+    sliderPositionTimeState: MutableState<ClosedFloatingPointRange<Float>>
+) {
 
   /* the categories that can be selected by the user during filtering */
   val categoriesList =
@@ -49,7 +61,11 @@ fun DisplayOverviewItineraries(mapViewModel: MapViewModel, profileViewModel: Pro
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxWidth()) {
-              SearchBar(onSearchChange = { searchQuery = it }, onPriceChange = { priceRange = it })
+              SearchBar(
+                  onSearchChange = { searchQuery = it },
+                  onPriceChange = { priceRange = it },
+                  sliderPositionPriceState = sliderPositionPriceState,
+                  sliderPositionTimeState = sliderPositionTimeState)
               CategorySelector(
                   selectedIndex = selectedIndex,
                   categoriesList = categoriesList,
@@ -64,6 +80,16 @@ fun DisplayOverviewItineraries(mapViewModel: MapViewModel, profileViewModel: Pro
                   searchQuery.isBlank() ||
                       itinerary.title.contains(searchQuery, ignoreCase = true) ||
                       itinerary.description?.contains(searchQuery, ignoreCase = true) ?: false
+                }
+                .filter { itinerary ->
+                  val price = itinerary.price.toFloat()
+                  price in sliderPositionPriceState.value.start..sliderPositionPriceState.value.endInclusive
+                }
+                .filter { itinerary ->
+                  val time = itinerary.time.toFloat()
+                  time in
+                      sliderPositionTimeState.value.start..sliderPositionTimeState.value
+                              .endInclusive
                 }
         ItinerariesListScrollable(
             itineraries = filtered,

@@ -24,6 +24,7 @@ import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -54,6 +55,8 @@ fun ItineraryBanner(
 
   var isLiked by remember { mutableStateOf(isLikedInitially) }
   var numLikes by remember { mutableIntStateOf(itinerary.numLikes) }
+  var prices by remember { mutableFloatStateOf(itinerary.price) }
+  var times by remember { mutableIntStateOf(itinerary.time) }
 
   ElevatedCard(
       colors =
@@ -104,14 +107,14 @@ fun ItineraryBanner(
                           modifier = Modifier.padding(4.dp, 0.dp))
 
                       Text(
-                          text = "Estimated time : - hours",
+                          text = "Estimated time: $times hours",
                           color = MaterialTheme.colorScheme.secondary,
                           fontFamily = FontFamily.Monospace,
                           fontSize = 12.sp,
                           modifier = Modifier.padding(4.dp, 0.dp))
 
                       Text(
-                          text = "Average Expense : -",
+                          text = "Average Expense: $prices",
                           color = MaterialTheme.colorScheme.secondary,
                           fontFamily = FontFamily.Monospace,
                           fontSize = 12.sp,
