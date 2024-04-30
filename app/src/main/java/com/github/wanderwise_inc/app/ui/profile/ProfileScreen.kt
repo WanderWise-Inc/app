@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.Scaffold
 import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -73,7 +74,7 @@ fun ProfileScreen(
       mapViewModel.getUserItineraries(currentUid).collectAsState(initial = emptyList())
 
   if (profile != null) {
-    androidx.compose.material.Scaffold(
+    Scaffold(
         /*Top bar composable*/
         topBar = {
           TopAppBar(
