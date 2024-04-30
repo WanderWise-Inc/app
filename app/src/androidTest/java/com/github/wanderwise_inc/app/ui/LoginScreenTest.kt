@@ -1,5 +1,8 @@
 package com.github.wanderwise_inc.app.ui
 
+import android.content.Intent
+import android.util.Log
+import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -10,6 +13,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
+import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
 import com.github.wanderwise_inc.app.data.SignInRepositoryImpl
 import com.github.wanderwise_inc.app.model.profile.Profile
 import com.github.wanderwise_inc.app.ui.navigation.graph.Graph
@@ -43,6 +47,7 @@ class SignInButtonTest {
   @MockK private lateinit var profileViewModel: ProfileViewModel
   @MockK private lateinit var navController: NavHostController
   @MockK private lateinit var signInRepositoryImpl: SignInRepositoryImpl
+  @MockK private lateinit var signInLauncher : ManagedActivityResultLauncher<Intent, FirebaseAuthUIAuthenticationResult>
   private var route = Graph.AUTHENTICATION
 
   @Before
@@ -57,7 +62,8 @@ class SignInButtonTest {
     val p = Profile("", "Test", "0", "Bio", null)
 
     coEvery { profileViewModel.getProfile(any()) } returns flow { emit(p) }
-    coEvery { signInRepositoryImpl.signIn(any(), any(), any(), any(), any()) } answers {route = Graph.HOME}
+    every { navController.navigate(Graph.HOME) } answers { route = Graph.HOME }
+    //coEvery { signInRepositoryImpl.signIn(any(), any(), any(), any(), any()) } answers {route = Graph.HOME}
     // Perform actions and assert UI state using Espresso and MockK
     composeTestRule.setContent {
       LoginScreen(profileViewModel = profileViewModel, navController = navController)
@@ -73,16 +79,38 @@ class SignInButtonTest {
 
     composeTestRule.onNodeWithText("Sign-In with Google").performClick()
 
-    assertEquals(Graph.HOME, route)
-
     runBlocking {
-      delay(2000)
+      delay(10000)
     }
+
+    assertEquals(Graph.HOME, route)
   }
 
-  @Test fun testLoginScreenWhenUserNotPresentInDBShouldCallSetProfileAndNavigate() {}
-}
+  @Test fun testLoginScreenWhenUserNotPresentInDBShouldCallSetProfileAndNavigate() {
+    coEvery { profileViewModel.getProfile(any()) } returns flow { emit(null) }
+    every { navController.navigate(Graph.HOME) } answers { route = Graph.HOME }
+    coEvery { profileViewModel.setProfile(any()) } answers {route = Graph.HOME}
 
-fun NavController.assertCurrentRouteName(expectedRouteName: String) {
-  Assert.assertEquals(expectedRouteName, currentBackStackEntry?.destination?.route)
+    composeTestRule.setContent {
+      LoginScreen(profileViewModel = profileViewModel, navController = navController)
+    }
+
+    composeTestRule.onNodeWithText("WanderWise").assertExists()
+    composeTestRule.onNodeWithText("WanderWise").assertIsDisplayed()
+
+    composeTestRule.onNodeWithText("Sign-In with Google").assertExists()
+    composeTestRule.onNodeWithText("Sign-In with Google").assertIsDisplayed()
+
+    runBlocking { delay(2000) }
+
+    runBlocking { delay(2000) }
+
+    composeTestRule.onNodeWithText("Sign-In with Google").performClick()
+
+    runBlocking {
+      delay(10000)
+    }
+
+    assertEquals(Graph.HOME, route)
+  }
 }
