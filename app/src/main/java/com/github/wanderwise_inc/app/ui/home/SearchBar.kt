@@ -29,7 +29,7 @@ import com.github.wanderwise_inc.app.R
 fun SearchBar(
     onSearchChange: (String) -> Unit,
     onPriceChange: (Float) -> Unit,
-    sliderPositionState: MutableState<ClosedFloatingPointRange<Float>>,
+    sliderPositionPriceState: MutableState<ClosedFloatingPointRange<Float>>,
     sliderPositionTimeState: MutableState<ClosedFloatingPointRange<Float>>
 ) {
   var query by remember { mutableStateOf("") }
@@ -67,9 +67,9 @@ fun SearchBar(
       modifier = Modifier.fillMaxWidth()) {
         Text("How much do I want to spend ?")
         RangeSlider(
-            value = sliderPositionState.value,
+            value = sliderPositionPriceState.value,
             steps = 50,
-            onValueChange = { range -> sliderPositionState.value = range },
+            onValueChange = { range -> sliderPositionPriceState.value = range },
             valueRange = 0f..100f, // Adjust this range according to your needs
             onValueChangeFinished = {
               // launch something
@@ -79,8 +79,8 @@ fun SearchBar(
             text =
                 String.format(
                     "%.2f - %.2f",
-                    sliderPositionState.value.start,
-                    sliderPositionState.value.endInclusive))
+                    sliderPositionPriceState.value.start,
+                    sliderPositionPriceState.value.endInclusive))
         // sliderPosition.contains()
 
         Text("How Long do I want to wander ?")

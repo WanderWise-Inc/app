@@ -111,14 +111,14 @@ fun ItineraryBanner(
                           modifier = Modifier.padding(4.dp, 0.dp))
 
                       Text(
-                          text = "Estimated time : $times hours",
+                          text = "Estimated time: $times hours",
                           color = MaterialTheme.colorScheme.secondary,
                           fontFamily = FontFamily.Monospace,
                           fontSize = 12.sp,
                           modifier = Modifier.padding(4.dp, 0.dp))
 
                       Text(
-                          text = "Average Expense : $prices",
+                          text = "Average Expense: $prices",
                           color = MaterialTheme.colorScheme.secondary,
                           fontFamily = FontFamily.Monospace,
                           fontSize = 12.sp,

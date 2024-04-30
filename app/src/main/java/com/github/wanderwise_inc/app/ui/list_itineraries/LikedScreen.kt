@@ -36,13 +36,13 @@ object LikedScreenTestTags {
 
 @Composable
 fun LikedScreen(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel) {
-  val sliderPositionState = remember { mutableStateOf(0f..100f) }
+  val sliderPositionPriceState = remember { mutableStateOf(0f..100f) }
   val sliderPositionTimeState = remember { mutableStateOf(0f..24f) }
   DisplayLikedItineraries(
       mapViewModel = mapViewModel,
       profileViewModel = profileViewModel,
-      sliderPositionState = sliderPositionState,
-      sliderPositionTimeState = sliderPositionState)
+      sliderPositionPriceState = sliderPositionPriceState,
+      sliderPositionTimeState = sliderPositionTimeState)
 }
 
 /** Displays itineraries liked by the user */
@@ -50,7 +50,7 @@ fun LikedScreen(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel) 
 fun DisplayLikedItineraries(
     mapViewModel: MapViewModel,
     profileViewModel: ProfileViewModel,
-    sliderPositionState: MutableState<ClosedFloatingPointRange<Float>>,
+    sliderPositionPriceState: MutableState<ClosedFloatingPointRange<Float>>,
     sliderPositionTimeState: MutableState<ClosedFloatingPointRange<Float>>
 ) {
 
@@ -80,7 +80,7 @@ fun DisplayLikedItineraries(
               SearchBar(
                   onSearchChange = { searchQuery = it },
                   onPriceChange = { priceRange = it },
-                  sliderPositionState = sliderPositionState,
+                  sliderPositionPriceState = sliderPositionPriceState,
                   sliderPositionTimeState = sliderPositionTimeState)
 
               CategorySelector(
@@ -100,7 +100,7 @@ fun DisplayLikedItineraries(
                 }
                 .filter { itinerary ->
                   val price = itinerary.price.toFloat()
-                  price in sliderPositionState.value.start..sliderPositionState.value.endInclusive
+                  price in sliderPositionPriceState.value.start..sliderPositionPriceState.value.endInclusive
                 }
                 .filter { itinerary ->
                   val time = itinerary.time.toFloat()
