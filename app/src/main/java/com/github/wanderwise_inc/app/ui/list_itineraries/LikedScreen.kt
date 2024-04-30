@@ -70,7 +70,7 @@ fun DisplayLikedItineraries(
           SearchCategory(ItineraryTags.FOODIE, R.drawable.drinks_icon, "Drinks"),
       )
 
-  val uid = firebaseAuth.uid ?: DEFAULT_USER_UID
+  val uid = firebaseAuth.currentUser?.uid ?: DEFAULT_USER_UID
   var selectedIndex by remember { mutableIntStateOf(0) }
   var searchQuery by remember { mutableStateOf("") }
   var priceRange by remember { mutableStateOf(0f) }

@@ -53,6 +53,7 @@ import androidx.compose.ui.unit.sp
 import com.github.wanderwise_inc.app.R
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.profile.Profile
+import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -67,24 +68,6 @@ import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
 import kotlinx.coroutines.flow.flow
-
-/* helps us avoid typos / inconsistencies between the test files and this file */
-object PreviewItineraryScreenTestTags {
-  const val MAIN_SCREEN = "preview_itinerary_screen"
-  const val GOOGLE_MAPS = "google_maps"
-  const val MAXIMIZED_BANNER = "maximized_banner"
-  const val MINIMIZED_BANNER = "minimized_banner"
-  const val PROFILE_PIC = "profile_picture"
-  const val CENTER_CAMERA_BUTTON = "center_camera_button"
-  const val BANNER_BUTTON = "banner_button"
-  const val ITINERARY_TITLE = "itinerary_title"
-  const val ITINERARY_DESCRIPTION = "itinerary_description"
-  const val USER_LOCATION = "user_location"
-}
-
-object MapScreenTestTag {
-  const val SCREEN = "Overview Screen"
-}
 
 /** @brief previews an itinerary */
 @Composable
@@ -104,7 +87,7 @@ fun PreviewItineraryScreen(
 
   Scaffold(
       bottomBar = { PreviewItineraryBanner(itinerary, mapViewModel, profileViewModel) },
-      modifier = Modifier.testTag(PreviewItineraryScreenTestTags.MAIN_SCREEN),
+      modifier = Modifier.testTag(TestTags.MAP_PREVIEW_ITINERARY_SCREEN),
       floatingActionButton = {
         CenterButton(cameraPositionState = cameraPositionState, currentLocation = userLocation)
       },
@@ -113,11 +96,11 @@ fun PreviewItineraryScreen(
             modifier =
                 Modifier.fillMaxSize()
                     .padding(paddingValues)
-                    .testTag(PreviewItineraryScreenTestTags.GOOGLE_MAPS),
+                    .testTag(TestTags.MAP_GOOGLE_MAPS),
             cameraPositionState = cameraPositionState) {
               userLocation?.let {
                 Marker(
-                    tag = PreviewItineraryScreenTestTags.USER_LOCATION,
+                    tag = TestTags.MAP_USER_LOCATION,
                     state = MarkerState(position = LatLng(it.latitude, it.longitude)),
                     icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
               }
@@ -175,7 +158,7 @@ private fun PreviewItineraryBannerMaximized(
           CardDefaults.cardColors(
               containerColor = MaterialTheme.colorScheme.primaryContainer,
           ),
-      modifier = Modifier.testTag(PreviewItineraryScreenTestTags.MAXIMIZED_BANNER)) {
+      modifier = Modifier.testTag(TestTags.MAP_MAXIMIZED_BANNER)) {
         Column(
             modifier =
                 Modifier.background(MaterialTheme.colorScheme.primaryContainer)
@@ -192,7 +175,7 @@ private fun PreviewItineraryBannerMaximized(
                 contentDescription = "minimize_button",
                 modifier =
                     Modifier.clickable { onMinimizedClick() }
-                        .testTag(PreviewItineraryScreenTestTags.BANNER_BUTTON))
+                        .testTag(TestTags.MAP_BANNER_BUTTON))
             // Itinerary Title
             Text(
                 text = itinerary.title,
@@ -201,7 +184,7 @@ private fun PreviewItineraryBannerMaximized(
                 fontSize = titleFontSize,
                 fontWeight = FontWeight.Normal,
                 modifier =
-                    Modifier.padding(2.dp).testTag(PreviewItineraryScreenTestTags.ITINERARY_TITLE),
+                    Modifier.padding(2.dp).testTag(TestTags.MAP_ITINERARY_TITLE),
                 textAlign = TextAlign.Center)
           }
 
@@ -330,7 +313,7 @@ private fun PreviewItineraryBannerMaximized(
                 fontWeight = FontWeight.Normal,
                 modifier =
                     Modifier.padding(2.dp)
-                        .testTag(PreviewItineraryScreenTestTags.ITINERARY_DESCRIPTION),
+                        .testTag(TestTags.MAP_ITINERARY_DESCRIPTION),
                 textAlign = TextAlign.Center)
           }
         }
@@ -342,7 +325,7 @@ fun ProfilePicture(profile: Profile?, profileViewModel: ProfileViewModel) {
   val imageModifier =
       Modifier.clip(RoundedCornerShape(5.dp))
           .size(50.dp)
-          .testTag(PreviewItineraryScreenTestTags.PROFILE_PIC)
+          .testTag(TestTags.MAP_PROFILE_PIC)
 
   val defaultProfilePicture by
       profileViewModel.getDefaultProfilePicture().collectAsState(initial = null)
@@ -369,7 +352,7 @@ private fun PreviewItineraryBannerMinimized(onMinimizedClick: () -> Unit, itiner
           CardDefaults.cardColors(
               containerColor = MaterialTheme.colorScheme.primaryContainer,
           ),
-      modifier = Modifier.testTag(PreviewItineraryScreenTestTags.MINIMIZED_BANNER)) {
+      modifier = Modifier.testTag(TestTags.MAP_MINIMIZED_BANNER)) {
         Column(
             modifier =
                 Modifier.background(MaterialTheme.colorScheme.primaryContainer)
@@ -385,7 +368,7 @@ private fun PreviewItineraryBannerMinimized(onMinimizedClick: () -> Unit, itiner
                 contentDescription = "minimize_button",
                 modifier =
                     Modifier.clickable { onMinimizedClick() }
-                        .testTag(PreviewItineraryScreenTestTags.BANNER_BUTTON))
+                        .testTag(TestTags.MAP_BANNER_BUTTON))
             // Itinerary Title
             Text(
                 text = itinerary.title,
@@ -394,7 +377,7 @@ private fun PreviewItineraryBannerMinimized(onMinimizedClick: () -> Unit, itiner
                 fontSize = titleFontSize,
                 fontWeight = FontWeight.Normal,
                 modifier =
-                    Modifier.padding(2.dp).testTag(PreviewItineraryScreenTestTags.ITINERARY_TITLE),
+                    Modifier.padding(2.dp).testTag(TestTags.MAP_ITINERARY_TITLE),
                 textAlign = TextAlign.Center)
           }
         }
@@ -410,7 +393,7 @@ fun CenterButton(cameraPositionState: CameraPositionState, currentLocation: Loca
           cameraPositionState.move(CameraUpdateFactory.newLatLngZoom(latLng, 13f))
         }
       },
-      modifier = Modifier.testTag(PreviewItineraryScreenTestTags.CENTER_CAMERA_BUTTON),
+      modifier = Modifier.testTag(TestTags.MAP_CENTER_CAMERA_BUTTON),
       containerColor = MaterialTheme.colorScheme.surfaceContainer) {
         Icon(
             imageVector = Icons.Default.Place,

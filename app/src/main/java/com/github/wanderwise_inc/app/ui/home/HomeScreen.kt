@@ -35,23 +35,6 @@ fun HomeScreen(
 ) {
   val navigationActions = NavigationActions(navController)
   Scaffold(topBar = {}, bottomBar = { BottomNavigationMenu(navigationActions) }) { innerPadding ->
-    @Composable
-    fun ScrollableList(viewModel: MapViewModel) {
-      // Gets all itineraries
-      val itineraries by viewModel.getAllPublicItineraries().collectAsState(initial = listOf())
-      // Scrollable Column that only composes items on Screen
-      LazyColumn(
-          modifier =
-              Modifier.fillMaxSize()
-                  .background(MaterialTheme.colorScheme.background)
-                  .padding(16.dp, 8.dp),
-          verticalArrangement = Arrangement.spacedBy(15.dp),
-      ) {
-        items(itineraries, key = { it }) { itinerary ->
-          ItineraryBanner(itinerary, onBannerClick = {}, onLikeButtonClick = { _, _ -> })
-        }
-      }
-    }
     Box(modifier = Modifier.padding(innerPadding)) {
       HomeNavGraph(navController, mapViewModel, profileViewModel, imageRepository, firebaseAuth)
     }

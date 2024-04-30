@@ -1,6 +1,5 @@
 package com.github.wanderwise_inc.app.ui.navigation
 
-/*
 import android.util.Log
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.assertIsDisplayed
@@ -10,18 +9,22 @@ import androidx.compose.ui.test.performClick
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
-import com.github.wanderwise_inc.app.DemoSetup
 import com.github.wanderwise_inc.app.data.ImageRepository
+import com.github.wanderwise_inc.app.model.location.FakeItinerary
+import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.profile.Profile
-import com.github.wanderwise_inc.app.ui.creation.CreationScreenTestTags
+import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.home.HomeScreen
-import com.github.wanderwise_inc.app.ui.list_itineraries.LikedScreenTestTags
-import com.github.wanderwise_inc.app.ui.list_itineraries.OverviewScreenTestTags
-import com.github.wanderwise_inc.app.ui.map.MapScreenTestTag
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
+import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import io.mockk.MockKAnnotations
+import io.mockk.coEvery
+import io.mockk.every
+import io.mockk.impl.annotations.MockK
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
@@ -29,38 +32,38 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.Mockito.`when`
-import org.mockito.kotlin.whenever
-import org.mockito.kotlin.any
-import org.mockito.kotlin.mock
-import org.mockito.junit.MockitoJUnit
-import org.mockito.junit.MockitoJUnitRunner
-import org.mockito.junit.MockitoRule
-import org.mockito.kotlin.any
-import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class HomeNavigationTest {
   @get:Rule val composeTestRule = createComposeRule()
-  @get:Rule val mockitoRule: MockitoRule = MockitoJUnit.rule()
 
-  @Mock private lateinit var imageRepository: ImageRepository
-  @Mock private lateinit var mapViewModel: MapViewModel
-  @Mock private lateinit var profileViewModel: ProfileViewModel
-  @Mock private lateinit var firebaseAuth: FirebaseAuth
-  @Mock private lateinit var demoSetup: DemoSetup
+  @MockK private lateinit var imageRepository: ImageRepository
+  @MockK private lateinit var mapViewModel: MapViewModel
+  @MockK private lateinit var profileViewModel: ProfileViewModel
+  @MockK private lateinit var firebaseAuth: FirebaseAuth
 
-  private lateinit var navController: NavHostController
+  private lateinit var navController: TestNavHostController
 
   @Before
   fun setupNavHost() {
+    MockKAnnotations.init(this)
+    
     composeTestRule.setContent {
-      `when`(demoSetup.demoSetup(mapViewModel, profileViewModel, firebaseAuth)).then {  }
+      val mockProfile = Profile("", "Test", "0", "Bio", null)
+      val mockItinerary = FakeItinerary.SAN_FRANCISCO
+        
+      every { profileViewModel.getProfile(any()) } returns flow { emit(mockProfile) }
+      coEvery { profileViewModel.setProfile(any()) } returns Unit
+      every { profileViewModel.addLikedItinerary(any(), any()) } returns Unit
+      
+      every { mapViewModel.setItinerary(any()) } returns Unit
+      every { mapViewModel.incrementItineraryLikes(any()) } returns Unit
+      coEvery { mapViewModel.getItineraryFromUids(any()) } returns flow { listOf(mockItinerary) }
+      
+      every {firebaseAuth.currentUser?.uid } returns null
 
-      `when`(firebaseAuth.uid).thenReturn("0")
-
+      FirebaseApp.initializeApp(LocalContext.current)
       navController = TestNavHostController(LocalContext.current)
       navController.navigatorProvider.addNavigator(ComposeNavigator())
       HomeScreen(imageRepository, mapViewModel, profileViewModel, navController, firebaseAuth)
@@ -74,7 +77,7 @@ class HomeNavigationTest {
 
   @Test
   fun verify_StartDestinationIsOverviewScreen() {
-    composeTestRule.onNodeWithTag(OverviewScreenTestTags.SCREEN).assertIsDisplayed()
+    composeTestRule.onNodeWithTag(TestTags.OVERVIEW_SCREEN).assertIsDisplayed()
 
     val route = navController.currentBackStackEntry?.destination?.route
     assertEquals(Route.OVERVIEW, route)
@@ -84,7 +87,7 @@ class HomeNavigationTest {
   fun performClick_OnItineraryButton_NavigatesToLikedScreen() {
     composeTestRule.onNodeWithTag(Route.LIKED).performClick()
 
-    composeTestRule.onNodeWithTag(LikedScreenTestTags.SCREEN).assertIsDisplayed()
+    composeTestRule.onNodeWithTag(TestTags.LIKED_SCREEN).assertIsDisplayed()
 
     val route = navController.currentBackStackEntry?.destination?.route
     assertEquals(Route.LIKED, route)
@@ -94,7 +97,7 @@ class HomeNavigationTest {
   fun performClick_OnItineraryButton_NavigatesToCreationScreen() {
     composeTestRule.onNodeWithTag(Route.CREATION).performClick()
 
-    composeTestRule.onNodeWithTag(CreationScreenTestTags.SCREEN).assertIsDisplayed()
+    composeTestRule.onNodeWithTag(TestTags.CREATION_SCREEN).assertIsDisplayed()
 
     val route = navController.currentBackStackEntry?.destination?.route
     assertEquals(Route.CREATION, route)
@@ -104,7 +107,7 @@ class HomeNavigationTest {
   fun performClick_OnMapButton_NavigatesToMapScreen() {
     composeTestRule.onNodeWithTag(Route.MAP).performClick()
 
-    composeTestRule.onNodeWithTag(MapScreenTestTag.SCREEN).assertIsDisplayed()
+    composeTestRule.onNodeWithTag(TestTags.MAP_PREVIEW_ITINERARY_SCREEN).assertIsDisplayed()
 
     val route = navController.currentBackStackEntry?.destination?.route
     assertEquals(Route.MAP, route)
@@ -114,8 +117,7 @@ class HomeNavigationTest {
   fun performClick_OnProfileButton_NavigatesToProfileScreen() {
     composeTestRule.onNodeWithTag(Route.PROFILE).performClick()
 
-    // TODO I don't know why this test isn't working
-    // composeTestRule.onNodeWithTag(PROFILE_SCREEN_TEST_TAG).assertIsDisplayed()
+    composeTestRule.onNodeWithTag(TestTags.PROFILE_SCREEN).assertIsDisplayed()
 
     val route = navController.currentBackStackEntry?.destination?.route
     assertEquals(Route.PROFILE, route)
@@ -127,7 +129,7 @@ class HomeNavigationTest {
 
     composeTestRule.onNodeWithTag(Route.MAP).performClick()
 
-    composeTestRule.onNodeWithTag(MapScreenTestTag.SCREEN).assertIsDisplayed()
+    composeTestRule.onNodeWithTag(TestTags.MAP_PREVIEW_ITINERARY_SCREEN).assertIsDisplayed()
 
     val route = navController.currentBackStackEntry?.destination?.route
     assertEquals(Route.MAP, route)
@@ -139,7 +141,7 @@ class HomeNavigationTest {
 
     composeTestRule.onNodeWithTag(Route.LIKED).performClick()
 
-    composeTestRule.onNodeWithTag(LikedScreenTestTags.SCREEN).assertIsDisplayed()
+    composeTestRule.onNodeWithTag(TestTags.LIKED_SCREEN).assertIsDisplayed()
 
     val route = navController.currentBackStackEntry?.destination?.route
     assertEquals(Route.LIKED, route)
@@ -151,7 +153,7 @@ class HomeNavigationTest {
 
     composeTestRule.onNodeWithTag(Route.OVERVIEW).performClick()
 
-    composeTestRule.onNodeWithTag(OverviewScreenTestTags.SCREEN).assertIsDisplayed()
+    composeTestRule.onNodeWithTag(TestTags.OVERVIEW_SCREEN).assertIsDisplayed()
 
     val route = navController.currentBackStackEntry?.destination?.route
     assertEquals(Route.OVERVIEW, route)
@@ -174,7 +176,7 @@ class HomeNavigationTest {
     val route = navController.currentBackStackEntry?.destination?.route
     assertEquals(Route.OVERVIEW, route)
 
-    composeTestRule.onNodeWithTag(OverviewScreenTestTags.SCREEN).assertIsDisplayed()
+    composeTestRule.onNodeWithTag(TestTags.OVERVIEW_SCREEN).assertIsDisplayed()
   }
 
   @Test
@@ -197,4 +199,3 @@ class HomeNavigationTest {
     assertEquals(null, route)
   }
 }
-*/

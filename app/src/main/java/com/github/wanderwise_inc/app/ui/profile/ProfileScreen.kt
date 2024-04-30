@@ -57,7 +57,7 @@ fun ProfileScreen(
     firebaseAuth: FirebaseAuth
 ) {
   // val currentUid = FirebaseAuth.getInstance().currentUser!!.uid
-  val currentUid = firebaseAuth.uid ?: DEFAULT_USER_UID
+  val currentUid = firebaseAuth.currentUser?.uid ?: DEFAULT_USER_UID
 
   val profile by profileViewModel.getProfile(currentUid).collectAsState(initial = null)
 
