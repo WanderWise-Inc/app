@@ -22,6 +22,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -35,6 +36,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -42,12 +44,12 @@ import com.github.wanderwise_inc.app.DEFAULT_USER_UID
 import com.github.wanderwise_inc.app.R
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.model.profile.Profile
+import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.list_itineraries.ItinerariesListScrollable
+import com.github.wanderwise_inc.app.ui.list_itineraries.ItineraryListParent
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
-
-const val PROFILE_SCREEN_TEST_TAG: String = "profile_screen"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -66,7 +68,7 @@ fun ProfileScreen(
       mapViewModel.getUserItineraries(currentUid).collectAsState(initial = emptyList())
 
   if (profile != null) {
-    androidx.compose.material.Scaffold(
+    Scaffold(
         /*Top bar composable*/
         topBar = {
           TopAppBar(
@@ -95,7 +97,8 @@ fun ProfileScreen(
                       actionIconContentColor = MaterialTheme.colorScheme.onSecondary),
               modifier = Modifier.padding(bottom = 20.dp))
         },
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize()
+            .testTag(TestTags.PROFILE_SCREEN),
     ) { innerPadding ->
       Box(
           modifier = Modifier.padding(innerPadding).fillMaxSize(),
@@ -119,24 +122,12 @@ fun ProfileScreen(
                   }
               Username(profile!!, modifier = Modifier.padding(100.dp))
               WanderScore(profile!!)
-              if (userItineraries.isEmpty()) {
-                Log.d("EMPTY_ITINERARIES", "there are no created itineraries")
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier.padding(innerPadding).fillMaxWidth().height(100.dp)) {
-                      Text(
-                          text = "You have not created any itineraries yet",
-                          // color = MaterialTheme.colorScheme.
-                          textAlign = TextAlign.Center,
-                          modifier = Modifier.padding(5.dp, 10.dp))
-                    } // PaModifier.padding(5.dp, 10.dp))
-              } else {
-                ItinerariesListScrollable(
-                    itineraries = userItineraries,
-                    mapViewModel = mapViewModel,
-                    profileViewModel = profileViewModel,
-                    paddingValues = PaddingValues(8.dp))
-              }
+              ItinerariesListScrollable(
+                itineraries = userItineraries,
+                mapViewModel = mapViewModel,
+                profileViewModel = profileViewModel,
+                paddingValues = PaddingValues(8.dp),
+                parent = ItineraryListParent.PROFILE)
             }
           }
     }

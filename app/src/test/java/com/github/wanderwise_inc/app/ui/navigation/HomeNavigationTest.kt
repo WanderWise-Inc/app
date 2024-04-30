@@ -1,6 +1,6 @@
-/*
 package com.github.wanderwise_inc.app.ui.navigation
 
+/*
 import android.util.Log
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.assertIsDisplayed

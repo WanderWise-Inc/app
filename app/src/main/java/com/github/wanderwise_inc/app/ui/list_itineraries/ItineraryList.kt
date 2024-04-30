@@ -1,7 +1,11 @@
 package com.github.wanderwise_inc.app.ui.list_itineraries
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -12,6 +16,7 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
@@ -36,31 +41,51 @@ fun ItinerariesListScrollable(
     itineraries: List<Itinerary>,
     mapViewModel: MapViewModel,
     profileViewModel: ProfileViewModel,
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
+    parent: ItineraryListParent
 ) {
-  LazyColumn(
-      modifier = Modifier.padding(paddingValues).testTag("Scrollable itineraries"),
-      verticalArrangement = spacedBy(15.dp)) {
-        this.items(itineraries) { itinerary ->
-          val uid = FirebaseAuth.getInstance().uid ?: DEFAULT_USER_UID
-          val isLikedInitially = profileViewModel.checkIfItineraryIsLiked(uid, itinerary.uid)
-          val onLikeButtonClick = { it: Itinerary, isLiked: Boolean ->
-            if (isLiked) {
-              mapViewModel.decrementItineraryLikes(it)
-              profileViewModel.removeLikedItinerary(uid, it.uid)
-            } else {
-              mapViewModel.incrementItineraryLikes(it)
-              profileViewModel.addLikedItinerary(uid, it.uid)
-            }
-          }
-          val onBannerClick = {}
-          ItineraryBanner(
-              itinerary = itinerary,
-              onLikeButtonClick = onLikeButtonClick,
-              onBannerClick = onBannerClick,
-              isLikedInitially = isLikedInitially)
-        }
+  if (itineraries.isEmpty()){
+      val parentVerb = when(parent) {
+          ItineraryListParent.OVERVIEW -> "searched"
+          ItineraryListParent.LIKED -> "liked"
+          ItineraryListParent.PROFILE -> "created"
       }
+      Box(
+          contentAlignment = Alignment.Center,
+          modifier = Modifier.padding(paddingValues).fillMaxWidth().height(100.dp)) {
+          Text(
+              text = "You have not $parentVerb any itineraries yet",
+              // color = MaterialTheme.colorScheme.
+              textAlign = TextAlign.Center,
+              modifier = Modifier.padding(5.dp, 10.dp))
+      } // PaModifier.padding(5.dp, 10.dp))
+  } else {
+      LazyColumn(
+          modifier = Modifier.padding(paddingValues).testTag("Scrollable itineraries"),
+          verticalArrangement = spacedBy(15.dp)
+      ) {
+          this.items(itineraries) { itinerary ->
+              val uid = FirebaseAuth.getInstance().uid ?: DEFAULT_USER_UID
+              val isLikedInitially = profileViewModel.checkIfItineraryIsLiked(uid, itinerary.uid)
+              val onLikeButtonClick = { it: Itinerary, isLiked: Boolean ->
+                  if (isLiked) {
+                      mapViewModel.decrementItineraryLikes(it)
+                      profileViewModel.removeLikedItinerary(uid, it.uid)
+                  } else {
+                      mapViewModel.incrementItineraryLikes(it)
+                      profileViewModel.addLikedItinerary(uid, it.uid)
+                  }
+              }
+              val onBannerClick = {}
+              ItineraryBanner(
+                  itinerary = itinerary,
+                  onLikeButtonClick = onLikeButtonClick,
+                  onBannerClick = onBannerClick,
+                  isLikedInitially = isLikedInitially
+              )
+          }
+      }
+  }
 }
 
 /** @brief a bar that allows for selecting a category and updating parent state */
@@ -102,4 +127,9 @@ fun CategorySelector(
           })
     }
   }
+}
+
+
+enum class ItineraryListParent{
+    OVERVIEW, LIKED, PROFILE
 }

@@ -15,13 +15,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import com.github.wanderwise_inc.app.R
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
+import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.home.SearchBar
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
-
-object OverviewScreenTestTags {
-  const val SCREEN = "Overview Screen"
-}
 
 @Composable
 fun OverviewScreen(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel) {
@@ -59,7 +56,7 @@ fun DisplayOverviewItineraries(mapViewModel: MapViewModel, profileViewModel: Pro
                   onCategorySelected = { selectedIndex = it })
             }
       },
-      modifier = Modifier.testTag(OverviewScreenTestTags.SCREEN)) { innerPadding ->
+      modifier = Modifier.testTag(TestTags.OVERVIEW_SCREEN)) { innerPadding ->
         val filtered =
             itineraries
                 .filter { itinerary -> itinerary.tags.contains(categoriesList[selectedIndex].tag) }
@@ -72,6 +69,7 @@ fun DisplayOverviewItineraries(mapViewModel: MapViewModel, profileViewModel: Pro
             itineraries = filtered,
             paddingValues = innerPadding,
             mapViewModel = mapViewModel,
-            profileViewModel = profileViewModel)
+            profileViewModel = profileViewModel,
+            parent = ItineraryListParent.OVERVIEW)
       }
 }
