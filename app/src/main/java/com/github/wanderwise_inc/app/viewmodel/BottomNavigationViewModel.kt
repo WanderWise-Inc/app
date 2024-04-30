@@ -23,14 +23,11 @@ class BottomNavigationViewModel {
   //        return selected
   //    }
   private val _selected = MutableLiveData<Int>()
-  private val selected: LiveData<Int> = _selected
+  public val selected: LiveData<Int>
+    get() = _selected
 
   init {
     _selected.value = 0 // Initialize with default value
-  }
-
-  fun getSelected(): MutableLiveData<Int> {
-    return _selected
   }
 
   fun setSelected(index: Int) {

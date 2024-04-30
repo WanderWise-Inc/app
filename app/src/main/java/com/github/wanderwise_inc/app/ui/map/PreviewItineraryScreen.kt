@@ -79,16 +79,12 @@ object PreviewItineraryScreenTestTags {
 
 /** @brief previews an itinerary */
 @Composable
-fun PreviewItineraryScreen(
-    _itinerary: Itinerary,
-    mapViewModel: MapViewModel,
-    profileViewModel: ProfileViewModel
-) {
+fun PreviewItineraryScreen(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel) {
   val userLocation by mapViewModel.getUserLocation().collectAsState(null)
   val itinerary = mapViewModel.getFocusedItinerary()
 
   if (itinerary == null) {
-    nullItinerary()
+    NullItinerary(userLocation)
   } else {
     val cameraPositionState = rememberCameraPositionState {
       position = CameraPosition.fromLatLngZoom(itinerary.computeCenterOfGravity().toLatLng(), 13f)
@@ -402,7 +398,27 @@ fun CenterButton(cameraPositionState: CameraPositionState, currentLocation: Loca
 }
 
 @Composable
-fun nullItinerary() {
+fun NullItinerary(userLocation: Location?) {
   // for now doesn't do anything, would be nice to center on location
-  Text("no itinerary")
+  if (userLocation == null) {
+    Column(
+        modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center) {
+          Text("Loading...")
+        }
+  } else {
+    val userLocationLatLng = LatLng(userLocation!!.latitude, userLocation!!.longitude)
+    val cameraPositionState = rememberCameraPositionState {
+      position = CameraPosition.fromLatLngZoom(userLocationLatLng, 13f)
+    }
+    GoogleMap(
+        modifier = Modifier.fillMaxSize().testTag(PreviewItineraryScreenTestTags.GOOGLE_MAPS),
+        cameraPositionState = cameraPositionState) {
+          Marker(
+              tag = PreviewItineraryScreenTestTags.USER_LOCATION,
+              state = MarkerState(position = userLocationLatLng),
+              icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+        }
+  }
 }

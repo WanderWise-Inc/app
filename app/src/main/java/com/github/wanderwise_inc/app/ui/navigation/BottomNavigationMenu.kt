@@ -23,12 +23,9 @@ fun BottomNavigationMenu(
     navigationActions: NavigationActions,
     bottomNavigationViewModel: BottomNavigationViewModel
 ) {
-  val _selectedIndex by bottomNavigationViewModel.getSelected().observeAsState()
-  var selectedIndex = 0
 
-  if (_selectedIndex != null) {
-    selectedIndex = _selectedIndex as Int
-  }
+  val _selectedIndex by bottomNavigationViewModel.selected.observeAsState()
+  val selectedIndex = _selectedIndex ?: 0
 
   NavigationBar(modifier = Modifier.testTag("Bottom navigation bar")) {
     TOP_LEVEL_DESTINATIONS.forEachIndexed { index, dest ->
