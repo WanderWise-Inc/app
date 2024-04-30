@@ -1,9 +1,6 @@
 package com.github.wanderwise_inc.app.model.location
 
-/**
- * Represents a tag
- * Used both for storage and for display
- */
+/** Represents a tag Used both for storage and for display */
 typealias Tag = String
 
 /**
