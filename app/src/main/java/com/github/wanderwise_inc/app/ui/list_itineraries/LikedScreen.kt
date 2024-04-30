@@ -36,14 +36,19 @@ object LikedScreenTestTags {
 }
 
 @Composable
-fun LikedScreen(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel) {
+fun LikedScreen(
+    mapViewModel: MapViewModel,
+    profileViewModel: ProfileViewModel,
+    firebaseAuth: FirebaseAuth
+) {
   val sliderPositionPriceState = remember { mutableStateOf(0f..100f) }
   val sliderPositionTimeState = remember { mutableStateOf(0f..24f) }
   DisplayLikedItineraries(
       mapViewModel = mapViewModel,
       profileViewModel = profileViewModel,
       sliderPositionPriceState = sliderPositionPriceState,
-      sliderPositionTimeState = sliderPositionTimeState)
+      sliderPositionTimeState = sliderPositionTimeState,
+      firebaseAuth = firebaseAuth)
 }
 
 /** Displays itineraries liked by the user */
@@ -52,7 +57,8 @@ fun DisplayLikedItineraries(
     mapViewModel: MapViewModel,
     profileViewModel: ProfileViewModel,
     sliderPositionPriceState: MutableState<ClosedFloatingPointRange<Float>>,
-    sliderPositionTimeState: MutableState<ClosedFloatingPointRange<Float>>
+    sliderPositionTimeState: MutableState<ClosedFloatingPointRange<Float>>,
+    firebaseAuth: FirebaseAuth
 ) {
 
   /* the categories that can be selected by the user during filtering */
@@ -101,7 +107,9 @@ fun DisplayLikedItineraries(
                 }
                 .filter { itinerary ->
                   val price = itinerary.price.toFloat()
-                  price in sliderPositionPriceState.value.start..sliderPositionPriceState.value.endInclusive
+                  price in
+                      sliderPositionPriceState.value.start..sliderPositionPriceState.value
+                              .endInclusive
                 }
                 .filter { itinerary ->
                   val time = itinerary.time.toFloat()
