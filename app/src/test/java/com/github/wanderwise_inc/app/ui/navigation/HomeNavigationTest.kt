@@ -24,6 +24,7 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -52,6 +53,8 @@ class HomeNavigationTest {
       val mockProfile = Profile("", "Test", "0", "Bio", null)
       val mockItinerary = FakeItinerary.SAN_FRANCISCO
       val mockLocation = Location("")
+
+      every { imageRepository.fetchImage(any()) } returns flowOf(null)
 
       every { profileViewModel.getProfile(any()) } returns flow { emit(mockProfile) }
       coEvery { profileViewModel.setProfile(any()) } returns Unit
