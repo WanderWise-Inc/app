@@ -22,6 +22,10 @@ import com.github.wanderwise_inc.app.ui.home.SearchBar
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 
+object OverviewScreenTestTags {
+  const val CATEGORY_SELECTOR = "category selector"
+}
+
 @Composable
 fun OverviewScreen(
     mapViewModel: MapViewModel,
@@ -67,7 +71,7 @@ fun DisplayOverviewItineraries(
       topBar = {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxWidth()) {
+            modifier = Modifier.fillMaxWidth().testTag(TestTags.CATEGORY_SELECTOR)) {
               SearchBar(
                   onSearchChange = { searchQuery = it },
                   onPriceChange = { priceRange = it },

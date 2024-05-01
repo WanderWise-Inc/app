@@ -19,13 +19,11 @@ import com.github.wanderwise_inc.app.model.location.ItineraryTags
 import com.github.wanderwise_inc.app.model.location.Location
 import com.github.wanderwise_inc.app.model.profile.Profile
 import com.github.wanderwise_inc.app.ui.itinerary.ItineraryBannerTestTags
-import com.github.wanderwise_inc.app.ui.list_itineraries.LikedScreen
+import com.github.wanderwise_inc.app.ui.list_itineraries.OverviewScreen
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.github.wanderwise_inc.app.viewmodel.UserLocationClient
 import com.google.firebase.FirebaseApp
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
@@ -34,11 +32,10 @@ import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.Mockito.mock
-import org.mockito.Mockito.`when`
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class LikedScreenTest {
+class OverviewScreenTest {
   private val profile = Profile(userUid = "testing")
   val itinerary =
       Itinerary(
@@ -59,8 +56,6 @@ class LikedScreenTest {
   @Mock private lateinit var directionsRepository: DirectionsRepository
   @Mock private lateinit var userLocationClient: UserLocationClient
   @Mock private lateinit var navHostController: NavHostController
-  @Mock private lateinit var firebaseUser: FirebaseUser
-  @Mock private lateinit var firebaseAuth: FirebaseAuth
 
   private lateinit var itineraryRepository: ItineraryRepository
   private lateinit var mapViewModel: MapViewModel
@@ -74,36 +69,31 @@ class LikedScreenTest {
     composeTestRule.setContent {
       // mock application context
       FirebaseApp.initializeApp(LocalContext.current)
-      mockApplication = mock(Application::class.java)
-      mockContext = mock(Context::class.java)
+      mockApplication = Mockito.mock(Application::class.java)
+      mockContext = Mockito.mock(Context::class.java)
       Mockito.`when`(mockApplication.applicationContext).thenReturn(mockContext)
 
-      directionsRepository = mock(DirectionsRepository::class.java)
-      imageRepository = mock(ImageRepository::class.java)
-      userLocationClient = mock(UserLocationClient::class.java)
+      directionsRepository = Mockito.mock(DirectionsRepository::class.java)
+      imageRepository = Mockito.mock(ImageRepository::class.java)
+      userLocationClient = Mockito.mock(UserLocationClient::class.java)
 
       itineraryRepository = ItineraryRepositoryTestImpl()
       profileRepository = ProfileRepositoryTestImpl()
       // imageRepository = ImageRepositoryImpl(mockApplication)
 
+      navHostController = mock(NavHostController::class.java)
+
       mapViewModel = MapViewModel(itineraryRepository, directionsRepository, userLocationClient)
       profileViewModel = ProfileViewModel(profileRepository, imageRepository)
 
-      navHostController = mock(NavHostController::class.java)
-      firebaseAuth = mock(FirebaseAuth::class.java)
-      firebaseUser = mock(FirebaseUser::class.java)
-      `when`(firebaseAuth.currentUser).thenReturn(firebaseUser)
-      `when`(firebaseUser.uid).thenReturn(null)
-
-      LikedScreen(mapViewModel, profileViewModel, navHostController, firebaseAuth)
+      OverviewScreen(mapViewModel, profileViewModel, navHostController)
     }
   }
 
   @Before
-  fun `add an itinerary to MapViewModel, and like it`() = runTest {
+  fun `add an itinerary to MapViewModel`() = runTest {
     profileRepository.setProfile(profile)
     mapViewModel.setItinerary(itinerary)
-    profileViewModel.addLikedItinerary(profile.userUid, itinerary.uid)
   }
 
   @Test
@@ -112,7 +102,7 @@ class LikedScreenTest {
   }
 
   @Test
-  fun `a liked itinerary should be displayed`() {
+  fun `at least one itinerary should be displayed`() {
     composeTestRule
         .onNodeWithTag("${ItineraryBannerTestTags.ITINERARY_BANNER}_${itinerary.uid}")
         .isDisplayed()
