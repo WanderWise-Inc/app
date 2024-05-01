@@ -87,7 +87,7 @@ fun DisplayLikedItineraries(
       topBar = {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxWidth().testTag(TestTags.LIKED_CATEGORY_COLLECTOR)) {
+            modifier = Modifier.fillMaxWidth().testTag(TestTags.CATEGORY_SELECTOR)) {
               SearchBar(
                   onSearchChange = { searchQuery = it },
                   onPriceChange = { priceRange = it },
