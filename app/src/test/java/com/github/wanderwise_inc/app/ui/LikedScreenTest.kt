@@ -18,7 +18,6 @@ import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
 import com.github.wanderwise_inc.app.model.location.Location
 import com.github.wanderwise_inc.app.model.profile.Profile
-import com.github.wanderwise_inc.app.ui.itinerary.ItineraryBannerTestTags
 import com.github.wanderwise_inc.app.ui.list_itineraries.LikedScreen
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
@@ -114,7 +113,7 @@ class LikedScreenTest {
   @Test
   fun `a liked itinerary should be displayed`() {
     composeTestRule
-        .onNodeWithTag("${ItineraryBannerTestTags.ITINERARY_BANNER}_${itinerary.uid}")
+        .onNodeWithTag("${TestTags.ITINERARY_BANNER}_${itinerary.uid}")
         .isDisplayed()
   }
 }

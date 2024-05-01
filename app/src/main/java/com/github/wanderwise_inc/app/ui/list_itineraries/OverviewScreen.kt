@@ -84,7 +84,7 @@ fun DisplayOverviewItineraries(
             }
       },
       modifier = Modifier.testTag(TestTags.OVERVIEW_SCREEN)) { innerPadding ->
-        val filtered =
+            val filtered =
             itineraries
                 .filter { itinerary -> itinerary.tags.contains(categoriesList[selectedIndex].tag) }
                 .filter { itinerary ->

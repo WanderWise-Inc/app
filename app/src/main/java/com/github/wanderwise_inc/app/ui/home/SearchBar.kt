@@ -24,6 +24,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.github.wanderwise_inc.app.R
+import com.github.wanderwise_inc.app.ui.TestTags
 
 @Composable
 fun SearchBar(
@@ -59,7 +60,7 @@ fun SearchBar(
           Modifier.background(MaterialTheme.colorScheme.primaryContainer)
               .fillMaxWidth()
               .padding(5.dp)
-              .testTag("SearchBar"))
+              .testTag(TestTags.SEARCH_BAR))
 
   DropdownMenu(
       expanded = isDropdownOpen,
