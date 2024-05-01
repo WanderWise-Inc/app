@@ -20,7 +20,6 @@ import com.github.wanderwise_inc.app.model.location.Location
 import com.github.wanderwise_inc.app.model.profile.Profile
 import com.github.wanderwise_inc.app.ui.itinerary.ItineraryBannerTestTags
 import com.github.wanderwise_inc.app.ui.list_itineraries.OverviewScreen
-import com.github.wanderwise_inc.app.ui.list_itineraries.OverviewScreenTestTags
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.github.wanderwise_inc.app.viewmodel.UserLocationClient
