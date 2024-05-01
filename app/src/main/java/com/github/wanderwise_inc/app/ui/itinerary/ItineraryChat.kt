@@ -44,102 +44,93 @@ import kotlinx.coroutines.launch
 /** @brief simple chat UI */
 @Composable
 fun ItineraryChat() {
-    var textState by remember { mutableStateOf("") }
-    val messagesState = remember { mutableStateListOf<String>() }
-    val listState = rememberLazyListState()
-    val coroutineScope = rememberCoroutineScope()
+  var textState by remember { mutableStateOf("") }
+  val messagesState = remember { mutableStateListOf<String>() }
+  val listState = rememberLazyListState()
+  val coroutineScope = rememberCoroutineScope()
 
-    Scaffold(
-        bottomBar = {
-            InputBar(
-                textState = textState,
-                onTextChange = { textState = it },
-                onSend = {
-                    if (textState.isNotBlank()) {
-                        messagesState.add(textState)
-                        textState = ""
-                        coroutineScope.launch { listState.animateScrollToItem(messagesState.size - 1) }
-                    }
-                })
-        },
-        containerColor = MaterialTheme.colorScheme.background
-    ) { innerPadding ->
+  Scaffold(
+      bottomBar = {
+        InputBar(
+            textState = textState,
+            onTextChange = { textState = it },
+            onSend = {
+              if (textState.isNotBlank()) {
+                messagesState.add(textState)
+                textState = ""
+                coroutineScope.launch { listState.animateScrollToItem(messagesState.size - 1) }
+              }
+            })
+      },
+      containerColor = MaterialTheme.colorScheme.background) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
-            MessagesList(messagesState = messagesState, listState = listState)
+          MessagesList(messagesState = messagesState, listState = listState)
         }
-    }
+      }
 }
 
 /** @brief message history */
 @Composable
 fun MessagesList(messagesState: List<String>, listState: LazyListState) {
-    LazyColumn(
-        state = listState,
-        modifier =
-        Modifier
-            .verticalScroll(rememberScrollState())
-            .height(LocalConfiguration.current.screenHeightDp.dp)
-            .fillMaxWidth()
-    ) {
+  LazyColumn(
+      state = listState,
+      modifier =
+          Modifier.verticalScroll(rememberScrollState())
+              .height(LocalConfiguration.current.screenHeightDp.dp)
+              .fillMaxWidth()) {
         items(messagesState.size) { index ->
-            MessageBubble(message = messagesState[index], isUserMessage = index % 2 == 0)
+          MessageBubble(message = messagesState[index], isUserMessage = index % 2 == 0)
         }
-    }
+      }
 }
 
 /** @brief message container */
 @Composable
 fun MessageBubble(message: String, isUserMessage: Boolean) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 8.dp, vertical = 4.dp),
-        horizontalArrangement = if (isUserMessage) Arrangement.End else Arrangement.Start
-    ) {
+  Row(
+      modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 4.dp),
+      horizontalArrangement = if (isUserMessage) Arrangement.End else Arrangement.Start) {
         Box(
             contentAlignment = Alignment.Center,
             modifier =
-            Modifier
-                .background(
-                    color = if (isUserMessage) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.secondaryContainer,
-                    shape = RoundedCornerShape(12.dp)
-                )
-                .padding(8.dp)
-        ) {
-            Text(
-                text = message,
-                fontSize = 16.sp,
-                color = if (isUserMessage) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSecondaryContainer
-            )
-        }
-    }
+                Modifier.background(
+                        color =
+                            if (isUserMessage) MaterialTheme.colorScheme.primaryContainer
+                            else MaterialTheme.colorScheme.secondaryContainer,
+                        shape = RoundedCornerShape(12.dp))
+                    .padding(8.dp)) {
+              Text(
+                  text = message,
+                  fontSize = 16.sp,
+                  color =
+                      if (isUserMessage) MaterialTheme.colorScheme.onPrimaryContainer
+                      else MaterialTheme.colorScheme.onSecondaryContainer)
+            }
+      }
 }
 
 /** @brief input text field */
 @Composable
 fun InputBar(textState: String, onTextChange: (String) -> Unit, onSend: () -> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp), verticalAlignment = Alignment.Bottom
-    ) {
-        TextField(
-            value = textState,
-            onValueChange = onTextChange,
-            modifier = Modifier.weight(1f),
-            placeholder = { Text(text = "Type a message...", color = Color.DarkGray) },
-            trailingIcon = {
-                IconButton(onClick = onSend) {
-                    Icon(
-                        painter = painterResource(R.drawable.send_icon),
-                        contentDescription = "Send Message",
-                        tint = if (textState.isBlank()) Color.Gray else MaterialTheme.colorScheme.onPrimaryContainer
-                    )
-                }
-            },
-            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
-            keyboardActions = KeyboardActions(onDone = { onSend() }),
-            colors =
+  Row(modifier = Modifier.fillMaxWidth().padding(8.dp), verticalAlignment = Alignment.Bottom) {
+    TextField(
+        value = textState,
+        onValueChange = onTextChange,
+        modifier = Modifier.weight(1f),
+        placeholder = { Text(text = "Type a message...", color = Color.DarkGray) },
+        trailingIcon = {
+          IconButton(onClick = onSend) {
+            Icon(
+                painter = painterResource(R.drawable.send_icon),
+                contentDescription = "Send Message",
+                tint =
+                    if (textState.isBlank()) Color.Gray
+                    else MaterialTheme.colorScheme.onPrimaryContainer)
+          }
+        },
+        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+        keyboardActions = KeyboardActions(onDone = { onSend() }),
+        colors =
             TextFieldDefaults.colors(
                 focusedTextColor = Color.Black,
                 unfocusedTextColor = Color.Black,
@@ -147,8 +138,6 @@ fun InputBar(textState: String, onTextChange: (String) -> Unit, onSend: () -> Un
                 unfocusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
                 cursorColor = Color.DarkGray,
                 focusedIndicatorColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                unfocusedIndicatorColor = MaterialTheme.colorScheme.onPrimaryContainer
-            )
-        )
-    }
+                unfocusedIndicatorColor = MaterialTheme.colorScheme.onPrimaryContainer))
+  }
 }
