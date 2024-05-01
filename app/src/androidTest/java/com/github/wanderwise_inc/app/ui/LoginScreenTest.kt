@@ -54,6 +54,7 @@ class SignInButtonTest {
 
     coEvery { profileViewModel.getProfile(any()) } returns flow { emit(p) }
     every { navController.navigate(Graph.HOME) } answers { route = Graph.HOME }
+    every { signInLauncher.launch(any()) } answers { route = Graph.HOME }
     // coEvery { signInRepositoryImpl.signIn(any(), any(), any(), any(), any()) } answers {route =
     // Graph.HOME}
     // Perform actions and assert UI state using Espresso and MockK
@@ -103,3 +104,4 @@ class SignInButtonTest {
     assertEquals(Graph.HOME, route)
   }
 }
+
