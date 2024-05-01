@@ -3,7 +3,8 @@ package com.github.wanderwise_inc.app.viewmodel
 import android.content.Context
 import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
-import org.junit.Assert.*
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`

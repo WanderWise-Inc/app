@@ -27,6 +27,7 @@ import com.github.wanderwise_inc.app.data.SignInRepositoryImpl
 import com.github.wanderwise_inc.app.network.ApiServiceFactory
 import com.github.wanderwise_inc.app.ui.navigation.graph.RootNavigationGraph
 import com.github.wanderwise_inc.app.ui.theme.WanderWiseTheme
+import com.github.wanderwise_inc.app.viewmodel.BottomNavigationViewModel
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.github.wanderwise_inc.app.viewmodel.UserLocationClient
@@ -49,6 +50,7 @@ class MainActivity : ComponentActivity() {
   private lateinit var navController: NavHostController
 
   private lateinit var profileViewModel: ProfileViewModel
+  private lateinit var bottomNavigationViewModel: BottomNavigationViewModel
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -86,6 +88,7 @@ class MainActivity : ComponentActivity() {
 
     mapViewModel = MapViewModel(itineraryRepository, directionsRepository, userLocationClient)
     profileViewModel = ProfileViewModel(profileRepository, imageRepository)
+    bottomNavigationViewModel = BottomNavigationViewModel()
 
     setContent {
       WanderWiseTheme {
@@ -96,8 +99,11 @@ class MainActivity : ComponentActivity() {
               googleSignInLauncher = googleSignInLauncher,
               profileViewModel = profileViewModel,
               mapViewModel = mapViewModel,
+              bottomNavigationViewModel = bottomNavigationViewModel,
               imageRepository = imageRepository,
-              navController = navController)
+              navController = navController,
+              firebaseAuth = FirebaseAuth.getInstance(),
+          )
         }
       }
     }
