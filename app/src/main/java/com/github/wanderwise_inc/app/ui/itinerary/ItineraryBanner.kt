@@ -43,6 +43,11 @@ import androidx.compose.ui.unit.sp
 import com.github.wanderwise_inc.app.R
 import com.github.wanderwise_inc.app.model.location.Itinerary
 
+object ItineraryBannerTestTags {
+  const val ITINERARY_BANNER = "itinerary_banner"
+  const val LIKE_BUTTON = "like_button"
+}
+
 @Composable
 fun ItineraryBanner(
     itinerary: Itinerary,
@@ -65,8 +70,8 @@ fun ItineraryBanner(
           ),
       elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
       shape = RoundedCornerShape(13.dp),
-      onClick = { onBannerClick(itinerary) },
-      modifier = Modifier.testTag("Itinerary banner")) {
+      modifier = Modifier.testTag("${ItineraryBannerTestTags.ITINERARY_BANNER}_${itinerary.uid}"),
+      onClick = { onBannerClick(itinerary) }) {
         Column(
             modifier =
                 Modifier.background(MaterialTheme.colorScheme.primaryContainer)
@@ -148,7 +153,10 @@ fun ItineraryBanner(
                       }
 
                   Column(
-                      modifier = Modifier.fillMaxWidth().weight(0.5f),
+                      modifier =
+                          Modifier.fillMaxWidth()
+                              .weight(0.5f)
+                              .testTag(ItineraryBannerTestTags.LIKE_BUTTON),
                       horizontalAlignment = Alignment.CenterHorizontally) {
                         // Like Icon
                         Icon(
