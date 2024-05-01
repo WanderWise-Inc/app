@@ -1,6 +1,5 @@
 package com.github.wanderwise_inc.app.ui.signin
 
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -27,18 +26,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
 import com.github.wanderwise_inc.app.R
 import com.github.wanderwise_inc.app.data.GoogleSignInLauncher
-import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 
 @Composable
-fun LoginScreen(
-    googleSignInLauncher: GoogleSignInLauncher,
-    profileViewModel: ProfileViewModel,
-    navController: NavHostController,
-    modifier: Modifier = Modifier
-) {
+fun LoginScreen(googleSignInLauncher: GoogleSignInLauncher, modifier: Modifier = Modifier) {
   Box(modifier = modifier.requiredWidth(width = 1280.dp).requiredHeight(height = 1100.dp)) {
     Image(
         painter = painterResource(id = R.drawable.underground_2725336_1280),
@@ -53,7 +45,7 @@ fun LoginScreen(
                 .requiredHeight(height = 39.dp)
                 .clip(shape = RoundedCornerShape(8.dp))
                 .background(color = Color(0xFF972626))) {
-          SignInButton(googleSignInLauncher, profileViewModel, navController)
+          SignInButton(googleSignInLauncher)
         }
     Image(
         painter = painterResource(id = R.drawable.google__g__logo_svg),
@@ -82,30 +74,7 @@ fun LoginScreen(
 }
 
 @Composable
-fun SignInButton(
-    googleSignInLauncher: GoogleSignInLauncher,
-    profileViewModel: ProfileViewModel,
-    navController: NavHostController,
-) {
-  Log.d("TESTING SIGN IN BUTTON", "IN SIGN IN BUTTON")
-  // Added a coroutine because userViewModel functions are async
-  /*  val signInRepositoryImpl = SignInRepositoryImpl()
-  val coroutineScope = rememberCoroutineScope()
-  val providers = arrayListOf(AuthUI.IdpConfig.GoogleBuilder().build())
-  // Create and launch sign-in intent
-  val signInIntent =
-      AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers).build()
-  // creating the launcher that will be used to signIn
-  Log.d("TESTING SIGN IN BUTTON", "BEFORE LAUNCHER")
-  val signInLauncher =
-      rememberLauncherForActivityResult(contract = FirebaseAuthUIActivityResultContract()) {
-        coroutineScope.launch {
-          Log.d("TESTING SIGN IN BUTTON", "IN SIGN IN LAUNCHER")
-          val user = FirebaseAuth.getInstance().currentUser
-          signInRepositoryImpl.signIn(it, navController, profileViewModel, user, it.resultCode)
-        }
-      }*/
-
+fun SignInButton(googleSignInLauncher: GoogleSignInLauncher) {
   Button(
       onClick = { googleSignInLauncher.launchSignIn() },
       modifier =

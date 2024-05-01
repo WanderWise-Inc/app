@@ -4,10 +4,8 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.navigation.NavHostController
 import com.github.wanderwise_inc.app.data.GoogleSignInLauncher
 import com.github.wanderwise_inc.app.ui.navigation.graph.Graph
-import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -24,8 +22,6 @@ class SignInButtonTest {
 
   @get:Rule val composeTestRule = createComposeRule()
 
-  @MockK private lateinit var profileViewModel: ProfileViewModel
-  @MockK private lateinit var navController: NavHostController
   private var route = Graph.AUTHENTICATION
 
   @MockK private lateinit var googleSignInLauncher: MockGoogleSignInLauncher
@@ -33,10 +29,7 @@ class SignInButtonTest {
   @Before
   fun setup() {
     MockKAnnotations.init(this)
-    composeTestRule.setContent {
-      LoginScreen(
-          googleSignInLauncher, profileViewModel = profileViewModel, navController = navController)
-    }
+    composeTestRule.setContent { LoginScreen(googleSignInLauncher) }
     composeTestRule.waitForIdle()
   }
 
