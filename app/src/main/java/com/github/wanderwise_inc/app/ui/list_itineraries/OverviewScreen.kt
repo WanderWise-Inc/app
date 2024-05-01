@@ -89,7 +89,6 @@ fun DisplayOverviewItineraries(
                       itinerary.description?.contains(searchQuery, ignoreCase = true) ?: false
                 }
                 .filter { itinerary ->
-
                   val price = itinerary.price
 
                   price in
