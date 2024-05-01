@@ -68,6 +68,7 @@ fun SearchBar(
             value = sliderPositionPriceState.value,
             steps = 50,
             onValueChange = { range -> sliderPositionPriceState.value = range },
+            modifier = Modifier.testTag("RangeSlider"),
             valueRange = 0f..100f, // Adjust this range according to your needs
             onValueChangeFinished = {
               // launch something
