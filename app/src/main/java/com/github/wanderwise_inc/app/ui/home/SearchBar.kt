@@ -34,8 +34,6 @@ fun SearchBar(
 ) {
   var query by remember { mutableStateOf("") }
   var isDropdownOpen by remember { mutableStateOf(false) }
-  var sliderPosition by remember { mutableStateOf(0f..100f) }
-  var sliderPositionTime by remember { mutableStateOf(0f..24f) }
 
   OutlinedTextField(
       value = query,

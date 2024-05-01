@@ -81,8 +81,10 @@ fun DisplayOverviewItineraries(
                       itinerary.description?.contains(searchQuery, ignoreCase = true) ?: false
                 }
                 .filter { itinerary ->
-                  val price = itinerary.price.toFloat()
-                  price in sliderPositionPriceState.value.start..sliderPositionPriceState.value.endInclusive
+                  val price = itinerary.price
+                  price in
+                      sliderPositionPriceState.value.start..sliderPositionPriceState.value
+                              .endInclusive
                 }
                 .filter { itinerary ->
                   val time = itinerary.time.toFloat()
