@@ -79,6 +79,11 @@ android {
         }
     }
     testOptions {
+        packaging {
+            jniLibs {
+                useLegacyPackaging = true
+            }
+        }
         unitTests {
             isIncludeAndroidResources = true
             isReturnDefaultValues = true
@@ -148,6 +153,17 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore:24.10.0")
     implementation("com.google.firebase:firebase-auth:22.3.1")
     implementation("com.firebaseui:firebase-ui-auth:7.2.0")
+
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4:$version")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation(platform("androidx.compose:compose-bom:2023.08.00"))
+
+    androidTestImplementation("org.mockito:mockito-core:3.12.4")
+    androidTestImplementation("org.mockito:mockito-android:3.12.4")
+
+
+    debugImplementation("androidx.compose.ui:ui-test-manifest:$rootProject.composeVersion")
 
     // ------------------ Navigation ------------------
     val nav_version = "2.7.7"
@@ -225,7 +241,7 @@ dependencies {
 
     // ----------       Robolectric     ------------
     testImplementation(libs.robolectric)
-    androidTestImplementation(libs.robolectric)
+    //androidTestImplementation(libs.robolectric)
 
     // ----------       Mock ------------
     testImplementation("org.mockito.kotlin:mockito-kotlin:5.3.1")
@@ -234,7 +250,6 @@ dependencies {
     testImplementation("app.cash.turbine:turbine:1.1.0")
     testImplementation("com.google.truth:truth:1.3.0")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.0")
-    testImplementation("io.mockk:mockk:1.12.0")
     testImplementation("org.mockito:mockito-core:5.7.0")
 
     // ----------       Retrofit ------------
@@ -245,6 +260,13 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
     implementation("androidx.compose.runtime:runtime-livedata:1.0.0-beta01")
+
+    testImplementation ("io.mockk:mockk:1.13.10")
+
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.1.0")
+    androidTestImplementation("io.mockk:mockk-android:1.13.10")
+    androidTestImplementation("androidx.arch.core:core-testing:2.1.0")
+
     testImplementation("androidx.arch.core:core-testing:2.2.0")
 }
 
