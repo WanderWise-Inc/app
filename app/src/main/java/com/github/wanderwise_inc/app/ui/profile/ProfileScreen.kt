@@ -71,7 +71,7 @@ fun ProfileScreen(
     navHostController: NavHostController,
     firebaseAuth: FirebaseAuth
 ) {
-  val currentUid = FirebaseAuth.getInstance().currentUser?.uid ?: DEFAULT_USER_UID
+  val currentUid = firebaseAuth.currentUser?.uid ?: DEFAULT_USER_UID
 
   val profile by profileViewModel.getProfile(currentUid).collectAsState(initial = null)
 
