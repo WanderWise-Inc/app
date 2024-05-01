@@ -19,7 +19,8 @@ fun NavGraphBuilder.authNavGraph(
       startDestination = AuthScreen.SignIn.route,
   ) {
     composable(route = AuthScreen.SignIn.route) {
-      LoginScreen(googleSignInLauncher,profileViewModel = profileViewModel, navController = navController)
+      LoginScreen(
+          googleSignInLauncher, profileViewModel = profileViewModel, navController = navController)
     }
   }
 }

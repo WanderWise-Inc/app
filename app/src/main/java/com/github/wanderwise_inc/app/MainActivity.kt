@@ -41,34 +41,33 @@ class MainActivity : ComponentActivity() {
   private val directionsRepository = DirectionsRepository(directionsApiService)
   private lateinit var mapViewModel: MapViewModel
   private val signInRepositoryImpl = SignInRepositoryImpl()
-    private lateinit var googleSignInLauncher: GoogleSignInLauncher
+  private lateinit var googleSignInLauncher: GoogleSignInLauncher
 
   // declaration for use of storage
   private val storage = FirebaseStorage.getInstance()
   private var imageReference = storage.reference
-    private lateinit var navController: NavHostController
+  private lateinit var navController: NavHostController
 
   private lateinit var profileViewModel: ProfileViewModel
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
-      val providers = arrayListOf(AuthUI.IdpConfig.GoogleBuilder().build())
-      val signInIntent = AuthUI.getInstance()
-          .createSignInIntentBuilder()
-          .setAvailableProviders(providers)
-          .build()
+    val providers = arrayListOf(AuthUI.IdpConfig.GoogleBuilder().build())
+    val signInIntent =
+        AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers).build()
 
-      val signInLauncher = registerForActivityResult(
-          FirebaseAuthUIActivityResultContract(),
-      ) { res ->
+    val signInLauncher =
+        registerForActivityResult(
+            FirebaseAuthUIActivityResultContract(),
+        ) { res ->
           lifecycleScope.launch {
-              val user = FirebaseAuth.getInstance().currentUser
-              signInRepositoryImpl.signIn(res, navController, profileViewModel, user, res.resultCode)
+            val user = FirebaseAuth.getInstance().currentUser
+            signInRepositoryImpl.signIn(res, navController, profileViewModel, user, res.resultCode)
           }
-      }
+        }
 
-      googleSignInLauncher = RealGoogleSignInLauncher(signInLauncher, signInIntent)
+    googleSignInLauncher = RealGoogleSignInLauncher(signInLauncher, signInIntent)
 
     val profileRepository = ProfileRepositoryTestImpl()
     imageRepository = ImageRepositoryImpl(imageLauncher, imageReference, null)
@@ -92,7 +91,7 @@ class MainActivity : ComponentActivity() {
       WanderWiseTheme {
         // A surface container using the 'background' color from the theme
         Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-            navController = rememberNavController()
+          navController = rememberNavController()
           RootNavigationGraph(
               googleSignInLauncher = googleSignInLauncher,
               profileViewModel = profileViewModel,

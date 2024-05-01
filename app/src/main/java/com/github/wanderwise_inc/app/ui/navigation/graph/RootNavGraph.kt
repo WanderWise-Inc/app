@@ -20,7 +20,7 @@ fun RootNavigationGraph(
 ) {
   NavHost(
       navController = navController, route = Graph.ROOT, startDestination = Graph.AUTHENTICATION) {
-        authNavGraph(googleSignInLauncher,profileViewModel, navController)
+        authNavGraph(googleSignInLauncher, profileViewModel, navController)
         composable(route = Graph.HOME) {
           HomeScreen(imageRepository, mapViewModel, profileViewModel)
         }
