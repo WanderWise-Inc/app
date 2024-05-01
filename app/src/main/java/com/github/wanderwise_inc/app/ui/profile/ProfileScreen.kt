@@ -1,11 +1,8 @@
 package com.github.wanderwise_inc.app.ui.profile
 
 import android.content.Intent
-import android.util.Log
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -20,6 +17,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -28,41 +26,42 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.graphics.painter.BitmapPainter
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.github.wanderwise_inc.app.DEFAULT_USER_UID
 import com.github.wanderwise_inc.app.R
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.model.profile.Profile
+import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.list_itineraries.ItinerariesListScrollable
+import com.github.wanderwise_inc.app.ui.list_itineraries.ItineraryListParent
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
-
-const val PROFILE_SCREEN_TEST_TAG: String = "profile_screen"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
     mapViewModel: MapViewModel,
     profileViewModel: ProfileViewModel,
-    imageRepository: ImageRepository
+    imageRepository: ImageRepository,
+    navHostController: NavHostController,
+    firebaseAuth: FirebaseAuth
 ) {
   // val currentUid = FirebaseAuth.getInstance().currentUser!!.uid
-  val currentUid = FirebaseAuth.getInstance().currentUser?.uid ?: DEFAULT_USER_UID
+  val currentUid = firebaseAuth.currentUser?.uid ?: DEFAULT_USER_UID
 
   val profile by profileViewModel.getProfile(currentUid).collectAsState(initial = null)
 
   val userItineraries by
       mapViewModel.getUserItineraries(currentUid).collectAsState(initial = emptyList())
 
+  val profilePictureModifier = Modifier.size(100.dp)
+
   if (profile != null) {
-    androidx.compose.material.Scaffold(
+    Scaffold(
         /*Top bar composable*/
         topBar = {
           TopAppBar(
@@ -91,13 +90,13 @@ fun ProfileScreen(
                       actionIconContentColor = MaterialTheme.colorScheme.onSecondary),
               modifier = Modifier.padding(bottom = 20.dp))
         },
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().testTag(TestTags.PROFILE_SCREEN),
     ) { innerPadding ->
       Box(
           modifier = Modifier.padding(innerPadding).fillMaxSize(),
           contentAlignment = Alignment.TopCenter) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-              ProfilePicture(profileViewModel, profile!!, imageRepository)
+              ProfilePicture(profile, profileViewModel, profilePictureModifier)
               Button(
                   onClick = {
                     Intent(Intent.ACTION_GET_CONTENT).also {
@@ -119,60 +118,11 @@ fun ProfileScreen(
                   itineraries = userItineraries,
                   mapViewModel = mapViewModel,
                   profileViewModel = profileViewModel,
-                  paddingValues = PaddingValues(8.dp))
+                  paddingValues = PaddingValues(8.dp),
+                  navController = navHostController,
+                  parent = ItineraryListParent.PROFILE)
             }
           }
-    }
-  }
-}
-
-@Composable
-fun ProfilePictureStatic(profileViewModel: ProfileViewModel, profile: Profile, modifier: Modifier) {
-  val picture by profileViewModel.getProfilePicture(profile).collectAsState(initial = null)
-
-  if (picture != null) {
-    Image(
-        painter = BitmapPainter(picture!!.asImageBitmap()),
-        contentDescription = "Profile picture",
-        modifier =
-            Modifier.size(100.dp)
-                .clip(MaterialTheme.shapes.small)
-                .border(BorderStroke(1.dp, Color.Black)),
-        contentScale = ContentScale.FillBounds)
-  } else {
-    Text("No Picture")
-  }
-}
-
-@Composable
-fun ProfilePicture(
-    profileViewModel: ProfileViewModel,
-    profile: Profile,
-    imageRepository: ImageRepository
-) {
-  // We will first fetch the default picture that is stored in the storage
-  val bitmap by
-      imageRepository
-          .fetchImage("profilePicture/defaultProfilePicture.jpg")
-          .collectAsState(initial = null)
-
-  if (bitmap != null) {
-    // When the default picture is fetched, we will try to get the profilePicture of the user.
-    // If the profile picture isn't present in the Storage, then the default picture will be loaded
-    // instead
-    val picture by profileViewModel.getProfilePicture(profile).collectAsState(initial = null)
-    if (picture != null) {
-      Image(
-          painter = BitmapPainter(picture!!.asImageBitmap()),
-          contentDescription = null,
-          modifier = Modifier.size(100.dp))
-      Log.d("CRASHED", "PICTURE DISPLAYED")
-    } else {
-      Image(
-          painter = BitmapPainter(bitmap!!.asImageBitmap()),
-          contentDescription = null,
-          modifier = Modifier.size(100.dp))
-      Log.d("CRASHED", "PICTURE IS NULL")
     }
   }
 }
@@ -188,7 +138,10 @@ fun Username(profile: Profile, modifier: Modifier) {
 @Composable
 fun WanderScore(profile: Profile) {
   Box(modifier = Modifier.background(MaterialTheme.colorScheme.secondary)) {
-    Text(text = "WanderScore: Not Implemented Yet")
+    Text(
+        text = "WanderScore: Not Implemented Yet",
+        color = MaterialTheme.colorScheme.surface // added white color to increase visibility
+        )
   }
 }
 
