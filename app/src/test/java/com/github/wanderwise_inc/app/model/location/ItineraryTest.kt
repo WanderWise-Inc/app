@@ -4,26 +4,20 @@ import org.junit.Assert.*
 import org.junit.Test
 
 class ItineraryTest {
+  private val dummyItinerary =
+      Itinerary(
+          uid = "test",
+          userUid = "test",
+          locations = listOf(Location(0.0, 0.0)),
+          tags = listOf(ItineraryTags.ADVENTURE),
+          title = "test",
+          description = "test",
+          visible = false,
+      )
 
   private val sfObject = FakeItinerary.SAN_FRANCISCO
   private val tkObject = FakeItinerary.TOKYO
   private val swObject = FakeItinerary.SWITZERLAND
-
-  @Test
-  fun toMap() {
-    val expected =
-        mapOf(
-            ItineraryLabels.UID to sfObject.uid,
-            ItineraryLabels.USER_UID to sfObject.userUid,
-            ItineraryLabels.LOCATIONS to sfObject.locations.map { location -> location.toMap() },
-            ItineraryLabels.TITLE to sfObject.title,
-            ItineraryLabels.TAGS to sfObject.tags,
-            ItineraryLabels.DESCRIPTION to (sfObject.description ?: ""),
-            ItineraryLabels.VISIBLE to sfObject.visible,
-            ItineraryLabels.PRICE to sfObject.price,
-            ItineraryLabels.TIME to sfObject.time)
-    assertEquals(expected, sfObject.toMap())
-  }
 
   @Test
   fun toBuilder() {
@@ -98,5 +92,24 @@ class ItineraryTest {
     val likes = sfObject.numLikes
     sfObject.incrementLike()
     assertEquals(likes + 1, sfObject.numLikes)
+  }
+
+  @Test
+  fun toMap() {
+    val actual = dummyItinerary.toMap()
+    val expected =
+        mapOf(
+            "uid" to "test",
+            "user_uid" to "test",
+            "locations" to dummyItinerary.locations.map { it.toMap() },
+            "title" to "test",
+            "tags" to listOf(ItineraryTags.ADVENTURE),
+            "description" to "test",
+            "visible" to false,
+            "price" to 0f,
+            "time" to 0,
+        )
+
+    assertEquals(expected, actual)
   }
 }

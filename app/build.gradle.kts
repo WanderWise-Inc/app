@@ -231,7 +231,7 @@ dependencies {
     // UI Tests
     globalTestImplementation(libs.compose.test.junit)
     debugImplementation(libs.compose.test.manifest)
-    
+
     // Android navigation test
     androidTestImplementation("androidx.navigation:navigation-testing:2.7.7")
 
