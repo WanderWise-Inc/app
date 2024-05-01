@@ -1,4 +1,4 @@
-package com.github.wanderwise_inc.app.ui.itinerary
+package com.github.wanderwise_inc.app.ui
 
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -7,6 +7,10 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.github.wanderwise_inc.app.ui.itinerary.InputBar
+import com.github.wanderwise_inc.app.ui.itinerary.ItineraryChat
+import com.github.wanderwise_inc.app.ui.itinerary.MessageBubble
+import com.github.wanderwise_inc.app.ui.itinerary.MessagesList
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
