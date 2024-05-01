@@ -61,8 +61,6 @@ import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
 
-const val PROFILE_SCREEN_TEST_TAG: String = "profile_screen"
-
 @OptIn(ExperimentalMaterial3Api::class)
 // Declare a composable function for the profile screen.
 @Composable
