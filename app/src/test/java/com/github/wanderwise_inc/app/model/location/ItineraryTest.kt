@@ -20,7 +20,7 @@ class ItineraryTest {
   private val swObject = FakeItinerary.SWITZERLAND
 
   @Test
-  fun toBuilder() {
+  fun `to builder should correctly build`() {
     val builder = sfObject.toBuilder()
     assertEquals(sfObject.uid, builder.uid)
     assertEquals(sfObject.userUid, builder.userUid)
@@ -32,7 +32,7 @@ class ItineraryTest {
   }
 
   @Test
-  fun scoreFromPreferences() {
+  fun `score From Preferences should return correct result`() {
     val sfPreferences = ItineraryPreferences(listOf(ItineraryTags.URBAN))
     val tkPreferences = ItineraryPreferences(listOf(ItineraryTags.URBAN, ItineraryTags.CULTURAL))
     val swPreferences = ItineraryPreferences(listOf(ItineraryTags.URBAN, ItineraryTags.CULTURAL))
@@ -45,7 +45,7 @@ class ItineraryTest {
   }
 
   @Test
-  fun computeCenterOfGravity() {
+  fun `compute center of gravity should return correct result`() {
     val newLocation = Location(46.61844, 7.705)
     val centerOfGrav = swObject.computeCenterOfGravity()
     assertEquals(newLocation.lat, centerOfGrav.lat, 0.0001)
@@ -53,21 +53,21 @@ class ItineraryTest {
   }
 
   @Test
-  fun getUid() {
+  fun `get Uid should return the correct UID of the itinerary`() {
     assertEquals(sfObject.uid, sfObject.getItineraryUid())
     assertEquals(tkObject.uid, tkObject.getItineraryUid())
     assertEquals(swObject.uid, swObject.getItineraryUid())
   }
 
   @Test
-  fun setUid() {
+  fun `set uid should correctly set the UID of the itinerary`() {
     val newUid = "newUid"
     sfObject.setItineraryUid(newUid)
     assertEquals(newUid, sfObject.uid)
   }
 
   @Test
-  fun getUserUid() {
+  fun `user uid should return the correct uid`() {
     assertEquals("Elena Cruz", sfObject.userUid)
     assertEquals("Sophia Reynolds", tkObject.userUid)
     assertEquals("Liam Bennett", swObject.userUid)
@@ -95,7 +95,7 @@ class ItineraryTest {
   }
 
   @Test
-  fun toMap() {
+  fun `toMap should return the correct Map representation`() {
     val actual = dummyItinerary.toMap()
     val expected =
         mapOf(
