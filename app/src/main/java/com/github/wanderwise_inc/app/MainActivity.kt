@@ -17,12 +17,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
+import com.github.wanderwise_inc.app.data.DefaultGoogleSignInLauncher
 import com.github.wanderwise_inc.app.data.DirectionsRepository
 import com.github.wanderwise_inc.app.data.GoogleSignInLauncher
 import com.github.wanderwise_inc.app.data.ImageRepositoryImpl
 import com.github.wanderwise_inc.app.data.ItineraryRepositoryTestImpl
 import com.github.wanderwise_inc.app.data.ProfileRepositoryTestImpl
-import com.github.wanderwise_inc.app.data.RealGoogleSignInLauncher
 import com.github.wanderwise_inc.app.data.SignInRepositoryImpl
 import com.github.wanderwise_inc.app.network.ApiServiceFactory
 import com.github.wanderwise_inc.app.ui.navigation.graph.RootNavigationGraph
@@ -69,7 +69,7 @@ class MainActivity : ComponentActivity() {
           }
         }
 
-    googleSignInLauncher = RealGoogleSignInLauncher(signInLauncher, signInIntent)
+    googleSignInLauncher = DefaultGoogleSignInLauncher(signInLauncher, signInIntent)
 
     val profileRepository = ProfileRepositoryTestImpl()
     imageRepository = ImageRepositoryImpl(imageLauncher, imageReference, null)

@@ -7,7 +7,7 @@ interface GoogleSignInLauncher {
   fun launchSignIn()
 }
 
-class RealGoogleSignInLauncher(
+class DefaultGoogleSignInLauncher(
     private val signInLauncher: ActivityResultLauncher<Intent>,
     private val signInIntent: Intent
 ) : GoogleSignInLauncher {

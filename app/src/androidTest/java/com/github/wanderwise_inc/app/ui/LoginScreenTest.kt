@@ -20,7 +20,7 @@ import org.junit.runner.RunWith
 import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)
-class SignInButtonTest {
+class LoginScreenTest {
 
   @get:Rule val composeTestRule = createComposeRule()
 
@@ -55,7 +55,5 @@ class SignInButtonTest {
 }
 
 class MockGoogleSignInLauncher : GoogleSignInLauncher {
-  override fun launchSignIn() {
-    TODO("Not yet implemented")
-  }
+  override fun launchSignIn() {}
 }

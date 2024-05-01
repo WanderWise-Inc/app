@@ -16,13 +16,13 @@ import org.robolectric.RobolectricTestRunner
 class GoogleSignInLauncherTest {
   @get:Rule val mockitoRule: MockitoRule = MockitoJUnit.rule()
 
-  private lateinit var googleSignInLauncher: RealGoogleSignInLauncher
+  private lateinit var googleSignInLauncher: DefaultGoogleSignInLauncher
   @Mock private lateinit var signInLauncher: ActivityResultLauncher<Intent>
   @Mock private lateinit var signInIntent: Intent
 
   @Before
   fun setup() {
-    googleSignInLauncher = RealGoogleSignInLauncher(signInLauncher, signInIntent)
+    googleSignInLauncher = DefaultGoogleSignInLauncher(signInLauncher, signInIntent)
   }
 
   @Test

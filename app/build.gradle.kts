@@ -261,7 +261,7 @@ dependencies {
 
     implementation("androidx.compose.runtime:runtime-livedata:1.0.0-beta01")
 
-    testImplementation ("io.mockk:mockk:1.12.0")
+    testImplementation ("io.mockk:mockk:1.13.10")
 
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.1.0")
     androidTestImplementation("io.mockk:mockk-android:1.13.10")
