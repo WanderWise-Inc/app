@@ -1,10 +1,6 @@
 package com.github.wanderwise_inc.app.model.location
 
-/**
- * Represents a tag
- *
- * @param str is the string representation of the tag. Used both for storage and for display
- */
+/** Represents a tag Used both for storage and for display */
 typealias Tag = String
 
 /**
@@ -13,35 +9,20 @@ typealias Tag = String
  * String representations should consist of a single word and start with a Capital letter
  */
 object ItineraryTags {
-  val SOCIAL = "Social"
-  val CULTURAL = "Cultural"
-  val ADVENTURE = "Adventure"
-  val FOOD = "Food"
-  val RELAXATION = "Relaxation"
-  val NATURE = "Nature"
-  val FOODIE = "Foodie"
-  val RURAL = "Rural"
-  val URBAN = "Urban"
-  val ROMANCE = "Romance"
-  val WILDLIFE = "Wildlife"
-  val PHOTOGRAPHY = "Photography"
-  val BUDGET = "Budget"
-  val LUXURY = "Luxury"
-  val ACTIVE = "Active"
-  val WELLNESS = "Wellness"
+  const val ACTIVE = "Active"
+  const val ADVENTURE = "Adventure"
+  const val BUDGET = "Budget"
+  const val CULTURAL = "Cultural"
+  const val FOOD = "Food"
+  const val FOODIE = "Foodie"
+  const val LUXURY = "Luxury"
+  const val NATURE = "Nature"
+  const val PHOTOGRAPHY = "Photography"
+  const val RELAXATION = "Relaxation"
+  const val ROMANCE = "Romance"
+  const val RURAL = "Rural"
+  const val SOCIAL = "Social"
+  const val URBAN = "Urban"
+  const val WELLNESS = "Wellness"
+  const val WILDLIFE = "Wildlife"
 }
-
-/*Luxury
-Family-friendly
-Solo
-Backpacking
-Road trip
-Sustainable
-Off-the-beaten-path
-Festivals
-Wellness
-Active
-Volunteer
-Educational
-Exotic
-Staycation*/
