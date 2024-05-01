@@ -18,7 +18,7 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class SignInButtonTest {
+class LoginScreenKtTest {
 
   @get:Rule val composeTestRule = createComposeRule()
 
