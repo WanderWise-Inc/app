@@ -7,22 +7,31 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.ui.home.HomeScreen
+import com.github.wanderwise_inc.app.viewmodel.BottomNavigationViewModel
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun RootNavigationGraph(
     context: Context,
     profileViewModel: ProfileViewModel,
     mapViewModel: MapViewModel,
+    bottomNavigationViewModel: BottomNavigationViewModel,
     imageRepository: ImageRepository,
-    navController: NavHostController
+    navController: NavHostController,
+    firebaseAuth: FirebaseAuth
 ) {
   NavHost(
       navController = navController, route = Graph.ROOT, startDestination = Graph.AUTHENTICATION) {
         authNavGraph(context, profileViewModel, navController)
         composable(route = Graph.HOME) {
-          HomeScreen(imageRepository, mapViewModel, profileViewModel)
+          HomeScreen(
+              imageRepository = imageRepository,
+              mapViewModel = mapViewModel,
+              bottomNavigationViewModel = bottomNavigationViewModel,
+              profileViewModel = profileViewModel,
+              firebaseAuth = firebaseAuth)
         }
       }
 }
@@ -31,6 +40,4 @@ object Graph {
   const val ROOT = "root_graph"
   const val AUTHENTICATION = "auth_graph"
   const val HOME = "home_graph"
-  const val OVERVIEW = "overview_graph"
-  const val LIKED = "liked_graph"
 }
