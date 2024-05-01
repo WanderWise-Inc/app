@@ -29,6 +29,17 @@ class ItineraryChatTest {
   }
 
   @Test
+  fun `ItineraryChat should display messages sent`() {
+    composeTestRule.setContent { ItineraryChat() }
+
+    // Simulate typing a message and sending it
+    composeTestRule.onNodeWithText("Type a message...").performTextInput("Hello")
+    composeTestRule.onNodeWithContentDescription("Send Message").performClick()
+
+    composeTestRule.onNodeWithText("Hello").assertExists()
+  }
+
+  @Test
   fun `MessagesList should display all messages correctly`() {
     composeTestRule.setContent { MessagesList(listOf("Hello", "World"), rememberLazyListState()) }
 
