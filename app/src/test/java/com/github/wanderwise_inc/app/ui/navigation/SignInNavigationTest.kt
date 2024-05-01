@@ -1,8 +1,5 @@
 package com.github.wanderwise_inc.app.ui.navigation
 
-import org.junit.jupiter.api.Assertions.*
-
-
 /*
 @RunWith(RobolectricTestRunner::class)
 class SignInNavigationTest {
@@ -13,7 +10,12 @@ class SignInNavigationTest {
 
     private lateinit var navController: TestNavHostController
 
-    Before
+    @Test
+    fun exampleTest() {
+        assert(true)
+    }
+
+    /*@Before
     fun setupNavHost() {
         composeTestRule.setContent {
             // val userViewModel by viewModels<UserViewModel>()
@@ -61,7 +63,7 @@ class SignInNavigationTest {
 
         val route = navController.currentBackStackEntry?.destination?.route
         assertEquals(Route.SIGNIN, route)
-    }
+    }*/
 }
 
      */

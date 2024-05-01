@@ -13,6 +13,8 @@ object ItineraryLabels {
   const val DESCRIPTION = "description"
   const val VISIBLE = "visible"
   const val TAGS = "tags"
+  const val PRICE = "price"
+  const val TIME = "time"
 }
 
 /** @brief score of an itinerary based on some preferences */
@@ -33,23 +35,13 @@ data class Itinerary(
     val userUid: String,
     val locations: List<Location>,
     val title: String,
-    var tags: List<Tag>,
+    val tags: List<Tag>,
     val description: String?,
     val visible: Boolean,
-    val numLikes: Int = 0
+    var numLikes: Int = 0,
+    val price: Float = 0f,
+    val time: Int = 0
 ) {
-  /** @return a map representation of an itinerary */
-  fun toMap(): Map<String, Any> {
-    return mapOf(
-        ItineraryLabels.UID to uid,
-        ItineraryLabels.USER_UID to userUid,
-        ItineraryLabels.LOCATIONS to locations.map { location -> location.toMap() },
-        ItineraryLabels.TITLE to title,
-        ItineraryLabels.TAGS to tags,
-        ItineraryLabels.DESCRIPTION to (description ?: ""),
-        ItineraryLabels.VISIBLE to visible,
-    )
-  }
 
   /**
    * @param uid a unique identifier
@@ -63,11 +55,13 @@ data class Itinerary(
   data class Builder(
       var uid: String = "",
       val userUid: String,
-      var locations: MutableList<Location> = mutableListOf(),
+      val locations: MutableList<Location> = mutableListOf(),
       var title: String = "",
       val tags: MutableList<Tag> = mutableListOf(),
       var description: String? = null,
-      var visible: Boolean = false
+      var visible: Boolean = false,
+      var price: Float = 0f,
+      var time: Int = 0
   ) {
     /**
      * @param location the location to be added
@@ -79,14 +73,6 @@ data class Itinerary(
       return this
     }
 
-    /**  */
-    fun addTag(tag: Tag): Builder {
-      if (tags.size >= 3)
-          throw InvalidObjectException("An itinerary should not have more than $MAX_TAGS tags")
-      tags.add(tag)
-      return this
-    }
-
     /**
      * @param title the new title
      * @return the builder to support method chaining
@@ -94,6 +80,19 @@ data class Itinerary(
      */
     fun title(title: String): Builder {
       this.title = title
+      return this
+    }
+
+    /**
+     * @param tag the tag added
+     * @return the builder to support method chaining
+     * @throws InvalidObjectException if the list already has 3 tags
+     * @brief add a tag to the itinerary builder list of tags
+     */
+    fun addTag(tag: Tag): Builder {
+      if (tags.size >= MAX_TAGS)
+          throw InvalidObjectException("An itinerary should not have more than $MAX_TAGS tags")
+      tags.add(tag)
       return this
     }
 
@@ -118,6 +117,28 @@ data class Itinerary(
     }
 
     /**
+     * @param price the new price
+     * @return the builder to support method chaining
+     * @brief set the price of the itinerary builder
+     */
+    fun price(price: Float): Builder {
+      require(price >= 0f)
+      this.price = price
+      return this
+    }
+
+    /**
+     * @param time the new time
+     * @return the builder to support method chaining
+     * @brief set the time of the itinerary builder
+     */
+    fun time(time: Int): Builder {
+      require(time >= 0)
+      this.time = time
+      return this
+    }
+
+    /**
      * @return an itinerary with the parameters of the builder
      * @throws IllegalArgumentException if no locations are provided
      * @throws IllegalArgumentException if the title is blank
@@ -126,8 +147,31 @@ data class Itinerary(
     fun build(): Itinerary {
       require(locations.isNotEmpty()) { "At least one location must be provided" }
       require(title.isNotBlank()) { "Title must not be blank" }
-      return Itinerary(uid, userUid, locations.toList(), title, tags.toList(), description, visible)
+      return Itinerary(
+          uid = uid,
+          userUid = userUid,
+          locations = locations.toList(),
+          title = title,
+          tags = tags.toList(),
+          description = description,
+          visible = visible,
+          price = price,
+          time = time)
     }
+  }
+
+  /** @return a map representation of an itinerary */
+  fun toMap(): Map<String, Any> {
+    return mapOf(
+        ItineraryLabels.UID to uid,
+        ItineraryLabels.USER_UID to userUid,
+        ItineraryLabels.LOCATIONS to locations.map { location -> location.toMap() },
+        ItineraryLabels.TITLE to title,
+        ItineraryLabels.TAGS to tags,
+        ItineraryLabels.DESCRIPTION to (description ?: ""),
+        ItineraryLabels.VISIBLE to visible,
+        ItineraryLabels.PRICE to price,
+        ItineraryLabels.TIME to time)
   }
 
   /**
@@ -141,6 +185,8 @@ data class Itinerary(
       title = this@Itinerary.title
       description = this@Itinerary.description
       visible = this@Itinerary.visible
+      price = this@Itinerary.price
+      time = this@Itinerary.time
     }
   }
 

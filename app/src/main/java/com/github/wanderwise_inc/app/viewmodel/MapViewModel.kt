@@ -12,6 +12,7 @@ import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryPreferences
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 
 private const val DEBUG_TAG: String = "MAP_VIEWMODEL"
@@ -21,6 +22,18 @@ class MapViewModel(
     private val directionsRepository: DirectionsRepository,
     private val userLocationClient: UserLocationClient,
 ) : ViewModel() {
+  private var focusedItinerary: Itinerary? = null
+
+  /** @return the itinerary the user has clicked on */
+  fun getFocusedItinerary(): Itinerary? {
+    return focusedItinerary
+  }
+
+  /** changes the focused itinerary to a new one */
+  fun setFocusedItinerary(itinerary: Itinerary?) {
+    focusedItinerary = itinerary
+  }
+
   /** @return a flow of all public itineraries */
   fun getAllPublicItineraries(): Flow<List<Itinerary>> {
     return itineraryRepository.getPublicItineraries()
@@ -33,9 +46,23 @@ class MapViewModel(
 
   /** @return the total number of likes from a list of itineraries */
   fun getItineraryLikes(itineraries: List<Itinerary>): Int {
-    var totalLikes = 0
+
+    var totalLikes: Int = 0
+
     for (itinerary in itineraries) totalLikes += itinerary.numLikes
     return totalLikes
+  }
+
+  /** @brief increment likes of a given itinerary */
+  fun incrementItineraryLikes(itinerary: Itinerary) {
+    itinerary.numLikes++
+    itineraryRepository.updateItinerary(itinerary.uid, itinerary)
+  }
+
+  /** @brief decrement likes of a given itinerary */
+  fun decrementItineraryLikes(itinerary: Itinerary) {
+    itinerary.numLikes--
+    itineraryRepository.updateItinerary(itinerary.uid, itinerary)
   }
 
   /**
@@ -54,6 +81,14 @@ class MapViewModel(
   ): List<Itinerary> {
     // invert the sign so that the list is sorted in descending order
     return itineraries.sortedBy { -it.scoreFromPreferences(preferences) }
+  }
+
+  /** @return list of itineraries queried based on their UIDs */
+  fun getItineraryFromUids(uidList: List<String>): Flow<List<Itinerary>> {
+    return flow {
+      val result = uidList.map { uid -> itineraryRepository.getItinerary(uid) }
+      emit(result)
+    }
   }
 
   /** @brief sets an itinerary in DB */
@@ -102,4 +137,8 @@ class MapViewModel(
   fun getUserLocation(): Flow<Location> {
     return userLocationClient.getLocationUpdates(1000)
   }
+
+  /* fun filterItinerariesByPrice(priceRange: FloatRange): List<Itinerary> {
+    return allItineraries.filter { it.price in priceRange }
+  }*/
 }

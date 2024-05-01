@@ -1,38 +1,40 @@
 package com.github.wanderwise_inc.app.ui.navigation.graph
 
-import OverviewScreen
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.github.wanderwise_inc.app.model.location.Itinerary
-import com.github.wanderwise_inc.app.model.location.ItineraryTags
-import com.github.wanderwise_inc.app.model.location.PlacesReader
-import com.github.wanderwise_inc.app.ui.liked.LikedScreen
+import com.github.wanderwise_inc.app.data.ImageRepository
+import com.github.wanderwise_inc.app.demoSetup
+import com.github.wanderwise_inc.app.ui.creation.CreationScreen
+import com.github.wanderwise_inc.app.ui.list_itineraries.LikedScreen
+import com.github.wanderwise_inc.app.ui.list_itineraries.OverviewScreen
 import com.github.wanderwise_inc.app.ui.map.PreviewItineraryScreen
 import com.github.wanderwise_inc.app.ui.navigation.Destination.TopLevelDestination
 import com.github.wanderwise_inc.app.ui.profile.ProfileScreen
-import com.github.wanderwise_inc.app.ui.search.SearchScreen
+import com.github.wanderwise_inc.app.viewmodel.BottomNavigationViewModel
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
+import com.github.wanderwise_inc.app.viewmodel.NavigationItem
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun HomeNavGraph(
-    mapViewModel: MapViewModel,
     navController: NavHostController,
-    profileViewModel: ProfileViewModel
+    mapViewModel: MapViewModel,
+    profileViewModel: ProfileViewModel,
+    bottomNavigationViewModel: BottomNavigationViewModel,
+    imageRepository: ImageRepository,
+    firebaseAuth: FirebaseAuth
 ) {
-  val placeReader = PlacesReader(null)
-  val locations = placeReader.readFromString()
 
-  val itinerary =
-      Itinerary(
-          userUid = "",
-          locations = locations,
-          title = "San Francisco Bike Itinerary",
-          tags = listOf(ItineraryTags.CULTURAL, ItineraryTags.NATURE, ItineraryTags.BUDGET),
-          description = "A 3-day itinerary to explore the best of San Francisco on a bike.",
-          visible = true)
+  // BEGIN DEMO SETUP
+  demoSetup(mapViewModel, profileViewModel, firebaseAuth)
+  /*var itinerary: Itinerary? = null
+  runBlocking {
+    itinerary = mapViewModel.getItineraryFromUids(listOf(PREVIEW_ITINERARY_DEMO_UID)).first()[0]
+  }*/
+  // END DEMO SETUP
 
   NavHost(
       navController = navController,
@@ -40,17 +42,25 @@ fun HomeNavGraph(
       startDestination = TopLevelDestination.Overview.route,
       // modifier = Modifier.padding(innerPadding)
   ) {
-    composable(route = TopLevelDestination.Overview.route) { OverviewScreen(mapViewModel) }
-    composable(route = TopLevelDestination.Liked.route) { LikedScreen(mapViewModel) }
-    composable(route = TopLevelDestination.Search.route) { SearchScreen(mapViewModel) }
+    composable(route = TopLevelDestination.Overview.route) {
+      bottomNavigationViewModel.setSelected(NavigationItem.OVERVIEW.ordinal)
+      OverviewScreen(mapViewModel, profileViewModel, navController)
+    }
+    composable(route = TopLevelDestination.Liked.route) {
+      bottomNavigationViewModel.setSelected(NavigationItem.LIKED.ordinal)
+      LikedScreen(mapViewModel, profileViewModel, navController, firebaseAuth)
+    }
+    composable(route = TopLevelDestination.Creation.route) {
+      bottomNavigationViewModel.setSelected(NavigationItem.CREATE.ordinal)
+      CreationScreen(mapViewModel)
+    }
     composable(route = TopLevelDestination.Map.route) {
-      PreviewItineraryScreen(itinerary, mapViewModel)
+      bottomNavigationViewModel.setSelected(NavigationItem.MAP.ordinal)
+      PreviewItineraryScreen(mapViewModel, profileViewModel)
     }
     composable(route = TopLevelDestination.Profile.route) {
-      ProfileScreen(mapViewModel, profileViewModel)
-    }
-    composable(route = TopLevelDestination.Profile.route) {
-      ProfileScreen(mapViewModel, profileViewModel)
+      bottomNavigationViewModel.setSelected(NavigationItem.PROFILE.ordinal)
+      ProfileScreen(mapViewModel, profileViewModel, imageRepository, navController, firebaseAuth)
     }
   }
 }
