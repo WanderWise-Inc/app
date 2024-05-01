@@ -17,19 +17,26 @@ private const val OTHER_USER_UID = "OTHER_UID"
 private var DEMO_CALLED = false
 
 /** @brief isolates demo-related setup */
-fun demoSetup(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel) {
+fun demoSetup(
+    mapViewModel: MapViewModel,
+    profileViewModel: ProfileViewModel,
+    firebaseAuth: FirebaseAuth
+) {
   // was being called multiple times for some reason. The condition prevents this
   if (!DEMO_CALLED) {
-    addProfiles(mapViewModel, profileViewModel)
-    addItineraries(mapViewModel, profileViewModel)
+    addProfiles(mapViewModel, profileViewModel, firebaseAuth)
+    addItineraries(mapViewModel, profileViewModel, firebaseAuth)
     DEMO_CALLED = true
   }
 }
 
 /** @brief adds some profiles to ProfileViewModel */
-fun addProfiles(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel) {
-  val currentUser = FirebaseAuth.getInstance().currentUser
-  val currentUserUid = currentUser?.uid ?: DEFAULT_USER_UID
+fun addProfiles(
+    mapViewModel: MapViewModel,
+    profileViewModel: ProfileViewModel,
+    firebaseAuth: FirebaseAuth
+) {
+  val currentUserUid = firebaseAuth.currentUser?.uid ?: DEFAULT_USER_UID
 
   val someOtherProfile =
       Profile(
@@ -47,7 +54,11 @@ fun addProfiles(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel) 
 }
 
 /** @brief adds some itineraries to MapViewModel */
-fun addItineraries(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel) {
+fun addItineraries(
+    mapViewModel: MapViewModel,
+    profileViewModel: ProfileViewModel,
+    firebaseAuth: FirebaseAuth
+) {
   val defaultLocations = PlacesReader(null).readFromString()
 
   val itineraryAdventureAndLuxury =
@@ -77,9 +88,11 @@ fun addItineraries(mapViewModel: MapViewModel, profileViewModel: ProfileViewMode
                   ItineraryTags.WELLNESS),
           description = null,
           visible = true,
+          time = 3,
+          price = 25.0f,
       )
-  val currentUser = FirebaseAuth.getInstance().currentUser
-  val currentUserUid = currentUser?.uid ?: DEFAULT_USER_UID
+
+  val currentUserUid = firebaseAuth.currentUser?.uid ?: DEFAULT_USER_UID
 
   val privateItinerary =
       Itinerary(

@@ -22,6 +22,18 @@ class MapViewModel(
     private val directionsRepository: DirectionsRepository,
     private val userLocationClient: UserLocationClient,
 ) : ViewModel() {
+  private var focusedItinerary: Itinerary? = null
+
+  /** @return the itinerary the user has clicked on */
+  fun getFocusedItinerary(): Itinerary? {
+    return focusedItinerary
+  }
+
+  /** changes the focused itinerary to a new one */
+  fun setFocusedItinerary(itinerary: Itinerary?) {
+    focusedItinerary = itinerary
+  }
+
   /** @return a flow of all public itineraries */
   fun getAllPublicItineraries(): Flow<List<Itinerary>> {
     return itineraryRepository.getPublicItineraries()
@@ -125,4 +137,8 @@ class MapViewModel(
   fun getUserLocation(): Flow<Location> {
     return userLocationClient.getLocationUpdates(1000)
   }
+
+  /* fun filterItinerariesByPrice(priceRange: FloatRange): List<Itinerary> {
+    return allItineraries.filter { it.price in priceRange }
+  }*/
 }

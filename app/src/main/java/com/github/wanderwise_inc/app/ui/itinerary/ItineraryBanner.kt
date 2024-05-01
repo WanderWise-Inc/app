@@ -4,7 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -12,13 +11,10 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
@@ -28,6 +24,7 @@ import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -50,7 +47,7 @@ import com.github.wanderwise_inc.app.model.location.Itinerary
 fun ItineraryBanner(
     itinerary: Itinerary,
     onLikeButtonClick: (Itinerary, Boolean) -> Unit,
-    onBannerClick: () -> Unit,
+    onBannerClick: (Itinerary) -> Unit,
     isLikedInitially: Boolean = false
 ) {
 
@@ -58,6 +55,8 @@ fun ItineraryBanner(
 
   var isLiked by remember { mutableStateOf(isLikedInitially) }
   var numLikes by remember { mutableIntStateOf(itinerary.numLikes) }
+  var prices by remember { mutableFloatStateOf(itinerary.price) }
+  var times by remember { mutableIntStateOf(itinerary.time) }
 
   ElevatedCard(
       colors =
@@ -66,7 +65,7 @@ fun ItineraryBanner(
           ),
       elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
       shape = RoundedCornerShape(13.dp),
-      onClick = { onBannerClick() },
+      onClick = { onBannerClick(itinerary) },
       modifier = Modifier.testTag("Itinerary banner")) {
         Column(
             modifier =
@@ -108,14 +107,14 @@ fun ItineraryBanner(
                           modifier = Modifier.padding(4.dp, 0.dp))
 
                       Text(
-                          text = "Estimated time : - hours",
+                          text = "Estimated time: $times hours",
                           color = MaterialTheme.colorScheme.secondary,
                           fontFamily = FontFamily.Monospace,
                           fontSize = 12.sp,
                           modifier = Modifier.padding(4.dp, 0.dp))
 
                       Text(
-                          text = "Average Expense : -",
+                          text = "Average Expense: $prices",
                           color = MaterialTheme.colorScheme.secondary,
                           fontFamily = FontFamily.Monospace,
                           fontSize = 12.sp,
