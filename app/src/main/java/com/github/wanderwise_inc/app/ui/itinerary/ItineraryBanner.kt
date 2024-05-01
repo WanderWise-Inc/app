@@ -4,7 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -12,13 +11,10 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
@@ -56,7 +52,7 @@ object ItineraryBannerTestTags {
 fun ItineraryBanner(
     itinerary: Itinerary,
     onLikeButtonClick: (Itinerary, Boolean) -> Unit,
-    onBannerClick: () -> Unit,
+    onBannerClick: (Itinerary) -> Unit,
     isLikedInitially: Boolean = false
 ) {
 
@@ -74,8 +70,8 @@ fun ItineraryBanner(
           ),
       elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
       shape = RoundedCornerShape(13.dp),
-      onClick = { onBannerClick() },
-      modifier = Modifier.testTag("${ItineraryBannerTestTags.ITINERARY_BANNER}_${itinerary.uid}")) {
+      modifier = Modifier.testTag("${ItineraryBannerTestTags.ITINERARY_BANNER}_${itinerary.uid}"),
+      onClick = { onBannerClick(itinerary) }) {
         Column(
             modifier =
                 Modifier.background(MaterialTheme.colorScheme.primaryContainer)

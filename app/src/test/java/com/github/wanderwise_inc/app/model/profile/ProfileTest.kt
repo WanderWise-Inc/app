@@ -1,6 +1,5 @@
 package com.github.wanderwise_inc.app.model.profile
 
-import org.junit.Assert.*
 import org.junit.Test
 
 class ProfileTest {

@@ -7,6 +7,8 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.github.wanderwise_inc.app.data.DirectionsRepository
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.data.ItineraryRepository
@@ -24,6 +26,8 @@ import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.github.wanderwise_inc.app.viewmodel.UserLocationClient
 import com.google.firebase.FirebaseApp
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
@@ -32,6 +36,7 @@ import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.Mockito.mock
+import org.mockito.Mockito.`when`
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
@@ -55,6 +60,9 @@ class LikedScreenTest {
   @Mock private lateinit var imageRepository: ImageRepository
   @Mock private lateinit var directionsRepository: DirectionsRepository
   @Mock private lateinit var userLocationClient: UserLocationClient
+  @Mock private lateinit var navHostController: NavHostController
+  @Mock private lateinit var firebaseUser: FirebaseUser
+  @Mock private lateinit var firebaseAuth: FirebaseAuth
 
   private lateinit var itineraryRepository: ItineraryRepository
   private lateinit var mapViewModel: MapViewModel
@@ -83,7 +91,13 @@ class LikedScreenTest {
       mapViewModel = MapViewModel(itineraryRepository, directionsRepository, userLocationClient)
       profileViewModel = ProfileViewModel(profileRepository, imageRepository)
 
-      LikedScreen(mapViewModel, profileViewModel)
+      navHostController = mock(NavHostController::class.java)
+      firebaseAuth = mock(FirebaseAuth::class.java)
+      firebaseUser = mock(FirebaseUser::class.java)
+      `when`(firebaseAuth.currentUser).thenReturn(firebaseUser)
+      `when`(firebaseUser.uid).thenReturn(null)
+
+      LikedScreen(mapViewModel, profileViewModel, navHostController, firebaseAuth)
     }
   }
 
@@ -96,7 +110,7 @@ class LikedScreenTest {
 
   @Test
   fun `category selector should be displayed on liked screen`() {
-    composeTestRule.onNodeWithTag(LikedScreenTestTags.CATEGORY_SELECTOR).assertIsDisplayed()
+    composeTestRule.onNodeWithTag(TestTags.CATEGORY_SELECTOR).assertIsDisplayed()
   }
 
   @Test
