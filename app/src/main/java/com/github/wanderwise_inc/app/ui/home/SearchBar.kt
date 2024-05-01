@@ -47,7 +47,7 @@ fun SearchBar(
       leadingIcon = {
         Icon(
             painter = painterResource(id = R.drawable.les_controles),
-            contentDescription = null,
+            contentDescription = "les_controles",
             tint = Color.Black,
             modifier = Modifier.clickable { isDropdownOpen = true }.padding(2.dp).size(30.dp))
       },
@@ -68,7 +68,6 @@ fun SearchBar(
             value = sliderPositionPriceState.value,
             steps = 50,
             onValueChange = { range -> sliderPositionPriceState.value = range },
-            modifier = Modifier.testTag("RangeSlider"),
             valueRange = 0f..100f, // Adjust this range according to your needs
             onValueChangeFinished = {
               // launch something
@@ -91,6 +90,7 @@ fun SearchBar(
             onValueChangeFinished = {
               // launch something
             },
+
         )
         Text(
             text =
