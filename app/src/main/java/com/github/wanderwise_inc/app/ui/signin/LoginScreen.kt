@@ -33,6 +33,7 @@ import androidx.navigation.NavHostController
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.github.wanderwise_inc.app.R
+import com.github.wanderwise_inc.app.data.GoogleSignInLauncher
 import com.github.wanderwise_inc.app.data.SignInRepositoryImpl
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -40,6 +41,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(
+    googleSignInLauncher: GoogleSignInLauncher,
     profileViewModel: ProfileViewModel,
     navController: NavHostController,
     modifier: Modifier = Modifier
@@ -58,7 +60,7 @@ fun LoginScreen(
                 .requiredHeight(height = 39.dp)
                 .clip(shape = RoundedCornerShape(8.dp))
                 .background(color = Color(0xFF972626))) {
-          SignInButton(profileViewModel, navController)
+          SignInButton(googleSignInLauncher,profileViewModel, navController)
         }
     Image(
         painter = painterResource(id = R.drawable.google__g__logo_svg),
@@ -88,12 +90,13 @@ fun LoginScreen(
 
 @Composable
 fun SignInButton(
+    googleSignInLauncher : GoogleSignInLauncher,
     profileViewModel: ProfileViewModel,
     navController: NavHostController,
 ) {
   Log.d("TESTING SIGN IN BUTTON", "IN SIGN IN BUTTON")
   // Added a coroutine because userViewModel functions are async
-  val signInRepositoryImpl = SignInRepositoryImpl()
+/*  val signInRepositoryImpl = SignInRepositoryImpl()
   val coroutineScope = rememberCoroutineScope()
   val providers = arrayListOf(AuthUI.IdpConfig.GoogleBuilder().build())
   // Create and launch sign-in intent
@@ -108,10 +111,10 @@ fun SignInButton(
           val user = FirebaseAuth.getInstance().currentUser
           signInRepositoryImpl.signIn(it, navController, profileViewModel, user, it.resultCode)
         }
-      }
+      }*/
 
   Button(
-      onClick = { signInLauncher.launch(signInIntent) },
+      onClick = { googleSignInLauncher.launchSignIn() },
       modifier =
           Modifier.requiredWidth(width = 289.dp)
               .requiredHeight(height = 39.dp)

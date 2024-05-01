@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.github.wanderwise_inc.app.data.GoogleSignInLauncher
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.ui.home.HomeScreen
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
@@ -11,6 +12,7 @@ import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 
 @Composable
 fun RootNavigationGraph(
+    googleSignInLauncher: GoogleSignInLauncher,
     profileViewModel: ProfileViewModel,
     mapViewModel: MapViewModel,
     imageRepository: ImageRepository,
@@ -18,7 +20,7 @@ fun RootNavigationGraph(
 ) {
   NavHost(
       navController = navController, route = Graph.ROOT, startDestination = Graph.AUTHENTICATION) {
-        authNavGraph(profileViewModel, navController)
+        authNavGraph(googleSignInLauncher,profileViewModel, navController)
         composable(route = Graph.HOME) {
           HomeScreen(imageRepository, mapViewModel, profileViewModel)
         }
