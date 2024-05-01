@@ -25,6 +25,7 @@ import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.github.wanderwise_inc.app.viewmodel.UserLocationClient
 import com.google.android.gms.location.LocationServices
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 
 class MainActivity : ComponentActivity() {
@@ -72,7 +73,9 @@ class MainActivity : ComponentActivity() {
               mapViewModel = mapViewModel,
               bottomNavigationViewModel = bottomNavigationViewModel,
               imageRepository = imageRepository,
-              navController = rememberNavController())
+              navController = rememberNavController(),
+              firebaseAuth = FirebaseAuth.getInstance(),
+          )
         }
       }
     }

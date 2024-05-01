@@ -17,6 +17,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.navigation.NavHostController
 import com.github.wanderwise_inc.app.R
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
+import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.home.SearchBar
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
@@ -66,7 +67,7 @@ fun DisplayOverviewItineraries(
       topBar = {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxWidth().testTag("Overview screen")) {
+            modifier = Modifier.fillMaxWidth()) {
               SearchBar(
                   onSearchChange = { searchQuery = it },
                   onPriceChange = { priceRange = it },
@@ -78,7 +79,7 @@ fun DisplayOverviewItineraries(
                   onCategorySelected = { selectedIndex = it })
             }
       },
-      modifier = Modifier.testTag("Liked screen")) { innerPadding ->
+      modifier = Modifier.testTag(TestTags.OVERVIEW_SCREEN)) { innerPadding ->
         val filtered =
             itineraries
                 .filter { itinerary -> itinerary.tags.contains(categoriesList[selectedIndex].tag) }
@@ -104,6 +105,7 @@ fun DisplayOverviewItineraries(
             paddingValues = innerPadding,
             mapViewModel = mapViewModel,
             profileViewModel = profileViewModel,
-            navController = navController)
+            navController = navController,
+            parent = ItineraryListParent.OVERVIEW)
       }
 }

@@ -17,6 +17,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -25,6 +26,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -32,12 +34,12 @@ import com.github.wanderwise_inc.app.DEFAULT_USER_UID
 import com.github.wanderwise_inc.app.R
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.model.profile.Profile
+import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.list_itineraries.ItinerariesListScrollable
+import com.github.wanderwise_inc.app.ui.list_itineraries.ItineraryListParent
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
-
-const val PROFILE_SCREEN_TEST_TAG: String = "profile_screen"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -45,10 +47,11 @@ fun ProfileScreen(
     mapViewModel: MapViewModel,
     profileViewModel: ProfileViewModel,
     imageRepository: ImageRepository,
-    navHostController: NavHostController
+    navHostController: NavHostController,
+    firebaseAuth: FirebaseAuth
 ) {
   // val currentUid = FirebaseAuth.getInstance().currentUser!!.uid
-  val currentUid = FirebaseAuth.getInstance().currentUser?.uid ?: DEFAULT_USER_UID
+  val currentUid = firebaseAuth.currentUser?.uid ?: DEFAULT_USER_UID
 
   val profile by profileViewModel.getProfile(currentUid).collectAsState(initial = null)
 
@@ -58,7 +61,7 @@ fun ProfileScreen(
   val profilePictureModifier = Modifier.size(100.dp)
 
   if (profile != null) {
-    androidx.compose.material.Scaffold(
+    Scaffold(
         /*Top bar composable*/
         topBar = {
           TopAppBar(
@@ -87,7 +90,7 @@ fun ProfileScreen(
                       actionIconContentColor = MaterialTheme.colorScheme.onSecondary),
               modifier = Modifier.padding(bottom = 20.dp))
         },
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().testTag(TestTags.PROFILE_SCREEN),
     ) { innerPadding ->
       Box(
           modifier = Modifier.padding(innerPadding).fillMaxSize(),
@@ -116,7 +119,8 @@ fun ProfileScreen(
                   mapViewModel = mapViewModel,
                   profileViewModel = profileViewModel,
                   paddingValues = PaddingValues(8.dp),
-                  navController = navHostController)
+                  navController = navHostController,
+                  parent = ItineraryListParent.PROFILE)
             }
           }
     }
@@ -134,7 +138,10 @@ fun Username(profile: Profile, modifier: Modifier) {
 @Composable
 fun WanderScore(profile: Profile) {
   Box(modifier = Modifier.background(MaterialTheme.colorScheme.secondary)) {
-    Text(text = "WanderScore: Not Implemented Yet")
+    Text(
+        text = "WanderScore: Not Implemented Yet",
+        color = MaterialTheme.colorScheme.surface // added white color to increase visibility
+        )
   }
 }
 

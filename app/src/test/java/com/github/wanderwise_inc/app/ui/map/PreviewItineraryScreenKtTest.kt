@@ -19,6 +19,7 @@ import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
 import com.github.wanderwise_inc.app.model.location.PlacesReader
 import com.github.wanderwise_inc.app.model.profile.Profile
+import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.github.wanderwise_inc.app.viewmodel.UserLocationClient
@@ -101,60 +102,35 @@ class PreviewItineraryScreenKtTest {
   fun `initial elements are displayed correctly`() {
     composeTestRule.setContent { PreviewItineraryScreen(mapViewModel, profileViewModel) }
 
-    composeTestRule.onNodeWithTag(PreviewItineraryScreenTestTags.MAIN_SCREEN).assertIsDisplayed()
-    composeTestRule
-        .onNodeWithTag(PreviewItineraryScreenTestTags.MAXIMIZED_BANNER)
-        .assertIsDisplayed()
-
-    composeTestRule.onNodeWithTag(PreviewItineraryScreenTestTags.BANNER_BUTTON).assertIsDisplayed()
-    composeTestRule
-        .onNodeWithTag(PreviewItineraryScreenTestTags.CENTER_CAMERA_BUTTON)
-        .assertIsDisplayed()
-    composeTestRule.onNodeWithTag(PreviewItineraryScreenTestTags.PROFILE_PIC).assertIsDisplayed()
+    composeTestRule.onNodeWithTag(TestTags.MAP_PREVIEW_ITINERARY_SCREEN).assertIsDisplayed()
+    composeTestRule.onNodeWithTag(TestTags.MAP_MAXIMIZED_BANNER).assertIsDisplayed()
+    composeTestRule.onNodeWithTag(TestTags.MAP_BANNER_BUTTON).assertIsDisplayed()
+    composeTestRule.onNodeWithTag(TestTags.MAP_CENTER_CAMERA_BUTTON).assertIsDisplayed()
+    composeTestRule.onNodeWithTag(TestTags.MAP_PROFILE_PIC).assertIsDisplayed()
   }
 
   @Test
   fun `pressing banner button should minimize and maximize the banner`() {
     composeTestRule.setContent { PreviewItineraryScreen(mapViewModel, profileViewModel) }
 
-    composeTestRule
-        .onNodeWithTag(PreviewItineraryScreenTestTags.MAXIMIZED_BANNER)
-        .assertIsDisplayed()
-    composeTestRule
-        .onNodeWithTag(PreviewItineraryScreenTestTags.MINIMIZED_BANNER)
-        .assertIsNotDisplayed()
+    composeTestRule.onNodeWithTag(TestTags.MAP_MAXIMIZED_BANNER).assertIsDisplayed()
+    composeTestRule.onNodeWithTag(TestTags.MAP_MINIMIZED_BANNER).assertIsNotDisplayed()
 
     // minimize the banner
-    composeTestRule.onNodeWithTag(PreviewItineraryScreenTestTags.BANNER_BUTTON).performClick()
+    composeTestRule.onNodeWithTag(TestTags.MAP_BANNER_BUTTON).performClick()
 
-    composeTestRule
-        .onNodeWithTag(PreviewItineraryScreenTestTags.MAXIMIZED_BANNER)
-        .assertIsNotDisplayed()
-    composeTestRule
-        .onNodeWithTag(PreviewItineraryScreenTestTags.MINIMIZED_BANNER)
-        .assertIsDisplayed()
-    composeTestRule
-        .onNodeWithTag(PreviewItineraryScreenTestTags.ITINERARY_TITLE)
-        .assertIsDisplayed()
-    composeTestRule
-        .onNodeWithTag(PreviewItineraryScreenTestTags.ITINERARY_DESCRIPTION)
-        .assertIsNotDisplayed()
+    composeTestRule.onNodeWithTag(TestTags.MAP_MAXIMIZED_BANNER).assertIsNotDisplayed()
+    composeTestRule.onNodeWithTag(TestTags.MAP_MINIMIZED_BANNER).assertIsDisplayed()
+    composeTestRule.onNodeWithTag(TestTags.MAP_ITINERARY_TITLE).assertIsDisplayed()
+    composeTestRule.onNodeWithTag(TestTags.MAP_ITINERARY_DESCRIPTION).assertIsNotDisplayed()
 
     // maximize the banner
-    composeTestRule.onNodeWithTag(PreviewItineraryScreenTestTags.BANNER_BUTTON).performClick()
+    composeTestRule.onNodeWithTag(TestTags.MAP_BANNER_BUTTON).performClick()
 
-    composeTestRule
-        .onNodeWithTag(PreviewItineraryScreenTestTags.MAXIMIZED_BANNER)
-        .assertIsDisplayed()
-    composeTestRule
-        .onNodeWithTag(PreviewItineraryScreenTestTags.MINIMIZED_BANNER)
-        .assertIsNotDisplayed()
-    composeTestRule
-        .onNodeWithTag(PreviewItineraryScreenTestTags.ITINERARY_TITLE)
-        .assertIsDisplayed()
-    composeTestRule
-        .onNodeWithTag(PreviewItineraryScreenTestTags.ITINERARY_DESCRIPTION)
-        .assertIsDisplayed()
+    composeTestRule.onNodeWithTag(TestTags.MAP_MAXIMIZED_BANNER).assertIsDisplayed()
+    composeTestRule.onNodeWithTag(TestTags.MAP_MINIMIZED_BANNER).assertIsNotDisplayed()
+    composeTestRule.onNodeWithTag(TestTags.MAP_ITINERARY_TITLE).assertIsDisplayed()
+    composeTestRule.onNodeWithTag(TestTags.MAP_ITINERARY_DESCRIPTION).assertIsDisplayed()
   }
 
   @Test
@@ -162,21 +138,13 @@ class PreviewItineraryScreenKtTest {
     mapViewModel.setFocusedItinerary(null)
     composeTestRule.setContent { PreviewItineraryScreen(mapViewModel, profileViewModel) }
 
-    composeTestRule.onNodeWithTag(PreviewItineraryScreenTestTags.NULL_ITINERARY).assertIsDisplayed()
+    composeTestRule.onNodeWithTag(TestTags.MAP_NULL_ITINERARY).assertIsDisplayed()
 
     // this shouldn't be displayed
-    composeTestRule
-        .onNodeWithTag(PreviewItineraryScreenTestTags.MAXIMIZED_BANNER)
-        .assertIsNotDisplayed()
-    composeTestRule
-        .onNodeWithTag(PreviewItineraryScreenTestTags.MINIMIZED_BANNER)
-        .assertIsNotDisplayed()
-    composeTestRule
-        .onNodeWithTag(PreviewItineraryScreenTestTags.ITINERARY_TITLE)
-        .assertIsNotDisplayed()
-    composeTestRule
-        .onNodeWithTag(PreviewItineraryScreenTestTags.ITINERARY_DESCRIPTION)
-        .assertIsNotDisplayed()
+    composeTestRule.onNodeWithTag(TestTags.MAP_MAXIMIZED_BANNER).assertIsNotDisplayed()
+    composeTestRule.onNodeWithTag(TestTags.MAP_MINIMIZED_BANNER).assertIsNotDisplayed()
+    composeTestRule.onNodeWithTag(TestTags.MAP_ITINERARY_TITLE).assertIsNotDisplayed()
+    composeTestRule.onNodeWithTag(TestTags.MAP_ITINERARY_DESCRIPTION).assertIsNotDisplayed()
   }
 
   @Test
@@ -204,9 +172,7 @@ class PreviewItineraryScreenKtTest {
       }
     }
 
-    composeTestRule
-        .onNodeWithTag(PreviewItineraryScreenTestTags.CENTER_CAMERA_BUTTON)
-        .assertIsDisplayed()
+    composeTestRule.onNodeWithTag(TestTags.MAP_CENTER_CAMERA_BUTTON).assertIsDisplayed()
     // TODO test fails: java.lang.NullPointerException: CameraUpdateFactory is not initialized
     // composeTestRule.onNodeWithTag("Center Button").performClick()
     /*
