@@ -35,7 +35,7 @@ fun SearchBar(
     sliderPositionTimeState: MutableState<ClosedFloatingPointRange<Float>>
 ) {
   var query by remember { mutableStateOf("") }
-  var isDropdownOpen by remember { mutableStateOf(false) }
+  var isDropdownOpen = remember { mutableStateOf(false) }
 
   OutlinedTextField(
       value = query,
@@ -51,28 +51,32 @@ fun SearchBar(
             painter = painterResource(id = R.drawable.les_controles),
             contentDescription = "les_controles",
             tint = Color.Black,
-            modifier = Modifier
-                .clickable { isDropdownOpen = true }
-                .padding(2.dp)
-                .size(30.dp)
-                .testTag(TestTags.SEARCH_ICON))
+            modifier =
+                Modifier.clickable { isDropdownOpen.value = true }
+                    .padding(2.dp)
+                    .size(30.dp)
+                    .testTag(TestTags.SEARCH_ICON))
       },
       singleLine = true,
       shape = RoundedCornerShape(30.dp),
       modifier =
-      Modifier
-          .background(MaterialTheme.colorScheme.primaryContainer)
-          .fillMaxWidth()
-          .padding(5.dp)
-          )
+          Modifier.background(MaterialTheme.colorScheme.primaryContainer)
+              .fillMaxWidth()
+              .padding(5.dp))
+  DropdownSearch(isDropdownOpen, sliderPositionPriceState, sliderPositionTimeState)
+}
 
+@Composable
+fun DropdownSearch(
+    isDropdownOpen: MutableState<Boolean>,
+    sliderPositionPriceState: MutableState<ClosedFloatingPointRange<Float>>,
+    sliderPositionTimeState: MutableState<ClosedFloatingPointRange<Float>>
+) {
   DropdownMenu(
-      expanded = isDropdownOpen,
-      onDismissRequest = { isDropdownOpen = false },
+      expanded = isDropdownOpen.value,
+      onDismissRequest = { isDropdownOpen.value = false },
       modifier = Modifier.testTag(TestTags.SEARCH_DROPDOWN).fillMaxWidth()) {
-
-
-      Column {
+        Column {
           Text("How much do I want to spend ?", modifier = Modifier.testTag(TestTags.PRICE_SEARCH))
           RangeSlider(
               value = sliderPositionPriceState.value,
@@ -80,40 +84,35 @@ fun SearchBar(
               onValueChange = { range -> sliderPositionPriceState.value = range },
               valueRange = 0f..100f, // Adjust this range according to your needs
               onValueChangeFinished = {
-                  // launch something
+                // launch something
               },
-                modifier = Modifier.testTag(TestTags.PRICE_SEARCH)
-          )
+              modifier = Modifier.testTag(TestTags.PRICE_SEARCH))
           Text(
               text =
-              String.format(
-                  "%.2f - %.2f",
-                  sliderPositionPriceState.value.start,
-                  sliderPositionPriceState.value.endInclusive))
+                  String.format(
+                      "%.2f - %.2f",
+                      sliderPositionPriceState.value.start,
+                      sliderPositionPriceState.value.endInclusive))
           // sliderPosition.contains()
-      }
-
-
-
-        Column {
-            Text("How Long do I want to wander ?", modifier = Modifier.testTag(TestTags.TIME_SEARCH))
-            RangeSlider(
-                value = sliderPositionTimeState.value,
-                steps = 24,
-                onValueChange = { range -> sliderPositionTimeState.value = range },
-                valueRange = 0f..24f, // Adjust this range according to your needs
-                onValueChangeFinished = {
-                    // launch something
-                },
-                modifier = Modifier.testTag(TestTags.TIME_SEARCH)
-                )
-            Text(
-                text =
-                String.format(
-                    "%.2f - %.2f",
-                    sliderPositionTimeState.value.start,
-                    sliderPositionTimeState.value.endInclusive))
         }
 
+        Column {
+          Text("How Long do I want to wander ?", modifier = Modifier.testTag(TestTags.TIME_SEARCH))
+          RangeSlider(
+              value = sliderPositionTimeState.value,
+              steps = 24,
+              onValueChange = { range -> sliderPositionTimeState.value = range },
+              valueRange = 0f..24f, // Adjust this range according to your needs
+              onValueChangeFinished = {
+                // launch something
+              },
+              modifier = Modifier.testTag(TestTags.TIME_SEARCH))
+          Text(
+              text =
+                  String.format(
+                      "%.2f - %.2f",
+                      sliderPositionTimeState.value.start,
+                      sliderPositionTimeState.value.endInclusive))
+        }
       }
 }
