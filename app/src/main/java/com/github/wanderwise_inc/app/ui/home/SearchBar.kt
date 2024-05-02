@@ -35,7 +35,7 @@ fun SearchBar(
     sliderPositionTimeState: MutableState<ClosedFloatingPointRange<Float>>
 ) {
   var query by remember { mutableStateOf("") }
-  var isDropdownOpen = remember { mutableStateOf(false) }
+  var isDropdownOpen by remember { mutableStateOf(false) }
 
   OutlinedTextField(
       value = query,
@@ -49,10 +49,10 @@ fun SearchBar(
       leadingIcon = {
         Icon(
             painter = painterResource(id = R.drawable.les_controles),
-            contentDescription = "les_controles",
+            contentDescription = "search icon",
             tint = Color.Black,
             modifier =
-                Modifier.clickable { isDropdownOpen.value = true }
+                Modifier.clickable { isDropdownOpen = true }
                     .padding(2.dp)
                     .size(30.dp)
                     .testTag(TestTags.SEARCH_ICON))
@@ -63,18 +63,12 @@ fun SearchBar(
           Modifier.background(MaterialTheme.colorScheme.primaryContainer)
               .fillMaxWidth()
               .padding(5.dp))
-  DropdownSearch(isDropdownOpen, sliderPositionPriceState, sliderPositionTimeState)
-}
+  //DropdownSearch(isDropdownOpen, sliderPositionPriceState, sliderPositionTimeState)
 
-@Composable
-fun DropdownSearch(
-    isDropdownOpen: MutableState<Boolean>,
-    sliderPositionPriceState: MutableState<ClosedFloatingPointRange<Float>>,
-    sliderPositionTimeState: MutableState<ClosedFloatingPointRange<Float>>
-) {
+
   DropdownMenu(
-      expanded = isDropdownOpen.value,
-      onDismissRequest = { isDropdownOpen.value = false },
+      expanded = isDropdownOpen,
+      onDismissRequest = { isDropdownOpen = false },
       modifier = Modifier.testTag(TestTags.SEARCH_DROPDOWN).fillMaxWidth()) {
         Column {
           Text("How much do I want to spend ?", modifier = Modifier.testTag(TestTags.PRICE_SEARCH))
