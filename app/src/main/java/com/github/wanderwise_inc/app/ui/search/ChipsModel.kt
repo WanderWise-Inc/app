@@ -1,5 +1,6 @@
 package com.github.wanderwise_inc.app.ui.search
 
+/*
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.layout.Spacer
@@ -147,3 +148,4 @@ fun ChipWithSubItems(chipLabel: String, chipItems: List<String>) {
         }
       }
 }
+*/
