@@ -25,16 +25,14 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.github.wanderwise_inc.app.R
+import com.github.wanderwise_inc.app.ui.TestTags
 
 @Composable
 fun SearchBar(
     onSearchChange: (String) -> Unit,
     onPriceChange: (Float) -> Unit,
     sliderPositionPriceState: MutableState<ClosedFloatingPointRange<Float>>,
-    sliderPositionTimeState: MutableState<ClosedFloatingPointRange<Float>>,
-    searchIconTag: String, // Add testTag parameter
-    priceTextTag: String, // Add testTag parameter
-    timeTextTag: String
+    sliderPositionTimeState: MutableState<ClosedFloatingPointRange<Float>>
 ) {
   var query by remember { mutableStateOf("") }
   var isDropdownOpen by remember { mutableStateOf(false) }
@@ -57,7 +55,7 @@ fun SearchBar(
                 .clickable { isDropdownOpen = true }
                 .padding(2.dp)
                 .size(30.dp)
-                .testTag(searchIconTag))
+                .testTag(TestTags.SEARCH_ICON))
       },
       singleLine = true,
       shape = RoundedCornerShape(30.dp),
@@ -71,9 +69,11 @@ fun SearchBar(
   DropdownMenu(
       expanded = isDropdownOpen,
       onDismissRequest = { isDropdownOpen = false },
-      modifier = Modifier.fillMaxWidth()) {
+      modifier = Modifier.testTag(TestTags.SEARCH_DROPDOWN).fillMaxWidth()) {
+
+
       Column {
-          Text("How much do I want to spend ?", modifier = Modifier.testTag(priceTextTag))
+          Text("How much do I want to spend ?", modifier = Modifier.testTag(TestTags.PRICE_SEARCH))
           RangeSlider(
               value = sliderPositionPriceState.value,
               steps = 50,
@@ -82,7 +82,7 @@ fun SearchBar(
               onValueChangeFinished = {
                   // launch something
               },
-                modifier = Modifier.testTag(priceTextTag)
+                modifier = Modifier.testTag(TestTags.PRICE_SEARCH)
           )
           Text(
               text =
@@ -93,25 +93,27 @@ fun SearchBar(
           // sliderPosition.contains()
       }
 
-Column {
-    Text("How Long do I want to wander ?", modifier = Modifier.testTag(timeTextTag))
-    RangeSlider(
-        value = sliderPositionTimeState.value,
-        steps = 24,
-        onValueChange = { range -> sliderPositionTimeState.value = range },
-        valueRange = 0f..24f, // Adjust this range according to your needs
-        onValueChangeFinished = {
-            // launch something
-        },
-        modifier = Modifier.testTag(timeTextTag)
-        )
-    Text(
-        text =
-        String.format(
-            "%.2f - %.2f",
-            sliderPositionTimeState.value.start,
-            sliderPositionTimeState.value.endInclusive))
-}
+
+
+        Column {
+            Text("How Long do I want to wander ?", modifier = Modifier.testTag(TestTags.TIME_SEARCH))
+            RangeSlider(
+                value = sliderPositionTimeState.value,
+                steps = 24,
+                onValueChange = { range -> sliderPositionTimeState.value = range },
+                valueRange = 0f..24f, // Adjust this range according to your needs
+                onValueChangeFinished = {
+                    // launch something
+                },
+                modifier = Modifier.testTag(TestTags.TIME_SEARCH)
+                )
+            Text(
+                text =
+                String.format(
+                    "%.2f - %.2f",
+                    sliderPositionTimeState.value.start,
+                    sliderPositionTimeState.value.endInclusive))
+        }
 
       }
 }

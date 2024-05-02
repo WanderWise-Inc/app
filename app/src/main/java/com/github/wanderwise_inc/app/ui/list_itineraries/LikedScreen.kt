@@ -92,10 +92,7 @@ fun DisplayLikedItineraries(
                   onSearchChange = { searchQuery = it },
                   onPriceChange = { priceRange = it },
                   sliderPositionPriceState = sliderPositionPriceState,
-                  sliderPositionTimeState = sliderPositionTimeState,
-                  searchIconTag = "search_icon",
-                  priceTextTag = "price_text",
-                  timeTextTag = "time_text")
+                  sliderPositionTimeState = sliderPositionTimeState)
 
               CategorySelector(
                   selectedIndex = selectedIndex,
