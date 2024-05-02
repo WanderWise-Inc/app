@@ -28,29 +28,20 @@ class SignInRepositoryImpl : SignInRepository {
       user: FirebaseUser?,
       resultCode: Int
   ) {
-    Log.d("USER SIGN IN", "CHECKING")
     if (user == null) {
-      // TODO Handle ERROR
-      Log.d("USER SIGN IN", "USER NULL")
       throw Exception("User is Null")
     } else {
-      // If the user is not null, we must check if this user is already in the database,
-      // in which case we will not add it again
-      // ACTIVITY.RESULT_OK == -1
       if (resultCode == Activity.RESULT_OK) {
-        Log.d("USER SIGN IN", "RESULT_OK")
+        Log.d("TESTING SIGN IN BUTTON", "RESULT_OK")
         // Get the user from database (function that returns a flow)
         val currentProfile = profileViewModel.getProfile(user.uid).first()
-        Log.d("USER SIGN IN", "GET PROFILE PASSED")
+        Log.d("TESTING SIGN IN BUTTON", "GET PROFILE PASSED")
 
         // User was already present in the database, in which case we only
         // navigate to the Home page
         if (currentProfile != null) {
-          Log.d("USERS", "USER ALREADY IN DATABASE")
           navController.navigate(Graph.HOME)
         } else {
-          Log.d("USERS", "USER NOT FOUND IN DATABASE, MUST CREATE IT")
-
           // We define properly the fields, because some of them could be empty
           val username = user.displayName
           val properUsername = username ?: ""
@@ -70,9 +61,7 @@ class SignInRepositoryImpl : SignInRepository {
         }
       } else {
         // unsuccessful sign in
-        Log.d("USERS", "UNSUCCESSFUL SIGN IN")
         throw Exception("User unsuccessful sign in")
-        // TODO Handle ERROR
       }
     }
   }
