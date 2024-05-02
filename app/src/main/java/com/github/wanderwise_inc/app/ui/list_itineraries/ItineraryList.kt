@@ -45,8 +45,9 @@ fun ItinerariesListScrollable(
     mapViewModel: MapViewModel,
     profileViewModel: ProfileViewModel,
     navController: NavHostController,
+    firebaseAuth: FirebaseAuth,
     paddingValues: PaddingValues,
-    parent: ItineraryListParent
+    parent: ItineraryListParent,
 ) {
   if (itineraries.isEmpty()) {
     val parentVerb =
@@ -57,7 +58,11 @@ fun ItinerariesListScrollable(
         }
     Box(
         contentAlignment = Alignment.Center,
-        modifier = Modifier.padding(paddingValues).testTag(TestTags.ITINERARY_LIST_NULL).fillMaxWidth().height(100.dp)) {
+        modifier = Modifier
+            .padding(paddingValues)
+            .testTag(TestTags.ITINERARY_LIST_NULL)
+            .fillMaxWidth()
+            .height(100.dp)) {
           Text(
               text = "You have not $parentVerb any itineraries yet",
               // color = MaterialTheme.colorScheme.
@@ -66,10 +71,12 @@ fun ItinerariesListScrollable(
         } // PaModifier.padding(5.dp, 10.dp))
   } else {
     LazyColumn(
-        modifier = Modifier.padding(paddingValues).testTag(TestTags.ITINERARY_LIST_SCROLLABLE),
+        modifier = Modifier
+            .padding(paddingValues)
+            .testTag(TestTags.ITINERARY_LIST_SCROLLABLE),
         verticalArrangement = spacedBy(15.dp)) {
           this.items(itineraries) { itinerary ->
-            val uid = FirebaseAuth.getInstance().uid ?: DEFAULT_USER_UID
+            val uid = firebaseAuth.currentUser?.uid ?: DEFAULT_USER_UID
             val isLikedInitially = profileViewModel.checkIfItineraryIsLiked(uid, itinerary.uid)
             val onLikeButtonClick = { it: Itinerary, isLiked: Boolean ->
               if (isLiked) {
@@ -130,8 +137,12 @@ fun CategorySelector(
                 painter = painterResource(id = category.icon),
                 contentDescription = null,
                 tint = Color(0xFF191C1E),
-                modifier = Modifier.size(30.dp).padding(2.dp))
-          })
+                modifier = Modifier
+                    .size(30.dp)
+                    .padding(2.dp))
+          },
+          modifier = Modifier.testTag("${TestTags.CATEGORY_SELECTOR_TAB}_${index}")
+      )
     }
   }
 }
