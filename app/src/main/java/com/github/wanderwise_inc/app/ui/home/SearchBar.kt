@@ -75,8 +75,7 @@ fun SearchBar(
             onValueChangeFinished = {
               // launch something
             },
-            modifier = Modifier.testTag(TestTags.FILTER_PRICE_RANGE)
-        )
+            modifier = Modifier.testTag(TestTags.FILTER_PRICE_RANGE))
         Text(
             text =
                 String.format(
@@ -94,8 +93,7 @@ fun SearchBar(
             onValueChangeFinished = {
               // launch something
             },
-            modifier = Modifier.testTag(TestTags.FILTER_TIME_RANGE)
-        )
+            modifier = Modifier.testTag(TestTags.FILTER_TIME_RANGE))
         Text(
             text =
                 String.format(

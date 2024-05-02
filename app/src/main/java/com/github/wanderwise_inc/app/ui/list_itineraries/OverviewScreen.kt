@@ -32,7 +32,7 @@ fun OverviewScreen(
 ) {
   val sliderPositionPriceState = remember { mutableStateOf(0f..100f) }
   val sliderPositionTimeState = remember { mutableStateOf(0f..24f) }
-    
+
   DisplayOverviewItineraries(
       mapViewModel = mapViewModel,
       profileViewModel = profileViewModel,
@@ -85,7 +85,7 @@ fun DisplayOverviewItineraries(
             }
       },
       modifier = Modifier.testTag(TestTags.OVERVIEW_SCREEN)) { innerPadding ->
-            val filtered =
+        val filtered =
             itineraries
                 .filter { itinerary -> itinerary.tags.contains(categoriesList[selectedIndex].tag) }
                 .filter { itinerary ->
