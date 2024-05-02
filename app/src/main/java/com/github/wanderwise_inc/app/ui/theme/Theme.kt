@@ -7,7 +7,7 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
-private val LightColorPalette =
+val LightColorPalette =
     lightColorScheme(
         primary = Blue40,
         onPrimary = Color.White,
@@ -36,7 +36,7 @@ private val LightColorPalette =
         onSurfaceVariant = BlueGrey30,
         outline = BlueGrey50)
 
-private val DarkColorPalette =
+val DarkColorPalette =
     darkColorScheme(
         primary = Blue80,
         onPrimary = Blue20,
@@ -76,6 +76,5 @@ fun WanderWiseTheme(
         darkTheme -> DarkColorPalette
         else -> LightColorPalette
       }
-  /*for the moment being, we only implement a light theme*/
   MaterialTheme(colorScheme = colors, typography = Typography, content = content)
 }
