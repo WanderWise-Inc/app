@@ -18,8 +18,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.Scaffold
-import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -119,9 +117,11 @@ fun ProfileScreen(
                   itineraries = userItineraries,
                   mapViewModel = mapViewModel,
                   profileViewModel = profileViewModel,
-                  paddingValues = PaddingValues(8.dp),
                   navController = navHostController,
-                  parent = ItineraryListParent.PROFILE)
+                  firebaseAuth = firebaseAuth,
+                  paddingValues = PaddingValues(8.dp),
+                  parent = ItineraryListParent.PROFILE,
+              )
             }
           }
     }
@@ -184,16 +184,6 @@ fun WanderScore(profile: Profile) {
             modifier = Modifier.padding(8.dp),
             fontWeight = FontWeight.Bold)
       }
-}
-
-@Composable
-fun ItineraryCard() {
-  Card(modifier = Modifier.padding(8.dp)) /*onClick = { TODO* OPEN PREVIEW OF ITINERARY}*/ {
-    Column {
-      Text("Itinerary Name")
-      Text("Itinerary Description")
-    }
-  }
 }
 
 // Composable function for displaying a dropdown menu for changing the profile picture.
