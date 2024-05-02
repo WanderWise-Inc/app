@@ -33,6 +33,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 
+// chips
 data class ChipsModel(
     val name: String,
     val subList: List<String>? = null,
