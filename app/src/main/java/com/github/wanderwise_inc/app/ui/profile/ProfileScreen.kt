@@ -1,7 +1,6 @@
 package com.github.wanderwise_inc.app.ui.profile
 
 import android.content.Intent
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -39,10 +38,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.graphics.painter.BitmapPainter
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -78,8 +73,6 @@ fun ProfileScreen(
   val userItineraries by
       mapViewModel.getUserItineraries(currentUid).collectAsState(initial = emptyList())
 
-  val profilePictureModifier = Modifier.size(100.dp)
-
   if (profile != null) {
     Scaffold(
         topBar = {
@@ -114,7 +107,7 @@ fun ProfileScreen(
             // Column to layout profile details vertically and centered.
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
               // Display the user's profile picture.
-              ProfilePicture(profileViewModel, profile!!, imageRepository)
+              ProfilePictureWithDropDown(profile, profileViewModel, imageRepository)
               // Display the user's username with top padding.
               Username(profile!!, modifier = Modifier.padding(100.dp))
               // Display the user's "Wander Score".
@@ -136,68 +129,21 @@ fun ProfileScreen(
 }
 
 @Composable
-fun ProfilePictureStatic(profileViewModel: ProfileViewModel, profile: Profile, modifier: Modifier) {
-  val picture by profileViewModel.getProfilePicture(profile).collectAsState(initial = null)
-
-  if (picture != null) {
-    Image(
-        painter = BitmapPainter(picture!!.asImageBitmap()),
-        contentDescription = "Profile picture",
-        modifier =
-            Modifier.size(100.dp)
-                .clip(MaterialTheme.shapes.small)
-                .border(BorderStroke(1.dp, Color.Black)),
-        contentScale = ContentScale.FillBounds)
-  } else {
-    Text("No Picture")
-  }
-}
-
-@Composable
-fun ProfilePicture(
+fun ProfilePictureWithDropDown(
+    profile: Profile?,
     profileViewModel: ProfileViewModel,
-    profile: Profile,
-    imageRepository: ImageRepository
+    imageRepository: ImageRepository,
 ) {
-
   var isProfilePictureChangeDropdownOpen by remember { mutableStateOf(false) }
-
-  // We will first fetch the default picture that is stored in the storage
-  val bitmap by
-      imageRepository
-          .fetchImage("profilePicture/defaultProfilePicture.jpg")
-          .collectAsState(initial = null)
-
-  if (bitmap != null) {
-    // When the default picture is fetched, we will try to get the profilePicture of the user.
-    // If the profile picture isn't present in the Storage, then the default picture will be loaded
-    // instead
-    val picture by profileViewModel.getProfilePicture(profile).collectAsState(initial = null)
-    if (picture != null) {
-      Image(
-          painter = BitmapPainter(picture!!.asImageBitmap()),
-          contentDescription = null,
-          modifier =
-              Modifier.clip(MaterialTheme.shapes.medium).size(100.dp).clickable {
-                isProfilePictureChangeDropdownOpen = true
-              })
-      Log.d("CRASHED", "PICTURE DISPLAYED")
-    } else {
-      Image(
-          painter = BitmapPainter(bitmap!!.asImageBitmap()),
-          contentDescription = null,
-          modifier =
-              Modifier.clip(MaterialTheme.shapes.medium).size(100.dp).clickable {
-                isProfilePictureChangeDropdownOpen = true
-              })
-      Log.d("CRASHED", "PICTURE IS NULL")
-    }
-    ProfilePictureChangeDropdownMenu(
-        expanded = isProfilePictureChangeDropdownOpen,
-        onDismissRequest = { isProfilePictureChangeDropdownOpen = false },
-        imageRepository = imageRepository,
-        profile = profile) {}
-  }
+  val profilePictureModifier =
+      Modifier.size(100.dp).clickable { isProfilePictureChangeDropdownOpen = true }
+  ProfilePicture(
+      profile = profile, profileViewModel = profileViewModel, modifier = profilePictureModifier)
+  ProfilePictureChangeDropdownMenu(
+      expanded = isProfilePictureChangeDropdownOpen,
+      onDismissRequest = { isProfilePictureChangeDropdownOpen = false },
+      imageRepository = imageRepository,
+      profile = profile) {}
 }
 
 @Composable
@@ -256,35 +202,37 @@ fun ProfilePictureChangeDropdownMenu(
     expanded: Boolean,
     onDismissRequest: () -> Unit,
     imageRepository: ImageRepository,
-    profile: Profile,
+    profile: Profile?,
     modifier: Modifier = Modifier,
     offset: DpOffset = DpOffset(0.dp, 0.dp),
     properties: PopupProperties = PopupProperties(focusable = true),
     content: @Composable ColumnScope.() -> Unit
 ) {
 
-  DropdownMenu(
-      expanded = expanded,
-      onDismissRequest = onDismissRequest,
-      offset = offset,
-      properties = properties,
-      modifier = modifier) {
-        // Dropdown menu item for searching and selecting a photo from the device.
-        DropdownMenuItem(
-            text = { Text("SEARCH PHOTO") },
-            onClick = {
-              // Intent for selecting an image from the device storage.
-              Intent(Intent.ACTION_GET_CONTENT).also {
-                it.type = "image/*" // Set type to any image format.
-                imageRepository.launchActivity(it) // Launch activity to select an image.
-              }
-            })
+  if (profile != null) {
+    DropdownMenu(
+        expanded = expanded,
+        onDismissRequest = onDismissRequest,
+        offset = offset,
+        properties = properties,
+        modifier = modifier) {
+          // Dropdown menu item for searching and selecting a photo from the device.
+          DropdownMenuItem(
+              text = { Text("SEARCH PHOTO") },
+              onClick = {
+                // Intent for selecting an image from the device storage.
+                Intent(Intent.ACTION_GET_CONTENT).also {
+                  it.type = "image/*" // Set type to any image format.
+                  imageRepository.launchActivity(it) // Launch activity to select an image.
+                }
+              })
 
-        DropdownMenuItem(
-            text = { Text("UPLOAD PHOTO") },
-            onClick = {
-              // Call to upload image to storage with a specific path.
-              imageRepository.uploadImageToStorage("profilePicture/${profile.userUid}")
-            })
-      }
+          DropdownMenuItem(
+              text = { Text("UPLOAD PHOTO") },
+              onClick = {
+                // Call to upload image to storage with a specific path.
+                imageRepository.uploadImageToStorage("profilePicture/${profile.userUid}")
+              })
+        }
+  }
 }
