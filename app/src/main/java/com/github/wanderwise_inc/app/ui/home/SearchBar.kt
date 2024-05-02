@@ -2,6 +2,7 @@ package com.github.wanderwise_inc.app.ui.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -30,7 +31,10 @@ fun SearchBar(
     onSearchChange: (String) -> Unit,
     onPriceChange: (Float) -> Unit,
     sliderPositionPriceState: MutableState<ClosedFloatingPointRange<Float>>,
-    sliderPositionTimeState: MutableState<ClosedFloatingPointRange<Float>>
+    sliderPositionTimeState: MutableState<ClosedFloatingPointRange<Float>>,
+    searchIconTag: String, // Add testTag parameter
+    priceTextTag: String, // Add testTag parameter
+    timeTextTag: String
 ) {
   var query by remember { mutableStateOf("") }
   var isDropdownOpen by remember { mutableStateOf(false) }
@@ -49,54 +53,65 @@ fun SearchBar(
             painter = painterResource(id = R.drawable.les_controles),
             contentDescription = "les_controles",
             tint = Color.Black,
-            modifier = Modifier.clickable { isDropdownOpen = true }.padding(2.dp).size(30.dp))
+            modifier = Modifier
+                .clickable { isDropdownOpen = true }
+                .padding(2.dp)
+                .size(30.dp)
+                .testTag(searchIconTag))
       },
       singleLine = true,
       shape = RoundedCornerShape(30.dp),
       modifier =
-          Modifier.background(MaterialTheme.colorScheme.primaryContainer)
-              .fillMaxWidth()
-              .padding(5.dp)
-              .testTag("SearchBar"))
+      Modifier
+          .background(MaterialTheme.colorScheme.primaryContainer)
+          .fillMaxWidth()
+          .padding(5.dp)
+          )
 
   DropdownMenu(
       expanded = isDropdownOpen,
       onDismissRequest = { isDropdownOpen = false },
       modifier = Modifier.fillMaxWidth()) {
-        Text("How much do I want to spend ?")
-        RangeSlider(
-            value = sliderPositionPriceState.value,
-            steps = 50,
-            onValueChange = { range -> sliderPositionPriceState.value = range },
-            valueRange = 0f..100f, // Adjust this range according to your needs
-            onValueChangeFinished = {
-              // launch something
-            },
-        )
-        Text(
-            text =
-                String.format(
-                    "%.2f - %.2f",
-                    sliderPositionPriceState.value.start,
-                    sliderPositionPriceState.value.endInclusive))
-        // sliderPosition.contains()
+      Column {
+          Text("How much do I want to spend ?", modifier = Modifier.testTag(priceTextTag))
+          RangeSlider(
+              value = sliderPositionPriceState.value,
+              steps = 50,
+              onValueChange = { range -> sliderPositionPriceState.value = range },
+              valueRange = 0f..100f, // Adjust this range according to your needs
+              onValueChangeFinished = {
+                  // launch something
+              },
+                modifier = Modifier.testTag(priceTextTag)
+          )
+          Text(
+              text =
+              String.format(
+                  "%.2f - %.2f",
+                  sliderPositionPriceState.value.start,
+                  sliderPositionPriceState.value.endInclusive))
+          // sliderPosition.contains()
+      }
 
-        Text("How Long do I want to wander ?")
-        RangeSlider(
-            value = sliderPositionTimeState.value,
-            steps = 24,
-            onValueChange = { range -> sliderPositionTimeState.value = range },
-            valueRange = 0f..24f, // Adjust this range according to your needs
-            onValueChangeFinished = {
-              // launch something
-            },
-
+Column {
+    Text("How Long do I want to wander ?", modifier = Modifier.testTag(timeTextTag))
+    RangeSlider(
+        value = sliderPositionTimeState.value,
+        steps = 24,
+        onValueChange = { range -> sliderPositionTimeState.value = range },
+        valueRange = 0f..24f, // Adjust this range according to your needs
+        onValueChangeFinished = {
+            // launch something
+        },
+        modifier = Modifier.testTag(timeTextTag)
         )
-        Text(
-            text =
-                String.format(
-                    "%.2f - %.2f",
-                    sliderPositionTimeState.value.start,
-                    sliderPositionTimeState.value.endInclusive))
+    Text(
+        text =
+        String.format(
+            "%.2f - %.2f",
+            sliderPositionTimeState.value.start,
+            sliderPositionTimeState.value.endInclusive))
+}
+
       }
 }

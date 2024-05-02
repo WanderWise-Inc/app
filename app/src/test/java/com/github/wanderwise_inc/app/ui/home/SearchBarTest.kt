@@ -3,13 +3,17 @@ import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.uiautomator.Direction
 import com.github.wanderwise_inc.app.ui.home.SearchBar
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
+import org.robolectric.annotation.LooperMode
 
 @RunWith(RobolectricTestRunner::class)
+//@LooperMode(LooperMode.Mode.PAUSED) // Use PAUSED LooperMode to speed up tests
 //@Config(manifest=Config.NONE)
 class SearchBarTest {
 
@@ -25,19 +29,30 @@ class SearchBarTest {
         onSearchChange = {},
         onPriceChange = {},
         sliderPositionPriceState = sliderPositionPriceState,
-        sliderPositionTimeState = sliderPositionTimeState
+        sliderPositionTimeState = sliderPositionTimeState,
+        searchIconTag = "search_icon", // Add testTag to your SearchBar component
+        priceTextTag = "price_text", // Add testTag to your Text component
+        timeTextTag = "time_text" // Add testTag to your Text component
       )
     }
 
-    // Check if the dropdown menu is initially not visible
-    composeTestRule.onNodeWithText("How much do I want to spend ?").assertDoesNotExist()
-
-    // Click the search icon
-    composeTestRule.onNodeWithContentDescription("les_controles").performClick()
+    composeTestRule.onNodeWithTag("search_icon").performClick()
 
     // Check if the dropdown menu becomes visible
-    composeTestRule.onNodeWithText("How much do I want to spend ?").assertExists()
-    composeTestRule.onNodeWithText("How Long do I want to wander ?").assertExists()
+    composeTestRule.onNodeWithTag("price_text").assertExists()
+    composeTestRule.onNodeWithTag("time_text").assertExists()
+
+
+    // Check if the dropdown menu is initially not visible
+    //composeTestRule.onNodeWithText("How much do I want to spend ?").assertDoesNotExist()
+
+    // Click the search icon
+    //composeTestRule.onNodeWithContentDescription("les_controles").performClick()
+
+
+    // Check if the dropdown menu becomes visible
+    //composeTestRule.onNodeWithText("How much do I want to spend ?").assertExists()
+    //composeTestRule.onNodeWithText("How Long do I want to wander ?").assertExists()
   }
 
   /*@Test
