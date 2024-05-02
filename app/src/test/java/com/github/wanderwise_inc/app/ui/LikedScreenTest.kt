@@ -1,6 +1,5 @@
 package com.github.wanderwise_inc.app.ui
 
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.LocalContext
@@ -15,7 +14,6 @@ import androidx.navigation.NavHostController
 import com.github.wanderwise_inc.app.model.location.FakeItinerary
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.ui.list_itineraries.DisplayLikedItineraries
-import com.github.wanderwise_inc.app.ui.list_itineraries.LikedScreen
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.firebase.FirebaseApp
@@ -64,12 +62,12 @@ class LikedScreenTest {
     composeTestRule.setContent {
       FirebaseApp.initializeApp(LocalContext.current)
       DisplayLikedItineraries(
-        mapViewModel,
-        profileViewModel,
-        navController,
-        sliderPositionPriceState, 
-        sliderPositionTimeState,
-        firebaseAuth,
+          mapViewModel,
+          profileViewModel,
+          navController,
+          sliderPositionPriceState,
+          sliderPositionTimeState,
+          firebaseAuth,
       )
     }
   }
@@ -144,16 +142,16 @@ class LikedScreenTest {
   }
 
   private fun testExpectedItinerariesDisplayed(
-    expectedItineraries: List<Itinerary>,
-    selectedTagIndex: Int = 0,
-    textInput: String = "",
-    priceRange: ClosedFloatingPointRange<Float> = 0f..100f,
-    timeRange: ClosedFloatingPointRange<Float> = 0f..24f
+      expectedItineraries: List<Itinerary>,
+      selectedTagIndex: Int = 0,
+      textInput: String = "",
+      priceRange: ClosedFloatingPointRange<Float> = 0f..100f,
+      timeRange: ClosedFloatingPointRange<Float> = 0f..24f
   ) {
     // choose corresponding tag for search (0 = Adventure, 1 = Luxury, 2 = Photography, 3 = Foodie)
     composeTestRule
-      .onNodeWithTag("${TestTags.CATEGORY_SELECTOR_TAB}_$selectedTagIndex")
-      .performClick()
+        .onNodeWithTag("${TestTags.CATEGORY_SELECTOR_TAB}_$selectedTagIndex")
+        .performClick()
     // enter text query for search
     composeTestRule.onNodeWithTag(TestTags.SEARCH_BAR).performTextClearance()
     if (textInput.isNotBlank()) { // search for itineraries
@@ -170,16 +168,16 @@ class LikedScreenTest {
       // composeTestRule.onRoot(useUnmergedTree = true).printToLog()
       for (i in expectedItineraries.indices) {
         composeTestRule
-          .onNodeWithTag(TestTags.ITINERARY_LIST_SCROLLABLE)
-          .performScrollToIndex(i) // scroll to correct position
+            .onNodeWithTag(TestTags.ITINERARY_LIST_SCROLLABLE)
+            .performScrollToIndex(i) // scroll to correct position
         composeTestRule
-          .onNodeWithTag("${TestTags.ITINERARY_BANNER}_${expectedItineraries[i].uid}")
-          .assertIsDisplayed()
+            .onNodeWithTag("${TestTags.ITINERARY_BANNER}_${expectedItineraries[i].uid}")
+            .assertIsDisplayed()
       }
       for (itinerary in testItineraries.minus(expectedItineraries)) {
         composeTestRule
-          .onNodeWithTag("${TestTags.ITINERARY_BANNER}_${itinerary.uid}")
-          .assertDoesNotExist()
+            .onNodeWithTag("${TestTags.ITINERARY_BANNER}_${itinerary.uid}")
+            .assertDoesNotExist()
       }
     }
   }

@@ -15,7 +15,6 @@ import androidx.navigation.NavHostController
 import com.github.wanderwise_inc.app.model.location.FakeItinerary
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.ui.list_itineraries.DisplayOverviewItineraries
-import com.github.wanderwise_inc.app.ui.list_itineraries.OverviewScreen
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.firebase.FirebaseApp
@@ -62,13 +61,12 @@ class OverviewScreenTest {
     composeTestRule.setContent {
       FirebaseApp.initializeApp(LocalContext.current)
       DisplayOverviewItineraries(
-        mapViewModel,
-        profileViewModel,
-        navController,
-        firebaseAuth,
-        sliderPositionPriceState,
-        sliderPositionTimeState
-      )
+          mapViewModel,
+          profileViewModel,
+          navController,
+          firebaseAuth,
+          sliderPositionPriceState,
+          sliderPositionTimeState)
     }
   }
 
