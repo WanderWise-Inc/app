@@ -1,5 +1,6 @@
 package com.github.wanderwise_inc.app.ui.search
 
+/*
 import androidx.compose.material3.Slider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -15,3 +16,4 @@ fun Slider() {
       onValueChange = { sliderPosition = it },
   )
 }
+*/

@@ -1,5 +1,6 @@
 package com.github.wanderwise_inc.app.ui.search
 
+/*
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,3 +21,4 @@ fun ChipsScreen() {
     Spacer(modifier = Modifier.padding(vertical = 10.dp))
   }
 }
+*/

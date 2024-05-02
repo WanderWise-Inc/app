@@ -123,10 +123,12 @@ fun DisplayLikedItineraries(
                 }
         ItinerariesListScrollable(
             itineraries = filtered,
-            paddingValues = innerPadding,
             mapViewModel = mapViewModel,
             profileViewModel = profileViewModel,
             navController = navController,
-            parent = ItineraryListParent.LIKED)
+            firebaseAuth = firebaseAuth,
+            paddingValues = innerPadding,
+            parent = ItineraryListParent.LIKED,
+        )
       }
 }

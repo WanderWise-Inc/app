@@ -21,23 +21,23 @@ import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.home.SearchBar
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
-
-object OverviewScreenTestTags {
-  const val CATEGORY_SELECTOR = "category selector"
-}
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun OverviewScreen(
     mapViewModel: MapViewModel,
     profileViewModel: ProfileViewModel,
-    navController: NavHostController
+    navController: NavHostController,
+    firebaseAuth: FirebaseAuth
 ) {
   val sliderPositionPriceState = remember { mutableStateOf(0f..100f) }
   val sliderPositionTimeState = remember { mutableStateOf(0f..24f) }
+
   DisplayOverviewItineraries(
       mapViewModel = mapViewModel,
       profileViewModel = profileViewModel,
       navController = navController,
+      firebaseAuth = firebaseAuth,
       sliderPositionPriceState = sliderPositionPriceState,
       sliderPositionTimeState = sliderPositionTimeState)
 }
@@ -48,6 +48,7 @@ fun DisplayOverviewItineraries(
     mapViewModel: MapViewModel,
     profileViewModel: ProfileViewModel,
     navController: NavHostController,
+    firebaseAuth: FirebaseAuth,
     sliderPositionPriceState: MutableState<ClosedFloatingPointRange<Float>>,
     sliderPositionTimeState: MutableState<ClosedFloatingPointRange<Float>>
 ) {
@@ -106,10 +107,12 @@ fun DisplayOverviewItineraries(
                 }
         ItinerariesListScrollable(
             itineraries = filtered,
-            paddingValues = innerPadding,
             mapViewModel = mapViewModel,
             profileViewModel = profileViewModel,
             navController = navController,
-            parent = ItineraryListParent.OVERVIEW)
+            firebaseAuth = firebaseAuth,
+            paddingValues = innerPadding,
+            parent = ItineraryListParent.OVERVIEW,
+        )
       }
 }

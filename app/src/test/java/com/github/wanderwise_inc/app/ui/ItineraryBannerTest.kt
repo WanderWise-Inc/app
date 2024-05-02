@@ -7,7 +7,6 @@ import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
 import com.github.wanderwise_inc.app.model.location.Location
 import com.github.wanderwise_inc.app.ui.itinerary.ItineraryBanner
-import com.github.wanderwise_inc.app.ui.itinerary.ItineraryBannerTestTags
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -42,7 +41,7 @@ class ItineraryBannerTest {
   @Test
   fun `Banner should be displayed`() {
     composeTestRule
-        .onNodeWithTag("${ItineraryBannerTestTags.ITINERARY_BANNER}_${itineraryUid}")
+        .onNodeWithTag("${TestTags.ITINERARY_BANNER}_${itineraryUid}")
         .assertIsDisplayed()
   }
 }
