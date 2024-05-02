@@ -1,5 +1,6 @@
 package com.github.wanderwise_inc.app.ui
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.assertIsDisplayed
@@ -13,6 +14,7 @@ import androidx.compose.ui.test.printToString
 import androidx.navigation.NavHostController
 import com.github.wanderwise_inc.app.model.location.FakeItinerary
 import com.github.wanderwise_inc.app.model.location.Itinerary
+import com.github.wanderwise_inc.app.ui.list_itineraries.DisplayOverviewItineraries
 import com.github.wanderwise_inc.app.ui.list_itineraries.OverviewScreen
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
@@ -37,10 +39,8 @@ class OverviewScreenTest {
   @MockK private lateinit var navController: NavHostController
   @MockK private lateinit var firebaseAuth: FirebaseAuth
 
-  //  @MockK private lateinit var sliderPositionPriceState:
-  // MutableState<ClosedFloatingPointRange<Float>>
-  //  @MockK private lateinit var sliderPositionTimeState:
-  // MutableState<ClosedFloatingPointRange<Float>>
+  private var sliderPositionPriceState = mutableStateOf(0f..100f)
+  private var sliderPositionTimeState = mutableStateOf(0f..24f)
 
   private val testItineraries =
       listOf(FakeItinerary.SAN_FRANCISCO, FakeItinerary.SWITZERLAND, FakeItinerary.TOKYO)
@@ -61,11 +61,13 @@ class OverviewScreenTest {
 
     composeTestRule.setContent {
       FirebaseApp.initializeApp(LocalContext.current)
-      OverviewScreen(
-          mapViewModel,
-          profileViewModel,
-          navController,
-          firebaseAuth,
+      DisplayOverviewItineraries(
+        mapViewModel,
+        profileViewModel,
+        navController,
+        firebaseAuth,
+        sliderPositionPriceState,
+        sliderPositionTimeState
       )
     }
   }
@@ -110,34 +112,41 @@ class OverviewScreenTest {
     testExpectedItinerariesDisplayed(listOf(FakeItinerary.SWITZERLAND), textInput = "Switzerland")
   }
 
-  // Was not able to make this test work yet, interaction with CategorySelector is really annoying
-  /*@Test
+  @Test
   fun `price range filters itineraries correctly`() {
     // basic tag is Adventure, which eliminates Tokyo
-    // SF -> 5$, Switzerland -> 50$, Tokyo ->
+    // SF -> 5$, Switzerland -> 50$, Tokyo -> 20$
 
     // choose price range
-    var priceRange = 0f..100f
-    every { sliderPositionPriceState.value } returns priceRange
+    sliderPositionPriceState.value = 0f..100f
 
     // SF and Switzerland itineraries should be displayed
     testExpectedItinerariesDisplayed(listOf(FakeItinerary.SWITZERLAND, FakeItinerary.SAN_FRANCISCO))
 
-    priceRange = 40f..100f
-    every { sliderPositionPriceState.value } returns priceRange
-    // no itineraries should be displayed
-    testExpectedItinerariesDisplayed(listOf(FakeItinerary.SWITZERLAND))
+    testExpectedItinerariesDisplayed(listOf(FakeItinerary.SWITZERLAND), priceRange = 40f..100f)
 
-    priceRange = 0f..30f
-    every { sliderPositionPriceState.value } returns priceRange
-    // should only correspond to SF and Switzerland itineraries
-    testExpectedItinerariesDisplayed(listOf(FakeItinerary.SAN_FRANCISCO))
-  }*/
+    testExpectedItinerariesDisplayed(listOf(FakeItinerary.SAN_FRANCISCO), priceRange = 0f..30f)
+  }
+
+  @Test
+  fun `time range filters itineraries correctly`() {
+    // basic tag is Adventure, which eliminates Tokyo
+    // SF -> 3h, Switzerland -> 10h, Tokyo -> 4h
+
+    // SF and Switzerland itineraries should be displayed
+    testExpectedItinerariesDisplayed(listOf(FakeItinerary.SWITZERLAND, FakeItinerary.SAN_FRANCISCO))
+
+    testExpectedItinerariesDisplayed(listOf(FakeItinerary.SWITZERLAND), timeRange = 5f..12f)
+
+    testExpectedItinerariesDisplayed(listOf(FakeItinerary.SAN_FRANCISCO), timeRange = 1f..3.5f)
+  }
 
   private fun testExpectedItinerariesDisplayed(
       expectedItineraries: List<Itinerary>,
       selectedTagIndex: Int = 0,
       textInput: String = "",
+      priceRange: ClosedFloatingPointRange<Float> = 0f..100f,
+      timeRange: ClosedFloatingPointRange<Float> = 0f..24f
   ) {
     // choose corresponding tag for search (0 = Adventure, 1 = Luxury, 2 = Photography, 3 = Foodie)
     composeTestRule
@@ -148,6 +157,10 @@ class OverviewScreenTest {
     if (textInput.isNotBlank()) { // search for itineraries
       composeTestRule.onNodeWithTag(TestTags.SEARCH_BAR).performTextInput(textInput)
     }
+    // choose price range
+    sliderPositionPriceState.value = priceRange
+    // choose time range
+    sliderPositionTimeState.value = timeRange
 
     if (expectedItineraries.isEmpty()) {
       composeTestRule.onNodeWithTag(TestTags.ITINERARY_LIST_NULL).assertIsDisplayed()
@@ -169,6 +182,7 @@ class OverviewScreenTest {
     }
   }
 
+  /* Used for debugging in unit tests, prints composable tree for tester */
   fun SemanticsNodeInteraction.printToLog(
       maxDepth: Int = Int.MAX_VALUE,
   ) {
