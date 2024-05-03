@@ -222,7 +222,7 @@ private fun PreviewItineraryBannerMaximized(
                           tint = MaterialTheme.colorScheme.secondary,
                           modifier = Modifier.size(width = 25.dp, height = 25.dp))
                       Text(
-                          text = "N/A hours",
+                          text = "${itinerary.time} hours",
                           color = MaterialTheme.colorScheme.secondary,
                           fontFamily = MaterialTheme.typography.displayMedium.fontFamily,
                           fontSize = innerFontSize,
@@ -244,7 +244,7 @@ private fun PreviewItineraryBannerMaximized(
                           tint = MaterialTheme.colorScheme.secondary,
                           modifier = Modifier.size(width = 20.dp, height = 20.dp))
                       Text(
-                          text = "\$N/A - \$N/A",
+                          text = "${itinerary.price.toInt()} \$",
                           color = MaterialTheme.colorScheme.secondary,
                           fontFamily = MaterialTheme.typography.displayMedium.fontFamily,
                           fontSize = innerFontSize,
