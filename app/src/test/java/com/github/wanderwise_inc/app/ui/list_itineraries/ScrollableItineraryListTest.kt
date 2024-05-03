@@ -2,14 +2,12 @@ package com.github.wanderwise_inc.app.ui.list_itineraries
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToIndex
-import androidx.compose.ui.test.printToString
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.github.wanderwise_inc.app.model.location.FakeItinerary
@@ -42,7 +40,7 @@ class ScrollableItineraryListTest {
   private val paddingValues: PaddingValues = PaddingValues(0.dp)
 
   private lateinit var testItineraries: List<Itinerary>
-  
+
   var itinerariesAreLiked = false
 
   @Before
@@ -58,7 +56,7 @@ class ScrollableItineraryListTest {
     for (itinerary in testItineraries) {
       itinerary.uid = itinerary.title
     }
-      
+
     every { profileViewModel.checkIfItineraryIsLiked(any(), any()) } returns false
 
     composeTestRule.setContent {
@@ -102,48 +100,49 @@ class ScrollableItineraryListTest {
 
     composeTestRule.onNodeWithTag(TestTags.ITINERARY_LIST_NULL).assertIsDisplayed()
   }
-    
+
   @Test
   fun `verify clicking on like button when itinerary is unliked correctly calls API`() {
-      testItineraries = listOf(FakeItinerary.SWITZERLAND)
+    testItineraries = listOf(FakeItinerary.SWITZERLAND)
 
-      every { profileViewModel.checkIfItineraryIsLiked(any(), any()) } returns false
+    every { profileViewModel.checkIfItineraryIsLiked(any(), any()) } returns false
 
-      composeTestRule.setContent {
-          FirebaseApp.initializeApp(LocalContext.current)
-          ItinerariesListScrollable(
-              itineraries = testItineraries,
-              mapViewModel = mapViewModel,
-              profileViewModel = profileViewModel,
-              navController = navController,
-              firebaseAuth = firebaseAuth,
-              paddingValues = paddingValues,
-              parent = ItineraryListParent.PROFILE,
-              // could be any parent
-          )
-      }
-      
-      var itineraryLikesBackend = testItineraries.first().numLikes
-      
-      var likedItineraryListBackend = mutableListOf<String>()
+    composeTestRule.setContent {
+      FirebaseApp.initializeApp(LocalContext.current)
+      ItinerariesListScrollable(
+          itineraries = testItineraries,
+          mapViewModel = mapViewModel,
+          profileViewModel = profileViewModel,
+          navController = navController,
+          firebaseAuth = firebaseAuth,
+          paddingValues = paddingValues,
+          parent = ItineraryListParent.PROFILE,
+          // could be any parent
+      )
+    }
 
-      every { mapViewModel.incrementItineraryLikes(any()) } answers { itineraryLikesBackend++ }
-      
-      every { profileViewModel.addLikedItinerary(any(), any()) } answers { 
-          likedItineraryListBackend.add(testItineraries.first().uid) 
-      }
-      
-      //composeTestRule.onNodeWithTag("$")
-      composeTestRule.onRoot(useUnmergedTree = true).printToLog()
-      
-      assertEquals(testItineraries.first().numLikes, itineraryLikesBackend)
-      assertEquals(emptyList<String>(), likedItineraryListBackend)
-      composeTestRule.onNodeWithTag(TestTags.ITINERARY_LIST_SCROLLABLE).performScrollToIndex(0)
-      composeTestRule
-          .onNodeWithTag("${TestTags.ITINERARY_BANNER_LIKE_BUTTON}_${testItineraries.first().uid}")
-          .performClick()
-      assertEquals(testItineraries.first().numLikes+1, itineraryLikesBackend)
-      assertEquals(listOf(testItineraries.first().uid), likedItineraryListBackend)
+    var itineraryLikesBackend = testItineraries.first().numLikes
+
+    var likedItineraryListBackend = mutableListOf<String>()
+
+    every { mapViewModel.incrementItineraryLikes(any()) } answers { itineraryLikesBackend++ }
+
+    every { profileViewModel.addLikedItinerary(any(), any()) } answers
+        {
+          likedItineraryListBackend.add(testItineraries.first().uid)
+        }
+
+    // composeTestRule.onNodeWithTag("$")
+    composeTestRule.onRoot(useUnmergedTree = true).printToLog()
+
+    assertEquals(testItineraries.first().numLikes, itineraryLikesBackend)
+    assertEquals(emptyList<String>(), likedItineraryListBackend)
+    composeTestRule.onNodeWithTag(TestTags.ITINERARY_LIST_SCROLLABLE).performScrollToIndex(0)
+    composeTestRule
+        .onNodeWithTag("${TestTags.ITINERARY_BANNER_LIKE_BUTTON}_${testItineraries.first().uid}")
+        .performClick()
+    assertEquals(testItineraries.first().numLikes + 1, itineraryLikesBackend)
+    assertEquals(listOf(testItineraries.first().uid), likedItineraryListBackend)
   }
 
   @Test
@@ -151,19 +150,19 @@ class ScrollableItineraryListTest {
     testItineraries = listOf(FakeItinerary.SWITZERLAND)
 
     every { profileViewModel.checkIfItineraryIsLiked(any(), any()) } returns true
-      
+
     composeTestRule.setContent {
-        FirebaseApp.initializeApp(LocalContext.current)
-        ItinerariesListScrollable(
-            itineraries = testItineraries,
-            mapViewModel = mapViewModel,
-            profileViewModel = profileViewModel,
-            navController = navController,
-            firebaseAuth = firebaseAuth,
-            paddingValues = paddingValues,
-            parent = ItineraryListParent.PROFILE,
-            // could be any parent
-        )
+      FirebaseApp.initializeApp(LocalContext.current)
+      ItinerariesListScrollable(
+          itineraries = testItineraries,
+          mapViewModel = mapViewModel,
+          profileViewModel = profileViewModel,
+          navController = navController,
+          firebaseAuth = firebaseAuth,
+          paddingValues = paddingValues,
+          parent = ItineraryListParent.PROFILE,
+          // could be any parent
+      )
     }
 
     var itineraryLikesBackend = testItineraries.first().numLikes
@@ -172,9 +171,10 @@ class ScrollableItineraryListTest {
 
     every { mapViewModel.decrementItineraryLikes(any()) } answers { itineraryLikesBackend-- }
 
-    every { profileViewModel.removeLikedItinerary(any(), any()) } answers {
-        likedItineraryListBackend.remove(testItineraries.first().uid)
-    }
+    every { profileViewModel.removeLikedItinerary(any(), any()) } answers
+        {
+          likedItineraryListBackend.remove(testItineraries.first().uid)
+        }
 
     // composeTestRule.onRoot(useUnmergedTree = true).printToLog()
 
@@ -184,7 +184,7 @@ class ScrollableItineraryListTest {
     composeTestRule
         .onNodeWithTag("${TestTags.ITINERARY_BANNER_LIKE_BUTTON}_${testItineraries.first().uid}")
         .performClick()
-    assertEquals(testItineraries.first().numLikes-1, itineraryLikesBackend)
+    assertEquals(testItineraries.first().numLikes - 1, itineraryLikesBackend)
     assertEquals(listOf<String>(), likedItineraryListBackend)
   }
 }

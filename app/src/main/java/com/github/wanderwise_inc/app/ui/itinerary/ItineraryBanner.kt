@@ -150,20 +150,20 @@ fun ItineraryBanner(
                       }
 
                   Column(
-                      modifier =
-                          Modifier.fillMaxWidth()
-                              .weight(0.5f),
+                      modifier = Modifier.fillMaxWidth().weight(0.5f),
                       horizontalAlignment = Alignment.CenterHorizontally) {
                         // Like Icon
                         Icon(
-                            painter = painterResource(
-                                id = if (isLiked) R.drawable.liked_icon_full else R.drawable.liked_icon
-                            ),
+                            painter =
+                                painterResource(
+                                    id =
+                                        if (isLiked) R.drawable.liked_icon_full
+                                        else R.drawable.liked_icon),
                             contentDescription = "like button heart icon",
                             tint = if (isLiked) Color.Red else MaterialTheme.colorScheme.secondary,
                             modifier =
-                                Modifier
-                                    .testTag("${TestTags.ITINERARY_BANNER_LIKE_BUTTON}_${itinerary.uid}")
+                                Modifier.testTag(
+                                        "${TestTags.ITINERARY_BANNER_LIKE_BUTTON}_${itinerary.uid}")
                                     .size(width = 40.dp, height = 40.dp)
                                     .clickable(
                                         onClick = {

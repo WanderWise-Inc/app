@@ -7,6 +7,6 @@ import androidx.compose.ui.test.printToString
 fun SemanticsNodeInteraction.printToLog(
     maxDepth: Int = Int.MAX_VALUE,
 ) {
-    val result = "printToLog:\n" + printToString(maxDepth)
-    println(result)
+  val result = "printToLog:\n" + printToString(maxDepth)
+  println(result)
 }
