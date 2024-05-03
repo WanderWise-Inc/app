@@ -2,10 +2,14 @@ package com.github.wanderwise_inc.app.ui.list_itineraries
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onRoot
+import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToIndex
+import androidx.compose.ui.test.printToString
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.github.wanderwise_inc.app.model.location.FakeItinerary
@@ -18,6 +22,7 @@ import com.google.firebase.auth.FirebaseAuth
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import junit.framework.TestCase.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -36,20 +41,17 @@ class ScrollableItineraryListTest {
   private val paddingValues: PaddingValues = PaddingValues(0.dp)
 
   private lateinit var testItineraries: List<Itinerary>
+  
+  var itinerariesAreLiked = false
 
   @Before
   fun setup() {
     MockKAnnotations.init(this)
-    every { profileViewModel.checkIfItineraryIsLiked(any(), any()) } returns false
     every { firebaseAuth.currentUser?.uid } returns null
   }
 
   @Test
   fun `verify ItinerariesListScrollable displays all correct ItineraryBanners`() {
-    // cannot add more itineraries as they would all have
-    // the same uid (not initialized with setItinerary())
-    // => the assertion would fail as more than 1 tag will
-    // be found
     testItineraries =
         listOf(FakeItinerary.SWITZERLAND, FakeItinerary.SAN_FRANCISCO, FakeItinerary.TOKYO)
     for (itinerary in testItineraries) {
@@ -69,15 +71,8 @@ class ScrollableItineraryListTest {
       )
     }
 
-    //        composeTestRule.onNodeWithTag(TestTags.ITINERARY_LIST_SCROLLABLE).assertIsDisplayed()
-    //
-    // composeTestRule.onNodeWithTag("${TestTags.ITINERARY_BANNER}_${testItineraries[0].uid}").assertIsDisplayed()
-    //
-    // composeTestRule.onNodeWithTag("${TestTags.ITINERARY_BANNER}_${testItineraries[1].uid}").assertIsDisplayed()
-    //
-    // composeTestRule.onNodeWithTag(TestTags.ITINERARY_LIST_SCROLLABLE).performScrollToIndex(2)//.assertExists()//performScrollTo().assertIsDisplayed()
-    //
-    // composeTestRule.onNodeWithTag("${TestTags.ITINERARY_BANNER}_${testItineraries[2].uid}").assertIsDisplayed()
+    every { profileViewModel.checkIfItineraryIsLiked(any(), any()) } returns false
+
     for (i in testItineraries.indices) {
       composeTestRule.onNodeWithTag(TestTags.ITINERARY_LIST_SCROLLABLE).performScrollToIndex(i)
       composeTestRule
@@ -105,4 +100,97 @@ class ScrollableItineraryListTest {
 
     composeTestRule.onNodeWithTag(TestTags.ITINERARY_LIST_NULL).assertIsDisplayed()
   }
+    
+  @Test
+  fun `verify clicking on like button when itinerary is unliked correctly calls API`() {
+      testItineraries = listOf(FakeItinerary.SWITZERLAND)
+
+      composeTestRule.setContent {
+          FirebaseApp.initializeApp(LocalContext.current)
+          ItinerariesListScrollable(
+              itineraries = testItineraries,
+              mapViewModel = mapViewModel,
+              profileViewModel = profileViewModel,
+              navController = navController,
+              firebaseAuth = firebaseAuth,
+              paddingValues = paddingValues,
+              parent = ItineraryListParent.PROFILE,
+              // could be any parent
+          )
+      }
+      
+      var itineraryLikesBackend = testItineraries.first().numLikes
+      
+      var likedItineraryListBackend = mutableListOf<String>()
+
+      every { profileViewModel.checkIfItineraryIsLiked(any(), any()) } returns false
+
+      every { mapViewModel.incrementItineraryLikes(any()) } answers { itineraryLikesBackend++ }
+      
+      every { profileViewModel.addLikedItinerary(any(), any()) } answers { 
+          likedItineraryListBackend.add(testItineraries.first().uid) 
+      }
+      
+      //composeTestRule.onNodeWithTag("$")
+      composeTestRule.onRoot(useUnmergedTree = true).printToLog()
+      
+      assertEquals(testItineraries.first().numLikes, itineraryLikesBackend)
+      assertEquals(emptyList<String>(), likedItineraryListBackend)
+      composeTestRule.onNodeWithTag(TestTags.ITINERARY_LIST_SCROLLABLE).performScrollToIndex(0)
+      composeTestRule
+          .onNodeWithTag("${TestTags.ITINERARY_BANNER_LIKE_BUTTON}_${testItineraries.first().uid}")
+          .performClick()
+      assertEquals(testItineraries.first().numLikes+1, itineraryLikesBackend)
+      assertEquals(listOf(testItineraries.first().uid), likedItineraryListBackend)
+  }
+
+  @Test
+  fun `verify clicking on like button when itinerary is liked correctly calls API`() {
+    testItineraries = listOf(FakeItinerary.SWITZERLAND)
+
+    every { profileViewModel.checkIfItineraryIsLiked(any(), any()) } returns true
+      
+    composeTestRule.setContent {
+        FirebaseApp.initializeApp(LocalContext.current)
+        ItinerariesListScrollable(
+            itineraries = testItineraries,
+            mapViewModel = mapViewModel,
+            profileViewModel = profileViewModel,
+            navController = navController,
+            firebaseAuth = firebaseAuth,
+            paddingValues = paddingValues,
+            parent = ItineraryListParent.PROFILE,
+            // could be any parent
+        )
+    }
+
+    var itineraryLikesBackend = testItineraries.first().numLikes
+
+    var likedItineraryListBackend = mutableListOf<String>(testItineraries.first().uid)
+
+    every { mapViewModel.decrementItineraryLikes(any()) } answers { itineraryLikesBackend-- }
+
+    every { profileViewModel.removeLikedItinerary(any(), any()) } answers {
+        likedItineraryListBackend.remove(testItineraries.first().uid)
+    }
+
+    //composeTestRule.onNodeWithTag("$")
+    composeTestRule.onRoot(useUnmergedTree = true).printToLog()
+
+    assertEquals(testItineraries.first().numLikes, itineraryLikesBackend)
+    assertEquals(listOf(testItineraries.first().uid), likedItineraryListBackend)
+    composeTestRule.onNodeWithTag(TestTags.ITINERARY_LIST_SCROLLABLE).performScrollToIndex(0)
+    composeTestRule
+        .onNodeWithTag("${TestTags.ITINERARY_BANNER_LIKE_BUTTON}_${testItineraries.first().uid}")
+        .performClick()
+    assertEquals(testItineraries.first().numLikes-1, itineraryLikesBackend)
+    assertEquals(listOf<String>(), likedItineraryListBackend)
+  }
+}
+
+fun SemanticsNodeInteraction.printToLog(
+    maxDepth: Int = Int.MAX_VALUE,
+) {
+    val result = "printToLog:\n" + printToString(maxDepth)
+    println(result)
 }

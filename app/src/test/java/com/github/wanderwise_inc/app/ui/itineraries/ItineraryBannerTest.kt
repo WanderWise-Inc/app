@@ -1,8 +1,14 @@
 package com.github.wanderwise_inc.app.ui.itineraries
 
+import androidx.compose.ui.test.SemanticsNodeInteraction
+import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onParent
+import androidx.compose.ui.test.onRoot
+import androidx.compose.ui.test.printToString
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
 import com.github.wanderwise_inc.app.model.location.Location
@@ -33,7 +39,8 @@ class ItineraryBannerTest {
               title = "Ethan's Itinerary",
               tags = listOf(ItineraryTags.BUDGET, ItineraryTags.SOCIAL),
               description = null,
-              visible = true)
+              visible = true,
+              numLikes = 42)
 
       ItineraryBanner(itinerary = itinerary, onLikeButtonClick = { _, _ -> }, onBannerClick = {})
     }
@@ -47,7 +54,13 @@ class ItineraryBannerTest {
   }
     
   @Test
-  fun `like button should be displayed`() {
-      composeTestRule.onNodeWithTag("${TestTags.ITINERARY_BANNER_LIKE_BUTTON}_${itineraryUid}")
+  fun `like button should be displayed and clickable`() {
+      //composeTestRule.onRoot(useUnmergedTree = true).printToLog()
+      val likeButton = composeTestRule
+          .onNodeWithTag("${TestTags.ITINERARY_BANNER_LIKE_BUTTON}_${itineraryUid}")
+          
+      likeButton.assertExists()
+      likeButton.assertIsDisplayed()
+      likeButton.assertHasClickAction()
   }
 }
