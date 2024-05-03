@@ -32,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
@@ -149,18 +150,21 @@ fun ItineraryBanner(
                       }
 
                   Column(
-                      modifier =
-                          Modifier.fillMaxWidth()
-                              .weight(0.5f)
-                              .testTag("${TestTags.ITINERARY_BANNER_LIKE_BUTTON}_${itinerary.uid}"),
+                      modifier = Modifier.fillMaxWidth().weight(0.5f),
                       horizontalAlignment = Alignment.CenterHorizontally) {
                         // Like Icon
                         Icon(
-                            painter = painterResource(id = R.drawable.liked_icon),
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.secondary,
+                            painter =
+                                painterResource(
+                                    id =
+                                        if (isLiked) R.drawable.liked_icon_full
+                                        else R.drawable.liked_icon),
+                            contentDescription = "like button heart icon",
+                            tint = if (isLiked) Color.Red else MaterialTheme.colorScheme.secondary,
                             modifier =
-                                Modifier.size(width = 40.dp, height = 40.dp)
+                                Modifier.testTag(
+                                        "${TestTags.ITINERARY_BANNER_LIKE_BUTTON}_${itinerary.uid}")
+                                    .size(width = 40.dp, height = 40.dp)
                                     .clickable(
                                         onClick = {
                                           if (isLiked) numLikes-- else numLikes++

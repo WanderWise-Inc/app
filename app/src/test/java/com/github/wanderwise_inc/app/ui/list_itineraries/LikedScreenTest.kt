@@ -1,6 +1,5 @@
-package com.github.wanderwise_inc.app.ui
+package com.github.wanderwise_inc.app.ui.list_itineraries
 
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.assertIsDisplayed
@@ -13,7 +12,7 @@ import androidx.compose.ui.test.performTextInput
 import androidx.navigation.NavHostController
 import com.github.wanderwise_inc.app.model.location.FakeItinerary
 import com.github.wanderwise_inc.app.model.location.Itinerary
-import com.github.wanderwise_inc.app.ui.list_itineraries.DisplayLikedItineraries
+import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.firebase.FirebaseApp
