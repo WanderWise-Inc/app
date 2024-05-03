@@ -45,6 +45,9 @@ jobs:
       - name: Format debug keystore
         run: base64 -d -i ./app/external/debug.keystore.base64 > ./app/external/debug.keystore
 
+      - name: Sign Android release
+        uses: r0adkll/sign-android-release@v1
+
       - name: Build APK
         run: ./gradlew build
 
