@@ -1,4 +1,4 @@
-package com.github.wanderwise_inc.app.ui
+package com.github.wanderwise_inc.app.ui.itineraries
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -6,6 +6,7 @@ import androidx.compose.ui.test.onNodeWithTag
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
 import com.github.wanderwise_inc.app.model.location.Location
+import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.itinerary.ItineraryBanner
 import org.junit.Before
 import org.junit.Rule
@@ -43,5 +44,10 @@ class ItineraryBannerTest {
     composeTestRule
         .onNodeWithTag("${TestTags.ITINERARY_BANNER}_${itineraryUid}")
         .assertIsDisplayed()
+  }
+    
+  @Test
+  fun `like button should be displayed`() {
+      composeTestRule.onNodeWithTag("${TestTags.ITINERARY_BANNER_LIKE_BUTTON}_${itineraryUid}")
   }
 }

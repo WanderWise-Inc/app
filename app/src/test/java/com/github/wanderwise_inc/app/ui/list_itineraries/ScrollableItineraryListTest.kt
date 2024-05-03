@@ -1,4 +1,4 @@
-package com.github.wanderwise_inc.app.ui
+package com.github.wanderwise_inc.app.ui.list_itineraries
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.ui.platform.LocalContext
@@ -10,8 +10,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.github.wanderwise_inc.app.model.location.FakeItinerary
 import com.github.wanderwise_inc.app.model.location.Itinerary
-import com.github.wanderwise_inc.app.ui.list_itineraries.ItinerariesListScrollable
-import com.github.wanderwise_inc.app.ui.list_itineraries.ItineraryListParent
+import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.firebase.FirebaseApp
