@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.github.wanderwise_inc.app.model.location.FakeItinerary
 import com.github.wanderwise_inc.app.model.location.Itinerary
+import com.github.wanderwise_inc.app.printToLog
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
@@ -57,6 +58,9 @@ class ScrollableItineraryListTest {
     for (itinerary in testItineraries) {
       itinerary.uid = itinerary.title
     }
+      
+    every { profileViewModel.checkIfItineraryIsLiked(any(), any()) } returns false
+
     composeTestRule.setContent {
       FirebaseApp.initializeApp(LocalContext.current)
       ItinerariesListScrollable(
@@ -70,8 +74,6 @@ class ScrollableItineraryListTest {
           // could be any parent
       )
     }
-
-    every { profileViewModel.checkIfItineraryIsLiked(any(), any()) } returns false
 
     for (i in testItineraries.indices) {
       composeTestRule.onNodeWithTag(TestTags.ITINERARY_LIST_SCROLLABLE).performScrollToIndex(i)
@@ -105,6 +107,8 @@ class ScrollableItineraryListTest {
   fun `verify clicking on like button when itinerary is unliked correctly calls API`() {
       testItineraries = listOf(FakeItinerary.SWITZERLAND)
 
+      every { profileViewModel.checkIfItineraryIsLiked(any(), any()) } returns false
+
       composeTestRule.setContent {
           FirebaseApp.initializeApp(LocalContext.current)
           ItinerariesListScrollable(
@@ -122,8 +126,6 @@ class ScrollableItineraryListTest {
       var itineraryLikesBackend = testItineraries.first().numLikes
       
       var likedItineraryListBackend = mutableListOf<String>()
-
-      every { profileViewModel.checkIfItineraryIsLiked(any(), any()) } returns false
 
       every { mapViewModel.incrementItineraryLikes(any()) } answers { itineraryLikesBackend++ }
       
@@ -174,8 +176,7 @@ class ScrollableItineraryListTest {
         likedItineraryListBackend.remove(testItineraries.first().uid)
     }
 
-    //composeTestRule.onNodeWithTag("$")
-    composeTestRule.onRoot(useUnmergedTree = true).printToLog()
+    // composeTestRule.onRoot(useUnmergedTree = true).printToLog()
 
     assertEquals(testItineraries.first().numLikes, itineraryLikesBackend)
     assertEquals(listOf(testItineraries.first().uid), likedItineraryListBackend)
@@ -186,11 +187,4 @@ class ScrollableItineraryListTest {
     assertEquals(testItineraries.first().numLikes-1, itineraryLikesBackend)
     assertEquals(listOf<String>(), likedItineraryListBackend)
   }
-}
-
-fun SemanticsNodeInteraction.printToLog(
-    maxDepth: Int = Int.MAX_VALUE,
-) {
-    val result = "printToLog:\n" + printToString(maxDepth)
-    println(result)
 }

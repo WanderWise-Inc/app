@@ -65,7 +65,7 @@ object FakeItinerary {
           description =
               "Discover the beauty of Tokyo with this tour, visiting iconic landmarks such as Tokyo Skytree, Meiji Shrine, Tsukiji Fish Market, Ueno Park, Shinjuku Gyoen National Garden, Tokyo Disneyland, Shibuya Crossing, Asakusa Temple, and Odaiba, and more!",
           visible = true,
-          numLikes = 376,
+          numLikes = 0,
           price = 20f,
           time = 4)
 
