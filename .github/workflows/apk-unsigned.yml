@@ -46,7 +46,7 @@ jobs:
         run: base64 -d -i ./app/external/debug.keystore.base64 > ./app/external/debug.keystore
 
       - name: Build APK
-        run: ./gradlew assembleRelease
+        run: ./gradlew build
 
       - name: Upload APK to GitHub Release
         uses: softprops/action-gh-release@v2
