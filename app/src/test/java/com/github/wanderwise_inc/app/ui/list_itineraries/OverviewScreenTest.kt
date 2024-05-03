@@ -1,8 +1,7 @@
-package com.github.wanderwise_inc.app.ui
+package com.github.wanderwise_inc.app.ui.list_itineraries
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
@@ -10,11 +9,10 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToIndex
 import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
-import androidx.compose.ui.test.printToString
 import androidx.navigation.NavHostController
 import com.github.wanderwise_inc.app.model.location.FakeItinerary
 import com.github.wanderwise_inc.app.model.location.Itinerary
-import com.github.wanderwise_inc.app.ui.list_itineraries.DisplayOverviewItineraries
+import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.firebase.FirebaseApp
@@ -178,13 +176,5 @@ class OverviewScreenTest {
             .assertDoesNotExist()
       }
     }
-  }
-
-  /* Used for debugging in unit tests, prints composable tree for tester */
-  fun SemanticsNodeInteraction.printToLog(
-      maxDepth: Int = Int.MAX_VALUE,
-  ) {
-    val result = "printToLog:\n" + printToString(maxDepth)
-    println(result)
   }
 }

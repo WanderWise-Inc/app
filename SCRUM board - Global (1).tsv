@@ -1,0 +1,85 @@
+Title	URL	Assignees	Status	Sprint	Task Type	Nature	Epic	concerning	Estimate (h)	Actual (h)
+SCRUM master		ethangraham2001	Done in "Sprint #3"							
+SCRUM master		276746	Done in Sprint #5							
+ISSUE#98 Test LikeScreen		ethangraham2001	Done in Sprint #5	Sprint 5	🚪 Frontend	🏎️ Sprint Task	🤖 technical		3	2
+ISSUE#104 merge the search bar with the scrollable list		gunnm0, imaneb942	Done in Sprint #5	Sprint 5	🚪 Frontend	🏎️ Sprint Task	🤖 technical	Navigation	2	1
+ISSUE#96 Show user position on map	https://github.com/WanderWise-Inc/app/issues/119	276746	Done in Sprint #5	Sprint 5	🚪 Frontend	🏎️ Sprint Task	🤖 technical	Map	3	4
+ISSUE#101 Implement Itinerary Banner composable	https://github.com/WanderWise-Inc/app/issues/123	gunnm0	Done in Sprint #5	Sprint 5	🚪 Frontend	🏎️ Sprint Task	🤖 technical	Itineraries	3	10
+ISSUE#96 Test User position display	https://github.com/WanderWise-Inc/app/issues/120	276746	Done in Sprint #5	Sprint 5	🚪 Frontend	🏎️ Sprint Task	🤖 technical	Map	3	7
+ISSUE#107 Create a chatbox composable	https://github.com/WanderWise-Inc/app/issues/121	276746	Done in Sprint #5	Sprint 5	🚪 Frontend	🏎️ Sprint Task	🤖 technical	Itineraries	4	5
+ISSUE#99 Profile Screen UI		YofiY	Done in Sprint #5	Sprint 5	🚪 Frontend	🏎️ Sprint Task	🤖 technical	Profile	4	6
+ISSUE#107 Test Chatbox	https://github.com/WanderWise-Inc/app/issues/122	276746	Done in Sprint #5	Sprint 5	🚪 Frontend	📜 User Story	🤖 technical		4	2
+ISSUE#98 Implement two button composables that upvote/downvote the itinerary	https://github.com/WanderWise-Inc/app/issues/104	ThomasPFMuller	Done in Sprint #5	Sprint 5	🚪 Frontend	🏎️ Sprint Task	🤖 technical	Itineraries	4	4
+ISSUE#98 Create tests for liked itineraries backend	https://github.com/WanderWise-Inc/app/issues/109	ThomasPFMuller	Done in Sprint #5	Sprint 5	🍑 Backend	🏎️ Sprint Task	🤖 technical	Itineraries	4	4
+ISSUE#98 Create tests for Liked button implementation	https://github.com/WanderWise-Inc/app/issues/116	ThomasPFMuller	Done in Sprint #5	Sprint 5	🚪 Frontend	🏎️ Sprint Task	🤖 technical	Itineraries	3	5
+ISSUE#98 Add backend to support liked itineraries for each user	https://github.com/WanderWise-Inc/app/issues/110	ThomasPFMuller	Done in Sprint #5	Sprint 5	🍑 Backend	🏎️ Sprint Task	🤖 technical	Itineraries	3	4
+ISSUE#95 Compute shortest path between locations	https://github.com/WanderWise-Inc/app/issues/106	ethangraham2001	Done in Sprint #5	Sprint 5	🍑 Backend	🏎️ Sprint Task	🤖 technical	Itineraries	4	8
+ISSUE#98 LikeScreen		ethangraham2001	Done in Sprint #5	Sprint 5	🚪 Frontend	🏎️ Sprint Task	🤖 technical		4	6
+As a itinerary creator, I would l like to create an itinerary with tags describing the trip, so that people can filter my trips easily			🦑 Product Backlog							
+As a user, I would like to have an app page dedicated to creating new Itineraries			🦑 Product Backlog							
+As a user I would like to be able to see my finished itinerary after I am done creating it			🦑 Product Backlog							
+As a user, I would like to be able to see the ratings that were given to a path, so that I can better judge the quality of itineraries			🦑 Product Backlog							
+As a user, I would like to be able to see a map centered on me when I open the app, so that I can locate myself easier			🦑 Product Backlog							
+As a user, I would like to change my profile photo, so that I can have a customise my experience			🦑 Product Backlog							
+As I user, I would like to be able to search for an intinerary by pinning points that I would like to pass by, so that i have a planned trip going through places I am interested in			🦑 Product Backlog							
+As a user, I would like to record my path and remember them for later on, so that I can choose to follow them at a later time			🦑 Product Backlog							
+As a user, I would like to modify my profile with a profile picture and personal features, so that people looking for my itineraries have a better understanding of who I am.			🦑 Product Backlog							
+As a user, I would like to see itinerarie clearly drawn on the map with details, in order to have a visual representation			🦑 Product Backlog							
+As a user, I would like to see markers of the points of interest of my itinerary, so that I know what locations the itinerary visits and see if it coresponds to my likings			🦑 Product Backlog							
+As a itinerary creator, I want to see what ratings were given to me on my trip, so that I can get feedback on the quality of my itinerary so that I know what is good and what I have to improve on			🦑 Product Backlog							
+SCRUM master		imaneb942	Done in "Sprint #2"							
+SCRUM master		YofiY	Done in Sprint #4							
+ISSUE#102 Test scrolable list		gunnm0	Done in Sprint #5	Sprint 5	🚪 Frontend	🏎️ Sprint Task	🤖 technical		4	4
+ISSUE#102 Implement the scrollable list on the main page		gunnm0	Done in Sprint #5	Sprint 5	🚪 Frontend	🏎️ Sprint Task	🤖 technical	Navigation	5	1.5
+ISSUE #99 Implement an image uploader composable		engjellismaili	Done in Sprint #5	Sprint 5	🍑 Backend	🏎️ Sprint Task	🤖 technical		6	7
+ISSUE #99 Add test for the image uploader		engjellismaili	Done in Sprint #5	Sprint 5	🍑 Backend	🏎️ Sprint Task	🤖 technical		4	10
+update/create WanderWise color theme	https://github.com/WanderWise-Inc/app/issues/108	YofiY	Done in Sprint #5	Sprint 5	🚪 Frontend	🏎️ Sprint Task	🧵 miscellaneous		2	10
+ISSUE#103 Implement the search bar option		imaneb942	Done in Sprint #5	Sprint 5	🚪 Frontend	🏎️ Sprint Task	🤖 technical	Navigation	6	
+ISSUE #109 Implement the filters for our search bar		imaneb942	Done in Sprint #5	Sprint 5	🚪 Frontend	📜 User Story	🤖 technical	Navigation	5	
+ISSUE #110 Create tests for our filters		imaneb942	Done in Sprint #5	Sprint 5	🍑 Backend	🏎️ Sprint Task	🤖 technical	Navigation	4	
+ISSUE#108 Create tests for search bar		imaneb942	Done in Sprint #5	Sprint 5	🍑 Backend	🏎️ Sprint Task	🤖 technical	Navigation	4	
+SCRUM master		gunnm0	Done in "Sprint #6"							
+ISSUE#143 Test `OverviewScreen `+ `LikedScreen`	https://github.com/WanderWise-Inc/app/issues/172	ThomasPFMuller	Done in "Sprint #6"	Sprint 6		🏎️ Sprint Task	🤖 technical	Testing	6	8
+ISSUE#143 Test `ProfileScreen`		YofiY	Done in "Sprint #6"	Sprint 6		🏎️ Sprint Task	🤖 technical	Testing	5	6
+ISSUE#146 Remake the navigation bar and logic	https://github.com/WanderWise-Inc/app/issues/142	ThomasPFMuller	Done in "Sprint #6"	Sprint 6	🚪 Frontend	🏎️ Sprint Task	🤖 technical	Navigation	4	6
+ISSUE#143 Test `LoginScreen` and modify `SignIn` implementation	https://github.com/WanderWise-Inc/app/issues/165	engjellismaili	Done in "Sprint #6"	Sprint 6	🍑 Backend	🏎️ Sprint Task	🤖 technical	Testing	6	8
+ISSUE#143 Test data-repositories	https://github.com/WanderWise-Inc/app/issues/144	engjellismaili	Done in "Sprint #6"	Sprint 6	🍑 Backend	🏎️ Sprint Task	🤖 technical	Testing	6	6
+ISSUE#143 Update tests for `OverviewScreen` and `LikedScreen` to be compatible with new implementation of those screens	https://github.com/WanderWise-Inc/app/issues/161	ethangraham2001	Done in "Sprint #6"	Sprint 6	🍑 Backend	🏎️ Sprint Task		Itineraries	2	2
+ISSUE#152 Upgrade `PreviewItineraryScreen`	https://github.com/WanderWise-Inc/app/issues/153	ethangraham2001	Done in "Sprint #6"	Sprint 6	🚪 Frontend	🏎️ Sprint Task	🤖 technical	Map	8	8.5
+ISSUE#143 Test `Itinerary`	https://github.com/WanderWise-Inc/app/issues/160	276746, ethangraham2001	Done in "Sprint #6"	Sprint 6		🏎️ Sprint Task	🤖 technical	Testing	2	2
+ISSUE#143 Write UI tests for `PreviewItineraryScreen`	https://github.com/WanderWise-Inc/app/issues/145	ethangraham2001	Done in "Sprint #6"	Sprint 6	🚪 Frontend	🏎️ Sprint Task	🤖 technical	Map	4	4
+ISSUE#143 Fix Demo	https://github.com/WanderWise-Inc/app/issues/151	ethangraham2001	Done in "Sprint #6"	Sprint 6	🚪 Frontend	🏎️ Sprint Task	🤖 technical		2	2
+ISSUE#143 Fix `ItinerayBanner` UI	https://github.com/WanderWise-Inc/app/issues/150	gunnm0	Done in "Sprint #6"	Sprint 6	🚪 Frontend	🏎️ Sprint Task	🤖 technical	Itineraries	3	4
+ISSUE#143 Test viewmodels	https://github.com/WanderWise-Inc/app/issues/147	276746	Done in "Sprint #6"	Sprint 6		🏎️ Sprint Task	🤖 technical	Testing	8	9
+ISSUE#143 Store fake Itineraries	https://github.com/WanderWise-Inc/app/issues/148	276746	Done in "Sprint #6"	Sprint 6	🍑 Backend	🏎️ Sprint Task	🧵 miscellaneous	Itineraries	3	1
+ISSUE#152 Add navigation to `ItineraryBanners`	https://github.com/WanderWise-Inc/app/issues/154	gunnm0	Done in "Sprint #6"	Sprint 6	🚪 Frontend	🏎️ Sprint Task	🤖 technical	Navigation	5	6
+ISSUE#155 Add attributes to `Itinerary` model	https://github.com/WanderWise-Inc/app/issues/157	imaneb942	Done in "Sprint #6"	Sprint 6	🍑 Backend	🏎️ Sprint Task	🤖 technical	Itineraries	2	
+ISSUE#143 Fix `ProfileScreen` UI	https://github.com/WanderWise-Inc/app/issues/166	YofiY	Done in "Sprint #6"	Sprint 6	🚪 Frontend	🏎️ Sprint Task	🤖 technical	Profile	4	10
+ISSUE#149 Change profile picture by clicking on it	https://github.com/WanderWise-Inc/app/issues/167	YofiY	Done in "Sprint #6"	Sprint 6	🚪 Frontend	🏎️ Sprint Task	🤖 technical	Profile	2	2
+ISSUE#155 Integrate filter	https://github.com/WanderWise-Inc/app/issues/156	imaneb942	Done in "Sprint #6"	Sprint 6	🍑 Backend	🏎️ Sprint Task	🤖 technical		2	
+ISSUE#143 Update Figma	https://github.com/WanderWise-Inc/app/issues/162	gunnm0	Done in "Sprint #6"	Sprint 6	🧑🏽‍🎨 Figma	🏎️ Sprint Task	🧵 miscellaneous		8	10
+ISSUE#143 Centralize `ProfilePicture` composable, fix 404 loop	https://github.com/WanderWise-Inc/app/issues/173	ethangraham2001	Done in "Sprint #6"	Sprint 6	🚪 Frontend	🏎️ Sprint Task	🤖 technical	Profile	3	4.5
+Change the LoginScreen UI		imaneb942	Done in "Sprint #6"	Sprint 6	🚪 Frontend	🏎️ Sprint Task	🤖 technical	Itineraries	2	3
+As a user, I would like to have an app page dedicated to creating new Itineraries			🐎 Sprint Backlog							
+As a user, I would like to be able to create an itinerary by searching for an address and adding it as a waypoint to the itinerary			🐎 Sprint Backlog							
+As a user, I would like to be able to see my finished itinerary after I am done creating it			🐎 Sprint Backlog							
+As a user, I would like to have a clear visual indicator that I have liked an itinerary			🐎 Sprint Backlog							
+As a user, I would like my itineraries to be accessible from any device in which I login			🐎 Sprint Backlog							
+As a user, I would like to be able to customize the itinerary with an image of my choosing			🐎 Sprint Backlog							
+As a user, I would like to be able to customize my app from the settings screen			🐎 Sprint Backlog							
+SCRUM master		ThomasPFMuller	Done in "Sprint #7"							
+Start PRD draft		imaneb942	Sprint Tasks	Sprint 7		🏎️ Sprint Task	🧵 miscellaneous		2	
+Create Itinerary UI: map screen		imaneb942	Sprint Tasks	Sprint 7	🚪 Frontend	📜 User Story	🤖 technical	Itineraries	8	
+Create Itinerary: compute itinerary from locations		ethangraham2001	Sprint Tasks	Sprint 7	🚪 Frontend	🏎️ Sprint Task	🤖 technical	Itineraries	8	
+Create Itinerary Backend: find location from searched name		ThomasPFMuller	Sprint Tasks	Sprint 7	🍑 Backend	🏎️ Sprint Task	🤖 technical	Itineraries	8	
+Create Itinerary UI: navigation		ThomasPFMuller	Sprint Tasks	Sprint 7	🚪 Frontend	🏎️ Sprint Task	🤖 technical	Navigation	4	
+Create Itinerary UI: Title/Description screen		YofiY	Sprint Tasks	Sprint 7	🚪 Frontend	🏎️ Sprint Task	🤖 technical	Itineraries	3	
+Create Itinerary Backend: Title/Description screen		YofiY	Sprint Tasks	Sprint 7	🍑 Backend	🏎️ Sprint Task	🤖 technical	Itineraries	3	
+Create Itinerary UI: Tags screen		YofiY	Sprint Tasks	Sprint 7	🚪 Frontend	🏎️ Sprint Task	🤖 technical	Itineraries	6	
+Create Itinerary Backend: Tags screen		YofiY	Sprint Tasks	Sprint 7	🍑 Backend	🏎️ Sprint Task	🤖 technical	Itineraries	6	
+Create Itinerary UI: Preview Itinerary screen		ethangraham2001	Sprint Tasks	Sprint 7	🚪 Frontend	🏎️ Sprint Task	🤖 technical	Itineraries	4	
+Create Itinerary UI: preview Itinerary Banner			Sprint Tasks	Sprint 7	🚪 Frontend	🏎️ Sprint Task	🤖 technical	Itineraries	3	
+Add an itinerary to user's personal itineraries		engjellismaili	👩🏽‍💻 In Development	Sprint 7	🍑 Backend	🏎️ Sprint Task	🤖 technical	Itineraries	6	
+Tests		ethangraham2001, gunnm0, imaneb942, ThomasPFMuller, YofiY	Sprint Tasks	Sprint 7		🏎️ Sprint Task	🤖 technical		22	
+E2E tests		276746	Sprint Tasks	Sprint 7	🍑 Backend	🏎️ Sprint Task	🤖 technical	Testing	12	
+Add test for the creation of an itinerary		engjellismaili	Sprint Tasks	Sprint 7	🍑 Backend	🏎️ Sprint Task	🤖 technical	Testing	6	
