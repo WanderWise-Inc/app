@@ -35,8 +35,6 @@ fun SearchBar(
 ) {
   var query by remember { mutableStateOf("") }
   var isDropdownOpen by remember { mutableStateOf(false) }
-  var sliderPosition by remember { mutableStateOf(0f..100f) }
-  var sliderPositionTime by remember { mutableStateOf(0f..24f) }
 
   OutlinedTextField(
       value = query,
@@ -50,9 +48,13 @@ fun SearchBar(
       leadingIcon = {
         Icon(
             painter = painterResource(id = R.drawable.les_controles),
-            contentDescription = null,
+            contentDescription = "search icon",
             tint = Color.Black,
-            modifier = Modifier.clickable { isDropdownOpen = true }.padding(2.dp).size(30.dp))
+            modifier =
+                Modifier.clickable { isDropdownOpen = true }
+                    .padding(2.dp)
+                    .size(30.dp)
+                    .testTag(TestTags.SEARCH_ICON))
       },
       singleLine = true,
       shape = RoundedCornerShape(30.dp),

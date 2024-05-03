@@ -37,8 +37,8 @@ class LoginScreenKtTest {
   fun testLoginScreenWithUserAlreadyPresentInDatabaseShouldNavigate() {
     every { googleSignInLauncher.launchSignIn() } answers { route = Graph.HOME }
 
-    composeTestRule.onNodeWithText("WanderWise").assertExists()
-    composeTestRule.onNodeWithText("WanderWise").assertIsDisplayed()
+    composeTestRule.onNodeWithText("Start Wandering Now").assertExists()
+    composeTestRule.onNodeWithText("Start Wandering Now").assertIsDisplayed()
 
     composeTestRule.onNodeWithText("Sign-In with Google").assertExists()
     // composeTestRule.onNodeWithText("Sign-In with Google").assertIsDisplayed()
