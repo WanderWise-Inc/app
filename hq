@@ -1,0 +1,3955 @@
+[33mcommit 11aa4449bc41e6a4ff981daee387c6eb4fe78d20[m[33m ([m[1;36mHEAD -> [m[1;32mimaneb942-patch-2[m[33m, [m[1;31morigin/imaneb942-patch-2[m[33m)[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Sat May 4 00:17:53 2024 +0300
+
+    Revert "Add files via upload"
+    
+    This reverts commit fd30f2c049a022396c1992e60e47d0b972f4f268.
+
+[33mcommit fd30f2c049a022396c1992e60e47d0b972f4f268[m
+Author: imaneb942 <56965479+imaneb942@users.noreply.github.com>
+Date:   Fri May 3 17:10:46 2024 +0200
+
+    Add files via upload
+
+[33mcommit 8c2964a0caf602e33e7eb77132e955f819fb8f22[m[33m ([m[1;31morigin/release-apk-thomas[m[33m, [m[1;31morigin/M2[m[33m, [m[1;32mrelease-apk-thomas[m[33m, [m[1;32mmain[m[33m, [m[1;32mimane942-patch-2[m[33m)[m
+Merge: ccc9b25 772576f
+Author: engjellismaili <126008250+engjellismaili@users.noreply.github.com>
+Date:   Fri May 3 15:10:11 2024 +0000
+
+    Merge pull request #181 from WanderWise-Inc/imaneb942-patch-1
+    
+    added TSV file for M2
+
+[33mcommit 772576f5af4f8e076c69ced941ef83da29efd002[m
+Author: imaneb942 <56965479+imaneb942@users.noreply.github.com>
+Date:   Fri May 3 16:56:55 2024 +0200
+
+    added TSV file for M2
+
+[33mcommit ccc9b2512275dbe6fa1568628bbb07fbebacd7d4[m
+Merge: 1b4b292 7487925
+Author: imaneb942 <56965479+imaneb942@users.noreply.github.com>
+Date:   Fri May 3 15:50:24 2024 +0200
+
+    Merge pull request #179 from WanderWise-Inc/fix/like-button
+    
+    Fix like button
+
+[33mcommit 748792589164b0e61ad2cb9e5759e242e4e1a13a[m
+Merge: 818a17e 1b4b292
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Fri May 3 16:41:27 2024 +0300
+
+    Merge branch 'main' into fix/like-button
+
+[33mcommit 1b4b292745f0fe4b355bf4c91dfd72a2a1e51625[m
+Merge: abcf7f9 0c6de22
+Author: engjellismaili <126008250+engjellismaili@users.noreply.github.com>
+Date:   Fri May 3 13:39:59 2024 +0000
+
+    Merge pull request #180 from WanderWise-Inc/imaneb942-readme-update
+    
+    Update README.md
+
+[33mcommit 0c6de220faff6c26755a1517081bda6e2989ac7d[m
+Author: imaneb942 <56965479+imaneb942@users.noreply.github.com>
+Date:   Fri May 3 15:32:20 2024 +0200
+
+    Update README.md
+
+[33mcommit 818a17ed7dd5c9d2d2b92632d43b45b38ed9be79[m
+Merge: 6dc2be9 abcf7f9
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Fri May 3 15:32:20 2024 +0300
+
+    Merge branch 'main' into fix/like-button
+
+[33mcommit 6dc2be9e4c8d21c79310e7bf993822ab23a8361b[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Fri May 3 15:31:46 2024 +0300
+
+    ran ktfmt
+
+[33mcommit 57eace55a9557fd5c97b1a8d04c386626460f143[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Fri May 3 15:31:04 2024 +0300
+
+    code cleanup
+
+[33mcommit b22f9692a75f077ff6d561dbadb71a87d4974412[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Fri May 3 15:27:12 2024 +0300
+
+    added tests for like button (got lost in a deleted branch during sprint 5)
+
+[33mcommit 34a97da19d695682aaee1d3167672ca21d419d92[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Fri May 3 14:16:04 2024 +0300
+
+    reformatted unit test folder tree
+
+[33mcommit abcf7f96e0357fe4989ec2b12db8db654e08ade1[m
+Merge: 366c538 92a39dd
+Author: Ethan G <100317390+ethangraham2001@users.noreply.github.com>
+Date:   Fri May 3 13:14:42 2024 +0200
+
+    Merge pull request #178 from WanderWise-Inc/bugfix/add-params-to-previewitineraryscreen
+    
+    Small changes to `PreviewItineraryScreen`, `OverviewScreen` and `LikedScreen`
+
+[33mcommit 672f219e8e80b8c997ab827f9c6f427d8d58cde6[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Fri May 3 14:03:51 2024 +0300
+
+    made like button fill up and change color when clicked
+
+[33mcommit 92a39ddbbf05c64b6809757ae6a7085688ad0bf2[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Fri May 3 12:56:55 2024 +0200
+
+    Added duration and price to PreviewItineraryScreen as discussed in meeting. Updated shopping logo in OverviewScreen and LikedScreen
+
+[33mcommit 366c538012bbdf647326ebf52e2cf947c42ce6cd[m
+Merge: 1b23cad 4b3e051
+Author: Oscar <126007815+276746@users.noreply.github.com>
+Date:   Fri May 3 11:43:13 2024 +0200
+
+    Merge pull request #175 from WanderWise-Inc/bugfix/android-manifest
+    
+    modified some permissions in the android manifest
+
+[33mcommit 4b3e0512ad37a8d9dddd48bb763466e4447f188b[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Fri May 3 11:31:57 2024 +0200
+
+    modified some permissions in the android manifest
+
+[33mcommit 1b23cad1f253de3e958dffb7976ccf7f47683f74[m
+Merge: c9ed50f 409efc5
+Author: imaneb942 <56965479+imaneb942@users.noreply.github.com>
+Date:   Fri May 3 09:14:06 2024 +0200
+
+    Merge pull request #174 from WanderWise-Inc/tests/filtering
+    
+    Modified the Login UI and Tried Implementing Tests for the Search Bar
+
+[33mcommit 409efc56d734b0e8f343513843497b2cb27a9575[m[33m ([m[1;31morigin/tests/filtering[m[33m)[m
+Author: imaneb942 <imane.benkamoun@epfl.ch>
+Date:   Fri May 3 08:27:55 2024 +0200
+
+    deleted unused features
+
+[33mcommit 0ff65553cd1a58b545128942051349a4fccbf3cf[m
+Author: imaneb942 <imane.benkamoun@epfl.ch>
+Date:   Thu May 2 21:34:02 2024 +0200
+
+    formatted
+
+[33mcommit 6d9010462e6e6c2c977e366e76a3ade5aba1a9f7[m
+Merge: 1fbe53b c9ed50f
+Author: imaneb942 <imane.benkamoun@epfl.ch>
+Date:   Thu May 2 21:30:26 2024 +0200
+
+    Merge branch 'main' into tests/filtering-+-UI-LOGIN
+
+[33mcommit 1fbe53b3a590501323fcefe494bcbe61c51e2e32[m
+Author: imaneb942 <imane.benkamoun@epfl.ch>
+Date:   Thu May 2 21:27:11 2024 +0200
+
+    changed the icon name for the review
+
+[33mcommit c9ed50ff9367176fb95b2f2a14801db51a17b4b5[m
+Merge: 2b5dc59 082f5db
+Author: Yofthahe Yeshitila <63012939+YofiY@users.noreply.github.com>
+Date:   Thu May 2 21:07:55 2024 +0200
+
+    Merge pull request #171 from WanderWise-Inc/test/overview-liked-screen
+    
+    Test/overview liked screen
+
+[33mcommit 082f5dbb0a4aeaa75130e5eb65f1b6c8a560f613[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Thu May 2 21:45:19 2024 +0300
+
+    ran ktfmt and removed duplicate composable ItineraryCard identical to ItineraryBanner
+
+[33mcommit 743ddeea7302aebe7f7ec69b50db591e6140f521[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Thu May 2 21:42:27 2024 +0300
+
+    finished Overview/Liked screen tests with slider functionnality test
+
+[33mcommit 11fab4c6c5ba6ae7340a33c9e5b32b64eb1252c6[m
+Author: imaneb942 <imane.benkamoun@epfl.ch>
+Date:   Thu May 2 20:09:11 2024 +0200
+
+    formatted
+
+[33mcommit 32e59840590ac642f926903cac9ca136ccf37e76[m
+Merge: eb4c02d 2b5dc59
+Author: imaneb942 <imane.benkamoun@epfl.ch>
+Date:   Thu May 2 20:01:14 2024 +0200
+
+    Merge branch 'main' into tests/filtering-+-UI-LOGIN
+
+[33mcommit eb4c02d3d15e5b1d62a83d96701956c98763ab74[m
+Author: imaneb942 <imane.benkamoun@epfl.ch>
+Date:   Thu May 2 20:00:30 2024 +0200
+
+    Login UI changed
+
+[33mcommit 63a8056b82502a8e604fac172c2768054909eeb6[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Thu May 2 19:14:59 2024 +0300
+
+    commented unused files to improve line coverage
+
+[33mcommit f5409b0c4c1862dfaa7b8819f4eef84effed78f6[m
+Merge: fe222c3 2b5dc59
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Thu May 2 19:03:08 2024 +0300
+
+    Merge branch 'main' into test/overview-liked-screen
+
+[33mcommit fe222c3aef443faae39ac2f0449490ed9fa2e95c[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Thu May 2 18:49:45 2024 +0300
+
+    ran ktfmt
+
+[33mcommit 2b5dc59e35536e3a1140e22c121560a825691a10[m
+Merge: 12efb6e 41ce7e3
+Author: gunnm0 <100207698+gunnm0@users.noreply.github.com>
+Date:   Thu May 2 17:33:41 2024 +0200
+
+    Merge pull request #170 from WanderWise-Inc/feature/upgrade-chips
+    
+    upgraded chips
+
+[33mcommit 41ce7e31be627922eb3b340918dac6d3939ae0b9[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Thu May 2 17:31:38 2024 +0200
+
+    upgraded chips
+
+[33mcommit 174925fe02dd1bcdf9a9b184e75c27f33fe6e4a0[m
+Merge: f31c817 12efb6e
+Author: imaneb942 <imane.benkamoun@epfl.ch>
+Date:   Thu May 2 17:29:56 2024 +0200
+
+    Merge branch 'main' into tests/filtering
+
+[33mcommit 4982f859146b9f71198647efeb446d49a2211d83[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Thu May 2 18:29:55 2024 +0300
+
+    added LikedScreenTest, still need to check price and time slider functionnality
+
+[33mcommit 372132a8e6532b57825e2287440dfbf986059aa1[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Thu May 2 18:21:54 2024 +0300
+
+    finished OverviewScreenTest
+
+[33mcommit f31c8172305f3ebfa9a9752222befab7071e5e46[m
+Author: imaneb942 <imane.benkamoun@epfl.ch>
+Date:   Thu May 2 16:17:15 2024 +0200
+
+    commit with last changes into SearchBar test
+
+[33mcommit 12efb6eefab76541bb2daa0277f6017f178fb72c[m
+Merge: 8511d54 0371c42
+Author: Yofthahe Yeshitila <63012939+YofiY@users.noreply.github.com>
+Date:   Thu May 2 16:12:30 2024 +0200
+
+    Merge pull request #169 from WanderWise-Inc/test/material-theme
+    
+    Wrote tests for the WanderWise Theme
+
+[33mcommit 0371c4242fe5734938d685bcfc91dfe891925ca1[m
+Author: YofiY <theburnface2013@gmail.com>
+Date:   Thu May 2 15:58:17 2024 +0200
+
+    done writting tests for the Theme
+
+[33mcommit 751d3d46c5183e036fd15e61dbd81422c403db58[m
+Merge: fa045e5 8511d54
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Thu May 2 14:23:44 2024 +0300
+
+    Merge branch 'main' into test/overview-liked-screen
+
+[33mcommit 9257975fc0876e157b6c3d0d9b47acff826cea91[m
+Author: imaneb942 <imane.benkamoun@epfl.ch>
+Date:   Thu May 2 11:14:41 2024 +0200
+
+    modified the SearchBar, LikedScreen and OverviewScreen to have test tags
+
+[33mcommit 8511d54aedd166c9aaf12086666e0eb6fcdf3225[m
+Merge: 16df580 7a60bbf
+Author: Ethan G <100317390+ethangraham2001@users.noreply.github.com>
+Date:   Thu May 2 10:53:02 2024 +0200
+
+    Merge pull request #168 from WanderWise-Inc/bugfix/fix-reverted-profile-picture
+    
+    fixed `ProfileScreen` which was depending on a deprecated implementation of `ProfilePicture`
+
+[33mcommit 7a60bbf8567ba112214c4b3f8d3cf50182a02d16[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Thu May 2 10:40:32 2024 +0200
+
+    fixed profile picture which was depending on a deprecated implementation of profile picture composable
+
+[33mcommit 16df5808a5cb0bbadb181745540897479fa6c949[m
+Merge: c87d0d6 9164e8c
+Author: engjellismaili <126008250+engjellismaili@users.noreply.github.com>
+Date:   Thu May 2 09:39:55 2024 +0200
+
+    Merge pull request #164 from WanderWise-Inc/feature/ItineraryChat
+    
+    ItineraryChat
+
+[33mcommit 9164e8c28ed4cf69d92e03f8bd2bd0a693edaa7d[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Wed May 1 21:05:28 2024 +0200
+
+    Format
+
+[33mcommit 6446c9ec8e5eb087f409225c8ee0f06fdc531456[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Wed May 1 21:04:22 2024 +0200
+
+    Add test
+
+[33mcommit 9d440a32be79fdd305fd50654c05eb9a63e5303e[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Wed May 1 20:59:47 2024 +0200
+
+    Refactor variable name + Icon 'Send'
+
+[33mcommit 8088086fc11fee5f33a5144f37d4208815ce0580[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Wed May 1 20:55:53 2024 +0200
+
+    Add 'Send' Icon
+
+[33mcommit 2a1bb00e820ae5fa305290143babc0e9a3827690[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Wed May 1 19:09:16 2024 +0200
+
+    Format
+
+[33mcommit fa045e5961e13f44b1f2279ace5f122b1abb8dcc[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Wed May 1 20:07:24 2024 +0300
+
+    created test for ItineraryListScrollable, now working on OverviewScreenTest
+
+[33mcommit 37bd5904c35fef5faa44c45b42f67eaf32df9cda[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Wed May 1 19:07:06 2024 +0200
+
+    Apply WanderWise color theme
+
+[33mcommit 054bd1099ce702d95e978ecc6ac9f92fb0f2cd8a[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Wed May 1 19:06:23 2024 +0200
+
+    Change tests location
+
+[33mcommit 62f6c60d94200c42ffcc326b893a4451195919fb[m
+Merge: db9437c c87d0d6
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Wed May 1 18:31:37 2024 +0200
+
+    Merge branch 'main' into feature/ItineraryChat
+
+[33mcommit c87d0d669afcf510e27f47d90385844982dfb992[m
+Merge: 31b1722 f575d43
+Author: engjellismaili <126008250+engjellismaili@users.noreply.github.com>
+Date:   Wed May 1 18:12:12 2024 +0200
+
+    Merge pull request #163 from WanderWise-Inc/test/sign-in-ui
+    
+    Test/sign in UI
+
+[33mcommit f575d43f0a69ff988c3261910e2c84c93759dcf9[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Wed May 1 18:05:07 2024 +0200
+
+    Clean useless tests
+
+[33mcommit 708a35aaea9227b6c247bbfc97d04f8f6454279a[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Wed May 1 17:58:32 2024 +0200
+
+    fixed issues
+
+[33mcommit 9e87ec29472130f6363da9a9b19383de306f2a57[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Wed May 1 17:34:56 2024 +0200
+
+    formatted
+
+[33mcommit 9fc563a4d388e5bf5d203b04af517e63851e7a7f[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Wed May 1 17:34:14 2024 +0200
+
+    removed the android test since already testes in unit tests
+
+[33mcommit 50622ad3a5bc6897a1a922c704f38eb86038ea3b[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Wed May 1 17:32:20 2024 +0200
+
+    fixed issues pointed by comments
+
+[33mcommit 287de162640d7a3609394684ab4a88f63220cc81[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Wed May 1 17:15:35 2024 +0200
+
+    formatted files
+
+[33mcommit 1bbecb8ac79f3f791a879bf8b9182014e8f84b78[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Wed May 1 17:15:02 2024 +0200
+
+    deleted some unused tests
+
+[33mcommit 6fd72c09b06a4200094dcbd73aa28fe2fd93e47f[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Wed May 1 17:12:51 2024 +0200
+
+    replaced itinerary test with the one in the main
+
+[33mcommit 07936b6857334dded7e9f02fb3e404f29694933a[m
+Author: imaneb942 <imane.benkamoun@epfl.ch>
+Date:   Wed May 1 17:10:26 2024 +0200
+
+    added roboelectric tests
+
+[33mcommit 8736613cd9fd8b10e84e663816101c27195f1199[m
+Merge: b88f4af 31b1722
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Wed May 1 17:08:32 2024 +0200
+
+    Merge branch 'main' into test/sign-in-ui
+
+[33mcommit b88f4af5f341c7a78b6691d393fc4bac9b341068[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Wed May 1 16:54:36 2024 +0200
+
+    Fixed name conflict for tests
+
+[33mcommit 4b67c562c4cce461f0c718ad5d4a17ce7e7c813a[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Wed May 1 16:38:04 2024 +0200
+
+    Formatted code and merged with main
+
+[33mcommit d3c8aca00f764c25963538e4533ab79d401abd1b[m
+Merge: f5f7986 d90128f
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Wed May 1 16:08:03 2024 +0200
+
+    Merge branch 'main' into test/sign-in-ui
+
+[33mcommit 31b172260269d99c7ddf8a5cabbe827204dfc752[m
+Merge: d90128f f4b1cef
+Author: engjellismaili <126008250+engjellismaili@users.noreply.github.com>
+Date:   Wed May 1 16:06:25 2024 +0200
+
+    Merge pull request #159 from WanderWise-Inc/test/itinerary
+    
+    Test Itinerary
+
+[33mcommit f5f7986bf07588e682a2c0fd0f491e24ea7c4dd2[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Wed May 1 16:03:57 2024 +0200
+
+    Formatted file
+
+[33mcommit d90128fbca735fdefca9f04facc22ae9b5b2008f[m
+Merge: 3202a18 d6e2084
+Author: Yofthahe Yeshitila <63012939+YofiY@users.noreply.github.com>
+Date:   Wed May 1 15:56:15 2024 +0200
+
+    Merge pull request #134 from WanderWise-Inc/fix/profile-screen
+    
+    Fixed UI components inside the ProfileScreen and added the feature to modify the profile picture by click
+
+[33mcommit f4b1ceffc7587f7d3792a57f9e352aefadc49fa5[m
+Merge: 7d2aec6 3202a18
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Wed May 1 15:43:33 2024 +0200
+
+    Merge branch 'main' into test/itinerary
+    
+    # Conflicts:
+    #       app/src/test/java/com/github/wanderwise_inc/app/model/location/ItineraryTest.kt
+
+[33mcommit 580ac68e8688b8228ca1500e3707f89ee3ae9623[m
+Merge: 0527672 3202a18
+Author: imaneb942 <imane.benkamoun@epfl.ch>
+Date:   Wed May 1 15:39:59 2024 +0200
+
+    Merge branch 'main' into tests/filtering
+
+[33mcommit 3202a184c104d96f8d85959e244dd92f2bd4d487[m
+Merge: 28f6284 326ed4f
+Author: Ethan G <100317390+ethangraham2001@users.noreply.github.com>
+Date:   Wed May 1 15:39:07 2024 +0200
+
+    Merge pull request #141 from WanderWise-Inc/test/itinerary-tests
+    
+    Updated `PreviewItineraryScreenTest` and `OverviewScreenTest` for compatibility. Added a basic test to `MapViewmodelTest`
+
+[33mcommit 05276723db551f648f51a411af7181077f26f83c[m
+Author: imaneb942 <imane.benkamoun@epfl.ch>
+Date:   Wed May 1 15:38:16 2024 +0200
+
+    working on the SearchBar Test
+
+[33mcommit d6e2084fae3b594ef867338fc9cf3e5dd30704d0[m
+Author: YofiY <theburnface2013@gmail.com>
+Date:   Wed May 1 15:35:26 2024 +0200
+
+    using the firebaseAuth passed as an argument*
+
+[33mcommit 326ed4f0cb51a7f96d3b9456d148b44fb80723f5[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Wed May 1 15:31:32 2024 +0200
+
+    ran ktfmt
+
+[33mcommit 063e24ff66828400f6deb7fa01ca8fff1370b0b5[m
+Merge: 3de65cf 28f6284
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Wed May 1 15:24:11 2024 +0200
+
+    merged test branch with main. Fixed tests for compatibility
+
+[33mcommit fd8c97430f3f9a389c50cdc361974223acf2dd17[m
+Author: imaneb942 <imane.benkamoun@epfl.ch>
+Date:   Wed May 1 14:21:19 2024 +0200
+
+    removed useless files
+
+[33mcommit 020f89f1382c6a3afbacdc91f30a31f91cd682d5[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Wed May 1 12:58:39 2024 +0200
+
+    Added unit test for the LoginScreen
+
+[33mcommit 47b333051e929dd29d0b9f06238afda39843e436[m
+Merge: ba85e7b 28f6284
+Author: imaneb942 <imane.benkamoun@epfl.ch>
+Date:   Wed May 1 12:47:32 2024 +0200
+
+    Merge branch 'main' into tests/filtering
+
+[33mcommit ba85e7b51e4026001b513b7415f59da74abfa354[m
+Author: imaneb942 <imane.benkamoun@epfl.ch>
+Date:   Wed May 1 12:45:07 2024 +0200
+
+    added tests and a few modifications to the screens
+
+[33mcommit 88ea200f444cf54de024b0a1e6f085a6f6c4702e[m
+Author: YofiY <theburnface2013@gmail.com>
+Date:   Wed May 1 12:05:05 2024 +0200
+
+    removed unsued test tag
+
+[33mcommit 17d84b20dc4d85b498970864304fbca2914b81cd[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Wed May 1 11:58:04 2024 +0200
+
+    formatted code
+
+[33mcommit 714a7a51800a3ff29cce3dde84e3ca9522606f4f[m
+Merge: 32709d6 28f6284
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Wed May 1 11:56:37 2024 +0200
+
+    Merge branch 'main' into test/sign-in-ui
+
+[33mcommit 32709d697a0c35d988eaf8a3f3fa397955efe1f1[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Wed May 1 11:54:40 2024 +0200
+
+    Formated the code
+
+[33mcommit 31d47ade71a0e50b6be278a86911d8423432a13c[m
+Merge: b0af0ea 28f6284
+Author: YofiY <theburnface2013@gmail.com>
+Date:   Wed May 1 11:46:47 2024 +0200
+
+    remerged with main
+
+[33mcommit ec1fe96983c39608336ebb0ef6b4aa60dd38efff[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Wed May 1 11:41:17 2024 +0200
+
+    Added a GoogleSignInLauncher
+    
+    Added a google sign in launcher that will handle the launch of the activity for the sign in. Doing this way lead to a potential easier way of testing the UI screen.
+
+[33mcommit 044f0127be3b7d79430480e60f4f26ae08de2c58[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Wed May 1 11:20:25 2024 +0200
+
+    Try  to add an interface for singInLauncher
+
+[33mcommit 7d2aec6654b35aaa2f8fb42fd3c434eaf186aa65[m
+Merge: cbb6f6d 28f6284
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Wed May 1 11:05:39 2024 +0200
+
+    Merge branch 'main' into test/itinerary
+
+[33mcommit 28f62845ec4c5d0085dca1138eff9fb58982a2ae[m
+Merge: 8085567 efc42d3
+Author: ThomasPFMuller <100191653+ThomasPFMuller@users.noreply.github.com>
+Date:   Wed May 1 10:26:24 2024 +0200
+
+    Merge pull request #135 from WanderWise-Inc/feature/navigation
+    
+    Updated navigation and changed a few details
+
+[33mcommit efc42d31f9e78d58637ec0ca356c7c5eb93e19d2[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Wed May 1 00:41:26 2024 +0300
+
+    HomeNavigationTest passes + all other tests pass
+
+[33mcommit 72aae04fd7def6622fb69ba733c5c24daba8f79f[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Tue Apr 30 23:15:16 2024 +0300
+
+    finalized merge
+
+[33mcommit acbf9aa78c87af50e5fba1a28cfd85c5863611f3[m
+Merge: 74c3afb 8085567
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Tue Apr 30 23:08:06 2024 +0300
+
+    Merge branch 'main' into feature/navigation
+    
+    # Conflicts:
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/home/HomeScreen.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/list_itineraries/ItineraryList.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/list_itineraries/LikedScreen.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/list_itineraries/OverviewScreen.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/map/PreviewItineraryScreen.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/navigation/graph/HomeNavGraph.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/navigation/graph/RootNavGraph.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/profile/ProfileScreen.kt
+    #       app/src/test/java/com/github/wanderwise_inc/app/ui/map/PreviewItineraryScreenKtTest.kt
+
+[33mcommit 808556705ad9aaea171749f2b1e0bcc7e00a41ae[m
+Merge: b956d77 f792ca6
+Author: Oscar <126007815+276746@users.noreply.github.com>
+Date:   Tue Apr 30 21:45:30 2024 +0200
+
+    Merge pull request #139 from WanderWise-Inc/feature/itineraryBanner-Navigation
+    
+    Feature/itinerary banner navigation
+
+[33mcommit cbb6f6de9fe72bd93305b7754b226dbe108d130a[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Tue Apr 30 21:18:25 2024 +0200
+
+    Format
+
+[33mcommit e271b2925c70009980b7b087798d1b786013f7fe[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Tue Apr 30 21:17:47 2024 +0200
+
+    Add tests
+
+[33mcommit 313b2c45b73488f37a06ac9abf594194474af5d9[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Tue Apr 30 21:17:18 2024 +0200
+
+    Add tests
+
+[33mcommit ffa790446f6a194c6447f88a4e3dfcefdd40cb83[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Tue Apr 30 21:16:55 2024 +0200
+
+    Change comments + order
+
+[33mcommit a36cda12d5683cdaeaf25dbe90b9f12059269702[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Tue Apr 30 21:15:37 2024 +0200
+
+    Add new function for added parameters
+
+[33mcommit 74c3afbd5f9b6eff9f6e71ce34e3424ea6ba2ce0[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Tue Apr 30 21:08:18 2024 +0300
+
+    continuing work on HomeNavigationTest
+
+[33mcommit 88ea66616645e3437a3f2c0e452a248f41ba992b[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Tue Apr 30 20:06:01 2024 +0200
+
+    Format
+
+[33mcommit 299041ac7243e0b343b6f1574af0240b1486d750[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Tue Apr 30 20:04:18 2024 +0200
+
+    Add tests
+
+[33mcommit 3de65cfc8a2fb9618a36088b6fdafab54841c710[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Tue Apr 30 19:23:10 2024 +0200
+
+    added a bunch of tests for several files
+
+[33mcommit b7ba35ef59fee11631ce03ffbba3c1bbc9a74c9a[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Tue Apr 30 20:06:29 2024 +0300
+
+    reran ktfmt
+
+[33mcommit b00eaf07d4521af2433e9d5e84b639a0506928c6[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Tue Apr 30 20:05:32 2024 +0300
+
+    fixed triggering syntax
+
+[33mcommit b0af0ea99a3fa6fa2875064c6abbc2f9b72dd710[m
+Author: YofiY <theburnface2013@gmail.com>
+Date:   Tue Apr 30 19:05:12 2024 +0200
+
+    reran ktfmt
+
+[33mcommit 8be5689b200a394884d1514790a130e097e4de14[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Tue Apr 30 20:02:15 2024 +0300
+
+    cleaned up merge
+
+[33mcommit 965ae179d61bccf1026e29c3d38470c07a9f4d86[m
+Merge: 17bed78 b956d77
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Tue Apr 30 19:59:21 2024 +0300
+
+    Merge branch 'main' into feature/navigation
+    
+    # Conflicts:
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/list_itineraries/LikedScreen.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/list_itineraries/OverviewScreen.kt
+
+[33mcommit 17bed788e3981cc9e596f55865466455c1461336[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Tue Apr 30 19:56:10 2024 +0300
+
+    ran ktfmt successfully
+
+[33mcommit 699e4be7c6e0de04548a666b422edd6ac064cf4b[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Tue Apr 30 19:55:12 2024 +0300
+
+    changed test tag implementation and if..else.. before ItineraryListScrollable with the new parameter
+
+[33mcommit 6b6ea4099be8e42bd03855ae6444f972bc1d1166[m
+Author: YofiY <theburnface2013@gmail.com>
+Date:   Tue Apr 30 18:54:03 2024 +0200
+
+    added comments
+
+[33mcommit 9c6d03e6704223cee1c15b552f004369ed80cc14[m
+Author: YofiY <theburnface2013@gmail.com>
+Date:   Tue Apr 30 18:44:41 2024 +0200
+
+    updated the scaffold to the material3 composable
+
+[33mcommit 94b019d643f36e215937fd7b69a8f0735b72df78[m
+Author: YofiY <theburnface2013@gmail.com>
+Date:   Tue Apr 30 18:42:37 2024 +0200
+
+    ran the ktformatter
+
+[33mcommit 119b7ffba2457f543db348fed2da0fd18872f056[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Tue Apr 30 18:33:43 2024 +0200
+
+    added a toMapTest. Will be used by firebase in future, but since we are mocking it called anywhere
+
+[33mcommit bbe11291120e48de61194c432ad8f3623f50faba[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Tue Apr 30 18:22:23 2024 +0200
+
+    Merged with main and changed some files
+
+[33mcommit f792ca62a100e93fee51df5ff8861b73d528fda6[m
+Merge: 19aceee db7cd7e
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Tue Apr 30 18:11:29 2024 +0200
+
+    Merge branch 'feature/itineraryBanner-Navigation' of github.com:WanderWise-Inc/app into feature/itineraryBanner-Navigation
+
+[33mcommit 19aceee5cd41ada838282cc2cf9538d616303cf0[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Tue Apr 30 18:08:42 2024 +0200
+
+    added a new preview itinerary screen test for NullItineraryScreen
+
+[33mcommit db7cd7e9fd1103b96e60871d70414ec0264972da[m
+Author: balloux <leonard.balloux@epfl.ch>
+Date:   Tue Apr 30 18:06:03 2024 +0200
+
+    Added navigation to ItineraryBanner
+    -When clicking on a Banner, saves the itinerary in the mapViewModel as focusedItinerary and navigates to PreviewItineraryScreen
+    -PreviewItineary then displays the focusedItinerary in the mapViewModel
+    -If foucsedItinerary hasnt been initialised (null) will display the current user position on the map
+    -In order to have the bottom navigation bar update, the selected argument gets modified in the NavGraph
+
+[33mcommit 41769aa1594cf3906800e0560d8fe0f554c63075[m
+Merge: 435aeee b956d77
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Tue Apr 30 18:05:14 2024 +0200
+
+    Merge branch 'main' into test/sign-in-ui
+
+[33mcommit 435aeee15cfaf74281f8a6037fcc247ee0b1c5a8[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Tue Apr 30 18:02:23 2024 +0200
+
+    Added new test for the LoginScreen
+
+[33mcommit 659bdbf79ccd69aa6dd3b4b56428e50e3ceaa723[m
+Merge: 0ade5ed b956d77
+Author: balloux <leonard.balloux@epfl.ch>
+Date:   Tue Apr 30 17:55:40 2024 +0200
+
+    Merge branch 'main' into feature/itineraryBanner-Navigation
+    
+    # Conflicts:
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/list_itineraries/LikedScreen.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/list_itineraries/OverviewScreen.kt
+
+[33mcommit 0ade5ed0f37c6c57343cdaef990266c78c689cca[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Tue Apr 30 17:43:32 2024 +0200
+
+    updated tests for previewItineraryScreen to ensure compatibility
+
+[33mcommit dee0c45a6e1e61ed2a31fc6a89a1cb264eaea108[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Tue Apr 30 17:34:49 2024 +0200
+
+    Added some test for the LoginScreen
+
+[33mcommit eb057e2f80e96b7a815cd0b4a304089705b4308a[m
+Merge: 6f0ec1f 72dcda8
+Author: gunnm0 <100207698+gunnm0@users.noreply.github.com>
+Date:   Tue Apr 30 17:29:04 2024 +0200
+
+    Merge pull request #138 from WanderWise-Inc/bugfix/profile-picture-loops-on-404
+    
+    Fixed a bug that was causing an endless loop when fetching a profile picture
+
+[33mcommit b956d77c0030c61a31e3d4204b7a07f1f1212b38[m
+Merge: 47658d3 b9f4206
+Author: imaneb942 <56965479+imaneb942@users.noreply.github.com>
+Date:   Tue Apr 30 17:19:29 2024 +0200
+
+    Merge pull request #137 from WanderWise-Inc/filtering-page
+    
+    Added the filter of itinerary feature, to filter with regards of different items
+
+[33mcommit b9f42067f7351a34b084c623a60a1c43d7c961b6[m
+Author: imaneb942 <imane.benkamoun@epfl.ch>
+Date:   Tue Apr 30 17:17:12 2024 +0200
+
+    added some of the PR commentary modification
+    
+    the reason why the values are ints is because you want to be able to have finer granularity over time and also because for now I am not able to change the sliders to take int because of ClosedFloatingPointRange that does not exist in Int
+
+[33mcommit 72dcda8fb235e9f52f851a974cf992a89fd25a66[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Tue Apr 30 17:07:07 2024 +0200
+
+    ran ktfmt
+
+[33mcommit 066865b34b7880a654753647bc212fda63530cd7[m
+Merge: bfe93cb 6f0ec1f
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Tue Apr 30 17:05:43 2024 +0200
+
+    merged with banner navigation
+
+[33mcommit bfe93cb4ba0eadede1ff00234c89f48dc0d77f40[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Tue Apr 30 17:00:43 2024 +0200
+
+    ran ktfmt on prev. changes
+
+[33mcommit def9f5f717dfb70a347d9716411cd75ccfc10780[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Tue Apr 30 16:59:41 2024 +0200
+
+    Fixed bug with ProfilePicture that was causing an infinite loop of 404 codes with firebase storage
+     - new ProfileScreen composable
+     - updated usage in PreviewItineraryScreen and ProfileScreen
+
+[33mcommit 6f0ec1fd38d1214530eea6622686411cac88c94b[m
+Author: balloux <leonard.balloux@epfl.ch>
+Date:   Tue Apr 30 14:34:09 2024 +0200
+
+    everything works good
+
+[33mcommit c2bec81521d44b7af360a3646b74fe057adeca9b[m
+Merge: fc716f0 47658d3
+Author: balloux <leonard.balloux@epfl.ch>
+Date:   Tue Apr 30 13:51:11 2024 +0200
+
+    Merge branch 'main' into feature/itineraryBanner-Navigation
+
+[33mcommit fc716f0b15f3b4628449b7f74b0e7779ce808378[m
+Author: balloux <leonard.balloux@epfl.ch>
+Date:   Tue Apr 30 13:47:59 2024 +0200
+
+    added ablity to navigate when clicking on itineraryBanners
+    - changed navigation to update selected item every time we change screen
+    - ItineraryBanner sets focusedItinerary in the mapViewModel to its itinerary and navigates to map screen
+    - PreviewItinerary then displays the focusedItinerary
+
+[33mcommit 7aa97db0e84f42fd6cdace7ea8aa8c7122bc7c05[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Tue Apr 30 11:21:10 2024 +0200
+
+    Created test dans modify gradle to handle UI tests
+
+[33mcommit cb65618e00d8328974cf23fcbb08b1e98b92ed03[m
+Author: imaneb942 <imane.benkamoun@epfl.ch>
+Date:   Mon Apr 29 23:43:29 2024 +0200
+
+    formatted with ktfmt
+
+[33mcommit 9366e24ff3ec6c2d08730a8fadfba44d7004d82e[m
+Merge: 392a0e2 47658d3
+Author: imaneb942 <imane.benkamoun@epfl.ch>
+Date:   Mon Apr 29 23:39:09 2024 +0200
+
+    Merge branch 'main' into filtering-page
+
+[33mcommit 47658d38f35884f60aa3351a0c186c1fd8842c5d[m
+Merge: aed740a 20a4b19
+Author: imaneb942 <56965479+imaneb942@users.noreply.github.com>
+Date:   Mon Apr 29 23:38:33 2024 +0200
+
+    Merge pull request #136 from WanderWise-Inc/test/viewmodel
+    
+    Test/viewmodel
+
+[33mcommit 20a4b1962ba6a068b67eeabddee674f0c3dfc0bf[m
+Merge: 9bd3818 aed740a
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Mon Apr 29 22:00:41 2024 +0200
+
+    Merge branch 'main' into test/viewmodel
+
+[33mcommit 9bd381844eccd8cc3bfff91cc9c477823cee8bf3[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Mon Apr 29 21:59:33 2024 +0200
+
+    Format
+
+[33mcommit 018d940ba2514571c54150dbb91debbec745a04f[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Mon Apr 29 21:53:32 2024 +0200
+
+    Remove old tests
+
+[33mcommit 7a7b8a9345901c06b9008bbaa8949f2ea744811b[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Mon Apr 29 21:51:10 2024 +0200
+
+    Support for coroutines tests
+
+[33mcommit ba80310b80a78cf2d8b08e6b952b8904b191a561[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Mon Apr 29 21:50:33 2024 +0200
+
+    Add tests
+
+[33mcommit 93d36745b63dac054a8e3a38dbcdcc8913f96cea[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Mon Apr 29 21:49:53 2024 +0200
+
+    Add support for coroutines test
+
+[33mcommit ef888e1748b05acb27dc5257069d8b95bb660379[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Mon Apr 29 21:01:52 2024 +0300
+
+    ran ktfmt
+
+[33mcommit 10c2c1e08f0c7c67579493afbc0123bb51c22ddc[m
+Author: balloux <leonard.balloux@epfl.ch>
+Date:   Mon Apr 29 19:01:27 2024 +0200
+
+    works but dodgy af
+
+[33mcommit 5549255625e113d849736e5510e4128e62ed82b8[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Mon Apr 29 18:52:12 2024 +0200
+
+    Use MockK instead of Mockito for tests
+
+[33mcommit 687f76b1be819984933e0c7a7d3eef322ab06c2e[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Mon Apr 29 19:49:13 2024 +0300
+
+    solved merge mistake
+
+[33mcommit ef16f5f93537cc0a9b97f542f93306da931ad580[m
+Merge: 9255d67 aed740a
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Mon Apr 29 19:42:47 2024 +0300
+
+    Merge branch 'main' into feature/navigation
+    
+    # Conflicts:
+    #       app/src/main/java/com/github/wanderwise_inc/app/DemoSetup.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/map/PreviewItineraryScreen.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/navigation/graph/HomeNavGraph.kt
+
+[33mcommit 392a0e2b6e61526b50f8e3c9f56632d2492c61b6[m
+Author: imaneb942 <imane.benkamoun@epfl.ch>
+Date:   Mon Apr 29 18:40:40 2024 +0200
+
+    added that feature for time also
+
+[33mcommit 9255d676cb7bea98b15ee24e84ac932b3745c51a[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Mon Apr 29 19:38:29 2024 +0300
+
+    forgot to git add, this time added plus icon for new screen
+
+[33mcommit 873b260f620d6442e0ddd147b6ba66228205f591[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Mon Apr 29 19:36:39 2024 +0300
+
+    changed the icon to a plus sign
+
+[33mcommit 379d36272d0be447221d60153f28f39af32275b1[m
+Author: imaneb942 <imane.benkamoun@epfl.ch>
+Date:   Mon Apr 29 18:19:05 2024 +0200
+
+    updated the home screen to filter out in function of price
+
+[33mcommit 0c7b82ab8f601ffa6070cf52e791d4e4321d3d42[m
+Author: imaneb942 <imane.benkamoun@epfl.ch>
+Date:   Mon Apr 29 18:18:05 2024 +0200
+
+    added new features to the itinerary class
+
+[33mcommit 02031dd4882f796b30f954eb9c1e20ced1890afe[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Mon Apr 29 19:05:18 2024 +0300
+
+    commented HomeNavigationTest TODO later and ran ktfmt
+
+[33mcommit 2a36b6c667a632523289fdaaf0f8df28f97606a6[m
+Author: balloux <leonard.balloux@epfl.ch>
+Date:   Mon Apr 29 16:30:00 2024 +0200
+
+    added navigation to ItineraryBanners
+    -when clicking on Banner, saves the itinerary to the mapViewModel (into focused focusedItinerary) then,navigates to PreviewItineraryScreen. By doing this, there are no issues when changing pages and going back to previewItineraryScreen with bottom navigation.
+    -Issue: doesn't update the bottom navigation bar (TODO)
+
+[33mcommit c0e88579113e48d2d9797197ec203fe3f9bb0d9f[m
+Author: balloux <leonard.balloux@epfl.ch>
+Date:   Mon Apr 29 16:19:45 2024 +0200
+
+    added ItineraryBanner navigation
+
+[33mcommit 529ad4f9e4fbc0d738924ea51c3b9001906ee88c[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Mon Apr 29 17:18:24 2024 +0300
+
+    cant get this stupid test to work
+
+[33mcommit dd42ff4f8be9441489d6e62819ca9d2726cd0ad7[m
+Author: balloux <leonard.balloux@epfl.ch>
+Date:   Mon Apr 29 15:27:04 2024 +0200
+
+    doesnt compile
+
+[33mcommit a7f184b343673243463c25793b0cbb2604ff858a[m
+Author: YofiY <theburnface2013@gmail.com>
+Date:   Mon Apr 29 15:19:23 2024 +0200
+
+    fixed the UI, added a composable for the badges
+
+[33mcommit a3b7ea3395377281bfdcbaea528ae1cec713ccc1[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Mon Apr 29 16:01:58 2024 +0300
+
+    working on navigation test
+
+[33mcommit c0ad035b5c49233e89ad3d10ed60c831708d3a7b[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Mon Apr 29 11:42:33 2024 +0200
+
+    Add tests + Refractor old tests file
+
+[33mcommit a07fffd4c2f6c48716a515537db2b48e7dfccc1f[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Mon Apr 29 10:58:51 2024 +0200
+
+    Formatted the tests for the ItineraryModel
+
+[33mcommit ac43f8bb8332b2ea2f9ad4b228e0b053745c0761[m
+Author: YofiY <theburnface2013@gmail.com>
+Date:   Mon Apr 29 10:58:22 2024 +0200
+
+    clickable profile picture to change it
+
+[33mcommit a412648121df97ede3dd0d9f11ed10e009f379eb[m[33m ([m[1;31morigin/feature/profile-firebase[m[33m)[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Mon Apr 29 10:53:50 2024 +0200
+
+    Added some tests for the Itinerary class and added get/set functions in Itinerary
+
+[33mcommit aed740ac29053d677baf1c9e73c436d8cd0875a5[m
+Merge: a0ffa20 f5e2a7c
+Author: imaneb942 <56965479+imaneb942@users.noreply.github.com>
+Date:   Mon Apr 29 07:29:45 2024 +0200
+
+    Merge pull request #133 from WanderWise-Inc/test/data-repo
+    
+    Test for Data Repository
+
+[33mcommit 39c47f5ec9a1d99394f70294554d08a9948b1dab[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Mon Apr 29 02:00:59 2024 +0200
+
+    Add tests
+
+[33mcommit f5e2a7c9cbda6a40bb4aa2ef15e8b770b70bf270[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Mon Apr 29 01:18:05 2024 +0200
+
+    Fixed two tests in ImageRepo that didn't use correct mock
+
+[33mcommit 4a89bfeff577381431dbaf7b25e1929ef70f3f7a[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Mon Apr 29 00:38:08 2024 +0200
+
+    Finished ImageRepositoryTest and formatted code
+
+[33mcommit d1be80d96eabc3fe05ea82df23c2cfe376c5e12e[m
+Merge: cd20db4 a0ffa20
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Mon Apr 29 00:05:46 2024 +0200
+
+    Merge branch 'main' into test/data-repo
+
+[33mcommit cd20db4b54516a95d5081b2e528e02165f94a7ea[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Mon Apr 29 00:05:09 2024 +0200
+
+    Added test for the fetchImage function
+
+[33mcommit a0ffa20d6c3db3d4fa9326867e8a043557265e51[m
+Merge: f2568b3 e9c23a4
+Author: engjellismaili <126008250+engjellismaili@users.noreply.github.com>
+Date:   Mon Apr 29 00:03:52 2024 +0200
+
+    Merge pull request #132 from WanderWise-Inc/feature/upgrade-preview-itinerary-screen
+    
+    Upgrade Itinerary Screen
+
+[33mcommit e9c23a449d1d9e8e12aac8a6b9a30e01c9bd2fc9[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Sun Apr 28 21:11:55 2024 +0200
+
+    removed the goofy null checks from PreviewItineraryScreen/ProfilePicture. Updated a test tag
+
+[33mcommit eea3832398abbfd2286ee68e235bc10d96fbae96[m[33m ([m[1;31morigin/test/updated-preview-itinerary-screen[m[33m)[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Sun Apr 28 20:37:05 2024 +0200
+
+    added some tests for preview itinerary screen
+
+[33mcommit 6047edc07916883fc542b392f5cd8d612874d33c[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Sun Apr 28 19:55:56 2024 +0200
+
+    updated polyline color to match app scheme
+
+[33mcommit 182cf09206b2ff6cbab07861a106dc7e581b5744[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Sun Apr 28 19:50:00 2024 +0200
+
+    added test tags for PreviewItineraryScreen
+
+[33mcommit 31c590c89dd0a9b0704e65e63d9abdda8301615b[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Sun Apr 28 19:34:38 2024 +0200
+
+    ItineraryBanners now use Card instead of ElevatedCard as the effect wasn't visible
+
+[33mcommit 23c567f201465c219cacd15a0f058c187c892740[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Sun Apr 28 19:01:57 2024 +0300
+
+    test still not passing, mocked firebaseAuth in all necessary files
+
+[33mcommit 21c3bf2944ef18eea84593e173bd55cbaa3223a0[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Sun Apr 28 17:28:15 2024 +0300
+
+    working on making navigation test pass
+
+[33mcommit 6e77c8a7c787dcd8dbb550a35c377c0d987e593f[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Sun Apr 28 17:06:06 2024 +0300
+
+    updated navigation yet again and added default logic for when there are itineraries to display in liked and profile screens
+
+[33mcommit 3464f8e09b84a4f0a2b1dfa788b824a8c6464834[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Sun Apr 28 11:15:22 2024 +0200
+
+    Added test for the ItineraryRepository
+    
+    The ItineraryRepository is now fully tested
+
+[33mcommit e7b5dde136068ed5b55ba3fd9065e10cba5506d3[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Sun Apr 28 09:49:32 2024 +0200
+
+    Updated some files
+
+[33mcommit c91b4068fc644ea1c1ae9c89671fed905d3114e0[m
+Merge: 69b4c1d f2568b3
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Sat Apr 27 23:27:37 2024 +0200
+
+    Merge branch 'main' into feature/upgrade-preview-itinerary-screen
+
+[33mcommit c7c959ce70459728895299afaa99ddf4f13c066f[m
+Merge: d3f244e f2568b3
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Sat Apr 27 20:35:26 2024 +0200
+
+    Merge branch 'main' into test/data-repo
+
+[33mcommit f2568b3cdd6f851e31d0d4a8fa840c500dbd9237[m
+Merge: 1d32680 de89237
+Author: gunnm0 <100207698+gunnm0@users.noreply.github.com>
+Date:   Sat Apr 27 20:34:03 2024 +0200
+
+    Merge pull request #131 from WanderWise-Inc/test/fake-itineraries
+    
+    Test/fake itineraries
+
+[33mcommit d3f244ee40ca63266820ce14e99335183c10b6f5[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Sat Apr 27 20:04:04 2024 +0200
+
+    Added some log for an issue
+
+[33mcommit e9ce62a310ba29492e0751129634aa7df21c951f[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Sat Apr 27 19:35:05 2024 +0200
+
+    Added all the test for the ProfileRepositoryTestImpl
+
+[33mcommit eefadaa28cc67ce9f11285c6c165c652e424543b[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Sat Apr 27 17:50:50 2024 +0200
+
+    Added some test for the ProfileRepository.
+    
+    Some tests for the ProfileRepository were added. Not all functions are covered yet but this will be done for the next commit.
+
+[33mcommit 69b4c1dc3e3ee03e94bcc413ebb514abbe68d7f5[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Sat Apr 27 17:37:15 2024 +0200
+
+    commented out test incompatibility. A todo for later
+
+[33mcommit cd434f5c00673842812db0d676797c366b16700f[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Sat Apr 27 17:26:12 2024 +0200
+
+    updated tests for compatibility with previewItineraryScreen. One test has bizarre behavior related to initialization of some google-defined object
+
+[33mcommit e67d2a7254b89cf9f8eb23c9c1a63e572b2c7896[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Sat Apr 27 17:25:30 2024 +0200
+
+    made center button in previewItineraryScreen public as needed for testing
+
+[33mcommit 68e86729d1a7b29cb9bd2aa3cea19ccab0ee6ef0[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Sat Apr 27 16:44:33 2024 +0200
+
+    uncommented polyline drawing in previewItineraryScreen
+
+[33mcommit ed41479aa172b0a258c5e6cef10439d75ed4eaa9[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Sat Apr 27 16:42:38 2024 +0200
+
+    added getDefaultProfilePicture() to profileViewModel
+
+[33mcommit ee32d57f9b86405e34b2f08b2c8b7ca184f7f2da[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Sat Apr 27 16:41:59 2024 +0200
+
+    updated demo calling in home nav graph
+
+[33mcommit 3ff9e8ddf23d6d3e44269e5a6eb0aad80cbfae00[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Sat Apr 27 16:41:07 2024 +0200
+
+    Near final implementation of PreviewItineraryScreen. Waiting on additional attributes in Itinerary for displaying price and duration
+
+[33mcommit 919ed36d8f673eaff73755f2887e13b451db5117[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Sat Apr 27 16:33:20 2024 +0200
+
+    added new drawable assets for PreviewItineraryScreen
+
+[33mcommit b8ee25071e9ae67843ceb750f5c261394fb41ae6[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Sat Apr 27 16:06:46 2024 +0200
+
+    incremented likes in public itinerary demo
+
+[33mcommit dbfc1d92b03e3de54eca461b32a27a0236f97c4f[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Sat Apr 27 15:36:16 2024 +0200
+
+    added profile picture drawing composable
+
+[33mcommit de89237930779362061a2b30c458ee268373efcd[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Sat Apr 27 14:30:32 2024 +0200
+
+    Format
+
+[33mcommit 315ff32c2d532fb56cfbdb6f9c8aacb52cbc6726[m
+Merge: 0f445f1 1d32680
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Sat Apr 27 14:22:55 2024 +0200
+
+    Merge branch 'main' into test/fake-itineraries
+
+[33mcommit 0f445f1dc7a44d1363a0cda836ace343bb3a9b3e[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Sat Apr 27 14:19:55 2024 +0200
+
+    Add test
+
+[33mcommit c569c546ec0d091af122f84e0fc1202764a2591e[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Sat Apr 27 14:06:11 2024 +0200
+
+    Add fake itineraries for testing purposes
+
+[33mcommit 3e9a8f12d96688c4767005303d24c65e25fed1ed[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Sat Apr 27 13:26:01 2024 +0200
+
+    addde minimized/maximized versions of preview Itinerary screen
+
+[33mcommit cafc87c68a84bba5d042ba1edafc2f0d1bf5f247[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Sat Apr 27 12:26:43 2024 +0200
+
+    first draft of updated previewItineraryScreen
+
+[33mcommit 1d32680de6917a10d00e58a2f301d97262926b3f[m
+Merge: c21f171 e9fe970
+Author: Ethan G <100317390+ethangraham2001@users.noreply.github.com>
+Date:   Sat Apr 27 11:03:50 2024 +0200
+
+    Merge pull request #130 from WanderWise-Inc/dev
+    
+    Update main
+
+[33mcommit 5e81d2ea35099c806c098ead2c405ec494a0996b[m
+Merge: 59a9ae1 e9fe970
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Fri Apr 26 20:07:58 2024 +0200
+
+    Merge remote-tracking branch 'origin/dev' into test/fake-itineraries
+
+[33mcommit 59a9ae16daae9472461478f9e81986d8314108c0[m
+Author: duong <oscar.duong@epfl.ch>
+Date:   Fri Apr 26 18:26:56 2024 +0200
+
+    Add skeleton
+
+[33mcommit c21f171dc108b1e1bb1dd7b4969f04f3c1956552[m
+Merge: a405e93 734100e
+Author: Oscar <126007815+276746@users.noreply.github.com>
+Date:   Fri Apr 26 18:07:16 2024 +0200
+
+    Merge pull request #128 from WanderWise-Inc/feature/ItineraryBanner
+    
+    Feature/itinerary banner, fixed
+
+[33mcommit e9fe970358331d19fb14d58c4dbd67753756e9af[m[33m ([m[1;31morigin/dev[m[33m)[m
+Merge: 9807333 f28331a
+Author: Oscar <126007815+276746@users.noreply.github.com>
+Date:   Fri Apr 26 17:55:19 2024 +0200
+
+    Merge pull request #127 from WanderWise-Inc/bugfix/fix-demo-profile-uid
+    
+    Isolated demo setup in one new file
+
+[33mcommit 734100e2488051861097589813afb00d029e850b[m
+Author: balloux <leonard.balloux@epfl.ch>
+Date:   Fri Apr 26 17:20:46 2024 +0200
+
+    ItineraryBanner :
+    - fixed layout error due to bad merge
+    - ktfmt fomat
+
+[33mcommit b4ca3070e63d4aefb41382a37676f41ef23cab13[m
+Author: balloux <leonard.balloux@epfl.ch>
+Date:   Fri Apr 26 17:03:04 2024 +0200
+
+    ItineraryBanner:
+    - fixed visual errors due to bad merge.
+
+[33mcommit be0c30952615f4a18eaba4e803ed00abc784fb12[m
+Author: duong <oscar.duong@epfl.ch>
+Date:   Fri Apr 26 16:38:12 2024 +0200
+
+    Add object for fake itineraries for testing purpose
+
+[33mcommit 37132273f6247599dd2c8069007e268ba8232fb2[m
+Merge: 8840728 a405e93
+Author: balloux <leonard.balloux@epfl.ch>
+Date:   Fri Apr 26 16:06:57 2024 +0200
+
+    Merge branch 'main' into feature/ItineraryBanner
+    
+    # Conflicts:
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/itinerary/ItineraryBanner.kt
+
+[33mcommit f28331a77a3f3de2b80d70b3ae111bc42c046c4b[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Fri Apr 26 16:04:03 2024 +0200
+
+    isolated all demo setup in a few functions in one file. Called in HomeNavGraph
+
+[33mcommit 884072895a4035550f27d26fec510ac91c65e27e[m
+Author: balloux <leonard.balloux@epfl.ch>
+Date:   Fri Apr 26 15:54:48 2024 +0200
+
+    fixed ItineraryBanner visual bugs, works for now however, isn't perfect
+
+[33mcommit a405e93db47d58b98d416feda8d06bdf48cb870f[m
+Merge: 3d8c47a 80cc47f
+Author: gunnm0 <100207698+gunnm0@users.noreply.github.com>
+Date:   Fri Apr 26 15:53:25 2024 +0200
+
+    Merge pull request #126 from WanderWise-Inc/add-image-upload
+    
+    Added the image uploader
+
+[33mcommit 80cc47f552bfc7aae8f90c116aefe8f9674a2300[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Fri Apr 26 15:31:00 2024 +0200
+
+    Formatted the code
+
+[33mcommit 4d3450e476c64a167fb73a86711f3b99c21a73ab[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Fri Apr 26 15:28:58 2024 +0200
+
+    Added the image uploader
+
+[33mcommit 3d8c47a98d44c5db55a40d6b5d14830c1ca9ba37[m
+Merge: e07355b 9807333
+Author: Oscar <126007815+276746@users.noreply.github.com>
+Date:   Fri Apr 26 10:11:32 2024 +0200
+
+    Merge pull request #125 from WanderWise-Inc/dev
+    
+    Dev
+
+[33mcommit 98073337b5ac3cb68bacea57c8b44e555607606a[m
+Merge: 9552f04 988f656
+Author: engjellismaili <126008250+engjellismaili@users.noreply.github.com>
+Date:   Fri Apr 26 10:02:44 2024 +0200
+
+    Merge pull request #124 from WanderWise-Inc/search-bar-new
+    
+    Added search bar, liked screen, overview screen, and profile screen
+
+[33mcommit 988f65624b8cb55bf7a9b617a0ea200daae4a4d5[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Fri Apr 26 10:55:10 2024 +0300
+
+    formatted
+
+[33mcommit 170f160b915c2830b4f4c96caeb74a4671a26aae[m
+Author: ThomasPFMuller <100191653+ThomasPFMuller@users.noreply.github.com>
+Date:   Fri Apr 26 10:51:37 2024 +0300
+
+    Fixed fail in CI
+
+[33mcommit 776c9025c02f7c93fea6f972b7688a7be431df73[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Fri Apr 26 09:32:08 2024 +0200
+
+    formatted searchbarTest
+
+[33mcommit 9c23505ceb6f57dfac65cf5e3500773237270e3b[m
+Merge: 322705a 9552f04
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Fri Apr 26 09:25:33 2024 +0200
+
+    merged dev into search-bar-new
+
+[33mcommit e07355b3c146dd617c13943b5c53d6bef3355af6[m
+Merge: 6615dff 9552f04
+Author: Ethan G <100317390+ethangraham2001@users.noreply.github.com>
+Date:   Fri Apr 26 09:23:23 2024 +0200
+
+    Merge pull request #113 from WanderWise-Inc/dev
+    
+    Update main with map related backend and composables
+
+[33mcommit 322705a837c0bb9e8045ff03192358c5b0b84049[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Fri Apr 26 08:49:38 2024 +0200
+
+    added a hardcoded value for the demo. This will be removed
+
+[33mcommit 3e887f75f7e98ec694f2baefd86ed063d84ab935[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Fri Apr 26 08:43:31 2024 +0200
+
+    ensured compatibility with previewItineraryScreen and ran formatter
+
+[33mcommit 9552f0484d7903a2ec1591a79bf4dfc9dd8cab3a[m
+Merge: 3064adf 6f89226
+Author: engjellismaili <126008250+engjellismaili@users.noreply.github.com>
+Date:   Fri Apr 26 08:37:09 2024 +0200
+
+    Merge pull request #118 from WanderWise-Inc/feature/image-upload
+    
+    Added the image uploader feature.
+
+[33mcommit 5082a822cbdd224fc618da4b4901cab2114a20c4[m
+Merge: aa2f01c d6e99b8
+Author: imaneb942 <imane.benkamoun@epfl.ch>
+Date:   Fri Apr 26 01:11:21 2024 +0200
+
+    Merge branch 'last-working' into search-bar-new
+
+[33mcommit aa2f01cae42c3573a1df929833f845760ddd892a[m
+Author: imaneb942 <imane.benkamoun@epfl.ch>
+Date:   Fri Apr 26 01:08:03 2024 +0200
+
+    imports
+
+[33mcommit 2f3e34bf4a7ca827ffbf880d8108df408bbc2cef[m
+Author: imaneb942 <imane.benkamoun@epfl.ch>
+Date:   Thu Apr 25 17:50:50 2024 +0200
+
+    Merge branch 'feature/profileScreen' into search_bar
+
+[33mcommit ae059a0a2d4469d94fae81031909043b9aa0ad53[m
+Merge: dffefa2 e55b55f
+Author: imaneb942 <imane.benkamoun@epfl.ch>
+Date:   Fri Apr 26 01:01:16 2024 +0200
+
+    Merge branch 'feature/profileScreen' into search-bar-new
+
+[33mcommit dffefa2db1ba6b866522a40ce7381b6358479575[m
+Author: imaneb942 <imane.benkamoun@epfl.ch>
+Date:   Fri Apr 26 00:49:07 2024 +0200
+
+    commit 1
+
+[33mcommit 6f8922697b1ca50d1c4461c0b628077c0db62eec[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Fri Apr 26 00:31:25 2024 +0200
+
+    Merged dev into the branch. Everything works fine.
+
+[33mcommit db98f4cdc6731c36e34600c0eecd444c8b427bc3[m
+Merge: 8333a95 3064adf
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Fri Apr 26 00:16:30 2024 +0200
+
+    Merge branch 'dev' into feature/image-upload
+
+[33mcommit 8333a955ecb5bb02d0b3e4f085aa76ba510de760[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Fri Apr 26 00:09:08 2024 +0200
+
+    Clean code, ready to merge dev into the branch
+
+[33mcommit db9437c6a299f0dadd1228420e76621b01616795[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Thu Apr 25 22:55:50 2024 +0200
+
+    Format
+
+[33mcommit 913969a638358ae1fa5f9abc5b3e2f0d65ed8004[m
+Merge: 729d8c9 3064adf
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Thu Apr 25 22:54:11 2024 +0200
+
+    Merge remote-tracking branch 'origin/dev' into feature/ItineraryChat
+
+[33mcommit 729d8c998ca06155a0329c3c7d59b3e893c7540f[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Thu Apr 25 22:51:29 2024 +0200
+
+    Add tests for ItineraryChat
+
+[33mcommit 94d4b1c9ccd82c803b85862e106c8a043d90ab90[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Thu Apr 25 22:50:52 2024 +0200
+
+    Implement chat UI
+
+[33mcommit a98cd65dd5d2950aac1a1e3d3e11dbd678f1eafb[m
+Author: duong <oscar.duong@epfl.ch>
+Date:   Thu Apr 25 20:12:32 2024 +0200
+
+    Improve UI
+
+[33mcommit dbf275721aa1dbdb7fc99293e425a419306d69fe[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Thu Apr 25 19:10:48 2024 +0200
+
+    Added SignInRepository and test for it
+
+[33mcommit d6e99b86d8aa8978e0da37292be1cef2088610de[m
+Author: imaneb942 <imane.benkamoun@epfl.ch>
+Date:   Thu Apr 25 17:39:21 2024 +0200
+
+    did the tests and the Sliders for the price and time range
+
+[33mcommit 3064adf274002624e1764e0b7f8c130be4853c51[m
+Merge: 4e070df 2d52ec7
+Author: Ethan G <100317390+ethangraham2001@users.noreply.github.com>
+Date:   Thu Apr 25 17:29:48 2024 +0200
+
+    Merge pull request #112 from WanderWise-Inc/map/shortest-path
+    
+    Added itinerary drawing and ability to see user's live location on map
+
+[33mcommit 2d52ec7a3e1ac81b3682b950f0da8c3865d56008[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Thu Apr 25 17:07:32 2024 +0200
+
+    made all tests work with mocks. Ran formatter
+
+[33mcommit 9b20d6c3576aff84520e98bfb8346c482e74352a[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Thu Apr 25 17:01:01 2024 +0200
+
+    fixed previewItineraryScreenTest for compatibility
+
+[33mcommit 046069ffcd116e60836612b342d0498e34e6cd3e[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Thu Apr 25 17:00:39 2024 +0200
+
+    updated previewItinerary screen to call getter instead of (now) private class variable
+
+[33mcommit c6ccd6394340cb146a6ed2ecbb6283a382de490c[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Thu Apr 25 17:00:05 2024 +0200
+
+    made getPolyLineWaypointsLiveData getter
+
+[33mcommit d9fd527b49348164715de587c3f38d3294ed9f10[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Thu Apr 25 16:38:33 2024 +0200
+
+    Tried to add some test for fetchImage
+
+[33mcommit 240d0fd3147242e20a74a20a4004126e5e092ea2[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Thu Apr 25 16:35:03 2024 +0200
+
+    removed redundant placesReader and unused call to ItineraryRepositoryTestImpl
+
+[33mcommit 1eb2aaf0099b6f08227a06ef7350d3ef9b8380a4[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Thu Apr 25 16:32:38 2024 +0200
+
+    removed rendundant test itinerary from mainActivity
+
+[33mcommit a15301605dbfbaea4dc241400bdf59b852b82c69[m
+Merge: 230e7fb ab7a93c
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Thu Apr 25 16:29:23 2024 +0200
+
+    merged map/show-user-position into map/shortest-path
+
+[33mcommit 4eb5a6e7f0cbaf0edb29d1472c7b19d034f3243e[m
+Merge: 7c3ce6b ab7a93c
+Author: duong <oscar.duong@epfl.ch>
+Date:   Thu Apr 25 14:55:31 2024 +0200
+
+    Merge branch 'map/show-user-position' of https://github.com/WanderWise-Inc/app into feature/ItineraryChat
+
+[33mcommit e55b55fbf0cdc5b6866911cf58daeff3125b64b3[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Thu Apr 25 14:53:07 2024 +0200
+
+    updated hardcoded demo test values so that demo works. This is only a temporary solution - will be discarded asap
+
+[33mcommit 75437cc9f0134dc37b9aad6314ebc28df938c721[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Thu Apr 25 14:48:32 2024 +0200
+
+    merges into profile screen
+     - ensured compatability of most tests (one failiing due to some image resource)
+     - got coverage on ProfileScreen
+     - formatted everything with ktfmt
+
+[33mcommit 3dbf34006d295ef665b3a894befe9ca57205f6e8[m
+Merge: 1296cf8 dd08500
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Thu Apr 25 14:14:15 2024 +0200
+
+    merged liked screen tests into profilescreen
+
+[33mcommit dd0850067e2c37fb549728700b03c48189159a62[m[33m ([m[1;31morigin/test/liked-screen[m[33m)[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Thu Apr 25 14:11:06 2024 +0200
+
+    added test tags to itinerary listing composables
+
+[33mcommit a1f876d97a730f4feb4a748b514a0ff93d30ac40[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Thu Apr 25 14:09:26 2024 +0200
+
+    added tests for itinerary listing composables
+
+[33mcommit 1296cf8095ca01e3f4f302749b9b6c191ed1ca4d[m
+Author: YofiY <theburnface2013@gmail.com>
+Date:   Thu Apr 25 14:04:57 2024 +0200
+
+    added padding between the itineraries banners
+
+[33mcommit 56455c18f4721ac1fddbad8aa687c1125c9b2304[m
+Merge: 2af82da 61b8f04
+Author: YofiY <theburnface2013@gmail.com>
+Date:   Thu Apr 25 13:28:40 2024 +0200
+
+    Merge branch 'feature/WanderWiseTheme' into feature/profileScreen
+    
+    merged the feature/liked-screen into feature/profileScreen in order to have the list of itineraries created by the user inside the profile screen
+
+[33mcommit 61b8f0442b5d5474d607c76f6731acc1e4dc73d7[m
+Author: YofiY <theburnface2013@gmail.com>
+Date:   Thu Apr 25 13:02:46 2024 +0200
+
+    added a frame around the profile picture
+
+[33mcommit 230e7fba0690f3fdf60f2f2f8e7f9cca17ee3c7d[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Thu Apr 25 10:39:17 2024 +0200
+
+    temporarily removed tests relating to shortest-path drawing. Having a difficult time with mocking directions repository due to the liveData
+
+[33mcommit 7c3ce6bba8a25274219a74d133e181a57fda6558[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Wed Apr 24 23:44:52 2024 +0200
+
+    Add simple chat
+
+[33mcommit ab7a93c54ae67383a9a472191ad372e10a28b86e[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Wed Apr 24 22:31:36 2024 +0200
+
+    Reformat
+
+[33mcommit da2e9495e6ab1d7334dc65e35e6abfc99ed6d8db[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Wed Apr 24 22:19:10 2024 +0200
+
+    Reformat test
+
+[33mcommit a8fab7914e6f1f3383c7a9174b6d47ef76121fe0[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Wed Apr 24 20:35:57 2024 +0200
+
+    Add test to check display
+
+[33mcommit 1e166923db09536d3ea55b4679bb040b35beacb9[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Wed Apr 24 20:34:45 2024 +0200
+
+    Add test tags
+
+[33mcommit 76e9130fa8277cc02e541233362001230e9c4469[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Wed Apr 24 20:05:23 2024 +0200
+
+    Added test for uploadImageToStorage function
+
+[33mcommit d368fdc29746d0787f12734e9b791dd97c2034f9[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Wed Apr 24 19:53:09 2024 +0200
+
+    update to MapviewModeltest
+
+[33mcommit 3934bc794f31888e8553b101dc76e2b3f8bb79a9[m
+Author: imaneb942 <imane.benkamoun@epfl.ch>
+Date:   Wed Apr 24 19:06:47 2024 +0200
+
+    delete overviewscreen.kt
+
+[33mcommit b3c4176da25afb7a375384c7f786a3cae8521429[m
+Merge: 9288578 2af82da
+Author: imaneb942 <imane.benkamoun@epfl.ch>
+Date:   Wed Apr 24 18:56:17 2024 +0200
+
+    Merge branch 'feature/liked-screen' into search_bar
+
+[33mcommit 92885782f3267170adb69ec93cdf221e716edfab[m
+Author: imaneb942 <imane.benkamoun@epfl.ch>
+Date:   Wed Apr 24 18:54:52 2024 +0200
+
+    added slider
+
+[33mcommit 7df4b036facbb0f03add6854e2c68bd361471814[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Wed Apr 24 17:56:56 2024 +0200
+
+    Add test for getUserLocation
+
+[33mcommit 650af810746816ea271233bffdc310ed2c93a12c[m[33m ([m[1;31morigin/feature/WanderWiseTheme[m[33m)[m
+Author: YofiY <theburnface2013@gmail.com>
+Date:   Wed Apr 24 17:52:59 2024 +0200
+
+    Properly defined the WanderWise Theme following the Material 3 design style.
+    - Colors definition inside `Color.kt`
+    - Composable shapes definitions inside `Shapes.kt`
+    - Typography definitions inside `Type.kt`
+    - Fixed imports that were from Material2 instead of Material3 inside `searchBar.kt`
+
+[33mcommit 2af82dabd14dc43d03be127524b2d699f6e7d9fb[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Wed Apr 24 17:51:19 2024 +0200
+
+    removed a duplicate callback that was unused
+
+[33mcommit 4a30df2dff1dfec59709160b9eaefa7b8c72a3f7[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Wed Apr 24 17:50:42 2024 +0200
+
+    implemented liking mechanism for new ItineraryBanner implementation (using callbacks)
+
+[33mcommit 51fe94623c0ca9c1741781dd0ba8cf2fba267283[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Wed Apr 24 17:18:58 2024 +0200
+
+    updated usage of itineraryBanner in files depending on it
+
+[33mcommit 1293b08cf79a375f2952deb8059f8ced489320e5[m
+Merge: 15a792a 4a579de
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Wed Apr 24 17:18:01 2024 +0200
+
+    merged itineraryBanner into LikedScreen
+
+[33mcommit 9811952452f24199f2d275f676257ed3ebf9a9a9[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Wed Apr 24 17:07:02 2024 +0200
+
+    Adjust indentation
+
+[33mcommit 435ad4d9b90db7a835b0613b9c77c1efb7e4e4f9[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Wed Apr 24 17:04:38 2024 +0200
+
+    Add getUserLocation function + Comment
+
+[33mcommit 8d3b7f8bed03b1bbbd9263ffa9e657c205229574[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Wed Apr 24 17:02:15 2024 +0200
+
+    Reformat comment
+
+[33mcommit 92506a8f254dbc11d5d429d43ead9bdfccf80e9d[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Wed Apr 24 16:58:37 2024 +0200
+
+    Pass mapViewModel as arg to PreviewItineraryScreen
+
+[33mcommit 218105c97dcd1ab76fe6f764276ce07b8d74cc4a[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Wed Apr 24 16:57:00 2024 +0200
+
+    Ask for location permissions + Instantiate location clien
+
+[33mcommit d0aecaafd602b3b57cb5283fd2c0d9e7583e8550[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Wed Apr 24 16:53:40 2024 +0200
+
+    Display user position
+
+[33mcommit 37681a513efd70962a0b1f78cfd35c9649069258[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Wed Apr 24 16:49:05 2024 +0200
+
+    Update tests
+
+[33mcommit cfdd9ea49dd66974a4e02d9f58c8070685f7835c[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Wed Apr 24 15:59:21 2024 +0200
+
+    Debugging
+
+[33mcommit 15a792ae4024a9f84362a5d8b1fa3a12b7fd4c07[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Wed Apr 24 15:54:29 2024 +0200
+
+    removed androidTest/.../MapViewModelTest
+
+[33mcommit 4a579de39b6cfc14ac98b1fe7baa4a31bf633faf[m
+Author: balloux <leonard.balloux@epfl.ch>
+Date:   Wed Apr 24 15:34:23 2024 +0200
+
+    forgot to remove Preview
+
+[33mcommit 29a15237b66bc8a4c955471d93371b8381131f48[m
+Author: balloux <leonard.balloux@epfl.ch>
+Date:   Wed Apr 24 15:31:56 2024 +0200
+
+    finished
+
+[33mcommit 629f58482c36598d8a0b03aaf0a61d6f8e4132a7[m
+Author: balloux <leonard.balloux@epfl.ch>
+Date:   Wed Apr 24 14:02:48 2024 +0200
+
+    managed to display tags
+    (not clean)
+
+[33mcommit 961f139479b6f11fa4841b8d1fec85a2e622e2ee[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Wed Apr 24 12:32:07 2024 +0200
+
+    updated brief demo in mainActivity
+
+[33mcommit b5223a86f0ebd4ac3763c0e128a0e07ef845e65c[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Wed Apr 24 12:19:34 2024 +0200
+
+    ran formatter, added some test data points in MainActivity
+
+[33mcommit e439f287042de45a1933f604e677d947e6dab60b[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Wed Apr 24 12:18:58 2024 +0200
+
+    Updated mechanism for liking an itinerary
+     - ItineraryBanner now takes a callback instead of profileViewModel and MapViewModle instances
+     - Liked screen fetches all screens liked by the user from the viewModel (works)
+     - Updated itineraryList to call this new ItineraryBanner, and not the deprecated one from PreviewItineraryScreen
+
+[33mcommit 20a5c19a01d0d787ce7ff31b527415c06eade550[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Wed Apr 24 12:14:41 2024 +0200
+
+    updated MapViewModel and ItineraryRepository for fetching a list of Itinerary from their uids
+
+[33mcommit df83694ebc93fbab95ebdd0d0f7a34507190e5f6[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Wed Apr 24 10:48:55 2024 +0200
+
+    Added new test and use RoboElectric
+
+[33mcommit 934d036be25b161eac03aae4389c33bed7e9aa6c[m
+Merge: e305dd3 5fdbfed
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Wed Apr 24 10:43:40 2024 +0200
+
+    merged Likes-Implementation into liked-screen
+
+[33mcommit 2d5e137878237004d7e80c191bfc8bc9f9297142[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Wed Apr 24 10:40:12 2024 +0200
+
+    added a test for getPolylineWayPoints
+
+[33mcommit c5c5637d54d0572b7b65e30f175e7964c06d0561[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Wed Apr 24 10:39:25 2024 +0200
+
+    Changed the link
+
+[33mcommit aaeda67a78ffc15ac6a5699e681ea4d43560ab53[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Wed Apr 24 10:36:35 2024 +0200
+
+    Added some test for the ImageRepository
+
+[33mcommit 14e09f2d7fae231e60a76608f1eaafd3327c5ff5[m
+Author: imaneb942 <imane.benkamoun@epfl.ch>
+Date:   Wed Apr 24 09:49:08 2024 +0200
+
+    added a Screen to visualize my implementation
+
+[33mcommit 40c699fbc859a5c0be44be48f54a696aaced04c6[m
+Author: imaneb942 <imane.benkamoun@epfl.ch>
+Date:   Wed Apr 24 07:41:41 2024 +0200
+
+    added a ChipsModel to filter out our search
+
+[33mcommit 8ea5c9cd4d03c9743339c0450a534d870cb5917f[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Tue Apr 23 22:57:29 2024 +0200
+
+    Made tests compile with the updated mapViewModel class. MapViewModel tests pass, navigation tests aren't yet
+
+[33mcommit d4996f1bd931ce39b54f6897a913b93f94257b02[m
+Author: balloux <leonard.balloux@epfl.ch>
+Date:   Tue Apr 23 19:44:55 2024 +0200
+
+    added scrollable list to HomeScreen.kt
+
+[33mcommit 03910e06a5bbf5421d040374786caff52ecb255a[m
+Author: balloux <leonard.balloux@epfl.ch>
+Date:   Tue Apr 23 15:50:01 2024 +0200
+
+    nearly completed ItinerearyBanner
+    Need to implement:
+    - onclick
+    - draw feature better
+
+[33mcommit 58b67e45fbacb6b4324a1f3b0f23d199059bd6ca[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Tue Apr 23 14:22:18 2024 +0200
+
+    small fix for shortest path
+
+[33mcommit e305dd3cc4bd5156457bcde6e7b54a469a34b950[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Tue Apr 23 14:06:10 2024 +0200
+
+    changed scrollable itinerary list to use banner instead of text
+
+[33mcommit a80ccf9236c30e0227dfdfbcbf443463198e7a4e[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Tue Apr 23 13:56:18 2024 +0200
+
+    ran formatter
+
+[33mcommit b2a2b11752d4831d1a76404ae15197b95653a805[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Tue Apr 23 13:56:11 2024 +0200
+
+    deleted LikeNavGraph and OverViewNavGraph
+
+[33mcommit 22051e3606d93a1f488b9e26e3165f13e8e5c55f[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Tue Apr 23 13:49:52 2024 +0200
+
+    refactored overviewScreen to use the new mechanisms introduced in LikedScreen
+
+[33mcommit fc74ebc905220da40a95f11271b623db2c0b159a[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Tue Apr 23 13:46:23 2024 +0200
+
+    Refactoring:
+    - removed liked/categories
+    - removed overview/categories
+    These are replaced a filtering mechanism using UI elements defined in ItineraryList
+
+[33mcommit 149eb9d8229dc1c12fdae2995707b68980fd149f[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Tue Apr 23 13:35:02 2024 +0200
+
+    Updated home screen and overview screen to call LikedScreen correcty with new implementation
+
+[33mcommit 3e282fcde68fe02e26903ee2405aeeec23996346[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Tue Apr 23 13:34:01 2024 +0200
+
+    updated SearchBar to take a callback (allows for updating state in parent)
+
+[33mcommit 1e7c5f3cd7bb87d6fb810d2eaeea2d9b574bf4bb[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Tue Apr 23 13:33:32 2024 +0200
+
+    added a likeScreen that implements filtering and searching
+
+[33mcommit 5fdbfed998abead4ec7e9c9720a27e46850832ef[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Tue Apr 23 13:31:27 2024 +0200
+
+    managed to get the liked button working
+
+[33mcommit d3f4696c3f1e604629c07aeb7bfc07c6768e6994[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Tue Apr 23 09:36:45 2024 +0200
+
+    advanced on tasks
+
+[33mcommit 9c786ddca51466ae65e53d3a4418e286145676e2[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Mon Apr 22 21:57:22 2024 +0200
+
+    Fixed the issue with fetch
+    
+    I fixed the issue with the upload/fetch. Now, when the user get to the screen, he first load the default profile picture, then he can choose to upload a new photo that will replace the default profile picture.
+
+[33mcommit 5d2272aaeafdee6188fd840d7ff3714e20881b75[m
+Author: balloux <leonard.balloux@epfl.ch>
+Date:   Mon Apr 22 17:59:38 2024 +0200
+
+    mock of new ItineraryBanner
+
+[33mcommit b7ca72aae5b82a7b49139a162482d2ab4a833416[m
+Author: imaneb942 <imane.benkamoun@epfl.ch>
+Date:   Mon Apr 22 18:17:09 2024 +0200
+
+    added a search option
+
+[33mcommit f4417a2ae03cf89e39477038f694038b70cbdf65[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Mon Apr 22 17:54:39 2024 +0200
+
+    Added buttons to the ProfileScreen
+    
+    Added buttons to search a photo and upload it, now the user can see his profile picture !
+
+[33mcommit ef635dd41dc7d858ac83c5c6f5acd99e05de86d4[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Mon Apr 22 16:19:51 2024 +0200
+
+    Added possiblity to store an image from gallery
+
+[33mcommit 4189b1d22d04d60a646ac5a1fe353a054faa03eb[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Sun Apr 21 12:00:16 2024 +0200
+
+    Added the possibility to show the profile picture of a user
+    
+    Added the implementation of the ProfileRepository and the ImageRepository. Now when a user sign in to the app, a profile is created and added to Firestore. Then, when the user goes to the ProfileScreen, if he has a profile picture, then this one will be shown in the view
+
+[33mcommit 5a1b7d17e04fd72619270e1ea8cf11d2b6cba19b[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Sat Apr 20 17:59:11 2024 +0200
+
+    added implementation of ImageRepository
+    
+    The image repository has now an implemtation of a fetchImage and a storeImage. Both functions were not tested yet, so we should test them before merge. Next thing to do is to set a default picture for each user, and add a function to give possibility of user to change the profile picture. I also added two functions to the profileViewModel to be able to store an image.
+
+[33mcommit 9cf091177fcb0c0931f7876844575bebe8927dac[m
+Author: balloux <leonard.balloux@epfl.ch>
+Date:   Sat Apr 20 13:17:21 2024 +0200
+
+    created wanderHub for composing ItineraryBanners in a scrollable fashion
+
+[33mcommit e86a94b74940eb90d129dc8998b104460265b39e[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Fri Apr 19 15:52:37 2024 +0200
+
+    adding methods to update like count in Repository & MapViewModel class
+
+[33mcommit 10eb5e4e47a45bd157ab0de2073ee18563d5f359[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Fri Apr 19 15:33:37 2024 +0200
+
+    removed an accidentally pushed test from mainactivity
+
+[33mcommit c6243635a1002ce22958a8e6adf9b1d258db6598[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Fri Apr 19 15:31:21 2024 +0200
+
+    minor changes:
+    - updated directionsRepository to now make the api calls using waypoints
+    - updated mapviewmodel to call the repository correctly
+    - added new params to the APIserviceClass
+    - ran formatter uwu
+
+[33mcommit 7ac97d859d37a1f6cb41454f13290ca4118cd1db[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Fri Apr 19 15:18:37 2024 +0200
+
+    updated mainActivity and homeNavGraph to accomodate for the now needed DirectionsRepository class
+
+[33mcommit 81ab526d34ce4e851cf9acd9a50e56cb8a420218[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Fri Apr 19 15:17:58 2024 +0200
+
+    updated previewItineraryScreen to use the new functionality in mapViewModel
+
+[33mcommit f04d1f6ed445c796c7a75008cd163cb40f601e43[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Fri Apr 19 15:17:33 2024 +0200
+
+    ran ktfmt and deleted an unused file
+
+[33mcommit ee3c08e80d3f4cc83984cfeaefb92d454721c908[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Fri Apr 19 15:16:29 2024 +0200
+
+    updated build.gradle to use compose lifetimes, and thus allow us to use observeAsState or liveData (needed for directions API calls)
+
+[33mcommit f1b3e59682498dbb2da1f4cfa0da207f0f2efc77[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Fri Apr 19 15:15:51 2024 +0200
+
+    updated mapviewmodel to use the new DirectionsRepository
+
+[33mcommit cfff552df243656be67521464c6192982e258d88[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Fri Apr 19 15:10:19 2024 +0200
+
+    Added directions repository. taken by mapviewmodel as parameter
+
+[33mcommit 4212ad26be16d96b3be0ddd4cffd69e2ae70497f[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Fri Apr 19 15:09:26 2024 +0200
+
+    Added DirectionsAPIService
+     - generates google directions API requests
+
+[33mcommit 329eba3658d7f0cd29c7e7dc6d0c87f85582bb89[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Fri Apr 19 10:05:29 2024 +0200
+
+    started working on like button in itineraryBanner
+
+[33mcommit cd24aee3dbf386c535975a167c271cb89614c389[m
+Merge: 3db87a7 4e070df
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Fri Apr 19 09:23:16 2024 +0200
+
+    Merge branch 'dev' of https://github.com/WanderWise-Inc/app into dev
+
+[33mcommit 4e070df0cb79d26b2a17c4724952d78ac066a320[m
+Merge: 86d2d2e 35c49d1
+Author: engjellismaili <126008250+engjellismaili@users.noreply.github.com>
+Date:   Thu Apr 18 18:19:18 2024 +0200
+
+    Merge pull request #102 from WanderWise-Inc/test/user-position
+    
+    Test/user position
+
+[33mcommit 35c49d1389278985a626683d48ce09284acc14cd[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Thu Apr 18 17:53:51 2024 +0200
+
+    Format
+
+[33mcommit 4aaf22e5a3d1e873fa444f7c22884ed3a284f525[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Thu Apr 18 01:48:46 2024 +0200
+
+    Add test for getLocationUpdates
+
+[33mcommit 9c13853e4fe9edae11d36b5f0de0fe80ed268bac[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Tue Apr 16 18:28:54 2024 +0200
+
+    Add test (doesnt work)
+
+[33mcommit 82abbbd29bbfe14eafe861336bd178562432318d[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Mon Apr 15 22:39:33 2024 +0200
+
+    Add ContextExtTest with unit tests
+    
+    Initial commit adding the ContextExtTest class with unit tests for the hasLocationPermission function. The tests verify the behavior of the function when both permissions are granted, when either permission is not granted and when none are granted.
+
+[33mcommit ef79b9b05687e10a2057c36e683a36df3e01c559[m
+Merge: 410842a 86d2d2e
+Author: balloux <leonard.balloux@epfl.ch>
+Date:   Mon Apr 15 17:48:00 2024 +0200
+
+    Merge branch 'dev' into map/shortest-path
+
+[33mcommit 86d2d2ecdc624df073e686f36045e372e089f870[m
+Merge: c570521 881e88e
+Author: Ethan G <100317390+ethangraham2001@users.noreply.github.com>
+Date:   Sun Apr 14 22:37:56 2024 +0200
+
+    Merge pull request #94 from WanderWise-Inc/doc/update-readme-workflow-guidelines
+
+[33mcommit 881e88e557b9b69b6dcc47189eae8a996b660c51[m
+Author: YofiY <theburnface2013@gmail.com>
+Date:   Sun Apr 14 17:56:53 2024 +0200
+
+    updated the readme, a guidline for the team's workflow
+
+[33mcommit 410842a962db5710baa813662ac0992cb38849f5[m
+Author: balloux <leonard.balloux@epfl.ch>
+Date:   Sun Apr 14 17:14:15 2024 +0200
+
+    shortest path
+
+[33mcommit c5705212eee9df0d9e6e5c8c8f2db6c5ee414067[m
+Merge: 373dec6 2e722f4
+Author: Ethan G <100317390+ethangraham2001@users.noreply.github.com>
+Date:   Sat Apr 13 16:33:20 2024 +0200
+
+    Merge pull request #92 from WanderWise-Inc/unfuckup-main
+    
+    Fixed remaining tests that weren't working, and put project into a decent state so that everyone can work on it during the next sprint.
+
+[33mcommit 2e722f4a95a89c3a3e7db27003650bdffe081370[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Sat Apr 13 16:08:53 2024 +0200
+
+    ran ktfmt
+
+[33mcommit 31288aabf8838f9996473db7abe81333c4172346[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Sat Apr 13 16:07:37 2024 +0200
+
+    fixed home screen tests
+
+[33mcommit 373dec666704d945e8106f48c022fa64fa9a4eba[m
+Merge: 6615dff 34ff70e
+Author: Ethan G <100317390+ethangraham2001@users.noreply.github.com>
+Date:   Sat Apr 13 15:31:40 2024 +0200
+
+    Merge pull request #91 from WanderWise-Inc/unfuckup-main
+    
+    Make main work again
+
+[33mcommit 34ff70eafdb3727e8089cf03c12e7cf8bde2179f[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Sat Apr 13 15:29:43 2024 +0200
+
+    added branch dev to workflows check list
+
+[33mcommit d6ea928cd9af621a866321e8f59487f6b4850bf1[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Sat Apr 13 15:23:19 2024 +0200
+
+    reverted some composables to the state they were meant to be in for submission. Ran ktfmt
+
+[33mcommit 6615dff7cbb2d818fb342fa0d53459264925e286[m
+Merge: 32094a6 2e758f4
+Author: imaneb942 <56965479+imaneb942@users.noreply.github.com>
+Date:   Sat Apr 13 00:06:49 2024 +0200
+
+    Merge pull request #90 from WanderWise-Inc/debugging
+    
+    app runs now
+
+[33mcommit 2e758f4e75811ce7d64ba5211072b115eb26c82c[m
+Author: YofiY <theburnface2013@gmail.com>
+Date:   Fri Apr 12 23:55:48 2024 +0200
+
+    app runs now
+
+[33mcommit 3db87a71e30e083a166207ea4985727432d348f5[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Fri Apr 12 23:42:06 2024 +0200
+
+    merged test/navigation into main
+
+[33mcommit 32094a64d5a6d88a57a9647ff03a1248bbef604d[m
+Merge: bdf2c19 bb13269
+Author: imaneb942 <56965479+imaneb942@users.noreply.github.com>
+Date:   Fri Apr 12 23:39:29 2024 +0200
+
+    Merge pull request #89 from WanderWise-Inc/LoginScreenTest
+    
+    Added Profile Test and tried to add Sign in Test unsuccesfully
+
+[33mcommit bdf2c19c4d98c37d7da04782bff2071bf78471d3[m
+Merge: 72ebf3c 8950e79
+Author: imaneb942 <56965479+imaneb942@users.noreply.github.com>
+Date:   Fri Apr 12 23:37:49 2024 +0200
+
+    Merge pull request #87 from WanderWise-Inc/profileScreen
+    
+    created the first draft for the profileScreen
+
+[33mcommit 8950e791dfb1be7424c02abe08478ff8e04f6c50[m
+Merge: d742792 72ebf3c
+Author: imaneb942 <56965479+imaneb942@users.noreply.github.com>
+Date:   Fri Apr 12 23:37:13 2024 +0200
+
+    Merge branch 'main' into profileScreen
+
+[33mcommit 31f81fd683d312847cd17ab22b19dbcafcdb57ff[m
+Merge: 72ebf3c 8d44189
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Fri Apr 12 23:30:46 2024 +0200
+
+    Merge branch 'test/navigation'
+    
+    # Conflicts:
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/liked/categories/LikedAdventureScreen.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/liked/categories/LikedDrinksScreen.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/liked/categories/LikedShoppingScreen.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/liked/categories/LikedSightSeeingScreen.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/navigation/TopNavigationMenu.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/overview/categories/OverviewAdventureScreen.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/overview/categories/OverviewDrinksScreen.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/overview/categories/OverviewShoppingScreen.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/overview/categories/OverviewSightSeeingScreen.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/overview/categories/OverviewTrendingScreen.kt
+    #       app/src/test/java/com/github/wanderwise_inc/app/ui/navigation/SignInNavigationTest.kt
+
+[33mcommit 8d441891d710d2f6250c761f488835c81e563b4d[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Fri Apr 12 23:24:40 2024 +0200
+
+    quick fix to SignInNavigationTest to make it pass
+
+[33mcommit bb13269e8dbacfb43d077bf44944a74c8532bdc3[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Fri Apr 12 23:24:28 2024 +0200
+
+    Added Profile Test
+
+[33mcommit 8ff134b34ba4bc66ade2cd912918ae2206eb5a58[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Fri Apr 12 22:53:37 2024 +0200
+
+    added tests for liked tag navigation, should once again add around 20% local test coverage
+
+[33mcommit 99950df8bc858b740712a1af293053b35e7d865b[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Fri Apr 12 22:41:20 2024 +0200
+
+    added tests for tag navigation in overview screen, should increase test coverage in navigation.graph by 20%
+
+[33mcommit 72ebf3c8167da641cde249800ed24ad4251759ef[m
+Merge: bd119ea c5e7312
+Author: Oscar <126007815+276746@users.noreply.github.com>
+Date:   Fri Apr 12 20:30:12 2024 +0200
+
+    Merge pull request #86 from WanderWise-Inc/ci/sonarcloud-setup
+    
+    Ci/sonarcloud setup
+
+[33mcommit c5e7312ccb4a7eba836d74419ffa26e42b6b0ca5[m
+Author: duong <oscar.duong@epfl.ch>
+Date:   Fri Apr 12 20:07:23 2024 +0200
+
+    Remove test branch from ci
+
+[33mcommit 2ce12689e54a269fded802490e3ad4b58a3c322c[m
+Merge: 2e5afb3 bd119ea
+Author: duong <oscar.duong@epfl.ch>
+Date:   Fri Apr 12 20:06:18 2024 +0200
+
+    Merge branch 'main' into ci/sonarcloud-setup
+    
+    # Conflicts:
+    #       app/src/androidTest/java/com/github/wanderwise_inc/app/model/LocationTest.kt
+    #       app/src/androidTest/java/com/github/wanderwise_inc/app/ui/signin/LoginScreenTest.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/MainActivity.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/auth/Authentication.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/data/ItineraryRepository.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/model/location/Location.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/model/user/User.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/liked/LikedScreen.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/map/MapScreen.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/map/PreviewItineraryScreen.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/navigation/BottomNavigationMenu.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/navigation/graph/AuthNavGraph.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/navigation/graph/HomeNavGraph.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/navigation/graph/OverviewNavGraph.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/navigation/graph/RootNavGraph.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/overview/OverviewScreen.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/overview/categories/OverviewAdventureScreen.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/overview/categories/OverviewDrinksScreen.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/overview/categories/OverviewShoppingScreen.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/overview/categories/OverviewSightSeeingScreen.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/overview/categories/OverviewTrendingScreen.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/profile/ProfileScreen.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/search/SearchScreen.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/signin/LoginScreen.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/viewmodel/MapViewModel.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/viewmodel/ProfileViewModel.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/viewmodel/UserViewModel.kt
+    #       app/src/test/java/com/github/wanderwise_inc/app/ui/navigation/HomeNavigationTest.kt
+    #       app/src/test/java/com/github/wanderwise_inc/app/ui/navigation/SignInNavigationTest.kt
+
+[33mcommit 2e5afb302649cd2c3a5d0eaf6c30a9cadd6b6d60[m
+Author: duong <oscar.duong@epfl.ch>
+Date:   Fri Apr 12 19:52:27 2024 +0200
+
+    Cooking2...
+
+[33mcommit b58700295116b0a13e33cd8d43fa380944911b1c[m
+Author: duong <oscar.duong@epfl.ch>
+Date:   Fri Apr 12 19:39:02 2024 +0200
+
+    Cooking...
+
+[33mcommit bd119eae560464aebf7f3bb4e5add63d9f688e7a[m
+Merge: d9f4775 dfeae82
+Author: Yofthahe Yeshitila <63012939+YofiY@users.noreply.github.com>
+Date:   Fri Apr 12 19:28:06 2024 +0200
+
+    Merge pull request #85 from WanderWise-Inc/update-test
+    
+    Updated all tests and ran ktfmt uwu
+
+[33mcommit dfeae82b4e1dec7dbc093ed6a48abb09be21a1a3[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Fri Apr 12 19:26:09 2024 +0200
+
+    removed a bunch of stuff. Ran ktfmt so all files changed lel
+
+[33mcommit ff74a1ce4115f8515cfb7960b1d11b291231caad[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Fri Apr 12 18:49:37 2024 +0200
+
+    removed resetpassword and deleteuser from profileviewmodel
+
+[33mcommit afe15ee49867281509b1faa9469adb38009595f3[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Fri Apr 12 18:48:03 2024 +0200
+
+    factored all traces of userViewModel as it wasn't used and was giving bad test coverage
+
+[33mcommit d5ace94c4c3ebbc8a78ac952c1625c48e4292ba2[m
+Author: duong <oscar.duong@epfl.ch>
+Date:   Fri Apr 12 18:47:11 2024 +0200
+
+    Update path
+
+[33mcommit 1f5791c54a8068f1ba80ac88985865b7cc0af434[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Fri Apr 12 18:45:28 2024 +0200
+
+    removed all users of UserViewModel
+
+[33mcommit ffd540a5876adb581a53de08c860d14a4a5488fa[m
+Author: duong <oscar.duong@epfl.ch>
+Date:   Fri Apr 12 18:42:30 2024 +0200
+
+    Update path
+
+[33mcommit a2e37402fc11031be70e27065837ed11adea8c53[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Fri Apr 12 18:33:55 2024 +0200
+
+    removed polyline stuff from mapviewmodel as it was unused
+
+[33mcommit d74279270aaeebbf64d9c0cabbbf5d17208f6bf6[m
+Author: YofiY <theburnface2013@gmail.com>
+Date:   Fri Apr 12 18:15:33 2024 +0200
+
+    created the first draft for the profileScreen
+
+[33mcommit bf69b9bd15b8a5fb64ed917694c636a69be0b3fe[m
+Author: duong <oscar.duong@epfl.ch>
+Date:   Fri Apr 12 18:10:36 2024 +0200
+
+    Modify paths
+
+[33mcommit d9f477513c49417ab0e613d8a73a84f8a8092a03[m
+Merge: 8529177 57b299b
+Author: Ethan G <100317390+ethangraham2001@users.noreply.github.com>
+Date:   Fri Apr 12 18:03:17 2024 +0200
+
+    Merge pull request #84 from WanderWise-Inc/test/navigation
+    
+    added tests for updated navigation
+
+[33mcommit cc157d22e696aabb3c13af41c6f01583b3e097ad[m
+Author: duong <oscar.duong@epfl.ch>
+Date:   Fri Apr 12 17:56:24 2024 +0200
+
+    Add debug.keystore secret
+
+[33mcommit 57b299b24009f84e94a2985f6b4e60578abc6313[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Fri Apr 12 17:49:44 2024 +0200
+
+    fixed non passing tests after merge
+
+[33mcommit 35d307fbe3d422330de09819e0df62062c24fbdc[m
+Merge: 9bca32a 8529177
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Fri Apr 12 17:44:08 2024 +0200
+
+    Merge branch 'main' into test/navigation
+
+[33mcommit 8529177f289229929b8bf23723f97a349fda20d2[m
+Merge: 11be4fc 96f7a70
+Author: engjellismaili <126008250+engjellismaili@users.noreply.github.com>
+Date:   Fri Apr 12 17:31:36 2024 +0200
+
+    Merge pull request #83 from WanderWise-Inc/location_filter
+    
+    Places Display onto a Map
+
+[33mcommit 96f7a70a7531c61c0d9a5e2acbdd9c89cbea42c4[m
+Author: imaneb942 <imane.benkamoun@epfl.ch>
+Date:   Fri Apr 12 17:31:02 2024 +0200
+
+    changes in comments and delete
+
+[33mcommit 9bca32a1bfa9b15de9e7a13e911778537a1a6624[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Fri Apr 12 17:19:13 2024 +0200
+
+    added tests for navigation
+
+[33mcommit 1385bd19bb549584f397815b287b2c64b63af9ce[m
+Author: duong <oscar.duong@epfl.ch>
+Date:   Fri Apr 12 17:15:04 2024 +0200
+
+    Resolve conflict
+
+[33mcommit 5d4aaaafc0786a7173738464766188058c9ce85c[m
+Merge: 352a3ec 11be4fc
+Author: duong <oscar.duong@epfl.ch>
+Date:   Fri Apr 12 17:05:01 2024 +0200
+
+    Merge branch 'main' into ci/sonarcloud-setup
+    
+    # Conflicts:
+    #       app/src/main/java/com/github/wanderwise_inc/app/MainActivity.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/model/location/Itinerary.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/model/location/Location.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/model/user/User.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/home/HomeScreen.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/itineraries/ItineraryScreen.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/map/MapScreen.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/navigation/BottomNavigationMenu.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/navigation/NavigationActions.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/navigation/graph/AuthNavGraph.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/navigation/graph/HomeNavGraph.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/navigation/graph/RootNavGraph.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/overview/OverviewScreen.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/signin/LoginScreen.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/viewmodel/MapViewModel.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/viewmodel/UserLocationClient.kt
+    #       app/src/main/java/com/github/wanderwise_inc/app/viewmodel/UserViewModel.kt
+    #       build.gradle.kts
+
+[33mcommit b7e12b6e6a750a076e1dab7f4c2c4cf92666cd08[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Fri Apr 12 16:59:59 2024 +0200
+
+    removed unused import
+
+[33mcommit 2d8c770928c78095c95c0a47428617b74378d7b7[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Fri Apr 12 16:59:32 2024 +0200
+
+    reverted main to including proper home screen
+
+[33mcommit d49145980f4748a154f7d0975c83673df7cc8197[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Fri Apr 12 16:58:55 2024 +0200
+
+    added a map preview screen with the san francisco locations
+
+[33mcommit 599a3ca188756ce340d5892a65858c248f6c15ca[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Fri Apr 12 16:58:34 2024 +0200
+
+    added a function for reading locations from a JSON string, and added a sample json file for previewing purposes
+
+[33mcommit 352a3ecb41c8e1d1ffb4fa1879c48e47de68e00c[m
+Author: duong <oscar.duong@epfl.ch>
+Date:   Fri Apr 12 16:47:50 2024 +0200
+
+    Remove all test
+
+[33mcommit 1798eb8d24085f63c42abbba4685158290acfc04[m
+Author: duong <oscar.duong@epfl.ch>
+Date:   Fri Apr 12 16:32:10 2024 +0200
+
+    Remove test
+
+[33mcommit 253731d3136638034f6e6694fcf3528c7e55c1a4[m
+Merge: 051a0ca 11be4fc
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Fri Apr 12 16:29:36 2024 +0200
+
+    merged main into location_filter
+
+[33mcommit 051a0ca0b96f27afd6d040dd11e6ade4f6f5f5d7[m
+Author: imaneb942 <imane.benkamoun@epfl.ch>
+Date:   Fri Apr 12 16:26:44 2024 +0200
+
+    added a PreviewDummy function to visulaize on the PreviewItineraryScreen the list of places
+
+[33mcommit 11be4fcda1b93cc7b798ed40d6cd39f376c544df[m
+Merge: f69e00f 8c473c1
+Author: Ethan G <100317390+ethangraham2001@users.noreply.github.com>
+Date:   Fri Apr 12 16:05:17 2024 +0200
+
+    Merge pull request #82 from WanderWise-Inc/ProfileViewModel
+    
+    Changed methods to use profileViewModel instead of userViewModel in SignInScreen instead of deprecated UserViewModel
+
+[33mcommit 8c473c1a3643ced3315fb90e714a63c312e1c1da[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Fri Apr 12 15:59:20 2024 +0200
+
+    changed u to newProfile
+
+[33mcommit 52af7ed9407e42e7ce04611cb462c378dbc8b1f2[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Fri Apr 12 15:55:09 2024 +0200
+
+    Changed currentUser to currentProfile
+
+[33mcommit d3c49583cf256eac8cde2ecaa6e64cbae3919c9a[m
+Merge: a821696 f69e00f
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Fri Apr 12 15:52:27 2024 +0200
+
+    Merge branch 'main' into ProfileViewModel
+
+[33mcommit a821696acca30acd1ed56ec864879a4fb1132d9e[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Fri Apr 12 15:47:43 2024 +0200
+
+    Changed methods to use profileViewModel
+
+[33mcommit 99735d7194b617aee2880f51526f60573e2dc8c0[m
+Author: duong <oscar.duong@epfl.ch>
+Date:   Fri Apr 12 15:38:40 2024 +0200
+
+    Correct variable access
+
+[33mcommit 68623dbca4b61ea711a2af4e573262632d8be673[m
+Author: duong <oscar.duong@epfl.ch>
+Date:   Fri Apr 12 15:21:44 2024 +0200
+
+    Correct path
+
+[33mcommit 0e82768e1757ead9e22f476defd25abd47405b30[m
+Author: duong <oscar.duong@epfl.ch>
+Date:   Fri Apr 12 15:16:27 2024 +0200
+
+    Fetch google-service.json from GitHub secrets
+
+[33mcommit 9094ed4f4a3e2e4544a17e8421a8994fd3884644[m
+Author: duong <oscar.duong@epfl.ch>
+Date:   Fri Apr 12 14:57:15 2024 +0200
+
+    Update format
+
+[33mcommit 39513b3b72d49d6577860283c8d104fd0f877156[m
+Author: duong <oscar.duong@epfl.ch>
+Date:   Fri Apr 12 14:44:02 2024 +0200
+
+    Update secrets with defaults secrets
+
+[33mcommit f69e00ffa364b0194fd7f2a924f34f0b290a98a5[m
+Merge: f4959f6 8a6a72c
+Author: Yofthahe Yeshitila <63012939+YofiY@users.noreply.github.com>
+Date:   Fri Apr 12 14:40:43 2024 +0200
+
+    Merge pull request #81 from WanderWise-Inc/ProfileViewModel
+    
+    refactor of profile viewmodel
+
+[33mcommit 7eb94caf98bb6a2619f12ffa86e083e8735f8017[m
+Author: duong <oscar.duong@epfl.ch>
+Date:   Fri Apr 12 14:38:29 2024 +0200
+
+    Add default secrets
+
+[33mcommit f4959f6e8a17e884f59b7b03d74ee985d24ad2ca[m
+Merge: 14c6f42 fbf1a2a
+Author: Ethan G <100317390+ethangraham2001@users.noreply.github.com>
+Date:   Fri Apr 12 14:28:25 2024 +0200
+
+    Merge pull request #77 from WanderWise-Inc/location-tests
+    
+    Added tests for Location Class
+
+[33mcommit 423bedd5c251091f63111f52a8aa442c2a2956a2[m
+Author: duong <oscar.duong@epfl.ch>
+Date:   Fri Apr 12 14:16:42 2024 +0200
+
+    Add secrets + Update gradle version
+
+[33mcommit 8a6a72c3e4f92315f923e8b4f12434408e768cf2[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Fri Apr 12 14:07:32 2024 +0200
+
+    updated app-level build.gradle to have mockito dependency for androidTestImplementation
+
+[33mcommit 5403e3141e50ac5ddc98fb32c42538f44bcc2374[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Fri Apr 12 14:07:06 2024 +0200
+
+    added a new test for ProfileViewModel
+
+[33mcommit 4dc73af7a2430f7e356e64cfc93c293f7cf650b7[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Fri Apr 12 13:28:46 2024 +0200
+
+    updated mainactivity to remove bug that was causing crash (calling getApplication before onCreate)
+
+[33mcommit b2ca71f9d1bfb32c9400e6a640eac4a6e84a0870[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Fri Apr 12 13:16:34 2024 +0200
+
+    updated ProfileRepository and ProfileViewModel to return nullable Profile for getProfile(uid)
+
+[33mcommit e2a987067a04f89772edd2693f791690360e8ded[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Fri Apr 12 13:05:23 2024 +0200
+
+    added ProfileViewModel into signatures, still unused. Waiting for refactor
+
+[33mcommit d53b0ddb6346b058b8c35884f59698ef695db9c7[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Fri Apr 12 11:36:43 2024 +0200
+
+    removed unused imports from MainActivity
+
+[33mcommit 4535d652866c625814e1c6c63be5fab7cdb62e0a[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Fri Apr 12 11:35:53 2024 +0200
+
+    changed mapViewModel initialization
+
+[33mcommit fd0cd2775a4a67f3227f8d970957199914ef0324[m
+Merge: 59d3f98 14c6f42
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Fri Apr 12 11:32:18 2024 +0200
+
+    merged main into profileViewmodel. Lots of fixes needed now
+
+[33mcommit 14c6f42f77d443c78cc0d87a85f19d35588e84b9[m
+Merge: 0ee3b51 e3bc543
+Author: imaneb942 <56965479+imaneb942@users.noreply.github.com>
+Date:   Fri Apr 12 10:38:09 2024 +0200
+
+    Merge pull request #78 from WanderWise-Inc/map/user-position
+    
+    Map/user position
+
+[33mcommit 59d3f9860e406dd34f32f1bf788b0c9dcd426936[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Fri Apr 12 09:45:56 2024 +0200
+
+    updated a comment in image repository
+
+[33mcommit 34d9d5147a713c84c215f7c827049d129b35188a[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Fri Apr 12 09:44:07 2024 +0200
+
+    added a getProfilePicture method to ProfileViewmodel. ProfileViewModel now takes an image repository as argument
+
+[33mcommit 148e5cffd4a5b93e956ca62ffeedb9aebf60d493[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Fri Apr 12 09:39:12 2024 +0200
+
+    Image repository:
+    - added image repository with test implementation returning static image for every URI on fetch
+    - added example usage of image repository into MainActivity
+
+[33mcommit b82995346390869e727dfcbaa939bc6d0e8c0df2[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Fri Apr 12 08:41:43 2024 +0200
+
+    removed unused imports
+
+[33mcommit 1ab653b01c26edca98546f05372c231396c384a3[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Fri Apr 12 08:40:50 2024 +0200
+
+    removed unused curly braces from user class
+
+[33mcommit 68aade2480a1ad2c6fc373636c7373bddf3d1517[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Fri Apr 12 08:40:33 2024 +0200
+
+    added profile picture uri attribut to profile class
+
+[33mcommit e3bc5435e6bfcae638f6000742841fb0957e3a83[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Thu Apr 11 22:43:45 2024 +0200
+
+    Update from v8.2 to v8.4
+
+[33mcommit 7990083207e803f86c4a6d3d73294533d29c9550[m
+Merge: 579b140 3ea7d5d
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Thu Apr 11 22:40:35 2024 +0200
+
+    Merge branch 'main' into map/user-position
+    
+    # Conflicts:
+    #       app/build.gradle.kts
+    #       app/src/main/java/com/github/wanderwise_inc/app/ui/signin/LoginScreen.kt
+
+[33mcommit 579b140901c7dc81478b54a720511e62570fa238[m
+Merge: c5fa134 c288bf4
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Thu Apr 11 22:19:29 2024 +0200
+
+    Merge branch 'map/user-position' of https://github.com/WanderWise-Inc/app into map/user-position
+
+[33mcommit c5fa134e1f75310be12f5cfcc283e9be8b2ca932[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Thu Apr 11 22:19:05 2024 +0200
+
+    Update comment
+
+[33mcommit b9b79c315293bfd6f62a63d74177a5548fdf2a35[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Thu Apr 11 22:18:23 2024 +0200
+
+    Check param of fun getLocationUpdate
+
+[33mcommit 484931d383e5f835b1445ee970d6f9875c10a8a7[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Thu Apr 11 19:00:46 2024 +0200
+
+    updated a depdency related to firestore storage
+
+[33mcommit b252647d7dc9e2d2ba62e9b7f4b22983376ce659[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Thu Apr 11 19:00:28 2024 +0200
+
+    ProfileViewModel:
+    - now uses repository class as data source -> we can mock is easily
+    - added API for getting and setting profiles in the data source
+    - consistent with MapViewModel
+
+[33mcommit 0ee3b518403ccf10d1dbb4ae339730acf4dcec58[m
+Merge: c629bd6 4ff3a0a
+Author: Yofthahe Yeshitila <63012939+YofiY@users.noreply.github.com>
+Date:   Thu Apr 11 19:00:14 2024 +0200
+
+    Merge pull request #80 from WanderWise-Inc/README_update
+    
+    Update README.md with an Architecture Diagram
+
+[33mcommit bf16b37cd5269e3c06bf214a3b350dfb768fc31f[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Thu Apr 11 18:59:10 2024 +0200
+
+    ProfileRepository added some more documentation
+
+[33mcommit b3cb25b1f206d1103fe36f01d48b3054c840b811[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Thu Apr 11 18:58:39 2024 +0200
+
+    removed country from Profile, added displayName attribute
+
+[33mcommit f7a38d6680045836489aefb9f0c16ff04795cdc5[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Thu Apr 11 18:57:33 2024 +0200
+
+    wrote basic test suite for ProfileViewModel to ensure correctness before merging with maiN
+
+[33mcommit 149be79b145378149291068fb3191be10d388bb3[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Thu Apr 11 18:37:32 2024 +0200
+
+    Execute CI tests for the branch ci/sonarcloud-setup (test)
+
+[33mcommit c51e47cf939c138423236a40d9e5e3514bc77cdb[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Thu Apr 11 18:25:42 2024 +0200
+
+    Add sonarcloud
+
+[33mcommit 81bdef0caf02d4709f08988bdfb4d77fa3c4bf83[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Thu Apr 11 18:24:15 2024 +0200
+
+    added Profile class and ProfileRepository + test data source
+
+[33mcommit 3099ef5eea320a8c64aec93ec37e5bb4c981dfc0[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Thu Apr 11 18:23:36 2024 +0200
+
+    added a profile class
+
+[33mcommit 4ff3a0ad91eeb6c7903398715002792e31d5be5c[m
+Author: imaneb942 <56965479+imaneb942@users.noreply.github.com>
+Date:   Thu Apr 11 18:21:50 2024 +0200
+
+    Update README.md with an Architecture Diagram
+
+[33mcommit c288bf4080292beba9a928497aca64fa9d216c06[m
+Author: Oscar <126007815+276746@users.noreply.github.com>
+Date:   Thu Apr 11 18:17:57 2024 +0200
+
+    Delete app/src/main/java/com/github/wanderwise_inc/app/ui/signin/LoginScreen.kt
+    
+    Removed because of minor changes and was unnecessary
+
+[33mcommit da85e2da901a8b7aab5f6fc97a05cbad7a615551[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Thu Apr 11 18:12:20 2024 +0200
+
+    Add sonarcloud
+
+[33mcommit 305e9a7a78a8a0c0c37b0ea802028a33c2a6870c[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Thu Apr 11 15:48:31 2024 +0200
+
+    Add ci file
+
+[33mcommit c629bd6332c021c8c7ce215380662e2c30ed7f98[m
+Merge: b59678a f9bf933
+Author: ThomasPFMuller <100191653+ThomasPFMuller@users.noreply.github.com>
+Date:   Thu Apr 11 15:31:54 2024 +0200
+
+    Merge pull request #62 from WanderWise-Inc/itinerary/view-and-navigation
+    
+    Finished tab implementation and navigation between different itineraries
+
+[33mcommit 5bdec9764d17365c18cbc04563acfbf07972eec2[m
+Merge: 9f3f786 5e96987
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Thu Apr 11 15:16:08 2024 +0200
+
+    Merge branch 'ProfileViewModel' of github.com:WanderWise-Inc/app into ProfileViewModel
+
+[33mcommit 5e96987464f37b221bc3de69c2660fe279a0ccad[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Thu Apr 11 15:15:13 2024 +0200
+
+    Clean the add/fetch methods for storage
+
+[33mcommit 4c60ce06d1b990574a14e98cee80961aacfdc58c[m
+Merge: 54133ea 5edac28
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Thu Apr 11 15:02:04 2024 +0200
+
+    Merge branch 'update-location' into location_filter
+
+[33mcommit 5edac2804bb39c18ea3a9670c6d2738fe410b8ba[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Thu Apr 11 14:59:28 2024 +0200
+
+    updated location class to include new attributes for consistency with places API
+
+[33mcommit 54133eaf2b0d333bf24330d56e0948f23786fbfb[m
+Author: imaneb942 <imane.benkamoun@epfl.ch>
+Date:   Thu Apr 11 14:57:13 2024 +0200
+
+    added PlaceReader.kt that reads places from a json file that has Place.kt attributes
+    
+    returns them on the map with a list of type PlacesResponse.kt
+
+[33mcommit 8adbcaaa5b19e1bd8c1e0629171b850a03388cba[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Thu Apr 11 14:51:23 2024 +0200
+
+    Add comments
+
+[33mcommit 9f3f786c901af4193f518e118a0efc16cbe6a543[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Thu Apr 11 14:36:23 2024 +0200
+
+    MapViewModel: added function for computing the total number of likes from a list of itineraries
+
+[33mcommit 2a104bf75bc4ee04a0320a150a43f50cc405a41e[m
+Merge: 1d7cb62 b59678a
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Thu Apr 11 14:14:26 2024 +0200
+
+    merged main into ProfileViewModel
+
+[33mcommit 1d7cb62dbbb91432f97afeab19045f73c0441c7f[m
+Merge: 1d660ed 019ef45
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Thu Apr 11 14:08:38 2024 +0200
+
+    merge main into current branch
+
+[33mcommit 3ea7d5de8572a56af2d1229949156b270b920d86[m
+Merge: 46c1d64 b59678a
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Thu Apr 11 14:01:35 2024 +0200
+
+    Merge branch 'main' of https://github.com/WanderWise-Inc/app
+
+[33mcommit 1d660ed7bcc66e3d125b0780193dd5e076b3736e[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Thu Apr 11 14:00:55 2024 +0200
+
+    Added storage logic to add and fetch images on firebase
+
+[33mcommit f9bf933bfb0d77a393fa2d5979cf08d8c8285407[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Thu Apr 11 13:28:10 2024 +0200
+
+    finished final template of app
+
+[33mcommit fbf1a2a07c5b84f28952cc7cbbd48ca471c10116[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Thu Apr 11 12:35:22 2024 +0200
+
+    added test suite for location class
+
+[33mcommit b59678a0faa01611ff4ed223abb97a998680c66d[m
+Merge: 87e14e5 c2ec355
+Author: imaneb942 <56965479+imaneb942@users.noreply.github.com>
+Date:   Thu Apr 11 11:39:20 2024 +0200
+
+    Merge pull request #76 from WanderWise-Inc/backend/updateItinerary
+    
+    Big updates to MapViewModel
+
+[33mcommit c2ec355c5068694d0c911513ea3c3a1be24d8acd[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Thu Apr 11 11:31:40 2024 +0200
+
+    removed unused MapViewModel from the test directory. Moved to androidTest
+
+[33mcommit 460787c7d8ae5de1c21beadd3dd717947d838e1a[m
+Merge: 3244a94 a9e2631
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Thu Apr 11 11:13:07 2024 +0200
+
+    Merge branch 'itinerary/view-and-navigation' of https://github.com/WanderWise-Inc/app into itinerary/view-and-navigation
+
+[33mcommit 3244a942112db6eb9754f4cb4f1cffd396bfcfa4[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Thu Apr 11 11:12:48 2024 +0200
+
+    added all boilerplate code for navigation through composables
+
+[33mcommit c767a5ea820c62aae18de0ad1942c1defb24897b[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Thu Apr 11 11:03:14 2024 +0200
+
+    added missing firebaseauth dependency needed by connectedCheck
+
+[33mcommit 8877e82434ea3d51d15f2a9342429747146737be[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Thu Apr 11 10:59:42 2024 +0200
+
+    removed unused debug tag from MapViewModel
+
+[33mcommit 12bab3b9da8f2bcac9262e8a576ba5fb992bf20f[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Thu Apr 11 10:59:12 2024 +0200
+
+    moved MapViewModelTest to androidTest directory as the other directory wasn't being recognized by code coverage report
+
+[33mcommit 0116b15cf693b4c7d3740e89f69af0753cb35d0c[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Thu Apr 11 10:12:27 2024 +0200
+
+    removed minRating parameter from ItineraryPreferences as it is no longer relevant
+
+[33mcommit 0b3ac462c6a339f41ddd3a9da083f36e1d1de6a1[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Thu Apr 11 10:11:56 2024 +0200
+
+    wrote testing suite for MapViewModel using a mock repository (in ItineraryRepository.kt)
+
+[33mcommit 563778abdc1b1f9bd30ba87334e62b4b2e35f783[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Wed Apr 10 22:29:06 2024 +0200
+
+    small progression on mapviewmodel test
+
+[33mcommit 209dcc3207e68369ef05e8ed033a3ed55d50ac02[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Wed Apr 10 22:28:47 2024 +0200
+
+    started test implementation of repository
+
+[33mcommit e920317ba3fc42ee959a2cd2b7c6e87162cb314c[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Wed Apr 10 22:20:55 2024 +0200
+
+    updated mapviewmodel to use the new repository
+
+[33mcommit da689b740821481fe8d81071fdf59e0ca8ea83f8[m
+Merge: 2e962f9 fe6ec83
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Wed Apr 10 22:13:40 2024 +0200
+
+    Merge branch 'backend/updateItinerary' of github.com:WanderWise-Inc/app into backend/updateItinerary
+
+[33mcommit 2e962f9e1b70263df9633ca549197df1f3420ad8[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Wed Apr 10 22:12:12 2024 +0200
+
+    started work on a repository class to take some load off of viewmodel
+
+[33mcommit 91cd973a238eb95d04792d6c89c22c00895850d0[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Wed Apr 10 18:31:37 2024 +0200
+
+    updated build dependencies
+     - app level build.gradle with mockito
+     - top level with correct dependencies for building test
+
+[33mcommit fe6ec83da9d8ecc651f9b28e5a6f284081e07723[m
+Author: imaneb942 <imane.benkamoun@epfl.ch>
+Date:   Wed Apr 10 16:28:52 2024 +0200
+
+    Updated tag.kt
+
+[33mcommit a9e26315a80e61453247e33e88b74c87f083511b[m
+Merge: ae35c75 87e14e5
+Author: ThomasPFMuller <100191653+ThomasPFMuller@users.noreply.github.com>
+Date:   Wed Apr 10 15:36:39 2024 +0200
+
+    Merge branch 'main' into itinerary/view-and-navigation
+
+[33mcommit ae35c75e4cbfcf12290836cd4afe336f9ec127c8[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Wed Apr 10 14:32:17 2024 +0200
+
+    finished tab implementation and navigation between different itineraries
+
+[33mcommit 87e14e56758f38a757b25ada794fa7cb7d90a6b0[m
+Merge: e39023d 1c9b3b9
+Author: ThomasPFMuller <100191653+ThomasPFMuller@users.noreply.github.com>
+Date:   Wed Apr 10 13:23:14 2024 +0200
+
+    Merge pull request #60 from WanderWise-Inc/backend/updateItinerary
+    
+    Updates to itinerary backend
+
+[33mcommit 1c9b3b9af7135a2c98f6b0c9053a7345d1ed9db8[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Wed Apr 10 12:38:18 2024 +0200
+
+    added an itinerary deletion method
+
+[33mcommit dff43c92b76798689a8520d99f652735def9bc91[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Wed Apr 10 12:37:59 2024 +0200
+
+    Itinerary: changes upvotes/downvotes to a number of likes. Have accounted for this in the scoring algorithm
+
+[33mcommit 6458824ed0275a70d8b1a330ac231280e2fed5d1[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Tue Apr 9 15:58:52 2024 +0200
+
+    Added a preview itineraryscreen for funzies. Still a bit ugly tho ngl
+
+[33mcommit 73bb3821f355c491e7a05e35fea9bc249f4d32e9[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Tue Apr 9 15:52:00 2024 +0200
+
+    Added preference-based filtering of itineraries
+     - Tag alias for string that represents an itinerary tag, with an object containing common instances
+     - updated itinerary with a list of tags, as well as upvotes / downvotes. Added a scoring method that scores an itinerary based on preferences, as well as overall rating
+     - implemented preference-based filtering, and sorting based on scoring in MapViewModel
+     - Added a function for computing distance between two Locations (goal is to use for sorting in the future)
+     - Added some no-argument constructors which are needed by firebase
+     - did some general refactoring for prettier code uwu
+
+[33mcommit c6cf6292c2819bff05a74a27c92b61cab7cb16aa[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Tue Apr 9 11:00:34 2024 +0200
+
+    added a preview composable for the PreviewItinerary composable
+
+[33mcommit e39023d2354603dfe6b5bbfe2c694ee00584e7a1[m
+Merge: 019ef45 372b8c6
+Author: imaneb942 <56965479+imaneb942@users.noreply.github.com>
+Date:   Mon Apr 8 23:54:47 2024 +0200
+
+    Merge pull request #59 from WanderWise-Inc/User_Profile
+    
+    deleted some images
+
+[33mcommit 372b8c64360d688dee78bc91b3b9534b50faddac[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Mon Apr 8 23:51:27 2024 +0200
+
+    deleted some images
+
+[33mcommit b01c1d73d4da82cb80565ea42cddd4cefa19f26d[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Mon Apr 8 10:47:48 2024 +0200
+
+    Working on filtering itineraries:
+     - Tag class for representing different tag options
+     - Itinerary Preferences represents query preferences and will be configured from a screen
+    - started work on MapViewModel func that queries based on preferences
+    - Updated Itinerary to include a list of tags
+
+[33mcommit 7841f6dc3fec7d80d434d109bb4c209aad94fd6e[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Mon Apr 8 10:45:38 2024 +0200
+
+    Added func for computing distance between two locations in Km
+
+[33mcommit 6b523114fe5ffe30fc0f2c4ad1f1077b99e9db56[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Mon Apr 8 08:51:48 2024 +0200
+
+    first draft of a preview itinerary screen. Banner is ugly, needs to be updated
+
+[33mcommit 730a49b4ed693ea6b4666fe73cdf6108810ddb9d[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Sun Apr 7 17:37:57 2024 +0200
+
+    added preview itinerary screen and updated itinerary viewmodel for computing a center of gravity of all locations
+
+[33mcommit 019ef45d29072d6ff2fdbde7aa8545aa324abf1b[m
+Merge: 0319446 8888a94
+Author: ThomasPFMuller <100191653+ThomasPFMuller@users.noreply.github.com>
+Date:   Sun Apr 7 16:05:25 2024 +0200
+
+    Merge pull request #58 from WanderWise-Inc/update-nav-ui
+    
+    Update nav UI
+
+[33mcommit 8888a944f4c1048e708a0d1e80c0eec117045979[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Sat Apr 6 21:31:23 2024 +0200
+
+    fixed the issue with the navbar overlapping the screen and blocking it
+
+[33mcommit 3d1aee40adec17163770ed79b18a1bac8e74d949[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Sat Apr 6 12:21:31 2024 +0200
+
+    removed old implementation of bottomNavigationMenu
+
+[33mcommit afba88ff8692156f4fad92b66da92f90b375bef5[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Sat Apr 6 12:19:45 2024 +0200
+
+    Updated navbar UI
+     - now using compose  and  instead of a
+     -  composable now only takes a  as argument
+     - Updated  to call the composable accordingly
+
+[33mcommit 0319446c9c43db0b1b87df3d02c4d50413a3dc12[m
+Merge: 553be58 1c97576
+Author: Ethan G <100317390+ethangraham2001@users.noreply.github.com>
+Date:   Sat Apr 6 11:54:00 2024 +0200
+
+    Merge pull request #57 from WanderWise-Inc/User_Profile
+    
+    Sign-in fixed
+
+[33mcommit 1c97576211ec86568bfc22068488cdc9b83b1e41[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Sat Apr 6 11:21:52 2024 +0200
+
+    removed the login quick fix that is now unnecessary (navigate to overview on signin failure)
+
+[33mcommit 6f3ff9c1e5516f433871a7ad9c86d207f0eabf1d[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Sat Apr 6 00:13:36 2024 +0200
+
+    added the sign-in in build.gradle
+
+[33mcommit 553be5858aa5c8a35592bc7f3d6bac040ec37672[m
+Merge: 8f7b6ab 9845926
+Author: imaneb942 <56965479+imaneb942@users.noreply.github.com>
+Date:   Fri Apr 5 05:44:27 2024 +0200
+
+    Merge pull request #53 from WanderWise-Inc/map/mapView
+    
+    created the mapView using the example from the maps compose doc
+
+[33mcommit 984592627e7b4e929b6bb5baa98b379852e81193[m
+Author: YofiY <theburnface2013@gmail.com>
+Date:   Thu Apr 4 23:56:34 2024 +0000
+
+    created the mapView using the example from the maps compose doc
+
+[33mcommit ed6d2bf01953ed01dc552a42f4b43b59ff0e8744[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Wed Apr 3 18:13:21 2024 +0200
+
+    Implement getLocationUpdates function
+
+[33mcommit ccee39ba597880ae98b0d2f5cc98cfa7a1906950[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Wed Apr 3 17:04:33 2024 +0200
+
+    Add comments
+
+[33mcommit c628693c163280a9992e4d0a3b582811355629cf[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Wed Apr 3 16:58:06 2024 +0200
+
+    Implement hasLocationPermission function
+
+[33mcommit d937aaca705fcc6452fff6fc5e0e3b8d66bc253b[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Wed Apr 3 16:43:58 2024 +0200
+
+    Add foreground service to track user position
+
+[33mcommit b027ab7124b05fb15158866b0d7087395ab60ef2[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Wed Apr 3 16:36:39 2024 +0200
+
+    Add extension fun to Context to check if location permissions are approved
+
+[33mcommit a1f9542a1c7277fa4ddf9375eaef23a9d13d0a52[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Wed Apr 3 16:31:09 2024 +0200
+
+    Add UserLocationClient to track user position
+
+[33mcommit d5bbc054faffc98a495ca2c1b1a0ffeb7300da2b[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Wed Apr 3 16:21:51 2024 +0200
+
+    Add LocationClient interface
+
+[33mcommit 43bcb5cc2bec3d6f83caaffe18fd747e01ba18fd[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Wed Apr 3 16:17:22 2024 +0200
+
+    Add service permissions
+
+[33mcommit eecb62bc5c9535b77bac7b74926f6d70c0869ea2[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Wed Apr 3 16:11:47 2024 +0200
+
+    Navigate to home screen even in case of failure (temporary)
+
+[33mcommit 80505d6b93e8f168445ea032de2c00cbd0eba193[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Wed Apr 3 16:10:50 2024 +0200
+
+    Add firebase auth dependency
+
+[33mcommit 8f7b6ab8064b7ab9002011584b7fc4f0744caddc[m
+Merge: aefffe9 3925d6b
+Author: Oscar <126007815+276746@users.noreply.github.com>
+Date:   Wed Apr 3 16:06:05 2024 +0200
+
+    Merge pull request #52 from WanderWise-Inc/debug/fix-login
+    
+    added bandaid fix for login problem
+
+[33mcommit 460eaf9350a23f41a1329e13e01649954a872023[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Tue Apr 2 17:43:24 2024 +0200
+
+    Add google maps location dependency
+
+[33mcommit 46c1d64b37de9134a36473ea61d4a9811cbc7889[m
+Merge: 42b5904 aefffe9
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Tue Apr 2 16:27:24 2024 +0200
+
+    Merge branch 'main' of https://github.com/WanderWise-Inc/app
+
+[33mcommit 3925d6bd3d79fdcc9b797fd67b50fc157c219f9f[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Tue Apr 2 15:10:37 2024 +0200
+
+    added bandaid fix for login problem -> just navigate to next screen on sign in failure
+
+[33mcommit aefffe96570a873f1e6b88116bb6987f6a8af1e5[m
+Merge: b62693a a00fa40
+Author: Ethan G <100317390+ethangraham2001@users.noreply.github.com>
+Date:   Mon Apr 1 19:30:24 2024 +0200
+
+    Merge pull request #50 from WanderWise-Inc/dev/navigation
+    
+    Merge dev/navigation into main
+
+[33mcommit a00fa400c463597ea8dc09c81e87e0faa6edde61[m
+Author: Ethan G <100317390+ethangraham2001@users.noreply.github.com>
+Date:   Mon Apr 1 19:29:27 2024 +0200
+
+    Update .gitignore
+
+[33mcommit 7689c93dc1e52559f9d9092e15a77d6294cae6fd[m
+Merge: 32d01b9 f77137b
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Mon Apr 1 18:11:19 2024 +0200
+
+    merged dev/navigation with main, implemented navigation from sign in to home screen, must redo SignInNavigationTest to test all possible outcomes of sign in logic
+
+[33mcommit 32d01b9aa14bde3ac50397845bd5bd620623c63c[m
+Merge: 7ef4114 b62693a
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Mon Apr 1 17:00:59 2024 +0200
+
+    merged main
+
+[33mcommit b62693a71e824db7d926c1e97f07652a9a1c8815[m
+Merge: f2db263 59d628a
+Author: Ethan G <100317390+ethangraham2001@users.noreply.github.com>
+Date:   Mon Apr 1 13:59:11 2024 +0200
+
+    Merge pull request #49 from WanderWise-Inc/update-skeleton
+    
+    Updated project structure so that it builds on main
+
+[33mcommit 59d628af9f257ed4bcb07edee7a9ac880aa2c9ce[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Mon Apr 1 13:53:20 2024 +0200
+
+    Updated project structure
+     - updated gitignore to include secrets.properties on ignore list
+     - updated main activity which had an unused dependency (commented it out. Not clean, but will do for the time being)
+     - changed a firestore collection name which was causing errors for no apparent reason. Not clean, but will do for the time being
+    - updated build.gradle.kts to have all needed dependencies for building the problem. Some were lost during merging, this should be fixed now.
+
+[33mcommit f2db263ceb13a53ebae3bc079d999775250a87f5[m
+Merge: 1b71847 f6dabaf
+Author: Ethan G <100317390+ethangraham2001@users.noreply.github.com>
+Date:   Mon Apr 1 13:23:30 2024 +0200
+
+    Merge pull request #48 from WanderWise-Inc/map/setup-skeleton
+    
+    Merge map skeleton into main
+
+[33mcommit f6dabaf194e325ebb52aa98d991a185384017cae[m
+Merge: 76c6f12 1b71847
+Author: Ethan G <100317390+ethangraham2001@users.noreply.github.com>
+Date:   Mon Apr 1 13:23:14 2024 +0200
+
+    Merge branch 'main' into map/setup-skeleton
+
+[33mcommit 1b71847018ba8550b263d476fa9e551cc5ed6c99[m
+Merge: 5df88ef 57b1ba7
+Author: Ethan G <100317390+ethangraham2001@users.noreply.github.com>
+Date:   Mon Apr 1 13:04:40 2024 +0200
+
+    Merge pull request #46 from WanderWise-Inc/sign-in-branch
+    
+    Merge sign-in branch changes into main
+
+[33mcommit f77137b012f8f7577dda226e7b8a9ac3186984eb[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Mon Apr 1 13:01:48 2024 +0200
+
+    tests finished, all passing, must remember to add test tags to non-pushed files for tests to pass
+
+[33mcommit 57b1ba7d6734778aac85795027e164b74a5e2849[m
+Merge: 5df88ef ea66639
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Mon Apr 1 12:54:04 2024 +0200
+
+    resolve merge conflicts
+
+[33mcommit ea66639f3321294cf49c1d5d40b5bd5ebab2f3d0[m
+Author: imaneb942 <imane.benkamoun@epfl.ch>
+Date:   Mon Apr 1 12:28:29 2024 +0200
+
+    fixed gitignore, google-service.json itinerary.kt location.kt and local properties
+
+[33mcommit 971b1688e640f7bc625169a042174d64fd8b83b9[m
+Author: imaneb942 <imane.benkamoun@epfl.ch>
+Date:   Sun Mar 31 18:29:28 2024 +0200
+
+    want to merge with main
+
+[33mcommit 55e9590e17bace44f9f90687b3489889343bc5cd[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Sat Mar 30 21:59:38 2024 +0200
+
+    continued working on tests, jacoco still not working
+
+[33mcommit 25ec46149742f2df90776836a3fbfa795d8ba889[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Sat Mar 30 16:38:18 2024 +0100
+
+    added some useful methods for updating the database
+
+[33mcommit 13d0cc7506d418643a56fc03fb32bf8e50e26ac4[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Fri Mar 29 22:33:05 2024 +0100
+
+    add logic to add the user that is logging in using Google authentication
+
+[33mcommit 9b28316ff4393670bf4ecd0dd20ead6a150df639[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Fri Mar 29 22:12:00 2024 +0200
+
+    started working on tests, removed goBack function as already works with explicit function
+
+[33mcommit 180adcb62522f022d4f7280213531b9e9eb3b773[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Fri Mar 29 18:13:35 2024 +0100
+
+    Merge the UI and the Users
+
+[33mcommit 51757ffa5693b4cae0a191a76400b4ffbc6d7e55[m
+Merge: 4f39e88 7ff2530
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Fri Mar 29 18:06:36 2024 +0100
+
+    Merge branch 'sign-in-branch' of https://github.com/WanderWise-Inc/app into sign-in-branch
+
+[33mcommit 4f39e8849b3f6ee972f927abe4eb7c0f7619cef4[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Fri Mar 29 18:05:47 2024 +0100
+
+    Added UserViewModel and UserModel
+
+[33mcommit 7ff2530ebbb976f16374a8f5e0fe2a9e75187d2f[m
+Author: imaneb942 <imane.benkamoun@epfl.ch>
+Date:   Fri Mar 29 18:04:14 2024 +0100
+
+    Login Screen UI done
+
+[33mcommit 76c6f12c930cde4d0f72c88ddfc46f842584587b[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Fri Mar 29 17:52:27 2024 +0100
+
+    changed the setItineraryFunction() to set a map of Itinerary instead of the class object
+
+[33mcommit ab5b4b69efe0416e21fc19b1e5df333fda0e5fbd[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Fri Mar 29 17:50:54 2024 +0100
+
+    added toMap() methods for Location and Itinerary. Added enum classes for their labels in database for consistency
+
+[33mcommit f8143c8457fc1d1c98bbea8ab05ae5927e53a184[m
+Author: balloux <leonard.balloux@epfl.ch>
+Date:   Thu Mar 28 17:49:39 2024 +0100
+
+    added functions to add polyline and markers
+
+[33mcommit 73180a01828d5787e1386a34b4ced2f23b2c6f32[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Wed Mar 27 19:14:45 2024 +0100
+
+    Implement builder functions
+    + Add comments
+    + Rename associatedUserUid -> userUid
+
+[33mcommit 74c0bd0e9f65de9ea6660f475dbdd8e3fb28d741[m
+Author: balloux <leonard.balloux@epfl.ch>
+Date:   Wed Mar 27 18:27:45 2024 +0100
+
+    added GoogleMaps API key
+
+[33mcommit 6c9b5d3d125cd8d6b70ad2c778726652ebe2e370[m
+Author: balloux <leonard.balloux@epfl.ch>
+Date:   Wed Mar 27 18:23:58 2024 +0100
+
+    please
+
+[33mcommit b961110103f4e00c4dd695729113aa1724881bd8[m
+Merge: 5893bd3 1d89782
+Author: balloux <leonard.balloux@epfl.ch>
+Date:   Wed Mar 27 18:02:39 2024 +0100
+
+    Merge branch 'map/setup-skeleton' of github.com:WanderWise-Inc/app into setup-skeleton
+
+[33mcommit 5893bd3447606e5db1d5326e04a341b1669f2bf7[m
+Author: balloux <leonard.balloux@epfl.ch>
+Date:   Wed Mar 27 18:02:32 2024 +0100
+
+    before merge
+
+[33mcommit 4a6b87da2bbd177b82e2ad31bb6febafa9725d9b[m
+Merge: 4f02180 812a347
+Author: balloux <leonard.balloux@epfl.ch>
+Date:   Wed Mar 27 17:57:37 2024 +0100
+
+    merging
+
+[33mcommit 1d8978209808e37de53d36de358efb529109f85c[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Wed Mar 27 17:39:26 2024 +0100
+
+    updated gitignore
+
+[33mcommit 27a61f5ebd29d1101d64f60192d6e076634d9b2b[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Wed Mar 27 17:38:56 2024 +0100
+
+    small changed to mapViewModel
+
+[33mcommit 5fb13b3489708b55d812ef4a3bd57912e0e796f8[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Wed Mar 27 17:38:33 2024 +0100
+
+    added uid field for querying by uid. Made the field variable.
+
+[33mcommit 4f0218034cf7fec6f2447dcae4a1f0e837c71b5d[m
+Author: balloux <leonard.balloux@epfl.ch>
+Date:   Wed Mar 27 17:34:20 2024 +0100
+
+    added Google Maps API key
+
+[33mcommit 812a347e92e2c70a5b49ace94dd18a36c2feda27[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Wed Mar 27 17:27:08 2024 +0100
+
+    Updated Itinerary data class
+    - added new field for uid
+    - changed name and data type of creating user field. creator -> associatedUserId, int -> String
+    - added some documentation for the class
+
+[33mcommit be235cf2cb5ba2be955ab2f647abea5ba00aa367[m
+Merge: a27affa 96444da
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Wed Mar 27 17:13:48 2024 +0100
+
+    Merge branch 'map/setup-skeleton' of github.com:WanderWise-Inc/app into map/setup-skeleton
+
+[33mcommit a27affaa7feaba7090aacd15b7371cc63047cfe9[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Wed Mar 27 17:10:47 2024 +0100
+
+    MapViewModel:
+     - added global set function that sets an itinerary on firestore
+     - added getItinerary functions that get from DB based on a predicate such as user uid or if they are set as public
+
+[33mcommit d0ab7f4d7fcaae453a178a69d6c2dbd8030451d6[m
+Merge: 2e236af d9f1abc
+Author: imaneb942 <imane.benkamoun@epfl.ch>
+Date:   Wed Mar 27 16:31:23 2024 +0100
+
+    Merge branch 'sign-in-branch' of https://github.com/WanderWise-Inc/app into sign-in-branch
+
+[33mcommit 2e236af67be3c77658db778eaebbbcb0b995c57d[m
+Author: imaneb942 <imane.benkamoun@epfl.ch>
+Date:   Wed Mar 27 16:24:51 2024 +0100
+
+    background image
+
+[33mcommit d9f1abc434b50baf4de4d5bf8b2a296e91e9326c[m
+Merge: 36dc7b8 15325d2
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Wed Mar 27 16:09:40 2024 +0100
+
+    Merge branch 'sign-in-branch' of https://github.com/WanderWise-Inc/app into sign-in-branch
+
+[33mcommit 36dc7b80daf9ae9a2c308da5b04b7dbe85db1a6a[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Wed Mar 27 16:09:38 2024 +0100
+
+    Cleaned the SignIn button
+
+[33mcommit 15325d24a5a2894ab555ef6e22d2c9283d78eb39[m
+Author: imaneb942 <imane.benkamoun@epfl.ch>
+Date:   Wed Mar 27 15:48:23 2024 +0100
+
+    add map_image
+
+[33mcommit 05e8efcda2aa2a5e4b4b42943798599629382585[m
+Author: imaneb942 <imane.benkamoun@epfl.ch>
+Date:   Wed Mar 27 15:48:01 2024 +0100
+
+    ImageView for our loginscreen
+
+[33mcommit ef42248364ce0126a15de0b63b2f2a41d5c0ae71[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Wed Mar 27 14:45:28 2024 +0200
+
+    finished manual testing
+
+[33mcommit c8685623c5eb8ceeb7172a43ab3a0391cf61463b[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Wed Mar 27 12:45:56 2024 +0100
+
+    Finished Sign In, Ready to add Navigation
+
+[33mcommit 490b239baac8a838eae5f35376c61950d4c156f8[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Wed Mar 27 13:16:54 2024 +0200
+
+    finished implementing navigation, have to test
+
+[33mcommit 96444da2fe0b4d71f303852565e73f75bdd494f0[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Wed Mar 27 10:51:24 2024 +0100
+
+    Add Builder signature
+    
+    Add Builder pattern to create and modify an Itinerary
+
+[33mcommit f014f9f60339a22e9154e1d4ae740d8800c36005[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Wed Mar 27 10:49:01 2024 +0100
+
+    Add static function fromLatLng
+    
+    Convert LatLng to Location
+
+[33mcommit 9149748a21a8fdd2bdc6c3755720617ad32b2350[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Tue Mar 26 22:45:37 2024 +0100
+
+    LoginScreen added and start of user sign in
+
+[33mcommit fc3a6238d20539c0d31c6678bcdc49a995a9844e[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Tue Mar 26 19:37:02 2024 +0100
+
+    Add basic skeleton
+
+[33mcommit e7616787feb8d97a9510f22bc03e57fe2df839c0[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Tue Mar 26 19:08:50 2024 +0100
+
+    Add basic skeleton
+
+[33mcommit 2e876aea7b3590f2aba321e4d2c42c45fec402a2[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Tue Mar 26 19:02:39 2024 +0100
+
+    Add gms:play-services-maps dependency
+
+[33mcommit 42b5904cae9c54dec258c3b9fc36a545154e9b38[m
+Merge: ff39ba9 5df88ef
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Tue Mar 26 18:18:09 2024 +0100
+
+    Merge branch 'main' of https://github.com/WanderWise-Inc/app
+
+[33mcommit ff39ba9b72dab4345d44c132ba7a53e05f05e037[m
+Author: Oscar Duong <notzeoscar@gmail.com>
+Date:   Tue Mar 26 18:18:02 2024 +0100
+
+    Removed local.properties from git
+
+[33mcommit 0b5ab9e8dbfc8509f50487ca991a5661aca13c0f[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Tue Mar 26 17:58:28 2024 +0200
+
+    setup navigation graphs and navigation logic, have to finish bottom navigation bar
+
+[33mcommit 5df88ef950e7aa235a4cc33424da8d00369328dd[m
+Merge: 5fee3e0 bb5655d
+Author: ThomasPFMuller <100191653+ThomasPFMuller@users.noreply.github.com>
+Date:   Tue Mar 26 16:28:10 2024 +0200
+
+    Merge pull request #13 from WanderWise-Inc/settingFirebaseFirestore
+    
+    Setting firebase firestore
+
+[33mcommit bb5655d91eb99b7536c5d9725d42c061ac8c99f4[m
+Author: YofiY <theburnface2013@gmail.com>
+Date:   Tue Mar 26 15:21:19 2024 +0100
+
+    finished setting up Firebase and Firestore, updated the gitignore to ignore the google-services.json file containing the API keys
+
+[33mcommit fc03f4fe59e02f0e4d813b1de61399080aa64261[m
+Author: YofiY <theburnface2013@gmail.com>
+Date:   Tue Mar 26 15:19:18 2024 +0100
+
+    finished setting up Firebase and Firestore
+
+[33mcommit 7ef411481e0771f55f7b9bf8d5e0a9c0ec61c738[m
+Author: ThomasPFMuller <thomas.muller@epfl.ch>
+Date:   Tue Mar 26 16:01:49 2024 +0200
+
+    testing new branch
+
+[33mcommit 46feb6b4f3ed41e2c97fc49630f1b2b110ad8fd5[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Tue Mar 26 14:36:55 2024 +0100
+
+    added doc for MapViewModel
+
+[33mcommit 5fee3e04b85cee250a81f1b35f7166dc0ef0bec7[m
+Merge: 1c48f0a 4aa0696
+Author: Ethan G <100317390+ethangraham2001@users.noreply.github.com>
+Date:   Tue Mar 26 14:29:24 2024 +0100
+
+    Merge pull request #12 from WanderWise-Inc/dev/setup-environment
+    
+    Added general packages and map-related class files
+
+[33mcommit 4aa06967194577b194b2e4c3199a11cba24558e0[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Tue Mar 26 14:18:21 2024 +0100
+
+    Added models and viewmodels
+    - Location model
+    - Itinerary model
+    - Map viewmodel
+
+[33mcommit 3003cf86f0c53e15134212685ca449b74bdd77d4[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Tue Mar 26 14:13:18 2024 +0100
+
+    removed ethan's local.properties
+
+[33mcommit 4d82ffecb0cb4c8df7409d0a6c02468934a3462a[m
+Author: engjellismaili <engjell.ismaili@epfl.ch>
+Date:   Tue Mar 26 13:49:36 2024 +0100
+
+    Add Authentication Class
+
+[33mcommit 1c48f0a7d9df6e56a3d74e790ee2a09b99458c7e[m
+Merge: 0e1c80a b7171de
+Author: Oscar <126007815+276746@users.noreply.github.com>
+Date:   Fri Mar 22 10:29:57 2024 +0100
+
+    Merge pull request #4 from WanderWise-Inc/dev/setup-environment
+    
+    Refactored project structure
+
+[33mcommit b7171de0589b0fd458b9787cba72904df86328c9[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Fri Mar 22 10:17:36 2024 +0100
+
+    updated top-level gitignore
+
+[33mcommit 0e1c80a22c7f8a35887e150ef8f7cffffded8d30[m
+Merge: 4ee085f 7f9face
+Author: imaneb942 <56965479+imaneb942@users.noreply.github.com>
+Date:   Fri Mar 22 10:17:12 2024 +0100
+
+    Merge pull request #3 from WanderWise-Inc/imaneb942-branch-1
+    
+    Create README.md from my branch
+
+[33mcommit 7f9face8918495eaa456eec82bd34165618a4a22[m
+Author: imaneb942 <56965479+imaneb942@users.noreply.github.com>
+Date:   Fri Mar 22 10:12:55 2024 +0100
+
+    Create README.md
+
+[33mcommit bc44a26832f7d647f30e93fc49627dc2b55b50d9[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Fri Mar 22 10:12:40 2024 +0100
+
+    refactored structure
+
+[33mcommit 4ee085fc3b6f9dbb5f86746ba2855e09f02e79be[m
+Merge: 12c50c4 3588cbc
+Author: Yofthahe Yeshitila <63012939+YofiY@users.noreply.github.com>
+Date:   Thu Mar 21 11:43:46 2024 +0100
+
+    Merge pull request #1 from WanderWise-Inc/dev/setup-environment
+    
+    Setup development environment
+
+[33mcommit 3588cbcb1cb627cc83e0f6d9ae55674fe1834ba6[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Thu Mar 21 11:39:58 2024 +0100
+
+    Updated gradle build files
+      - libs.versions.toml in gradle/ for maintaining depedendency versions
+      - build.gradle.kts: added with dependencies from sample android project
+
+[33mcommit 568c8f21a0b291cc711d82d27cb43ed799d20c3d[m
+Author: Ethan <ethan.graham@epfl.ch>
+Date:   Thu Mar 21 11:20:58 2024 +0100
+
+    - added initial project structure
+
+[33mcommit 12c50c48fb8778b5b0829a7f93c36f74e46eddc6[m
+Author: Ethan G <100317390+ethangraham2001@users.noreply.github.com>
+Date:   Thu Mar 21 10:36:03 2024 +0100
+
+    Initial commit
