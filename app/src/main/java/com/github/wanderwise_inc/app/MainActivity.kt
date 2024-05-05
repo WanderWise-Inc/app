@@ -47,12 +47,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        firebaseAuth = FirebaseAuth.getInstance()
-        firebaseStorage = FirebaseStorage.getInstance()
-        requestPermissions()
-        initializeRepositories()
-        setupSignIn()
-        initializeViewModels()
+        init()
 
         setContent {
             WanderWiseTheme {
@@ -73,6 +68,16 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    private fun init() {
+        firebaseAuth = FirebaseAuth.getInstance()
+        firebaseStorage = FirebaseStorage.getInstance()
+
+        requestPermissions()
+        initializeRepositories()
+        setupSignIn()
+        initializeViewModels()
     }
 
     private fun requestPermissions() {
