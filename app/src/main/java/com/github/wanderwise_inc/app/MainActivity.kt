@@ -14,6 +14,7 @@ import androidx.core.app.ActivityCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.github.wanderwise_inc.app.data.DirectionsRepository
 import com.github.wanderwise_inc.app.data.GoogleSignInLauncher
 import com.github.wanderwise_inc.app.data.ImageRepository
@@ -28,6 +29,7 @@ import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     private lateinit var firebaseAuth: FirebaseAuth
@@ -46,15 +48,6 @@ class MainActivity : ComponentActivity() {
     private lateinit var googleSignInLauncher: GoogleSignInLauncher
 
     private lateinit var navController: NavHostController
-
-    private val imageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { res ->
-        if (res.resultCode == RESULT_OK) {
-            res.data?.data?.let {
-                imageRepository.setCurrentFile(it)
-                Log.d("STORE IMAGE", "CURRENT FILE SELECTED")
-            }
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,6 +76,8 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun init() {
+        requestPermissions()
+
         firebaseAuth = AppModule.provideFirebaseAuth()
         firebaseStorage = AppModule.provideFirebaseStorage()
 
@@ -90,16 +85,7 @@ class MainActivity : ComponentActivity() {
 
         initializeViewModels()
 
-        googleSignInLauncher = AppModule.provideGoogleSignInLauncher(
-            this,
-            lifecycleScope,
-            firebaseAuth,
-            signInRepository,
-            navController,
-            profileViewModel
-        )
-
-        requestPermissions()
+        googleSignInLauncher = AppModule.provideGoogleSignInLauncher(signInLauncher())
     }
 
     private fun requestPermissions() {
@@ -114,7 +100,7 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun initializeRepositories() {
-        imageRepository = AppModule.provideImageRepository(imageLauncher, firebaseStorage)
+        imageRepository = AppModule.provideImageRepository(imageLauncher(), firebaseStorage)
         itineraryRepository = AppModule.provideItineraryRepository()
         directionsRepository = AppModule.provideDirectionsRepository()
         profileRepository = AppModule.provideProfileRepository()
@@ -125,5 +111,31 @@ class MainActivity : ComponentActivity() {
         bottomNavigationViewModel = AppModule.provideBottomNavigationViewModel()
         mapViewModel = AppModule.provideMapViewModel(applicationContext, itineraryRepository, directionsRepository)
         profileViewModel = AppModule.provideProfileViewModel(profileRepository, imageRepository)
+    }
+
+    private fun imageLauncher() = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { res ->
+        if (res.resultCode == RESULT_OK) {
+            res.data?.data?.let {
+                imageRepository.setCurrentFile(it)
+                Log.d("STORE IMAGE", "CURRENT FILE SELECTED")
+            }
+        }
+    }
+
+    private fun signInLauncher() = registerForActivityResult(
+        FirebaseAuthUIActivityResultContract()
+    ) { res ->
+        lifecycleScope.launch {
+            val user = firebaseAuth.currentUser
+            signInRepository.signIn(
+                res,
+                navController,
+                profileViewModel,
+                user,
+                res.resultCode
+            )
+        }
     }
 }
