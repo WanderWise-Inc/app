@@ -1,7 +1,6 @@
 package com.github.wanderwise_inc.app.data
 
 import androidx.navigation.NavController
-import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
 import com.github.wanderwise_inc.app.model.profile.Profile
 import com.github.wanderwise_inc.app.ui.navigation.graph.Graph
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
@@ -26,11 +25,8 @@ class SignInRepositoryTest {
 
   @get:Rule val mockitoRule: MockitoRule = MockitoJUnit.rule()
   @Mock private lateinit var mockedUser: FirebaseUser
-  @Mock private lateinit var result: FirebaseAuthUIAuthenticationResult
   @Mock private lateinit var navController: NavController
   @Mock private lateinit var profileViewModel: ProfileViewModel
-
-  private var resultCode = -1
 
   private lateinit var signInRepositoryImpl: SignInRepositoryImpl
 
@@ -41,18 +37,13 @@ class SignInRepositoryTest {
 
   @Test(expected = Exception::class)
   fun `if user is Null then nothing should happen`() = runTest {
-    signInRepositoryImpl.signIn(result, navController, profileViewModel, null, resultCode)
-  }
-
-  @Test(expected = Exception::class)
-  fun `if resultCode not correct, throw an exception`() = runTest {
-    signInRepositoryImpl.signIn(result, navController, profileViewModel, mockedUser, 0)
+    signInRepositoryImpl.signIn(navController, profileViewModel, null)
   }
 
   @Test
   fun `if user already in database then just navigate`() = runTest {
-    val p = Profile("", "Test", "0", "Bio", null)
-    val flow = flow<Profile?> { emit(p) }
+    val profile = Profile("", "Test", "0", "Bio", null)
+    val flow = flow<Profile?> { emit(profile) }
     var path = "begin"
     `when`(mockedUser.uid).thenReturn("0")
     `when`(profileViewModel.getProfile(anyString())).thenReturn(flow)
@@ -61,7 +52,7 @@ class SignInRepositoryTest {
       null
     }
 
-    signInRepositoryImpl.signIn(result, navController, profileViewModel, mockedUser, -1)
+    signInRepositoryImpl.signIn(navController, profileViewModel, mockedUser)
 
     assertEquals("HOME", path)
   }
@@ -81,7 +72,7 @@ class SignInRepositoryTest {
       null
     }
 
-    signInRepositoryImpl.signIn(result, navController, profileViewModel, mockedUser, -1)
+    signInRepositoryImpl.signIn(navController, profileViewModel, mockedUser)
 
     verify(profileViewModel).setProfile(p)
     verify(navController).navigate(Graph.HOME)
