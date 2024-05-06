@@ -119,9 +119,10 @@ class MainActivity : ComponentActivity() {
 
   private fun signInLauncher() =
       registerForActivityResult(FirebaseAuthUIActivityResultContract()) { res ->
+        if (res.resultCode != RESULT_OK) throw Exception("User unsuccessful sign in")
+
         lifecycleScope.launch {
-          val user = firebaseAuth.currentUser
-          signInRepository.signIn(res, navController, profileViewModel, user, res.resultCode)
+          signInRepository.signIn(navController, profileViewModel, firebaseAuth.currentUser)
         }
       }
 }
