@@ -10,7 +10,9 @@ import com.github.wanderwise_inc.app.data.DirectionsRepository
 import com.github.wanderwise_inc.app.data.ItineraryRepository
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryPreferences
+import com.github.wanderwise_inc.app.model.location.MutableItinerary
 import com.google.android.gms.maps.model.LatLng
+import java.io.InvalidObjectException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
@@ -23,6 +25,26 @@ class MapViewModel(
     private val userLocationClient: UserLocationClient,
 ) : ViewModel() {
   private var focusedItinerary: Itinerary? = null
+
+  /**
+   * New itinerary that the signed in user is currently building
+   *
+   * ```
+   * // Usage example (updating with a button)
+   * val newItinerary = mapViewModel.getNewItinerary()!!
+   * // any attributes that should cause a recomposition should be remembered
+   * var title by remember {
+   *  mutableStateOf(newItinerary.title)
+   * }
+   * Button (
+   *  onClick = {
+   *    title = newTitle              // update mutableState for recomposition
+   *    newItinerary.title = newTitle // update shared state across screens
+   *  }
+   * )
+   * ```
+   */
+  private var newItinerary: MutableItinerary? = null
 
   /** @return the itinerary the user has clicked on */
   fun getFocusedItinerary(): Itinerary? {
@@ -136,6 +158,26 @@ class MapViewModel(
   /** @brief get a Flow of the user location updated every second */
   fun getUserLocation(): Flow<Location> {
     return userLocationClient.getLocationUpdates(1000)
+  }
+
+  /**
+   * @return the uid that the user is building
+   *
+   * If there is no itinerary currently being created, initializes a new one with the provided
+   * `userUid`
+   */
+  fun getNewItinerary(): MutableItinerary? {
+    return newItinerary
+  }
+
+  /** initializes a new `MutableItinerary` */
+  fun startNewItinerary(userUid: String) {
+    newItinerary = MutableItinerary(userUid = userUid)
+  }
+
+  fun uploadNewItinerary() {
+    if (newItinerary != null) itineraryRepository.setItinerary(newItinerary!!.toItinerary())
+    else throw InvalidObjectException("Cannot upload a new itinerary that is `null`")
   }
 
   /* fun filterItinerariesByPrice(priceRange: FloatRange): List<Itinerary> {
