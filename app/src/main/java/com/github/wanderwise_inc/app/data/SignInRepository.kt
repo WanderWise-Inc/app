@@ -32,7 +32,7 @@ class SignInRepositoryImpl : SignInRepository {
             if (currentProfile != null) {
                 navController.navigate(Graph.HOME)
             } else {
-                // We define properly the fields, because some of them could be empty
+                // Define properly the fields, because some of them could be empty
                 val username = user.displayName
                 val properUsername = username ?: ""
                 val uid = user.uid
@@ -46,7 +46,7 @@ class SignInRepositoryImpl : SignInRepository {
                         profilePicture = user.photoUrl
                     )
 
-                // We set the user to the database
+                // Set the user to the database
                 profileViewModel.setProfile(newProfile)
                 navController.navigate(Graph.HOME)
             }
