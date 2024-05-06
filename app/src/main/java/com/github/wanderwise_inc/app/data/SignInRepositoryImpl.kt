@@ -16,11 +16,10 @@ class SignInRepositoryImpl : SignInRepository {
     if (user == null) {
       throw Exception("User is Null")
     } else {
-      // Get the user from database (function that returns a flow)
+      // Get the user from database
       val currentProfile = profileViewModel.getProfile(user.uid).first()
 
-      // User was already present in the database, in which case we only
-      // navigate to the Home page
+      // User already present in the database, navigate to the Home page
       if (currentProfile != null) {
         navController.navigate(Graph.HOME)
       } else {
