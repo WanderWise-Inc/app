@@ -1,9 +1,9 @@
 package com.github.wanderwise_inc.app.di
 
 import android.content.Context
-import android.util.Log
+import android.content.Intent
 import androidx.activity.ComponentActivity
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.ActivityResultLauncher
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.navigation.NavHostController
 import com.firebase.ui.auth.AuthUI
@@ -35,12 +35,11 @@ object AppModule  {
     fun provideFirebaseStorage() = FirebaseStorage.getInstance()
 
     fun provideImageRepository(
-        activity: ComponentActivity,
-        imageRepository: ImageRepository,
+        imageLauncher: ActivityResultLauncher<Intent>,
         firebaseStorage: FirebaseStorage
     ): ImageRepository {
         return ImageRepositoryImpl(
-            provideImageLauncher(activity, imageRepository),
+            imageLauncher,
             firebaseStorage.reference,
             null
         )
@@ -94,18 +93,6 @@ object AppModule  {
         ),
         provideSignInIntent()
     )
-
-    private fun provideImageLauncher(
-        activity: ComponentActivity,
-        imageRepository: ImageRepository
-    ) = activity.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { res ->
-        if (res.resultCode == ComponentActivity.RESULT_OK) {
-            res.data?.data?.let {
-                imageRepository.setCurrentFile(it)
-                Log.d("STORE IMAGE", "CURRENT FILE SELECTED")
-            }
-        }
-    }
 
     private fun provideLocationClient(context: Context) = UserLocationClient(
         context,

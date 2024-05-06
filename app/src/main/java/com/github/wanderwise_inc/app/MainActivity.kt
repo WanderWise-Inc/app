@@ -2,8 +2,10 @@ package com.github.wanderwise_inc.app
 
 import android.Manifest
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -45,6 +47,15 @@ class MainActivity : ComponentActivity() {
 
     private lateinit var navController: NavHostController
 
+    private val imageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { res ->
+        if (res.resultCode == RESULT_OK) {
+            res.data?.data?.let {
+                imageRepository.setCurrentFile(it)
+                Log.d("STORE IMAGE", "CURRENT FILE SELECTED")
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -72,8 +83,6 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun init() {
-        requestPermissions()
-
         firebaseAuth = AppModule.provideFirebaseAuth()
         firebaseStorage = AppModule.provideFirebaseStorage()
 
@@ -89,6 +98,8 @@ class MainActivity : ComponentActivity() {
             navController,
             profileViewModel
         )
+
+        requestPermissions()
     }
 
     private fun requestPermissions() {
@@ -103,7 +114,7 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun initializeRepositories() {
-        imageRepository = AppModule.provideImageRepository(this, imageRepository, firebaseStorage)
+        imageRepository = AppModule.provideImageRepository(imageLauncher, firebaseStorage)
         itineraryRepository = AppModule.provideItineraryRepository()
         directionsRepository = AppModule.provideDirectionsRepository()
         profileRepository = AppModule.provideProfileRepository()
