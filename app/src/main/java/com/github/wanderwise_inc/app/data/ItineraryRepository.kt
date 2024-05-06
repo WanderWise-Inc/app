@@ -140,66 +140,70 @@ class ItineraryRepositoryImpl : ItineraryRepository {
 
   private val db = FirebaseFirestore.getInstance()
   private val itinerariesCollection = db.collection("itineraries")
+
   override fun getPublicItineraries(): Flow<List<Itinerary>> {
     return flow {
-      val snap = itinerariesCollection
-        .whereEqualTo(ItineraryLabels.VISIBLE, true)
-        .get()
-        .addOnFailureListener {
-            Log.d("ItineraryRepository", "Failed to get public itineraries")
+          val snap =
+              itinerariesCollection
+                  .whereEqualTo(ItineraryLabels.VISIBLE, true)
+                  .get()
+                  .addOnFailureListener {
+                    Log.d("ItineraryRepository", "Failed to get public itineraries")
+                  }
+                  .addOnSuccessListener {
+                    Log.d("ItineraryRepository", "Successfully got public itineraries")
+                  }
+                  .await()
+          val itineraries = snap.map { it.toObject(Itinerary::class.java) }
+          emit(itineraries)
         }
-        .addOnSuccessListener {
-            Log.d("ItineraryRepository", "Successfully got public itineraries")
-        }.await()
-      val itineraries = snap.map { it.toObject(Itinerary::class.java) }
-      emit(itineraries)
-    }.catch {
-      emit(listOf())
-    }
+        .catch { emit(listOf()) }
   }
 
   override fun getUserItineraries(userUid: String): Flow<List<Itinerary>> {
     return flow {
-      val snap = itinerariesCollection
-        .whereEqualTo(ItineraryLabels.USER_UID, userUid)
-        .get()
-        .addOnFailureListener {
-          Log.d("ItineraryRepository", "Failed to get public itineraries")
+          val snap =
+              itinerariesCollection
+                  .whereEqualTo(ItineraryLabels.USER_UID, userUid)
+                  .get()
+                  .addOnFailureListener {
+                    Log.d("ItineraryRepository", "Failed to get public itineraries")
+                  }
+                  .addOnSuccessListener {
+                    Log.d("ItineraryRepository", "Successfully got public itineraries")
+                  }
+                  .await()
+          val itineraries = snap.map { it.toObject(Itinerary::class.java) }
+          emit(itineraries)
         }
-        .addOnSuccessListener {
-          Log.d("ItineraryRepository", "Successfully got public itineraries")
-        }.await()
-      val itineraries = snap.map { it.toObject(Itinerary::class.java) }
-      emit(itineraries)
-    }.catch {
-      emit(listOf())
-    }
+        .catch { emit(listOf()) }
   }
 
   override fun getItinerariesWithTags(tags: List<Tag>): Flow<List<Itinerary>> {
     return flow {
-      val snap = itinerariesCollection
-        .whereArrayContainsAny(ItineraryLabels.TAGS, tags)
-        .get()
-        .addOnFailureListener {
-          Log.d("ItineraryRepository", "Failed to get public itineraries")
+          val snap =
+              itinerariesCollection
+                  .whereArrayContainsAny(ItineraryLabels.TAGS, tags)
+                  .get()
+                  .addOnFailureListener {
+                    Log.d("ItineraryRepository", "Failed to get public itineraries")
+                  }
+                  .addOnSuccessListener {
+                    Log.d("ItineraryRepository", "Successfully got public itineraries")
+                  }
+                  .await()
+          val itineraries = snap.map { it.toObject(Itinerary::class.java) }
+          emit(itineraries)
         }
-        .addOnSuccessListener {
-          Log.d("ItineraryRepository", "Successfully got public itineraries")
-        }.await()
-      val itineraries = snap.map { it.toObject(Itinerary::class.java) }
-      emit(itineraries)
-    }.catch {
-      emit(listOf())
-    }
+        .catch { emit(listOf()) }
   }
 
   override suspend fun getItinerary(uid: String): Itinerary {
     val document = itinerariesCollection.document(uid).get().await()
     if (document.exists()) {
-        return document.toObject(Itinerary::class.java)!!
+      return document.toObject(Itinerary::class.java)!!
     } else {
-        throw Exception("Itinerary not found")
+      throw Exception("Itinerary not found")
     }
   }
 
@@ -208,14 +212,11 @@ class ItineraryRepositoryImpl : ItineraryRepository {
       itinerary.uid = itinerariesCollection.document().id
     }
     val itineraryMap = itinerary.toMap()
-    itinerariesCollection.document(itinerary.uid)
-      .set(itineraryMap)
-      .addOnSuccessListener {
-        Log.d("ItineraryRepository", "Successfully set itinerary")
-      }
-      .addOnFailureListener {
-        Log.d("ItineraryRepository", "Failed to set itinerary")
-      }
+    itinerariesCollection
+        .document(itinerary.uid)
+        .set(itineraryMap)
+        .addOnSuccessListener { Log.d("ItineraryRepository", "Successfully set itinerary") }
+        .addOnFailureListener { Log.d("ItineraryRepository", "Failed to set itinerary") }
   }
 
   override fun updateItinerary(oldUid: String, new: Itinerary) {
@@ -223,24 +224,18 @@ class ItineraryRepositoryImpl : ItineraryRepository {
       throw Exception("UIDs do not match")
     }
     val itineraryMap = new.toMap()
-    itinerariesCollection.document(oldUid)
-      .set(itineraryMap)
-      .addOnSuccessListener {
-        Log.d("ItineraryRepository", "Successfully updated itinerary")
-      }
-      .addOnFailureListener {
-        Log.d("ItineraryRepository", "Failed to update itinerary")
-      }
+    itinerariesCollection
+        .document(oldUid)
+        .set(itineraryMap)
+        .addOnSuccessListener { Log.d("ItineraryRepository", "Successfully updated itinerary") }
+        .addOnFailureListener { Log.d("ItineraryRepository", "Failed to update itinerary") }
   }
 
   override fun deleteItinerary(itinerary: Itinerary) {
-    itinerariesCollection.document(itinerary.uid)
-      .delete()
-      .addOnSuccessListener {
-        Log.d("ItineraryRepository", "Successfully deleted itinerary")
-      }
-      .addOnFailureListener {
-        Log.d("ItineraryRepository", "Failed to delete itinerary")
-      }
+    itinerariesCollection
+        .document(itinerary.uid)
+        .delete()
+        .addOnSuccessListener { Log.d("ItineraryRepository", "Successfully deleted itinerary") }
+        .addOnFailureListener { Log.d("ItineraryRepository", "Failed to delete itinerary") }
   }
 }
