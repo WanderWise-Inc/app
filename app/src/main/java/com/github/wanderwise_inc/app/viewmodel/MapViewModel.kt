@@ -26,24 +26,7 @@ class MapViewModel(
 ) : ViewModel() {
   private var focusedItinerary: Itinerary? = null
 
-  /**
-   * New itinerary that the signed in user is currently building
-   *
-   * ```
-   * // Usage example (updating with a button)
-   * val newItinerary = mapViewModel.getNewItinerary()!!
-   * // any attributes that should cause a recomposition should be remembered
-   * var title by remember {
-   *  mutableStateOf(newItinerary.title)
-   * }
-   * Button (
-   *  onClick = {
-   *    title = newTitle              // update mutableState for recomposition
-   *    newItinerary.title = newTitle // update shared state across screens
-   *  }
-   * )
-   * ```
-   */
+  /** New itinerary that the signed in user is currently building */
   private var newItinerary: MutableItinerary? = null
 
   /** @return the itinerary the user has clicked on */
@@ -161,10 +144,27 @@ class MapViewModel(
   }
 
   /**
-   * @return the uid that the user is building
+   * @return Itinerary being built by the user currently. The composable is responsible for setting
+   *   it to `null` when the creation is finished
    *
    * If there is no itinerary currently being created, initializes a new one with the provided
    * `userUid`
+   *
+   * **USAGE EXAMPLE**
+   *
+   * ```
+   * val newItinerary = mapViewModel.getNewItinerary()!!
+   * // any attributes that should cause a recomposition should be remembered
+   * var title by remember {
+   *  mutableStateOf(newItinerary.title)
+   * }
+   * Button (
+   *  onClick = {
+   *    title = newTitle              // update mutableState for recomposition
+   *    newItinerary.title = newTitle // update shared state across screens
+   *  }
+   * )
+   * ```
    */
   fun getNewItinerary(): MutableItinerary? {
     return newItinerary
