@@ -20,7 +20,7 @@ private const val DEBUG_TAG: String = "MAP_VIEWMODEL"
 class MapViewModel(
     private val itineraryRepository: ItineraryRepository,
     private val directionsRepository: DirectionsRepository,
-    private val userLocationClient: UserLocationClient,
+    private val userLocationClient: LocationClient,
 ) : ViewModel() {
   private var focusedItinerary: Itinerary? = null
 
