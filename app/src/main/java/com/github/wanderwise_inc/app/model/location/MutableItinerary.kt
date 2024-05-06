@@ -2,7 +2,7 @@ package com.github.wanderwise_inc.app.model.location
 
 /** @brief mutable itinerary class for usage during UI creation */
 data class MutableItinerary(
-    val userUid: String, // only immutable member
+    val userUid: String, // only immutable member as this should not change during creation
     var locations: MutableList<Location> = mutableListOf(),
     var title: String = "",
     var tags: MutableList<Tag> = mutableListOf(),
