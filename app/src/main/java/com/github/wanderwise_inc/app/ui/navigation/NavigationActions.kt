@@ -18,7 +18,8 @@ object CreationStepsRoute {
     const val LOCATIONS = "Locations"
     const val DESCRIPTION = "Description"
     const val TAGS = "Tags"
-    const val PREVIEW = "Preview"
+    const val PREVIEW_BANNER = "Preview/Banner"
+    const val PREVIEW_ITINERARY = "Preview/Itinerary"
 }
 
 sealed class Destination(val route: String, val icon: Int, @StringRes val textId: Int) {
@@ -69,9 +70,14 @@ sealed class Destination(val route: String, val icon: Int, @StringRes val textId
               textId = R.string.tags_string,
           )
 
-      data object Preview :
+      data object PreviewBanner :
           CreationStepsDestinations(
-              route = CreationStepsRoute.PREVIEW, icon = R.drawable.tick_icon, textId = R.string.preview_string
+              route = CreationStepsRoute.PREVIEW_BANNER, icon = R.drawable.tick_icon, textId = R.string.preview_string
+          )
+      
+      data object PreviewItinerary :
+          CreationStepsDestinations(
+              route = CreationStepsRoute.PREVIEW_ITINERARY, icon = R.drawable.tick_icon, textId = R.string.preview_string
           )
   }
 }
@@ -89,7 +95,7 @@ val CREATION_STEPS_DESTINATIONS =
         Destination.CreationStepsDestinations.ChooseLocations,
         Destination.CreationStepsDestinations.ChooseDescription,
         Destination.CreationStepsDestinations.ChooseTags,
-        Destination.CreationStepsDestinations.Preview,
+        Destination.CreationStepsDestinations.PreviewBanner,
     )
 
 class NavigationActions(private val navController: NavHostController) {
