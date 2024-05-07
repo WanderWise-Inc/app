@@ -1,27 +1,21 @@
 package com.github.wanderwise_inc.app.ui.navigation.graph
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.github.wanderwise_inc.app.data.ImageRepository
-import com.github.wanderwise_inc.app.demoSetup
-import com.github.wanderwise_inc.app.ui.creation.CreationScreen
-import com.github.wanderwise_inc.app.ui.list_itineraries.LikedScreen
-import com.github.wanderwise_inc.app.ui.list_itineraries.OverviewScreen
-import com.github.wanderwise_inc.app.ui.map.PreviewItineraryScreen
-import com.github.wanderwise_inc.app.ui.navigation.Destination
-import com.github.wanderwise_inc.app.ui.profile.ProfileScreen
-import com.github.wanderwise_inc.app.viewmodel.BottomNavigationViewModel
-import com.github.wanderwise_inc.app.viewmodel.MapViewModel
-import com.github.wanderwise_inc.app.viewmodel.NavigationItem
-import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
-import com.google.firebase.auth.FirebaseAuth
+import com.github.wanderwise_inc.app.ui.creation.steps.CreationStepChooseDescriptionScreen
+import com.github.wanderwise_inc.app.ui.creation.steps.CreationStepChooseLocationsScreen
+import com.github.wanderwise_inc.app.ui.creation.steps.CreationStepChooseTagsScreen
+import com.github.wanderwise_inc.app.ui.creation.steps.CreationStepPreviewBanner
+import com.github.wanderwise_inc.app.ui.navigation.Destination.CreationStepsDestinations
 
 
 @Composable
 fun CreationNavGraph(
     navController: NavHostController,
+    padding: PaddingValues,
     // mapViewModel: MapViewModel,
     // profileViewModel: ProfileViewModel,
     // bottomNavigationViewModel: BottomNavigationViewModel,
@@ -31,9 +25,20 @@ fun CreationNavGraph(
     NavHost(
         navController = navController,
         route = Graph.CREATION,
-        startDestination = Destination.TopLevelDestination.Overview.route,
+        startDestination = CreationStepsDestinations.ChooseLocations.route,
         // modifier = Modifier.padding(innerPadding)
     ) {
-        
+        composable(CreationStepsDestinations.ChooseLocations.route){
+            CreationStepChooseLocationsScreen()
+        }
+        composable(CreationStepsDestinations.ChooseDescription.route){
+            CreationStepChooseDescriptionScreen()
+        }
+        composable(CreationStepsDestinations.ChooseTags.route){
+            CreationStepChooseTagsScreen()
+        }
+        composable(CreationStepsDestinations.Preview.route){
+            CreationStepPreviewBanner()
+        }
     }
 }
