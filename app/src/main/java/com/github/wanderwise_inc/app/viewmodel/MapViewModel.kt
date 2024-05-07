@@ -11,6 +11,7 @@ import com.github.wanderwise_inc.app.data.ItineraryRepository
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryPreferences
 import com.google.android.gms.maps.model.LatLng
+import java.io.InvalidObjectException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
@@ -23,6 +24,9 @@ class MapViewModel(
     private val userLocationClient: UserLocationClient,
 ) : ViewModel() {
   private var focusedItinerary: Itinerary? = null
+
+  /** New itinerary that the signed in user is currently building */
+  private var newItineraryBuilder: Itinerary.Builder? = null
 
   /** @return the itinerary the user has clicked on */
   fun getFocusedItinerary(): Itinerary? {
@@ -136,6 +140,43 @@ class MapViewModel(
   /** @brief get a Flow of the user location updated every second */
   fun getUserLocation(): Flow<Location> {
     return userLocationClient.getLocationUpdates(1000)
+  }
+
+  /**
+   * @return Itinerary being built by the user currently. The composable is responsible for setting
+   *   it to `null` when the creation is finished
+   *
+   * If there is no itinerary currently being created, initializes a new one with the provided
+   * `userUid`
+   *
+   * **USAGE EXAMPLE**
+   *
+   * ```
+   * val newItineraryBuilder = mapViewModel.getNewItinerary()!!
+   * // any attributes that should cause a recomposition should be remembered
+   * var title by remember {
+   *  mutableStateOf(newItinerary.title)
+   * }
+   * Button (
+   *  onClick = {
+   *    title = newTitle                        // update mutableState for recomposition
+   *    newItineraryBuilder.addTitle(newTitle)  // update shared state across screens
+   *  }
+   * )
+   * ```
+   */
+  fun getNewItinerary(): Itinerary.Builder? {
+    return newItineraryBuilder
+  }
+
+  /** initializes a new `MutableItinerary` */
+  fun startNewItinerary(userUid: String) {
+    newItineraryBuilder = Itinerary.Builder(userUid = userUid)
+  }
+
+  fun uploadNewItinerary() {
+    if (newItineraryBuilder != null) itineraryRepository.setItinerary(newItineraryBuilder!!.build())
+    else throw InvalidObjectException("Itinerary.Builder is `null`")
   }
 
   /* fun filterItinerariesByPrice(priceRange: FloatRange): List<Itinerary> {

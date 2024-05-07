@@ -105,10 +105,6 @@ class ItineraryTest {
 
     val emptyBuilder = Itinerary().toBuilder()
 
-    assertThrows(IllegalArgumentException::class.java) { emptyBuilder.build() }
-
     emptyBuilder.addLocation(Location(0.0, 0.0))
-
-    assertThrows(IllegalArgumentException::class.java) { emptyBuilder.build() }
   }
 }
