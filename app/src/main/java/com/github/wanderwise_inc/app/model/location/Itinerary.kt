@@ -146,8 +146,8 @@ data class Itinerary(
      * @brief build the itinerary from its builder
      */
     fun build(): Itinerary {
-      require(locations.isNotEmpty()) { "At least one location must be provided" }
-      require(title.isNotBlank()) { "Title must not be blank" }
+      // require(locations.isNotEmpty()) { "At least one location must be provided" }
+      // require(title.isNotBlank()) { "Title must not be blank" }
       return Itinerary(
           uid = uid,
           userUid = userUid,
