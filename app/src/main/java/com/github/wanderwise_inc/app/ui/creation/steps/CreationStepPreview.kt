@@ -57,10 +57,10 @@ fun CreationStepPreview(
             startDestination = CreationStepsDestinations.ChooseLocations.route,
             modifier = Modifier.padding(padding)
         ) {
-            composable(route = "${CreationStepsDestinations.Preview.route}/banner") {
+            composable(route = CreationStepsDestinations.PreviewBanner.route) {
                 CreationStepPreviewBanner()
             }
-            composable(route = "${CreationStepsDestinations.Preview.route}/itinerary") {
+            composable(route = CreationStepsDestinations.PreviewItinerary.route) {
                 CreationStepPreviewItinerary()
             }
         }
