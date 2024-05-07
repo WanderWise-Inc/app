@@ -34,25 +34,6 @@ fun CreationNavGraph(
         startDestination = Destination.TopLevelDestination.Overview.route,
         // modifier = Modifier.padding(innerPadding)
     ) {
-        composable(route = Destination.TopLevelDestination.Overview.route) {
-            bottomNavigationViewModel.setSelected(NavigationItem.OVERVIEW.ordinal)
-            OverviewScreen(mapViewModel, profileViewModel, navController, firebaseAuth)
-        }
-        composable(route = Destination.TopLevelDestination.Liked.route) {
-            bottomNavigationViewModel.setSelected(NavigationItem.LIKED.ordinal)
-            LikedScreen(mapViewModel, profileViewModel, navController, firebaseAuth)
-        }
-        composable(route = Destination.TopLevelDestination.Creation.route) {
-            bottomNavigationViewModel.setSelected(NavigationItem.CREATE.ordinal)
-            CreationScreen(mapViewModel)
-        }
-        composable(route = Destination.TopLevelDestination.Map.route) {
-            bottomNavigationViewModel.setSelected(NavigationItem.MAP.ordinal)
-            PreviewItineraryScreen(mapViewModel, profileViewModel)
-        }
-        composable(route = Destination.TopLevelDestination.Profile.route) {
-            bottomNavigationViewModel.setSelected(NavigationItem.PROFILE.ordinal)
-            ProfileScreen(mapViewModel, profileViewModel, imageRepository, navController, firebaseAuth)
-        }
+        
     }
 }
