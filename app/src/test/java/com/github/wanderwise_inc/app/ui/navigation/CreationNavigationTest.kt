@@ -198,7 +198,7 @@ class CreationPreviewNavigationTest {
         composeTestRule.onNodeWithTag(TestTags.CREATION_SCREEN_PREVIEW_BANNER).assertIsDisplayed()
 
         val route = navController.currentBackStackEntry?.destination?.route
-        assertEquals("Creation/Preview/${CreationPreviewOptions.PREVIEW_BANNER}", route)
+        assertEquals("Creation/${CreationPreviewOptions.PREVIEW_BANNER}", route)
     }
 
     @Test
@@ -208,7 +208,7 @@ class CreationPreviewNavigationTest {
         composeTestRule.onNodeWithTag(TestTags.CREATION_SCREEN_PREVIEW_ITINERARY).assertIsDisplayed()
 
         val route = navController.currentBackStackEntry?.destination?.route
-        assertEquals("Creation/Preview/${CreationPreviewOptions.PREVIEW_ITINERARY}", route)
+        assertEquals("Creation/${CreationPreviewOptions.PREVIEW_ITINERARY}", route)
     }
 
     @Test
@@ -219,6 +219,6 @@ class CreationPreviewNavigationTest {
         composeTestRule.onNodeWithTag(TestTags.CREATION_SCREEN_PREVIEW_BANNER).assertIsDisplayed()
 
         val route = navController.currentBackStackEntry?.destination?.route
-        assertEquals("Creation/Preview/${CreationPreviewOptions.PREVIEW_BANNER}", route)
+        assertEquals("Creation/${CreationPreviewOptions.PREVIEW_BANNER}", route)
     }
 }
