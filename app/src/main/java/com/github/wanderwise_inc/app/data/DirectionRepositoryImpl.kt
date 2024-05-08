@@ -13,8 +13,8 @@ import retrofit2.Response
 const val DEBUG_TAG: String = "DIRECTIONS_REPOSITORY"
 
 /** Handles interactions with maps API */
-class DirectionsRepositoryImpl(private val directionsApiService: DirectionsApiService) {
-    fun getPolylineWayPoints(
+class DirectionsRepositoryImpl(private val directionsApiService: DirectionsApiService): DirectionsRepository {
+    override fun getPolylineWayPoints(
         origin: String,
         destination: String,
         waypoints: List<String>,
