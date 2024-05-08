@@ -16,37 +16,37 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 
 interface ModuleProvider {
-    fun provideFirebaseAuth(): FirebaseAuth
+  fun provideFirebaseAuth(): FirebaseAuth
 
-    fun provideFirebaseStorage(): FirebaseStorage
+  fun provideFirebaseStorage(): FirebaseStorage
 
-    fun provideImageRepository(
-        imageLauncher: ActivityResultLauncher<Intent>,
-        firebaseStorage: FirebaseStorage
-    ): ImageRepository
+  fun provideImageRepository(
+      imageLauncher: ActivityResultLauncher<Intent>,
+      firebaseStorage: FirebaseStorage
+  ): ImageRepository
 
-    fun provideDirectionsRepository(): DirectionsRepository
+  fun provideDirectionsRepository(): DirectionsRepository
 
-    fun provideItineraryRepository(): ItineraryRepository
+  fun provideItineraryRepository(): ItineraryRepository
 
-    fun provideProfileRepository(): ProfileRepository
+  fun provideProfileRepository(): ProfileRepository
 
-    fun provideSignInRepository(): SignInRepository
+  fun provideSignInRepository(): SignInRepository
 
-    fun provideBottomNavigationViewModel(): BottomNavigationViewModel
+  fun provideBottomNavigationViewModel(): BottomNavigationViewModel
 
-    fun provideMapViewModel(
-        context: Context,
-        itineraryRepository: ItineraryRepository,
-        directionsRepository: DirectionsRepository
-    ): MapViewModel
+  fun provideMapViewModel(
+      context: Context,
+      itineraryRepository: ItineraryRepository,
+      directionsRepository: DirectionsRepository
+  ): MapViewModel
 
-    fun provideProfileViewModel(
-        profileRepository: ProfileRepository,
-        imageRepository: ImageRepository
-    ): ProfileViewModel
+  fun provideProfileViewModel(
+      profileRepository: ProfileRepository,
+      imageRepository: ImageRepository
+  ): ProfileViewModel
 
-    fun provideGoogleSignInLauncher(
-        signInLauncher: ActivityResultLauncher<Intent>
-    ): GoogleSignInLauncher
+  fun provideGoogleSignInLauncher(
+      signInLauncher: ActivityResultLauncher<Intent>
+  ): GoogleSignInLauncher
 }
