@@ -13,40 +13,41 @@ import retrofit2.Response
 const val DEBUG_TAG: String = "DIRECTIONS_REPOSITORY"
 
 /** Handles interactions with maps API */
-class DirectionsRepositoryImpl(private val directionsApiService: DirectionsApiService): DirectionsRepository {
-    override fun getPolylineWayPoints(
-        origin: String,
-        destination: String,
-        waypoints: List<String>,
-        apiKey: String
-    ): LiveData<List<LatLng>?> {
-        val resultLiveData = MutableLiveData<List<LatLng>?>()
+class DirectionsRepositoryImpl(private val directionsApiService: DirectionsApiService) :
+    DirectionsRepository {
+  override fun getPolylineWayPoints(
+      origin: String,
+      destination: String,
+      waypoints: List<String>,
+      apiKey: String
+  ): LiveData<List<LatLng>?> {
+    val resultLiveData = MutableLiveData<List<LatLng>?>()
 
-        directionsApiService
-            .getPolylineWayPoints(
-                origin = origin, destination = destination, waypoints = waypoints, key = apiKey)
-            .enqueue(
-                object : Callback<DirectionsResponseBody> {
-                    override fun onResponse(
-                        call: Call<DirectionsResponseBody>,
-                        response: Response<DirectionsResponseBody>
-                    ) {
-                        if (response.isSuccessful) {
-                            Log.d(DEBUG_TAG, "Response was successful!")
-                            val directionsResponse = response.body()
-                            Log.d(DEBUG_TAG, "num elements = ${directionsResponse!!.toLatLngList().size}")
-                            resultLiveData.value = directionsResponse.toLatLngList()
-                        } else {
-                            resultLiveData.value = null // or any other value that represents an error
-                        }
-                    }
+    directionsApiService
+        .getPolylineWayPoints(
+            origin = origin, destination = destination, waypoints = waypoints, key = apiKey)
+        .enqueue(
+            object : Callback<DirectionsResponseBody> {
+              override fun onResponse(
+                  call: Call<DirectionsResponseBody>,
+                  response: Response<DirectionsResponseBody>
+              ) {
+                if (response.isSuccessful) {
+                  Log.d(DEBUG_TAG, "Response was successful!")
+                  val directionsResponse = response.body()
+                  Log.d(DEBUG_TAG, "num elements = ${directionsResponse!!.toLatLngList().size}")
+                  resultLiveData.value = directionsResponse.toLatLngList()
+                } else {
+                  resultLiveData.value = null // or any other value that represents an error
+                }
+              }
 
-                    override fun onFailure(call: Call<DirectionsResponseBody>, t: Throwable) {
-                        Log.d(DEBUG_TAG, "request failed! ${t.message}")
-                        resultLiveData.value = null // or any other value that represents a network error
-                    }
-                })
+              override fun onFailure(call: Call<DirectionsResponseBody>, t: Throwable) {
+                Log.d(DEBUG_TAG, "request failed! ${t.message}")
+                resultLiveData.value = null // or any other value that represents a network error
+              }
+            })
 
-        return resultLiveData
-    }
+    return resultLiveData
+  }
 }
