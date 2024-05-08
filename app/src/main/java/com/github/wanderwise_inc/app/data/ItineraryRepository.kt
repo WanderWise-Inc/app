@@ -4,11 +4,16 @@ import android.util.Log
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryLabels
 import com.github.wanderwise_inc.app.model.location.Tag
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 interface ItineraryRepository {
   /** @return a list of all public itineraries */
@@ -83,86 +88,139 @@ class ItineraryRepositoryTestImpl : ItineraryRepository {
   }
 }
 
-class ItineraryRepositoryImpl : ItineraryRepository {
-  private val db = FirebaseFirestore.getInstance()
+class ItineraryRepositoryImpl(private val db : FirebaseFirestore) : ItineraryRepository {
+  //private val db = FirebaseFirestore.getInstance()
   private val itinerariesCollection = db.collection("itineraries")
 
   override fun getPublicItineraries(): Flow<List<Itinerary>> {
+      println("BEFORE FLOW")
     return flow {
-          val snap =
-              itinerariesCollection
-                  .whereEqualTo(ItineraryLabels.VISIBLE, true)
-                  .get()
-                  .addOnFailureListener {
-                    Log.d("ItineraryRepository", "Failed to get public itineraries")
-                  }
-                  .addOnSuccessListener {
-                    Log.d("ItineraryRepository", "Successfully got public itineraries")
-                  }
-                  .await()
-          val itineraries = snap.map { it.toObject(Itinerary::class.java) }
+        println("BEFORE SNAP")
+        val itineraries = suspendCancellableCoroutine<List<Itinerary>> {continuation ->
+            itinerariesCollection
+                .whereEqualTo(ItineraryLabels.VISIBLE, true)
+                .get()
+                .addOnSuccessListener { snap ->
+                    val documents = snap.documents
+                    println("BEFORE ITINERARIES")
+                    val iti = documents.mapNotNull { it.toObject(Itinerary::class.java) }
+                    println("SUCCESS")
+                    continuation.resume(iti)
+                }
+                .addOnFailureListener { exception ->
+                    println("FAILURE")
+                    continuation.resumeWithException(exception)
+                }
+        }
+        println("AFTER SNAP")
           emit(itineraries)
         }
-        .catch { emit(listOf()) }
+        .catch {
+            println("IN CATCH")
+            emit(listOf())
+        }
   }
 
   override fun getUserItineraries(userUid: String): Flow<List<Itinerary>> {
     return flow {
-          val snap =
+        println("BEFORE ITI")
+          val iti = suspendCancellableCoroutine<List<Itinerary>> {continuation ->
               itinerariesCollection
                   .whereEqualTo(ItineraryLabels.USER_UID, userUid)
                   .get()
+                  .addOnSuccessListener {snap ->
+                      println("SUCCESS")
+                      val documents = snap.documents
+                      val itineraries = documents.mapNotNull { it.toObject(Itinerary::class.java) }
+                      Log.d("ItineraryRepository", "Successfully got public itineraries")
+                      continuation.resume(itineraries)
+                  }
                   .addOnFailureListener {
-                    Log.d("ItineraryRepository", "Failed to get public itineraries")
+                      println("FAILURE")
+                      Log.d("ItineraryRepository", "Failed to get public itineraries")
+                      continuation.resumeWithException(it)
                   }
-                  .addOnSuccessListener {
-                    Log.d("ItineraryRepository", "Successfully got public itineraries")
-                  }
-                  .await()
-          val itineraries = snap.map { it.toObject(Itinerary::class.java) }
-          emit(itineraries)
+          }
+          emit(iti)
         }
-        .catch { emit(listOf()) }
+        .catch {
+            println("IN CATCH")
+            emit(listOf())
+        }
   }
 
   override fun getItinerariesWithTags(tags: List<Tag>): Flow<List<Itinerary>> {
     return flow {
-          val snap =
-              itinerariesCollection
-                  .whereArrayContainsAny(ItineraryLabels.TAGS, tags)
-                  .get()
-                  .addOnFailureListener {
-                    Log.d("ItineraryRepository", "Failed to get public itineraries")
-                  }
-                  .addOnSuccessListener {
+        println("BEFORE ITI")
+        val iti = suspendCancellableCoroutine<List<Itinerary>> { continuation ->
+            itinerariesCollection
+                .whereArrayContainsAny(ItineraryLabels.TAGS, tags)
+                .get()
+                .addOnSuccessListener {snap ->
+                    println("SUCCESS")
+                    val documents = snap.documents
+                    val itineraries = documents.mapNotNull { it.toObject(Itinerary::class.java) }
                     Log.d("ItineraryRepository", "Successfully got public itineraries")
-                  }
-                  .await()
-          val itineraries = snap.map { it.toObject(Itinerary::class.java) }
-          emit(itineraries)
+                    continuation.resume(itineraries)
+                }
+                .addOnFailureListener {
+                    println("FAILURE")
+                    Log.d("ItineraryRepository", "Failed to get public itineraries")
+                    continuation.resumeWithException(it)
+                }
         }
-        .catch { emit(listOf()) }
+        emit(iti)
+    }
+    .catch {
+        println("IN CATCH")
+        emit(listOf())
+    }
   }
 
   override suspend fun getItinerary(uid: String): Itinerary {
-    val document = itinerariesCollection.document(uid).get().await()
+    val document = suspendCancellableCoroutine<DocumentSnapshot> {continuation ->
+        itinerariesCollection
+            .document(uid)
+            .get()
+            .addOnSuccessListener { document ->
+                println("SUCCESS")
+                continuation.resume(document)
+            }
+            .addOnFailureListener { exception ->
+                println("FAILURE")
+                continuation.resumeWithException(exception)
+            }
+    }
     if (document.exists()) {
+        println("DOC EXIST")
       return document.toObject(Itinerary::class.java)!!
     } else {
+        println("DOC DOESN'T EXIST")
       throw Exception("Itinerary not found")
     }
   }
 
   override fun setItinerary(itinerary: Itinerary) {
     if (itinerary.uid.isBlank()) {
+        println("UID BLANK")
       itinerary.uid = itinerariesCollection.document().id
+        println("AFTER UID")
     }
+      println("BEFORE MAP")
     val itineraryMap = itinerary.toMap()
+      println("AFTER MAP")
     itinerariesCollection
         .document(itinerary.uid)
         .set(itineraryMap)
-        .addOnSuccessListener { Log.d("ItineraryRepository", "Successfully set itinerary") }
-        .addOnFailureListener { Log.d("ItineraryRepository", "Failed to set itinerary") }
+        .addOnSuccessListener {
+            println("SUCCESS")
+            Log.d("ItineraryRepository", "Successfully set itinerary")
+        }
+        .addOnFailureListener {
+            println("FAILURE")
+            Log.d("ItineraryRepository", "Failed to set itinerary")
+            throw it
+        }
   }
 
   override fun updateItinerary(oldUid: String, new: Itinerary) {
