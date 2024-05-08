@@ -29,25 +29,25 @@ import com.github.wanderwise_inc.app.ui.navigation.NavigationActions
 fun CreationStepPreview(
     navController: NavHostController = rememberNavController()
 ) {
-    var selected by remember { mutableIntStateOf(0) }
+    var selected by remember { mutableStateOf(PreviewOption.Banner) }
     val navigator = NavigationActions(navController)
 
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    if (selected == 0) {
-                        selected = 1
-                        navigator.navigateTo(CreationPreviewOptionsDestinations.PreviewBanner)
-                    } else {
-                        selected = 0
+                    if (selected == PreviewOption.Banner) {
+                        selected = PreviewOption.Itinerary
                         navigator.navigateTo(CreationPreviewOptionsDestinations.PreviewItinerary)
+                    } else {
+                        selected = PreviewOption.Banner
+                        navigator.navigateTo(CreationPreviewOptionsDestinations.PreviewBanner)
                     }
                 }
             ) {
                 Icon(
                     painter = painterResource(id = 
-                        if (selected == 0){
+                        if (selected == PreviewOption.Banner){
                             CreationPreviewOptionsDestinations.PreviewBanner.icon
                         } else {
                             CreationPreviewOptionsDestinations.PreviewItinerary.icon
@@ -60,7 +60,7 @@ fun CreationStepPreview(
                 )
             }
         }
-    ) {padding ->
+    ) { padding ->
         CreationStepPreviewNav(navController, padding)
     }
 }
@@ -72,7 +72,7 @@ fun CreationStepPreviewNav(
 ) {
     NavHost(
         navController = navController,
-        route = Graph.CREATION,
+        route = Graph.CREATION_PREVIEW,
         startDestination = CreationPreviewOptionsDestinations.PreviewBanner.route,
         modifier = Modifier.padding(padding)
     ) {
@@ -83,4 +83,8 @@ fun CreationStepPreviewNav(
             CreationStepPreviewItinerary()
         }
     }
+}
+
+enum class PreviewOption{
+    Banner, Itinerary
 }
