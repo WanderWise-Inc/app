@@ -2,17 +2,8 @@ package com.github.wanderwise_inc.app.data
 
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
-import android.util.Log
-import androidx.activity.result.ActivityResultLauncher
-import com.google.firebase.storage.StorageReference
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.suspendCancellableCoroutine
 
 /** @brief data source for fetching and retrieving images */
 interface ImageRepository {

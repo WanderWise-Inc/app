@@ -1,10 +1,8 @@
 package com.github.wanderwise_inc.app.data
 
-import android.util.Log
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.Tag
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 
 interface ItineraryRepository {
   /** @return a list of all public itineraries */
