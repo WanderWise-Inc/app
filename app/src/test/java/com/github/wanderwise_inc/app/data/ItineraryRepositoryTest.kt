@@ -338,6 +338,82 @@ class ItineraryRepositoryTest {
 
   @Test
   fun `set itinerary should correctly set an itinerary to the database (FIREBASE)`() = runTest {
-
+    val testList = mutableListOf<Itinerary>()
+    `when`(itineraryColl.document()).thenReturn(documentRef)
+    `when`(documentRef.id).thenReturn("0")
+    `when`(itineraryColl.document(anyString())).thenReturn(documentRef)
+    `when`(documentRef.set(any())).thenReturn(voidTask)
+    `when`(voidTask.addOnSuccessListener(any())).thenAnswer {
+      val listener = it.arguments[0] as OnSuccessListener<Void>
+      listener.onSuccess(null)
+      testList.add(itineraryObject.SAN_FRANCISCO)
+      voidTask
+    }
+    itineraryRepository.setItinerary(itineraryObject.SAN_FRANCISCO)
+    assertEquals(listOf(itineraryObject.SAN_FRANCISCO), testList)
   }
+
+  @Test(expected = Exception::class)
+  fun `update itinerary should throw an exception if oldUid isnt the same as new itinerary uid`() = runTest {
+    itineraryRepository.updateItinerary("0", itineraryObject.SAN_FRANCISCO)
+  }
+
+  @Test(expected = Exception::class)
+  fun `update itinerary should throw an exception if set failed`() = runTest {
+    `when`(itineraryColl.document(anyString())).thenReturn(documentRef)
+    `when`(documentRef.set(any())).thenReturn(voidTask)
+    `when`(voidTask.addOnSuccessListener(any())).thenReturn(voidTask)
+    `when`(voidTask.addOnFailureListener(any())).thenAnswer {
+      val listener = it.arguments[0] as OnFailureListener
+      listener.onFailure(Exception("Get bytes return an exception"))
+      voidTask
+    }
+    itineraryRepository.updateItinerary(itineraryObject.SAN_FRANCISCO.uid, itineraryObject.SAN_FRANCISCO)
+  }
+
+  @Test
+  fun `update itinerary should correctly set a new itinerary to the database (FIREBASE)`() = runTest {
+    val testList = mutableListOf(itineraryObject.SAN_FRANCISCO)
+    val newItinerary = itineraryObject.SAN_FRANCISCO.copy(numLikes = 10)
+    `when`(itineraryColl.document(anyString())).thenReturn(documentRef)
+    `when`(documentRef.set(any())).thenReturn(voidTask)
+    `when`(voidTask.addOnSuccessListener(any())).thenAnswer {
+      val listener = it.arguments[0] as OnSuccessListener<Void>
+      listener.onSuccess(null)
+      testList.remove(itineraryObject.SAN_FRANCISCO)
+      testList.add(newItinerary)
+      voidTask
+    }
+    itineraryRepository.updateItinerary(itineraryObject.SAN_FRANCISCO.uid, newItinerary)
+    assertEquals(listOf(newItinerary), testList)
+  }
+
+  @Test(expected = Exception::class)
+  fun `delete itinerary should throw an exception if an error occurred during deletion`() = runTest {
+    `when`(itineraryColl.document(anyString())).thenReturn(documentRef)
+    `when`(documentRef.delete()).thenReturn(voidTask)
+    `when`(voidTask.addOnSuccessListener(any())).thenReturn(voidTask)
+    `when`(voidTask.addOnFailureListener(any())).thenAnswer {
+      val listener = it.arguments[0] as OnFailureListener
+      listener.onFailure(Exception("Get bytes return an exception"))
+      voidTask
+    }
+    itineraryRepository.deleteItinerary(itineraryObject.SAN_FRANCISCO)
+  }
+
+  @Test
+  fun `delete itinerary should correctly remove the itinerary from database`() = runTest {
+    val testList = mutableListOf(itineraryObject.SAN_FRANCISCO)
+    `when`(itineraryColl.document(anyString())).thenReturn(documentRef)
+    `when`(documentRef.delete()).thenReturn(voidTask)
+    `when`(voidTask.addOnSuccessListener(any())).thenAnswer {
+      val listener = it.arguments[0] as OnSuccessListener<Void>
+      listener.onSuccess(null)
+      testList.remove(itineraryObject.SAN_FRANCISCO)
+      voidTask
+    }
+    itineraryRepository.deleteItinerary(itineraryObject.SAN_FRANCISCO)
+    assertTrue(testList.isEmpty())
+  }
+
 }

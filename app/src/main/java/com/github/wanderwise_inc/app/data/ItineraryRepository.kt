@@ -203,12 +203,12 @@ class ItineraryRepositoryImpl(private val db : FirebaseFirestore) : ItineraryRep
   override fun setItinerary(itinerary: Itinerary) {
     if (itinerary.uid.isBlank()) {
         println("UID BLANK")
-      itinerary.uid = itinerariesCollection.document().id
+        itinerary.uid = itinerariesCollection.document().id
         println("AFTER UID")
     }
-      println("BEFORE MAP")
+    println("BEFORE MAP")
     val itineraryMap = itinerary.toMap()
-      println("AFTER MAP")
+    println("AFTER MAP")
     itinerariesCollection
         .document(itinerary.uid)
         .set(itineraryMap)
@@ -231,15 +231,27 @@ class ItineraryRepositoryImpl(private val db : FirebaseFirestore) : ItineraryRep
     itinerariesCollection
         .document(oldUid)
         .set(itineraryMap)
-        .addOnSuccessListener { Log.d("ItineraryRepository", "Successfully updated itinerary") }
-        .addOnFailureListener { Log.d("ItineraryRepository", "Failed to update itinerary") }
+        .addOnSuccessListener {
+            println("SUCCESS")
+            Log.d("ItineraryRepository", "Successfully updated itinerary") }
+        .addOnFailureListener {
+            println("FAILURE")
+            Log.d("ItineraryRepository", "Failed to update itinerary")
+            throw it
+        }
   }
 
   override fun deleteItinerary(itinerary: Itinerary) {
     itinerariesCollection
         .document(itinerary.uid)
         .delete()
-        .addOnSuccessListener { Log.d("ItineraryRepository", "Successfully deleted itinerary") }
-        .addOnFailureListener { Log.d("ItineraryRepository", "Failed to delete itinerary") }
+        .addOnSuccessListener {
+            println("SUCCESS")
+            Log.d("ItineraryRepository", "Successfully deleted itinerary") }
+        .addOnFailureListener {
+            println("FAILURE")
+            Log.d("ItineraryRepository", "Failed to delete itinerary")
+            throw it
+        }
   }
 }
