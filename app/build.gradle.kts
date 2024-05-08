@@ -252,9 +252,6 @@ dependencies {
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.0")
     testImplementation("org.mockito:mockito-core:5.7.0")
 
-    testImplementation ("io.mockk:mockk:1.13.10")
-    androidTestImplementation ("io.mockk:mockk:1.13.10")
-
     // ----------       Retrofit ------------
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
@@ -264,6 +261,7 @@ dependencies {
 
     implementation("androidx.compose.runtime:runtime-livedata:1.0.0-beta01")
 
+    testImplementation ("io.mockk:mockk:1.13.10")
 
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.1.0")
     androidTestImplementation("io.mockk:mockk-android:1.13.10")
