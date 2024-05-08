@@ -91,9 +91,7 @@ class ItineraryRepositoryImpl(private val db: FirebaseFirestore) : ItineraryRepo
   private val itinerariesCollection = db.collection("itineraries")
 
   override fun getPublicItineraries(): Flow<List<Itinerary>> {
-    println("BEFORE FLOW")
     return flow {
-          println("BEFORE SNAP")
           val itineraries =
               suspendCancellableCoroutine<List<Itinerary>> { continuation ->
                 itinerariesCollection
@@ -101,42 +99,34 @@ class ItineraryRepositoryImpl(private val db: FirebaseFirestore) : ItineraryRepo
                     .get()
                     .addOnSuccessListener { snap ->
                       val documents = snap.documents
-                      println("BEFORE ITINERARIES")
                       val iti = documents.mapNotNull { it.toObject(Itinerary::class.java) }
-                      println("SUCCESS")
                       continuation.resume(iti)
                     }
                     .addOnFailureListener { exception ->
-                      println("FAILURE")
                       continuation.resumeWithException(exception)
                     }
               }
-          println("AFTER SNAP")
           emit(itineraries)
         }
         .catch {
-          println("IN CATCH")
           emit(listOf())
         }
   }
 
   override fun getUserItineraries(userUid: String): Flow<List<Itinerary>> {
     return flow {
-          println("BEFORE ITI")
           val iti =
               suspendCancellableCoroutine<List<Itinerary>> { continuation ->
                 itinerariesCollection
                     .whereEqualTo(ItineraryLabels.USER_UID, userUid)
                     .get()
                     .addOnSuccessListener { snap ->
-                      println("SUCCESS")
                       val documents = snap.documents
                       val itineraries = documents.mapNotNull { it.toObject(Itinerary::class.java) }
                       Log.d("ItineraryRepository", "Successfully got public itineraries")
                       continuation.resume(itineraries)
                     }
                     .addOnFailureListener {
-                      println("FAILURE")
                       Log.d("ItineraryRepository", "Failed to get public itineraries")
                       continuation.resumeWithException(it)
                     }
@@ -144,28 +134,24 @@ class ItineraryRepositoryImpl(private val db: FirebaseFirestore) : ItineraryRepo
           emit(iti)
         }
         .catch {
-          println("IN CATCH")
           emit(listOf())
         }
   }
 
   override fun getItinerariesWithTags(tags: List<Tag>): Flow<List<Itinerary>> {
     return flow {
-          println("BEFORE ITI")
           val iti =
               suspendCancellableCoroutine<List<Itinerary>> { continuation ->
                 itinerariesCollection
                     .whereArrayContainsAny(ItineraryLabels.TAGS, tags)
                     .get()
                     .addOnSuccessListener { snap ->
-                      println("SUCCESS")
                       val documents = snap.documents
                       val itineraries = documents.mapNotNull { it.toObject(Itinerary::class.java) }
                       Log.d("ItineraryRepository", "Successfully got public itineraries")
                       continuation.resume(itineraries)
                     }
                     .addOnFailureListener {
-                      println("FAILURE")
                       Log.d("ItineraryRepository", "Failed to get public itineraries")
                       continuation.resumeWithException(it)
                     }
@@ -173,7 +159,6 @@ class ItineraryRepositoryImpl(private val db: FirebaseFirestore) : ItineraryRepo
           emit(iti)
         }
         .catch {
-          println("IN CATCH")
           emit(listOf())
         }
   }
@@ -185,41 +170,31 @@ class ItineraryRepositoryImpl(private val db: FirebaseFirestore) : ItineraryRepo
               .document(uid)
               .get()
               .addOnSuccessListener { document ->
-                println("SUCCESS")
                 continuation.resume(document)
               }
               .addOnFailureListener { exception ->
-                println("FAILURE")
                 continuation.resumeWithException(exception)
               }
         }
     if (document.exists()) {
-      println("DOC EXIST")
       return document.toObject(Itinerary::class.java)!!
     } else {
-      println("DOC DOESN'T EXIST")
       throw Exception("Itinerary not found")
     }
   }
 
   override fun setItinerary(itinerary: Itinerary) {
     if (itinerary.uid.isBlank()) {
-      println("UID BLANK")
       itinerary.uid = itinerariesCollection.document().id
-      println("AFTER UID")
     }
-    println("BEFORE MAP")
     val itineraryMap = itinerary.toMap()
-    println("AFTER MAP")
     itinerariesCollection
         .document(itinerary.uid)
         .set(itineraryMap)
         .addOnSuccessListener {
-          println("SUCCESS")
           Log.d("ItineraryRepository", "Successfully set itinerary")
         }
         .addOnFailureListener {
-          println("FAILURE")
           Log.d("ItineraryRepository", "Failed to set itinerary")
           throw it
         }
@@ -234,11 +209,9 @@ class ItineraryRepositoryImpl(private val db: FirebaseFirestore) : ItineraryRepo
         .document(oldUid)
         .set(itineraryMap)
         .addOnSuccessListener {
-          println("SUCCESS")
           Log.d("ItineraryRepository", "Successfully updated itinerary")
         }
         .addOnFailureListener {
-          println("FAILURE")
           Log.d("ItineraryRepository", "Failed to update itinerary")
           throw it
         }
@@ -249,11 +222,9 @@ class ItineraryRepositoryImpl(private val db: FirebaseFirestore) : ItineraryRepo
         .document(itinerary.uid)
         .delete()
         .addOnSuccessListener {
-          println("SUCCESS")
           Log.d("ItineraryRepository", "Successfully deleted itinerary")
         }
         .addOnFailureListener {
-          println("FAILURE")
           Log.d("ItineraryRepository", "Failed to delete itinerary")
           throw it
         }
