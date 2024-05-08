@@ -21,7 +21,7 @@ import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.data.ItineraryRepository
 import com.github.wanderwise_inc.app.data.ProfileRepository
 import com.github.wanderwise_inc.app.data.SignInRepository
-import com.github.wanderwise_inc.app.di.Injection.moduleProvider
+import com.github.wanderwise_inc.app.di.AppModule
 import com.github.wanderwise_inc.app.ui.navigation.graph.RootNavigationGraph
 import com.github.wanderwise_inc.app.ui.theme.WanderWiseTheme
 import com.github.wanderwise_inc.app.viewmodel.BottomNavigationViewModel
@@ -78,14 +78,14 @@ class MainActivity : ComponentActivity() {
     private fun init() {
         requestPermissions()
 
-        firebaseAuth = moduleProvider.provideFirebaseAuth()
-        firebaseStorage = moduleProvider.provideFirebaseStorage()
+        firebaseAuth = AppModule.provideFirebaseAuth()
+        firebaseStorage = AppModule.provideFirebaseStorage()
 
         initializeRepositories()
 
         initializeViewModels()
 
-        googleSignInLauncher = moduleProvider.provideGoogleSignInLauncher(signInLauncher())
+        googleSignInLauncher = AppModule.provideGoogleSignInLauncher(signInLauncher())
     }
 
     private fun requestPermissions() {
@@ -99,23 +99,23 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun initializeRepositories() {
-        imageRepository = moduleProvider.provideImageRepository(imageLauncher(), firebaseStorage)
-        itineraryRepository = moduleProvider.provideItineraryRepository()
-        directionsRepository = moduleProvider.provideDirectionsRepository()
-        profileRepository = moduleProvider.provideProfileRepository()
-        signInRepository = moduleProvider.provideSignInRepository()
+        imageRepository = AppModule.provideImageRepository(imageLauncher(), firebaseStorage)
+        itineraryRepository = AppModule.provideItineraryRepository()
+        directionsRepository = AppModule.provideDirectionsRepository()
+        profileRepository = AppModule.provideProfileRepository()
+        signInRepository = AppModule.provideSignInRepository()
     }
 
     private fun initializeViewModels() {
-        bottomNavigationViewModel = moduleProvider.provideBottomNavigationViewModel()
+        bottomNavigationViewModel = AppModule.provideBottomNavigationViewModel()
         mapViewModel =
-            moduleProvider.provideMapViewModel(
+            AppModule.provideMapViewModel(
                 applicationContext,
                 itineraryRepository,
                 directionsRepository
             )
         profileViewModel =
-            moduleProvider.provideProfileViewModel(profileRepository, imageRepository)
+            AppModule.provideProfileViewModel(profileRepository, imageRepository)
     }
 
     private fun imageLauncher() =

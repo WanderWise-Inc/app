@@ -24,46 +24,46 @@ import com.google.android.gms.location.LocationServices
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 
-object AppModule: ModuleProvider {
+object AppModule {
 
     init {
         Log.d("ModuleProvider", "Using AppModule")
     }
 
-    override fun provideFirebaseAuth() = FirebaseAuth.getInstance()
+    fun provideFirebaseAuth() = FirebaseAuth.getInstance()
 
-    override fun provideFirebaseStorage() = FirebaseStorage.getInstance()
+    fun provideFirebaseStorage() = FirebaseStorage.getInstance()
 
-    override fun provideImageRepository(
+    fun provideImageRepository(
         imageLauncher: ActivityResultLauncher<Intent>,
         firebaseStorage: FirebaseStorage
     ): ImageRepository {
         return ImageRepositoryImpl(imageLauncher, firebaseStorage.reference, null)
     }
 
-    override fun provideDirectionsRepository() =
+    fun provideDirectionsRepository() =
         DirectionsRepositoryImpl(ApiServiceFactory.createDirectionsApiService())
 
-    override fun provideItineraryRepository() = ItineraryRepositoryTestImpl()
+    fun provideItineraryRepository() = ItineraryRepositoryTestImpl()
 
-    override fun provideProfileRepository() = ProfileRepositoryTestImpl()
+    fun provideProfileRepository() = ProfileRepositoryTestImpl()
 
-    override fun provideSignInRepository() = SignInRepositoryImpl()
+    fun provideSignInRepository() = SignInRepositoryImpl()
 
-    override fun provideBottomNavigationViewModel() = BottomNavigationViewModel()
+    fun provideBottomNavigationViewModel() = BottomNavigationViewModel()
 
-    override fun provideMapViewModel(
+    fun provideMapViewModel(
         context: Context,
         itineraryRepository: ItineraryRepository,
         directionsRepository: DirectionsRepository
     ) = MapViewModel(itineraryRepository, directionsRepository, provideLocationClient(context))
 
-    override fun provideProfileViewModel(
+    fun provideProfileViewModel(
         profileRepository: ProfileRepository,
         imageRepository: ImageRepository
     ) = ProfileViewModel(profileRepository, imageRepository)
 
-    override fun provideGoogleSignInLauncher(signInLauncher: ActivityResultLauncher<Intent>) =
+    fun provideGoogleSignInLauncher(signInLauncher: ActivityResultLauncher<Intent>) =
         DefaultGoogleSignInLauncher(signInLauncher, provideSignInIntent())
 
     private fun provideLocationClient(context: Context) =
