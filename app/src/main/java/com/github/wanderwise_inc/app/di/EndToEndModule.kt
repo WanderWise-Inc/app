@@ -24,10 +24,10 @@ import com.google.android.gms.location.LocationServices
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 
-object AppModule: ModuleProvider {
+object EndToEndModule: ModuleProvider {
 
     init {
-        Log.d("ModuleProvider", "Using AppModule")
+        Log.d("ModuleProvider", "Using EndToEndModule")
     }
 
     override fun provideFirebaseAuth() = FirebaseAuth.getInstance()
