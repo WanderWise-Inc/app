@@ -21,7 +21,7 @@ import com.github.wanderwise_inc.app.model.location.ItineraryTags
 import com.github.wanderwise_inc.app.model.location.Tag
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.home.SearchBar
-import com.github.wanderwise_inc.app.viewmodel.MapViewModel
+import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
 
@@ -38,7 +38,7 @@ object LikedScreenTestTags {
 
 @Composable
 fun LikedScreen(
-    mapViewModel: MapViewModel,
+    itineraryViewModel: ItineraryViewModel,
     profileViewModel: ProfileViewModel,
     navController: NavHostController,
     firebaseAuth: FirebaseAuth
@@ -46,7 +46,7 @@ fun LikedScreen(
   val sliderPositionPriceState = remember { mutableStateOf(0f..100f) }
   val sliderPositionTimeState = remember { mutableStateOf(0f..24f) }
   DisplayLikedItineraries(
-      mapViewModel = mapViewModel,
+      itineraryViewModel = itineraryViewModel,
       profileViewModel = profileViewModel,
       navController = navController,
       sliderPositionPriceState = sliderPositionPriceState,
@@ -57,7 +57,7 @@ fun LikedScreen(
 /** Displays itineraries liked by the user */
 @Composable
 fun DisplayLikedItineraries(
-    mapViewModel: MapViewModel,
+    itineraryViewModel: ItineraryViewModel,
     profileViewModel: ProfileViewModel,
     navController: NavHostController,
     sliderPositionPriceState: MutableState<ClosedFloatingPointRange<Float>>,
@@ -81,7 +81,7 @@ fun DisplayLikedItineraries(
 
   val itineraryUids by profileViewModel.getLikedItineraries(uid).collectAsState(initial = listOf())
   val itineraries by
-      mapViewModel.getItineraryFromUids(itineraryUids).collectAsState(initial = listOf())
+      itineraryViewModel.getItineraryFromUids(itineraryUids).collectAsState(initial = listOf())
 
   Scaffold(
       topBar = {
@@ -123,7 +123,7 @@ fun DisplayLikedItineraries(
                 }
         ItinerariesListScrollable(
             itineraries = filtered,
-            mapViewModel = mapViewModel,
+            itineraryViewModel = itineraryViewModel,
             profileViewModel = profileViewModel,
             navController = navController,
             firebaseAuth = firebaseAuth,

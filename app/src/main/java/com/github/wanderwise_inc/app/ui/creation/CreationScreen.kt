@@ -22,28 +22,30 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.github.wanderwise_inc.app.ui.TestTags
-import com.github.wanderwise_inc.app.viewmodel.MapViewModel
+import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun CreationScreen(
     // navController: NavHostController,
-    mapViewModel: MapViewModel,
+    createItineraryViewModel: CreateItineraryViewModel,
     profileViewModel: ProfileViewModel
 ) {
   // TODO replace this when implemented in `ProfileViewModel`
   val userUid = FirebaseAuth.getInstance().currentUser?.uid ?: "NULL"
 
-  var isNewItineraryNull by remember { mutableStateOf(mapViewModel.getNewItinerary() == null) }
+  var isNewItineraryNull by remember {
+    mutableStateOf(createItineraryViewModel.getNewItinerary() == null)
+  }
 
   if (isNewItineraryNull) {
     NoNewItinerary {
-      mapViewModel.startNewItinerary(userUid)
+      createItineraryViewModel.startNewItinerary(userUid)
       isNewItineraryNull = false
     }
   } else {
-    CreateItineraryMap(mapViewModel = mapViewModel)
+    CreateItineraryMap(createItineraryViewModel = createItineraryViewModel)
   }
 }
 
