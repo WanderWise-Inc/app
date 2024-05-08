@@ -70,6 +70,7 @@ class HomeNavigationTest {
       every { mapViewModel.getUserItineraries(any()) } returns flow { emit(emptyList()) }
       every { mapViewModel.getItineraryFromUids(any()) } returns flow { emit(emptyList()) }
       every { mapViewModel.getFocusedItinerary() } returns null
+      every { mapViewModel.getNewItinerary() } returns null
       // coEvery { mapViewModel.getItineraryFromUids(any()) } returns flow { listOf(mockItinerary) }
 
       every { bottomNavigationViewModel.setSelected(any()) } returns Unit
