@@ -74,7 +74,7 @@ class CreationNavigationTest {
 
       /*every { bottomNavigationViewModel.setSelected(any()) } returns Unit
       every { bottomNavigationViewModel.selected } returns liveData { 0 }*/
-      
+
       every { firebaseAuth.currentUser?.uid } returns null
 
       FirebaseApp.initializeApp(LocalContext.current)

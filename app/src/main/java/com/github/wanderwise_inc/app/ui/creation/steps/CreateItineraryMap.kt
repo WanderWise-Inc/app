@@ -38,36 +38,24 @@ fun CreateItineraryMap(
   val cameraPositionState = rememberCameraPositionState {
     CameraPosition.fromLatLngZoom(itinerary.computeCenterOfGravity().toLatLng(), 13f)
   }
-  Box(
-    modifier = Modifier.testTag(TestTags.CREATION_SCREEN_LOCATIONS)
-  ) {
+  Box(modifier = Modifier.testTag(TestTags.CREATION_SCREEN_LOCATIONS)) {
     GoogleMap(
-        modifier = Modifier
-            .fillMaxSize()
-            .testTag(TestTags.MAP_GOOGLE_MAPS),
-        cameraPositionState = cameraPositionState
-    ) {
-        locations.map { location ->
+        modifier = Modifier.fillMaxSize().testTag(TestTags.MAP_GOOGLE_MAPS),
+        cameraPositionState = cameraPositionState) {
+          locations.map { location ->
             AdvancedMarker(
                 state = MarkerState(position = location.toLatLng()),
                 title = location.title ?: "",
             )
+          }
         }
-    }
     Button(
         onClick = {
-            itineraryBuilder.addLocation(
-                Location.fromLatLng(
-                    LatLng(
-                        ctr.toDouble(),
-                        ctr.toDouble()
-                    )
-                )
-            )
-            locations.add(Location.fromLatLng(LatLng(ctr.toDouble(), ctr.toDouble())))
-            ctr += 1
+          itineraryBuilder.addLocation(Location.fromLatLng(LatLng(ctr.toDouble(), ctr.toDouble())))
+          locations.add(Location.fromLatLng(LatLng(ctr.toDouble(), ctr.toDouble())))
+          ctr += 1
         }) {
-        Text("Add a new location")
-    }
+          Text("Add a new location")
+        }
   }
 }
