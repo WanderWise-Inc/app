@@ -23,100 +23,100 @@ import org.robolectric.RuntimeEnvironment
 @RunWith(RobolectricTestRunner::class)
 class AppModuleTest {
 
-    @Before
-    fun setUp() {
-        FirebaseApp.initializeApp(RuntimeEnvironment.getApplication())
-    }
+  @Before
+  fun setUp() {
+    FirebaseApp.initializeApp(RuntimeEnvironment.getApplication())
+  }
 
-    @Test
-    fun `provideFirebaseAuth should return an instance of FirebaseAuth`() {
-        val result = AppModule.provideFirebaseAuth()
+  @Test
+  fun `provideFirebaseAuth should return an instance of FirebaseAuth`() {
+    val result = AppModule.provideFirebaseAuth()
 
-        assertNotNull(result)
-    }
+    assertNotNull(result)
+  }
 
-    @Test
-    fun `provideFirebaseStorage should return an instance of FirebaseStorage`() {
-        val result = AppModule.provideFirebaseStorage()
+  @Test
+  fun `provideFirebaseStorage should return an instance of FirebaseStorage`() {
+    val result = AppModule.provideFirebaseStorage()
 
-        assertNotNull(result)
-    }
+    assertNotNull(result)
+  }
 
-    @Test
-    fun `provideImageRepository should return an instance of ImageRepository`() {
-        val imageLauncher = mockk<ActivityResultLauncher<Intent>>()
-        val firebaseStorage = mockk<FirebaseStorage>()
+  @Test
+  fun `provideImageRepository should return an instance of ImageRepository`() {
+    val imageLauncher = mockk<ActivityResultLauncher<Intent>>()
+    val firebaseStorage = mockk<FirebaseStorage>()
 
-        every { firebaseStorage.getReference() } returns mockk<StorageReference>()
+    every { firebaseStorage.getReference() } returns mockk<StorageReference>()
 
-        val result = AppModule.provideImageRepository(imageLauncher, firebaseStorage)
+    val result = AppModule.provideImageRepository(imageLauncher, firebaseStorage)
 
-        assertNotNull(result)
-    }
+    assertNotNull(result)
+  }
 
-    @Test
-    fun `provideDirectionsRepository should return an instance of DirectionsRepository`() {
-        val result = AppModule.provideDirectionsRepository()
+  @Test
+  fun `provideDirectionsRepository should return an instance of DirectionsRepository`() {
+    val result = AppModule.provideDirectionsRepository()
 
-        assertNotNull(result)
-    }
+    assertNotNull(result)
+  }
 
-    @Test
-    fun `provideItineraryRepository should return an instance of ItineraryRepository`() {
-        val result = AppModule.provideItineraryRepository()
+  @Test
+  fun `provideItineraryRepository should return an instance of ItineraryRepository`() {
+    val result = AppModule.provideItineraryRepository()
 
-        assertNotNull(result)
-    }
+    assertNotNull(result)
+  }
 
-    @Test
-    fun `provideProfileRepository should return an instance of ProfileRepository`() {
-        val result = AppModule.provideProfileRepository()
+  @Test
+  fun `provideProfileRepository should return an instance of ProfileRepository`() {
+    val result = AppModule.provideProfileRepository()
 
-        assertNotNull(result)
-    }
+    assertNotNull(result)
+  }
 
-    @Test
-    fun `provideProfileSignIn should return an instance of ProfileSignIn`() {
-        val result = AppModule.provideSignInRepository()
+  @Test
+  fun `provideProfileSignIn should return an instance of ProfileSignIn`() {
+    val result = AppModule.provideSignInRepository()
 
-        assertNotNull(result)
-    }
+    assertNotNull(result)
+  }
 
-    @Test
-    fun `provideBottomNavigationViewModel should return an instance of BottomNavigationViewModel`() {
-        val result = AppModule.provideBottomNavigationViewModel()
+  @Test
+  fun `provideBottomNavigationViewModel should return an instance of BottomNavigationViewModel`() {
+    val result = AppModule.provideBottomNavigationViewModel()
 
-        assertNotNull(result)
-    }
+    assertNotNull(result)
+  }
 
-    @Test
-    fun `provideMapViewModel should return an instance of MapViewModel`() {
-        val context = mockk<Context>(relaxed = true)
-        val itineraryRepository = mockk<ItineraryRepository>()
-        val directionsRepository = mockk<DirectionsRepository>()
+  @Test
+  fun `provideMapViewModel should return an instance of MapViewModel`() {
+    val context = mockk<Context>(relaxed = true)
+    val itineraryRepository = mockk<ItineraryRepository>()
+    val directionsRepository = mockk<DirectionsRepository>()
 
-        val result = AppModule.provideMapViewModel(context, itineraryRepository, directionsRepository)
+    val result = AppModule.provideMapViewModel(context, itineraryRepository, directionsRepository)
 
-        assertNotNull(result)
-    }
+    assertNotNull(result)
+  }
 
-    @Test
-    fun `provideProfileViewModel should return an instance of ProfileViewModel`() {
-        val profileRepository = mockk<ProfileRepository>()
-        val imageRepository = mockk<ImageRepository>()
+  @Test
+  fun `provideProfileViewModel should return an instance of ProfileViewModel`() {
+    val profileRepository = mockk<ProfileRepository>()
+    val imageRepository = mockk<ImageRepository>()
 
-        val result = AppModule.provideProfileViewModel(profileRepository, imageRepository)
+    val result = AppModule.provideProfileViewModel(profileRepository, imageRepository)
 
-        assertNotNull(result)
-    }
+    assertNotNull(result)
+  }
 
-    @Test
-    fun `provideGoogleSignInLauncher should return an instance of GoogleSignInLauncher`() {
-        val signInLauncher = mockk<ActivityResultLauncher<Intent>>()
-        val providers = emptyList<AuthUI.IdpConfig>()
+  @Test
+  fun `provideGoogleSignInLauncher should return an instance of GoogleSignInLauncher`() {
+    val signInLauncher = mockk<ActivityResultLauncher<Intent>>()
+    val providers = emptyList<AuthUI.IdpConfig>()
 
-        val result = AppModule.provideGoogleSignInLauncher(signInLauncher, providers)
+    val result = AppModule.provideGoogleSignInLauncher(signInLauncher, providers)
 
-        assertNotNull(result)
-    }
+    assertNotNull(result)
+  }
 }

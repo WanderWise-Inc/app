@@ -26,52 +26,51 @@ import com.google.firebase.storage.FirebaseStorage
 
 object AppModule {
 
-    init {
-        Log.d("ModuleProvider", "Using AppModule")
-    }
+  init {
+    Log.d("ModuleProvider", "Using AppModule")
+  }
 
-    fun provideFirebaseAuth() = FirebaseAuth.getInstance()
+  fun provideFirebaseAuth() = FirebaseAuth.getInstance()
 
-    fun provideFirebaseStorage() = FirebaseStorage.getInstance()
+  fun provideFirebaseStorage() = FirebaseStorage.getInstance()
 
-    fun provideImageRepository(
-        imageLauncher: ActivityResultLauncher<Intent>,
-        firebaseStorage: FirebaseStorage
-    ): ImageRepository {
-        return ImageRepositoryImpl(imageLauncher, firebaseStorage.reference, null)
-    }
+  fun provideImageRepository(
+      imageLauncher: ActivityResultLauncher<Intent>,
+      firebaseStorage: FirebaseStorage
+  ): ImageRepository {
+    return ImageRepositoryImpl(imageLauncher, firebaseStorage.reference, null)
+  }
 
-    fun provideDirectionsRepository() =
-        DirectionsRepositoryImpl(ApiServiceFactory.createDirectionsApiService())
+  fun provideDirectionsRepository() =
+      DirectionsRepositoryImpl(ApiServiceFactory.createDirectionsApiService())
 
-    fun provideItineraryRepository() = ItineraryRepositoryTestImpl()
+  fun provideItineraryRepository() = ItineraryRepositoryTestImpl()
 
-    fun provideProfileRepository() = ProfileRepositoryTestImpl()
+  fun provideProfileRepository() = ProfileRepositoryTestImpl()
 
-    fun provideSignInRepository() = SignInRepositoryImpl()
+  fun provideSignInRepository() = SignInRepositoryImpl()
 
-    fun provideBottomNavigationViewModel() = BottomNavigationViewModel()
+  fun provideBottomNavigationViewModel() = BottomNavigationViewModel()
 
-    fun provideMapViewModel(
-        context: Context,
-        itineraryRepository: ItineraryRepository,
-        directionsRepository: DirectionsRepository
-    ) = MapViewModel(itineraryRepository, directionsRepository, provideLocationClient(context))
+  fun provideMapViewModel(
+      context: Context,
+      itineraryRepository: ItineraryRepository,
+      directionsRepository: DirectionsRepository
+  ) = MapViewModel(itineraryRepository, directionsRepository, provideLocationClient(context))
 
-    fun provideProfileViewModel(
-        profileRepository: ProfileRepository,
-        imageRepository: ImageRepository
-    ) = ProfileViewModel(profileRepository, imageRepository)
+  fun provideProfileViewModel(
+      profileRepository: ProfileRepository,
+      imageRepository: ImageRepository
+  ) = ProfileViewModel(profileRepository, imageRepository)
 
-    fun provideGoogleSignInLauncher(
-        signInLauncher: ActivityResultLauncher<Intent>,
-        providers: List<AuthUI.IdpConfig>
-    ) = DefaultGoogleSignInLauncher(signInLauncher, provideSignInIntent(providers))
+  fun provideGoogleSignInLauncher(
+      signInLauncher: ActivityResultLauncher<Intent>,
+      providers: List<AuthUI.IdpConfig>
+  ) = DefaultGoogleSignInLauncher(signInLauncher, provideSignInIntent(providers))
 
-    private fun provideLocationClient(context: Context) =
-        UserLocationClient(context, LocationServices.getFusedLocationProviderClient(context))
+  private fun provideLocationClient(context: Context) =
+      UserLocationClient(context, LocationServices.getFusedLocationProviderClient(context))
 
-
-    private fun provideSignInIntent(providers: List<AuthUI.IdpConfig>) =
-        AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers).build()
+  private fun provideSignInIntent(providers: List<AuthUI.IdpConfig>) =
+      AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers).build()
 }
