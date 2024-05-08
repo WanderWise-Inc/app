@@ -63,14 +63,15 @@ object AppModule {
         imageRepository: ImageRepository
     ) = ProfileViewModel(profileRepository, imageRepository)
 
-    fun provideGoogleSignInLauncher(signInLauncher: ActivityResultLauncher<Intent>) =
-        DefaultGoogleSignInLauncher(signInLauncher, provideSignInIntent())
+    fun provideGoogleSignInLauncher(
+        signInLauncher: ActivityResultLauncher<Intent>,
+        providers: List<AuthUI.IdpConfig>
+    ) = DefaultGoogleSignInLauncher(signInLauncher, provideSignInIntent(providers))
 
     private fun provideLocationClient(context: Context) =
         UserLocationClient(context, LocationServices.getFusedLocationProviderClient(context))
 
-    private val providers = listOf(AuthUI.IdpConfig.GoogleBuilder().build())
 
-    private fun provideSignInIntent() =
+    private fun provideSignInIntent(providers: List<AuthUI.IdpConfig>) =
         AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers).build()
 }

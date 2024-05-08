@@ -14,6 +14,7 @@ import androidx.core.app.ActivityCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.github.wanderwise_inc.app.data.DirectionsRepository
 import com.github.wanderwise_inc.app.data.GoogleSignInLauncher
@@ -48,6 +49,10 @@ class MainActivity : ComponentActivity() {
     private lateinit var googleSignInLauncher: GoogleSignInLauncher
 
     private lateinit var navController: NavHostController
+
+    private val providers by lazy {
+        listOf(AuthUI.IdpConfig.GoogleBuilder().build())
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,7 +90,7 @@ class MainActivity : ComponentActivity() {
 
         initializeViewModels()
 
-        googleSignInLauncher = AppModule.provideGoogleSignInLauncher(signInLauncher())
+        googleSignInLauncher = AppModule.provideGoogleSignInLauncher(signInLauncher(), providers)
     }
 
     private fun requestPermissions() {
