@@ -14,6 +14,7 @@ interface DirectionsApiService {
       @Query("origin") origin: String,
       @Query("destination") destination: String,
       @Query("waypoints") waypoints: List<String>,
+      @Query("mode") mode: String,
       @Query("key") key: String
   ): Call<DirectionsResponseBody>
 }

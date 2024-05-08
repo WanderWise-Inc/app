@@ -1,6 +1,7 @@
 package com.github.wanderwise_inc.app.viewmodel
 
 import android.location.Location
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -113,7 +114,10 @@ class MapViewModel(
    * composable function
    */
   fun fetchPolylineLocations(itinerary: Itinerary) {
-    assert(itinerary.locations.size >= 2)
+    Log.d(DEBUG_TAG, "called fetch polyline points")
+    if (itinerary.locations.size < 2)
+      return
+
     val origin = itinerary.locations.first()
     val destination = itinerary.locations.last()
     val originEncoded = "${origin.lat}, ${origin.long}"
