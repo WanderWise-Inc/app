@@ -10,11 +10,8 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -24,27 +21,26 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
+import org.mockito.Mockito.any
 import org.mockito.Mockito.anyString
+import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
 import org.robolectric.RobolectricTestRunner
-import org.mockito.Mockito.any
-import org.mockito.Mockito.mock
 
 @RunWith(RobolectricTestRunner::class)
 class ItineraryRepositoryTest {
   @get:Rule val mockitoRule: MockitoRule = MockitoJUnit.rule()
 
-  @Mock private lateinit var db : FirebaseFirestore
-  @Mock private lateinit var itineraryColl : CollectionReference
-  @Mock private lateinit var queryTask : Task<QuerySnapshot>
-  @Mock private lateinit var query : QuerySnapshot
-  @Mock private lateinit var documentRef : DocumentReference
-  @Mock private lateinit var documentSnapshot : DocumentSnapshot
-  @Mock private lateinit var docTask : Task<DocumentSnapshot>
-  @Mock private lateinit var voidTask : Task<Void>
-
+  @Mock private lateinit var db: FirebaseFirestore
+  @Mock private lateinit var itineraryColl: CollectionReference
+  @Mock private lateinit var queryTask: Task<QuerySnapshot>
+  @Mock private lateinit var query: QuerySnapshot
+  @Mock private lateinit var documentRef: DocumentReference
+  @Mock private lateinit var documentSnapshot: DocumentSnapshot
+  @Mock private lateinit var docTask: Task<DocumentSnapshot>
+  @Mock private lateinit var voidTask: Task<Void>
 
   private val itineraryObject = FakeItinerary
   private lateinit var itineraryRepositoryTest: ItineraryRepository
@@ -178,51 +174,55 @@ class ItineraryRepositoryTest {
   // FIREBASE IMPLEMENTATION TEST
 
   @Test
-  fun `getPublicItineraries should return an empty list if no itineraries were added (FIREBASE)`() = runTest {
-    `when`(itineraryColl.whereEqualTo(anyString(), any())).thenReturn(itineraryColl)
-    `when`(itineraryColl.get()).thenReturn(queryTask)
-    `when`(queryTask.addOnSuccessListener(any())).thenReturn(queryTask)
-    `when`(queryTask.addOnFailureListener(any())).thenAnswer {
-      val listener = it.arguments[0] as OnFailureListener
-      listener.onFailure(Exception("Get bytes return an exception"))
-      null
-    }
-    val publicItineraries = itineraryRepository.getPublicItineraries().first()
-    assertTrue(publicItineraries.isEmpty())
-  }
+  fun `getPublicItineraries should return an empty list if no itineraries were added (FIREBASE)`() =
+      runTest {
+        `when`(itineraryColl.whereEqualTo(anyString(), any())).thenReturn(itineraryColl)
+        `when`(itineraryColl.get()).thenReturn(queryTask)
+        `when`(queryTask.addOnSuccessListener(any())).thenReturn(queryTask)
+        `when`(queryTask.addOnFailureListener(any())).thenAnswer {
+          val listener = it.arguments[0] as OnFailureListener
+          listener.onFailure(Exception("Get bytes return an exception"))
+          null
+        }
+        val publicItineraries = itineraryRepository.getPublicItineraries().first()
+        assertTrue(publicItineraries.isEmpty())
+      }
 
   @Test
-  fun `getPublic itineraries should return the correct list if itineraries were added (FIREBASE)`() = runTest {
-    `when`(itineraryColl.whereEqualTo(anyString(), any())).thenReturn(itineraryColl)
-    `when`(itineraryColl.get()).thenReturn(queryTask)
-    `when`(queryTask.addOnSuccessListener(any())).thenAnswer {
-        val listener = it.arguments[0] as OnSuccessListener<QuerySnapshot>
-        listener.onSuccess(query)
-        queryTask
-    }
-    val mockDocuments = locationsList.map {itinerary ->
-      val mockDocument = mock(DocumentSnapshot::class.java)
-      `when`(mockDocument.toObject(Itinerary::class.java)).thenReturn(itinerary)
-      mockDocument
-    }
-    `when`(query.documents).thenReturn(mockDocuments)
-    val publicItineraries = itineraryRepository.getPublicItineraries().first()
-    assertEquals(locationsList, publicItineraries)
-  }
+  fun `getPublic itineraries should return the correct list if itineraries were added (FIREBASE)`() =
+      runTest {
+        `when`(itineraryColl.whereEqualTo(anyString(), any())).thenReturn(itineraryColl)
+        `when`(itineraryColl.get()).thenReturn(queryTask)
+        `when`(queryTask.addOnSuccessListener(any())).thenAnswer {
+          val listener = it.arguments[0] as OnSuccessListener<QuerySnapshot>
+          listener.onSuccess(query)
+          queryTask
+        }
+        val mockDocuments =
+            locationsList.map { itinerary ->
+              val mockDocument = mock(DocumentSnapshot::class.java)
+              `when`(mockDocument.toObject(Itinerary::class.java)).thenReturn(itinerary)
+              mockDocument
+            }
+        `when`(query.documents).thenReturn(mockDocuments)
+        val publicItineraries = itineraryRepository.getPublicItineraries().first()
+        assertEquals(locationsList, publicItineraries)
+      }
 
   @Test
-  fun `getUser itineraries should return an empty list if nothing was found (FIREBASE)`() = runTest {
-    `when`(itineraryColl.whereEqualTo(anyString(), any())).thenReturn(itineraryColl)
-    `when`(itineraryColl.get()).thenReturn(queryTask)
-    `when`(queryTask.addOnSuccessListener(any())).thenReturn(queryTask)
-    `when`(queryTask.addOnFailureListener(any())).thenAnswer {
-      val listener = it.arguments[0] as OnFailureListener
-      listener.onFailure(Exception("Get bytes return an exception"))
-      null
-    }
-    val userItineraries = itineraryRepository.getUserItineraries("testUser").first()
-    assertTrue(userItineraries.isEmpty())
-  }
+  fun `getUser itineraries should return an empty list if nothing was found (FIREBASE)`() =
+      runTest {
+        `when`(itineraryColl.whereEqualTo(anyString(), any())).thenReturn(itineraryColl)
+        `when`(itineraryColl.get()).thenReturn(queryTask)
+        `when`(queryTask.addOnSuccessListener(any())).thenReturn(queryTask)
+        `when`(queryTask.addOnFailureListener(any())).thenAnswer {
+          val listener = it.arguments[0] as OnFailureListener
+          listener.onFailure(Exception("Get bytes return an exception"))
+          null
+        }
+        val userItineraries = itineraryRepository.getUserItineraries("testUser").first()
+        assertTrue(userItineraries.isEmpty())
+      }
 
   @Test
   fun `get user itineraries should return the list of the user itineraries (FIREBASE)`() = runTest {
@@ -235,50 +235,57 @@ class ItineraryRepositoryTest {
     }
 
     val userList = listOf(itineraryObject.SAN_FRANCISCO)
-    val mockDocuments = userList.map {itinerary ->
-      val mockDocument = mock(DocumentSnapshot::class.java)
-      `when`(mockDocument.toObject(Itinerary::class.java)).thenReturn(itinerary)
-      mockDocument
-    }
+    val mockDocuments =
+        userList.map { itinerary ->
+          val mockDocument = mock(DocumentSnapshot::class.java)
+          `when`(mockDocument.toObject(Itinerary::class.java)).thenReturn(itinerary)
+          mockDocument
+        }
     `when`(query.documents).thenReturn(mockDocuments)
-    val userItineraries = itineraryRepository.getUserItineraries(itineraryObject.SAN_FRANCISCO.userUid).first()
+    val userItineraries =
+        itineraryRepository.getUserItineraries(itineraryObject.SAN_FRANCISCO.userUid).first()
     assertTrue(userItineraries.size == 1)
     assertEquals(userList[0], userItineraries[0])
   }
 
   @Test
-  fun `get itineraries with tags should return an empty list if nothing was found (FIREBASE)`() = runTest {
-    `when`(itineraryColl.whereArrayContainsAny(anyString(), any())).thenReturn(itineraryColl)
-    `when`(itineraryColl.get()).thenReturn(queryTask)
-    `when`(queryTask.addOnSuccessListener(any())).thenReturn(queryTask)
-    `when`(queryTask.addOnFailureListener(any())).thenAnswer {
-      val listener = it.arguments[0] as OnFailureListener
-      listener.onFailure(Exception("Get bytes return an exception"))
-      null
-    }
-    val itinerariesWithTags = itineraryRepository.getItinerariesWithTags(listOf(ItineraryTags.URBAN)).first()
-    assertTrue(itinerariesWithTags.isEmpty())
-  }
+  fun `get itineraries with tags should return an empty list if nothing was found (FIREBASE)`() =
+      runTest {
+        `when`(itineraryColl.whereArrayContainsAny(anyString(), any())).thenReturn(itineraryColl)
+        `when`(itineraryColl.get()).thenReturn(queryTask)
+        `when`(queryTask.addOnSuccessListener(any())).thenReturn(queryTask)
+        `when`(queryTask.addOnFailureListener(any())).thenAnswer {
+          val listener = it.arguments[0] as OnFailureListener
+          listener.onFailure(Exception("Get bytes return an exception"))
+          null
+        }
+        val itinerariesWithTags =
+            itineraryRepository.getItinerariesWithTags(listOf(ItineraryTags.URBAN)).first()
+        assertTrue(itinerariesWithTags.isEmpty())
+      }
 
   @Test
-  fun `get itineraries with tags should return the list of itineraries with the tags (FIREBASE)`() = runTest {
-      `when`(itineraryColl.whereArrayContainsAny(anyString(), any())).thenReturn(itineraryColl)
-      `when`(itineraryColl.get()).thenReturn(queryTask)
-      `when`(queryTask.addOnSuccessListener(any())).thenAnswer {
-        val listener = it.arguments[0] as OnSuccessListener<QuerySnapshot>
-        listener.onSuccess(query)
-        queryTask
+  fun `get itineraries with tags should return the list of itineraries with the tags (FIREBASE)`() =
+      runTest {
+        `when`(itineraryColl.whereArrayContainsAny(anyString(), any())).thenReturn(itineraryColl)
+        `when`(itineraryColl.get()).thenReturn(queryTask)
+        `when`(queryTask.addOnSuccessListener(any())).thenAnswer {
+          val listener = it.arguments[0] as OnSuccessListener<QuerySnapshot>
+          listener.onSuccess(query)
+          queryTask
+        }
+        val locationWithTagUrban = listOf(itineraryObject.SAN_FRANCISCO, itineraryObject.TOKYO)
+        val mockDocuments =
+            locationWithTagUrban.map { itinerary ->
+              val mockDocument = mock(DocumentSnapshot::class.java)
+              `when`(mockDocument.toObject(Itinerary::class.java)).thenReturn(itinerary)
+              mockDocument
+            }
+        `when`(query.documents).thenReturn(mockDocuments)
+        val itinerariesWithTags =
+            itineraryRepository.getItinerariesWithTags(listOf(ItineraryTags.URBAN)).first()
+        assertEquals(locationWithTagUrban, itinerariesWithTags)
       }
-      val locationWithTagUrban = listOf(itineraryObject.SAN_FRANCISCO, itineraryObject.TOKYO)
-      val mockDocuments = locationWithTagUrban.map {itinerary ->
-      val mockDocument = mock(DocumentSnapshot::class.java)
-      `when`(mockDocument.toObject(Itinerary::class.java)).thenReturn(itinerary)
-      mockDocument
-      }
-      `when`(query.documents).thenReturn(mockDocuments)
-      val itinerariesWithTags = itineraryRepository.getItinerariesWithTags(listOf(ItineraryTags.URBAN)).first()
-      assertEquals(locationWithTagUrban, itinerariesWithTags)
-  }
 
   @Test(expected = Exception::class)
   fun `get itinerary should throw an error if no itineraries were found (FIREBASE)`() = runTest {
@@ -286,9 +293,9 @@ class ItineraryRepositoryTest {
     `when`(documentRef.get()).thenReturn(docTask)
     `when`(docTask.addOnSuccessListener(any())).thenReturn(docTask)
     `when`(docTask.addOnFailureListener(any())).thenAnswer {
-        val listener = it.arguments[0] as OnFailureListener
-        listener.onFailure(Exception("Get bytes return an exception"))
-        docTask
+      val listener = it.arguments[0] as OnFailureListener
+      listener.onFailure(Exception("Get bytes return an exception"))
+      docTask
     }
     itineraryRepository.getItinerary("0")
   }
@@ -298,9 +305,9 @@ class ItineraryRepositoryTest {
     `when`(itineraryColl.document(anyString())).thenReturn(documentRef)
     `when`(documentRef.get()).thenReturn(docTask)
     `when`(docTask.addOnSuccessListener(any())).thenAnswer {
-        val listener = it.arguments[0] as OnSuccessListener<DocumentSnapshot>
-        listener.onSuccess(documentSnapshot)
-        docTask
+      val listener = it.arguments[0] as OnSuccessListener<DocumentSnapshot>
+      listener.onSuccess(documentSnapshot)
+      docTask
     }
     `when`(documentSnapshot.exists()).thenReturn(false)
     itineraryRepository.getItinerary("0")
@@ -316,7 +323,8 @@ class ItineraryRepositoryTest {
       docTask
     }
     `when`(documentSnapshot.exists()).thenReturn(true)
-    `when`(documentSnapshot.toObject(Itinerary::class.java)).thenReturn(itineraryObject.SAN_FRANCISCO)
+    `when`(documentSnapshot.toObject(Itinerary::class.java))
+        .thenReturn(itineraryObject.SAN_FRANCISCO)
     val itinerary = itineraryRepository.getItinerary("0")
     assertEquals(itineraryObject.SAN_FRANCISCO, itinerary)
   }
@@ -329,9 +337,9 @@ class ItineraryRepositoryTest {
     `when`(documentRef.set(any())).thenReturn(voidTask)
     `when`(voidTask.addOnSuccessListener(any())).thenReturn(voidTask)
     `when`(voidTask.addOnFailureListener(any())).thenAnswer {
-        val listener = it.arguments[0] as OnFailureListener
-        listener.onFailure(Exception("Get bytes return an exception"))
-        voidTask
+      val listener = it.arguments[0] as OnFailureListener
+      listener.onFailure(Exception("Get bytes return an exception"))
+      voidTask
     }
     itineraryRepository.setItinerary(itineraryObject.SAN_FRANCISCO)
   }
@@ -354,9 +362,10 @@ class ItineraryRepositoryTest {
   }
 
   @Test(expected = Exception::class)
-  fun `update itinerary should throw an exception if oldUid isnt the same as new itinerary uid`() = runTest {
-    itineraryRepository.updateItinerary("0", itineraryObject.SAN_FRANCISCO)
-  }
+  fun `update itinerary should throw an exception if oldUid isnt the same as new itinerary uid`() =
+      runTest {
+        itineraryRepository.updateItinerary("0", itineraryObject.SAN_FRANCISCO)
+      }
 
   @Test(expected = Exception::class)
   fun `update itinerary should throw an exception if set failed`() = runTest {
@@ -368,38 +377,41 @@ class ItineraryRepositoryTest {
       listener.onFailure(Exception("Get bytes return an exception"))
       voidTask
     }
-    itineraryRepository.updateItinerary(itineraryObject.SAN_FRANCISCO.uid, itineraryObject.SAN_FRANCISCO)
+    itineraryRepository.updateItinerary(
+        itineraryObject.SAN_FRANCISCO.uid, itineraryObject.SAN_FRANCISCO)
   }
 
   @Test
-  fun `update itinerary should correctly set a new itinerary to the database (FIREBASE)`() = runTest {
-    val testList = mutableListOf(itineraryObject.SAN_FRANCISCO)
-    val newItinerary = itineraryObject.SAN_FRANCISCO.copy(numLikes = 10)
-    `when`(itineraryColl.document(anyString())).thenReturn(documentRef)
-    `when`(documentRef.set(any())).thenReturn(voidTask)
-    `when`(voidTask.addOnSuccessListener(any())).thenAnswer {
-      val listener = it.arguments[0] as OnSuccessListener<Void>
-      listener.onSuccess(null)
-      testList.remove(itineraryObject.SAN_FRANCISCO)
-      testList.add(newItinerary)
-      voidTask
-    }
-    itineraryRepository.updateItinerary(itineraryObject.SAN_FRANCISCO.uid, newItinerary)
-    assertEquals(listOf(newItinerary), testList)
-  }
+  fun `update itinerary should correctly set a new itinerary to the database (FIREBASE)`() =
+      runTest {
+        val testList = mutableListOf(itineraryObject.SAN_FRANCISCO)
+        val newItinerary = itineraryObject.SAN_FRANCISCO.copy(numLikes = 10)
+        `when`(itineraryColl.document(anyString())).thenReturn(documentRef)
+        `when`(documentRef.set(any())).thenReturn(voidTask)
+        `when`(voidTask.addOnSuccessListener(any())).thenAnswer {
+          val listener = it.arguments[0] as OnSuccessListener<Void>
+          listener.onSuccess(null)
+          testList.remove(itineraryObject.SAN_FRANCISCO)
+          testList.add(newItinerary)
+          voidTask
+        }
+        itineraryRepository.updateItinerary(itineraryObject.SAN_FRANCISCO.uid, newItinerary)
+        assertEquals(listOf(newItinerary), testList)
+      }
 
   @Test(expected = Exception::class)
-  fun `delete itinerary should throw an exception if an error occurred during deletion`() = runTest {
-    `when`(itineraryColl.document(anyString())).thenReturn(documentRef)
-    `when`(documentRef.delete()).thenReturn(voidTask)
-    `when`(voidTask.addOnSuccessListener(any())).thenReturn(voidTask)
-    `when`(voidTask.addOnFailureListener(any())).thenAnswer {
-      val listener = it.arguments[0] as OnFailureListener
-      listener.onFailure(Exception("Get bytes return an exception"))
-      voidTask
-    }
-    itineraryRepository.deleteItinerary(itineraryObject.SAN_FRANCISCO)
-  }
+  fun `delete itinerary should throw an exception if an error occurred during deletion`() =
+      runTest {
+        `when`(itineraryColl.document(anyString())).thenReturn(documentRef)
+        `when`(documentRef.delete()).thenReturn(voidTask)
+        `when`(voidTask.addOnSuccessListener(any())).thenReturn(voidTask)
+        `when`(voidTask.addOnFailureListener(any())).thenAnswer {
+          val listener = it.arguments[0] as OnFailureListener
+          listener.onFailure(Exception("Get bytes return an exception"))
+          voidTask
+        }
+        itineraryRepository.deleteItinerary(itineraryObject.SAN_FRANCISCO)
+      }
 
   @Test
   fun `delete itinerary should correctly remove the itinerary from database`() = runTest {
@@ -415,5 +427,4 @@ class ItineraryRepositoryTest {
     itineraryRepository.deleteItinerary(itineraryObject.SAN_FRANCISCO)
     assertTrue(testList.isEmpty())
   }
-
 }
