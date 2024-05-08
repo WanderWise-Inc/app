@@ -54,7 +54,7 @@ fun CreationScreen(
       topBar = {
           ItineraryCreationNavigationMenu(navigationActions = NavigationActions(navController))
       },
-      modifier = Modifier.testTag(TestTags.CREATION_SCREEN)
+      modifier = Modifier.testTag(TestTags.NEW_CREATION_SCREEN)
     ) { padding ->
       CreationNavGraph(mapViewModel, navController, padding)
     }
@@ -67,7 +67,7 @@ fun NoNewItinerary(onClick: () -> Unit) {
   Box(
       contentAlignment = Alignment.Center,
       modifier =
-          Modifier.fillMaxSize().testTag(TestTags.CREATION_SCREEN).fillMaxWidth().height(100.dp)) {
+          Modifier.fillMaxSize().testTag(TestTags.NO_NEW_CREATION_SCREEN).fillMaxWidth().height(100.dp)) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center) {

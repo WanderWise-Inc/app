@@ -9,6 +9,7 @@ import androidx.compose.ui.test.performClick
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
 import com.github.wanderwise_inc.app.data.ImageRepository
+import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.creation.CreationScreen
 import com.github.wanderwise_inc.app.ui.creation.steps.CreationStepPreview
@@ -46,6 +47,7 @@ class CreationNavigationTest {
     MockKAnnotations.init(this)
 
     composeTestRule.setContent {
+      val itineraryBuilder = Itinerary.Builder(userUid = "")
       /*val mockProfile = Profile("", "Test", "0", "Bio", null)
                   val mockItinerary = FakeItinerary.SAN_FRANCISCO
                   val mockLocation = Location("")
@@ -66,18 +68,20 @@ class CreationNavigationTest {
       every { mapViewModel.getUserItineraries(any()) } returns flow { emit(emptyList()) }
       every { mapViewModel.getItineraryFromUids(any()) } returns flow { emit(emptyList()) }
       every { mapViewModel.getFocusedItinerary() } returns null
+      every { mapViewModel.setItinerary(any()) } returns Unit
+      every { mapViewModel.getNewItinerary() } returns itineraryBuilder
       // coEvery { mapViewModel.getItineraryFromUids(any()) } returns flow { listOf(mockItinerary) }
 
       /*every { bottomNavigationViewModel.setSelected(any()) } returns Unit
-      every { bottomNavigationViewModel.selected } returns liveData { 0 }
-
-      every { firebaseAuth.currentUser?.uid } returns null*/
+      every { bottomNavigationViewModel.selected } returns liveData { 0 }*/
+      
+      every { firebaseAuth.currentUser?.uid } returns null
 
       FirebaseApp.initializeApp(LocalContext.current)
       navController = TestNavHostController(LocalContext.current)
       navController.navigatorProvider.addNavigator(ComposeNavigator())
 
-      CreationScreen(mapViewModel = mapViewModel, navController = navController)
+      CreationScreen(mapViewModel, profileViewModel, navController, firebaseAuth)
     }
   }
 

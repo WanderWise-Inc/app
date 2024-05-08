@@ -118,7 +118,7 @@ class HomeNavigationTest {
   fun performClick_OnItineraryButton_NavigatesToCreationScreen() {
     composeTestRule.onNodeWithTag(TopLevelRoute.CREATION).performClick()
 
-    composeTestRule.onNodeWithTag(TestTags.CREATION_SCREEN).assertIsDisplayed()
+    composeTestRule.onNodeWithTag(TestTags.NO_NEW_CREATION_SCREEN).assertIsDisplayed()
 
     val route = navController.currentBackStackEntry?.destination?.route
     assertEquals(TopLevelRoute.CREATION, route)
