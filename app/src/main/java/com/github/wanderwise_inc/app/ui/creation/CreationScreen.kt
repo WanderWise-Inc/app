@@ -18,14 +18,13 @@ fun CreationScreen(
     mapViewModel: MapViewModel
 ) {
   Scaffold(
-      topBar = { 
-          ItineraryCreationNavigationMenu(navigationActions = NavigationActions(navController))
+      topBar = {
+        ItineraryCreationNavigationMenu(navigationActions = NavigationActions(navController))
       },
-      modifier = Modifier.testTag(TestTags.CREATION_SCREEN)
-  ) { padding ->
-    CreationNavGraph(navController = navController, padding = padding)
-  }
-    /*Text(
-      text = "Welcome, here you will be able to create a new itinerary",
-      modifier = Modifier.testTag(TestTags.CREATION_SCREEN))*/
+      modifier = Modifier.testTag(TestTags.CREATION_SCREEN)) { padding ->
+        CreationNavGraph(navController = navController, padding = padding)
+      }
+  /*Text(
+  text = "Welcome, here you will be able to create a new itinerary",
+  modifier = Modifier.testTag(TestTags.CREATION_SCREEN))*/
 }

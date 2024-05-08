@@ -8,9 +8,9 @@ import com.github.wanderwise_inc.app.ui.TestTags
 
 @Composable
 fun CreationStepPreviewBanner() {
-    Text(
-        text = "Welcome to the final step of creating your itinerary, here you will be able to " +
-                "preview the banner corresponding to your itinerary",
-        modifier = Modifier.testTag(TestTags.CREATION_SCREEN_PREVIEW_BANNER)
-    )
+  Text(
+      text =
+          "Welcome to the final step of creating your itinerary, here you will be able to " +
+              "preview the banner corresponding to your itinerary",
+      modifier = Modifier.testTag(TestTags.CREATION_SCREEN_PREVIEW_BANNER))
 }

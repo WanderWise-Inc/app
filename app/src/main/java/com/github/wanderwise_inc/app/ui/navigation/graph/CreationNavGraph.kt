@@ -11,10 +11,7 @@ import com.github.wanderwise_inc.app.ui.creation.steps.CreationStepChooseDescrip
 import com.github.wanderwise_inc.app.ui.creation.steps.CreationStepChooseLocationsScreen
 import com.github.wanderwise_inc.app.ui.creation.steps.CreationStepChooseTagsScreen
 import com.github.wanderwise_inc.app.ui.creation.steps.CreationStepPreview
-import com.github.wanderwise_inc.app.ui.creation.steps.CreationStepPreviewBanner
-import com.github.wanderwise_inc.app.ui.creation.steps.CreationStepPreviewItinerary
 import com.github.wanderwise_inc.app.ui.navigation.Destination.CreationStepsDestinations
-
 
 @Composable
 fun CreationNavGraph(
@@ -26,23 +23,18 @@ fun CreationNavGraph(
     // imageRepository: ImageRepository,
     // firebaseAuth: FirebaseAuth
 ) {
-    NavHost(
-        navController = navController,
-        route = Graph.CREATION,
-        startDestination = CreationStepsDestinations.ChooseLocations.route,
-        modifier = Modifier.padding(padding)
-    ) {
-        composable(CreationStepsDestinations.ChooseLocations.route){
-            CreationStepChooseLocationsScreen()
+  NavHost(
+      navController = navController,
+      route = Graph.CREATION,
+      startDestination = CreationStepsDestinations.ChooseLocations.route,
+      modifier = Modifier.padding(padding)) {
+        composable(CreationStepsDestinations.ChooseLocations.route) {
+          CreationStepChooseLocationsScreen()
         }
-        composable(CreationStepsDestinations.ChooseDescription.route){
-            CreationStepChooseDescriptionScreen()
+        composable(CreationStepsDestinations.ChooseDescription.route) {
+          CreationStepChooseDescriptionScreen()
         }
-        composable(CreationStepsDestinations.ChooseTags.route){
-            CreationStepChooseTagsScreen()
-        }
-        composable(CreationStepsDestinations.Preview.route){
-            CreationStepPreview()
-        }
-    }
+        composable(CreationStepsDestinations.ChooseTags.route) { CreationStepChooseTagsScreen() }
+        composable(CreationStepsDestinations.Preview.route) { CreationStepPreview() }
+      }
 }

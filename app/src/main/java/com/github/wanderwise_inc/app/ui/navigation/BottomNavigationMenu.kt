@@ -52,19 +52,17 @@ fun BottomNavigationMenu(
           label = {
             Text(
                 text = stringResource(id = dest.textId),
-                modifier = Modifier
-                    .padding(1.dp),
-                style = TextStyle(
-                    fontSize = 12.sp,
-                    lineHeight = 16.sp,
-                    //fontFamily = FontFamily(Font(R.font.roboto)),
-                    fontWeight = FontWeight(600),
-                    color = Color(0xFF191C1E),
-
-                    textAlign = TextAlign.Center,
-                    letterSpacing = 0.5.sp,
-                )
-            )
+                modifier = Modifier.padding(1.dp),
+                style =
+                    TextStyle(
+                        fontSize = 12.sp,
+                        lineHeight = 16.sp,
+                        // fontFamily = FontFamily(Font(R.font.roboto)),
+                        fontWeight = FontWeight(600),
+                        color = Color(0xFF191C1E),
+                        textAlign = TextAlign.Center,
+                        letterSpacing = 0.5.sp,
+                    ))
           },
           modifier = Modifier.testTag(dest.route))
     }

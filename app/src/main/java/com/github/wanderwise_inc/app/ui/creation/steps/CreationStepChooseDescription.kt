@@ -8,9 +8,9 @@ import com.github.wanderwise_inc.app.ui.TestTags
 
 @Composable
 fun CreationStepChooseDescriptionScreen() {
-    Text(
-        text = "Welcome to the second step of creating your itinerary, here you will be able to " +
-                "choose the title and description of your itinerary",
-        modifier = Modifier.testTag(TestTags.CREATION_SCREEN_DESCRIPTION)
-    )
+  Text(
+      text =
+          "Welcome to the second step of creating your itinerary, here you will be able to " +
+              "choose the title and description of your itinerary",
+      modifier = Modifier.testTag(TestTags.CREATION_SCREEN_DESCRIPTION))
 }

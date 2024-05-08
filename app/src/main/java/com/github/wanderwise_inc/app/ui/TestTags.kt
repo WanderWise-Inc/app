@@ -17,7 +17,7 @@ object TestTags {
   const val CATEGORY_SELECTOR_TAB = "Category Selector Tab"
   const val CREATION_SCREEN = "Creation Screen"
   const val CREATION_SCREEN_LOCATIONS = "Creation Screen Choose Locations"
-  const val CREATION_SCREEN_DESCRIPTION = "Creation Screen Choose Description"  
+  const val CREATION_SCREEN_DESCRIPTION = "Creation Screen Choose Description"
   const val CREATION_SCREEN_TAGS = "Creation Screen Choose Tags"
   const val CREATION_SCREEN_PREVIEW = "Creation screen preview"
   const val CREATION_SCREEN_PREVIEW_BUTTON = "Creation screen preview button"
