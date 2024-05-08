@@ -2,9 +2,6 @@ package com.github.wanderwise_inc.app.data
 
 import com.github.wanderwise_inc.app.model.profile.Profile
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-
-const val DB_USERS_PATH = "users"
 
 interface ProfileRepository {
   /**
