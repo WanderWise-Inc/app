@@ -6,6 +6,7 @@ import androidx.activity.result.ActivityResultLauncher
 import com.firebase.ui.auth.AuthUI
 import com.github.wanderwise_inc.app.data.DefaultGoogleSignInLauncher
 import com.github.wanderwise_inc.app.data.DirectionsRepository
+import com.github.wanderwise_inc.app.data.DirectionsRepositoryImpl
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.data.ImageRepositoryImpl
 import com.github.wanderwise_inc.app.data.ItineraryRepository
@@ -36,7 +37,7 @@ object AppModule {
   }
 
   fun provideDirectionsRepository() =
-      DirectionsRepository(ApiServiceFactory.createDirectionsApiService())
+      DirectionsRepositoryImpl(ApiServiceFactory.createDirectionsApiService())
 
   fun provideItineraryRepository() = ItineraryRepositoryTestImpl()
 
