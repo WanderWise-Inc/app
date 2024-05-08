@@ -1,6 +1,8 @@
 package com.github.wanderwise_inc.app.ui.navigation
 
 import androidx.annotation.StringRes
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Home
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import com.github.wanderwise_inc.app.R
@@ -15,11 +17,15 @@ object TopLevelRoute {
 }
 
 object CreationStepsRoute {
+    const val PREVIEW = "Preview"
     const val LOCATIONS = "Locations"
     const val DESCRIPTION = "Description"
     const val TAGS = "Tags"
-    const val PREVIEW_BANNER = "Preview/Banner"
-    const val PREVIEW_ITINERARY = "Preview/Itinerary"
+}
+
+object CreationPreviewOptions {
+    const val PREVIEW_BANNER = "Banner"
+    const val PREVIEW_ITINERARY = "Itinerary"
 }
 
 sealed class Destination(val route: String, val icon: Int, @StringRes val textId: Int) {
@@ -70,14 +76,22 @@ sealed class Destination(val route: String, val icon: Int, @StringRes val textId
               textId = R.string.tags_string,
           )
 
+      data object Preview :
+          CreationStepsDestinations(
+              route = CreationStepsRoute.PREVIEW, icon = R.drawable.tick_icon, textId = R.string.preview_string
+          )
+  }
+    
+  sealed class CreationPreviewOptionsDestinations(route: String, icon: Int, textId: Int):
+    Destination("Creation/Preview/$route", icon, textId) {      
       data object PreviewBanner :
           CreationStepsDestinations(
-              route = CreationStepsRoute.PREVIEW_BANNER, icon = R.drawable.tick_icon, textId = R.string.preview_string
+              route = CreationPreviewOptions.PREVIEW_BANNER, icon = R.drawable.map_icon, textId = R.string.preview_string
           )
       
       data object PreviewItinerary :
           CreationStepsDestinations(
-              route = CreationStepsRoute.PREVIEW_ITINERARY, icon = R.drawable.tick_icon, textId = R.string.preview_string
+              route = CreationPreviewOptions.PREVIEW_ITINERARY, icon = R.drawable.home_icon, textId = R.string.preview_string
           )
   }
 }
@@ -95,7 +109,7 @@ val CREATION_STEPS_DESTINATIONS =
         Destination.CreationStepsDestinations.ChooseLocations,
         Destination.CreationStepsDestinations.ChooseDescription,
         Destination.CreationStepsDestinations.ChooseTags,
-        Destination.CreationStepsDestinations.PreviewBanner,
+        Destination.CreationStepsDestinations.Preview,
     )
 
 class NavigationActions(private val navController: NavHostController) {

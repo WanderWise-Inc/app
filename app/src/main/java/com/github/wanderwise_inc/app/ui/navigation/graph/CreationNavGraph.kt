@@ -41,11 +41,8 @@ fun CreationNavGraph(
         composable(CreationStepsDestinations.ChooseTags.route){
             CreationStepChooseTagsScreen()
         }
-        composable(CreationStepsDestinations.PreviewBanner.route){
-            CreationStepPreviewBanner()
-        }
-        composable(CreationStepsDestinations.PreviewItinerary.route){
-            CreationStepPreviewItinerary()
+        composable(CreationStepsDestinations.Preview.route){
+            CreationStepPreview()
         }
     }
 }
