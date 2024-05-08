@@ -19,10 +19,12 @@ import com.github.wanderwise_inc.app.ui.navigation.Destination.CreationPreviewOp
 import com.github.wanderwise_inc.app.ui.navigation.graph.Graph
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import com.github.wanderwise_inc.app.R
+import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.navigation.NavigationActions
 
 @Composable
@@ -43,7 +45,8 @@ fun CreationStepPreview(
                         selected = PreviewOption.Banner
                         navigator.navigateTo(CreationPreviewOptionsDestinations.PreviewBanner)
                     }
-                }
+                },
+                modifier = Modifier.testTag(TestTags.CREATION_SCREEN_PREVIEW_BUTTON)
             ) {
                 Icon(
                     painter = painterResource(id = 
@@ -59,7 +62,8 @@ fun CreationStepPreview(
                         .padding(2.dp)
                 )
             }
-        }
+        },
+        modifier = Modifier.testTag(TestTags.CREATION_SCREEN_PREVIEW)
     ) { padding ->
         CreationStepPreviewNav(navController, padding)
     }

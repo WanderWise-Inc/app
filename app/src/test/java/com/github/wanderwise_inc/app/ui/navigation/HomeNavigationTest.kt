@@ -92,7 +92,7 @@ class HomeNavigationTest {
 
   @Test
   fun verify_BottomNavigationBarIsDisplayed() {
-    composeTestRule.onNodeWithTag("Bottom navigation bar").assertIsDisplayed()
+    composeTestRule.onNodeWithTag(TestTags.BOTTOM_NAV).assertIsDisplayed()
   }
 
   @Test

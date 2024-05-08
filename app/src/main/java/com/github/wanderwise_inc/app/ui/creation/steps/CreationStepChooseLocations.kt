@@ -11,6 +11,7 @@ fun CreationStepChooseLocationsScreen() {
     Text(
         text = "Welcome to the first step of creating your itinerary, here you will be able to " +
                 "choose the list of locations in your itinerary",
-        modifier = Modifier.testTag(TestTags.CREATION_SCREEN_LOCATIONS)
+        // IT IS IMPORTANT TO KEEP THIS TAG SOMEWHERE IN THE COMPOSABLE FOR THE TEST
+        modifier = Modifier.testTag(TestTags.CREATION_SCREEN_LOCATIONS) 
     )
 }

@@ -19,6 +19,8 @@ object TestTags {
   const val CREATION_SCREEN_LOCATIONS = "Creation Screen Choose Locations"
   const val CREATION_SCREEN_DESCRIPTION = "Creation Screen Choose Description"  
   const val CREATION_SCREEN_TAGS = "Creation Screen Choose Tags"
+  const val CREATION_SCREEN_PREVIEW = "Creation screen preview"
+  const val CREATION_SCREEN_PREVIEW_BUTTON = "Creation screen preview button"
   const val CREATION_SCREEN_PREVIEW_BANNER = "Creation Screen Preview Banner"
   const val CREATION_SCREEN_PREVIEW_ITINERARY = "Creation Screen Preview Itinerary"
   const val CREATION_SCREEN_NAV_BAR = "Creation Screen Top navigation bar"

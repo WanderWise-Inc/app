@@ -70,7 +70,8 @@ fun ItineraryCreationNavigationMenu (
                             .size(30.dp)
                             .padding(2.dp)
                     )
-                }
+                },
+                modifier = Modifier.testTag(dest.route) // Keep to mock input click
             )
         }
     }
