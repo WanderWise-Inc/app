@@ -17,7 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -125,7 +124,7 @@ fun CategorySelector(
                         lineHeight = 16.sp,
                         // fontFamily = FontFamily(Font(R.font.roboto)),
                         fontWeight = FontWeight(600),
-                        color = Color(0xFF191C1E),
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
                         textAlign = TextAlign.Center,
                         letterSpacing = 0.5.sp,
                     ))
@@ -134,7 +133,7 @@ fun CategorySelector(
             Icon(
                 painter = painterResource(id = category.icon),
                 contentDescription = null,
-                tint = Color(0xFF191C1E),
+                tint = MaterialTheme.colorScheme.onPrimaryContainer,
                 modifier = Modifier.size(30.dp).padding(2.dp))
           },
           modifier = Modifier.testTag("${TestTags.CATEGORY_SELECTOR_TAB}_${index}"))
