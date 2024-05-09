@@ -1,6 +1,7 @@
-package com.github.wanderwise_inc.app.ui.creation
+package com.github.wanderwise_inc.app.ui.creation.steps
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -35,22 +36,24 @@ fun CreateItineraryMap(createItineraryViewModel: CreateItineraryViewModel) {
   val cameraPositionState = rememberCameraPositionState {
     CameraPosition.fromLatLngZoom(itinerary.computeCenterOfGravity().toLatLng(), 13f)
   }
-  GoogleMap(
-      modifier = Modifier.fillMaxSize().testTag(TestTags.MAP_GOOGLE_MAPS),
-      cameraPositionState = cameraPositionState) {
-        locations.map { location ->
-          AdvancedMarker(
-              state = MarkerState(position = location.toLatLng()),
-              title = location.title ?: "",
-          )
+  Box(modifier = Modifier.testTag(TestTags.CREATION_SCREEN_LOCATIONS)) {
+    GoogleMap(
+        modifier = Modifier.fillMaxSize().testTag(TestTags.MAP_GOOGLE_MAPS),
+        cameraPositionState = cameraPositionState) {
+          locations.map { location ->
+            AdvancedMarker(
+                state = MarkerState(position = location.toLatLng()),
+                title = location.title ?: "",
+            )
+          }
         }
-      }
-  Button(
-      onClick = {
-        itineraryBuilder.addLocation(Location.fromLatLng(LatLng(ctr.toDouble(), ctr.toDouble())))
-        locations.add(Location.fromLatLng(LatLng(ctr.toDouble(), ctr.toDouble())))
-        ctr += 1
-      }) {
-        Text("Add a new location")
-      }
+    Button(
+        onClick = {
+          itineraryBuilder.addLocation(Location.fromLatLng(LatLng(ctr.toDouble(), ctr.toDouble())))
+          locations.add(Location.fromLatLng(LatLng(ctr.toDouble(), ctr.toDouble())))
+          ctr += 1
+        }) {
+          Text("Add a new location")
+        }
+  }
 }
