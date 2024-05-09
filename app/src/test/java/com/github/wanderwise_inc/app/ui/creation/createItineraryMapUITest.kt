@@ -46,7 +46,7 @@ class CreateItineraryMapUITest {
 
     @get:Rule val mockitoRule: MockitoRule = MockitoJUnit.rule()
 
-    @Mock private lateinit var itineraryViewModel: ItineraryViewModel
+    @Mock private lateinit var createItineraryViewModel: CreateItineraryViewModel
 
     @Mock private lateinit var profileRepository: ProfileRepository
     @Mock private lateinit var imageRepository: ImageRepository
@@ -100,10 +100,12 @@ class CreateItineraryMapUITest {
         Mockito.`when`(imageRepository.fetchImage(ArgumentMatchers.anyString()))
             .thenReturn(flow { emit(null) })
 
-        CreateItineraryViewModel =
-            ItineraryViewModel(itineraryRepository, directionsRepository, userLocationClient)
-        itineraryViewModel.setFocusedItinerary(itinerary)
+        createItineraryViewModel =
+            CreateItineraryViewModel(itineraryRepository, directionsRepository, userLocationClient)
+        createItineraryViewModel.startNewItinerary(dummyProfile.userUid)
+
         profileViewModel = ProfileViewModel(profileRepository, imageRepository)
+
 
 
     }
@@ -115,8 +117,9 @@ class CreateItineraryMapUITest {
 
     @Test
     fun testLocation1TextField() {
+
         composeTestRule.setContent {
-            SelectLocation(mapViewModel = mockViewModel)
+            SelectLocation(mapViewModel = createItineraryViewModel)
         }
 
         composeTestRule.onNodeWithTag(TestTags.FIRST_LOCATION).assertIsDisplayed()
@@ -125,121 +128,10 @@ class CreateItineraryMapUITest {
     @Test
     fun testLocation2TextField() {
         composeTestRule.setContent {
-            SelectLocation(mapViewModel = mockViewModel)
+            SelectLocation(mapViewModel = createItineraryViewModel)
         }
 
         composeTestRule.onNodeWithTag(TestTags.SECOND_LOCATION).assertIsDisplayed()
     }
 }
 
-/*
-
-@RunWith(AndroidJUnit4::class)
-class CreateItineraryMapTest {
-    @get:Rule val composeTestRule = createComposeRule()
-
-    @get:Rule val mockitoRule: MockitoRule = MockitoJUnit.rule()
-
-    @Mock private lateinit var createItineraryViewModel: CreateItineraryViewModel
-
-    @Mock private lateinit var profileRepository: ProfileRepository
-    @Mock private lateinit var imageRepository: ImageRepository
-    @Mock private lateinit var directionsRepository: DirectionsRepository
-    @Mock private lateinit var userLocationClient: UserLocationClient
-
-    private lateinit var profileViewModel: ProfileViewModel
-
-    private val epflLat = 46.519126741544575
-    private val epflLon = 6.5676006970802145
-
-    private val locations = PlacesReader(null).readFromString()
-    private val itinerary =
-        Itinerary(
-            userUid = "",
-            locations = locations,
-            title = "San Francisco Bike Itinerary",
-            tags = listOf(ItineraryTags.CULTURAL, ItineraryTags.NATURE, ItineraryTags.BUDGET),
-            description = "A 3-day itinerary to explore the best of San Francisco on a bike.",
-            visible = true)
-
-    @Before
-    fun setup() {
-        val epflLocation = Mockito.mock(Location::class.java)
-        epflLocation.latitude = epflLat
-        epflLocation.longitude = epflLon
-        val polylinePoints = MutableLiveData<List<LatLng>>()
-        polylinePoints.value = listOf(LatLng(epflLat, epflLon))
-
-        Mockito.`when`(
-            directionsRepository.getPolylineWayPoints(
-                ArgumentMatchers.anyString(),
-                ArgumentMatchers.anyString(),
-                ArgumentMatchers.anyList(),
-                ArgumentMatchers.anyString()))
-            .thenReturn(MutableLiveData(listOf(LatLng(epflLat, epflLon))))
-        Mockito.`when`(userLocationClient.getLocationUpdates(anyLong()))
-            .thenReturn(flow { emit(epflLocation) })
-        val itineraryRepository = Mockito.mock(ItineraryRepository::class.java)
-
-        val dummyProfile = Profile("-")
-        Mockito.`when`(profileRepository.getProfile(ArgumentMatchers.anyString()))
-            .thenReturn(flow { emit(dummyProfile) })
-        Mockito.`when`(imageRepository.fetchImage(ArgumentMatchers.anyString()))
-            .thenReturn(flow { emit(null) })
-
-        createItineraryViewModel =
-            CreateItineraryViewModel(itineraryRepository, directionsRepository, userLocationClient)
-        createItineraryViewModel.startNewItinerary(dummyProfile.userUid)
-
-        profileViewModel = ProfileViewModel(profileRepository, imageRepository)
-    }
-
-    @Test
-    fun `initial elements are displayed correctly`() = runTest {
-        composeTestRule.setContent {
-            CreateItineraryMap(
-                createItineraryViewModel = createItineraryViewModel,
-                innerPaddingValues = PaddingValues(10.dp),
-            )
-        }
-        // map should be displayed; the loading screen should not
-        composeTestRule.onNodeWithTag(TestTags.MAP_GOOGLE_MAPS).assertIsDisplayed()
-        composeTestRule.onNodeWithTag(TestTags.MAP_NULL_ITINERARY).assertIsNotDisplayed()
-
-        // pop-up should be displayed
-        composeTestRule.onNodeWithTag(TestTags.HINT_POPUP).assertIsDisplayed()
-    }
-
-    @Test
-    fun `performing a click on the map should add a location to the builder`() = runTest {
-        val boxTag = "BOX"
-        composeTestRule.setContent {
-            Box(modifier = Modifier.fillMaxSize().testTag(boxTag)) {
-                CreateItineraryMap(
-                    createItineraryViewModel = createItineraryViewModel,
-                    innerPaddingValues = PaddingValues(10.dp),
-                )
-            }
-        }
-        assert(createItineraryViewModel.getNewItinerary() != null)
-        assert(createItineraryViewModel.getNewItinerary()!!.locations.isEmpty())
-
-        composeTestRule.onNodeWithTag(TestTags.MAP_GOOGLE_MAPS).assertIsDisplayed()
-        composeTestRule.onNodeWithTag(boxTag).performClick()
-
-        // TODO the callback isn't working when pressing. Need to fix
-        // assert(createItineraryViewModel.getNewItinerary()!!.locations.isNotEmpty())
-    }
-
-    @Test
-    fun `map with selector should display both elements correctly`() = runTest {
-        composeTestRule.setContent {
-            CreateItineraryMapWithSelector(
-                createItineraryViewModel = createItineraryViewModel,
-            )
-        }
-        composeTestRule.onNodeWithTag(TestTags.MAP_GOOGLE_MAPS).isDisplayed()
-        // TODO Imane needs to define the test tag for her composable
-    }
-}
-*/
