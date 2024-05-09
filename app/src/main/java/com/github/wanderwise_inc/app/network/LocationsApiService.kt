@@ -52,7 +52,7 @@ data class LocationsResponseBody(val places: List<Place>) {
 
 /** Factory for creating `ApiService` design patterns for Locations uwu */
 object LocationsApiServiceFactory {
-    private const val BASE_URL = "https://geocode.maps.co/search"
+    private const val BASE_URL = "https://geocode.maps.co/search/"
 
     fun createDirectionsApiService(): LocationsApiService {
         val retrofit =

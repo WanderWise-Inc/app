@@ -27,7 +27,7 @@ import com.github.wanderwise_inc.app.data.ProfileRepositoryTestImpl
 import com.github.wanderwise_inc.app.data.SignInRepositoryImpl
 import com.github.wanderwise_inc.app.network.DirectionsApiServiceFactory
 import com.github.wanderwise_inc.app.network.LocationsApiServiceFactory
-import com.github.wanderwise_inc.app.ui.creation.CreateItineraryMap
+import com.github.wanderwise_inc.app.ui.navigation.graph.RootNavigationGraph
 import com.github.wanderwise_inc.app.ui.theme.WanderWiseTheme
 import com.github.wanderwise_inc.app.viewmodel.BottomNavigationViewModel
 import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
@@ -104,11 +104,7 @@ private lateinit var itineraryViewModel: ItineraryViewModel
         // A surface container using the 'background' color from the theme
         Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
           navController = rememberNavController()
-          
-            
-          CreateItineraryMap(createItineraryViewModel)
-            
-            /*RootNavigationGraph(
+            RootNavigationGraph(
               googleSignInLauncher = googleSignInLauncher,
               profileViewModel = profileViewModel,
               itineraryViewModel = itineraryViewModel,
@@ -117,7 +113,7 @@ private lateinit var itineraryViewModel: ItineraryViewModel
               imageRepository = imageRepository,
               navController = navController,
               firebaseAuth = FirebaseAuth.getInstance(),
-          )*/
+          )
         }
       }
     }
