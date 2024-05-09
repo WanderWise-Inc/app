@@ -19,9 +19,9 @@ import kotlinx.coroutines.launch
 private const val DEBUG_TAG: String = "MAP_VIEWMODEL"
 /** @brief ViewModel class for providing `Location`s and `Itinerary`s to the map UI */
 open class ItineraryViewModel(
-    private val itineraryRepository: ItineraryRepository,
-    private val directionsRepository: DirectionsRepository,
-    private val userLocationClient: LocationClient,
+  private val itineraryRepository: ItineraryRepository,
+  private val directionsRepository: DirectionsRepository,
+  private val locationClient: LocationClient,
 ) : ViewModel() {
   private var focusedItinerary: Itinerary? = null
 
@@ -138,7 +138,7 @@ open class ItineraryViewModel(
 
   /** @brief get a Flow of the user location updated every second */
   fun getUserLocation(): Flow<Location> {
-    return userLocationClient.getLocationUpdates(1000)
+    return locationClient.getLocationUpdates(1000)
   }
 
   /**
