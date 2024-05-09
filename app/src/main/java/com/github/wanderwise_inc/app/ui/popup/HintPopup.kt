@@ -15,8 +15,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.github.wanderwise_inc.app.ui.TestTags
 
 /**
  * Displays a hint popup
@@ -41,7 +43,7 @@ fun HintPopup(
 ) {
   Snackbar(
       action = { Text(text = "Dismiss", modifier = Modifier.clickable { onDismiss() }) },
-      modifier = Modifier.padding(16.dp)) {
+      modifier = Modifier.padding(16.dp).testTag(TestTags.HINT_POPUP)) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,

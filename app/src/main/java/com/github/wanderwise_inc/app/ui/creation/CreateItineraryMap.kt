@@ -98,13 +98,14 @@ fun CreateItineraryMap(
             Marker(
                 tag = TestTags.MAP_USER_LOCATION,
                 state = MarkerState(position = LatLng(it.latitude, it.longitude)),
-                icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+                icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE),
+                contentDescription = TestTags.MAP_USER_LOCATION)
           }
 
           locations.map { location ->
             AdvancedMarker(
                 state = MarkerState(position = location.toLatLng()),
-                title = location.title ?: "",
+                title = location.title,
             )
           }
           if (polylinePoints != null)
