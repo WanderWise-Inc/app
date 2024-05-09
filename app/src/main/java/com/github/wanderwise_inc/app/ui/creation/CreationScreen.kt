@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -21,19 +22,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.github.wanderwise_inc.app.ui.TestTags
+import com.github.wanderwise_inc.app.ui.navigation.ItineraryCreationNavigationMenu
+import com.github.wanderwise_inc.app.ui.navigation.NavigationActions
+import com.github.wanderwise_inc.app.ui.navigation.graph.CreationNavGraph
 import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun CreationScreen(
-    // navController: NavHostController,
     createItineraryViewModel: CreateItineraryViewModel,
-    profileViewModel: ProfileViewModel
+    profileViewModel: ProfileViewModel,
+    navController: NavHostController = rememberNavController(),
+    firebaseAuth: FirebaseAuth
 ) {
-  // TODO replace this when implemented in `ProfileViewModel`
-  val userUid = FirebaseAuth.getInstance().currentUser?.uid ?: "NULL"
+  val userUid = firebaseAuth.currentUser?.uid ?: "NULL"
 
   var isNewItineraryNull by remember {
     mutableStateOf(createItineraryViewModel.getNewItinerary() == null)
@@ -45,9 +51,13 @@ fun CreationScreen(
       isNewItineraryNull = false
     }
   } else {
-    // CreateItineraryMap(createItineraryViewModel = createItineraryViewModel)
-    // CreateItineraryMap(mapViewModel = mapViewModel)
-    SelectLocation(mapViewModel = createItineraryViewModel)
+    Scaffold(
+        topBar = {
+          ItineraryCreationNavigationMenu(navigationActions = NavigationActions(navController))
+        },
+        modifier = Modifier.testTag(TestTags.NEW_CREATION_SCREEN)) { padding ->
+          CreationNavGraph(createItineraryViewModel, navController, padding)
+        }
   }
 }
 
@@ -57,7 +67,10 @@ fun NoNewItinerary(onClick: () -> Unit) {
   Box(
       contentAlignment = Alignment.Center,
       modifier =
-          Modifier.fillMaxSize().testTag(TestTags.CREATION_SCREEN).fillMaxWidth().height(100.dp)) {
+          Modifier.fillMaxSize()
+              .testTag(TestTags.NO_NEW_CREATION_SCREEN)
+              .fillMaxWidth()
+              .height(100.dp)) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center) {
