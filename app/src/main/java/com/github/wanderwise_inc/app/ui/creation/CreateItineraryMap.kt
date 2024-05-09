@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import com.github.wanderwise_inc.app.model.location.Location
 import com.github.wanderwise_inc.app.ui.TestTags
-import com.github.wanderwise_inc.app.viewmodel.MapViewModel
+import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.firebase.auth.FirebaseAuth
 import com.google.maps.android.compose.AdvancedMarker
@@ -26,28 +26,26 @@ import com.google.maps.android.compose.rememberCameraPositionState
 
 @SuppressLint("MutableCollectionMutableState")
 @Composable
-fun CreateItineraryMap(
-    mapViewModel: MapViewModel,
-) {
-  var locationsCtr by remember { mutableIntStateOf(0) }
-
+fun CreateItineraryMap(createItineraryViewModel: CreateItineraryViewModel) {
   val userUid = FirebaseAuth.getInstance().currentUser?.uid ?: "NULL"
-  val itineraryBuilder = mapViewModel.getNewItinerary()!!
+  var itineraryBuilder = createItineraryViewModel.getNewItinerary()!!
+  val itinerary = itineraryBuilder.build()
   val locations = remember { mutableStateListOf<Location>() }
   for (location in itineraryBuilder.locations) {
     locations += location
   }
+  var locationsCtr by remember { mutableIntStateOf(0) }
 
-  LaunchedEffect(locationsCtr) { mapViewModel.fetchPolylineLocations(itineraryBuilder.build()) }
-  val polylinePoints by mapViewModel.getPolylinePointsLiveData().observeAsState()
+  LaunchedEffect(locationsCtr) {
+    createItineraryViewModel.fetchPolylineLocations(itineraryBuilder.build())
+  }
+  val polylinePoints by createItineraryViewModel.getPolylinePointsLiveData().observeAsState()
 
   val cameraPositionState = rememberCameraPositionState {
     CameraPosition.fromLatLngZoom(itineraryBuilder.build().computeCenterOfGravity().toLatLng(), 13f)
   }
   GoogleMap(
-      modifier = Modifier
-        .fillMaxSize()
-        .testTag(TestTags.MAP_GOOGLE_MAPS),
+      modifier = Modifier.fillMaxSize().testTag(TestTags.MAP_GOOGLE_MAPS),
       onMapClick = {
         itineraryBuilder.addLocation(Location.fromLatLng(it))
         locations.add(Location.fromLatLng(it))
@@ -61,6 +59,6 @@ fun CreateItineraryMap(
           )
         }
         if (polylinePoints != null)
-          Polyline(points = polylinePoints!!, color = MaterialTheme.colorScheme.primary)
+            Polyline(points = polylinePoints!!, color = MaterialTheme.colorScheme.primary)
       }
 }
