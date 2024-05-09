@@ -142,8 +142,9 @@ fun SelectLocation(mapViewModel: CreateItineraryViewModel) {
                   value = location1,
                   onValueChange = { location1 = it },
                   label = { Text("location 1...") },
+
                   placeholder = { Text("location 1...") },
-                  modifier = Modifier.padding(start = 25.dp),
+                  modifier = Modifier.padding(start = 25.dp).testTag(TestTags.FIRST_LOCATION),
                   shape = RoundedCornerShape(20.dp))
             }
 
@@ -162,7 +163,7 @@ fun SelectLocation(mapViewModel: CreateItineraryViewModel) {
                   onValueChange = { location2 = it },
                   label = { Text("location 2...") },
                   placeholder = { Text("location 2...") },
-                  modifier = Modifier.padding(start = 25.dp),
+                  modifier = Modifier.padding(start = 25.dp).testTag(TestTags.SECOND_LOCATION),
                   shape = RoundedCornerShape(20.dp))
             }
           }
