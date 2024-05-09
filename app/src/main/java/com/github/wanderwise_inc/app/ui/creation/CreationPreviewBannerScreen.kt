@@ -14,14 +14,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.ui.itinerary.ItineraryBanner
+import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
 
-@Preview(showBackground = true)
 @Composable
-fun PreviewBanner(){
+fun PreviewBanner(createItineraryViewModel: CreateItineraryViewModel){
     //itinerary: Itinerary, mapViewModel: MapViewModel
-    val itinerary = Itinerary("", "", emptyList(), "True itinerary", emptyList(), "", true,)
+    //val itinerary = Itinerary("", "", emptyList(), "True itinerary", emptyList(), "", true,)
     val dummyItinerary = Itinerary("", "", emptyList(), "Dummy itinerary", emptyList(), "", true,)
 
+    //set the itineary, not permanent (will have to check all this in navigation
+    val itinerary =  if (createItineraryViewModel.getNewItinerary() == null)
+        dummyItinerary
+    else
+        createItineraryViewModel.getNewItinerary()!!.build()
+
+    //function that do nothing
     val onBannerClick = {i :Itinerary -> }
     val onLikeButtonClick = {i :Itinerary, b: Boolean-> }
 
