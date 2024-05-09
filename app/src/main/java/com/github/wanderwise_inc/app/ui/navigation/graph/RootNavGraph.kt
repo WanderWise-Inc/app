@@ -8,7 +8,8 @@ import com.github.wanderwise_inc.app.data.GoogleSignInLauncher
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.ui.home.HomeScreen
 import com.github.wanderwise_inc.app.viewmodel.BottomNavigationViewModel
-import com.github.wanderwise_inc.app.viewmodel.MapViewModel
+import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
+import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
 
@@ -16,7 +17,8 @@ import com.google.firebase.auth.FirebaseAuth
 fun RootNavigationGraph(
     googleSignInLauncher: GoogleSignInLauncher,
     profileViewModel: ProfileViewModel,
-    mapViewModel: MapViewModel,
+    itineraryViewModel: ItineraryViewModel,
+    createItineraryViewModel: CreateItineraryViewModel,
     bottomNavigationViewModel: BottomNavigationViewModel,
     imageRepository: ImageRepository,
     navController: NavHostController,
@@ -28,7 +30,8 @@ fun RootNavigationGraph(
         composable(route = Graph.HOME) {
           HomeScreen(
               imageRepository = imageRepository,
-              mapViewModel = mapViewModel,
+              itineraryViewModel = itineraryViewModel,
+              createItineraryViewModel = createItineraryViewModel,
               bottomNavigationViewModel = bottomNavigationViewModel,
               profileViewModel = profileViewModel,
               firebaseAuth = firebaseAuth)
@@ -40,4 +43,6 @@ object Graph {
   const val ROOT = "root_graph"
   const val AUTHENTICATION = "auth_graph"
   const val HOME = "home_graph"
+  const val CREATION = "creation_graph"
+  const val CREATION_PREVIEW = "creation_preview_graph"
 }

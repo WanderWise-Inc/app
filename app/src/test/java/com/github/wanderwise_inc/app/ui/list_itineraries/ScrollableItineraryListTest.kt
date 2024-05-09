@@ -14,7 +14,7 @@ import com.github.wanderwise_inc.app.model.location.FakeItinerary
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.printToLog
 import com.github.wanderwise_inc.app.ui.TestTags
-import com.github.wanderwise_inc.app.viewmodel.MapViewModel
+import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
@@ -32,7 +32,7 @@ import org.robolectric.RobolectricTestRunner
 class ScrollableItineraryListTest {
   @get:Rule val composeTestRule = createComposeRule()
 
-  @MockK private lateinit var mapViewModel: MapViewModel
+  @MockK private lateinit var itineraryViewModel: ItineraryViewModel
   @MockK private lateinit var profileViewModel: ProfileViewModel
   @MockK private lateinit var navController: NavHostController
   @MockK private lateinit var firebaseAuth: FirebaseAuth
@@ -63,7 +63,7 @@ class ScrollableItineraryListTest {
       FirebaseApp.initializeApp(LocalContext.current)
       ItinerariesListScrollable(
           itineraries = testItineraries,
-          mapViewModel = mapViewModel,
+          itineraryViewModel = itineraryViewModel,
           profileViewModel = profileViewModel,
           navController = navController,
           firebaseAuth = firebaseAuth,
@@ -88,7 +88,7 @@ class ScrollableItineraryListTest {
       // FirebaseApp.initializeApp(LocalContext.current)
       ItinerariesListScrollable(
           itineraries = testItineraries,
-          mapViewModel = mapViewModel,
+          itineraryViewModel = itineraryViewModel,
           profileViewModel = profileViewModel,
           navController = navController,
           firebaseAuth = firebaseAuth,
@@ -111,7 +111,7 @@ class ScrollableItineraryListTest {
       FirebaseApp.initializeApp(LocalContext.current)
       ItinerariesListScrollable(
           itineraries = testItineraries,
-          mapViewModel = mapViewModel,
+          itineraryViewModel = itineraryViewModel,
           profileViewModel = profileViewModel,
           navController = navController,
           firebaseAuth = firebaseAuth,
@@ -125,7 +125,7 @@ class ScrollableItineraryListTest {
 
     var likedItineraryListBackend = mutableListOf<String>()
 
-    every { mapViewModel.incrementItineraryLikes(any()) } answers { itineraryLikesBackend++ }
+    every { itineraryViewModel.incrementItineraryLikes(any()) } answers { itineraryLikesBackend++ }
 
     every { profileViewModel.addLikedItinerary(any(), any()) } answers
         {
@@ -155,7 +155,7 @@ class ScrollableItineraryListTest {
       FirebaseApp.initializeApp(LocalContext.current)
       ItinerariesListScrollable(
           itineraries = testItineraries,
-          mapViewModel = mapViewModel,
+          itineraryViewModel = itineraryViewModel,
           profileViewModel = profileViewModel,
           navController = navController,
           firebaseAuth = firebaseAuth,
@@ -169,7 +169,7 @@ class ScrollableItineraryListTest {
 
     var likedItineraryListBackend = mutableListOf<String>(testItineraries.first().uid)
 
-    every { mapViewModel.decrementItineraryLikes(any()) } answers { itineraryLikesBackend-- }
+    every { itineraryViewModel.decrementItineraryLikes(any()) } answers { itineraryLikesBackend-- }
 
     every { profileViewModel.removeLikedItinerary(any(), any()) } answers
         {

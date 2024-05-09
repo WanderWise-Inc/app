@@ -1,6 +1,7 @@
 package com.github.wanderwise_inc.app.viewmodel
 
 import android.location.Location
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,22 +12,18 @@ import com.github.wanderwise_inc.app.data.ItineraryRepository
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryPreferences
 import com.google.android.gms.maps.model.LatLng
-import java.io.InvalidObjectException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 
 private const val DEBUG_TAG: String = "MAP_VIEWMODEL"
 /** @brief ViewModel class for providing `Location`s and `Itinerary`s to the map UI */
-class MapViewModel(
+open class ItineraryViewModel(
     private val itineraryRepository: ItineraryRepository,
     private val directionsRepository: DirectionsRepository,
     private val userLocationClient: LocationClient,
 ) : ViewModel() {
   private var focusedItinerary: Itinerary? = null
-
-  /** New itinerary that the signed in user is currently building */
-  private var newItineraryBuilder: Itinerary.Builder? = null
 
   /** @return the itinerary the user has clicked on */
   fun getFocusedItinerary(): Itinerary? {
@@ -113,7 +110,9 @@ class MapViewModel(
    * composable function
    */
   fun fetchPolylineLocations(itinerary: Itinerary) {
-    assert(itinerary.locations.size >= 2)
+    Log.d(DEBUG_TAG, "called fetch polyline points")
+    if (itinerary.locations.size < 2) return
+
     val origin = itinerary.locations.first()
     val destination = itinerary.locations.last()
     val originEncoded = "${origin.lat}, ${origin.long}"
@@ -165,27 +164,6 @@ class MapViewModel(
    * )
    * ```
    */
-  fun getNewItinerary(): Itinerary.Builder? {
-    return newItineraryBuilder
-  }
-
-  /** initializes a new `MutableItinerary` */
-  fun startNewItinerary(userUid: String) {
-    newItineraryBuilder = Itinerary.Builder(userUid = userUid)
-  }
-
-  fun uploadNewItinerary() {
-    if (newItineraryBuilder != null) itineraryRepository.setItinerary(newItineraryBuilder!!.build())
-    else throw InvalidObjectException("Itinerary.Builder is `null`")
-  }
-
-  fun setNewItineraryTitle(title: String) {
-    newItineraryBuilder?.title = title
-  }
-
-  fun setNewItineraryDescription(description: String) {
-    newItineraryBuilder?.description = description
-  }
 
   /* fun filterItinerariesByPrice(priceRange: FloatRange): List<Itinerary> {
     return allItineraries.filter { it.price in priceRange }

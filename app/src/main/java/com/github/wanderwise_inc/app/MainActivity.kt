@@ -26,7 +26,8 @@ import com.github.wanderwise_inc.app.di.AppModule
 import com.github.wanderwise_inc.app.ui.navigation.graph.RootNavigationGraph
 import com.github.wanderwise_inc.app.ui.theme.WanderWiseTheme
 import com.github.wanderwise_inc.app.viewmodel.BottomNavigationViewModel
-import com.github.wanderwise_inc.app.viewmodel.MapViewModel
+import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
+import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.github.wanderwise_inc.app.viewmodel.UserLocationClient
 import com.google.android.gms.location.LocationServices
@@ -35,6 +36,13 @@ import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
+  private lateinit var imageRepository: ImageRepositoryImpl
+  private val directionsApiService = ApiServiceFactory.createDirectionsApiService()
+  private val directionsRepository = DirectionsRepository(directionsApiService)
+  private lateinit var itineraryViewModel: ItineraryViewModel
+  private lateinit var createItineraryViewModel: CreateItineraryViewModel
+  private val signInRepositoryImpl = SignInRepositoryImpl()
+  private lateinit var googleSignInLauncher: GoogleSignInLauncher
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var firebaseStorage: FirebaseStorage
 
@@ -92,6 +100,12 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         init()
+    itineraryViewModel =
+        ItineraryViewModel(itineraryRepository, directionsRepository, userLocationClient)
+    profileViewModel = ProfileViewModel(profileRepository, imageRepository)
+    createItineraryViewModel =
+        CreateItineraryViewModel(itineraryRepository, directionsRepository, userLocationClient)
+    bottomNavigationViewModel = BottomNavigationViewModel()
 
         setContent {
             WanderWiseTheme {
@@ -113,6 +127,25 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+    setContent {
+      WanderWiseTheme {
+        // A surface container using the 'background' color from the theme
+        Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
+          navController = rememberNavController()
+          RootNavigationGraph(
+              googleSignInLauncher = googleSignInLauncher,
+              profileViewModel = profileViewModel,
+              itineraryViewModel = itineraryViewModel,
+              createItineraryViewModel = createItineraryViewModel,
+              bottomNavigationViewModel = bottomNavigationViewModel,
+              imageRepository = imageRepository,
+              navController = navController,
+              firebaseAuth = FirebaseAuth.getInstance(),
+          )
+        }
+      }
+    }
+  }
 
     private fun init() {
         requestPermissions()
