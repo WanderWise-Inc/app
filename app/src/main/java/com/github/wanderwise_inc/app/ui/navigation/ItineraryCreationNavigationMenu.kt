@@ -47,7 +47,7 @@ fun ItineraryCreationNavigationMenu(
               lineHeight = 16.sp,
               //fontFamily = FontFamily(Font(R.font.roboto)),
               fontWeight = FontWeight(600),
-              color = Color(0xFF191C1E),
+              color = MaterialTheme.colorScheme.primary,
 
               textAlign = TextAlign.Center,
               letterSpacing = 0.5.sp,
@@ -58,7 +58,7 @@ fun ItineraryCreationNavigationMenu(
             Icon(
                 painter = painterResource(id = dest.icon),
                 contentDescription = null,
-                tint = Color(0xFF191C1E),
+                tint = MaterialTheme.colorScheme.onPrimaryContainer,
                 modifier = Modifier.size(30.dp).padding(2.dp))
           },
           modifier = Modifier.testTag(dest.route) // Keep to mock input click

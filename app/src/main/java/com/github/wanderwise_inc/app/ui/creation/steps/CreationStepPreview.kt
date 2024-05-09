@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -53,7 +54,7 @@ fun CreationStepPreview(navController: NavHostController = rememberNavController
                                 CreationPreviewOptionsDestinations.PreviewItinerary.icon
                               }),
                   contentDescription = null,
-                  tint = Color(0xFF191C1E),
+                  tint = MaterialTheme.colorScheme.primary,
                   modifier = Modifier.size(30.dp).padding(2.dp))
             }
       },

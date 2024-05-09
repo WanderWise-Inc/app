@@ -125,7 +125,7 @@ fun CategorySelector(
                         lineHeight = 16.sp,
                         // fontFamily = FontFamily(Font(R.font.roboto)),
                         fontWeight = FontWeight(600),
-                        color = Color(0xFF191C1E),
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
                         textAlign = TextAlign.Center,
                         letterSpacing = 0.5.sp,
                     ))
@@ -134,7 +134,7 @@ fun CategorySelector(
             Icon(
                 painter = painterResource(id = category.icon),
                 contentDescription = null,
-                tint = Color(0xFF191C1E),
+                tint = MaterialTheme.colorScheme.onPrimaryContainer,
                 modifier = Modifier.size(30.dp).padding(2.dp))
           },
           modifier = Modifier.testTag("${TestTags.CATEGORY_SELECTOR_TAB}_${index}"))
