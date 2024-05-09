@@ -7,6 +7,8 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
 import com.github.wanderwise_inc.app.data.ImageRepository
@@ -17,6 +19,7 @@ import com.github.wanderwise_inc.app.ui.creation.steps.CreationStepPreview
 import com.github.wanderwise_inc.app.viewmodel.BottomNavigationViewModel
 import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
+import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import io.mockk.MockKAnnotations
@@ -50,6 +53,7 @@ class CreationNavigationTest {
 
     composeTestRule.setContent {
       val itineraryBuilder = Itinerary.Builder(userUid = "")
+      val dummyLiveData: LiveData<List<LatLng>> = MutableLiveData(listOf())
       /*val mockProfile = Profile("", "Test", "0", "Bio", null)
                   val mockItinerary = FakeItinerary.SAN_FRANCISCO
                   val mockLocation = Location("")
@@ -75,6 +79,9 @@ class CreationNavigationTest {
       every { createItineraryViewModel.setFocusedItinerary(any()) } returns Unit
       every { createItineraryViewModel.getFocusedItinerary() } returns null
       every { createItineraryViewModel.setItinerary(any()) } returns Unit
+      every { createItineraryViewModel.getNewItinerary() } returns itineraryBuilder
+      every { createItineraryViewModel.fetchPolylineLocations(any()) } returns Unit
+      every { createItineraryViewModel.getPolylinePointsLiveData() } returns dummyLiveData
       //      every { createItineraryViewModel.getNewItinerary() } returns itineraryBuilder
       every { createItineraryViewModel.getNewItinerary() } returns
           Itinerary.Builder(userUid = "uniqueUserUID")
@@ -103,7 +110,7 @@ class CreationNavigationTest {
 
   @Test
   fun `verify start destination is overview screen`() {
-    composeTestRule.onNodeWithTag(TestTags.CREATION_SCREEN_LOCATIONS).assertIsDisplayed()
+    composeTestRule.onNodeWithTag(TestTags.MAP_GOOGLE_MAPS).assertIsDisplayed()
 
     val route = navController.currentBackStackEntry?.destination?.route
     assertEquals("Creation/${CreationStepsRoute.LOCATIONS}", route)
@@ -170,23 +177,19 @@ class CreationPreviewNavigationTest {
       every { profileViewModel.addLikedItinerary(any(), any()) } returns Unit
       every { profileViewModel.getLikedItineraries(any()) } returns flow { emit(emptyList()) }
       every { profileViewModel.getDefaultProfilePicture() } returns flow { emit(null) }
-      every { profileViewModel.getProfilePicture(any()) } returns flow { emit(null) }*/
+      every { profileViewModel.getProfilePicture(any()) } returns flow { emit(null) }
 
       every { createItineraryViewModel.setItinerary(any()) } returns Unit
       every { createItineraryViewModel.incrementItineraryLikes(any()) } returns Unit
-      every { createItineraryViewModel.getAllPublicItineraries() } returns
-          flow { emit(emptyList()) }
+      every { createItineraryViewModel.getAllPublicItineraries() } returns flow { emit(emptyList()) }
       every { createItineraryViewModel.getUserLocation() } returns flow { emit(Location("")) }
-      every { createItineraryViewModel.getUserItineraries(any()) } returns
-          flow { emit(emptyList()) }
-      every { createItineraryViewModel.getItineraryFromUids(any()) } returns
-          flow { emit(emptyList()) }
-      every { createItineraryViewModel.getFocusedItinerary() } returns null
-      every { createItineraryViewModel.setFocusedItinerary(any()) } returns Unit
+      every { createItineraryViewModel.getUserItineraries(any()) } returns flow { emit(emptyList()) }
+      every { createItineraryViewModel.getItineraryFromUids(any()) } returns flow { emit(emptyList()) }
+      every { createItineraryViewModel.getFocusedItinerary() } returns null*/
       // coEvery { createItineraryViewModel.getItineraryFromUids(any()) } returns flow {
       // listOf(mockItinerary) }
-      /*
-      every { bottomNavigationViewModel.setSelected(any()) } returns Unit
+
+      /*every { bottomNavigationViewModel.setSelected(any()) } returns Unit
       every { bottomNavigationViewModel.selected } returns liveData { 0 }
 
       every { firebaseAuth.currentUser?.uid } returns null*/

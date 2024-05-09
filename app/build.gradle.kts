@@ -224,6 +224,7 @@ dependencies {
     implementation("com.google.android.material:material:1.10.0")
     // Material Design 3
     implementation(libs.compose.material3)
+
     // Integration with activities
     implementation(libs.compose.activity)
     // Integration with ViewModels
