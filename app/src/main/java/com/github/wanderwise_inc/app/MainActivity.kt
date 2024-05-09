@@ -28,7 +28,8 @@ import com.github.wanderwise_inc.app.network.ApiServiceFactory
 import com.github.wanderwise_inc.app.ui.navigation.graph.RootNavigationGraph
 import com.github.wanderwise_inc.app.ui.theme.WanderWiseTheme
 import com.github.wanderwise_inc.app.viewmodel.BottomNavigationViewModel
-import com.github.wanderwise_inc.app.viewmodel.MapViewModel
+import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
+import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.github.wanderwise_inc.app.viewmodel.UserLocationClient
 import com.google.android.gms.location.LocationServices
@@ -40,7 +41,8 @@ class MainActivity : ComponentActivity() {
   private lateinit var imageRepository: ImageRepositoryImpl
   private val directionsApiService = ApiServiceFactory.createDirectionsApiService()
   private val directionsRepository = DirectionsRepository(directionsApiService)
-  private lateinit var mapViewModel: MapViewModel
+  private lateinit var itineraryViewModel: ItineraryViewModel
+  private lateinit var createItineraryViewModel: CreateItineraryViewModel
   private val signInRepositoryImpl = SignInRepositoryImpl()
   private lateinit var googleSignInLauncher: GoogleSignInLauncher
 
@@ -86,8 +88,11 @@ class MainActivity : ComponentActivity() {
         UserLocationClient(
             applicationContext, LocationServices.getFusedLocationProviderClient(applicationContext))
 
-    mapViewModel = MapViewModel(itineraryRepository, directionsRepository, userLocationClient)
+    itineraryViewModel =
+        ItineraryViewModel(itineraryRepository, directionsRepository, userLocationClient)
     profileViewModel = ProfileViewModel(profileRepository, imageRepository)
+    createItineraryViewModel =
+        CreateItineraryViewModel(itineraryRepository, directionsRepository, userLocationClient)
     bottomNavigationViewModel = BottomNavigationViewModel()
 
     setContent {
@@ -98,7 +103,8 @@ class MainActivity : ComponentActivity() {
           RootNavigationGraph(
               googleSignInLauncher = googleSignInLauncher,
               profileViewModel = profileViewModel,
-              mapViewModel = mapViewModel,
+              itineraryViewModel = itineraryViewModel,
+              createItineraryViewModel = createItineraryViewModel,
               bottomNavigationViewModel = bottomNavigationViewModel,
               imageRepository = imageRepository,
               navController = navController,

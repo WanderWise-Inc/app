@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.github.wanderwise_inc.app.ui.TestTags
+import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
 import com.github.wanderwise_inc.app.ui.navigation.ItineraryCreationNavigationMenu
 import com.github.wanderwise_inc.app.ui.navigation.NavigationActions
 import com.github.wanderwise_inc.app.ui.navigation.graph.CreationNavGraph
@@ -34,18 +35,20 @@ import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun CreationScreen(
-    mapViewModel: MapViewModel,
+    createItineraryViewModel: CreateItineraryViewModel,
     profileViewModel: ProfileViewModel,
     navController: NavHostController = rememberNavController(),
     firebaseAuth: FirebaseAuth
 ) {
   val userUid = firebaseAuth.currentUser?.uid ?: "NULL"
 
-  var isNewItineraryNull by remember { mutableStateOf(mapViewModel.getNewItinerary() == null) }
+  var isNewItineraryNull by remember {
+    mutableStateOf(createItineraryViewModel.getNewItinerary() == null)
+  }
 
   if (isNewItineraryNull) {
     NoNewItinerary {
-      mapViewModel.startNewItinerary(userUid)
+      createItineraryViewModel.startNewItinerary(userUid)
       isNewItineraryNull = false
     }
   } else {
@@ -54,7 +57,7 @@ fun CreationScreen(
           ItineraryCreationNavigationMenu(navigationActions = NavigationActions(navController))
         },
         modifier = Modifier.testTag(TestTags.NEW_CREATION_SCREEN)) { padding ->
-          CreationNavGraph(mapViewModel, navController, padding)
+        CreateItineraryMap(createItineraryViewModel = createItineraryViewModel)
         }
   }
 }

@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import com.github.wanderwise_inc.app.model.location.Location
 import com.github.wanderwise_inc.app.ui.TestTags
-import com.github.wanderwise_inc.app.viewmodel.MapViewModel
+import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.FirebaseAuth
@@ -23,11 +23,9 @@ import com.google.maps.android.compose.rememberCameraPositionState
 
 @SuppressLint("MutableCollectionMutableState")
 @Composable
-fun CreateItineraryMap(
-    mapViewModel: MapViewModel,
-) {
+fun CreateItineraryMap(createItineraryViewModel: CreateItineraryViewModel) {
   val userUid = FirebaseAuth.getInstance().currentUser?.uid ?: "NULL"
-  var itineraryBuilder = mapViewModel.getNewItinerary()!!
+  var itineraryBuilder = createItineraryViewModel.getNewItinerary()!!
   val itinerary = itineraryBuilder.build()
   val locations = remember { mutableStateListOf<Location>() }
   for (location in itinerary.locations) {
