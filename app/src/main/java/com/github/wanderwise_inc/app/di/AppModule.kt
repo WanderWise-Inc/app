@@ -11,8 +11,9 @@ import com.github.wanderwise_inc.app.data.ProfileRepositoryTestImpl
 import com.github.wanderwise_inc.app.data.SignInRepositoryImpl
 import com.github.wanderwise_inc.app.network.ApiServiceFactory
 import com.github.wanderwise_inc.app.viewmodel.BottomNavigationViewModel
+import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
+import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.LocationClient
-import com.github.wanderwise_inc.app.viewmodel.MapViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
@@ -72,8 +73,12 @@ object AppModule {
         BottomNavigationViewModel()
     }
 
-    val mapViewModel by lazy {
-        MapViewModel(itineraryRepository, directionsRepository, locationClient)
+    val createItineraryViewModel by lazy {
+        CreateItineraryViewModel(itineraryRepository, directionsRepository, locationClient)
+    }
+
+    val itineraryViewModel by lazy {
+        ItineraryViewModel(itineraryRepository, directionsRepository, locationClient)
     }
 
     val profileViewModel by lazy {
