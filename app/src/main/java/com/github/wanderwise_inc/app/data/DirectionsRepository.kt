@@ -24,7 +24,11 @@ class DirectionsRepository(private val directionsApiService: DirectionsApiServic
 
     directionsApiService
         .getPolylineWayPoints(
-            origin = origin, destination = destination, waypoints = waypoints, key = apiKey)
+            origin = origin,
+            destination = destination,
+            waypoints = waypoints,
+            key = apiKey,
+            mode = "walking")
         .enqueue(
             object : Callback<DirectionsResponseBody> {
               override fun onResponse(
