@@ -5,12 +5,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import com.github.wanderwise_inc.app.ui.TestTags
+import com.github.wanderwise_inc.app.ui.map.PreviewItineraryScreen
+import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
+import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 
 @Composable
-fun CreationStepPreviewItinerary() {
-  Text(
-      text =
-          "Welcome to the final step of creating your itinerary, here you will be able to " +
-              "preview your itinerary",
-      modifier = Modifier.testTag(TestTags.CREATION_SCREEN_PREVIEW_ITINERARY))
+fun CreationStepPreviewItinerary(createItineraryViewModel: CreateItineraryViewModel, profileViewModel: ProfileViewModel) {
+    createItineraryViewModel.setFocusedItinerary(
+        (if (createItineraryViewModel.getFocusedItinerary() == null)
+            null
+        else
+            createItineraryViewModel.getNewItinerary()?.build())
+    )
+
+    PreviewItineraryScreen(itineraryViewModel = createItineraryViewModel, profileViewModel = profileViewModel)
 }
+
+//modifier = Modifier.testTag(TestTags.CREATION_SCREEN_PREVIEW_ITINERARY)
