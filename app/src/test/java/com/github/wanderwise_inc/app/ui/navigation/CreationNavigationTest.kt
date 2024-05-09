@@ -14,7 +14,7 @@ import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.creation.CreationScreen
 import com.github.wanderwise_inc.app.ui.creation.steps.CreationStepPreview
 import com.github.wanderwise_inc.app.viewmodel.BottomNavigationViewModel
-import com.github.wanderwise_inc.app.viewmodel.MapViewModel
+import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
@@ -35,7 +35,7 @@ class CreationNavigationTest {
   @get:Rule val composeTestRule = createComposeRule()
 
   @MockK private lateinit var imageRepository: ImageRepository
-  @MockK private lateinit var mapViewModel: MapViewModel
+  @MockK private lateinit var createItineraryViewModel: CreateItineraryViewModel
   @MockK private lateinit var profileViewModel: ProfileViewModel
   @MockK private lateinit var bottomNavigationViewModel: BottomNavigationViewModel
   @MockK private lateinit var firebaseAuth: FirebaseAuth
@@ -61,16 +61,20 @@ class CreationNavigationTest {
                   every { profileViewModel.getDefaultProfilePicture() } returns flow { emit(null) }
                   every { profileViewModel.getProfilePicture(any()) } returns flow { emit(null) }
       */
-      every { mapViewModel.setItinerary(any()) } returns Unit
-      every { mapViewModel.incrementItineraryLikes(any()) } returns Unit
-      every { mapViewModel.getAllPublicItineraries() } returns flow { emit(emptyList()) }
-      every { mapViewModel.getUserLocation() } returns flow { emit(Location("")) }
-      every { mapViewModel.getUserItineraries(any()) } returns flow { emit(emptyList()) }
-      every { mapViewModel.getItineraryFromUids(any()) } returns flow { emit(emptyList()) }
-      every { mapViewModel.getFocusedItinerary() } returns null
-      every { mapViewModel.setItinerary(any()) } returns Unit
-      every { mapViewModel.getNewItinerary() } returns itineraryBuilder
-      // coEvery { mapViewModel.getItineraryFromUids(any()) } returns flow { listOf(mockItinerary) }
+      every { createItineraryViewModel.setItinerary(any()) } returns Unit
+      every { createItineraryViewModel.incrementItineraryLikes(any()) } returns Unit
+      every { createItineraryViewModel.getAllPublicItineraries() } returns
+          flow { emit(emptyList()) }
+      every { createItineraryViewModel.getUserLocation() } returns flow { emit(Location("")) }
+      every { createItineraryViewModel.getUserItineraries(any()) } returns
+          flow { emit(emptyList()) }
+      every { createItineraryViewModel.getItineraryFromUids(any()) } returns
+          flow { emit(emptyList()) }
+      every { createItineraryViewModel.getFocusedItinerary() } returns null
+      every { createItineraryViewModel.setItinerary(any()) } returns Unit
+      every { createItineraryViewModel.getNewItinerary() } returns itineraryBuilder
+      // coEvery { createItineraryViewModel.getItineraryFromUids(any()) } returns flow {
+      // listOf(mockItinerary) }
 
       /*every { bottomNavigationViewModel.setSelected(any()) } returns Unit
       every { bottomNavigationViewModel.selected } returns liveData { 0 }*/
@@ -81,7 +85,7 @@ class CreationNavigationTest {
       navController = TestNavHostController(LocalContext.current)
       navController.navigatorProvider.addNavigator(ComposeNavigator())
 
-      CreationScreen(mapViewModel, profileViewModel, navController, firebaseAuth)
+      CreationScreen(createItineraryViewModel, profileViewModel, navController, firebaseAuth)
     }
   }
 
@@ -134,7 +138,7 @@ class CreationPreviewNavigationTest {
   @get:Rule val composeTestRule = createComposeRule()
 
   @MockK private lateinit var imageRepository: ImageRepository
-  @MockK private lateinit var mapViewModel: MapViewModel
+  @MockK private lateinit var createItineraryViewModel: CreateItineraryViewModel
   @MockK private lateinit var profileViewModel: ProfileViewModel
   @MockK private lateinit var bottomNavigationViewModel: BottomNavigationViewModel
   @MockK private lateinit var firebaseAuth: FirebaseAuth
@@ -159,14 +163,15 @@ class CreationPreviewNavigationTest {
       every { profileViewModel.getDefaultProfilePicture() } returns flow { emit(null) }
       every { profileViewModel.getProfilePicture(any()) } returns flow { emit(null) }
 
-      every { mapViewModel.setItinerary(any()) } returns Unit
-      every { mapViewModel.incrementItineraryLikes(any()) } returns Unit
-      every { mapViewModel.getAllPublicItineraries() } returns flow { emit(emptyList()) }
-      every { mapViewModel.getUserLocation() } returns flow { emit(Location("")) }
-      every { mapViewModel.getUserItineraries(any()) } returns flow { emit(emptyList()) }
-      every { mapViewModel.getItineraryFromUids(any()) } returns flow { emit(emptyList()) }
-      every { mapViewModel.getFocusedItinerary() } returns null*/
-      // coEvery { mapViewModel.getItineraryFromUids(any()) } returns flow { listOf(mockItinerary) }
+      every { createItineraryViewModel.setItinerary(any()) } returns Unit
+      every { createItineraryViewModel.incrementItineraryLikes(any()) } returns Unit
+      every { createItineraryViewModel.getAllPublicItineraries() } returns flow { emit(emptyList()) }
+      every { createItineraryViewModel.getUserLocation() } returns flow { emit(Location("")) }
+      every { createItineraryViewModel.getUserItineraries(any()) } returns flow { emit(emptyList()) }
+      every { createItineraryViewModel.getItineraryFromUids(any()) } returns flow { emit(emptyList()) }
+      every { createItineraryViewModel.getFocusedItinerary() } returns null*/
+      // coEvery { createItineraryViewModel.getItineraryFromUids(any()) } returns flow {
+      // listOf(mockItinerary) }
 
       /*every { bottomNavigationViewModel.setSelected(any()) } returns Unit
       every { bottomNavigationViewModel.selected } returns liveData { 0 }
