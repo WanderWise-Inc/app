@@ -45,7 +45,7 @@ import kotlinx.coroutines.launch
 class MainActivity : ComponentActivity() {
   private lateinit var imageRepository: ImageRepositoryImpl
   private val directionsApiService = DirectionsApiServiceFactory.createDirectionsApiService()
-  private val locationsApiService = LocationsApiServiceFactory.createDirectionsApiService()
+  private val locationsApiService = LocationsApiServiceFactory.createLocationsApiService()
   private val directionsRepository = DirectionsRepository(directionsApiService)
   private val locationsRepository = LocationsRepository(locationsApiService) 
 private lateinit var itineraryViewModel: ItineraryViewModel
@@ -106,7 +106,7 @@ private lateinit var itineraryViewModel: ItineraryViewModel
       WanderWiseTheme {
         // A surface container using the 'background' color from the theme
         Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-          navController = rememberNavController()
+            navController = rememberNavController()
             CreationScreen(
                 createItineraryViewModel = createItineraryViewModel,
                 profileViewModel = profileViewModel,

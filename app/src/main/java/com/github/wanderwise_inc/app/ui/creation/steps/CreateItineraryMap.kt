@@ -194,7 +194,7 @@ fun LocationSelector(
                 onDone = { onSearch(location1) },
                 onSearch = { onSearch(location1) }
             ),
-            
+            singleLine = true
         )
       }
       

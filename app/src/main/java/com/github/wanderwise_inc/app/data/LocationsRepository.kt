@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.github.wanderwise_inc.app.model.location.Location
 import com.github.wanderwise_inc.app.network.LocationsApiService
-import com.github.wanderwise_inc.app.network.LocationsResponseBody
+import com.github.wanderwise_inc.app.network.Place
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -24,22 +24,23 @@ class LocationsRepository(private val locationsApiService: LocationsApiService) 
         locationsApiService
             .getLocation(name = name, key = apiKey)
             .enqueue(
-                object : Callback<LocationsResponseBody> {
+                object : Callback<List<Place>> {
                     override fun onResponse(
-                        call: Call<LocationsResponseBody>,
-                        response: Response<LocationsResponseBody>
+                        call: Call<List<Place>>,
+                        response: Response<List<Place>>
                     ) {
                         if (response.isSuccessful) {
                             Log.d(DEBUG_TAG, "Response was successful!")
                             val locationsResponse = response.body()
-                            Log.d(DEBUG_TAG, "num elements = ${locationsResponse!!.extractLocations().size}")
+                            Log.d(DEBUG_TAG, locationsResponse.toString())
+                            Log.d(DEBUG_TAG, "num elements = ${locationsResponse.extractLocations().size}")
                             resultLiveData.value = locationsResponse.extractLocations().take(limit)
                         } else {
                             resultLiveData.value = null // or any other value that represents a network error
                         }
                     }
 
-                    override fun onFailure(call: Call<LocationsResponseBody>, t: Throwable) {
+                    override fun onFailure(call: Call<List<Place>>, t: Throwable) {
                         Log.d(DEBUG_TAG, "request failed! ${t.message}")
                         resultLiveData.value = null // or any other value that represents a network error
                     }
@@ -48,4 +49,21 @@ class LocationsRepository(private val locationsApiService: LocationsApiService) 
         
         return resultLiveData
     }
+}
+
+private fun List<Place>?.extractLocations(): List<Location> {
+    if (this == null) return emptyList()
+    val out = mutableListOf<Location>()
+    for (place in this) {
+        val displayNameSplit = place.displayName.split(",", limit = 2)
+        assert(displayNameSplit.size == 2)
+        out.add(Location(
+            lat = place.lat.toDouble(),
+            long = place.lng.toDouble(),
+            title = displayNameSplit.first(),
+            address = displayNameSplit.last(),
+            googleRating = place.importance * 5
+        ))
+    }
+    return out
 }
