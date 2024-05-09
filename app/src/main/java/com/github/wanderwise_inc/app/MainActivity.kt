@@ -36,13 +36,7 @@ import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
-  private lateinit var imageRepository: ImageRepositoryImpl
-  private val directionsApiService = ApiServiceFactory.createDirectionsApiService()
-  private val directionsRepository = DirectionsRepository(directionsApiService)
-  private lateinit var itineraryViewModel: ItineraryViewModel
-  private lateinit var createItineraryViewModel: CreateItineraryViewModel
-  private val signInRepositoryImpl = SignInRepositoryImpl()
-  private lateinit var googleSignInLauncher: GoogleSignInLauncher
+
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var firebaseStorage: FirebaseStorage
 
@@ -53,7 +47,8 @@ class MainActivity : ComponentActivity() {
     private lateinit var signInRepository: SignInRepository
 
     private lateinit var bottomNavigationViewModel: BottomNavigationViewModel
-    private lateinit var mapViewModel: MapViewModel
+    private lateinit var createItineraryViewModel: CreateItineraryViewModel
+    private lateinit var itineraryViewModel: ItineraryViewModel
     private lateinit var profileViewModel: ProfileViewModel
 
     private lateinit var googleSignInLauncher: GoogleSignInLauncher
@@ -100,12 +95,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         init()
-    itineraryViewModel =
-        ItineraryViewModel(itineraryRepository, directionsRepository, userLocationClient)
-    profileViewModel = ProfileViewModel(profileRepository, imageRepository)
-    createItineraryViewModel =
-        CreateItineraryViewModel(itineraryRepository, directionsRepository, userLocationClient)
-    bottomNavigationViewModel = BottomNavigationViewModel()
 
         setContent {
             WanderWiseTheme {
@@ -117,7 +106,8 @@ class MainActivity : ComponentActivity() {
                     RootNavigationGraph(
                         googleSignInLauncher,
                         profileViewModel,
-                        mapViewModel,
+                        itineraryViewModel,
+                        createItineraryViewModel,
                         bottomNavigationViewModel,
                         imageRepository,
                         navController,
@@ -127,25 +117,6 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-    setContent {
-      WanderWiseTheme {
-        // A surface container using the 'background' color from the theme
-        Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-          navController = rememberNavController()
-          RootNavigationGraph(
-              googleSignInLauncher = googleSignInLauncher,
-              profileViewModel = profileViewModel,
-              itineraryViewModel = itineraryViewModel,
-              createItineraryViewModel = createItineraryViewModel,
-              bottomNavigationViewModel = bottomNavigationViewModel,
-              imageRepository = imageRepository,
-              navController = navController,
-              firebaseAuth = FirebaseAuth.getInstance(),
-          )
-        }
-      }
-    }
-  }
 
     private fun init() {
         requestPermissions()
@@ -187,7 +158,9 @@ class MainActivity : ComponentActivity() {
 
     private fun initializeViewModels() {
         bottomNavigationViewModel = AppModule.bottomNavigationViewModel
-        mapViewModel = AppModule.mapViewModel
+        createItineraryViewModel = AppModule.createItineraryViewModel
+        itineraryViewModel = AppModule.itineraryViewModel
         profileViewModel = AppModule.profileViewModel
     }
 }
+
