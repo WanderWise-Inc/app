@@ -3,9 +3,13 @@ package com.github.wanderwise_inc.app.ui.creation
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -20,6 +24,7 @@ import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 
+@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("MutableCollectionMutableState")
 @Composable
 fun CreateItineraryMap(createItineraryViewModel: CreateItineraryViewModel) {
@@ -35,8 +40,13 @@ fun CreateItineraryMap(createItineraryViewModel: CreateItineraryViewModel) {
   val cameraPositionState = rememberCameraPositionState {
     CameraPosition.fromLatLngZoom(itinerary.computeCenterOfGravity().toLatLng(), 13f)
   }
+    
+  var query by remember { mutableStateOf("") }
+    
   GoogleMap(
-      modifier = Modifier.fillMaxSize().testTag(TestTags.MAP_GOOGLE_MAPS),
+      modifier = Modifier
+          .fillMaxSize()
+          .testTag(TestTags.MAP_GOOGLE_MAPS),
       cameraPositionState = cameraPositionState) {
         locations.map { location ->
           AdvancedMarker(
@@ -53,4 +63,13 @@ fun CreateItineraryMap(createItineraryViewModel: CreateItineraryViewModel) {
       }) {
         Text("Add a new location")
       }
+  SearchBar(
+      query = query,
+      onQueryChange = { new -> query = new },
+      onSearch = {  },
+      active = true,
+      onActiveChange = {},
+  ) {
+      
+  }
 }
