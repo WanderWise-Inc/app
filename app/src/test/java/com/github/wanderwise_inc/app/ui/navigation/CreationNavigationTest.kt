@@ -177,15 +177,29 @@ class CreationPreviewNavigationTest {
       every { profileViewModel.addLikedItinerary(any(), any()) } returns Unit
       every { profileViewModel.getLikedItineraries(any()) } returns flow { emit(emptyList()) }
       every { profileViewModel.getDefaultProfilePicture() } returns flow { emit(null) }
-      every { profileViewModel.getProfilePicture(any()) } returns flow { emit(null) }
+      every { profileViewModel.getProfilePicture(any()) } returns flow { emit(null) }*/
 
+      val itineraryBuilder = Itinerary.Builder(userUid = "")
+      val dummyLiveData: LiveData<List<LatLng>> = MutableLiveData(listOf())
+      
       every { createItineraryViewModel.setItinerary(any()) } returns Unit
       every { createItineraryViewModel.incrementItineraryLikes(any()) } returns Unit
-      every { createItineraryViewModel.getAllPublicItineraries() } returns flow { emit(emptyList()) }
+      every { createItineraryViewModel.getAllPublicItineraries() } returns
+              flow { emit(emptyList()) }
       every { createItineraryViewModel.getUserLocation() } returns flow { emit(Location("")) }
-      every { createItineraryViewModel.getUserItineraries(any()) } returns flow { emit(emptyList()) }
-      every { createItineraryViewModel.getItineraryFromUids(any()) } returns flow { emit(emptyList()) }
-      every { createItineraryViewModel.getFocusedItinerary() } returns null*/
+      every { createItineraryViewModel.getUserItineraries(any()) } returns
+              flow { emit(emptyList()) }
+      every { createItineraryViewModel.getItineraryFromUids(any()) } returns
+              flow { emit(emptyList()) }
+      every { createItineraryViewModel.setFocusedItinerary(any()) } returns Unit
+      every { createItineraryViewModel.getFocusedItinerary() } returns null
+      every { createItineraryViewModel.setItinerary(any()) } returns Unit
+      every { createItineraryViewModel.getNewItinerary() } returns itineraryBuilder
+      every { createItineraryViewModel.fetchPolylineLocations(any()) } returns Unit
+      every { createItineraryViewModel.getPolylinePointsLiveData() } returns dummyLiveData
+      //      every { createItineraryViewModel.getNewItinerary() } returns itineraryBuilder
+      every { createItineraryViewModel.getNewItinerary() } returns
+              Itinerary.Builder(userUid = "uniqueUserUID")
       // coEvery { createItineraryViewModel.getItineraryFromUids(any()) } returns flow {
       // listOf(mockItinerary) }
 
