@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.github.wanderwise_inc.app.BuildConfig
 import com.github.wanderwise_inc.app.data.DirectionsRepository
 import com.github.wanderwise_inc.app.data.ItineraryRepository
+import com.github.wanderwise_inc.app.data.LocationsRepository
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryPreferences
 import com.google.android.gms.maps.model.LatLng
@@ -18,9 +19,10 @@ import kotlinx.coroutines.launch
 private const val DEBUG_TAG: String = "MAP_VIEWMODEL"
 /** @brief ViewModel class for providing `Location`s and `Itinerary`s to the map UI */
 open class ItineraryViewModel(
-    private val itineraryRepository: ItineraryRepository,
-    private val directionsRepository: DirectionsRepository,
-    private val userLocationClient: UserLocationClient,
+  private val itineraryRepository: ItineraryRepository,
+  private val directionsRepository: DirectionsRepository,
+  private val locationsRepository: LocationsRepository,
+  private val userLocationClient: UserLocationClient,
 ) : ViewModel() {
   private var focusedItinerary: Itinerary? = null
 
@@ -132,6 +134,24 @@ open class ItineraryViewModel(
   fun getPolylinePointsLiveData(): LiveData<List<LatLng>> {
     return polylinePointsLiveData
   }
+
+  private val _locationsLiveData = MutableLiveData<List<LatLng>>()
+  private val locationsLiveData: LiveData<List<LatLng>> =
+    _locationsLiveData // gettable from view 
+  
+  /* gets the places corresponding to the queried name */
+  fun fetchPlaces(name: String) {
+    val key = BuildConfig.GEOCODE_API_KEY
+    viewModelScope.launch { 
+      locationsRepository.getPlaces(name = name, apiKey = key)
+        .observeForever { response -> _locationsLiveData.value = response ?: listOf() }
+    }
+  }
+  
+  fun getPlacesLiveData(): LiveData<List<LatLng>> {
+    return locationsLiveData
+  }
+  
 
   /** @brief get a Flow of the user location updated every second */
   fun getUserLocation(): Flow<Location> {

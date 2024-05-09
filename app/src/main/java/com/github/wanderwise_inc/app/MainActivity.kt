@@ -2,7 +2,6 @@ package com.github.wanderwise_inc.app
 
 // import com.github.wanderwise_inc.app.data.ProfileRepositoryImpl
 import android.Manifest
-import android.location.Geocoder
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -12,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
@@ -24,11 +22,12 @@ import com.github.wanderwise_inc.app.data.DirectionsRepository
 import com.github.wanderwise_inc.app.data.GoogleSignInLauncher
 import com.github.wanderwise_inc.app.data.ImageRepositoryImpl
 import com.github.wanderwise_inc.app.data.ItineraryRepositoryTestImpl
+import com.github.wanderwise_inc.app.data.LocationsRepository
 import com.github.wanderwise_inc.app.data.ProfileRepositoryTestImpl
 import com.github.wanderwise_inc.app.data.SignInRepositoryImpl
-import com.github.wanderwise_inc.app.network.ApiServiceFactory
+import com.github.wanderwise_inc.app.network.DirectionsApiServiceFactory
+import com.github.wanderwise_inc.app.network.LocationsApiServiceFactory
 import com.github.wanderwise_inc.app.ui.creation.CreateItineraryMap
-import com.github.wanderwise_inc.app.ui.navigation.graph.RootNavigationGraph
 import com.github.wanderwise_inc.app.ui.theme.WanderWiseTheme
 import com.github.wanderwise_inc.app.viewmodel.BottomNavigationViewModel
 import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
@@ -42,9 +41,11 @@ import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
   private lateinit var imageRepository: ImageRepositoryImpl
-  private val directionsApiService = ApiServiceFactory.createDirectionsApiService()
+  private val directionsApiService = DirectionsApiServiceFactory.createDirectionsApiService()
+  private val locationsApiService = LocationsApiServiceFactory.createDirectionsApiService()
   private val directionsRepository = DirectionsRepository(directionsApiService)
-  private lateinit var itineraryViewModel: ItineraryViewModel
+  private val locationsRepository = LocationsRepository(locationsApiService) 
+private lateinit var itineraryViewModel: ItineraryViewModel
   private lateinit var createItineraryViewModel: CreateItineraryViewModel
   private val signInRepositoryImpl = SignInRepositoryImpl()
   private lateinit var googleSignInLauncher: GoogleSignInLauncher
@@ -92,10 +93,10 @@ class MainActivity : ComponentActivity() {
             applicationContext, LocationServices.getFusedLocationProviderClient(applicationContext))
 
     itineraryViewModel =
-        ItineraryViewModel(itineraryRepository, directionsRepository, userLocationClient)
+        ItineraryViewModel(itineraryRepository, directionsRepository, locationsRepository, userLocationClient)
     profileViewModel = ProfileViewModel(profileRepository, imageRepository)
     createItineraryViewModel =
-        CreateItineraryViewModel(itineraryRepository, directionsRepository, userLocationClient)
+        CreateItineraryViewModel(itineraryRepository, directionsRepository, locationsRepository, userLocationClient)
     bottomNavigationViewModel = BottomNavigationViewModel()
 
     setContent {

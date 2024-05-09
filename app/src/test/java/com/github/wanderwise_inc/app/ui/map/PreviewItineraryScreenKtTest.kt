@@ -94,7 +94,12 @@ class PreviewItineraryScreenKtTest {
     `when`(imageRepository.fetchImage(anyString())).thenReturn(flow { emit(null) })
 
     itineraryViewModel =
-        ItineraryViewModel(itineraryRepository, directionsRepository, userLocationClient)
+        ItineraryViewModel(
+            itineraryRepository,
+            directionsRepository,
+            locationsRepository,
+            userLocationClient
+        )
     itineraryViewModel.setFocusedItinerary(itinerary)
     profileViewModel = ProfileViewModel(profileRepository, imageRepository)
   }

@@ -54,7 +54,12 @@ class ItineraryViewModelTest {
     Dispatchers.setMain(testDispatcher)
     MockKAnnotations.init(this)
     itineraryViewModel =
-        ItineraryViewModel(itineraryRepository, directionsRepository, userLocationClient)
+        ItineraryViewModel(
+            itineraryRepository,
+            directionsRepository,
+            locationsRepository,
+            userLocationClient
+        )
   }
 
   @Test
