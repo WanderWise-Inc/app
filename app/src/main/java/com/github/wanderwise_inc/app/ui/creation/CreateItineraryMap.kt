@@ -4,8 +4,21 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -20,6 +33,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.unit.dp
 import com.github.wanderwise_inc.app.model.location.Location
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.popup.HintPopup
@@ -36,8 +50,12 @@ import com.google.maps.android.compose.rememberCameraPositionState
 
 @SuppressLint("MutableCollectionMutableState")
 @Composable
-fun CreateItineraryMap(createItineraryViewModel: CreateItineraryViewModel) {
+fun CreateItineraryMap(
+    createItineraryViewModel: CreateItineraryViewModel,
+    innerPaddingValues: PaddingValues
+) {
   val itineraryBuilder = createItineraryViewModel.getNewItinerary()!!
+
   val locations = remember { mutableStateListOf<Location>() }
   for (location in itineraryBuilder.locations) {
     locations += location
@@ -95,4 +113,63 @@ fun CreateItineraryMap(createItineraryViewModel: CreateItineraryViewModel) {
           Text("Loading your location...", modifier = Modifier.testTag(TestTags.MAP_NULL_ITINERARY))
         }
   }
+}
+
+@Composable
+fun SelectLocation(mapViewModel: CreateItineraryViewModel) {
+  var location1 by remember { mutableStateOf("") }
+  var location2 by remember { mutableStateOf("") }
+
+  Scaffold(
+      bottomBar = {
+        BottomAppBar(
+            modifier = Modifier.height(250.dp).fillMaxWidth(),
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            contentColor = MaterialTheme.colorScheme.primary,
+        ) {
+          Column {
+            /*Text(
+                modifier = Modifier.padding(10.dp),
+                textAlign = TextAlign.Center,
+                text = "Create a new itinerary",
+            )*/
+            Row(verticalAlignment = Alignment.CenterVertically) {
+              Icon(
+                  Icons.Filled.LocationOn,
+                  contentDescription = "Location 1",
+                  modifier = Modifier.padding(start = 10.dp))
+              OutlinedTextField(
+                  value = location1,
+                  onValueChange = { location1 = it },
+                  label = { Text("location 1...") },
+                  placeholder = { Text("location 1...") },
+                  modifier = Modifier.padding(start = 25.dp),
+                  shape = RoundedCornerShape(20.dp))
+            }
+
+            Icon(
+                Icons.Filled.MoreVert,
+                contentDescription = "more",
+                modifier = Modifier.padding(start = 10.dp))
+
+            Row(verticalAlignment = Alignment.CenterVertically) {
+              Icon(
+                  Icons.Filled.LocationOn,
+                  contentDescription = "Location 2",
+                  modifier = Modifier.padding(start = 10.dp))
+              OutlinedTextField(
+                  value = location2,
+                  onValueChange = { location2 = it },
+                  label = { Text("location 2...") },
+                  placeholder = { Text("location 2...") },
+                  modifier = Modifier.padding(start = 25.dp),
+                  shape = RoundedCornerShape(20.dp))
+            }
+          }
+        }
+      }) { innerPadding ->
+        // Modifier.fillMaxSize().padding(paddingValues).testTag(TestTags.MAP_GOOGLE_MAPS),
+        CreateItineraryMap(
+            createItineraryViewModel = mapViewModel, innerPaddingValues = innerPadding)
+      }
 }

@@ -45,7 +45,9 @@ fun CreationScreen(
       isNewItineraryNull = false
     }
   } else {
-    CreateItineraryMap(createItineraryViewModel = createItineraryViewModel)
+    // CreateItineraryMap(createItineraryViewModel = createItineraryViewModel)
+    // CreateItineraryMap(mapViewModel = mapViewModel)
+    SelectLocation(mapViewModel = createItineraryViewModel)
   }
 }
 
