@@ -32,7 +32,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class MapViewModelTest {
+class ItineraryViewModelTest {
 
   @ExperimentalCoroutinesApi @get:Rule val mainDispatcherRule = MainDispatcherRule()
 
@@ -44,7 +44,7 @@ class MapViewModelTest {
 
   @MockK private lateinit var userLocationClient: UserLocationClient
 
-  private lateinit var mapViewModel: MapViewModel
+  private lateinit var itineraryViewModel: ItineraryViewModel
 
   private val testDispatcher = StandardTestDispatcher()
 
@@ -53,7 +53,8 @@ class MapViewModelTest {
   fun setup() {
     Dispatchers.setMain(testDispatcher)
     MockKAnnotations.init(this)
-    mapViewModel = MapViewModel(itineraryRepository, directionsRepository, userLocationClient)
+    itineraryViewModel =
+        ItineraryViewModel(itineraryRepository, directionsRepository, userLocationClient)
   }
 
   @Test
@@ -61,7 +62,7 @@ class MapViewModelTest {
     every { itineraryRepository.getPublicItineraries() } returns
         flow { emit(listOf(FakeItinerary.TOKYO)) }
 
-    val emittedItineraryList = mapViewModel.getAllPublicItineraries().first()
+    val emittedItineraryList = itineraryViewModel.getAllPublicItineraries().first()
     assertEquals(listOf(FakeItinerary.TOKYO), emittedItineraryList)
   }
 
@@ -70,13 +71,13 @@ class MapViewModelTest {
     every { itineraryRepository.getUserItineraries(any()) } returns
         flow { emit(listOf(FakeItinerary.TOKYO)) }
 
-    val emittedItineraryList = mapViewModel.getUserItineraries(DEFAULT_USER_UID).first()
+    val emittedItineraryList = itineraryViewModel.getUserItineraries(DEFAULT_USER_UID).first()
     assertEquals(listOf(FakeItinerary.TOKYO), emittedItineraryList)
   }
 
   @Test
   fun getItineraryLikes() {
-    val totalLikes = mapViewModel.getItineraryLikes(listOf(FakeItinerary.TOKYO))
+    val totalLikes = itineraryViewModel.getItineraryLikes(listOf(FakeItinerary.TOKYO))
     assertEquals(0, totalLikes)
   }
 
@@ -91,7 +92,7 @@ class MapViewModelTest {
           repo[uid] = itinerary
         }
 
-    mapViewModel.incrementItineraryLikes(FakeItinerary.TOKYO)
+    itineraryViewModel.incrementItineraryLikes(FakeItinerary.TOKYO)
     assertEquals(1, repo[FakeItinerary.TOKYO.uid]!!.numLikes)
   }
 
@@ -108,7 +109,7 @@ class MapViewModelTest {
           repo[uid] = itinerary
         }
 
-    mapViewModel.decrementItineraryLikes(FakeItinerary.TOKYO)
+    itineraryViewModel.decrementItineraryLikes(FakeItinerary.TOKYO)
     assertEquals(0, repo[tokyoLikedItinerary.uid]!!.numLikes)
   }
 
@@ -118,7 +119,7 @@ class MapViewModelTest {
         flow { emit(listOf(FakeItinerary.TOKYO)) }
 
     val emittedItineraryList =
-        mapViewModel
+        itineraryViewModel
             .getItinerariesFromPreferences(ItineraryPreferences(listOf(ItineraryTags.URBAN)))
             .first()
     assertEquals(listOf(FakeItinerary.TOKYO), emittedItineraryList)
@@ -134,7 +135,7 @@ class MapViewModelTest {
     every { switzerland.scoreFromPreferences(any()) } returns 0.0
     every { tokyo.scoreFromPreferences(any()) } returns 1.0
 
-    val sortedItineraryList = mapViewModel.sortItinerariesFromPreferences(itineraries, pref)
+    val sortedItineraryList = itineraryViewModel.sortItinerariesFromPreferences(itineraries, pref)
     assertEquals(listOf(tokyo, switzerland), sortedItineraryList)
   }
 
@@ -148,7 +149,7 @@ class MapViewModelTest {
           repo[uid]!!
         }
 
-    mapViewModel.getItineraryFromUids(listOf(FakeItinerary.TOKYO.uid)).test {
+    itineraryViewModel.getItineraryFromUids(listOf(FakeItinerary.TOKYO.uid)).test {
       val emittedItineraryList = awaitItem()
       assertEquals(listOf(FakeItinerary.TOKYO), emittedItineraryList)
       awaitComplete()
@@ -165,7 +166,7 @@ class MapViewModelTest {
           repo[itinerary.uid] = itinerary
         }
 
-    mapViewModel.setItinerary(FakeItinerary.TOKYO)
+    itineraryViewModel.setItinerary(FakeItinerary.TOKYO)
     assertEquals(FakeItinerary.TOKYO, repo[FakeItinerary.TOKYO.uid])
   }
 
@@ -179,7 +180,7 @@ class MapViewModelTest {
           repo.remove(itinerary.uid)
         }
 
-    mapViewModel.deleteItinerary(FakeItinerary.TOKYO)
+    itineraryViewModel.deleteItinerary(FakeItinerary.TOKYO)
     assertEquals(0, repo.size)
   }
 
@@ -191,11 +192,11 @@ class MapViewModelTest {
     every { directionsRepository.getPolylineWayPoints(any(), any(), any(), any()) } returns
         MutableLiveData(locations)
 
-    mapViewModel.fetchPolylineLocations(FakeItinerary.TOKYO)
+    itineraryViewModel.fetchPolylineLocations(FakeItinerary.TOKYO)
 
     advanceUntilIdle()
 
-    val polylineLocations = mapViewModel.getPolylinePointsLiveData().value
+    val polylineLocations = itineraryViewModel.getPolylinePointsLiveData().value
     assertNotNull(polylineLocations)
   }
 
@@ -209,18 +210,18 @@ class MapViewModelTest {
         MutableLiveData(tokyoLocations) andThen
         MutableLiveData(sanfranciscoLocations)
 
-    mapViewModel.fetchPolylineLocations(FakeItinerary.TOKYO)
+    itineraryViewModel.fetchPolylineLocations(FakeItinerary.TOKYO)
 
     advanceUntilIdle()
 
-    var polylineLocations = mapViewModel.getPolylinePointsLiveData().value
+    var polylineLocations = itineraryViewModel.getPolylinePointsLiveData().value
     assertEquals(tokyoLocations, polylineLocations)
 
-    mapViewModel.fetchPolylineLocations(FakeItinerary.SAN_FRANCISCO)
+    itineraryViewModel.fetchPolylineLocations(FakeItinerary.SAN_FRANCISCO)
 
     advanceUntilIdle()
 
-    polylineLocations = mapViewModel.getPolylinePointsLiveData().value
+    polylineLocations = itineraryViewModel.getPolylinePointsLiveData().value
     assertEquals(sanfranciscoLocations, polylineLocations)
   }
 
@@ -233,7 +234,7 @@ class MapViewModelTest {
 
     every { userLocationClient.getLocationUpdates(any()) } returns flow { emit(epflLocation) }
 
-    val userLocationFlow = mapViewModel.getUserLocation()
+    val userLocationFlow = itineraryViewModel.getUserLocation()
     val emittedLocation = userLocationFlow.first()
 
     assertEquals(epflLocation.latitude, emittedLocation.latitude, delta)
