@@ -1,4 +1,4 @@
-package com.github.wanderwise_inc.app.ui.creation
+package com.github.wanderwise_inc.app.ui.creation.steps
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
