@@ -1,6 +1,5 @@
 package com.github.wanderwise_inc.app.ui.navigation.graph
 
-import android.content.IntentSender.OnFinished
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -39,6 +38,11 @@ fun CreationNavGraph(
           CreationStepChooseDescriptionScreen()
         }
         composable(CreationStepsDestinations.ChooseTags.route) { CreationStepChooseTagsScreen() }
-        composable(CreationStepsDestinations.Preview.route) { CreationStepPreview(createItineraryViewModel = createItineraryViewModel, profileViewModel = profileViewModel, onFinished = onFinished) }
+        composable(CreationStepsDestinations.Preview.route) {
+          CreationStepPreview(
+              createItineraryViewModel = createItineraryViewModel,
+              profileViewModel = profileViewModel,
+              onFinished = onFinished)
+        }
       }
 }

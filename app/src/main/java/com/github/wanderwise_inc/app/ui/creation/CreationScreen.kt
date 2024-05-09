@@ -57,7 +57,8 @@ fun CreationScreen(
           ItineraryCreationNavigationMenu(navigationActions = NavigationActions(navController))
         },
         modifier = Modifier.testTag(TestTags.NEW_CREATION_SCREEN)) { padding ->
-          CreationNavGraph(createItineraryViewModel, navController, padding, profileViewModel, onFinished)
+          CreationNavGraph(
+              createItineraryViewModel, navController, padding, profileViewModel, onFinished)
         }
   }
 }
