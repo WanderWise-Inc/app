@@ -8,11 +8,13 @@ import com.github.wanderwise_inc.app.data.DirectionsRepository
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.data.ItineraryRepository
 import com.github.wanderwise_inc.app.data.ProfileRepository
+import com.github.wanderwise_inc.app.viewmodel.LocationClient
 import com.google.firebase.FirebaseApp
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import io.mockk.every
 import io.mockk.mockk
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
@@ -26,97 +28,110 @@ class AppModuleTest {
   @Before
   fun setUp() {
     FirebaseApp.initializeApp(RuntimeEnvironment.getApplication())
+    AppModule.initialize(
+        mockk<ActivityResultLauncher<Intent>>(),
+        mockk<ActivityResultLauncher<Intent>>(),
+        mockk<Intent>(),
+        mockk<LocationClient>()
+    )
   }
 
   @Test
-  fun `provideFirebaseAuth should return an instance of FirebaseAuth`() {
-    val result = AppModule.provideFirebaseAuth()
+  fun `firebaseAuth should return only one instance of FirebaseAuth`() {
+    val result1 = AppModule.firebaseAuth
+    assertNotNull(result1)
 
-    assertNotNull(result)
+    val result2 = AppModule.firebaseAuth
+    assertEquals(result1, result2)
   }
 
   @Test
-  fun `provideFirebaseStorage should return an instance of FirebaseStorage`() {
-    val result = AppModule.provideFirebaseStorage()
+  fun `firebaseStorage should return only one instance of FirebaseStorage`() {
+    val result1 = AppModule.firebaseStorage
+    assertNotNull(result1)
 
-    assertNotNull(result)
+    val result2 = AppModule.firebaseStorage
+    assertEquals(result1, result2)
   }
 
   @Test
-  fun `provideImageRepository should return an instance of ImageRepository`() {
-    val imageLauncher = mockk<ActivityResultLauncher<Intent>>()
-    val firebaseStorage = mockk<FirebaseStorage>()
+  fun `imageRepository should return only one instance of ImageRepository`() {
+    val result1 = AppModule.imageRepository
+    assertNotNull(result1)
 
-    every { firebaseStorage.getReference() } returns mockk<StorageReference>()
-
-    val result = AppModule.provideImageRepository(imageLauncher, firebaseStorage)
-
-    assertNotNull(result)
+    val result2 = AppModule.imageRepository
+    assertEquals(result1, result2)
   }
 
   @Test
-  fun `provideDirectionsRepository should return an instance of DirectionsRepository`() {
-    val result = AppModule.provideDirectionsRepository()
+  fun `directionsRepository should return only one instance of DirectionsRepository`() {
+    val result1 = AppModule.directionsRepository
+    assertNotNull(result1)
 
-    assertNotNull(result)
+    val result2 = AppModule.directionsRepository
+    assertEquals(result1, result2)
   }
 
   @Test
-  fun `provideItineraryRepository should return an instance of ItineraryRepository`() {
-    val result = AppModule.provideItineraryRepository()
+  fun `itineraryRepository should return only one instance of ItineraryRepository`() {
+    val result1 = AppModule.itineraryRepository
+    assertNotNull(result1)
 
-    assertNotNull(result)
+    val result2 = AppModule.itineraryRepository
+    assertEquals(result1, result2)
   }
 
   @Test
-  fun `provideProfileRepository should return an instance of ProfileRepository`() {
-    val result = AppModule.provideProfileRepository()
+  fun `profileRepository should return only one instance of ProfileRepository`() {
+    val result1 = AppModule.profileRepository
+    assertNotNull(result1)
 
-    assertNotNull(result)
+    val result2 = AppModule.profileRepository
+    assertEquals(result1, result2)
   }
 
   @Test
-  fun `provideProfileSignIn should return an instance of ProfileSignIn`() {
-    val result = AppModule.provideSignInRepository()
+  fun `signInRepository should return only one instance of ProfileSignIn`() {
+    val result1 = AppModule.signInRepository
+    assertNotNull(result1)
 
-    assertNotNull(result)
+    val result2 = AppModule.signInRepository
+    assertEquals(result1, result2)
   }
 
   @Test
-  fun `provideBottomNavigationViewModel should return an instance of BottomNavigationViewModel`() {
-    val result = AppModule.provideBottomNavigationViewModel()
+  fun `bottomNavigationViewModel should return only one instance of BottomNavigationViewModel`() {
+    val result1 = AppModule.bottomNavigationViewModel
+    assertNotNull(result1)
 
-    assertNotNull(result)
+    val result2 = AppModule.bottomNavigationViewModel
+    assertEquals(result1, result2)
   }
 
   @Test
-  fun `provideMapViewModel should return an instance of MapViewModel`() {
-    val context = mockk<Context>(relaxed = true)
-    val itineraryRepository = mockk<ItineraryRepository>()
-    val directionsRepository = mockk<DirectionsRepository>()
+  fun `mapViewModel should return only one instance of MapViewModel`() {
+    val result1 = AppModule.mapViewModel
+    assertNotNull(result1)
 
-    val result = AppModule.provideMapViewModel(context, itineraryRepository, directionsRepository)
-
-    assertNotNull(result)
+    val result2 = AppModule.mapViewModel
+    assertEquals(result1, result2)
   }
 
   @Test
-  fun `provideProfileViewModel should return an instance of ProfileViewModel`() {
-    val profileRepository = mockk<ProfileRepository>()
-    val imageRepository = mockk<ImageRepository>()
+  fun `profileViewModel should return only one instance of ProfileViewModel`() {
+    val result1 = AppModule.profileViewModel
+    assertNotNull(result1)
 
-    val result = AppModule.provideProfileViewModel(profileRepository, imageRepository)
-
-    assertNotNull(result)
+    val result2 = AppModule.profileViewModel
+    assertEquals(result1, result2)
   }
 
   @Test
-  fun `provideGoogleSignInLauncher should return an instance of GoogleSignInLauncher`() {
-    val signInLauncher = mockk<ActivityResultLauncher<Intent>>()
-    val providers = emptyList<AuthUI.IdpConfig>()
+  fun `googleSignInLauncher should return only one instance of GoogleSignInLauncher`() {
+    val result1 = AppModule.googleSignInLauncher
+    assertNotNull(result1)
 
-    val result = AppModule.provideGoogleSignInLauncher(signInLauncher, providers)
-
-    assertNotNull(result)
+    val result2 = AppModule.googleSignInLauncher
+    assertEquals(result1, result2)
   }
 }
