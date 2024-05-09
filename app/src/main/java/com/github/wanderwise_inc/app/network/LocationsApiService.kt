@@ -1,5 +1,6 @@
 package com.github.wanderwise_inc.app.network
 
+import com.github.wanderwise_inc.app.model.location.Location
 import com.google.gson.annotations.SerializedName
 import com.google.android.gms.maps.model.LatLng
 import retrofit2.Call
@@ -30,7 +31,7 @@ data class LocationsResponseBody(val places: List<Place>) {
         @SerializedName("display_name") val displayName: String,
         @SerializedName("class") val placeClass: String,
         @SerializedName("type") val type: String,
-        @SerializedName("importance") val importance: Double,
+        @SerializedName("importance") val importance: Float,
     ) {
         data class BoundingBox(
             @SerializedName("0") val minLat: String,
@@ -40,10 +41,19 @@ data class LocationsResponseBody(val places: List<Place>) {
         )
     }
     
-    fun pruneLatLng(): List<LatLng> {
-        val out = mutableListOf<LatLng>()
+    fun extractLocations(): List<Location> {
+        val out = mutableListOf<Location>()
         for (place in places) {
-            out += LatLng(place.lat.toDouble(), place.lng.toDouble())
+            val displayNameSplit = place.displayName.split(",", limit = 2)
+            assert(displayNameSplit.size == 2)
+            out.add(Location(
+                lat = place.lat.toDouble(),
+                long = place.lng.toDouble(),
+                title = displayNameSplit.first(),
+                address = displayNameSplit.last(),
+                googleRating = place.importance * 5
+            ))
+        //LatLng(place.lat.toDouble(), place.lng.toDouble())
         }
         return out
     }

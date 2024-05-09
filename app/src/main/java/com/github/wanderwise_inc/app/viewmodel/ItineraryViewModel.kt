@@ -1,6 +1,5 @@
 package com.github.wanderwise_inc.app.viewmodel
 
-import android.location.Location
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,6 +11,7 @@ import com.github.wanderwise_inc.app.data.ItineraryRepository
 import com.github.wanderwise_inc.app.data.LocationsRepository
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryPreferences
+import com.github.wanderwise_inc.app.model.location.Location
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -138,8 +138,8 @@ open class ItineraryViewModel(
     return polylinePointsLiveData
   }
 
-  private val _locationsLiveData = MutableLiveData<List<LatLng>>()
-  private val locationsLiveData: LiveData<List<LatLng>> =
+  private val _locationsLiveData = MutableLiveData<List<Location>>()
+  private val locationsLiveData: LiveData<List<Location>> =
     _locationsLiveData // gettable from view 
   
   /* gets the places corresponding to the queried name */
@@ -151,13 +151,13 @@ open class ItineraryViewModel(
     }
   }
   
-  fun getPlacesLiveData(): LiveData<List<LatLng>> {
+  fun getPlacesLiveData(): LiveData<List<Location>> {
     return locationsLiveData
   }
   
 
   /** @brief get a Flow of the user location updated every second */
-  fun getUserLocation(): Flow<Location> {
+  fun getUserLocation(): Flow<android.location.Location> {
     return userLocationClient.getLocationUpdates(1000)
   }
 

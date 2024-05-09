@@ -1,6 +1,7 @@
 package com.github.wanderwise_inc.app.ui.creation.steps
 
 import android.annotation.SuppressLint
+import android.view.KeyEvent.KEYCODE_ENTER
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,11 +11,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -32,7 +38,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.github.wanderwise_inc.app.model.location.Location
 import com.github.wanderwise_inc.app.ui.TestTags
@@ -52,7 +61,7 @@ import com.google.maps.android.compose.rememberCameraPositionState
 fun CreateItineraryMapWithSelector(
     createItineraryViewModel: CreateItineraryViewModel,
 ) {
-  Scaffold(bottomBar = { LocationSelector() }) { innerPadding ->
+  Scaffold(bottomBar = { LocationSelector(createItineraryViewModel) }) { innerPadding ->
     CreateItineraryMap(
         createItineraryViewModel = createItineraryViewModel, innerPaddingValues = innerPadding)
   }
@@ -87,7 +96,9 @@ fun CreateItineraryMap(
     val polylinePoints by createItineraryViewModel.getPolylinePointsLiveData().observeAsState()
     GoogleMap(
         modifier =
-            Modifier.padding(paddingValues = innerPaddingValues).testTag(TestTags.MAP_GOOGLE_MAPS),
+        Modifier
+            .padding(paddingValues = innerPaddingValues)
+            .testTag(TestTags.MAP_GOOGLE_MAPS),
         onMapClick = {
           itineraryBuilder.addLocation(Location.fromLatLng(it))
           locations.add(Location.fromLatLng(it))
@@ -117,10 +128,11 @@ fun CreateItineraryMap(
   } else {
     Column(
         modifier =
-            Modifier.testTag(TestTags.MAP_NULL_ITINERARY)
-                .fillMaxSize()
-                .padding(innerPaddingValues)
-                .background(MaterialTheme.colorScheme.background),
+        Modifier
+            .testTag(TestTags.MAP_NULL_ITINERARY)
+            .fillMaxSize()
+            .padding(innerPaddingValues)
+            .background(MaterialTheme.colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center) {
           Text("Loading your location...", modifier = Modifier.testTag(TestTags.MAP_NULL_ITINERARY))
@@ -129,12 +141,25 @@ fun CreateItineraryMap(
 }
 
 @Composable
-fun LocationSelector() {
+fun LocationSelector(
+    createItineraryViewModel: CreateItineraryViewModel
+) {
   var location1 by remember { mutableStateOf("") }
   var location2 by remember { mutableStateOf("") }
+    
+  var searchMenuExpanded by remember { mutableStateOf(false) }
+    
+  val searchedLocations by createItineraryViewModel.getPlacesLiveData().observeAsState()
+    
+  val onSearch = { query:String -> 
+      createItineraryViewModel.fetchPlaces(query)
+      
+  }
 
   BottomAppBar(
-      modifier = Modifier.height(250.dp).fillMaxWidth(),
+      modifier = Modifier
+          .height(250.dp)
+          .fillMaxWidth(),
       containerColor = MaterialTheme.colorScheme.primaryContainer,
       contentColor = MaterialTheme.colorScheme.primary,
   ) {
@@ -154,8 +179,39 @@ fun LocationSelector() {
             onValueChange = { location1 = it },
             label = { Text("location 1...") },
             placeholder = { Text("location 1...") },
-            modifier = Modifier.padding(start = 25.dp),
-            shape = RoundedCornerShape(20.dp))
+            modifier = Modifier
+                .padding(start = 25.dp)
+                .onKeyEvent {
+                    if (it.nativeKeyEvent.keyCode == KEYCODE_ENTER) { // overwrite enter key
+                        onSearch(location1)
+                        true
+                    }
+                    false
+                },
+            shape = RoundedCornerShape(20.dp),
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+            keyboardActions = KeyboardActions(
+                onDone = { onSearch(location1) },
+                onSearch = { onSearch(location1) }
+            ),
+            
+        )
+      }
+      
+      DropdownMenu(expanded = searchMenuExpanded, onDismissRequest = { searchMenuExpanded = false }) {
+          LazyColumn(
+              
+          ) {
+              if (searchedLocations == null) {
+                  searchMenuExpanded = false
+              } else {
+                  this.items(searchedLocations!!) { location ->
+                      Row {
+                          Text(text = location.title!!)
+                      }
+                  }
+              }
+          }
       }
 
       Icon(

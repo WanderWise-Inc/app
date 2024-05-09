@@ -3,9 +3,9 @@ package com.github.wanderwise_inc.app.data
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.github.wanderwise_inc.app.model.location.Location
 import com.github.wanderwise_inc.app.network.LocationsApiService
 import com.github.wanderwise_inc.app.network.LocationsResponseBody
-import com.google.android.gms.maps.model.LatLng
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -18,8 +18,8 @@ class LocationsRepository(private val locationsApiService: LocationsApiService) 
         name: String,
         limit: Int = 1, // for the moment only fetch 1 place, can be increased later
         apiKey: String,
-    ): LiveData<List<LatLng>?> {
-        val resultLiveData = MutableLiveData<List<LatLng>?>()
+    ): LiveData<List<Location>?> {
+        val resultLiveData = MutableLiveData<List<Location>?>()
         
         locationsApiService
             .getLocation(name = name, key = apiKey)
@@ -32,8 +32,8 @@ class LocationsRepository(private val locationsApiService: LocationsApiService) 
                         if (response.isSuccessful) {
                             Log.d(DEBUG_TAG, "Response was successful!")
                             val locationsResponse = response.body()
-                            Log.d(DEBUG_TAG, "num elements = ${locationsResponse!!.pruneLatLng().size}")
-                            resultLiveData.value = locationsResponse.pruneLatLng().take(limit)
+                            Log.d(DEBUG_TAG, "num elements = ${locationsResponse!!.extractLocations().size}")
+                            resultLiveData.value = locationsResponse.extractLocations().take(limit)
                         } else {
                             resultLiveData.value = null // or any other value that represents a network error
                         }
