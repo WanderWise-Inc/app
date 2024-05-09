@@ -44,6 +44,7 @@ fun CreationScreen(
     }
   } else {
     CreateItineraryMap(mapViewModel = mapViewModel)
+      SelectLocation(mapViewModel = mapViewModel)
   }
 }
 
@@ -53,7 +54,11 @@ fun NoNewItinerary(onClick: () -> Unit) {
   Box(
       contentAlignment = Alignment.Center,
       modifier =
-          Modifier.fillMaxSize().testTag(TestTags.CREATION_SCREEN).fillMaxWidth().height(100.dp)) {
+      Modifier
+          .fillMaxSize()
+          .testTag(TestTags.CREATION_SCREEN)
+          .fillMaxWidth()
+          .height(100.dp)) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center) {
