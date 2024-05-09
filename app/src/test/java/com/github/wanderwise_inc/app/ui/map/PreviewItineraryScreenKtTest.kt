@@ -20,7 +20,7 @@ import com.github.wanderwise_inc.app.model.location.ItineraryTags
 import com.github.wanderwise_inc.app.model.location.PlacesReader
 import com.github.wanderwise_inc.app.model.profile.Profile
 import com.github.wanderwise_inc.app.ui.TestTags
-import com.github.wanderwise_inc.app.viewmodel.MapViewModel
+import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.github.wanderwise_inc.app.viewmodel.UserLocationClient
 import com.google.android.gms.maps.model.CameraPosition
@@ -49,7 +49,7 @@ class PreviewItineraryScreenKtTest {
 
   @get:Rule val mockitoRule: MockitoRule = MockitoJUnit.rule()
 
-  @Mock private lateinit var mapViewModel: MapViewModel
+  @Mock private lateinit var itineraryViewModel: ItineraryViewModel
 
   @Mock private lateinit var profileRepository: ProfileRepository
   @Mock private lateinit var imageRepository: ImageRepository
@@ -86,21 +86,22 @@ class PreviewItineraryScreenKtTest {
     `when`(userLocationClient.getLocationUpdates(1000)).thenReturn(flow { emit(epflLocation) })
     val itineraryRepository = mock(ItineraryRepository::class.java)
 
-    // `when`(mapViewModel.getUserLocation()).thenReturn(flow { emit(epflLocation) })
-    // `when`(mapViewModel.getPolylinePointsLiveData()).thenReturn(polylinePoints)
+    // `when`(itineraryViewModel.getUserLocation()).thenReturn(flow { emit(epflLocation) })
+    // `when`(itineraryViewModel.getPolylinePointsLiveData()).thenReturn(polylinePoints)
 
     val dummyProfile = Profile("-")
     `when`(profileRepository.getProfile(anyString())).thenReturn(flow { emit(dummyProfile) })
     `when`(imageRepository.fetchImage(anyString())).thenReturn(flow { emit(null) })
 
-    mapViewModel = MapViewModel(itineraryRepository, directionsRepository, userLocationClient)
-    mapViewModel.setFocusedItinerary(itinerary)
+    itineraryViewModel =
+        ItineraryViewModel(itineraryRepository, directionsRepository, userLocationClient)
+    itineraryViewModel.setFocusedItinerary(itinerary)
     profileViewModel = ProfileViewModel(profileRepository, imageRepository)
   }
 
   @Test
   fun `initial elements are displayed correctly`() {
-    composeTestRule.setContent { PreviewItineraryScreen(mapViewModel, profileViewModel) }
+    composeTestRule.setContent { PreviewItineraryScreen(itineraryViewModel, profileViewModel) }
 
     composeTestRule.onNodeWithTag(TestTags.MAP_PREVIEW_ITINERARY_SCREEN).assertIsDisplayed()
     composeTestRule.onNodeWithTag(TestTags.MAP_MAXIMIZED_BANNER).assertIsDisplayed()
@@ -111,7 +112,7 @@ class PreviewItineraryScreenKtTest {
 
   @Test
   fun `pressing banner button should minimize and maximize the banner`() {
-    composeTestRule.setContent { PreviewItineraryScreen(mapViewModel, profileViewModel) }
+    composeTestRule.setContent { PreviewItineraryScreen(itineraryViewModel, profileViewModel) }
 
     composeTestRule.onNodeWithTag(TestTags.MAP_MAXIMIZED_BANNER).assertIsDisplayed()
     composeTestRule.onNodeWithTag(TestTags.MAP_MINIMIZED_BANNER).assertIsNotDisplayed()
@@ -135,8 +136,8 @@ class PreviewItineraryScreenKtTest {
 
   @Test
   fun `NullItineraryScreen is displayed when focusedItinerary is null`() {
-    mapViewModel.setFocusedItinerary(null)
-    composeTestRule.setContent { PreviewItineraryScreen(mapViewModel, profileViewModel) }
+    itineraryViewModel.setFocusedItinerary(null)
+    composeTestRule.setContent { PreviewItineraryScreen(itineraryViewModel, profileViewModel) }
 
     composeTestRule.onNodeWithTag(TestTags.MAP_NULL_ITINERARY).assertIsDisplayed()
 

@@ -50,7 +50,7 @@ import com.github.wanderwise_inc.app.R
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.profile.ProfilePicture
-import com.github.wanderwise_inc.app.viewmodel.MapViewModel
+import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
@@ -66,9 +66,12 @@ import com.google.maps.android.compose.rememberCameraPositionState
 
 /** @brief previews an itinerary */
 @Composable
-fun PreviewItineraryScreen(mapViewModel: MapViewModel, profileViewModel: ProfileViewModel) {
-  val userLocation by mapViewModel.getUserLocation().collectAsState(null)
-  val itinerary = mapViewModel.getFocusedItinerary()
+fun PreviewItineraryScreen(
+    itineraryViewModel: ItineraryViewModel,
+    profileViewModel: ProfileViewModel
+) {
+  val userLocation by itineraryViewModel.getUserLocation().collectAsState(null)
+  val itinerary = itineraryViewModel.getFocusedItinerary()
 
   if (itinerary == null) {
     NullItinerary(userLocation)
@@ -77,11 +80,11 @@ fun PreviewItineraryScreen(mapViewModel: MapViewModel, profileViewModel: Profile
       position = CameraPosition.fromLatLngZoom(itinerary.computeCenterOfGravity().toLatLng(), 13f)
     }
 
-    LaunchedEffect(Unit) { mapViewModel.fetchPolylineLocations(itinerary) }
-    val polylinePoints by mapViewModel.getPolylinePointsLiveData().observeAsState()
+    LaunchedEffect(Unit) { itineraryViewModel.fetchPolylineLocations(itinerary) }
+    val polylinePoints by itineraryViewModel.getPolylinePointsLiveData().observeAsState()
 
     Scaffold(
-        bottomBar = { PreviewItineraryBanner(itinerary, mapViewModel, profileViewModel) },
+        bottomBar = { PreviewItineraryBanner(itinerary, itineraryViewModel, profileViewModel) },
         modifier = Modifier.testTag(TestTags.MAP_PREVIEW_ITINERARY_SCREEN),
         floatingActionButton = {
           CenterButton(cameraPositionState = cameraPositionState, currentLocation = userLocation)
@@ -119,7 +122,7 @@ fun PreviewItineraryScreen(mapViewModel: MapViewModel, profileViewModel: Profile
 @Composable
 fun PreviewItineraryBanner(
     itinerary: Itinerary,
-    mapViewModel: MapViewModel,
+    itineraryViewModel: ItineraryViewModel,
     profileViewModel: ProfileViewModel
 ) {
 
@@ -132,7 +135,7 @@ fun PreviewItineraryBanner(
       PreviewItineraryBannerMaximized(
           onMinimizedClick = onMinimizedClick,
           itinerary = itinerary,
-          mapViewModel = mapViewModel,
+          itineraryViewModel = itineraryViewModel,
           profileViewModel = profileViewModel)
 }
 
@@ -140,7 +143,7 @@ fun PreviewItineraryBanner(
 private fun PreviewItineraryBannerMaximized(
     onMinimizedClick: () -> Unit,
     itinerary: Itinerary,
-    mapViewModel: MapViewModel,
+    itineraryViewModel: ItineraryViewModel,
     profileViewModel: ProfileViewModel
 ) {
   val titleFontSize = 32.sp

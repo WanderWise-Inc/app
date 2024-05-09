@@ -13,7 +13,7 @@ import androidx.navigation.NavHostController
 import com.github.wanderwise_inc.app.model.location.FakeItinerary
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.ui.TestTags
-import com.github.wanderwise_inc.app.viewmodel.MapViewModel
+import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
@@ -31,7 +31,7 @@ import org.robolectric.RobolectricTestRunner
 class LikedScreenTest {
   @get:Rule val composeTestRule = createComposeRule()
 
-  @MockK private lateinit var mapViewModel: MapViewModel
+  @MockK private lateinit var itineraryViewModel: ItineraryViewModel
   @MockK private lateinit var profileViewModel: ProfileViewModel
   @MockK private lateinit var navController: NavHostController
   @MockK private lateinit var firebaseAuth: FirebaseAuth
@@ -56,12 +56,12 @@ class LikedScreenTest {
     every { profileViewModel.getLikedItineraries(any()) } returns
         flow { emit(listOf("0", "1", "2")) }
 
-    every { mapViewModel.getItineraryFromUids(any()) } returns flow { emit(testItineraries) }
+    every { itineraryViewModel.getItineraryFromUids(any()) } returns flow { emit(testItineraries) }
 
     composeTestRule.setContent {
       FirebaseApp.initializeApp(LocalContext.current)
       DisplayLikedItineraries(
-          mapViewModel,
+          itineraryViewModel,
           profileViewModel,
           navController,
           sliderPositionPriceState,
