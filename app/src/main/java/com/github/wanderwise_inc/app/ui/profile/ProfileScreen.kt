@@ -50,7 +50,7 @@ import com.github.wanderwise_inc.app.model.profile.Profile
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.list_itineraries.ItinerariesListScrollable
 import com.github.wanderwise_inc.app.ui.list_itineraries.ItineraryListParent
-import com.github.wanderwise_inc.app.viewmodel.MapViewModel
+import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
 
@@ -58,7 +58,7 @@ import com.google.firebase.auth.FirebaseAuth
 // Declare a composable function for the profile screen.
 @Composable
 fun ProfileScreen(
-    mapViewModel: MapViewModel,
+    itineraryViewModel: ItineraryViewModel,
     profileViewModel: ProfileViewModel,
     imageRepository: ImageRepository,
     navHostController: NavHostController,
@@ -69,7 +69,7 @@ fun ProfileScreen(
   val profile by profileViewModel.getProfile(currentUid).collectAsState(initial = null)
 
   val userItineraries by
-      mapViewModel.getUserItineraries(currentUid).collectAsState(initial = emptyList())
+      itineraryViewModel.getUserItineraries(currentUid).collectAsState(initial = emptyList())
 
   if (profile != null) {
     Scaffold(
@@ -115,7 +115,7 @@ fun ProfileScreen(
               // List scrollable itineraries associated with the user.
               ItinerariesListScrollable(
                   itineraries = userItineraries,
-                  mapViewModel = mapViewModel,
+                  itineraryViewModel = itineraryViewModel,
                   profileViewModel = profileViewModel,
                   navController = navHostController,
                   firebaseAuth = firebaseAuth,

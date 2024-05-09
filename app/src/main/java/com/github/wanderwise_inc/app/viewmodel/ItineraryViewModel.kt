@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 
 private const val DEBUG_TAG: String = "MAP_VIEWMODEL"
 /** @brief ViewModel class for providing `Location`s and `Itinerary`s to the map UI */
-class MapViewModel(
+open class ItineraryViewModel(
     private val itineraryRepository: ItineraryRepository,
     private val directionsRepository: DirectionsRepository,
     private val userLocationClient: UserLocationClient,
@@ -137,6 +137,30 @@ class MapViewModel(
   fun getUserLocation(): Flow<Location> {
     return userLocationClient.getLocationUpdates(1000)
   }
+
+  /**
+   * @return Itinerary being built by the user currently. The composable is responsible for setting
+   *   it to `null` when the creation is finished
+   *
+   * If there is no itinerary currently being created, initializes a new one with the provided
+   * `userUid`
+   *
+   * **USAGE EXAMPLE**
+   *
+   * ```
+   * val newItineraryBuilder = mapViewModel.getNewItinerary()!!
+   * // any attributes that should cause a recomposition should be remembered
+   * var title by remember {
+   *  mutableStateOf(newItinerary.title)
+   * }
+   * Button (
+   *  onClick = {
+   *    title = newTitle                        // update mutableState for recomposition
+   *    newItineraryBuilder.addTitle(newTitle)  // update shared state across screens
+   *  }
+   * )
+   * ```
+   */
 
   /* fun filterItinerariesByPrice(priceRange: FloatRange): List<Itinerary> {
     return allItineraries.filter { it.price in priceRange }
