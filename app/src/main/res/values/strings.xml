@@ -10,4 +10,8 @@
     <string name="shopping_string">Shopping</string>
     <string name="sight_seeing_string">Sight seeing</string>
     <string name="drinks_string">Drinks</string>
+    <string name="preview_string">Preview</string>
+    <string name="locations_string">Locations</string>
+    <string name="description_string">Description</string>
+    <string name="tags_string">Tags</string>
 </resources>

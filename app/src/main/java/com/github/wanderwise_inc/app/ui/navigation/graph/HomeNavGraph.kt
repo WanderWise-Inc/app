@@ -54,7 +54,7 @@ fun HomeNavGraph(
     }
     composable(route = TopLevelDestination.Creation.route) {
       bottomNavigationViewModel.setSelected(NavigationItem.CREATE.ordinal)
-      CreationScreen(createItineraryViewModel, profileViewModel)
+      CreationScreen(createItineraryViewModel, profileViewModel, firebaseAuth = firebaseAuth)
     }
     composable(route = TopLevelDestination.Map.route) {
       bottomNavigationViewModel.setSelected(NavigationItem.MAP.ordinal)
