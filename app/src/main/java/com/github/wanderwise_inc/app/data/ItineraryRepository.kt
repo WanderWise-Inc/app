@@ -1,16 +1,8 @@
 package com.github.wanderwise_inc.app.data
 
 import com.github.wanderwise_inc.app.model.location.Itinerary
-import com.github.wanderwise_inc.app.model.location.ItineraryLabels
 import com.github.wanderwise_inc.app.model.location.Tag
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FirebaseFirestore
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.suspendCancellableCoroutine
 
 interface ItineraryRepository {
   /** @return a list of all public itineraries */

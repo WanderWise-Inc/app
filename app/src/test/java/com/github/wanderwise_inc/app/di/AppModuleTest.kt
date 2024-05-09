@@ -1,18 +1,9 @@
 package com.github.wanderwise_inc.app.di
 
-import android.content.Context
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
-import com.firebase.ui.auth.AuthUI
-import com.github.wanderwise_inc.app.data.DirectionsRepository
-import com.github.wanderwise_inc.app.data.ImageRepository
-import com.github.wanderwise_inc.app.data.ItineraryRepository
-import com.github.wanderwise_inc.app.data.ProfileRepository
 import com.github.wanderwise_inc.app.viewmodel.LocationClient
 import com.google.firebase.FirebaseApp
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
-import io.mockk.every
 import io.mockk.mockk
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -32,8 +23,7 @@ class AppModuleTest {
         mockk<ActivityResultLauncher<Intent>>(),
         mockk<ActivityResultLauncher<Intent>>(),
         mockk<Intent>(),
-        mockk<LocationClient>()
-    )
+        mockk<LocationClient>())
   }
 
   @Test

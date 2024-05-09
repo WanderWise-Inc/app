@@ -20,72 +20,56 @@ import com.google.firebase.storage.FirebaseStorage
 
 object AppModule {
 
-    private lateinit var imageLauncher: ActivityResultLauncher<Intent>
-    private lateinit var signInLauncher: ActivityResultLauncher<Intent>
-    private lateinit var sinInIntent: Intent
-    private lateinit var locationClient: LocationClient
+  private lateinit var imageLauncher: ActivityResultLauncher<Intent>
+  private lateinit var signInLauncher: ActivityResultLauncher<Intent>
+  private lateinit var sinInIntent: Intent
+  private lateinit var locationClient: LocationClient
 
-    init {
-        Log.d("ModuleProvider", "Using AppModule")
-    }
+  init {
+    Log.d("ModuleProvider", "Using AppModule")
+  }
 
-    fun initialize(
-        imageLauncher: ActivityResultLauncher<Intent>,
-        signInLauncher: ActivityResultLauncher<Intent>,
-        sinInIntent: Intent,
-        locationClient: LocationClient
-    ) {
-        this.imageLauncher = imageLauncher
-        this.signInLauncher = signInLauncher
-        this.sinInIntent = sinInIntent
-        this.locationClient = locationClient
-    }
+  fun initialize(
+      imageLauncher: ActivityResultLauncher<Intent>,
+      signInLauncher: ActivityResultLauncher<Intent>,
+      sinInIntent: Intent,
+      locationClient: LocationClient
+  ) {
+    this.imageLauncher = imageLauncher
+    this.signInLauncher = signInLauncher
+    this.sinInIntent = sinInIntent
+    this.locationClient = locationClient
+  }
 
-    val firebaseAuth by lazy {
-        FirebaseAuth.getInstance()
-    }
+  val firebaseAuth by lazy { FirebaseAuth.getInstance() }
 
-    val firebaseStorage by lazy {
-        FirebaseStorage.getInstance()
-    }
+  val firebaseStorage by lazy { FirebaseStorage.getInstance() }
 
-    val imageRepository by lazy {
-        ImageRepositoryImpl(imageLauncher, firebaseStorage.reference, null)
-    }
+  val imageRepository by lazy {
+    ImageRepositoryImpl(imageLauncher, firebaseStorage.reference, null)
+  }
 
-    val directionsRepository by lazy {
-        DirectionsRepositoryImpl(ApiServiceFactory.createDirectionsApiService())
-    }
+  val directionsRepository by lazy {
+    DirectionsRepositoryImpl(ApiServiceFactory.createDirectionsApiService())
+  }
 
-    val itineraryRepository by lazy {
-        ItineraryRepositoryTestImpl()
-    }
+  val itineraryRepository by lazy { ItineraryRepositoryTestImpl() }
 
-    val profileRepository by lazy {
-        ProfileRepositoryTestImpl()
-    }
+  val profileRepository by lazy { ProfileRepositoryTestImpl() }
 
-    val signInRepository by lazy {
-        SignInRepositoryImpl()
-    }
+  val signInRepository by lazy { SignInRepositoryImpl() }
 
-    val bottomNavigationViewModel by lazy {
-        BottomNavigationViewModel()
-    }
+  val bottomNavigationViewModel by lazy { BottomNavigationViewModel() }
 
-    val createItineraryViewModel by lazy {
-        CreateItineraryViewModel(itineraryRepository, directionsRepository, locationClient)
-    }
+  val createItineraryViewModel by lazy {
+    CreateItineraryViewModel(itineraryRepository, directionsRepository, locationClient)
+  }
 
-    val itineraryViewModel by lazy {
-        ItineraryViewModel(itineraryRepository, directionsRepository, locationClient)
-    }
+  val itineraryViewModel by lazy {
+    ItineraryViewModel(itineraryRepository, directionsRepository, locationClient)
+  }
 
-    val profileViewModel by lazy {
-        ProfileViewModel(profileRepository, imageRepository)
-    }
+  val profileViewModel by lazy { ProfileViewModel(profileRepository, imageRepository) }
 
-    val googleSignInLauncher by lazy {
-        DefaultGoogleSignInLauncher(signInLauncher, sinInIntent)
-    }
+  val googleSignInLauncher by lazy { DefaultGoogleSignInLauncher(signInLauncher, sinInIntent) }
 }
