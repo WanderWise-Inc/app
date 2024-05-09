@@ -109,11 +109,20 @@ class AppModuleTest {
   }
 
   @Test
-  fun `mapViewModel should return only one instance of MapViewModel`() {
-    val result1 = AppModule.mapViewModel
+  fun `createItineraryViewModel should return only one instance of MapViewModel`() {
+    val result1 = AppModule.createItineraryViewModel
     assertNotNull(result1)
 
-    val result2 = AppModule.mapViewModel
+    val result2 = AppModule.createItineraryViewModel
+    assertEquals(result1, result2)
+  }
+
+  @Test
+  fun `itineraryViewModel should return only one instance of MapViewModel`() {
+    val result1 = AppModule.itineraryViewModel
+    assertNotNull(result1)
+
+    val result2 = AppModule.itineraryViewModel
     assertEquals(result1, result2)
   }
 
