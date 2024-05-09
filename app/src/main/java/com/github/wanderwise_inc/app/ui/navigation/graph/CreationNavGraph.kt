@@ -12,11 +12,11 @@ import com.github.wanderwise_inc.app.ui.creation.steps.CreationStepChooseDescrip
 import com.github.wanderwise_inc.app.ui.creation.steps.CreationStepChooseTagsScreen
 import com.github.wanderwise_inc.app.ui.creation.steps.CreationStepPreview
 import com.github.wanderwise_inc.app.ui.navigation.Destination.CreationStepsDestinations
-import com.github.wanderwise_inc.app.viewmodel.MapViewModel
+import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
 
 @Composable
 fun CreationNavGraph(
-    mapViewModel: MapViewModel,
+    createItineraryViewModel: CreateItineraryViewModel,
     navController: NavHostController,
     padding: PaddingValues,
     // profileViewModel: ProfileViewModel,
@@ -30,7 +30,7 @@ fun CreationNavGraph(
       startDestination = CreationStepsDestinations.ChooseLocations.route,
       modifier = Modifier.padding(padding)) {
         composable(CreationStepsDestinations.ChooseLocations.route) {
-          CreateItineraryMap(mapViewModel)
+          CreateItineraryMap(createItineraryViewModel)
         }
         composable(CreationStepsDestinations.ChooseDescription.route) {
           CreationStepChooseDescriptionScreen()
