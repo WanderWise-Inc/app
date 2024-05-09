@@ -1,9 +1,11 @@
 package com.github.wanderwise_inc.app.ui.creation
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
+import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import org.junit.Before
 import org.junit.Rule
@@ -19,26 +21,29 @@ class CreateItineraryMapUITest {
 
     @get:Rule
     val composeTestRule = createComposeRule()
-    
-
     @MockK
     private lateinit var mockViewModel: CreateItineraryViewModel
 
     @Before
     fun setUp() {
-        MockitoAnnotations.openMocks(this)
+        MockKAnnotations.init(this)
+
+
     }
+
+    @Test
+    fun dummy() {
+        assert(true)
+    }
+
     @Test
     fun testLocation1TextField() {
         composeTestRule.setContent {
             SelectLocation(mapViewModel = mockViewModel)
         }
 
-        composeTestRule.onNodeWithTag(TestTags.FIRST_LOCATION).assertExists()
+        composeTestRule.onNodeWithTag(TestTags.FIRST_LOCATION).assertIsDisplayed()
 
-        // Here you can add assertions to check if the SelectLocation function is working as expected.
-        // For example, you can check if the CreateItineraryMap function is called with the correct ViewModel.
-        // However, since Compose doesn't provide a way to directly check this, this is just a placeholder.
     }
     @Test
     fun testLocation2TextField() {
@@ -46,7 +51,7 @@ class CreateItineraryMapUITest {
             SelectLocation(mapViewModel = mockViewModel)
         }
 
-        composeTestRule.onNodeWithTag(TestTags.SECOND_LOCATION).assertExists()
+        composeTestRule.onNodeWithTag(TestTags.SECOND_LOCATION).assertIsDisplayed()
     }
 }
 
