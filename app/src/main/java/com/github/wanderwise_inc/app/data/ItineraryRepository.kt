@@ -87,7 +87,6 @@ class ItineraryRepositoryTestImpl : ItineraryRepository {
 }
 
 class ItineraryRepositoryImpl(private val db: FirebaseFirestore) : ItineraryRepository {
-  // private val db = FirebaseFirestore.getInstance()
   private val itinerariesCollection = db.collection("itineraries")
 
   override fun getPublicItineraries(): Flow<List<Itinerary>> {
@@ -108,59 +107,53 @@ class ItineraryRepositoryImpl(private val db: FirebaseFirestore) : ItineraryRepo
               }
           emit(itineraries)
         }
-        .catch {
-          emit(listOf())
-        }
+        .catch { emit(listOf()) }
   }
 
   override fun getUserItineraries(userUid: String): Flow<List<Itinerary>> {
     return flow {
-          val iti =
+          val itineraries =
               suspendCancellableCoroutine<List<Itinerary>> { continuation ->
                 itinerariesCollection
                     .whereEqualTo(ItineraryLabels.USER_UID, userUid)
                     .get()
                     .addOnSuccessListener { snap ->
                       val documents = snap.documents
-                      val itineraries = documents.mapNotNull { it.toObject(Itinerary::class.java) }
+                      val iti = documents.mapNotNull { it.toObject(Itinerary::class.java) }
                       Log.d("ItineraryRepository", "Successfully got public itineraries")
-                      continuation.resume(itineraries)
+                      continuation.resume(iti)
                     }
                     .addOnFailureListener {
                       Log.d("ItineraryRepository", "Failed to get public itineraries")
                       continuation.resumeWithException(it)
                     }
               }
-          emit(iti)
+          emit(itineraries)
         }
-        .catch {
-          emit(listOf())
-        }
+        .catch { emit(listOf()) }
   }
 
   override fun getItinerariesWithTags(tags: List<Tag>): Flow<List<Itinerary>> {
     return flow {
-          val iti =
+          val itineraries =
               suspendCancellableCoroutine<List<Itinerary>> { continuation ->
                 itinerariesCollection
                     .whereArrayContainsAny(ItineraryLabels.TAGS, tags)
                     .get()
                     .addOnSuccessListener { snap ->
                       val documents = snap.documents
-                      val itineraries = documents.mapNotNull { it.toObject(Itinerary::class.java) }
+                      val iti = documents.mapNotNull { it.toObject(Itinerary::class.java) }
                       Log.d("ItineraryRepository", "Successfully got public itineraries")
-                      continuation.resume(itineraries)
+                      continuation.resume(iti)
                     }
                     .addOnFailureListener {
                       Log.d("ItineraryRepository", "Failed to get public itineraries")
                       continuation.resumeWithException(it)
                     }
               }
-          emit(iti)
+          emit(itineraries)
         }
-        .catch {
-          emit(listOf())
-        }
+        .catch { emit(listOf()) }
   }
 
   override suspend fun getItinerary(uid: String): Itinerary {
@@ -169,12 +162,8 @@ class ItineraryRepositoryImpl(private val db: FirebaseFirestore) : ItineraryRepo
           itinerariesCollection
               .document(uid)
               .get()
-              .addOnSuccessListener { document ->
-                continuation.resume(document)
-              }
-              .addOnFailureListener { exception ->
-                continuation.resumeWithException(exception)
-              }
+              .addOnSuccessListener { document -> continuation.resume(document) }
+              .addOnFailureListener { exception -> continuation.resumeWithException(exception) }
         }
     if (document.exists()) {
       return document.toObject(Itinerary::class.java)!!
@@ -191,9 +180,7 @@ class ItineraryRepositoryImpl(private val db: FirebaseFirestore) : ItineraryRepo
     itinerariesCollection
         .document(itinerary.uid)
         .set(itineraryMap)
-        .addOnSuccessListener {
-          Log.d("ItineraryRepository", "Successfully set itinerary")
-        }
+        .addOnSuccessListener { Log.d("ItineraryRepository", "Successfully set itinerary") }
         .addOnFailureListener {
           Log.d("ItineraryRepository", "Failed to set itinerary")
           throw it
@@ -208,9 +195,7 @@ class ItineraryRepositoryImpl(private val db: FirebaseFirestore) : ItineraryRepo
     itinerariesCollection
         .document(oldUid)
         .set(itineraryMap)
-        .addOnSuccessListener {
-          Log.d("ItineraryRepository", "Successfully updated itinerary")
-        }
+        .addOnSuccessListener { Log.d("ItineraryRepository", "Successfully updated itinerary") }
         .addOnFailureListener {
           Log.d("ItineraryRepository", "Failed to update itinerary")
           throw it
@@ -221,9 +206,7 @@ class ItineraryRepositoryImpl(private val db: FirebaseFirestore) : ItineraryRepo
     itinerariesCollection
         .document(itinerary.uid)
         .delete()
-        .addOnSuccessListener {
-          Log.d("ItineraryRepository", "Successfully deleted itinerary")
-        }
+        .addOnSuccessListener { Log.d("ItineraryRepository", "Successfully deleted itinerary") }
         .addOnFailureListener {
           Log.d("ItineraryRepository", "Failed to delete itinerary")
           throw it
