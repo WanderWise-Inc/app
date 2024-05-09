@@ -77,7 +77,6 @@ fun PriceEstimationTextBox() {
         ExposedDropdownMenuBox(
             expanded = currenciesMenuExpanded,
             onExpandedChange = { currenciesMenuExpanded = !currenciesMenuExpanded }) {
-
               TextField(
                   modifier = Modifier.menuAnchor(),
                   value = selectedCurrency,
