@@ -181,16 +181,16 @@ class CreationPreviewNavigationTest {
 
       val itineraryBuilder = Itinerary.Builder(userUid = "")
       val dummyLiveData: LiveData<List<LatLng>> = MutableLiveData(listOf())
-      
+
       every { createItineraryViewModel.setItinerary(any()) } returns Unit
       every { createItineraryViewModel.incrementItineraryLikes(any()) } returns Unit
       every { createItineraryViewModel.getAllPublicItineraries() } returns
-              flow { emit(emptyList()) }
+          flow { emit(emptyList()) }
       every { createItineraryViewModel.getUserLocation() } returns flow { emit(Location("")) }
       every { createItineraryViewModel.getUserItineraries(any()) } returns
-              flow { emit(emptyList()) }
+          flow { emit(emptyList()) }
       every { createItineraryViewModel.getItineraryFromUids(any()) } returns
-              flow { emit(emptyList()) }
+          flow { emit(emptyList()) }
       every { createItineraryViewModel.setFocusedItinerary(any()) } returns Unit
       every { createItineraryViewModel.getFocusedItinerary() } returns null
       every { createItineraryViewModel.setItinerary(any()) } returns Unit
@@ -199,7 +199,7 @@ class CreationPreviewNavigationTest {
       every { createItineraryViewModel.getPolylinePointsLiveData() } returns dummyLiveData
       //      every { createItineraryViewModel.getNewItinerary() } returns itineraryBuilder
       every { createItineraryViewModel.getNewItinerary() } returns
-              Itinerary.Builder(userUid = "uniqueUserUID")
+          Itinerary.Builder(userUid = "uniqueUserUID")
       // coEvery { createItineraryViewModel.getItineraryFromUids(any()) } returns flow {
       // listOf(mockItinerary) }
 
@@ -238,28 +238,27 @@ class CreationPreviewNavigationTest {
     assertEquals("Creation/${CreationPreviewOptions.PREVIEW_BANNER}", route)
   }
 
-    @Test
-    fun `perform click on floating button navigates to preview itinerary`() {
-      composeTestRule.onNodeWithTag(TestTags.CREATION_SCREEN_PREVIEW_BUTTON).performClick()
+  @Test
+  fun `perform click on floating button navigates to preview itinerary`() {
+    composeTestRule.onNodeWithTag(TestTags.CREATION_SCREEN_PREVIEW_BUTTON).performClick()
 
+    composeTestRule.onNodeWithTag(TestTags.CREATION_SCREEN_PREVIEW_ITINERARY).assertIsDisplayed()
 
-   composeTestRule.onNodeWithTag(TestTags.CREATION_SCREEN_PREVIEW_ITINERARY).assertIsDisplayed()
+    val route = navController.currentBackStackEntry?.destination?.route
+    assertEquals("Creation/${CreationPreviewOptions.PREVIEW_ITINERARY}", route)
+  }
 
-      val route = navController.currentBackStackEntry?.destination?.route
-      assertEquals("Creation/${CreationPreviewOptions.PREVIEW_ITINERARY}", route)
-    }
+  // commented out because fixing this would take a lot of time
+  @Test
+  fun `perform click on floating button twice navigates to preview banner`() {
+    composeTestRule.onNodeWithTag(TestTags.CREATION_SCREEN_PREVIEW_BUTTON).performClick()
+    composeTestRule.onNodeWithTag(TestTags.CREATION_SCREEN_PREVIEW_BUTTON).performClick()
 
-   //commented out because fixing this would take a lot of time
-    @Test
-    fun `perform click on floating button twice navigates to preview banner`() {
-      composeTestRule.onNodeWithTag(TestTags.CREATION_SCREEN_PREVIEW_BUTTON).performClick()
-      composeTestRule.onNodeWithTag(TestTags.CREATION_SCREEN_PREVIEW_BUTTON).performClick()
+    composeTestRule.onNodeWithTag(TestTags.CREATION_SCREEN_PREVIEW_BANNER).assertIsDisplayed()
 
-      composeTestRule.onNodeWithTag(TestTags.CREATION_SCREEN_PREVIEW_BANNER).assertIsDisplayed()
-
-      val route = navController.currentBackStackEntry?.destination?.route
-      assertEquals("Creation/${CreationPreviewOptions.PREVIEW_BANNER}", route)
-    }
+    val route = navController.currentBackStackEntry?.destination?.route
+    assertEquals("Creation/${CreationPreviewOptions.PREVIEW_BANNER}", route)
+  }
 
   @Test
   fun `finish button exists and is clickable`() {

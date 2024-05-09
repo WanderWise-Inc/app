@@ -36,30 +36,32 @@ fun CreationStepPreviewBanner(createItineraryViewModel: CreateItineraryViewModel
   val onBannerClick = { i: Itinerary -> }
   val onLikeButtonClick = { i: Itinerary, b: Boolean -> }
 
-  Box(modifier = Modifier.fillMaxSize().padding(horizontal = 10.dp, vertical = 0.dp), contentAlignment = Alignment.TopCenter) {
-    LazyColumn(
-        verticalArrangement = spacedBy(15.dp),
-        modifier = Modifier.testTag(TestTags.CREATION_SCREEN_PREVIEW_BANNER)) {
-          item {
-            ItineraryBanner(
-                itinerary = dummyItinerary,
-                onLikeButtonClick = onLikeButtonClick,
-                onBannerClick = onBannerClick)
-          }
+  Box(
+      modifier = Modifier.fillMaxSize().padding(horizontal = 10.dp, vertical = 0.dp),
+      contentAlignment = Alignment.TopCenter) {
+        LazyColumn(
+            verticalArrangement = spacedBy(15.dp),
+            modifier = Modifier.testTag(TestTags.CREATION_SCREEN_PREVIEW_BANNER)) {
+              item {
+                ItineraryBanner(
+                    itinerary = dummyItinerary,
+                    onLikeButtonClick = onLikeButtonClick,
+                    onBannerClick = onBannerClick)
+              }
 
-          item {
-            ItineraryBanner(
-                itinerary = itinerary,
-                onLikeButtonClick = onLikeButtonClick,
-                onBannerClick = onBannerClick)
-          }
+              item {
+                ItineraryBanner(
+                    itinerary = itinerary,
+                    onLikeButtonClick = onLikeButtonClick,
+                    onBannerClick = onBannerClick)
+              }
 
-          item {
-            ItineraryBanner(
-                itinerary = dummyItinerary,
-                onLikeButtonClick = onLikeButtonClick,
-                onBannerClick = onBannerClick)
-          }
-        }
-  }
+              item {
+                ItineraryBanner(
+                    itinerary = dummyItinerary,
+                    onLikeButtonClick = onLikeButtonClick,
+                    onBannerClick = onBannerClick)
+              }
+            }
+      }
 }
