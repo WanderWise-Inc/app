@@ -4,6 +4,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import com.github.wanderwise_inc.app.model.location.FakeItinerary
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
 import io.mockk.MockKAnnotations
@@ -21,7 +22,7 @@ class CreationStepPreviewBannerKtTest {
 
   @MockK private lateinit var createItineraryViewModelTest: CreateItineraryViewModel
 
-  val title = "true itinerary"
+  val title = FakeItinerary.SWITZERLAND.title
   // val itineraryBuilder = Itinerary.Builder(uid = "0", userUid = "me", title = title)
 
   @Before

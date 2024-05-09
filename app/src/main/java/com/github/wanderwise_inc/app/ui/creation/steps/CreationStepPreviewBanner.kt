@@ -3,6 +3,7 @@ package com.github.wanderwise_inc.app.ui.creation.steps
 import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -35,7 +36,7 @@ fun CreationStepPreviewBanner(createItineraryViewModel: CreateItineraryViewModel
   val onBannerClick = { i: Itinerary -> }
   val onLikeButtonClick = { i: Itinerary, b: Boolean -> }
 
-  Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
+  Box(modifier = Modifier.fillMaxSize().padding(horizontal = 10.dp, vertical = 0.dp), contentAlignment = Alignment.TopCenter) {
     LazyColumn(
         verticalArrangement = spacedBy(15.dp),
         modifier = Modifier.testTag(TestTags.CREATION_SCREEN_PREVIEW_BANNER)) {
