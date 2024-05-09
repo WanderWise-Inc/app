@@ -101,10 +101,6 @@ class CreateItineraryMapUITest {
     profileViewModel = ProfileViewModel(profileRepository, imageRepository)
   }
 
-  @Test
-  fun dummy() {
-    assert(true)
-  }
 
   @Test
   fun testLocation1TextField() {
