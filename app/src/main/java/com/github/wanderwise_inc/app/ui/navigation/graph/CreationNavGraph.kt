@@ -7,7 +7,6 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.github.wanderwise_inc.app.ui.creation.steps.CreateItineraryMap
 import com.github.wanderwise_inc.app.ui.creation.steps.CreateItineraryMapWithSelector
 import com.github.wanderwise_inc.app.ui.creation.steps.CreationStepChooseDescriptionScreen
 import com.github.wanderwise_inc.app.ui.creation.steps.CreationStepChooseTagsScreen

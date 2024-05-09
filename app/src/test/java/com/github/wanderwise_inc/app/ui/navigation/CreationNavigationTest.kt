@@ -6,6 +6,8 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
 import com.github.wanderwise_inc.app.data.ImageRepository
@@ -16,6 +18,7 @@ import com.github.wanderwise_inc.app.ui.creation.steps.CreationStepPreview
 import com.github.wanderwise_inc.app.viewmodel.BottomNavigationViewModel
 import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
+import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import io.mockk.MockKAnnotations
@@ -48,6 +51,7 @@ class CreationNavigationTest {
 
     composeTestRule.setContent {
       val itineraryBuilder = Itinerary.Builder(userUid = "")
+      val dummyLiveData: LiveData<List<LatLng>> = MutableLiveData(listOf())
       /*val mockProfile = Profile("", "Test", "0", "Bio", null)
                   val mockItinerary = FakeItinerary.SAN_FRANCISCO
                   val mockLocation = Location("")
@@ -73,6 +77,8 @@ class CreationNavigationTest {
       every { createItineraryViewModel.getFocusedItinerary() } returns null
       every { createItineraryViewModel.setItinerary(any()) } returns Unit
       every { createItineraryViewModel.getNewItinerary() } returns itineraryBuilder
+      every { createItineraryViewModel.fetchPolylineLocations(any()) } returns Unit
+      every { createItineraryViewModel.getPolylinePointsLiveData() } returns dummyLiveData
       // coEvery { createItineraryViewModel.getItineraryFromUids(any()) } returns flow {
       // listOf(mockItinerary) }
 
@@ -96,7 +102,7 @@ class CreationNavigationTest {
 
   @Test
   fun `verify start destination is overview screen`() {
-    composeTestRule.onNodeWithTag(TestTags.CREATION_SCREEN_LOCATIONS).assertIsDisplayed()
+    composeTestRule.onNodeWithTag(TestTags.MAP_GOOGLE_MAPS).assertIsDisplayed()
 
     val route = navController.currentBackStackEntry?.destination?.route
     assertEquals("Creation/${CreationStepsRoute.LOCATIONS}", route)
