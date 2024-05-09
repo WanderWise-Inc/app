@@ -183,6 +183,14 @@ class MapViewModel(
     else throw InvalidObjectException("Itinerary.Builder is `null`")
   }
 
+  fun setNewItineraryTitle(title: String) {
+    newItineraryBuilder?.title = title
+  }
+
+  fun setNewItineraryDescription(description: String) {
+    newItineraryBuilder?.description = description
+  }
+
   /* fun filterItinerariesByPrice(priceRange: FloatRange): List<Itinerary> {
     return allItineraries.filter { it.price in priceRange }
   }*/
