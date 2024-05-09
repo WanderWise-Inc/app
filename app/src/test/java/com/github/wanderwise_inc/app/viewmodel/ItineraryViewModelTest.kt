@@ -7,11 +7,16 @@ import app.cash.turbine.test
 import com.github.wanderwise_inc.app.DEFAULT_USER_UID
 import com.github.wanderwise_inc.app.data.DirectionsRepository
 import com.github.wanderwise_inc.app.data.ItineraryRepository
+import com.github.wanderwise_inc.app.data.LocationsRepository
 import com.github.wanderwise_inc.app.model.location.FakeItinerary
+import com.github.wanderwise_inc.app.model.location.FakeLocation
+import com.github.wanderwise_inc.app.model.location.FakeLocation.EMPIRE_STATE_BUILDING
+import com.github.wanderwise_inc.app.model.location.FakeLocation.STATUE_OF_LIBERTY
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryPreferences
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
 import com.github.wanderwise_inc.app.utils.MainDispatcherRule
+import com.google.android.gms.maps.model.LatLng
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.every
@@ -41,6 +46,8 @@ class ItineraryViewModelTest {
   @MockK private lateinit var itineraryRepository: ItineraryRepository
 
   @MockK private lateinit var directionsRepository: DirectionsRepository
+  
+  @MockK private lateinit var locationsRepository: LocationsRepository
 
   @MockK private lateinit var userLocationClient: UserLocationClient
 
@@ -228,6 +235,47 @@ class ItineraryViewModelTest {
 
     polylineLocations = itineraryViewModel.getPolylinePointsLiveData().value
     assertEquals(sanfranciscoLocations, polylineLocations)
+  }
+
+  @ExperimentalCoroutinesApi
+  @Test
+  fun fetchPlaces() = runTest {
+    val locationsLatLng = listOf(LatLng(STATUE_OF_LIBERTY.lat, STATUE_OF_LIBERTY.long))
+
+    every { locationsRepository.getPlaces(any(), any(), any()) } returns
+            MutableLiveData(locationsLatLng)
+
+    itineraryViewModel.fetchPlaces("Statue of Liberty")
+
+    advanceUntilIdle()
+
+    val placesLocations = itineraryViewModel.getPlacesLiveData().value
+    assertNotNull(placesLocations)
+  }
+
+  @ExperimentalCoroutinesApi
+  @Test
+  fun getPlacesLiveData() = runTest {    
+    val statueOfLibertyLatLng = listOf(LatLng(STATUE_OF_LIBERTY.lat, STATUE_OF_LIBERTY.long))
+    val empireStateBuildingLatLng = listOf(LatLng(EMPIRE_STATE_BUILDING.lat, EMPIRE_STATE_BUILDING.long))
+
+    every { locationsRepository.getPlaces(any(), any(), any()) } returns
+            MutableLiveData(statueOfLibertyLatLng) andThen
+            MutableLiveData(empireStateBuildingLatLng)
+
+    itineraryViewModel.fetchPlaces("Statue of Liberty")
+
+    advanceUntilIdle()
+
+    var polylineLocations = itineraryViewModel.getPlacesLiveData().value
+    assertEquals(statueOfLibertyLatLng, polylineLocations)
+
+    itineraryViewModel.fetchPlaces("Empire State Building")
+
+    advanceUntilIdle()
+
+    polylineLocations = itineraryViewModel.getPlacesLiveData().value
+    assertEquals(empireStateBuildingLatLng, polylineLocations)
   }
 
   @Test
