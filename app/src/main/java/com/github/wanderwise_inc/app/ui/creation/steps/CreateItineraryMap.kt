@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -174,7 +173,7 @@ fun LocationSelector() {
             onValueChange = { location2 = it },
             label = { Text("location 2...") },
             placeholder = { Text("location 2...") },
-            modifier = Modifier.padding(start = 25.dp)..testTag(TestTags.SECOND_LOCATION),
+            modifier = Modifier.padding(start = 25.dp).testTag(TestTags.SECOND_LOCATION),
             shape = RoundedCornerShape(20.dp))
       }
     }
