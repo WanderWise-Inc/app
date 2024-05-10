@@ -9,6 +9,8 @@ import com.github.wanderwise_inc.app.network.Place
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import retrofit2.await
+import java.lang.NullPointerException
 
 private const val DEBUG_TAG: String = "LOCATIONS_REPOSITORY"
 
@@ -55,15 +57,20 @@ private fun List<Place>?.extractLocations(): List<Location> {
     if (this == null) return emptyList()
     val out = mutableListOf<Location>()
     for (place in this) {
-        val displayNameSplit = place.displayName.split(",", limit = 2)
-        assert(displayNameSplit.size == 2)
-        out.add(Location(
-            lat = place.lat.toDouble(),
-            long = place.lng.toDouble(),
-            title = displayNameSplit.first(),
-            address = displayNameSplit.last(),
-            googleRating = place.importance * 5
-        ))
+        if (place.displayName == null) throw NullPointerException("displayname is null")
+        else if (place.lat == null || place.lng == null) throw NullPointerException("lat-lng are null")
+        else if (place.importance == null) throw NullPointerException("importance is null")
+        else {
+            val displayNameSplit = place.displayName.split(",", limit = 2)
+            assert(displayNameSplit.size == 2)
+            out.add(Location(
+                lat = place.lat.toDouble(),
+                long = place.lng.toDouble(),
+                title = displayNameSplit.first(),
+                address = displayNameSplit.last(),
+                googleRating = place.importance * 5
+            ))
+        }
     }
     return out
 }

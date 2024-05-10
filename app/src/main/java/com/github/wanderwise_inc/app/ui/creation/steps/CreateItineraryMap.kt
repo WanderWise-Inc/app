@@ -1,9 +1,11 @@
 package com.github.wanderwise_inc.app.ui.creation.steps
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.KeyEvent.KEYCODE_ENTER
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -146,15 +148,6 @@ fun LocationSelector(
 ) {
   var location1 by remember { mutableStateOf("") }
   var location2 by remember { mutableStateOf("") }
-    
-  var searchMenuExpanded by remember { mutableStateOf(false) }
-    
-  val searchedLocations by createItineraryViewModel.getPlacesLiveData().observeAsState()
-    
-  val onSearch = { query:String -> 
-      createItineraryViewModel.fetchPlaces(query)
-      
-  }
 
   BottomAppBar(
       modifier = Modifier
@@ -183,7 +176,7 @@ fun LocationSelector(
                 .padding(start = 25.dp)
                 .onKeyEvent {
                     if (it.nativeKeyEvent.keyCode == KEYCODE_ENTER) { // overwrite enter key
-                        onSearch(location1)
+                        //onSearch(location1)
                         true
                     }
                     false
@@ -191,27 +184,11 @@ fun LocationSelector(
             shape = RoundedCornerShape(20.dp),
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
             keyboardActions = KeyboardActions(
-                onDone = { onSearch(location1) },
-                onSearch = { onSearch(location1) }
+                onDone = { /*onSearch(location1)*/ },
+                onSearch = { /*onSearch(location1)*/ }
             ),
             singleLine = true
         )
-      }
-      
-      DropdownMenu(expanded = searchMenuExpanded, onDismissRequest = { searchMenuExpanded = false }) {
-          LazyColumn(
-              
-          ) {
-              if (searchedLocations == null) {
-                  searchMenuExpanded = false
-              } else {
-                  this.items(searchedLocations!!) { location ->
-                      Row {
-                          Text(text = location.title!!)
-                      }
-                  }
-              }
-          }
       }
 
       Icon(

@@ -30,6 +30,7 @@ import com.github.wanderwise_inc.app.network.LocationsApiServiceFactory
 import com.github.wanderwise_inc.app.ui.creation.CreationScreen
 import com.github.wanderwise_inc.app.ui.creation.steps.CreateItineraryMapWithSelector
 import com.github.wanderwise_inc.app.ui.home.HomeScreen
+import com.github.wanderwise_inc.app.ui.map.SearchLocation
 import com.github.wanderwise_inc.app.ui.navigation.graph.RootNavigationGraph
 import com.github.wanderwise_inc.app.ui.theme.WanderWiseTheme
 import com.github.wanderwise_inc.app.viewmodel.BottomNavigationViewModel
@@ -107,11 +108,12 @@ private lateinit var itineraryViewModel: ItineraryViewModel
         // A surface container using the 'background' color from the theme
         Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
             navController = rememberNavController()
-            CreationScreen(
+            SearchLocation(itineraryViewModel)
+            /*CreationScreen(
                 createItineraryViewModel = createItineraryViewModel,
                 profileViewModel = profileViewModel,
                 firebaseAuth = FirebaseAuth.getInstance()
-            )
+            )*/
             /*RootNavigationGraph(
               googleSignInLauncher = googleSignInLauncher,
               profileViewModel = profileViewModel,
