@@ -17,7 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -32,7 +31,7 @@ import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.itinerary.ItineraryBanner
 import com.github.wanderwise_inc.app.ui.navigation.Destination
 import com.github.wanderwise_inc.app.ui.navigation.NavigationActions
-import com.github.wanderwise_inc.app.viewmodel.MapViewModel
+import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
 
@@ -42,7 +41,7 @@ import com.google.firebase.auth.FirebaseAuth
 @Composable
 fun ItinerariesListScrollable(
     itineraries: List<Itinerary>,
-    mapViewModel: MapViewModel,
+    itineraryViewModel: ItineraryViewModel,
     profileViewModel: ProfileViewModel,
     navController: NavHostController,
     firebaseAuth: FirebaseAuth,
@@ -78,16 +77,16 @@ fun ItinerariesListScrollable(
             val isLikedInitially = profileViewModel.checkIfItineraryIsLiked(uid, itinerary.uid)
             val onLikeButtonClick = { it: Itinerary, isLiked: Boolean ->
               if (isLiked) {
-                mapViewModel.decrementItineraryLikes(it)
+                itineraryViewModel.decrementItineraryLikes(it)
                 profileViewModel.removeLikedItinerary(uid, it.uid)
               } else {
-                mapViewModel.incrementItineraryLikes(it)
+                itineraryViewModel.incrementItineraryLikes(it)
                 profileViewModel.addLikedItinerary(uid, it.uid)
               }
             }
             val navigationActions = NavigationActions(navController)
             val onBannerClick = { it: Itinerary ->
-              mapViewModel.setFocusedItinerary(it)
+              itineraryViewModel.setFocusedItinerary(it)
               navigationActions.navigateTo(Destination.TopLevelDestination.Map)
             }
             ItineraryBanner(
@@ -125,7 +124,7 @@ fun CategorySelector(
                         lineHeight = 16.sp,
                         // fontFamily = FontFamily(Font(R.font.roboto)),
                         fontWeight = FontWeight(600),
-                        color = Color(0xFF191C1E),
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
                         textAlign = TextAlign.Center,
                         letterSpacing = 0.5.sp,
                     ))
@@ -134,7 +133,7 @@ fun CategorySelector(
             Icon(
                 painter = painterResource(id = category.icon),
                 contentDescription = null,
-                tint = Color(0xFF191C1E),
+                tint = MaterialTheme.colorScheme.onPrimaryContainer,
                 modifier = Modifier.size(30.dp).padding(2.dp))
           },
           modifier = Modifier.testTag("${TestTags.CATEGORY_SELECTOR_TAB}_${index}"))

@@ -15,7 +15,8 @@ import com.github.wanderwise_inc.app.model.profile.Profile
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.home.HomeScreen
 import com.github.wanderwise_inc.app.viewmodel.BottomNavigationViewModel
-import com.github.wanderwise_inc.app.viewmodel.MapViewModel
+import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
+import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
@@ -30,7 +31,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.runner.RunWith
-import org.mockito.kotlin.or
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
@@ -38,7 +38,8 @@ class HomeNavigationTest {
   @get:Rule val composeTestRule = createComposeRule()
 
   @MockK private lateinit var imageRepository: ImageRepository
-  @MockK private lateinit var mapViewModel: MapViewModel
+  @MockK private lateinit var itineraryViewModel: ItineraryViewModel
+  @MockK private lateinit var createItineraryViewModel: CreateItineraryViewModel
   @MockK private lateinit var profileViewModel: ProfileViewModel
   @MockK private lateinit var bottomNavigationViewModel: BottomNavigationViewModel
   @MockK private lateinit var firebaseAuth: FirebaseAuth
@@ -63,14 +64,17 @@ class HomeNavigationTest {
       every { profileViewModel.getDefaultProfilePicture() } returns flow { emit(null) }
       every { profileViewModel.getProfilePicture(any()) } returns flow { emit(null) }
 
-      every { mapViewModel.setItinerary(any()) } returns Unit
-      every { mapViewModel.incrementItineraryLikes(any()) } returns Unit
-      every { mapViewModel.getAllPublicItineraries() } returns flow { emit(emptyList()) }
-      every { mapViewModel.getUserLocation() } returns flow { emit(Location("")) }
-      every { mapViewModel.getUserItineraries(any()) } returns flow { emit(emptyList()) }
-      every { mapViewModel.getItineraryFromUids(any()) } returns flow { emit(emptyList()) }
-      every { mapViewModel.getFocusedItinerary() } returns null
-      // coEvery { mapViewModel.getItineraryFromUids(any()) } returns flow { listOf(mockItinerary) }
+      every { itineraryViewModel.setItinerary(any()) } returns Unit
+      every { itineraryViewModel.incrementItineraryLikes(any()) } returns Unit
+      every { itineraryViewModel.getAllPublicItineraries() } returns flow { emit(emptyList()) }
+      every { itineraryViewModel.getUserLocation() } returns flow { emit(Location("")) }
+      every { itineraryViewModel.getUserItineraries(any()) } returns flow { emit(emptyList()) }
+      every { itineraryViewModel.getItineraryFromUids(any()) } returns flow { emit(emptyList()) }
+      every { itineraryViewModel.getFocusedItinerary() } returns null
+      every { createItineraryViewModel.getNewItinerary() } returns null
+
+      // coEvery { itineraryViewModel.getItineraryFromUids(any()) } returns flow {
+      // listOf(mockItinerary) }
 
       every { bottomNavigationViewModel.setSelected(any()) } returns Unit
       every { bottomNavigationViewModel.selected } returns liveData { 0 }
@@ -82,7 +86,8 @@ class HomeNavigationTest {
       navController.navigatorProvider.addNavigator(ComposeNavigator())
       HomeScreen(
           imageRepository,
-          mapViewModel,
+          itineraryViewModel,
+          createItineraryViewModel,
           bottomNavigationViewModel,
           profileViewModel,
           navController,
@@ -92,7 +97,7 @@ class HomeNavigationTest {
 
   @Test
   fun verify_BottomNavigationBarIsDisplayed() {
-    composeTestRule.onNodeWithTag("Bottom navigation bar").assertIsDisplayed()
+    composeTestRule.onNodeWithTag(TestTags.BOTTOM_NAV).assertIsDisplayed()
   }
 
   @Test
@@ -100,118 +105,118 @@ class HomeNavigationTest {
     composeTestRule.onNodeWithTag(TestTags.OVERVIEW_SCREEN).assertIsDisplayed()
 
     val route = navController.currentBackStackEntry?.destination?.route
-    assertEquals(Route.OVERVIEW, route)
+    assertEquals(TopLevelRoute.OVERVIEW, route)
   }
 
   @Test
   fun performClick_OnItineraryButton_NavigatesToLikedScreen() {
-    composeTestRule.onNodeWithTag(Route.LIKED).performClick()
+    composeTestRule.onNodeWithTag(TopLevelRoute.LIKED).performClick()
 
     composeTestRule.onNodeWithTag(TestTags.LIKED_SCREEN).assertIsDisplayed()
 
     val route = navController.currentBackStackEntry?.destination?.route
-    assertEquals(Route.LIKED, route)
+    assertEquals(TopLevelRoute.LIKED, route)
   }
 
   @Test
   fun performClick_OnItineraryButton_NavigatesToCreationScreen() {
-    composeTestRule.onNodeWithTag(Route.CREATION).performClick()
+    composeTestRule.onNodeWithTag(TopLevelRoute.CREATION).performClick()
 
-    composeTestRule.onNodeWithTag(TestTags.CREATION_SCREEN).assertIsDisplayed()
+    composeTestRule.onNodeWithTag(TestTags.NO_NEW_CREATION_SCREEN).assertIsDisplayed()
 
     val route = navController.currentBackStackEntry?.destination?.route
-    assertEquals(Route.CREATION, route)
+    assertEquals(TopLevelRoute.CREATION, route)
   }
 
   @Test
   fun performClick_OnMapButton_NavigatesToMapScreen() {
-    composeTestRule.onNodeWithTag(Route.MAP).performClick()
+    composeTestRule.onNodeWithTag(TopLevelRoute.MAP).performClick()
 
     composeTestRule.onNodeWithTag(TestTags.MAP_NULL_ITINERARY).assertIsDisplayed()
 
     val route = navController.currentBackStackEntry?.destination?.route
-    assertEquals(Route.MAP, route)
+    assertEquals(TopLevelRoute.MAP, route)
   }
 
   @Test
   fun performClick_OnProfileButton_NavigatesToProfileScreen() {
-    composeTestRule.onNodeWithTag(Route.PROFILE).performClick()
+    composeTestRule.onNodeWithTag(TopLevelRoute.PROFILE).performClick()
 
     composeTestRule.onNodeWithTag(TestTags.PROFILE_SCREEN).assertIsDisplayed()
 
     val route = navController.currentBackStackEntry?.destination?.route
-    assertEquals(Route.PROFILE, route)
+    assertEquals(TopLevelRoute.PROFILE, route)
   }
 
   @Test
   fun performClicks_OnLikedThenMapButton_NavigatesToMapScreen() {
-    composeTestRule.onNodeWithTag(Route.LIKED).performClick()
+    composeTestRule.onNodeWithTag(TopLevelRoute.LIKED).performClick()
 
-    composeTestRule.onNodeWithTag(Route.MAP).performClick()
+    composeTestRule.onNodeWithTag(TopLevelRoute.MAP).performClick()
 
     composeTestRule.onNodeWithTag(TestTags.MAP_NULL_ITINERARY).assertIsDisplayed()
 
     val route = navController.currentBackStackEntry?.destination?.route
-    assertEquals(Route.MAP, route)
+    assertEquals(TopLevelRoute.MAP, route)
   }
 
   @Test
   fun performClicks_OnMapThenItineraryButton_NavigatesToLikedScreen() {
-    // composeTestRule.onNodeWithTag(Route.MAP).performClick()
+    // composeTestRule.onNodeWithTag(TopLevelRoute.MAP).performClick()
 
-    composeTestRule.onNodeWithTag(Route.LIKED).performClick()
+    composeTestRule.onNodeWithTag(TopLevelRoute.LIKED).performClick()
 
     composeTestRule.onNodeWithTag(TestTags.LIKED_SCREEN).assertIsDisplayed()
 
     val route = navController.currentBackStackEntry?.destination?.route
-    assertEquals(Route.LIKED, route)
+    assertEquals(TopLevelRoute.LIKED, route)
   }
 
   @Test
   fun performClicks_OnMapThenOverviewButton_NavigatesToOverviewScreen() {
-    composeTestRule.onNodeWithTag(Route.MAP).performClick()
+    composeTestRule.onNodeWithTag(TopLevelRoute.MAP).performClick()
 
-    composeTestRule.onNodeWithTag(Route.OVERVIEW).performClick()
+    composeTestRule.onNodeWithTag(TopLevelRoute.OVERVIEW).performClick()
 
     composeTestRule.onNodeWithTag(TestTags.OVERVIEW_SCREEN).assertIsDisplayed()
 
     val route = navController.currentBackStackEntry?.destination?.route
-    assertEquals(Route.OVERVIEW, route)
+    assertEquals(TopLevelRoute.OVERVIEW, route)
   }
 
   @Test
   fun performMultipleClicks_OnNavigationBarButton_DoesNotAddToBackStack() {
-    composeTestRule.onNodeWithTag(Route.MAP).performClick()
+    composeTestRule.onNodeWithTag(TopLevelRoute.MAP).performClick()
 
-    composeTestRule.onNodeWithTag(Route.LIKED).performClick()
+    composeTestRule.onNodeWithTag(TopLevelRoute.LIKED).performClick()
 
-    composeTestRule.onNodeWithTag(Route.MAP).performClick()
+    composeTestRule.onNodeWithTag(TopLevelRoute.MAP).performClick()
 
-    composeTestRule.onNodeWithTag(Route.LIKED).performClick()
+    composeTestRule.onNodeWithTag(TopLevelRoute.LIKED).performClick()
 
-    composeTestRule.onNodeWithTag(Route.MAP).performClick()
+    composeTestRule.onNodeWithTag(TopLevelRoute.MAP).performClick()
 
     navController.popBackStack() // simulates back button click
 
     val route = navController.currentBackStackEntry?.destination?.route
-    assertEquals(Route.OVERVIEW, route)
+    assertEquals(TopLevelRoute.OVERVIEW, route)
 
     composeTestRule.onNodeWithTag(TestTags.OVERVIEW_SCREEN).assertIsDisplayed()
   }
 
   @Test
   fun performMultipleClicks_OnNavigationBarButtonEndingOnOverviewScreen_DoesNotAddToBackStack() {
-    composeTestRule.onNodeWithTag(Route.MAP).performClick()
+    composeTestRule.onNodeWithTag(TopLevelRoute.MAP).performClick()
 
-    composeTestRule.onNodeWithTag(Route.LIKED).performClick()
+    composeTestRule.onNodeWithTag(TopLevelRoute.LIKED).performClick()
 
-    composeTestRule.onNodeWithTag(Route.MAP).performClick()
+    composeTestRule.onNodeWithTag(TopLevelRoute.MAP).performClick()
 
-    composeTestRule.onNodeWithTag(Route.LIKED).performClick()
+    composeTestRule.onNodeWithTag(TopLevelRoute.LIKED).performClick()
 
-    composeTestRule.onNodeWithTag(Route.PROFILE).performClick()
+    composeTestRule.onNodeWithTag(TopLevelRoute.PROFILE).performClick()
 
-    composeTestRule.onNodeWithTag(Route.OVERVIEW).performClick()
+    composeTestRule.onNodeWithTag(TopLevelRoute.OVERVIEW).performClick()
 
     navController.popBackStack() // simulates back button click
 

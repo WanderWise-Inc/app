@@ -148,6 +148,9 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     debugImplementation("androidx.customview:customview-poolingcontainer:1.0.0")*/
 
+    //extra icons
+    implementation("androidx.compose.material:material-icons-extended:1.6.2")
+
     // ------------------- Firebase -------------------
     implementation("com.google.firebase:firebase-database-ktx:20.3.0")
     implementation("com.google.firebase:firebase-firestore:24.10.0")
@@ -221,6 +224,7 @@ dependencies {
     implementation("com.google.android.material:material:1.10.0")
     // Material Design 3
     implementation(libs.compose.material3)
+
     // Integration with activities
     implementation(libs.compose.activity)
     // Integration with ViewModels

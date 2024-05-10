@@ -4,7 +4,7 @@ import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
 import com.github.wanderwise_inc.app.model.location.PlacesReader
 import com.github.wanderwise_inc.app.model.profile.Profile
-import com.github.wanderwise_inc.app.viewmodel.MapViewModel
+import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.first
@@ -18,21 +18,21 @@ private var DEMO_CALLED = false
 
 /** @brief isolates demo-related setup */
 fun demoSetup(
-    mapViewModel: MapViewModel,
+    itineraryViewModel: ItineraryViewModel,
     profileViewModel: ProfileViewModel,
     firebaseAuth: FirebaseAuth
 ) {
   // was being called multiple times for some reason. The condition prevents this
   if (!DEMO_CALLED) {
-    addProfiles(mapViewModel, profileViewModel, firebaseAuth)
-    addItineraries(mapViewModel, profileViewModel, firebaseAuth)
+    addProfiles(itineraryViewModel, profileViewModel, firebaseAuth)
+    addItineraries(itineraryViewModel, profileViewModel, firebaseAuth)
     DEMO_CALLED = true
   }
 }
 
 /** @brief adds some profiles to ProfileViewModel */
 fun addProfiles(
-    mapViewModel: MapViewModel,
+    itineraryViewModel: ItineraryViewModel,
     profileViewModel: ProfileViewModel,
     firebaseAuth: FirebaseAuth
 ) {
@@ -53,9 +53,9 @@ fun addProfiles(
   }
 }
 
-/** @brief adds some itineraries to MapViewModel */
+/** @brief adds some itineraries to ItineraryViewModel */
 fun addItineraries(
-    mapViewModel: MapViewModel,
+    itineraryViewModel: ItineraryViewModel,
     profileViewModel: ProfileViewModel,
     firebaseAuth: FirebaseAuth
 ) {
@@ -114,12 +114,12 @@ fun addItineraries(
           description = "A 3-day itinerary to explore the best of San Francisco on a bike.",
           visible = true)
 
-  mapViewModel.setItinerary(itineraryAdventure)
-  mapViewModel.setItinerary(itineraryAdventureAndLuxury)
-  mapViewModel.setItinerary(privateItinerary)
-  mapViewModel.setItinerary(publicItinerary)
+  itineraryViewModel.setItinerary(itineraryAdventure)
+  itineraryViewModel.setItinerary(itineraryAdventureAndLuxury)
+  itineraryViewModel.setItinerary(privateItinerary)
+  itineraryViewModel.setItinerary(publicItinerary)
 
-  for (i in 0..1023) mapViewModel.incrementItineraryLikes(publicItinerary)
+  for (i in 0..1023) itineraryViewModel.incrementItineraryLikes(publicItinerary)
 
   // other profile likes their own itinerary
   profileViewModel.addLikedItinerary(OTHER_USER_UID, itineraryAdventure.uid)

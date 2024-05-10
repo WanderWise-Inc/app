@@ -19,13 +19,13 @@ import com.github.wanderwise_inc.app.R
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.home.SearchBar
-import com.github.wanderwise_inc.app.viewmodel.MapViewModel
+import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun OverviewScreen(
-    mapViewModel: MapViewModel,
+    itineraryViewModel: ItineraryViewModel,
     profileViewModel: ProfileViewModel,
     navController: NavHostController,
     firebaseAuth: FirebaseAuth
@@ -34,7 +34,7 @@ fun OverviewScreen(
   val sliderPositionTimeState = remember { mutableStateOf(0f..24f) }
 
   DisplayOverviewItineraries(
-      mapViewModel = mapViewModel,
+      itineraryViewModel = itineraryViewModel,
       profileViewModel = profileViewModel,
       navController = navController,
       firebaseAuth = firebaseAuth,
@@ -45,7 +45,7 @@ fun OverviewScreen(
 /** Displays global itineraries filtered on some predicates */
 @Composable
 fun DisplayOverviewItineraries(
-    mapViewModel: MapViewModel,
+    itineraryViewModel: ItineraryViewModel,
     profileViewModel: ProfileViewModel,
     navController: NavHostController,
     firebaseAuth: FirebaseAuth,
@@ -66,7 +66,7 @@ fun DisplayOverviewItineraries(
   var searchQuery by remember { mutableStateOf("") }
   var priceRange by remember { mutableStateOf(0f) }
 
-  val itineraries by mapViewModel.getAllPublicItineraries().collectAsState(initial = listOf())
+  val itineraries by itineraryViewModel.getAllPublicItineraries().collectAsState(initial = listOf())
 
   Scaffold(
       topBar = {
@@ -108,7 +108,7 @@ fun DisplayOverviewItineraries(
                 }
         ItinerariesListScrollable(
             itineraries = filtered,
-            mapViewModel = mapViewModel,
+            itineraryViewModel = itineraryViewModel,
             profileViewModel = profileViewModel,
             navController = navController,
             firebaseAuth = firebaseAuth,

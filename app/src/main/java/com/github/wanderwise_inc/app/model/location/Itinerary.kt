@@ -1,5 +1,6 @@
 package com.github.wanderwise_inc.app.model.location
 
+import com.google.android.gms.maps.model.LatLng
 import java.io.InvalidObjectException
 
 const val MAX_TAGS: Int = 3 // maximum number of tags allowed for an itinerary
@@ -145,8 +146,8 @@ data class Itinerary(
      * @brief build the itinerary from its builder
      */
     fun build(): Itinerary {
-      require(locations.isNotEmpty()) { "At least one location must be provided" }
-      require(title.isNotBlank()) { "Title must not be blank" }
+      // require(locations.isNotEmpty()) { "At least one location must be provided" }
+      // require(title.isNotBlank()) { "Title must not be blank" }
       return Itinerary(
           uid = uid,
           userUid = userUid,
@@ -204,10 +205,11 @@ data class Itinerary(
   }
 
   /**
-   * @return the center of gravity of all locations in an itinerary. Useful for computing camera
-   *   position in maps
+   * @return the center of gravity of `Itinerary`'s locations, else a default if the list is empty
    */
   fun computeCenterOfGravity(): Location {
+    if (locations.isEmpty()) return Location.fromLatLng(LatLng(46.5185806553369, 6.561917561991305))
+
     var avgLat = 0.0
     var avgLon = 0.0
     locations.map {

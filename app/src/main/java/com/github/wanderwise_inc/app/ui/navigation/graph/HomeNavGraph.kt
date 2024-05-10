@@ -10,10 +10,13 @@ import com.github.wanderwise_inc.app.ui.creation.CreationScreen
 import com.github.wanderwise_inc.app.ui.list_itineraries.LikedScreen
 import com.github.wanderwise_inc.app.ui.list_itineraries.OverviewScreen
 import com.github.wanderwise_inc.app.ui.map.PreviewItineraryScreen
+import com.github.wanderwise_inc.app.ui.navigation.Destination
 import com.github.wanderwise_inc.app.ui.navigation.Destination.TopLevelDestination
+import com.github.wanderwise_inc.app.ui.navigation.NavigationActions
 import com.github.wanderwise_inc.app.ui.profile.ProfileScreen
 import com.github.wanderwise_inc.app.viewmodel.BottomNavigationViewModel
-import com.github.wanderwise_inc.app.viewmodel.MapViewModel
+import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
+import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.NavigationItem
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -21,7 +24,8 @@ import com.google.firebase.auth.FirebaseAuth
 @Composable
 fun HomeNavGraph(
     navController: NavHostController,
-    mapViewModel: MapViewModel,
+    itineraryViewModel: ItineraryViewModel,
+    createItineraryViewModel: CreateItineraryViewModel,
     profileViewModel: ProfileViewModel,
     bottomNavigationViewModel: BottomNavigationViewModel,
     imageRepository: ImageRepository,
@@ -29,10 +33,10 @@ fun HomeNavGraph(
 ) {
 
   // BEGIN DEMO SETUP
-  demoSetup(mapViewModel, profileViewModel, firebaseAuth)
+  demoSetup(itineraryViewModel, profileViewModel, firebaseAuth)
   /*var itinerary: Itinerary? = null
   runBlocking {
-    itinerary = mapViewModel.getItineraryFromUids(listOf(PREVIEW_ITINERARY_DEMO_UID)).first()[0]
+    itinerary = itineraryViewModel.getItineraryFromUids(listOf(PREVIEW_ITINERARY_DEMO_UID)).first()[0]
   }*/
   // END DEMO SETUP
 
@@ -44,23 +48,30 @@ fun HomeNavGraph(
   ) {
     composable(route = TopLevelDestination.Overview.route) {
       bottomNavigationViewModel.setSelected(NavigationItem.OVERVIEW.ordinal)
-      OverviewScreen(mapViewModel, profileViewModel, navController, firebaseAuth)
+      OverviewScreen(itineraryViewModel, profileViewModel, navController, firebaseAuth)
     }
     composable(route = TopLevelDestination.Liked.route) {
       bottomNavigationViewModel.setSelected(NavigationItem.LIKED.ordinal)
-      LikedScreen(mapViewModel, profileViewModel, navController, firebaseAuth)
+      LikedScreen(itineraryViewModel, profileViewModel, navController, firebaseAuth)
     }
     composable(route = TopLevelDestination.Creation.route) {
       bottomNavigationViewModel.setSelected(NavigationItem.CREATE.ordinal)
-      CreationScreen(mapViewModel)
+      CreationScreen(
+          createItineraryViewModel,
+          profileViewModel,
+          onFinished = {
+            NavigationActions(navController).navigateTo(Destination.TopLevelDestination.Profile)
+          },
+          firebaseAuth = firebaseAuth)
     }
     composable(route = TopLevelDestination.Map.route) {
       bottomNavigationViewModel.setSelected(NavigationItem.MAP.ordinal)
-      PreviewItineraryScreen(mapViewModel, profileViewModel)
+      PreviewItineraryScreen(itineraryViewModel, profileViewModel)
     }
     composable(route = TopLevelDestination.Profile.route) {
       bottomNavigationViewModel.setSelected(NavigationItem.PROFILE.ordinal)
-      ProfileScreen(mapViewModel, profileViewModel, imageRepository, navController, firebaseAuth)
+      ProfileScreen(
+          itineraryViewModel, profileViewModel, imageRepository, navController, firebaseAuth)
     }
   }
 }
