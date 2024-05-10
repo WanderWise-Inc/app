@@ -10,7 +10,9 @@ import com.github.wanderwise_inc.app.ui.creation.CreationScreen
 import com.github.wanderwise_inc.app.ui.list_itineraries.LikedScreen
 import com.github.wanderwise_inc.app.ui.list_itineraries.OverviewScreen
 import com.github.wanderwise_inc.app.ui.map.PreviewItineraryScreen
+import com.github.wanderwise_inc.app.ui.navigation.Destination
 import com.github.wanderwise_inc.app.ui.navigation.Destination.TopLevelDestination
+import com.github.wanderwise_inc.app.ui.navigation.NavigationActions
 import com.github.wanderwise_inc.app.ui.profile.ProfileScreen
 import com.github.wanderwise_inc.app.viewmodel.BottomNavigationViewModel
 import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
@@ -54,7 +56,13 @@ fun HomeNavGraph(
     }
     composable(route = TopLevelDestination.Creation.route) {
       bottomNavigationViewModel.setSelected(NavigationItem.CREATE.ordinal)
-      CreationScreen(createItineraryViewModel, profileViewModel, firebaseAuth = firebaseAuth)
+      CreationScreen(
+          createItineraryViewModel,
+          profileViewModel,
+          onFinished = {
+            NavigationActions(navController).navigateTo(Destination.TopLevelDestination.Profile)
+          },
+          firebaseAuth = firebaseAuth)
     }
     composable(route = TopLevelDestination.Map.route) {
       bottomNavigationViewModel.setSelected(NavigationItem.MAP.ordinal)

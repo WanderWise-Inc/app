@@ -13,13 +13,15 @@ import com.github.wanderwise_inc.app.ui.creation.steps.CreationStepChooseTagsScr
 import com.github.wanderwise_inc.app.ui.creation.steps.CreationStepPreview
 import com.github.wanderwise_inc.app.ui.navigation.Destination.CreationStepsDestinations
 import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
+import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 
 @Composable
 fun CreationNavGraph(
     createItineraryViewModel: CreateItineraryViewModel,
     navController: NavHostController,
     padding: PaddingValues,
-    // profileViewModel: ProfileViewModel,
+    profileViewModel: ProfileViewModel,
+    onFinished: () -> Unit,
     // bottomNavigationViewModel: BottomNavigationViewModel,
     // imageRepository: ImageRepository,
     // firebaseAuth: FirebaseAuth
@@ -36,6 +38,11 @@ fun CreationNavGraph(
           CreationStepChooseDescriptionScreen()
         }
         composable(CreationStepsDestinations.ChooseTags.route) { CreationStepChooseTagsScreen() }
-        composable(CreationStepsDestinations.Preview.route) { CreationStepPreview() }
+        composable(CreationStepsDestinations.Preview.route) {
+          CreationStepPreview(
+              createItineraryViewModel = createItineraryViewModel,
+              profileViewModel = profileViewModel,
+              onFinished = onFinished)
+        }
       }
 }

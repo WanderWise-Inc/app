@@ -25,6 +25,7 @@ object TestTags {
   const val CREATION_SCREEN_PREVIEW_BANNER = "Creation Screen Preview Banner"
   const val CREATION_SCREEN_PREVIEW_ITINERARY = "Creation Screen Preview Itinerary"
   const val CREATION_SCREEN_NAV_BAR = "Creation Screen Top navigation bar"
+  const val CREATION_FINISH_BUTTON = "Preview Finish Itinerary Creation Button"
   const val PRICE_SEARCH = "Price Search"
   const val TIME_SEARCH = "Time Search"
   const val SEARCH_ICON = "Search Icon"
@@ -41,6 +42,8 @@ object TestTags {
   const val MAP_USER_LOCATION = "user_location"
   const val MAP_NULL_ITINERARY = "null_location"
   const val PROFILE_SCREEN = "Profile Screen"
+  const val FIRST_LOCATION = "First Location"
+  const val SECOND_LOCATION = "Second Location"
 
   const val START_NEW_ITINERARY = "start_new_itinerary"
   const val HINT_POPUP = "hint_popup"
