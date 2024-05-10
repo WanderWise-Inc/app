@@ -40,7 +40,10 @@ import com.github.wanderwise_inc.app.ui.TestTags
 fun CreationStepChooseTagsScreen() {
   Column(
       horizontalAlignment = Alignment.CenterHorizontally,
-      modifier = Modifier.fillMaxSize().testTag(TestTags.CREATION_SCREEN_TAGS).background(MaterialTheme.colorScheme.primaryContainer),
+      modifier =
+          Modifier.fillMaxSize()
+              .testTag(TestTags.CREATION_SCREEN_TAGS)
+              .background(MaterialTheme.colorScheme.primaryContainer),
       verticalArrangement = Arrangement.spacedBy(10.dp)) {
         ItineraryImageBanner(modifier = Modifier.padding(all = 10.dp))
         PriceEstimationTextBox()
