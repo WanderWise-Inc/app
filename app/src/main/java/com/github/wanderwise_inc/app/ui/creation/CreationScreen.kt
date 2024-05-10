@@ -36,6 +36,7 @@ import com.google.firebase.auth.FirebaseAuth
 fun CreationScreen(
     createItineraryViewModel: CreateItineraryViewModel,
     profileViewModel: ProfileViewModel,
+    onFinished: () -> Unit,
     navController: NavHostController = rememberNavController(),
     firebaseAuth: FirebaseAuth
 ) {
@@ -56,7 +57,8 @@ fun CreationScreen(
           ItineraryCreationNavigationMenu(navigationActions = NavigationActions(navController))
         },
         modifier = Modifier.testTag(TestTags.NEW_CREATION_SCREEN)) { padding ->
-          CreationNavGraph(createItineraryViewModel, navController, padding)
+          CreationNavGraph(
+              createItineraryViewModel, navController, padding, profileViewModel, onFinished)
         }
   }
 }
