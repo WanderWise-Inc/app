@@ -8,8 +8,8 @@ import java.io.InvalidObjectException
 class CreateItineraryViewModel(
     private val itineraryRepository: ItineraryRepository,
     private val directionsRepository: DirectionsRepository,
-    private val userLocationClient: UserLocationClient
-) : ItineraryViewModel(itineraryRepository, directionsRepository, userLocationClient) {
+    private val locationClient: LocationClient
+) : ItineraryViewModel(itineraryRepository, directionsRepository, locationClient) {
   /** New itinerary that the signed in user is currently building */
   private var newItineraryBuilder: Itinerary.Builder? = null
 
