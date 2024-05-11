@@ -30,5 +30,4 @@ interface ProfileRepository {
 
   /** @brief returns list of user's liked itineraries */
   fun getLikedItineraries(userUid: String): Flow<List<String>>
-
 }
