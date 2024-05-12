@@ -94,7 +94,9 @@ open class ItineraryViewModel(
 
   /** @brief sets an itinerary in DB */
   fun setItinerary(itinerary: Itinerary) {
-    itineraryRepository.setItinerary(itinerary)
+    viewModelScope.launch {
+      itineraryRepository.setItinerary(itinerary)
+    }
   }
 
   /** @brief deletes an itinerary from the database */
