@@ -2,6 +2,7 @@ package com.github.wanderwise_inc.app.data
 
 import android.util.Log
 import com.github.wanderwise_inc.app.model.profile.Profile
+import com.github.wanderwise_inc.app.model.profile.ProfileLabels
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -83,7 +84,7 @@ class ProfileRepositoryImpl(db: FirebaseFirestore) : ProfileRepository {
   override fun addItineraryToLiked(userUid: String, itineraryUid: String) {
     usersCollection
       .document(userUid)
-      .update("liked_itineraries", FieldValue.arrayUnion(itineraryUid))
+      .update(ProfileLabels.LIKED_ITINERARIES, FieldValue.arrayUnion(itineraryUid))
       .addOnSuccessListener {
         Log.d("ProfileRepositoryImpl", "Successfully added itinerary to liked")
       }
@@ -96,7 +97,7 @@ class ProfileRepositoryImpl(db: FirebaseFirestore) : ProfileRepository {
   override fun removeItineraryFromLiked(userUid: String, itineraryUid: String) {
     usersCollection
       .document(userUid)
-      .update("liked_itineraries", FieldValue.arrayRemove(itineraryUid))
+      .update(ProfileLabels.LIKED_ITINERARIES, FieldValue.arrayRemove(itineraryUid))
       .addOnSuccessListener {
         Log.d("ProfileRepositoryImpl", "Successfully removed itinerary from liked")
       }
@@ -107,7 +108,7 @@ class ProfileRepositoryImpl(db: FirebaseFirestore) : ProfileRepository {
   }
 
   override fun checkIfItineraryIsLiked(userUid: String, itineraryUid: String): Boolean {
-    TODO("Not yet implemented")
+    return true
   }
 
   override fun getLikedItineraries(userUid: String): Flow<List<String>> {
