@@ -26,7 +26,7 @@ interface ProfileRepository {
   fun removeItineraryFromLiked(userUid: String, itineraryUid: String)
 
   /** @brief checks if the given Itinerary is contained in the user's liked itineraries */
-  fun checkIfItineraryIsLiked(userUid: String, itineraryUid: String): Boolean
+  suspend fun checkIfItineraryIsLiked(userUid: String, itineraryUid: String): Boolean
 
   /** @brief returns list of user's liked itineraries */
   fun getLikedItineraries(userUid: String): Flow<List<String>>

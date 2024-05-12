@@ -42,7 +42,7 @@ class ProfileRepositoryTestImpl : ProfileRepository {
     profiles.first { it.userUid == userUid }.likedItinerariesUid.remove(itineraryUid)
   }
 
-  override fun checkIfItineraryIsLiked(userUid: String, itineraryUid: String): Boolean {
+  override suspend fun checkIfItineraryIsLiked(userUid: String, itineraryUid: String): Boolean {
     return profiles.first { it.userUid == userUid }.likedItinerariesUid.contains(itineraryUid)
   }
 

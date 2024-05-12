@@ -53,7 +53,7 @@ class ProfileViewModel(
     profileRepository.removeItineraryFromLiked(userUid, itineraryUid)
   }
 
-  fun checkIfItineraryIsLiked(userUid: String, itineraryUid: String): Boolean {
+  suspend fun checkIfItineraryIsLiked(userUid: String, itineraryUid: String): Boolean {
     return profileRepository.checkIfItineraryIsLiked(userUid, itineraryUid)
   }
 

@@ -108,8 +108,21 @@ class ProfileRepositoryImpl(db: FirebaseFirestore) : ProfileRepository {
       }
   }
 
-  override fun checkIfItineraryIsLiked(userUid: String, itineraryUid: String): Boolean {
-    return true
+  override suspend fun checkIfItineraryIsLiked(userUid: String, itineraryUid: String): Boolean {
+    val isLiked = suspendCancellableCoroutine { continuation ->
+      usersCollection
+        .document(userUid)
+        .get()
+        .addOnSuccessListener { documentSnapshot ->
+          val likedItineraries = documentSnapshot.get(ProfileLabels.LIKED_ITINERARIES) as List<String>?
+          val isLiked = likedItineraries?.contains(itineraryUid) ?: false
+          continuation.resume(isLiked)
+        }
+        .addOnFailureListener { exception ->
+          continuation.resumeWithException(exception)
+        }
+    }
+    return isLiked
   }
 
   override fun getLikedItineraries(userUid: String): Flow<List<String>> {
