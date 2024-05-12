@@ -8,6 +8,7 @@ object ProfileLabels {
   const val BIO = "bio"
   const val NAME = "display_name"
   const val PICTURE = "profile_picture"
+  const val LIKED_ITINERARIES = "liked_itineraries"
 }
 
 data class Profile(
@@ -25,7 +26,8 @@ data class Profile(
         ProfileLabels.NAME to displayName,
         ProfileLabels.USER_UID to userUid,
         ProfileLabels.BIO to bio,
-        ProfileLabels.PICTURE to profilePicture)
+        ProfileLabels.PICTURE to profilePicture,
+        ProfileLabels.LIKED_ITINERARIES to likedItinerariesUid)
   }
 
   /** @brief no argument constructor for serialization */
