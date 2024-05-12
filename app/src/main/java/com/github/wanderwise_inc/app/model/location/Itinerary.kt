@@ -16,6 +16,7 @@ object ItineraryLabels {
   const val TAGS = "tags"
   const val PRICE = "price"
   const val TIME = "time"
+    const val NUM_LIKES = "numLikes"
 }
 
 /** @brief score of an itinerary based on some preferences */
@@ -172,7 +173,8 @@ data class Itinerary(
         ItineraryLabels.DESCRIPTION to (description ?: ""),
         ItineraryLabels.VISIBLE to visible,
         ItineraryLabels.PRICE to price,
-        ItineraryLabels.TIME to time)
+        ItineraryLabels.TIME to time,
+        ItineraryLabels.NUM_LIKES to numLikes)
   }
 
   /**
