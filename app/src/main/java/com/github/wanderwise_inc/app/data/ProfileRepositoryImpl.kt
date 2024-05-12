@@ -1,6 +1,7 @@
 package com.github.wanderwise_inc.app.data
 
 import android.util.Log
+import com.github.wanderwise_inc.app.model.location.ItineraryLabels
 import com.github.wanderwise_inc.app.model.profile.Profile
 import com.github.wanderwise_inc.app.model.profile.ProfileLabels
 import com.google.firebase.firestore.DocumentSnapshot
@@ -118,7 +119,7 @@ class ProfileRepositoryImpl(db: FirebaseFirestore) : ProfileRepository {
           .document(userUid)
           .get()
           .addOnSuccessListener { documentSnapshot ->
-            val likedItineraries = documentSnapshot.get("liked_itineraries") as List<String>?
+            val likedItineraries = documentSnapshot.get(ProfileLabels.LIKED_ITINERARIES) as List<String>?
             continuation.resume(likedItineraries ?: listOf())
           }
           .addOnFailureListener { exception ->
