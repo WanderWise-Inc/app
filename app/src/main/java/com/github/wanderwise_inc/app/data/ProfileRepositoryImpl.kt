@@ -3,6 +3,7 @@ package com.github.wanderwise_inc.app.data
 import android.util.Log
 import com.github.wanderwise_inc.app.model.profile.Profile
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -80,7 +81,16 @@ class ProfileRepositoryImpl(db: FirebaseFirestore) : ProfileRepository {
   }
 
   override fun addItineraryToLiked(userUid: String, itineraryUid: String) {
-    TODO("Not yet implemented")
+    usersCollection
+      .document(userUid)
+      .update("liked_itineraries", FieldValue.arrayUnion(itineraryUid))
+      .addOnSuccessListener {
+        Log.d("ProfileRepositoryImpl", "Successfully added itinerary to liked")
+      }
+      .addOnFailureListener {
+        Log.d("ProfileRepositoryImpl", "Failed to add itinerary to liked")
+        throw it
+      }
   }
 
   override fun removeItineraryFromLiked(userUid: String, itineraryUid: String) {
