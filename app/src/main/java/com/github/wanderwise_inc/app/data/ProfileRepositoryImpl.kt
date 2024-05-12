@@ -29,7 +29,16 @@ class ProfileRepositoryImpl(db: FirebaseFirestore) : ProfileRepository {
   }
 
   override fun deleteProfile(profile: Profile) {
-    TODO("Not yet implemented")
+    usersCollection
+      .document(profile.userUid)
+      .delete()
+      .addOnSuccessListener {
+        Log.d("ProfileRepositoryImpl", "Successfully deleted profile")
+      }
+      .addOnFailureListener {
+        Log.d("ProfileRepositoryImpl", "Failed to delete profile")
+        throw it
+      }
   }
 
   override fun addItineraryToLiked(userUid: String, itineraryUid: String) {
