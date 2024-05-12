@@ -37,7 +37,21 @@ class ProfileRepositoryImpl(db: FirebaseFirestore) : ProfileRepository {
   }
 
   override fun getAllProfiles(): Flow<List<Profile>> {
-    TODO("Not yet implemented")
+    return flow {
+      val allProfiles = suspendCancellableCoroutine { continuation ->
+        usersCollection
+          .get()
+          .addOnSuccessListener { querySnapshot ->
+            val documents = querySnapshot.documents
+            val profiles = documents.mapNotNull { it.toObject(Profile::class.java) }
+            continuation.resume(profiles)
+          }
+          .addOnFailureListener { exception ->
+            continuation.resumeWithException(exception)
+          }
+      }
+      emit(allProfiles)
+    }.catch { emit(listOf()) }
   }
 
   override fun setProfile(profile: Profile) {
