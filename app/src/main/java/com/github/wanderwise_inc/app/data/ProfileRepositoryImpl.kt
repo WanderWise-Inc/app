@@ -1,5 +1,6 @@
 package com.github.wanderwise_inc.app.data
 
+import android.util.Log
 import com.github.wanderwise_inc.app.model.profile.Profile
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.Flow
@@ -15,9 +16,16 @@ class ProfileRepositoryImpl(db: FirebaseFirestore) : ProfileRepository {
     TODO("Not yet implemented")
   }
 
-  override suspend fun setProfile(profile: Profile) {
+  override fun setProfile(profile: Profile) {
     val userMap = profile.toMap()
-    TODO("Not yet implemented")
+    usersCollection
+        .document(profile.userUid)
+        .set(userMap)
+        .addOnSuccessListener { Log.d("ProfileRepositoryImpl", "Successfully set profile") }
+        .addOnFailureListener {
+          Log.d("ProfileRepositoryImpl", "Failed to set profile")
+          throw it
+        }
   }
 
   override fun deleteProfile(profile: Profile) {

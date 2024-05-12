@@ -21,7 +21,7 @@ class ProfileRepositoryTestImpl : ProfileRepository {
     return flow { emit(profiles) }
   }
 
-  override suspend fun setProfile(profile: Profile) {
+  override fun setProfile(profile: Profile) {
     profiles.remove(profile) // remove profile if it already contained
     if (profile.uid.isBlank()) {
       profile.uid = uidCtr.toString()

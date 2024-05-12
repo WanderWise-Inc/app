@@ -14,7 +14,7 @@ interface ProfileRepository {
   fun getAllProfiles(): Flow<List<Profile>>
 
   /** @brief sets a user profile */
-  suspend fun setProfile(profile: Profile)
+  fun setProfile(profile: Profile)
 
   /** @brief deletes a user profile. Use sparingly */
   fun deleteProfile(profile: Profile)
