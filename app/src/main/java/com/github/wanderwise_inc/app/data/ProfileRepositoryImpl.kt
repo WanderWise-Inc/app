@@ -94,7 +94,16 @@ class ProfileRepositoryImpl(db: FirebaseFirestore) : ProfileRepository {
   }
 
   override fun removeItineraryFromLiked(userUid: String, itineraryUid: String) {
-    TODO("Not yet implemented")
+    usersCollection
+      .document(userUid)
+      .update("liked_itineraries", FieldValue.arrayRemove(itineraryUid))
+      .addOnSuccessListener {
+        Log.d("ProfileRepositoryImpl", "Successfully removed itinerary from liked")
+      }
+      .addOnFailureListener {
+        Log.d("ProfileRepositoryImpl", "Failed to remove itinerary from liked")
+        throw it
+      }
   }
 
   override fun checkIfItineraryIsLiked(userUid: String, itineraryUid: String): Boolean {
