@@ -4,11 +4,11 @@ import android.net.Uri
 
 object ProfileLabels {
   const val UID = "uid"
-  const val USER_UID = "user_uid"
+  const val USER_UID = "userUid"
   const val BIO = "bio"
-  const val NAME = "display_name"
-  const val PICTURE = "profile_picture"
-  const val LIKED_ITINERARIES = "liked_itineraries"
+  const val NAME = "displayName"
+  const val PICTURE = "profilePicture"
+  const val LIKED_ITINERARIES = "likedItinerariesUid"
 }
 
 data class Profile(
