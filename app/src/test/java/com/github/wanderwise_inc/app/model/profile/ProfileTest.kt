@@ -15,11 +15,11 @@ class ProfileTest {
             profilePicture = null,
             likedItinerariesUid = mutableListOf("0", "1"))
     val uid = "uid"
-    val user_uid = "user_uid"
+    val user_uid = "userUid"
     val bio = "bio"
-    val displayName = "display_name"
-    val profilePicture = "profile_picture"
-    val likedItineraries = "liked_itineraries"
+    val displayName = "displayName"
+    val profilePicture = "profilePicture"
+    val likedItineraries = "likedItinerariesUid"
 
     val map =
         mapOf(

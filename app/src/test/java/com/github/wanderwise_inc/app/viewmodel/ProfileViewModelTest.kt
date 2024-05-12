@@ -12,6 +12,7 @@ import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
@@ -132,10 +133,10 @@ class ProfileViewModelTest {
   }
 
   @Test
-  fun checkIfItineraryIsLiked() {
+  fun checkIfItineraryIsLiked() = runTest {
     val repo = mutableMapOf(testProfile.uid to mutableListOf(FakeItinerary.TOKYO.uid))
 
-    every { profileRepository.checkIfItineraryIsLiked(any(), any()) } answers
+    coEvery { profileRepository.checkIfItineraryIsLiked(any(), any()) } answers
         {
           val user = invocation.args[0] as String
           val itinerary = invocation.args[1] as String

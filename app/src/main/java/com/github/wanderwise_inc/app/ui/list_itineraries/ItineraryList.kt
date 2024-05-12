@@ -75,10 +75,10 @@ fun ItinerariesListScrollable(
         verticalArrangement = spacedBy(15.dp)) {
           this.items(itineraries) { itinerary ->
             val uid = firebaseAuth.currentUser?.uid ?: DEFAULT_USER_UID
-              val isLikedInitially : Boolean
-              runBlocking {
-                  isLikedInitially = profileViewModel.checkIfItineraryIsLiked(uid, itinerary.uid)
-              }
+            val isLikedInitially: Boolean
+            runBlocking {
+              isLikedInitially = profileViewModel.checkIfItineraryIsLiked(uid, itinerary.uid)
+            }
 
             val onLikeButtonClick = { it: Itinerary, isLiked: Boolean ->
               if (isLiked) {
