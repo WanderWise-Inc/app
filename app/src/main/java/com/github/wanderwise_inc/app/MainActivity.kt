@@ -54,6 +54,7 @@ class MainActivity : ComponentActivity() {
   private lateinit var imageRepository: ImageRepository
   private lateinit var itineraryRepository: ItineraryRepository
   private lateinit var directionsRepository: DirectionsRepository
+  private lateinit var locationsRepository: LocationsRepository
   private lateinit var profileRepository: ProfileRepository
   private lateinit var signInRepository: SignInRepository
 
@@ -153,6 +154,7 @@ class MainActivity : ComponentActivity() {
     imageRepository = AppModule.imageRepository
     itineraryRepository = AppModule.itineraryRepository
     directionsRepository = AppModule.directionsRepository
+    locationsRepository = AppModule.locationsRepository
     profileRepository = AppModule.profileRepository
     signInRepository = AppModule.signInRepository
   }

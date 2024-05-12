@@ -15,7 +15,7 @@ class CreateItineraryViewModel(
     itineraryRepository,
     directionsRepository,
     locationsRepository,
-    userLocationClient
+    locationClient
 ) {
   /** New itinerary that the signed in user is currently building */
   private var newItineraryBuilder: Itinerary.Builder? = null
