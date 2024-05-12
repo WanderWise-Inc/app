@@ -111,6 +111,20 @@ class ProfileRepositoryImpl(db: FirebaseFirestore) : ProfileRepository {
   }
 
   override fun getLikedItineraries(userUid: String): Flow<List<String>> {
-    TODO("Not yet implemented")
+    return flow {
+      val likedItineraries = suspendCancellableCoroutine { continuation ->
+        usersCollection
+          .document(userUid)
+          .get()
+          .addOnSuccessListener { documentSnapshot ->
+            val likedItineraries = documentSnapshot.get("liked_itineraries") as List<String>?
+            continuation.resume(likedItineraries ?: listOf())
+          }
+          .addOnFailureListener { exception ->
+            continuation.resumeWithException(exception)
+          }
+      }
+      emit(likedItineraries)
+    }.catch { emit(listOf()) }
   }
 }
