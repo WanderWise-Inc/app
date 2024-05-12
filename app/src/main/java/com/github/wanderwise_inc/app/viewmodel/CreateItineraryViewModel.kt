@@ -10,7 +10,7 @@ class CreateItineraryViewModel(
     private val itineraryRepository: ItineraryRepository,
     private val directionsRepository: DirectionsRepository,
     private val locationsRepository: LocationsRepository,
-    private val userLocationClient: UserLocationClient
+    private val locationClient: LocationClient
 ) : ItineraryViewModel(
     itineraryRepository,
     directionsRepository,

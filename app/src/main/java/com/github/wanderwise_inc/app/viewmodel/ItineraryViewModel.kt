@@ -23,7 +23,7 @@ open class ItineraryViewModel(
   private val itineraryRepository: ItineraryRepository,
   private val directionsRepository: DirectionsRepository,
   private val locationsRepository: LocationsRepository,
-  private val userLocationClient: UserLocationClient,
+  private val locationClient: LocationClient,
 ) : ViewModel() {
   private var focusedItinerary: Itinerary? = null
 
@@ -158,7 +158,7 @@ open class ItineraryViewModel(
 
   /** @brief get a Flow of the user location updated every second */
   fun getUserLocation(): Flow<android.location.Location> {
-    return userLocationClient.getLocationUpdates(1000)
+    return locationClient.getLocationUpdates(1000)
   }
 
   /**
