@@ -94,9 +94,11 @@ class MainActivity : ComponentActivity() {
     AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers).build()
   }
 
-  val locationClient =
-      UserLocationClient(
-            applicationContext, LocationServices.getFusedLocationProviderClient(applicationContext))
+  private val locationClient by lazy {
+    UserLocationClient(
+      applicationContext, LocationServices.getFusedLocationProviderClient(applicationContext)
+    )
+  }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
