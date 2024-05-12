@@ -93,9 +93,8 @@ class MainActivity : ComponentActivity() {
     AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers).build()
   }
 
-    val itineraryRepository = ItineraryRepositoryTestImpl()
-    val userLocationClient =
-        UserLocationClient(
+  val locationClient =
+      UserLocationClient(
             applicationContext, LocationServices.getFusedLocationProviderClient(applicationContext))
 
   override fun onCreate(savedInstanceState: Bundle?) {
