@@ -2,14 +2,38 @@ package com.github.wanderwise_inc.app.data
 
 import android.util.Log
 import com.github.wanderwise_inc.app.model.profile.Profile
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 class ProfileRepositoryImpl(db: FirebaseFirestore) : ProfileRepository {
   private val usersCollection = db.collection("users")
 
   override fun getProfile(userUid: String): Flow<Profile?> {
-    TODO("Not yet implemented")
+    return flow {
+      val document = suspendCancellableCoroutine<DocumentSnapshot> {continuation ->
+        usersCollection
+          .document(userUid)
+          .get()
+          .addOnSuccessListener { documentSnapshot ->
+            continuation.resume(documentSnapshot)
+          }
+          .addOnFailureListener { exception ->
+            continuation.resumeWithException(exception)
+          }
+      }
+      if (document.exists()) {
+        val profile = document.toObject(Profile::class.java)
+        emit(profile)
+      } else {
+        emit(null)
+      }
+    }.catch { emit(null) }
   }
 
   override fun getAllProfiles(): Flow<List<Profile>> {
