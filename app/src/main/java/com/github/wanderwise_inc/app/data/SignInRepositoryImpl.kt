@@ -15,7 +15,7 @@ class SignInRepositoryImpl : SignInRepository {
       user: FirebaseUser?,
   ) {
     if (user == null) {
-      profileViewModel.setProfile(DEFAULT_OFFLINE_PROFILE)
+      profileViewModel.setActiveProfile(DEFAULT_OFFLINE_PROFILE)
     } else {
       // Get the user from database
       val currentProfile = profileViewModel.getProfile(user.uid).first()
@@ -39,8 +39,9 @@ class SignInRepositoryImpl : SignInRepository {
 
         // Set the user to the database
         profileViewModel.setProfile(newProfile)
-        navController.navigate(Graph.HOME)
+        profileViewModel.setActiveProfile(newProfile)
       }
     }
+    navController.navigate(Graph.HOME)
   }
 }

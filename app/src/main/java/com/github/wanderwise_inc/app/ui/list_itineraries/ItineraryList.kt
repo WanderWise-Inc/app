@@ -25,7 +25,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.github.wanderwise_inc.app.DEFAULT_USER_UID
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.itinerary.ItineraryBanner
@@ -74,19 +73,19 @@ fun ItinerariesListScrollable(
         modifier = Modifier.padding(paddingValues).testTag(TestTags.ITINERARY_LIST_SCROLLABLE),
         verticalArrangement = spacedBy(15.dp)) {
           this.items(itineraries) { itinerary ->
-            val uid = firebaseAuth.currentUser?.uid ?: DEFAULT_USER_UID
+            val uid = profileViewModel.getUserUid()
             val isLikedInitially: Boolean
             runBlocking {
-              isLikedInitially = profileViewModel.checkIfItineraryIsLiked(uid, itinerary.uid)
+              isLikedInitially = profileViewModel.checkIfItineraryIsLiked(itinerary.uid)
             }
 
             val onLikeButtonClick = { it: Itinerary, isLiked: Boolean ->
               if (isLiked) {
                 itineraryViewModel.decrementItineraryLikes(it)
-                profileViewModel.removeLikedItinerary(uid, it.uid)
+                profileViewModel.removeLikedItinerary(it.uid)
               } else {
                 itineraryViewModel.incrementItineraryLikes(it)
-                profileViewModel.addLikedItinerary(uid, it.uid)
+                profileViewModel.addLikedItinerary(it.uid)
               }
             }
             val navigationActions = NavigationActions(navController)

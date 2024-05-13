@@ -3,6 +3,7 @@ package com.github.wanderwise_inc.app
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
 import com.github.wanderwise_inc.app.model.location.PlacesReader
+import com.github.wanderwise_inc.app.model.profile.DEFAULT_OFFLINE_PROFILE
 import com.github.wanderwise_inc.app.model.profile.Profile
 import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
@@ -61,6 +62,8 @@ fun addItineraries(
 ) {
   val defaultLocations = PlacesReader(null).readFromString()
 
+  profileViewModel.setActiveProfile(DEFAULT_OFFLINE_PROFILE)
+
   val itineraryAdventureAndLuxury =
       Itinerary(
           userUid = OTHER_USER_UID,
@@ -73,7 +76,7 @@ fun addItineraries(
 
   val itineraryAdventure =
       Itinerary(
-          userUid = OTHER_USER_UID,
+          userUid = profileViewModel.getUserUid(),
           locations = defaultLocations,
           title = "Hike",
           tags =
@@ -92,11 +95,13 @@ fun addItineraries(
           price = 25.0f,
       )
 
-  val currentUserUid = firebaseAuth.currentUser?.uid ?: DEFAULT_USER_UID
+  /** default profile for demo-ing */
+  val dummyProfile =
+      Profile(uid = DEFAULT_USER_UID, userUid = "-1", bio = "uwu", displayName = "John Doe")
 
   val privateItinerary =
       Itinerary(
-          userUid = currentUserUid,
+          userUid = profileViewModel.getUserUid(),
           locations = defaultLocations,
           title = "My private itinerary",
           tags = listOf(ItineraryTags.ADVENTURE),
@@ -107,7 +112,7 @@ fun addItineraries(
   val publicItinerary =
       Itinerary(
           uid = PREVIEW_ITINERARY_DEMO_UID,
-          userUid = FirebaseAuth.getInstance().currentUser?.uid ?: "NULL_UID",
+          userUid = profileViewModel.getUserUid(),
           locations = defaultLocations,
           title = "San Francisco Bike Itinerary",
           tags = listOf(ItineraryTags.CULTURAL, ItineraryTags.NATURE, ItineraryTags.BUDGET),
@@ -122,5 +127,5 @@ fun addItineraries(
   for (i in 0..1023) itineraryViewModel.incrementItineraryLikes(publicItinerary)
 
   // other profile likes their own itinerary
-  profileViewModel.addLikedItinerary(OTHER_USER_UID, itineraryAdventure.uid)
+  profileViewModel.addLikedItinerary(itineraryAdventure.uid)
 }

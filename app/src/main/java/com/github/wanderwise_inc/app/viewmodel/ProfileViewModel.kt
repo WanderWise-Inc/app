@@ -7,11 +7,15 @@ import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.data.ProfileRepository
 import com.github.wanderwise_inc.app.model.profile.Profile
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class ProfileViewModel(
     private val profileRepository: ProfileRepository,
     private val imageRepository: ImageRepository
 ) : ViewModel() {
+  private var isSignInComplete = false // set on sign-in success
+  private lateinit var activeProfile: Profile // set on sign-in
+
   /** @return flow of a user profile */
   fun getProfile(userUid: String): Flow<Profile?> {
     Log.d("USER SIGN IN", "CALLING GET PROFILE")
@@ -43,21 +47,49 @@ class ProfileViewModel(
     return imageRepository.fetchImage("profilePicture/defaultProfilePicture.jpg")
   }
 
-  /** @brief add an Itinerary to the user's liked itineraries */
-  fun addLikedItinerary(userUid: String, itineraryUid: String) {
-    profileRepository.addItineraryToLiked(userUid, itineraryUid)
+  /**
+   * @brief add an Itinerary to the profile's liked itineraries. Only has an effect if sign-in was
+   *   successful.
+   */
+  fun addLikedItinerary(itineraryUid: String) {
+    if (isSignInComplete) profileRepository.addItineraryToLiked(getUserUid(), itineraryUid)
   }
 
-  /** @brief remove an Itinerary to the user's liked itineraries */
-  fun removeLikedItinerary(userUid: String, itineraryUid: String) {
-    profileRepository.removeItineraryFromLiked(userUid, itineraryUid)
+  /**
+   * @brief remove an Itinerary to the user's liked itineraries. Only has an effect if sign-in was
+   *   successful
+   */
+  fun removeLikedItinerary(itineraryUid: String) {
+    if (isSignInComplete) profileRepository.removeItineraryFromLiked(getUserUid(), itineraryUid)
   }
 
-  suspend fun checkIfItineraryIsLiked(userUid: String, itineraryUid: String): Boolean {
-    return profileRepository.checkIfItineraryIsLiked(userUid, itineraryUid)
+  suspend fun checkIfItineraryIsLiked(itineraryUid: String): Boolean {
+    return if (isSignInComplete)
+        profileRepository.checkIfItineraryIsLiked(getUserUid(), itineraryUid)
+    else false
   }
 
+  /**
+   * @return all of the profile's liked itineraries, or an empty list if there is no actively signed
+   *   in profile
+   */
   fun getLikedItineraries(userUid: String): Flow<List<String>> {
-    return profileRepository.getLikedItineraries(userUid)
+    return if (isSignInComplete) profileRepository.getLikedItineraries(userUid)
+    else flow { emit(emptyList()) }
   }
+
+  /** Sets the active profile. Called on sign-in and only called once */
+  fun setActiveProfile(profile: Profile) {
+    if (!isSignInComplete) {
+      Log.d("ProfileViewModel", "Setting active profile to: $profile")
+      activeProfile = profile
+      isSignInComplete = true
+    }
+  }
+
+  /** Returns the profile of the active user, as initialized at sign-in */
+  fun getActiveProfile(): Profile = activeProfile
+
+  /** Returns the UID of the signed in profile */
+  fun getUserUid(): String = activeProfile.userUid
 }
