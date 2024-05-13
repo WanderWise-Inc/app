@@ -49,4 +49,10 @@ class ItineraryRepositoryTestImpl : ItineraryRepository {
   override fun deleteItinerary(itinerary: Itinerary) {
     itineraries.remove(itinerary)
   }
+
+  override suspend fun writeItinerariesToDisk(itineraries: List<Itinerary>) {
+    /* this test implementation has no disk interaction, so has the same effect as setting */
+    for (itinerary in itineraries)
+      setItinerary(itinerary)
+  }
 }

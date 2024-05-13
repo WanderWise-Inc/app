@@ -176,8 +176,10 @@ class ItineraryRepositoryImpl(
         }
   }
 
+
   /** @return a flow of saved itineraries from local storage */
   private fun getSavedItineraries(): Flow<List<Itinerary>> {
+    Log.d("Itinerary Repository", "Reading itineraries from disk")
     val savedItineraries = datastore.data
     return savedItineraries.map { saved ->
       saved.itinerariesList.map { itineraryProto -> itineraryProto.toModel() }
@@ -185,7 +187,8 @@ class ItineraryRepositoryImpl(
   }
 
   /** Replaces the stored saved itineraries protobuf with `itineraries` */
-  private suspend fun writeSavedItinerariesToDisk(itineraries: List<Itinerary>) {
+  override suspend fun writeItinerariesToDisk(itineraries: List<Itinerary>) {
+    Log.d("Itinerary Repository", "Updating saved itineraries to $itineraries")
     val savedItineraries =
         SavedItineraries.newBuilder().addAllItineraries(itineraries.map { it.toProto() }).build()
     withContext(Dispatchers.IO) { datastore.updateData { savedItineraries } }
