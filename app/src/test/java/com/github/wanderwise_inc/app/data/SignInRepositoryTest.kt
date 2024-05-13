@@ -8,6 +8,7 @@ import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
+import org.junit.Assert.fail
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -35,9 +36,13 @@ class SignInRepositoryTest {
     signInRepositoryImpl = SignInRepositoryImpl()
   }
 
-  @Test(expected = Exception::class)
-  fun `if user is Null then nothing should happen`() = runTest {
-    signInRepositoryImpl.signIn(navController, profileViewModel, null)
+  @Test
+  fun `if user is null, no exception should be thrown`() = runTest {
+    try {
+      signInRepositoryImpl.signIn(navController, profileViewModel, null)
+    } catch (e: Exception) {
+      fail("signIn should not throw. Exception was $e")
+    }
   }
 
   @Test
