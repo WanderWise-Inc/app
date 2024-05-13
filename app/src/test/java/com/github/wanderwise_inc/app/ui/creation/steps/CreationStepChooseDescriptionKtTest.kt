@@ -11,6 +11,7 @@ import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -77,8 +78,8 @@ class CreationStepChooseDescriptionKtTest {
         .onNodeWithTag(TestTags.CREATION_SCREEN_DESCRIPTION)
         .performTextInput(description)
 
-    assert(nullItineraryBuilder.title == title)
-    assert(nullItineraryBuilder.description == description)
+    assertEquals(nullItineraryBuilder.title, title)
+    assertEquals(nullItineraryBuilder.description, description)
   }
 
   @Test

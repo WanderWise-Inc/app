@@ -44,7 +44,7 @@ fun CreationStepChooseDescriptionScreen(createItineraryViewModel: CreateItinerar
               value = title,
               onValueChange = {
                 title = it
-                createItineraryViewModel.getNewItinerary()?.title = title
+                createItineraryViewModel.getNewItinerary()?.title(it)
               },
               maxLines = 2,
               textStyle =
@@ -66,7 +66,7 @@ fun CreationStepChooseDescriptionScreen(createItineraryViewModel: CreateItinerar
               value = description,
               onValueChange = {
                 description = it
-                createItineraryViewModel.getNewItinerary()?.description = description
+                createItineraryViewModel.getNewItinerary()?.description(it)
               },
               textStyle =
                   TextStyle(
