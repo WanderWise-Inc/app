@@ -88,7 +88,7 @@ class ImageRepositoryTest {
   fun `upload image should correctly store the Uri in storage`() {
     val testPath = "testPath"
 
-    `when`(imageReference.child(any(String::class.java))).thenReturn(storageReference)
+    `when`(imageReference.child(anyString())).thenReturn(storageReference)
     `when`(storageReference.putFile(any(Uri::class.java))).thenReturn(uploadTask)
     `when`(uploadTask.addOnSuccessListener(any())).thenAnswer {
       val listener = it.arguments[0] as OnSuccessListener<Void>
@@ -141,7 +141,7 @@ class ImageRepositoryTest {
   fun `if putFile throws an exception, the method should return false`() {
     val testPath = "random"
 
-    `when`(imageReference.child(any(String::class.java))).thenReturn(storageReference)
+    `when`(imageReference.child(anyString())).thenReturn(storageReference)
     `when`(storageReference.putFile(any(Uri::class.java)))
         .thenThrow(Exception("putFile throws an exception"))
     val success = imageRepositoryImpl.uploadImageToStorage(testPath)
@@ -157,7 +157,7 @@ class ImageRepositoryTest {
   @Test
   fun `fetch image with a correct path should correctly return a bitMap`() = runTest {
     val byteArray = byteArrayOf(1, 2, 3)
-    `when`(imageReference.child(any(String::class.java))).thenReturn(storageReference)
+    `when`(imageReference.child(anyString())).thenReturn(storageReference)
     `when`(storageReference.getBytes(any(Long::class.java))).thenReturn(taskByteArray)
     `when`(taskByteArray.addOnSuccessListener(any())).thenAnswer {
       val listener = it.arguments[0] as OnSuccessListener<ByteArray>
@@ -179,7 +179,7 @@ class ImageRepositoryTest {
 
   @Test
   fun `fetch image with an error while getting the bytes should return a null bitmap`() = runTest {
-    `when`(imageReference.child(any(String::class.java))).thenReturn(storageReference)
+    `when`(imageReference.child(anyString())).thenReturn(storageReference)
     `when`(storageReference.getBytes(any(Long::class.java))).thenReturn(taskByteArray)
     `when`(taskByteArray.addOnSuccessListener(any())).thenReturn(taskByteArray)
     `when`(taskByteArray.addOnFailureListener(any())).thenAnswer {
@@ -194,7 +194,7 @@ class ImageRepositoryTest {
 
   @Test
   fun `fetch image with getBytes that returns null should return a null bitmap`() = runTest {
-    `when`(imageReference.child(any(String::class.java))).thenReturn(storageReference)
+    `when`(imageReference.child(anyString())).thenReturn(storageReference)
     `when`(storageReference.getBytes(any(Long::class.java))).thenReturn(taskByteArray)
     `when`(taskByteArray.addOnSuccessListener(any())).thenAnswer {
       val listener = it.arguments[0] as OnSuccessListener<ByteArray>
