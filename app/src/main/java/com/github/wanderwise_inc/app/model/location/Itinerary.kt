@@ -19,6 +19,18 @@ object ItineraryLabels {
   const val NUM_LIKES = "numLikes"
 }
 
+object ItineraryDefaultValues {
+    const val UID : String = ""
+    const val USER_UID : String = ""
+    val LOCATIONS : MutableList<Location> = mutableListOf()
+    const val TITLE : String = ""
+    val TAGS : MutableList<Tag> = mutableListOf()
+    const val DESCRIPTION: String = ""
+    const val VISIBLE : Boolean = true
+    const val PRICE : Float = -1f
+    const val TIME : Int = -1
+}
+
 /** @brief score of an itinerary based on some preferences */
 typealias Score = Double
 
@@ -55,15 +67,15 @@ data class Itinerary(
    * @brief builder for an itinerary
    */
   data class Builder(
-      var uid: String = "",
-      val userUid: String,
-      val locations: MutableList<Location> = mutableListOf(),
-      var title: String = "",
-      val tags: MutableList<Tag> = mutableListOf(),
-      var description: String? = null,
-      var visible: Boolean = false,
-      var price: Float = 0f,
-      var time: Int = 0
+      var uid: String = ItineraryDefaultValues.UID,
+      val userUid: String = ItineraryDefaultValues.USER_UID,
+      val locations: MutableList<Location> = ItineraryDefaultValues.LOCATIONS,
+      var title: String? = ItineraryDefaultValues.TITLE,
+      val tags: MutableList<Tag> = ItineraryDefaultValues.TAGS,
+      var description: String? = ItineraryDefaultValues.DESCRIPTION,
+      var visible: Boolean = ItineraryDefaultValues.VISIBLE,
+      var price: Float = ItineraryDefaultValues.PRICE,
+      var time: Int = ItineraryDefaultValues.TIME
   ) {
     /**
      * @param location the location to be added
@@ -153,7 +165,7 @@ data class Itinerary(
           uid = uid,
           userUid = userUid,
           locations = locations.toList(),
-          title = title,
+          title = title?: "",
           tags = tags.toList(),
           description = description,
           visible = visible,
