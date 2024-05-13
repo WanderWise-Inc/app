@@ -92,8 +92,8 @@ data class Itinerary(
      * @brief add a tag to the itinerary builder list of tags
      */
     fun addTag(tag: Tag): Builder {
-      if (tags.size >= MAX_TAGS)
-          throw InvalidObjectException("An itinerary should not have more than $MAX_TAGS tags")
+      // if (tags.size >= MAX_TAGS)
+      // throw InvalidObjectException("An itinerary should not have more than $MAX_TAGS tags")
       tags.add(tag)
       return this
     }
