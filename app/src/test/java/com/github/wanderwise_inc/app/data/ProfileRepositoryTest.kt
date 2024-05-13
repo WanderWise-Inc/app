@@ -446,4 +446,34 @@ class ProfileRepositoryTest {
     assertFalse(shouldNotBeLiked)
   }
 
+  @Test
+  fun `getLiked itineraries should return an empty list if an error occurred`() = runTest {
+    `when`(userCollection.document(anyString())).thenReturn(documentRef)
+    `when`(documentRef.get()).thenReturn(taskDocSnap)
+    `when`(taskDocSnap.addOnSuccessListener(any())).thenReturn(taskDocSnap)
+    `when`(taskDocSnap.addOnFailureListener(any())).thenAnswer {
+      val listener = it.arguments[0] as OnFailureListener
+      listener.onFailure(Exception("Get bytes return an exception"))
+      taskDocSnap
+    }
+    val itineraries = profileRepositoryImpl.getLikedItineraries(profile0.userUid).first()
+    assertTrue(itineraries.isEmpty())
+  }
+
+  @Test
+  fun `getLiked itineraries should return the list of liked itineraries`() = runTest {
+    `when`(userCollection.document(anyString())).thenReturn(documentRef)
+    `when`(documentRef.get()).thenReturn(taskDocSnap)
+    `when`(taskDocSnap.addOnSuccessListener(any())).thenAnswer {
+      val listener = it.arguments[0] as OnSuccessListener<DocumentSnapshot>
+      listener.onSuccess(docSnap)
+      taskDocSnap
+    }
+    `when`(docSnap.get(anyString())).thenReturn(listOf("i0", "i1", "i2"))
+    val itineraries = profileRepositoryImpl.getLikedItineraries(profile0.userUid).first()
+    assertEquals(3, itineraries.size)
+    for (i in 0..2) {
+      assertEquals("i$i", itineraries[i])
+    }
+  }
 }
