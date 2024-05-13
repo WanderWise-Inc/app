@@ -10,11 +10,10 @@ import com.github.wanderwise_inc.app.data.DefaultGoogleSignInLauncher
 import com.github.wanderwise_inc.app.data.DirectionsRepositoryImpl
 import com.github.wanderwise_inc.app.data.ImageRepositoryImpl
 import com.github.wanderwise_inc.app.data.ItineraryRepositoryImpl
-import com.github.wanderwise_inc.app.data.ItineraryRepositoryTestImpl
 import com.github.wanderwise_inc.app.data.ProfileRepositoryTestImpl
 import com.github.wanderwise_inc.app.data.SignInRepositoryImpl
-import com.github.wanderwise_inc.app.model.location.SavedItineraries
 import com.github.wanderwise_inc.app.network.ApiServiceFactory
+import com.github.wanderwise_inc.app.proto.location.SavedItineraries
 import com.github.wanderwise_inc.app.viewmodel.BottomNavigationViewModel
 import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
@@ -44,15 +43,15 @@ object AppModule {
       signInLauncher: ActivityResultLauncher<Intent>,
       sinInIntent: Intent,
       locationClient: LocationClient,
-      // savedItinerariesDataStore: DataStore<SavedItineraries>,
-      // context: Context,
+      savedItinerariesDataStore: DataStore<SavedItineraries>,
+      context: Context,
   ) {
     this.imageLauncher = imageLauncher
     this.signInLauncher = signInLauncher
     this.sinInIntent = sinInIntent
     this.locationClient = locationClient
-    // this.savedItinerariesDataStore = savedItinerariesDataStore
-    // this.context = context
+    this.savedItinerariesDataStore = savedItinerariesDataStore
+    this.context = context
   }
 
   val firebaseAuth by lazy { FirebaseAuth.getInstance() }
@@ -68,8 +67,8 @@ object AppModule {
   }
 
   val itineraryRepository by lazy {
-    // ItineraryRepositoryImpl(Firebase.firestore, context, savedItinerariesDataStore)
-    ItineraryRepositoryTestImpl()
+    ItineraryRepositoryImpl(Firebase.firestore, context, savedItinerariesDataStore)
+    // ItineraryRepositoryTestImpl()
   }
 
   val profileRepository by lazy { ProfileRepositoryTestImpl() }

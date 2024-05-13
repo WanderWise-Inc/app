@@ -27,7 +27,7 @@ import com.github.wanderwise_inc.app.data.ProfileRepository
 import com.github.wanderwise_inc.app.data.SignInRepository
 import com.github.wanderwise_inc.app.di.AppModule
 import com.github.wanderwise_inc.app.disk.SavedItinerariesSerializer
-import com.github.wanderwise_inc.app.model.location.SavedItineraries
+import com.github.wanderwise_inc.app.proto.location.SavedItineraries
 import com.github.wanderwise_inc.app.ui.navigation.graph.RootNavigationGraph
 import com.github.wanderwise_inc.app.ui.theme.WanderWiseTheme
 import com.github.wanderwise_inc.app.viewmodel.BottomNavigationViewModel
@@ -93,7 +93,7 @@ class MainActivity : ComponentActivity() {
   }
 
   private val Context.savedItinerariesDataStore: DataStore<SavedItineraries> by
-    dataStore(fileName = "saved_itineraries.pb", serializer = SavedItinerariesSerializer)
+      dataStore(fileName = "saved_itineraries.pb", serializer = SavedItinerariesSerializer)
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -118,8 +118,6 @@ class MainActivity : ComponentActivity() {
     }
   }
 
-
-
   private fun init() {
     requestPermissions()
 
@@ -128,9 +126,8 @@ class MainActivity : ComponentActivity() {
         signInLauncher,
         signInIntent,
         locationClient,
-        //savedItinerariesDataStore,
-        //applicationContext
-    )
+        savedItinerariesDataStore,
+        applicationContext)
 
     firebaseAuth = AppModule.firebaseAuth
     firebaseStorage = AppModule.firebaseStorage
