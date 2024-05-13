@@ -70,10 +70,15 @@ class MainActivity : ComponentActivity() {
 
   private val signInLauncher by lazy {
     registerForActivityResult(FirebaseAuthUIActivityResultContract()) { res ->
-      if (res.resultCode != RESULT_OK) throw Exception("User unsuccessful sign in")
+      /* on failure, don't throw an exception. Pass the null value down for proper handling */
+      val currUser =
+        if (res.resultCode != RESULT_OK)
+          firebaseAuth.currentUser
+        else
+          null
 
       lifecycleScope.launch {
-        signInRepository.signIn(navController, profileViewModel, firebaseAuth.currentUser)
+        signInRepository.signIn(navController, profileViewModel, currUser)
       }
     }
   }
