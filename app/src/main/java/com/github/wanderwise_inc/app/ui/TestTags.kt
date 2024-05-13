@@ -18,6 +18,8 @@ object TestTags {
   const val NEW_CREATION_SCREEN = "New Creation Screen"
   const val NO_NEW_CREATION_SCREEN = "No New Creation Screen"
   const val CREATION_SCREEN_LOCATIONS = "Creation Screen Choose Locations"
+  const val CREATION_SCREEN_DESCRIPTION_TITLE = "Creation Screen Choose Title and Description"
+  const val CREATION_SCREEN_TITLE = "Creation Screen Choose Title"
   const val CREATION_SCREEN_DESCRIPTION = "Creation Screen Choose Description"
   const val CREATION_SCREEN_TAGS = "Creation Screen Choose Tags"
   const val CREATION_SCREEN_PREVIEW = "Creation screen preview"
@@ -26,6 +28,7 @@ object TestTags {
   const val CREATION_SCREEN_PREVIEW_ITINERARY = "Creation Screen Preview Itinerary"
   const val CREATION_SCREEN_NAV_BAR = "Creation Screen Top navigation bar"
   const val CREATION_FINISH_BUTTON = "Preview Finish Itinerary Creation Button"
+
   const val PRICE_SEARCH = "Price Search"
   const val TIME_SEARCH = "Time Search"
   const val SEARCH_ICON = "Search Icon"
