@@ -8,8 +8,8 @@ import androidx.datastore.core.DataStore
 import com.github.wanderwise_inc.app.disk.toModel
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryLabels
-import com.github.wanderwise_inc.app.model.location.SavedItineraries
 import com.github.wanderwise_inc.app.model.location.Tag
+import com.github.wanderwise_inc.app.proto.location.SavedItineraries
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlin.coroutines.resume
@@ -42,7 +42,7 @@ class ItineraryRepositoryImpl(
     val networkCapabilities = connectivityManager.getNetworkCapabilities(networkInfo)
     val ret =
         networkCapabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) ?: false
-    Log.d("ItineraryRepositoryImpl", "Network available: ${isNetworkAvailable()}")
+    Log.d("ItineraryRepositoryImpl", "Network available: $ret")
     return ret
   }
 
