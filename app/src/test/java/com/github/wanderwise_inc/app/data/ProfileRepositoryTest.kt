@@ -1,5 +1,6 @@
 package com.github.wanderwise_inc.app.data
 
+import com.github.wanderwise_inc.app.model.location.FakeItinerary
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.profile.Profile
 import com.google.android.gms.tasks.OnFailureListener
@@ -328,32 +329,63 @@ class ProfileRepositoryTest {
     assertEquals(profiles, pro)
   }
 
-    @Test(expected = Exception::class)
-    fun `delete profile should throw an exception if failure occurred`() = runTest {
-        `when`(userCollection.document(anyString())).thenReturn(documentRef)
-        `when`(documentRef.delete()).thenReturn(voidTask)
-        `when`(voidTask.addOnSuccessListener(any())).thenReturn(voidTask)
-        `when`(voidTask.addOnFailureListener(any())).thenAnswer {
-            val listener = it.arguments[0] as OnFailureListener
-            listener.onFailure(Exception("Get bytes return an exception"))
-            null
-        }
-        profileRepositoryImpl.deleteProfile(profile0)
-    }
-
-    @Test
-    fun `delete profile should correctly delete a profile`() = runTest {
-      val profileList = mutableListOf(profile0)
+  @Test(expected = Exception::class)
+  fun `delete profile should throw an exception if failure occurred`() = runTest {
       `when`(userCollection.document(anyString())).thenReturn(documentRef)
       `when`(documentRef.delete()).thenReturn(voidTask)
-      `when`(voidTask.addOnSuccessListener(any())).thenAnswer {
-          val listener = it.arguments[0] as OnSuccessListener<Void>
-          profileList.remove(profile0)
-          listener.onSuccess(null)
-          voidTask
+      `when`(voidTask.addOnSuccessListener(any())).thenReturn(voidTask)
+      `when`(voidTask.addOnFailureListener(any())).thenAnswer {
+          val listener = it.arguments[0] as OnFailureListener
+          listener.onFailure(Exception("Get bytes return an exception"))
+          null
       }
-      `when`(voidTask.addOnFailureListener(any())).thenReturn(voidTask)
       profileRepositoryImpl.deleteProfile(profile0)
-      assertTrue(profileList.isEmpty())
+  }
+
+  @Test
+  fun `delete profile should correctly delete a profile`() = runTest {
+    val profileList = mutableListOf(profile0)
+    `when`(userCollection.document(anyString())).thenReturn(documentRef)
+    `when`(documentRef.delete()).thenReturn(voidTask)
+    `when`(voidTask.addOnSuccessListener(any())).thenAnswer {
+        val listener = it.arguments[0] as OnSuccessListener<Void>
+        profileList.remove(profile0)
+        listener.onSuccess(null)
+        voidTask
     }
+    `when`(voidTask.addOnFailureListener(any())).thenReturn(voidTask)
+    profileRepositoryImpl.deleteProfile(profile0)
+    assertTrue(profileList.isEmpty())
+  }
+
+  @Test(expected = Exception::class)
+  fun `add itinerary liked should throw an exception if failure occurred`() = runTest {
+    `when`(userCollection.document(anyString())).thenReturn(documentRef)
+    `when`(documentRef.update(anyString(), any())).thenReturn(voidTask)
+    `when`(voidTask.addOnSuccessListener(any())).thenReturn(voidTask)
+    `when`(voidTask.addOnFailureListener(any())).thenAnswer {
+      val listener = it.arguments[0] as OnFailureListener
+      listener.onFailure(Exception("Get bytes return an exception"))
+      null
+    }
+    profileRepositoryImpl.addItineraryToLiked(profile0.userUid, "i0")
+  }
+
+  @Test
+  fun `add itinerary liked should not throw an exception if successful`() = runTest {
+    val itineraryList = mutableListOf<String>()
+    `when`(userCollection.document(anyString())).thenReturn(documentRef)
+    `when`(documentRef.update(anyString(), any())).thenReturn(voidTask)
+    `when`(voidTask.addOnSuccessListener(any())).thenAnswer {
+        val listener = it.arguments[0] as OnSuccessListener<Void>
+        itineraryList.add("tokyo")
+        listener.onSuccess(null)
+        voidTask
+    }
+    `when`(voidTask.addOnFailureListener(any())).thenReturn(voidTask)
+    profileRepositoryImpl.addItineraryToLiked(profile0.userUid, "tokyo")
+    assertEquals(1, itineraryList.size)
+    assertEquals("tokyo", itineraryList[0])
+  }
+
 }
