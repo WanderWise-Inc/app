@@ -19,6 +19,7 @@ import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import io.mockk.MockKAnnotations
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import junit.framework.TestCase.assertEquals
@@ -57,7 +58,7 @@ class ScrollableItineraryListTest {
       itinerary.uid = itinerary.title
     }
 
-    every { profileViewModel.checkIfItineraryIsLiked(any(), any()) } returns false
+    coEvery { profileViewModel.checkIfItineraryIsLiked(any(), any()) } returns false
 
     composeTestRule.setContent {
       FirebaseApp.initializeApp(LocalContext.current)
@@ -105,7 +106,7 @@ class ScrollableItineraryListTest {
   fun `verify clicking on like button when itinerary is unliked correctly calls API`() {
     testItineraries = listOf(FakeItinerary.SWITZERLAND)
 
-    every { profileViewModel.checkIfItineraryIsLiked(any(), any()) } returns false
+    coEvery { profileViewModel.checkIfItineraryIsLiked(any(), any()) } returns false
 
     composeTestRule.setContent {
       FirebaseApp.initializeApp(LocalContext.current)
@@ -149,7 +150,7 @@ class ScrollableItineraryListTest {
   fun `verify clicking on like button when itinerary is liked correctly calls API`() {
     testItineraries = listOf(FakeItinerary.SWITZERLAND)
 
-    every { profileViewModel.checkIfItineraryIsLiked(any(), any()) } returns true
+    coEvery { profileViewModel.checkIfItineraryIsLiked(any(), any()) } returns true
 
     composeTestRule.setContent {
       FirebaseApp.initializeApp(LocalContext.current)
