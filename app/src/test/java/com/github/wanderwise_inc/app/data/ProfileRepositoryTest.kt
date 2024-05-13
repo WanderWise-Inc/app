@@ -416,4 +416,34 @@ class ProfileRepositoryTest {
     profileRepositoryImpl.removeItineraryFromLiked(profile0.userUid, "i0")
     assertTrue(itineraryList.isEmpty())
   }
+
+  @Test(expected = Exception::class)
+  fun `check if itinerary is liked should throw an exception if failure occurred`() = runTest {
+    `when`(userCollection.document(anyString())).thenReturn(documentRef)
+    `when`(documentRef.get()).thenReturn(taskDocSnap)
+    `when`(taskDocSnap.addOnSuccessListener(any())).thenReturn(taskDocSnap)
+    `when`(taskDocSnap.addOnFailureListener(any())).thenAnswer {
+      val listener = it.arguments[0] as OnFailureListener
+      listener.onFailure(Exception("Get bytes return an exception"))
+      taskDocSnap
+    }
+    profileRepositoryImpl.checkIfItineraryIsLiked(profile0.userUid, "i0")
+  }
+
+  @Test
+  fun `check if itinerary is liked should return true if itinerary is liked`() = runTest {
+    `when`(userCollection.document(anyString())).thenReturn(documentRef)
+    `when`(documentRef.get()).thenReturn(taskDocSnap)
+    `when`(taskDocSnap.addOnSuccessListener(any())).thenAnswer {
+      val listener = it.arguments[0] as OnSuccessListener<DocumentSnapshot>
+      listener.onSuccess(docSnap)
+      taskDocSnap
+    }
+    `when`(docSnap.get(anyString())).thenReturn(listOf("i0"))
+    val isLiked = profileRepositoryImpl.checkIfItineraryIsLiked(profile0.userUid, "i0")
+    assertTrue(isLiked)
+    val shouldNotBeLiked = profileRepositoryImpl.checkIfItineraryIsLiked(profile0.userUid, "i1")
+    assertFalse(shouldNotBeLiked)
+  }
+
 }
