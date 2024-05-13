@@ -23,5 +23,3 @@ fun CreationStepPreviewItinerary(
         itineraryViewModel = createItineraryViewModel, profileViewModel = profileViewModel)
   }
 }
-
-// modifier = Modifier.testTag(TestTags.CREATION_SCREEN_PREVIEW_ITINERARY)

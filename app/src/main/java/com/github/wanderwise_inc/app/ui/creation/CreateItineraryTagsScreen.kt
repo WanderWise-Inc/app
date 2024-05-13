@@ -37,7 +37,7 @@ fun NewItineraryPropertiesScreen() {
         ItineraryImageBanner(modifier = Modifier.padding(all = 10.dp))
         PriceEstimationTextBox()
         TimeDurationEstimation()
-        ReleventTags()
+        RelevantTags()
         IsPublicSwitchButton()
       }
 }
@@ -110,7 +110,7 @@ fun TimeDurationEstimation() {
 }
 
 @Composable
-fun ReleventTags() {
+fun RelevantTags() {
   // tags that are relevant to the itinerary
   // drop down list
   // adds at most 3 tags
