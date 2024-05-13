@@ -1,5 +1,6 @@
 package com.github.wanderwise_inc.app.model.location
 
+import com.github.wanderwise_inc.app.proto.location.LocationProto
 import com.google.android.gms.maps.model.LatLng
 import kotlin.math.atan2
 import kotlin.math.cos

@@ -3,9 +3,9 @@ package com.github.wanderwise_inc.app.disk
 import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.Serializer
 import com.github.wanderwise_inc.app.model.location.Itinerary
-import com.github.wanderwise_inc.app.model.location.ItineraryProto
 import com.github.wanderwise_inc.app.model.location.Location
-import com.github.wanderwise_inc.app.model.location.LocationProto
+import com.github.wanderwise_inc.app.proto.location.ItineraryProto
+import com.github.wanderwise_inc.app.proto.location.LocationProto
 import com.google.protobuf.InvalidProtocolBufferException
 import java.io.InputStream
 import java.io.OutputStream

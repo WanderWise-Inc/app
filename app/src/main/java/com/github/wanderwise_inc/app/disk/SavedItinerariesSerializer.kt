@@ -2,7 +2,7 @@ package com.github.wanderwise_inc.app.disk
 
 import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.Serializer
-import com.github.wanderwise_inc.app.model.location.SavedItineraries
+import com.github.wanderwise_inc.app.proto.location.SavedItineraries
 import com.google.protobuf.InvalidProtocolBufferException
 import java.io.InputStream
 import java.io.OutputStream

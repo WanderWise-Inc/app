@@ -2,7 +2,7 @@ package com.github.wanderwise_inc.app.data
 
 import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.Serializer
-import com.github.wanderwise_inc.app.model.profile.ProfileProto
+import com.github.wanderwise_inc.app.proto.profile.ProfileProto
 import com.google.protobuf.InvalidProtocolBufferException
 import java.io.InputStream
 import java.io.OutputStream

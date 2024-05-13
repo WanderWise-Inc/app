@@ -1,5 +1,6 @@
 package com.github.wanderwise_inc.app.model.location
 
+import com.github.wanderwise_inc.app.proto.location.ItineraryProto
 import com.google.android.gms.maps.model.LatLng
 import java.io.InvalidObjectException
 
