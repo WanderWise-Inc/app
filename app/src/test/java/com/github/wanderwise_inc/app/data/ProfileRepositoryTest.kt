@@ -1,5 +1,6 @@
 package com.github.wanderwise_inc.app.data
 
+import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.profile.Profile
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
@@ -8,6 +9,7 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -19,6 +21,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
+import org.mockito.Mockito
 import org.mockito.Mockito.`when`
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
@@ -37,6 +40,8 @@ class ProfileRepositoryTest {
   @Mock private lateinit var voidTask : Task<Void>
   @Mock private lateinit var taskDocSnap : Task<DocumentSnapshot>
   @Mock private lateinit var docSnap : DocumentSnapshot
+  @Mock private lateinit var taskQuerySnap : Task<QuerySnapshot>
+  @Mock private lateinit var querySnap : QuerySnapshot
 
   private lateinit var profileRepositoryTestImpl: ProfileRepository
   private lateinit var profileRepositoryImpl: ProfileRepository
@@ -290,4 +295,37 @@ class ProfileRepositoryTest {
     val p = profileRepositoryImpl.getProfile("0").first()
     assertEquals(profile0, p)
   }
+
+  @Test
+  fun `get all profiles should return an empty list if failure occurred`() = runTest {
+    `when`(userCollection.get()).thenReturn(taskQuerySnap)
+    `when`(taskQuerySnap.addOnSuccessListener(any())).thenReturn(taskQuerySnap)
+    `when`(taskQuerySnap.addOnFailureListener(any())).thenAnswer {
+      val listener = it.arguments[0] as OnFailureListener
+      listener.onFailure(Exception("Get bytes return an exception"))
+      taskQuerySnap
+    }
+    val pro = profileRepositoryImpl.getAllProfiles().first()
+    assertTrue(pro.isEmpty())
+  }
+
+  @Test
+  fun `getAll profiles should return the correct list of profiles`() = runTest {
+    `when`(userCollection.get()).thenReturn(taskQuerySnap)
+    `when`(taskQuerySnap.addOnSuccessListener(any())).thenAnswer {
+      val listener = it.arguments[0] as OnSuccessListener<QuerySnapshot>
+      listener.onSuccess(querySnap)
+      taskQuerySnap
+    }
+    val mockDocuments =
+      profiles.map { p ->
+        val mockDocument = Mockito.mock(DocumentSnapshot::class.java)
+        `when`(mockDocument.toObject(Profile::class.java)).thenReturn(p)
+        mockDocument
+      }
+    `when`(querySnap.documents).thenReturn(mockDocuments)
+    val pro = profileRepositoryImpl.getAllProfiles().first()
+    assertEquals(profiles, pro)
+  }
+
 }
