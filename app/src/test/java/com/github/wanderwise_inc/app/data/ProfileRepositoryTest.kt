@@ -328,4 +328,32 @@ class ProfileRepositoryTest {
     assertEquals(profiles, pro)
   }
 
+    @Test(expected = Exception::class)
+    fun `delete profile should throw an exception if failure occurred`() = runTest {
+        `when`(userCollection.document(anyString())).thenReturn(documentRef)
+        `when`(documentRef.delete()).thenReturn(voidTask)
+        `when`(voidTask.addOnSuccessListener(any())).thenReturn(voidTask)
+        `when`(voidTask.addOnFailureListener(any())).thenAnswer {
+            val listener = it.arguments[0] as OnFailureListener
+            listener.onFailure(Exception("Get bytes return an exception"))
+            null
+        }
+        profileRepositoryImpl.deleteProfile(profile0)
+    }
+
+    @Test
+    fun `delete profile should correctly delete a profile`() = runTest {
+      val profileList = mutableListOf(profile0)
+      `when`(userCollection.document(anyString())).thenReturn(documentRef)
+      `when`(documentRef.delete()).thenReturn(voidTask)
+      `when`(voidTask.addOnSuccessListener(any())).thenAnswer {
+          val listener = it.arguments[0] as OnSuccessListener<Void>
+          profileList.remove(profile0)
+          listener.onSuccess(null)
+          voidTask
+      }
+      `when`(voidTask.addOnFailureListener(any())).thenReturn(voidTask)
+      profileRepositoryImpl.deleteProfile(profile0)
+      assertTrue(profileList.isEmpty())
+    }
 }
