@@ -106,7 +106,10 @@ class ImageRepositoryImpl(
             .child("images/${fileName}")
             .putFile(it)
             .addOnSuccessListener { Log.d("STORE IMAGE", "STORE SUCCESS") }
-            .addOnFailureListener { Log.d("STORE IMAGE", "STORE FAILED") }
+            .addOnFailureListener {
+              Log.d("STORE IMAGE", "STORE FAILED")
+              throw it
+            }
       }
       return currentFile != null
     } catch (e: Exception) {

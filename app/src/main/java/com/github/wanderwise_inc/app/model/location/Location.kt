@@ -12,7 +12,7 @@ object LocationLabels {
   const val LONG = "long"
   const val TITLE = "title"
   const val ADDRESS = "address"
-  const val GOOGLE_RATING = "google_rating"
+  const val GOOGLE_RATING = "googleRating"
 }
 
 typealias Kilometers = Double

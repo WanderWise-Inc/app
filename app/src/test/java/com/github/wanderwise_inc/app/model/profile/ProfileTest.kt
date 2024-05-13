@@ -12,12 +12,14 @@ class ProfileTest {
             displayName = "TestUser",
             userUid = "1",
             bio = "thisIsTheBioOfTestUser",
-            profilePicture = null)
+            profilePicture = null,
+            likedItinerariesUid = mutableListOf("0", "1"))
     val uid = "uid"
-    val user_uid = "user_uid"
+    val user_uid = "userUid"
     val bio = "bio"
-    val displayName = "display_name"
-    val profilePicture = "profile_picture"
+    val displayName = "displayName"
+    val profilePicture = "profilePicture"
+    val likedItineraries = "likedItinerariesUid"
 
     val map =
         mapOf(
@@ -25,7 +27,8 @@ class ProfileTest {
             user_uid to p.userUid,
             bio to p.bio,
             displayName to p.displayName,
-            profilePicture to p.profilePicture)
+            profilePicture to p.profilePicture,
+            likedItineraries to p.likedItinerariesUid)
 
     val profileMap = p.toMap()
 
@@ -35,5 +38,6 @@ class ProfileTest {
     assert(map[bio] == profileMap[bio])
     assert(map[displayName] == profileMap[displayName])
     assert(map[profilePicture] == profileMap[profilePicture])
+    assert(map[likedItineraries] == profileMap[likedItineraries])
   }
 }
