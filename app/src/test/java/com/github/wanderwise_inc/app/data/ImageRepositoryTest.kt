@@ -180,19 +180,19 @@ class ImageRepositoryTest {
   }
 
   @Test
-  fun `fetch image with an error for while getting the bytes should return a null bitmap`() =
-      runTest {
-        `when`(imageReference.child(any(String::class.java))).thenReturn(storageReference)
-        `when`(storageReference.getBytes(any(Long::class.java))).thenReturn(taskByteArray)
-        `when`(taskByteArray.addOnFailureListener(any())).thenAnswer {
-          val listener = it.arguments[0] as OnFailureListener
-          listener.onFailure(Exception("Get bytes return an exception"))
-          taskByteArray
-        }
+  fun `fetch image with an error while getting the bytes should return a null bitmap`() = runTest {
+    `when`(imageReference.child(any(String::class.java))).thenReturn(storageReference)
+    `when`(storageReference.getBytes(any(Long::class.java))).thenReturn(taskByteArray)
+    `when`(taskByteArray.addOnSuccessListener(any())).thenReturn(taskByteArray)
+    `when`(taskByteArray.addOnFailureListener(any())).thenAnswer {
+      val listener = it.arguments[0] as OnFailureListener
+      listener.onFailure(Exception("Get bytes return an exception"))
+      taskByteArray
+    }
 
-        val bitmap = imageRepositoryImpl.fetchImage("testPath").first()
-        assertNull(bitmap)
-      }
+    val bitmap = imageRepositoryImpl.fetchImage("testPath").first()
+    assertNull(bitmap)
+  }
 
   @Test
   fun `fetch image with getBytes that returns null should return a null bitmap`() = runTest {
