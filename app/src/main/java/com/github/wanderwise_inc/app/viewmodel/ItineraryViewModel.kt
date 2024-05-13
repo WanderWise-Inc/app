@@ -92,6 +92,16 @@ open class ItineraryViewModel(
     }
   }
 
+  /** saves a list of `Itinerary` to persistent storage */
+  fun saveItineraries(itineraries: List<Itinerary>) {
+    viewModelScope.launch { itineraryRepository.writeItinerariesToDisk(itineraries) }
+  }
+
+  /** saves an `Itinerary` to persistent storage */
+  fun saveItinerary(itinerary: Itinerary) {
+    viewModelScope.launch { itineraryRepository.writeItinerariesToDisk(listOf(itinerary)) }
+  }
+
   /** @brief sets an itinerary in DB */
   fun setItinerary(itinerary: Itinerary) {
     viewModelScope.launch { itineraryRepository.setItinerary(itinerary) }
