@@ -6,6 +6,7 @@ import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -34,6 +35,8 @@ class ProfileRepositoryTest {
   @Mock private lateinit var userCollection : CollectionReference
   @Mock private lateinit var documentRef : DocumentReference
   @Mock private lateinit var voidTask : Task<Void>
+  @Mock private lateinit var taskDocSnap : Task<DocumentSnapshot>
+  @Mock private lateinit var docSnap : DocumentSnapshot
 
   private lateinit var profileRepositoryTestImpl: ProfileRepository
   private lateinit var profileRepositoryImpl: ProfileRepository
@@ -243,5 +246,48 @@ class ProfileRepositoryTest {
     profileRepositoryImpl.setProfile(profile0)
     assertEquals(1, profileList.size)
     assertEquals(profile0, profileList[0])
+  }
+
+  @Test
+  fun `getProfile should return null if failure happened`() = runTest {
+    `when`(userCollection.document(anyString())).thenReturn(documentRef)
+    `when`(documentRef.get()).thenReturn(taskDocSnap)
+    `when`(taskDocSnap.addOnSuccessListener(any())).thenReturn(taskDocSnap)
+    `when`(taskDocSnap.addOnFailureListener(any())).thenAnswer {
+      val listener = it.arguments[0] as OnFailureListener
+      listener.onFailure(Exception("Get bytes return an exception"))
+      taskDocSnap
+    }
+    val p = profileRepositoryImpl.getProfile("0").first()
+    assertNull(p)
+  }
+
+  @Test
+  fun `getProfile should return null if document doesn't exist`() = runTest {
+    `when`(userCollection.document(anyString())).thenReturn(documentRef)
+    `when`(documentRef.get()).thenReturn(taskDocSnap)
+    `when`(taskDocSnap.addOnSuccessListener(any())).thenAnswer {
+      val listener = it.arguments[0] as OnSuccessListener<DocumentSnapshot>
+      listener.onSuccess(docSnap)
+      taskDocSnap
+    }
+    `when`(docSnap.exists()).thenReturn(false)
+    val p = profileRepositoryImpl.getProfile("0").first()
+    assertNull(p)
+  }
+
+  @Test
+  fun `getProfile should return the correct profile if document exists`() = runTest {
+    `when`(userCollection.document(anyString())).thenReturn(documentRef)
+    `when`(documentRef.get()).thenReturn(taskDocSnap)
+    `when`(taskDocSnap.addOnSuccessListener(any())).thenAnswer {
+      val listener = it.arguments[0] as OnSuccessListener<DocumentSnapshot>
+      listener.onSuccess(docSnap)
+      taskDocSnap
+    }
+    `when`(docSnap.exists()).thenReturn(true)
+    `when`(docSnap.toObject(Profile::class.java)).thenReturn(profile0)
+    val p = profileRepositoryImpl.getProfile("0").first()
+    assertEquals(profile0, p)
   }
 }
