@@ -1,7 +1,5 @@
 package com.github.wanderwise_inc.app.data
 
-import com.github.wanderwise_inc.app.model.location.FakeItinerary
-import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.profile.Profile
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
@@ -23,11 +21,11 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito
+import org.mockito.Mockito.any
+import org.mockito.Mockito.anyString
 import org.mockito.Mockito.`when`
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
-import org.mockito.Mockito.any
-import org.mockito.Mockito.anyString
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
@@ -36,13 +34,13 @@ class ProfileRepositoryTest {
   @get:Rule val mockitoRule: MockitoRule = MockitoJUnit.rule()
 
   @Mock private lateinit var db: FirebaseFirestore
-  @Mock private lateinit var userCollection : CollectionReference
-  @Mock private lateinit var documentRef : DocumentReference
-  @Mock private lateinit var voidTask : Task<Void>
-  @Mock private lateinit var taskDocSnap : Task<DocumentSnapshot>
-  @Mock private lateinit var docSnap : DocumentSnapshot
-  @Mock private lateinit var taskQuerySnap : Task<QuerySnapshot>
-  @Mock private lateinit var querySnap : QuerySnapshot
+  @Mock private lateinit var userCollection: CollectionReference
+  @Mock private lateinit var documentRef: DocumentReference
+  @Mock private lateinit var voidTask: Task<Void>
+  @Mock private lateinit var taskDocSnap: Task<DocumentSnapshot>
+  @Mock private lateinit var docSnap: DocumentSnapshot
+  @Mock private lateinit var taskQuerySnap: Task<QuerySnapshot>
+  @Mock private lateinit var querySnap: QuerySnapshot
 
   private lateinit var profileRepositoryTestImpl: ProfileRepository
   private lateinit var profileRepositoryImpl: ProfileRepository
@@ -319,11 +317,11 @@ class ProfileRepositoryTest {
       taskQuerySnap
     }
     val mockDocuments =
-      profiles.map { p ->
-        val mockDocument = Mockito.mock(DocumentSnapshot::class.java)
-        `when`(mockDocument.toObject(Profile::class.java)).thenReturn(p)
-        mockDocument
-      }
+        profiles.map { p ->
+          val mockDocument = Mockito.mock(DocumentSnapshot::class.java)
+          `when`(mockDocument.toObject(Profile::class.java)).thenReturn(p)
+          mockDocument
+        }
     `when`(querySnap.documents).thenReturn(mockDocuments)
     val pro = profileRepositoryImpl.getAllProfiles().first()
     assertEquals(profiles, pro)
@@ -331,15 +329,15 @@ class ProfileRepositoryTest {
 
   @Test(expected = Exception::class)
   fun `delete profile should throw an exception if failure occurred`() = runTest {
-      `when`(userCollection.document(anyString())).thenReturn(documentRef)
-      `when`(documentRef.delete()).thenReturn(voidTask)
-      `when`(voidTask.addOnSuccessListener(any())).thenReturn(voidTask)
-      `when`(voidTask.addOnFailureListener(any())).thenAnswer {
-          val listener = it.arguments[0] as OnFailureListener
-          listener.onFailure(Exception("Get bytes return an exception"))
-          null
-      }
-      profileRepositoryImpl.deleteProfile(profile0)
+    `when`(userCollection.document(anyString())).thenReturn(documentRef)
+    `when`(documentRef.delete()).thenReturn(voidTask)
+    `when`(voidTask.addOnSuccessListener(any())).thenReturn(voidTask)
+    `when`(voidTask.addOnFailureListener(any())).thenAnswer {
+      val listener = it.arguments[0] as OnFailureListener
+      listener.onFailure(Exception("Get bytes return an exception"))
+      null
+    }
+    profileRepositoryImpl.deleteProfile(profile0)
   }
 
   @Test
@@ -348,10 +346,10 @@ class ProfileRepositoryTest {
     `when`(userCollection.document(anyString())).thenReturn(documentRef)
     `when`(documentRef.delete()).thenReturn(voidTask)
     `when`(voidTask.addOnSuccessListener(any())).thenAnswer {
-        val listener = it.arguments[0] as OnSuccessListener<Void>
-        profileList.remove(profile0)
-        listener.onSuccess(null)
-        voidTask
+      val listener = it.arguments[0] as OnSuccessListener<Void>
+      profileList.remove(profile0)
+      listener.onSuccess(null)
+      voidTask
     }
     `when`(voidTask.addOnFailureListener(any())).thenReturn(voidTask)
     profileRepositoryImpl.deleteProfile(profile0)
@@ -377,10 +375,10 @@ class ProfileRepositoryTest {
     `when`(userCollection.document(anyString())).thenReturn(documentRef)
     `when`(documentRef.update(anyString(), any())).thenReturn(voidTask)
     `when`(voidTask.addOnSuccessListener(any())).thenAnswer {
-        val listener = it.arguments[0] as OnSuccessListener<Void>
-        itineraryList.add("tokyo")
-        listener.onSuccess(null)
-        voidTask
+      val listener = it.arguments[0] as OnSuccessListener<Void>
+      itineraryList.add("tokyo")
+      listener.onSuccess(null)
+      voidTask
     }
     `when`(voidTask.addOnFailureListener(any())).thenReturn(voidTask)
     profileRepositoryImpl.addItineraryToLiked(profile0.userUid, "tokyo")
