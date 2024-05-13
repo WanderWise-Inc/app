@@ -176,7 +176,6 @@ class ItineraryRepositoryImpl(
         }
   }
 
-
   /** @return a flow of saved itineraries from local storage */
   private fun getSavedItineraries(): Flow<List<Itinerary>> {
     Log.d("Itinerary Repository", "Reading itineraries from disk")

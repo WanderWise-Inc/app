@@ -52,7 +52,6 @@ class ItineraryRepositoryTestImpl : ItineraryRepository {
 
   override suspend fun writeItinerariesToDisk(itineraries: List<Itinerary>) {
     /* this test implementation has no disk interaction, so has the same effect as setting */
-    for (itinerary in itineraries)
-      setItinerary(itinerary)
+    for (itinerary in itineraries) setItinerary(itinerary)
   }
 }

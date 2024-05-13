@@ -31,8 +31,6 @@ interface ItineraryRepository {
   /** @brief deletes an itinerary */
   fun deleteItinerary(itinerary: Itinerary)
 
-  /**
-   * @brief writes itineraries to persistent storage
-   */
+  /** @brief writes itineraries to persistent storage */
   suspend fun writeItinerariesToDisk(itineraries: List<Itinerary>)
 }
