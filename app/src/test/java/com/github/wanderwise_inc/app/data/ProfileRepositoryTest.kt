@@ -1,6 +1,12 @@
 package com.github.wanderwise_inc.app.data
 
 import com.github.wanderwise_inc.app.model.profile.Profile
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.android.gms.tasks.OnSuccessListener
+import com.google.android.gms.tasks.Task
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -11,8 +17,12 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mock
+import org.mockito.Mockito.`when`
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
+import org.mockito.Mockito.any
+import org.mockito.Mockito.anyString
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
@@ -20,7 +30,13 @@ class ProfileRepositoryTest {
 
   @get:Rule val mockitoRule: MockitoRule = MockitoJUnit.rule()
 
+  @Mock private lateinit var db: FirebaseFirestore
+  @Mock private lateinit var userCollection : CollectionReference
+  @Mock private lateinit var documentRef : DocumentReference
+  @Mock private lateinit var voidTask : Task<Void>
+
   private lateinit var profileRepositoryTestImpl: ProfileRepository
+  private lateinit var profileRepositoryImpl: ProfileRepository
   private lateinit var profile0: Profile
   private lateinit var profile1: Profile
   private lateinit var profile2: Profile
@@ -29,6 +45,8 @@ class ProfileRepositoryTest {
   @Before
   fun setup() {
     profileRepositoryTestImpl = ProfileRepositoryTestImpl()
+    `when`(db.collection(anyString())).thenReturn(userCollection)
+    profileRepositoryImpl = ProfileRepositoryImpl(db)
     profile0 = Profile("0", "Profile0", "0", "bio of Profile0", null)
     profile1 = Profile("1", "Profile1", "1", "bio of Profile1", null)
     profile2 = Profile("2", "Profile2", "2", "bio of Profile2", null)
@@ -193,5 +211,37 @@ class ProfileRepositoryTest {
     for (i in 0..2) {
       assertEquals(iti[i], getItineraries[i])
     }
+  }
+
+  // FIREBASE IMPLEMENTATION
+
+  @Test(expected = Exception::class)
+  fun `set user should throw an exception if a failure occurred`() = runTest {
+    `when`(userCollection.document(anyString())).thenReturn(documentRef)
+    `when`(documentRef.set(any())).thenReturn(voidTask)
+    `when`(voidTask.addOnSuccessListener(any())).thenReturn(voidTask)
+    `when`(voidTask.addOnFailureListener(any())).thenAnswer {
+      val listener = it.arguments[0] as OnFailureListener
+      listener.onFailure(Exception("Get bytes return an exception"))
+      null
+    }
+    profileRepositoryImpl.setProfile(profile0)
+  }
+
+  @Test
+  fun `set user should not throw an exception if it was successful`() = runTest {
+    val profileList = mutableListOf<Profile>()
+    `when`(userCollection.document(anyString())).thenReturn(documentRef)
+    `when`(documentRef.set(any())).thenReturn(voidTask)
+    `when`(voidTask.addOnSuccessListener(any())).thenAnswer {
+      val listener = it.arguments[0] as OnSuccessListener<Void>
+      profileList.add(profile0)
+      listener.onSuccess(null)
+      voidTask
+    }
+    `when`(voidTask.addOnFailureListener(any())).thenReturn(voidTask)
+    profileRepositoryImpl.setProfile(profile0)
+    assertEquals(1, profileList.size)
+    assertEquals(profile0, profileList[0])
   }
 }
