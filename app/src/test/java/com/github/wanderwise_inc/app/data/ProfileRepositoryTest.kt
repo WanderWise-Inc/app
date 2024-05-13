@@ -388,4 +388,32 @@ class ProfileRepositoryTest {
     assertEquals("tokyo", itineraryList[0])
   }
 
+  @Test(expected = Exception::class)
+  fun `remove itinerary from liked should throw an exception if failure occurred`() = runTest {
+    `when`(userCollection.document(anyString())).thenReturn(documentRef)
+    `when`(documentRef.update(anyString(), any())).thenReturn(voidTask)
+    `when`(voidTask.addOnSuccessListener(any())).thenReturn(voidTask)
+    `when`(voidTask.addOnFailureListener(any())).thenAnswer {
+      val listener = it.arguments[0] as OnFailureListener
+      listener.onFailure(Exception("Get bytes return an exception"))
+      null
+    }
+    profileRepositoryImpl.removeItineraryFromLiked(profile0.userUid, "i0")
+  }
+
+  @Test
+  fun `remove itinerary from liked should correctly remove the itinerary`() = runTest {
+    val itineraryList = mutableListOf("i0")
+    `when`(userCollection.document(anyString())).thenReturn(documentRef)
+    `when`(documentRef.update(anyString(), any())).thenReturn(voidTask)
+    `when`(voidTask.addOnSuccessListener(any())).thenAnswer {
+      val listener = it.arguments[0] as OnSuccessListener<Void>
+      itineraryList.remove("i0")
+      listener.onSuccess(null)
+      voidTask
+    }
+    `when`(voidTask.addOnFailureListener(any())).thenReturn(voidTask)
+    profileRepositoryImpl.removeItineraryFromLiked(profile0.userUid, "i0")
+    assertTrue(itineraryList.isEmpty())
+  }
 }
