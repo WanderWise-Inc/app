@@ -7,10 +7,8 @@ import com.google.protobuf.InvalidProtocolBufferException
 import java.io.InputStream
 import java.io.OutputStream
 
-/**
- * Serializes the `ProfilePersistent` class which is mapped to protobuf
- */
-object ProfileProtoSerializer: Serializer<ProfileProto> {
+/** Serializes the `ProfilePersistent` class which is mapped to protobuf */
+object ProfileProtoSerializer : Serializer<ProfileProto> {
   override val defaultValue: ProfileProto = ProfileProto.getDefaultInstance()
 
   override suspend fun readFrom(input: InputStream): ProfileProto {

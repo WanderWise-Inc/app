@@ -22,3 +22,7 @@ message ItineraryProto {
   float price = 8;
   int32 time = 9;
 }
+
+message SavedItineraries {
+  repeated ItineraryProto itineraries = 1;
+}

@@ -174,6 +174,19 @@ data class Itinerary(
         ItineraryLabels.PRICE to price,
         ItineraryLabels.TIME to time)
   }
+  /** Conversion method for converting to protobuf */
+  fun toProto(): ItineraryProto {
+    return ItineraryProto.newBuilder()
+        .setUid(uid)
+        .setUid(userUid)
+        .addAllLocations(locations.map { it.toProto() })
+        .setTitle(title)
+        .addAllTags(tags)
+        .setDescription(description)
+        .setPrice(price)
+        .setTime(time)
+        .build()
+  }
 
   /**
    * @return a builder with the same values as the itinerary

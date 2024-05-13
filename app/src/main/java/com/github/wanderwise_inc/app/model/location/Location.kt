@@ -39,6 +39,16 @@ data class Location(
         LocationLabels.GOOGLE_RATING to googleRating)
   }
 
+  fun toProto(): LocationProto {
+    return LocationProto.newBuilder()
+        .setLat(lat)
+        .setLong(long)
+        .setAddress(address)
+        .setTitle(title)
+        .setGoogleRating(googleRating ?: 0f)
+        .build()
+  }
+
   /** @return the distance in kilometers to another point */
   fun distTo(other: Location): Kilometers {
     if (other.lat == lat && other.long == long) return 0.0
