@@ -33,7 +33,7 @@ class LocationTest {
             "long" to epflLon,
             "title" to null,
             "address" to null,
-            "google_rating" to null)
+            "googleRating" to null)
     assertEquals(expected, epflLocation.toMap())
   }
 

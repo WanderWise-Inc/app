@@ -30,20 +30,25 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.github.wanderwise_inc.app.ui.TestTags
 
 @Composable
 fun CreationStepChooseTagsScreen() {
   Column(
       horizontalAlignment = Alignment.CenterHorizontally,
-      modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.primaryContainer),
+      modifier =
+          Modifier.fillMaxSize()
+              .testTag(TestTags.CREATION_SCREEN_TAGS)
+              .background(MaterialTheme.colorScheme.primaryContainer),
       verticalArrangement = Arrangement.spacedBy(10.dp)) {
         ItineraryImageBanner(modifier = Modifier.padding(all = 10.dp))
         PriceEstimationTextBox()
         TimeDurationEstimation()
-        ReleventTags()
+        RelevantTags()
         IsPublicSwitchButton()
       }
 }
@@ -68,7 +73,7 @@ fun ItineraryImageBanner(modifier: Modifier = Modifier) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PriceEstimationTextBox() {
-  // numnber text field to estimate price, give the option to choose currency
+  // number text field to estimate price, give the option to choose currency
   val currencies = listOf("USD", "EUR", "JPY", "GBP", "AUD", "CAD", "CHF", "CNY", "SEK", "NZD")
   var isCurrenciesMenuExpanded by remember { mutableStateOf(false) }
   var selectedCurrency by remember { mutableStateOf(currencies[0]) }
@@ -124,7 +129,7 @@ fun TimeDurationEstimation() {
 }
 
 @Composable
-fun ReleventTags() {
+fun RelevantTags() {
   val allTags =
       listOf(
           "Adventure",
@@ -137,11 +142,11 @@ fun ReleventTags() {
           "Nightlife")
   var isTagsDDM by remember { mutableStateOf(false) }
   val selectedTags = remember { mutableStateListOf<String>() }
-  var tried_to_add_more_than_3_tags by remember { mutableStateOf(false) }
+  var triedToAddMoreThan3Tags by remember { mutableStateOf(false) }
 
   Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
     Text("Selected Tags: ${selectedTags.joinToString(", ")}")
-    if (tried_to_add_more_than_3_tags) {
+    if (triedToAddMoreThan3Tags) {
       Text(
           "You can only select up to 3 tags",
           color = MaterialTheme.colorScheme.error,
@@ -160,7 +165,7 @@ fun ReleventTags() {
             if (!selectedTags.contains(tag) && selectedTags.size < 3) {
               selectedTags.add(tag)
             } else if (selectedTags.size >= 3) {
-              tried_to_add_more_than_3_tags = true
+              triedToAddMoreThan3Tags = true
             }
           })
     }
