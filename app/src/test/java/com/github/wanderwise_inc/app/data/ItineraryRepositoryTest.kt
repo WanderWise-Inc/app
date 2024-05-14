@@ -1,11 +1,13 @@
 package com.github.wanderwise_inc.app.data
 
 import android.content.Context
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkCapabilities
 import androidx.datastore.core.DataStore
 import com.github.wanderwise_inc.app.model.location.FakeItinerary
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
-import com.github.wanderwise_inc.app.proto.location.ItineraryProto
 import com.github.wanderwise_inc.app.proto.location.SavedItineraries
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
@@ -24,6 +26,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.Mock
 import org.mockito.Mockito.any
 import org.mockito.Mockito.anyString
@@ -56,8 +59,16 @@ class ItineraryRepositoryTest {
 
   @Before
   fun setup() {
+    val connectivityManager = mock(ConnectivityManager::class.java)
+    val networkInfo = mock(Network::class.java)
+    val networkCapabilities = mock(NetworkCapabilities::class.java)
+    `when`(connectivityManager.activeNetwork).thenReturn(networkInfo)
+    `when`(connectivityManager.getNetworkCapabilities(any())).thenReturn(networkCapabilities)
+    `when`(networkCapabilities.hasCapability(anyInt())).thenReturn(true)
+
     itineraryRepositoryTest = ItineraryRepositoryTestImpl()
     `when`(db.collection(anyString())).thenReturn(itineraryColl)
+    `when`(context.getSystemService(any())).thenReturn(connectivityManager)
     itineraryRepository = ItineraryRepositoryImpl(db, context, savedItinerariesDataStore)
   }
 

@@ -28,8 +28,7 @@ class AppModuleTest {
         mockk<Intent>(),
         mockk<LocationClient>(),
         mockk<DataStore<SavedItineraries>>(),
-        mockk<Context>()
-      )
+        mockk<Context>())
   }
 
   @Test

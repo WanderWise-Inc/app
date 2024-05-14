@@ -1,6 +1,5 @@
 package com.github.wanderwise_inc.app.model.location
 
-import java.io.InvalidObjectException
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull

@@ -12,7 +12,6 @@ class ItineraryRepositoryTestImpl : ItineraryRepository {
   private var uidCtr = 0
 
   override fun getPublicItineraries(): Flow<List<Itinerary>> {
-    print(itineraries)
     return flow { emit(itineraries.filter { it.visible }) }
   }
 
