@@ -9,7 +9,6 @@ import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
-import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -21,6 +20,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito.any
+import org.mockito.Mockito.anyString
 import org.mockito.Mockito.`when`
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
@@ -34,17 +34,11 @@ class ImageRepositoryTest {
 
   @Mock private lateinit var imageReference: StorageReference
   @Mock private lateinit var storageReference: StorageReference
-  @Mock private lateinit var onSuccessListener: OnSuccessListener<Void>
-  @Mock private lateinit var onSuccessListenerArray: OnSuccessListener<in ByteArray>
-  @Mock private lateinit var onFailureListener: OnFailureListener
   @Mock private lateinit var activityLauncher: ActivityResultLauncher<Intent>
   @Mock private lateinit var uploadTask: UploadTask
   @Mock private lateinit var taskByteArray: Task<ByteArray>
-  @Mock private lateinit var cancellableContinuation: CancellableContinuation<ByteArray?>
 
   private lateinit var imageRepositoryImpl: ImageRepositoryImpl
-
-  private val mockByteArray = byteArrayOf(1, 2, 3)
 
   private val testPathFile =
       "https://lh3.googleusercontent.com/a/ACg8ocKuSpafO1jmH65vDl5SZ35E9NwFv07kyiO7tL110QRdwzRnSz5X=s96-c"
@@ -94,12 +88,14 @@ class ImageRepositoryTest {
   fun `upload image should correctly store the Uri in storage`() {
     val testPath = "testPath"
 
-    `when`(imageReference.child(any(String::class.java))).thenReturn(storageReference)
+    `when`(imageReference.child(anyString())).thenReturn(storageReference)
     `when`(storageReference.putFile(any(Uri::class.java))).thenReturn(uploadTask)
     `when`(uploadTask.addOnSuccessListener(any())).thenAnswer {
-      onSuccessListener.onSuccess(null)
+      val listener = it.arguments[0] as OnSuccessListener<Void>
+      listener.onSuccess(null)
       uploadTask
     }
+    `when`(uploadTask.addOnFailureListener(any())).thenReturn(uploadTask)
 
     val success = imageRepositoryImpl.uploadImageToStorage(testPath)
 
@@ -112,10 +108,12 @@ class ImageRepositoryTest {
   fun `upload image when putFile failed should return false`() {
     val testPath = "testPath"
 
-    `when`(imageReference.child(any(String::class.java))).thenReturn(storageReference)
-    `when`(storageReference.putFile(any(Uri::class.java))).thenReturn(uploadTask)
+    `when`(imageReference.child(anyString())).thenReturn(storageReference)
+    `when`(storageReference.putFile(uri)).thenReturn(uploadTask)
+    `when`(uploadTask.addOnSuccessListener(any())).thenReturn(uploadTask)
     `when`(uploadTask.addOnFailureListener(any())).thenAnswer {
-      onFailureListener.onFailure(Exception("putFile throws an exception"))
+      val listener = it.arguments[0] as OnFailureListener
+      listener.onFailure(Exception("putFile failed"))
       uploadTask
     }
 
@@ -143,7 +141,7 @@ class ImageRepositoryTest {
   fun `if putFile throws an exception, the method should return false`() {
     val testPath = "random"
 
-    `when`(imageReference.child(any(String::class.java))).thenReturn(storageReference)
+    `when`(imageReference.child(anyString())).thenReturn(storageReference)
     `when`(storageReference.putFile(any(Uri::class.java)))
         .thenThrow(Exception("putFile throws an exception"))
     val success = imageRepositoryImpl.uploadImageToStorage(testPath)
@@ -159,7 +157,7 @@ class ImageRepositoryTest {
   @Test
   fun `fetch image with a correct path should correctly return a bitMap`() = runTest {
     val byteArray = byteArrayOf(1, 2, 3)
-    `when`(imageReference.child(any(String::class.java))).thenReturn(storageReference)
+    `when`(imageReference.child(anyString())).thenReturn(storageReference)
     `when`(storageReference.getBytes(any(Long::class.java))).thenReturn(taskByteArray)
     `when`(taskByteArray.addOnSuccessListener(any())).thenAnswer {
       val listener = it.arguments[0] as OnSuccessListener<ByteArray>
@@ -180,23 +178,23 @@ class ImageRepositoryTest {
   }
 
   @Test
-  fun `fetch image with an error for while getting the bytes should return a null bitmap`() =
-      runTest {
-        `when`(imageReference.child(any(String::class.java))).thenReturn(storageReference)
-        `when`(storageReference.getBytes(any(Long::class.java))).thenReturn(taskByteArray)
-        `when`(taskByteArray.addOnFailureListener(any())).thenAnswer {
-          val listener = it.arguments[0] as OnFailureListener
-          listener.onFailure(Exception("Get bytes return an exception"))
-          taskByteArray
-        }
+  fun `fetch image with an error while getting the bytes should return a null bitmap`() = runTest {
+    `when`(imageReference.child(anyString())).thenReturn(storageReference)
+    `when`(storageReference.getBytes(any(Long::class.java))).thenReturn(taskByteArray)
+    `when`(taskByteArray.addOnSuccessListener(any())).thenReturn(taskByteArray)
+    `when`(taskByteArray.addOnFailureListener(any())).thenAnswer {
+      val listener = it.arguments[0] as OnFailureListener
+      listener.onFailure(Exception("Get bytes return an exception"))
+      taskByteArray
+    }
 
-        val bitmap = imageRepositoryImpl.fetchImage("testPath").first()
-        assertNull(bitmap)
-      }
+    val bitmap = imageRepositoryImpl.fetchImage("testPath").first()
+    assertNull(bitmap)
+  }
 
   @Test
   fun `fetch image with getBytes that returns null should return a null bitmap`() = runTest {
-    `when`(imageReference.child(any(String::class.java))).thenReturn(storageReference)
+    `when`(imageReference.child(anyString())).thenReturn(storageReference)
     `when`(storageReference.getBytes(any(Long::class.java))).thenReturn(taskByteArray)
     `when`(taskByteArray.addOnSuccessListener(any())).thenAnswer {
       val listener = it.arguments[0] as OnSuccessListener<ByteArray>

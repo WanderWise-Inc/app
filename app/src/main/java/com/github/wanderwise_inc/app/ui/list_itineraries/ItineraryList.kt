@@ -34,6 +34,7 @@ import com.github.wanderwise_inc.app.ui.navigation.NavigationActions
 import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.runBlocking
 
 /** @brief reusable UI elements for displaying a list of itineraries */
 
@@ -78,7 +79,11 @@ fun ItinerariesListScrollable(
         verticalArrangement = spacedBy(15.dp)) {
           this.items(itineraries) { itinerary ->
             val uid = firebaseAuth.currentUser?.uid ?: DEFAULT_USER_UID
-            val isLikedInitially = profileViewModel.checkIfItineraryIsLiked(uid, itinerary.uid)
+            val isLikedInitially: Boolean
+            runBlocking {
+              isLikedInitially = profileViewModel.checkIfItineraryIsLiked(uid, itinerary.uid)
+            }
+
             val onLikeButtonClick = { it: Itinerary, isLiked: Boolean ->
               if (isLiked) {
                 itineraryViewModel.decrementItineraryLikes(it)
