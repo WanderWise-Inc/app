@@ -58,6 +58,9 @@ class HomeNavigationTest {
       every { imageRepository.fetchImage(any()) } returns flowOf(null)
 
       every { profileViewModel.getProfile(any()) } returns flow { emit(mockProfile) }
+      every { profileViewModel.getActiveProfile() } returns mockProfile
+      every { profileViewModel.getUserUid() } returns mockProfile.userUid
+      every { profileViewModel.setActiveProfile(any()) } returns Unit
       coEvery { profileViewModel.setProfile(any()) } returns Unit
       every { profileViewModel.addLikedItinerary(any(), any()) } returns Unit
       every { profileViewModel.getLikedItineraries(any()) } returns flow { emit(emptyList()) }
