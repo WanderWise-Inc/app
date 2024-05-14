@@ -27,8 +27,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.github.wanderwise_inc.app.model.location.ItineraryDefaultValues
-import com.github.wanderwise_inc.app.model.location.ItineraryLabels
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.navigation.Destination.CreationPreviewOptionsDestinations
 import com.github.wanderwise_inc.app.ui.navigation.NavigationActions
@@ -48,7 +46,7 @@ fun CreationStepPreview(
   var selected by remember { mutableStateOf(PreviewOption.Banner) }
   val navigator = NavigationActions(navController)
 
-    var notSetValues by remember{ mutableStateOf(listOf<String>())}
+  var notSetValues by remember { mutableStateOf(listOf<String>()) }
 
   Scaffold(
       floatingActionButton = {
@@ -74,9 +72,7 @@ fun CreationStepPreview(
                               }),
                   contentDescription = null,
                   tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                  modifier = Modifier
-                      .size(30.dp)
-                      .padding(2.dp))
+                  modifier = Modifier.size(30.dp).padding(2.dp))
             }
       },
       modifier = Modifier.testTag(TestTags.CREATION_SCREEN_PREVIEW)) { padding ->
@@ -85,11 +81,12 @@ fun CreationStepPreview(
 
           ExtendedFloatingActionButton(
               onClick = {
-                  notSetValues = createItineraryViewModel.notSetValues()
-                        if(notSetValues.isEmpty()){
-                            createItineraryViewModel.uploadNewItinerary()
-                            onFinished()
-                        }},
+                notSetValues = createItineraryViewModel.notSetValues()
+                if (notSetValues.isEmpty()) {
+                  createItineraryViewModel.uploadNewItinerary()
+                  onFinished()
+                }
+              },
               icon = {
                 Icon(
                     Icons.Outlined.CheckBox,
@@ -100,14 +97,13 @@ fun CreationStepPreview(
               containerColor = MaterialTheme.colorScheme.secondaryContainer,
               contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
               modifier =
-              Modifier
-                  .align(Alignment.TopCenter)
-                  .padding(12.dp)
-                  .testTag(TestTags.CREATION_FINISH_BUTTON))
-            
-            if(notSetValues.isNotEmpty()){
-                PopUpValuesToSet(attributes = notSetValues){notSetValues = listOf()}
-            }
+                  Modifier.align(Alignment.TopCenter)
+                      .padding(12.dp)
+                      .testTag(TestTags.CREATION_FINISH_BUTTON))
+
+          if (notSetValues.isNotEmpty()) {
+            PopUpValuesToSet(attributes = notSetValues) { notSetValues = listOf() }
+          }
         }
       }
 }
@@ -141,10 +137,10 @@ enum class PreviewOption {
 }
 
 @Composable
-fun PopUpValuesToSet(attributes : List<String>, onDismiss :()->Unit){
-    val message = StringBuilder("please fill in the following fields before submitting: ")
-    for(a in attributes){
-        message.append(a).append(", ")
-    }
-    HintPopup(message = message.toString()){onDismiss()}
+fun PopUpValuesToSet(attributes: List<String>, onDismiss: () -> Unit) {
+  val message = StringBuilder("Please fill in the following fields before submitting: ")
+  for (a in attributes) {
+    message.append(a).append(", ")
+  }
+  HintPopup(message = message.toString()) { onDismiss() }
 }
