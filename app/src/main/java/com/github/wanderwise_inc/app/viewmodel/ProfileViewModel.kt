@@ -7,7 +7,6 @@ import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.data.ProfileRepository
 import com.github.wanderwise_inc.app.model.profile.Profile
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 
 class ProfileViewModel(
     private val profileRepository: ProfileRepository,
@@ -47,26 +46,22 @@ class ProfileViewModel(
     return imageRepository.fetchImage("profilePicture/defaultProfilePicture.jpg")
   }
 
-  /**
-   * @brief add an Itinerary to the profile's liked itineraries. Only has an effect if sign-in was
-   *   successful.
-   */
-  fun addLikedItinerary(itineraryUid: String) {
-    if (isSignInComplete) profileRepository.addItineraryToLiked(getUserUid(), itineraryUid)
+  fun addLikedItinerary(userUid: String, itineraryUid: String) {
+    profileRepository.addItineraryToLiked(userUid, itineraryUid)
   }
 
-  /**
-   * @brief remove an Itinerary to the user's liked itineraries. Only has an effect if sign-in was
-   *   successful
-   */
-  fun removeLikedItinerary(itineraryUid: String) {
-    if (isSignInComplete) profileRepository.removeItineraryFromLiked(getUserUid(), itineraryUid)
+  fun removeLikedItinerary(userUid: String, itineraryUid: String) {
+    profileRepository.removeItineraryFromLiked(userUid, itineraryUid)
   }
 
-  suspend fun checkIfItineraryIsLiked(itineraryUid: String): Boolean {
+  suspend fun checkIfItineraryIsLikedByActiveProfile(itineraryUid: String): Boolean {
     return if (isSignInComplete)
         profileRepository.checkIfItineraryIsLiked(getUserUid(), itineraryUid)
     else false
+  }
+
+  suspend fun checkIfItineraryIsLiked(userUid: String, itineraryUid: String): Boolean {
+    return profileRepository.checkIfItineraryIsLiked(userUid, itineraryUid)
   }
 
   /**
@@ -74,8 +69,7 @@ class ProfileViewModel(
    *   in profile
    */
   fun getLikedItineraries(userUid: String): Flow<List<String>> {
-    return if (isSignInComplete) profileRepository.getLikedItineraries(userUid)
-    else flow { emit(emptyList()) }
+    return profileRepository.getLikedItineraries(userUid)
   }
 
   /** Sets the active profile. Called on sign-in and only called once */
@@ -87,7 +81,10 @@ class ProfileViewModel(
     }
   }
 
-  /** Returns the profile of the active user, as initialized at sign-in */
+  /**
+   * Returns the profile of the active user, as initialized at sign-in. If sign-in in was
+   * unsuccessful, this will return `DEFAULT_OFFLINE_PROFILE` as defined in `Profile.kt`
+   */
   fun getActiveProfile(): Profile = activeProfile
 
   /** Returns the UID of the signed in profile */

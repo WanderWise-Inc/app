@@ -127,5 +127,5 @@ fun addItineraries(
   for (i in 0..1023) itineraryViewModel.incrementItineraryLikes(publicItinerary)
 
   // other profile likes their own itinerary
-  profileViewModel.addLikedItinerary(itineraryAdventure.uid)
+  profileViewModel.addLikedItinerary(profileViewModel.getUserUid(), itineraryAdventure.uid)
 }

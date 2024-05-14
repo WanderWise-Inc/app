@@ -73,19 +73,20 @@ fun ItinerariesListScrollable(
         modifier = Modifier.padding(paddingValues).testTag(TestTags.ITINERARY_LIST_SCROLLABLE),
         verticalArrangement = spacedBy(15.dp)) {
           this.items(itineraries) { itinerary ->
-            val uid = profileViewModel.getUserUid()
             val isLikedInitially: Boolean
             runBlocking {
-              isLikedInitially = profileViewModel.checkIfItineraryIsLiked(itinerary.uid)
+              isLikedInitially =
+                  profileViewModel.checkIfItineraryIsLiked(
+                      profileViewModel.getUserUid(), itinerary.uid)
             }
 
             val onLikeButtonClick = { it: Itinerary, isLiked: Boolean ->
               if (isLiked) {
                 itineraryViewModel.decrementItineraryLikes(it)
-                profileViewModel.removeLikedItinerary(it.uid)
+                profileViewModel.removeLikedItinerary(profileViewModel.getUserUid(), it.uid)
               } else {
                 itineraryViewModel.incrementItineraryLikes(it)
-                profileViewModel.addLikedItinerary(it.uid)
+                profileViewModel.addLikedItinerary(profileViewModel.getUserUid(), it.uid)
               }
             }
             val navigationActions = NavigationActions(navController)
