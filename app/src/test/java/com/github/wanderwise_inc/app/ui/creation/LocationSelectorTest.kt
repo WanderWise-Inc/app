@@ -104,14 +104,14 @@ class CreateItineraryMapUITest {
   @Test
   fun testLocation1TextField() {
 
-    composeTestRule.setContent { LocationSelector(createItineraryViewModel) }
+    composeTestRule.setContent { LocationSelector() }
 
     composeTestRule.onNodeWithTag(TestTags.FIRST_LOCATION).assertIsDisplayed()
   }
 
   @Test
   fun testLocation2TextField() {
-    composeTestRule.setContent { LocationSelector(createItineraryViewModel) }
+    composeTestRule.setContent { LocationSelector() }
 
     composeTestRule.onNodeWithTag(TestTags.SECOND_LOCATION).assertIsDisplayed()
   }

@@ -153,7 +153,6 @@ class PreviewItineraryScreenKtTest {
     composeTestRule.setContent { PreviewItineraryScreen(itineraryViewModel, profileViewModel) }
 
     composeTestRule.onNodeWithTag(TestTags.START_NEW_ITINERARY_STARTING).assertIsDisplayed()
-
   }
 
   @Test
