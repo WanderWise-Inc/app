@@ -18,58 +18,58 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class CreateItineraryViewModelTest(){
-    @ExperimentalCoroutinesApi @get:Rule val mainDispatcherRule = MainDispatcherRule()
+class CreateItineraryViewModelTest() {
+  @ExperimentalCoroutinesApi @get:Rule val mainDispatcherRule = MainDispatcherRule()
 
-    @get:Rule var instantExecutorRule = InstantTaskExecutorRule()
+  @get:Rule var instantExecutorRule = InstantTaskExecutorRule()
 
-    @MockK private lateinit var itineraryRepository: ItineraryRepository
+  @MockK private lateinit var itineraryRepository: ItineraryRepository
 
-    @MockK private lateinit var directionsRepository: DirectionsRepository
+  @MockK private lateinit var directionsRepository: DirectionsRepository
 
-    @MockK private lateinit var userLocationClient: UserLocationClient
+  @MockK private lateinit var userLocationClient: UserLocationClient
 
-    private lateinit var createItineraryViewModel: CreateItineraryViewModel
+  private lateinit var createItineraryViewModel: CreateItineraryViewModel
 
-    private val testDispatcher = StandardTestDispatcher()
+  private val testDispatcher = StandardTestDispatcher()
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    @Before
-    fun setup() {
-        Dispatchers.setMain(testDispatcher)
-        MockKAnnotations.init(this)
-        createItineraryViewModel =
-            CreateItineraryViewModel(itineraryRepository, directionsRepository, userLocationClient)
-    }
+  @OptIn(ExperimentalCoroutinesApi::class)
+  @Before
+  fun setup() {
+    Dispatchers.setMain(testDispatcher)
+    MockKAnnotations.init(this)
+    createItineraryViewModel =
+        CreateItineraryViewModel(itineraryRepository, directionsRepository, userLocationClient)
+  }
 
+  @Test
+  fun `calling notSetValues on a freshly created Itinerary returns every ItineraryLabel`() {
+    createItineraryViewModel.startNewItinerary("Me")
 
-    @Test
-    fun `calling notSetValues on a freshly created Itinerary returns every ItineraryLabel`(){
-        createItineraryViewModel.startNewItinerary("Me")
+    val notSetValues = createItineraryViewModel.notSetValues()
 
-        val notSetValues = createItineraryViewModel.notSetValues()
+    assert(notSetValues.contains(ItineraryLabels.TITLE))
+    assert(notSetValues.contains(ItineraryLabels.DESCRIPTION))
+    assert(notSetValues.contains(ItineraryLabels.TAGS))
+    assert(notSetValues.contains(ItineraryLabels.LOCATIONS))
+    assert(notSetValues.contains(ItineraryLabels.PRICE))
+    assert(notSetValues.contains(ItineraryLabels.TIME))
+  }
 
-        assert(notSetValues.contains(ItineraryLabels.TITLE))
-        assert(notSetValues.contains(ItineraryLabels.DESCRIPTION))
-        assert(notSetValues.contains(ItineraryLabels.TAGS))
-        assert(notSetValues.contains(ItineraryLabels.LOCATIONS))
-        assert(notSetValues.contains(ItineraryLabels.PRICE))
-        assert(notSetValues.contains(ItineraryLabels.TIME))
-    }
+  @Test
+  fun `calling notSetValues on a fully set Itinerary returns an empty list`() {
+    createItineraryViewModel.startNewItinerary("Me")
 
-    @Test
-    fun `calling notSetValues on a fully set Itinerary returns an empty list`(){
-        createItineraryViewModel.startNewItinerary("Me")
+    createItineraryViewModel.setNewItineraryTitle("title")
+    createItineraryViewModel.setNewItineraryDescription("description")
+    createItineraryViewModel.getNewItinerary()?.addTag(ItineraryTags.ADVENTURE)
+    createItineraryViewModel
+        .getNewItinerary()
+        ?.addLocation(Location(15.0, -10.0))
+        ?.addLocation(Location(20.0, -10.0))
+    createItineraryViewModel.getNewItinerary()?.price(20f)
+    createItineraryViewModel.getNewItinerary()?.time(4)
 
-        createItineraryViewModel.setNewItineraryTitle("title")
-        createItineraryViewModel.setNewItineraryDescription("description")
-        createItineraryViewModel.getNewItinerary()?.addTag(ItineraryTags.ADVENTURE)
-        createItineraryViewModel.getNewItinerary()?.addLocation(Location(15.0, -10.0))?.addLocation(Location(20.0, -10.0))
-        createItineraryViewModel.getNewItinerary()?.price(20f)
-        createItineraryViewModel.getNewItinerary()?.time(4)
-
-        assert(createItineraryViewModel.notSetValues().isEmpty())
-
-    }
-
+    assert(createItineraryViewModel.notSetValues().isEmpty())
+  }
 }

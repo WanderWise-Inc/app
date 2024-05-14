@@ -22,9 +22,9 @@ object ItineraryLabels {
 object ItineraryDefaultValues {
   const val UID: String = ""
   const val USER_UID: String = ""
-  //val LOCATIONS: MutableList<Location> = mutableListOf()
+  // val LOCATIONS: MutableList<Location> = mutableListOf()
   const val TITLE: String = ""
-  //val TAGS: MutableList<Tag> = mutableListOf()
+  // val TAGS: MutableList<Tag> = mutableListOf()
   const val DESCRIPTION: String = ""
   const val VISIBLE: Boolean = true
   const val PRICE: Float = -1f

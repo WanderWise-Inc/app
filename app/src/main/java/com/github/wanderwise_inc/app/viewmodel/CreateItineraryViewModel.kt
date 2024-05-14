@@ -37,7 +37,7 @@ class CreateItineraryViewModel(
     newItineraryBuilder?.description = description
   }
 
-  /** @returns a list of ItineraryLabels of fields that haven't been set **/
+  /** @returns a list of ItineraryLabels of fields that haven't been set * */
   fun notSetValues(): List<String> {
     // look if all values have been set
     val notSetValues: MutableList<String> = mutableListOf()
