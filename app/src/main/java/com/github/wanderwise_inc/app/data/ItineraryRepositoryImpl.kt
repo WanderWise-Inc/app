@@ -58,6 +58,7 @@ class ItineraryRepositoryImpl(
   }
 
   private fun getPublicItinerariesFirebase(): Flow<List<Itinerary>> {
+    Log.d("ItineraryRepository", "Fetching itineraries from firebase")
     return flow {
           val itineraries = suspendCancellableCoroutine { continuation ->
             itinerariesCollection

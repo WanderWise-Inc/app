@@ -1,7 +1,10 @@
 package com.github.wanderwise_inc.app.di
 
+import android.content.Context
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
+import androidx.datastore.core.DataStore
+import com.github.wanderwise_inc.app.proto.location.SavedItineraries
 import com.github.wanderwise_inc.app.viewmodel.LocationClient
 import com.google.firebase.FirebaseApp
 import io.mockk.mockk
@@ -23,7 +26,10 @@ class AppModuleTest {
         mockk<ActivityResultLauncher<Intent>>(),
         mockk<ActivityResultLauncher<Intent>>(),
         mockk<Intent>(),
-        mockk<LocationClient>())
+        mockk<LocationClient>(),
+        mockk<DataStore<SavedItineraries>>(),
+        mockk<Context>()
+      )
   }
 
   @Test

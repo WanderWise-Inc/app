@@ -1,8 +1,12 @@
 package com.github.wanderwise_inc.app.data
 
+import android.content.Context
+import androidx.datastore.core.DataStore
 import com.github.wanderwise_inc.app.model.location.FakeItinerary
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
+import com.github.wanderwise_inc.app.proto.location.ItineraryProto
+import com.github.wanderwise_inc.app.proto.location.SavedItineraries
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
@@ -34,6 +38,8 @@ class ItineraryRepositoryTest {
   @get:Rule val mockitoRule: MockitoRule = MockitoJUnit.rule()
 
   @Mock private lateinit var db: FirebaseFirestore
+  @Mock private lateinit var context: Context
+  @Mock private lateinit var savedItinerariesDataStore: DataStore<SavedItineraries>
   @Mock private lateinit var itineraryColl: CollectionReference
   @Mock private lateinit var queryTask: Task<QuerySnapshot>
   @Mock private lateinit var query: QuerySnapshot
@@ -52,7 +58,7 @@ class ItineraryRepositoryTest {
   fun setup() {
     itineraryRepositoryTest = ItineraryRepositoryTestImpl()
     `when`(db.collection(anyString())).thenReturn(itineraryColl)
-    itineraryRepository = ItineraryRepositoryImpl(db)
+    itineraryRepository = ItineraryRepositoryImpl(db, context, savedItinerariesDataStore)
   }
 
   @Test

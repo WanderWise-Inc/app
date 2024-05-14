@@ -9,7 +9,7 @@ const val MAX_TAGS: Int = 3 // maximum number of tags allowed for an itinerary
 /** @brief labels for accessing itinerary information from a hashmap representation */
 object ItineraryLabels {
   const val UID = "uid"
-  const val USER_UID = "user_uid"
+  const val USER_UID = "userUid"
   const val LOCATIONS = "locations"
   const val TITLE = "title"
   const val DESCRIPTION = "description"
