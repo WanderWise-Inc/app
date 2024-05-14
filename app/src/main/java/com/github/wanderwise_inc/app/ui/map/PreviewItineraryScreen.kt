@@ -4,7 +4,10 @@ import android.location.Location
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+
 import androidx.compose.foundation.layout.Column
+
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -82,25 +85,12 @@ fun PreviewItineraryScreen(
 
     LaunchedEffect(Unit) { itineraryViewModel.fetchPolylineLocations(itinerary) }
     val polylinePoints by itineraryViewModel.getPolylinePointsLiveData().observeAsState()
+      var isMinimized by remember { mutableStateOf(false) }
+      val onMinimizedClick = { isMinimized = !isMinimized }
 
     Scaffold(
-        topBar = { StartButton(onClick = {})
-
-
-       /*   Row(
-              modifier = Modifier.fillMaxWidth().padding(10.dp),
-              horizontalArrangement = Arrangement.Center,
-              verticalAlignment = Alignment.CenterVertically) {
-            Text(
-                text = "Preview Itinerary",
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                fontFamily = MaterialTheme.typography.displayMedium.fontFamily,
-                fontSize = 24.sp,
-                fontWeight = FontWeight.SemiBold,
-                textAlign = TextAlign.Center)
-          }*/
-        },
-        bottomBar = { PreviewItineraryBanner(itinerary, itineraryViewModel, profileViewModel) },
+        topBar = {StartButton(onClick = onMinimizedClick) },
+        bottomBar = { PreviewItineraryBanner(isMinimized, onMinimizedClick, itinerary, itineraryViewModel, profileViewModel) },
         modifier = Modifier.testTag(TestTags.MAP_PREVIEW_ITINERARY_SCREEN),
         floatingActionButton = {
           CenterButton(cameraPositionState = cameraPositionState, currentLocation = userLocation)
@@ -135,13 +125,16 @@ fun PreviewItineraryScreen(
 }
 @Composable
 fun StartButton(onClick: () -> Unit) {
-  FloatingActionButton(
-      onClick = onClick,
-
-      containerColor = MaterialTheme.colorScheme.surfaceContainer) {
-
-      Text(text = "Start Itinerary")
-      }
+    var isClicked by remember { mutableStateOf(false) }
+    Box(contentAlignment = Alignment.Center) {
+        FloatingActionButton(
+            onClick ={ onClick()
+            isClicked = true},
+            containerColor = MaterialTheme.colorScheme.surfaceContainer
+        ) {
+            Text(text = if (isClicked) "Starting..." else "Start", color = Color.DarkGray)
+        }
+    }
 }
 
 /**
@@ -150,13 +143,14 @@ fun StartButton(onClick: () -> Unit) {
  */
 @Composable
 fun PreviewItineraryBanner(
+    isMinimized: Boolean,
+    onMinimizedClick: () -> Unit,
     itinerary: Itinerary,
     itineraryViewModel: ItineraryViewModel,
     profileViewModel: ProfileViewModel
 ) {
 
-  var isMinimized by remember { mutableStateOf(false) }
-  val onMinimizedClick = { isMinimized = !isMinimized }
+
 
   if (isMinimized)
       PreviewItineraryBannerMinimized(onMinimizedClick = onMinimizedClick, itinerary = itinerary)
