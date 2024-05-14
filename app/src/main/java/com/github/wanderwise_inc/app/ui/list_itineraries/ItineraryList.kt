@@ -72,7 +72,8 @@ fun ItinerariesListScrollable(
     LazyColumn(
         modifier = Modifier.padding(paddingValues).testTag(TestTags.ITINERARY_LIST_SCROLLABLE),
         verticalArrangement = spacedBy(15.dp)) {
-          this.items(itineraries) { itinerary ->
+          // this.items(itineraries) { itinerary ->
+          this.items(itineraries, { (iti) -> iti }) { itinerary ->
             val isLikedInitially: Boolean
             runBlocking {
               isLikedInitially =
