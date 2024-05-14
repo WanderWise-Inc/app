@@ -73,7 +73,7 @@ fun ItinerariesListScrollable(
     LazyColumn(
         modifier = Modifier.padding(paddingValues).testTag(TestTags.ITINERARY_LIST_SCROLLABLE),
         verticalArrangement = spacedBy(15.dp)) {
-          this.items(itineraries, { (iti) -> iti}) { itinerary ->
+          this.items(itineraries, { (iti) -> iti }) { itinerary ->
             val uid = firebaseAuth.currentUser?.uid ?: DEFAULT_USER_UID
             val isLikedInitially: Boolean
             runBlocking {
