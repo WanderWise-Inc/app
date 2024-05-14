@@ -4,10 +4,11 @@ import android.net.Uri
 
 object ProfileLabels {
   const val UID = "uid"
-  const val USER_UID = "user_uid"
+  const val USER_UID = "userUid"
   const val BIO = "bio"
-  const val NAME = "display_name"
-  const val PICTURE = "profile_picture"
+  const val NAME = "displayName"
+  const val PICTURE = "profilePicture"
+  const val LIKED_ITINERARIES = "likedItinerariesUid"
 }
 
 data class Profile(
@@ -25,7 +26,8 @@ data class Profile(
         ProfileLabels.NAME to displayName,
         ProfileLabels.USER_UID to userUid,
         ProfileLabels.BIO to bio,
-        ProfileLabels.PICTURE to profilePicture)
+        ProfileLabels.PICTURE to profilePicture,
+        ProfileLabels.LIKED_ITINERARIES to likedItinerariesUid)
   }
 
   /** @brief no argument constructor for serialization */

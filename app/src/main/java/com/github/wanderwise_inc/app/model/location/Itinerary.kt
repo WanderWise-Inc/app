@@ -8,7 +8,7 @@ const val MAX_TAGS: Int = 3 // maximum number of tags allowed for an itinerary
 /** @brief labels for accessing itinerary information from a hashmap representation */
 object ItineraryLabels {
   const val UID = "uid"
-  const val USER_UID = "user_uid"
+  const val USER_UID = "userUid"
   const val LOCATIONS = "locations"
   const val TITLE = "title"
   const val DESCRIPTION = "description"
@@ -16,6 +16,7 @@ object ItineraryLabels {
   const val TAGS = "tags"
   const val PRICE = "price"
   const val TIME = "time"
+  const val NUM_LIKES = "numLikes"
 }
 
 /** @brief score of an itinerary based on some preferences */
@@ -172,7 +173,8 @@ data class Itinerary(
         ItineraryLabels.DESCRIPTION to (description ?: ""),
         ItineraryLabels.VISIBLE to visible,
         ItineraryLabels.PRICE to price,
-        ItineraryLabels.TIME to time)
+        ItineraryLabels.TIME to time,
+        ItineraryLabels.NUM_LIKES to numLikes)
   }
 
   /**

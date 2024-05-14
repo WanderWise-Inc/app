@@ -18,6 +18,7 @@ import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import io.mockk.MockKAnnotations
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.flow.flow
@@ -52,7 +53,7 @@ class OverviewScreenTest {
 
     every { firebaseAuth.currentUser?.uid } returns null
 
-    every { profileViewModel.checkIfItineraryIsLiked(any(), any()) } returns false
+    coEvery { profileViewModel.checkIfItineraryIsLiked(any(), any()) } returns false
 
     every { itineraryViewModel.getAllPublicItineraries() } returns flow { emit(testItineraries) }
 

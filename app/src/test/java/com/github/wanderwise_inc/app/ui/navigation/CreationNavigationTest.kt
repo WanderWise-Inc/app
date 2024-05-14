@@ -120,7 +120,7 @@ class CreationNavigationTest {
   fun `perform click on description navigates to description`() {
     composeTestRule.onNodeWithTag("Creation/${CreationStepsRoute.DESCRIPTION}").performClick()
 
-    composeTestRule.onNodeWithTag(TestTags.CREATION_SCREEN_DESCRIPTION).assertIsDisplayed()
+    composeTestRule.onNodeWithTag(TestTags.CREATION_SCREEN_DESCRIPTION_TITLE).assertIsDisplayed()
 
     val route = navController.currentBackStackEntry?.destination?.route
     assertEquals("Creation/${CreationStepsRoute.DESCRIPTION}", route)

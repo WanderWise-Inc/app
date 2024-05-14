@@ -24,7 +24,7 @@ class ProfileViewModel(
   }
 
   /** Sets a profile in data source */
-  suspend fun setProfile(profile: Profile) {
+  fun setProfile(profile: Profile) {
     profileRepository.setProfile(profile)
   }
 
@@ -53,7 +53,7 @@ class ProfileViewModel(
     profileRepository.removeItineraryFromLiked(userUid, itineraryUid)
   }
 
-  fun checkIfItineraryIsLiked(userUid: String, itineraryUid: String): Boolean {
+  suspend fun checkIfItineraryIsLiked(userUid: String, itineraryUid: String): Boolean {
     return profileRepository.checkIfItineraryIsLiked(userUid, itineraryUid)
   }
 

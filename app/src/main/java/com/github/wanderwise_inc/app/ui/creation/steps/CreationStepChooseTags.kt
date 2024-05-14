@@ -34,7 +34,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.github.wanderwise_inc.app.ui.TestTags.CREATION_SCREEN_TAGS
+import com.github.wanderwise_inc.app.ui.TestTags
 
 @Composable
 fun CreationStepChooseTagsScreen() {
@@ -42,8 +42,8 @@ fun CreationStepChooseTagsScreen() {
       horizontalAlignment = Alignment.CenterHorizontally,
       modifier =
           Modifier.fillMaxSize()
-              .background(MaterialTheme.colorScheme.primaryContainer)
-              .testTag(CREATION_SCREEN_TAGS),
+              .testTag(TestTags.CREATION_SCREEN_TAGS)
+              .background(MaterialTheme.colorScheme.primaryContainer),
       verticalArrangement = Arrangement.spacedBy(10.dp)) {
         ItineraryImageBanner(modifier = Modifier.padding(all = 10.dp))
         PriceEstimationTextBox()
