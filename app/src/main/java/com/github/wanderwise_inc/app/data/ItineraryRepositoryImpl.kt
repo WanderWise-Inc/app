@@ -17,6 +17,7 @@ import kotlin.coroutines.resumeWithException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -47,8 +48,8 @@ class ItineraryRepositoryImpl(
   }
 
   /**
-   * @return a `flow` of all public itineraries, or an empty list on failure or when internet
-   *   connection isn't available
+   * @return a `flow` of all public itineraries, or the list of saved itineraries from persistent
+   *   storage when internet connection isn't available
    */
   override fun getPublicItineraries(): Flow<List<Itinerary>> {
     return when (isNetworkAvailable()) {
@@ -57,6 +58,7 @@ class ItineraryRepositoryImpl(
     }
   }
 
+  /** fetches all public itineraries from Firebase */
   private fun getPublicItinerariesFirebase(): Flow<List<Itinerary>> {
     Log.d("ItineraryRepository", "Fetching itineraries from firebase")
     return flow {
@@ -76,7 +78,18 @@ class ItineraryRepositoryImpl(
         .catch { emit(emptyList()) }
   }
 
+  /**
+   * @return a `flow` of all user-created itineraries, or the list of user-created itineraries from
+   *   persistent storage when internet connection isn't available
+   */
   override fun getUserItineraries(userUid: String): Flow<List<Itinerary>> {
+    return when (isNetworkAvailable()) {
+      true -> getUserItinerariesFireBase(userUid)
+      false -> getSavedItineraries().map { list -> list.filter { it.userUid == userUid } }
+    }
+  }
+
+  private fun getUserItinerariesFireBase(userUid: String): Flow<List<Itinerary>> {
     return flow {
           val itineraries = suspendCancellableCoroutine { continuation ->
             itinerariesCollection
@@ -99,6 +112,16 @@ class ItineraryRepositoryImpl(
   }
 
   override fun getItinerariesWithTags(tags: List<Tag>): Flow<List<Itinerary>> {
+    return when (isNetworkAvailable()) {
+      true -> getItinerariesWithTagsFirebase(tags)
+      false ->
+          getSavedItineraries().map { list ->
+            list.filter { itinerary -> tags.any { tag -> itinerary.tags.contains(tag) } }
+          }
+    }
+  }
+
+  fun getItinerariesWithTagsFirebase(tags: List<Tag>): Flow<List<Itinerary>> {
     return flow {
           val itineraries = suspendCancellableCoroutine { continuation ->
             itinerariesCollection
