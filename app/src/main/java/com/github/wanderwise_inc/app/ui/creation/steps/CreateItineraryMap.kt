@@ -1,6 +1,7 @@
 package com.github.wanderwise_inc.app.ui.creation.steps
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -29,6 +31,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,12 +50,16 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 @Composable
 fun CreateItineraryMapWithSelector(
     createItineraryViewModel: CreateItineraryViewModel,
 ) {
-  Scaffold(bottomBar = { LocationSelector() }) { innerPadding ->
+  Scaffold(bottomBar = { LocationSelector(createItineraryViewModel) }) { innerPadding ->
     CreateItineraryMap(
         createItineraryViewModel = createItineraryViewModel, innerPaddingValues = innerPadding)
   }
@@ -87,7 +94,9 @@ fun CreateItineraryMap(
     val polylinePoints by createItineraryViewModel.getPolylinePointsLiveData().observeAsState()
     GoogleMap(
         modifier =
-            Modifier.padding(paddingValues = innerPaddingValues).testTag(TestTags.MAP_GOOGLE_MAPS),
+        Modifier
+            .padding(paddingValues = innerPaddingValues)
+            .testTag(TestTags.MAP_GOOGLE_MAPS),
         onMapClick = {
           itineraryBuilder.addLocation(Location.fromLatLng(it))
           locations.add(Location.fromLatLng(it))
@@ -117,10 +126,11 @@ fun CreateItineraryMap(
   } else {
     Column(
         modifier =
-            Modifier.testTag(TestTags.MAP_NULL_ITINERARY)
-                .fillMaxSize()
-                .padding(innerPaddingValues)
-                .background(MaterialTheme.colorScheme.background),
+        Modifier
+            .testTag(TestTags.MAP_NULL_ITINERARY)
+            .fillMaxSize()
+            .padding(innerPaddingValues)
+            .background(MaterialTheme.colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center) {
           Text("Loading your location...", modifier = Modifier.testTag(TestTags.MAP_NULL_ITINERARY))
@@ -129,16 +139,44 @@ fun CreateItineraryMap(
 }
 
 @Composable
-fun LocationSelector() {
+fun LocationSelector(createItineraryViewModel: CreateItineraryViewModel) {
   var location1 by remember { mutableStateOf("") }
+    val coroutineScope = rememberCoroutineScope()
   var location2 by remember { mutableStateOf("") }
-
+    var isClicked by remember { mutableStateOf(false) }
+    var location by remember { mutableStateOf<android.location.Location?>(null) }
+if (!isClicked) {
   BottomAppBar(
-      modifier = Modifier.height(250.dp).fillMaxWidth(),
+      modifier = Modifier
+          .height(250.dp)
+          .fillMaxWidth(),
       containerColor = MaterialTheme.colorScheme.primaryContainer,
       contentColor = MaterialTheme.colorScheme.primary,
   ) {
     Column {
+        Button(onClick = {
+            isClicked = true
+
+            coroutineScope.launch {
+                location = createItineraryViewModel.getUserLocation().first()
+
+                Log.d("LOCATION ENTERED", "Location: ${location?.latitude}, ${location?.longitude}")
+            }
+
+        }) {
+            Log.d("LOCATION BUTTON", "Location: ${location?.latitude}, ${location?.longitude}")
+            location?.let {loc ->
+                Log.d("LOCATION MARKER", "Location: ${loc.latitude}, ${loc.longitude}")
+                Marker(
+                    state = MarkerState(position = LatLng(loc.latitude, loc.longitude)),
+                    icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED),
+
+                    )
+            }
+            Text(text = "Track me")
+        }
+
+
       /*Text(
           modifier = Modifier.padding(10.dp),
           textAlign = TextAlign.Center,
@@ -154,7 +192,9 @@ fun LocationSelector() {
             onValueChange = { location1 = it },
             label = { Text("location 1...") },
             placeholder = { Text("location 1...") },
-            modifier = Modifier.padding(start = 25.dp).testTag(TestTags.FIRST_LOCATION),
+            modifier = Modifier
+                .padding(start = 25.dp)
+                .testTag(TestTags.FIRST_LOCATION),
             shape = RoundedCornerShape(20.dp))
       }
 
@@ -173,9 +213,12 @@ fun LocationSelector() {
             onValueChange = { location2 = it },
             label = { Text("location 2...") },
             placeholder = { Text("location 2...") },
-            modifier = Modifier.padding(start = 25.dp).testTag(TestTags.SECOND_LOCATION),
+            modifier = Modifier
+                .padding(start = 25.dp)
+                .testTag(TestTags.SECOND_LOCATION),
             shape = RoundedCornerShape(20.dp))
       }
     }
   }
+}
 }
