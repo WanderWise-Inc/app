@@ -1,5 +1,6 @@
 package com.github.wanderwise_inc.app.data
 
+import android.util.Log
 import com.github.wanderwise_inc.app.model.profile.Profile
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -35,15 +36,27 @@ class ProfileRepositoryTestImpl : ProfileRepository {
   }
 
   override fun addItineraryToLiked(userUid: String, itineraryUid: String) {
-    profiles.first { it.userUid == userUid }.likedItinerariesUid.add(itineraryUid)
+    try {
+      profiles.first { it.userUid == userUid }.likedItinerariesUid.add(itineraryUid)
+    } catch (e: Exception) {
+      Log.d("ProfileRepository", "Failed to add to liked: $e")
+    }
   }
 
   override fun removeItineraryFromLiked(userUid: String, itineraryUid: String) {
-    profiles.first { it.userUid == userUid }.likedItinerariesUid.remove(itineraryUid)
+    try {
+      profiles.first { it.userUid == userUid }.likedItinerariesUid.remove(itineraryUid)
+    } catch (e: Exception) {
+      Log.d("ProfileRepository", "Failed to remove from liked: $e")
+    }
   }
 
   override suspend fun checkIfItineraryIsLiked(userUid: String, itineraryUid: String): Boolean {
-    return profiles.first { it.userUid == userUid }.likedItinerariesUid.contains(itineraryUid)
+    return try {
+      profiles.first { it.userUid == userUid }.likedItinerariesUid.contains(itineraryUid)
+    } catch (e: Exception) {
+      false
+    }
   }
 
   override fun getLikedItineraries(userUid: String): Flow<List<String>> {
