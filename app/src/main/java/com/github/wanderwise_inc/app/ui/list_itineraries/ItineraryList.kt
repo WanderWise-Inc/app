@@ -1,5 +1,6 @@
 package com.github.wanderwise_inc.app.ui.list_itineraries
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -15,6 +16,12 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -25,6 +32,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.github.wanderwise_inc.app.DEFAULT_USER_UID
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.itinerary.ItineraryBanner
@@ -48,6 +56,7 @@ fun ItinerariesListScrollable(
     paddingValues: PaddingValues,
     parent: ItineraryListParent,
 ) {
+    val coroutineScope = rememberCoroutineScope()
   if (itineraries.isEmpty()) {
     val parentVerb =
         when (parent) {
@@ -58,10 +67,11 @@ fun ItinerariesListScrollable(
     Box(
         contentAlignment = Alignment.Center,
         modifier =
-            Modifier.padding(paddingValues)
-                .testTag(TestTags.ITINERARY_LIST_NULL)
-                .fillMaxWidth()
-                .height(100.dp)) {
+        Modifier
+            .padding(paddingValues)
+            .testTag(TestTags.ITINERARY_LIST_NULL)
+            .fillMaxWidth()
+            .height(100.dp)) {
           Text(
               text = "You have not $parentVerb any itineraries yet",
               // color = MaterialTheme.colorScheme.
@@ -70,24 +80,29 @@ fun ItinerariesListScrollable(
         } // PaModifier.padding(5.dp, 10.dp))
   } else {
     LazyColumn(
-        modifier = Modifier.padding(paddingValues).testTag(TestTags.ITINERARY_LIST_SCROLLABLE),
+        modifier = Modifier
+            .padding(paddingValues)
+            .testTag(TestTags.ITINERARY_LIST_SCROLLABLE),
         verticalArrangement = spacedBy(15.dp)) {
           // this.items(itineraries) { itinerary ->
           this.items(itineraries, { (iti) -> iti }) { itinerary ->
-            val isLikedInitially: Boolean
-            runBlocking {
-              isLikedInitially =
-                  profileViewModel.checkIfItineraryIsLiked(
-                      profileViewModel.getUserUid(), itinerary.uid)
+              val uid = firebaseAuth.currentUser?.uid ?: DEFAULT_USER_UID
+              // val uid = profileViewModel.getUserUid() -> CRASH APP
+              var isLikedInitially by remember {mutableStateOf(false)}
+            LaunchedEffect(uid) {
+                Log.d("ItinerariesListScrollable", "LaunchedEffect")
+                isLikedInitially =
+                    profileViewModel.checkIfItineraryIsLiked(
+                        uid, itinerary.uid)
             }
 
             val onLikeButtonClick = { it: Itinerary, isLiked: Boolean ->
               if (isLiked) {
                 itineraryViewModel.decrementItineraryLikes(it)
-                profileViewModel.removeLikedItinerary(profileViewModel.getUserUid(), it.uid)
+                profileViewModel.removeLikedItinerary(uid, it.uid)
               } else {
                 itineraryViewModel.incrementItineraryLikes(it)
-                profileViewModel.addLikedItinerary(profileViewModel.getUserUid(), it.uid)
+                profileViewModel.addLikedItinerary(uid, it.uid)
               }
             }
             val navigationActions = NavigationActions(navController)
@@ -96,10 +111,10 @@ fun ItinerariesListScrollable(
               navigationActions.navigateTo(Destination.TopLevelDestination.Map)
             }
             ItineraryBanner(
-                itinerary = itinerary,
-                onLikeButtonClick = onLikeButtonClick,
-                onBannerClick = onBannerClick,
-                isLikedInitially = isLikedInitially)
+              itinerary = itinerary,
+              onLikeButtonClick = onLikeButtonClick,
+              onBannerClick = onBannerClick,
+              isLikedInitially = isLikedInitially)
           }
         }
   }
@@ -140,7 +155,9 @@ fun CategorySelector(
                 painter = painterResource(id = category.icon),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                modifier = Modifier.size(30.dp).padding(2.dp))
+                modifier = Modifier
+                    .size(30.dp)
+                    .padding(2.dp))
           },
           modifier = Modifier.testTag("${TestTags.CATEGORY_SELECTOR_TAB}_${index}"))
     }
