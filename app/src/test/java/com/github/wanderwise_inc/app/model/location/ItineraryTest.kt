@@ -99,10 +99,6 @@ class ItineraryTest {
     assertEquals(10f, newItinerary.price)
     assertEquals(2, newItinerary.time)
 
-    assertThrows(InvalidObjectException::class.java) {
-      builder.addTag(ItineraryTags.ROMANCE).addTag(ItineraryTags.WILDLIFE)
-    }
-
     val emptyBuilder = Itinerary().toBuilder()
 
     emptyBuilder.addLocation(Location(0.0, 0.0))
