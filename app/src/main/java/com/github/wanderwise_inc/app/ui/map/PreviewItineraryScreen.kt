@@ -89,7 +89,11 @@ fun PreviewItineraryScreen(
       val onMinimizedClick = { isMinimized = !isMinimized }
 
     Scaffold(
-        topBar = {StartButton(onClick = onMinimizedClick) },
+        topBar = {
+            Box(modifier = Modifier.background(Color.LightGray).fillMaxWidth()) {
+            StartButton(onClick = onMinimizedClick, modifier = Modifier.align(Alignment.TopStart).fillMaxWidth())
+            }
+        },
         bottomBar = { PreviewItineraryBanner(isMinimized, onMinimizedClick, itinerary, itineraryViewModel, profileViewModel) },
         modifier = Modifier.testTag(TestTags.MAP_PREVIEW_ITINERARY_SCREEN),
         floatingActionButton = {
@@ -120,21 +124,24 @@ fun PreviewItineraryScreen(
                   }
                 }
               }
+
         }
   }
 }
 @Composable
-fun StartButton(onClick: () -> Unit) {
+fun StartButton(onClick: () -> Unit, modifier: Modifier) {
     var isClicked by remember { mutableStateOf(false) }
-    Box(contentAlignment = Alignment.Center) {
+
         FloatingActionButton(
             onClick ={ onClick()
-            isClicked = true},
-            containerColor = MaterialTheme.colorScheme.surfaceContainer
+            isClicked = !isClicked},
+            containerColor = Color.LightGray,
+            //MaterialTheme.colorScheme.surfaceContainer,
+            modifier = modifier.testTag(TestTags.START_NEW_ITINERARY_STARTING)
         ) {
-            Text(text = if (isClicked) "Starting..." else "Start", color = Color.DarkGray)
+            Text(text = if (isClicked) "Following..." else "Follow", color = Color.DarkGray)
         }
-    }
+
 }
 
 /**

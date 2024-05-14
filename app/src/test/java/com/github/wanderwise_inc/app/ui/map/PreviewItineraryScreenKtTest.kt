@@ -149,6 +149,14 @@ class PreviewItineraryScreenKtTest {
   }
 
   @Test
+  fun `Clicking on the Start Button should go to starting mode`() {
+    composeTestRule.setContent { PreviewItineraryScreen(itineraryViewModel, profileViewModel) }
+
+    composeTestRule.onNodeWithTag(TestTags.START_NEW_ITINERARY_STARTING).assertIsDisplayed()
+
+  }
+
+  @Test
   fun `pressing center button should update camera position`() {
     val epflLocation = Mockito.mock(android.location.Location::class.java)
     epflLocation.latitude = epflLat
