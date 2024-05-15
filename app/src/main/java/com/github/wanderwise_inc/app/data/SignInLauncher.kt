@@ -1,5 +1,5 @@
 package com.github.wanderwise_inc.app.data
 
-interface GoogleSignInLauncher {
+interface SignInLauncher {
   fun signIn()
 }
