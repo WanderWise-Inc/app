@@ -1,14 +1,10 @@
 package com.github.wanderwise_inc.app.viewmodel
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.navigation.NavController
 import com.github.wanderwise_inc.app.data.GoogleSignInLauncher
 import com.github.wanderwise_inc.app.model.profile.DEFAULT_OFFLINE_PROFILE
-import com.github.wanderwise_inc.app.model.profile.Profile
-import com.github.wanderwise_inc.app.ui.navigation.graph.Graph
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.first
 
