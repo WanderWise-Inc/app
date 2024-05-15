@@ -69,7 +69,7 @@ fun ProfileScreen(
     Log.d("ProfileScreen", "ProfileScreen")
   val profile = profileViewModel.getActiveProfile()
   val currentUid = profileViewModel.getUserUid()
-    var ctr = remember { mutableStateOf(0) }
+    //var ctr = remember { mutableStateOf(0) }
 
   val userItineraries by
       itineraryViewModel.getUserItineraries(currentUid).collectAsState(initial = emptyList())
@@ -114,7 +114,7 @@ fun ProfileScreen(
             // Column to layout profile details vertically and centered.
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
               // Display the user's profile picture.
-              ProfilePictureWithDropDown(profile, profileViewModel, imageRepository, ctr)
+              ProfilePictureWithDropDown(profile, profileViewModel, imageRepository/*, ctr*/)
               // Display the user's username with top padding.
               Username(profile!!, modifier = Modifier.padding(100.dp))
               // Display the user's "Wander Score".
@@ -143,7 +143,7 @@ fun ProfilePictureWithDropDown(
     profile: Profile?,
     profileViewModel: ProfileViewModel,
     imageRepository: ImageRepository,
-    ctr : MutableState<Int>
+    //ctr : MutableState<Int>
 ) {
   var isProfilePictureChangeDropdownOpen by remember { mutableStateOf(false) }
   val profilePictureModifier =
@@ -151,9 +151,9 @@ fun ProfilePictureWithDropDown(
           .size(100.dp)
           .clickable { isProfilePictureChangeDropdownOpen = true }
   ProfilePicture(
-      profile = profile, profileViewModel = profileViewModel, modifier = profilePictureModifier, ctr = ctr)
+      profile = profile, profileViewModel = profileViewModel, modifier = profilePictureModifier/*, ctr = ctr*/)
   ProfilePictureChangeDropdownMenu(
-      ctr = ctr,
+      //ctr = ctr,
       expanded = isProfilePictureChangeDropdownOpen,
       onDismissRequest = { isProfilePictureChangeDropdownOpen = false },
       imageRepository = imageRepository,
@@ -206,7 +206,7 @@ fun WanderScore(profile: Profile) {
 // Composable function for displaying a dropdown menu for changing the profile picture.
 @Composable
 fun ProfilePictureChangeDropdownMenu(
-    ctr : MutableState<Int>,
+    //ctr : MutableState<Int>,
     expanded: Boolean,
     onDismissRequest: () -> Unit,
     imageRepository: ImageRepository,
@@ -240,7 +240,7 @@ fun ProfilePictureChangeDropdownMenu(
               onClick = {
                 // Call to upload image to storage with a specific path.
                 imageRepository.uploadImageToStorage("profilePicture/${profile.userUid}")
-                  ctr.value++
+                  //ctr.value++
               })
         }
   }
