@@ -149,7 +149,7 @@ fun LocationSelector(createItineraryViewModel: CreateItineraryViewModel) {
           textAlign = TextAlign.Center,
           text = "Create a new itinerary",
       )*/
-      Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.testTag(TestTags.FIRST_LOCATION)) {
+      Row(verticalAlignment = Alignment.CenterVertically) {
         Icon(
             Icons.Filled.LocationOn,
             contentDescription = "Location 1",
@@ -159,19 +159,8 @@ fun LocationSelector(createItineraryViewModel: CreateItineraryViewModel) {
             onValueChange = { location1 = it },
             label = { Text("location 1...") },
             placeholder = { Text("location 1...") },
-            modifier =
-                Modifier.padding(start = 25.dp).onKeyEvent {
-                  if (it.nativeKeyEvent.keyCode == KEYCODE_ENTER) { // overwrite enter key
-                    // onSearch(location1)
-                    true
-                  }
-                  false
-                },
+            modifier = Modifier.padding(start = 25.dp).testTag(TestTags.FIRST_LOCATION),
             shape = RoundedCornerShape(20.dp),
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-            keyboardActions =
-                KeyboardActions(
-                    onDone = { /*onSearch(location1)*/}, onSearch = { /*onSearch(location1)*/}),
             singleLine = true)
       }
 
@@ -180,7 +169,7 @@ fun LocationSelector(createItineraryViewModel: CreateItineraryViewModel) {
           contentDescription = "more",
           modifier = Modifier.padding(start = 10.dp))
 
-      Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.testTag(TestTags.SECOND_LOCATION)) {
+      Row(verticalAlignment = Alignment.CenterVertically) {
         Icon(
             Icons.Filled.LocationOn,
             contentDescription = "Location 2",
@@ -190,7 +179,7 @@ fun LocationSelector(createItineraryViewModel: CreateItineraryViewModel) {
             onValueChange = { location2 = it },
             label = { Text("location 2...") },
             placeholder = { Text("location 2...") },
-            modifier = Modifier.padding(start = 25.dp),
+            modifier = Modifier.padding(start = 25.dp).testTag(TestTags.SECOND_LOCATION),
             shape = RoundedCornerShape(20.dp))
       }
     }

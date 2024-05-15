@@ -36,29 +36,9 @@ object LocationsApiServiceFactory {
   private const val BASE_URL = "https://geocode.maps.co/"
 
   fun createLocationsApiService(): LocationsApiService {
-    val logger =
-        HttpLoggingInterceptor(
-            HttpLoggingInterceptor.Logger {
-              @Override
-              fun log(message: String) {
-                Log.d("LOCATIONS_LOGGER", message)
-              }
-
-              @Override
-              fun intercept(chain: Interceptor.Chain) {
-                chain.request()
-              }
-            })
-
     val retrofit =
         Retrofit.Builder()
             .baseUrl(BASE_URL)
-            // .client(OkHttpClient().newBuilder()
-            // .addInterceptor(logger.setLevel(HttpLoggingInterceptor.Level.BODY))
-            // .readTimeout(, TimeUnit.SECONDS)
-            // .writeTimeout(WRITE_TIMEOUT_SECONDS, TimeUnit.SECONDS)
-            // .connectTimeout(CONNECTION_TIMEOUT_SECONDS, TimeUnit.SECONDS)
-            // .build())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
