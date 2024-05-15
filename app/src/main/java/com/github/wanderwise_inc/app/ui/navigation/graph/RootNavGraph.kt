@@ -10,23 +10,24 @@ import com.github.wanderwise_inc.app.ui.home.HomeScreen
 import com.github.wanderwise_inc.app.viewmodel.BottomNavigationViewModel
 import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
+import com.github.wanderwise_inc.app.viewmodel.LoginViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun RootNavigationGraph(
-    googleSignInLauncher: GoogleSignInLauncher,
     profileViewModel: ProfileViewModel,
     itineraryViewModel: ItineraryViewModel,
     createItineraryViewModel: CreateItineraryViewModel,
     bottomNavigationViewModel: BottomNavigationViewModel,
+    loginViewModel: LoginViewModel,
     imageRepository: ImageRepository,
     navController: NavHostController,
     firebaseAuth: FirebaseAuth
 ) {
   NavHost(
       navController = navController, route = Graph.ROOT, startDestination = Graph.AUTHENTICATION) {
-        authNavGraph(googleSignInLauncher)
+        authNavGraph(loginViewModel, navController)
         composable(route = Graph.HOME) {
           HomeScreen(
               imageRepository = imageRepository,
