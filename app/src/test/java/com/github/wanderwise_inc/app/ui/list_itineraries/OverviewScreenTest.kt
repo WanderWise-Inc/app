@@ -13,6 +13,7 @@ import androidx.navigation.NavHostController
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.model.location.FakeItinerary
 import com.github.wanderwise_inc.app.model.location.Itinerary
+import com.github.wanderwise_inc.app.model.profile.Profile
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
@@ -41,6 +42,7 @@ class OverviewScreenTest {
 
   private var sliderPositionPriceState = mutableStateOf(0f..100f)
   private var sliderPositionTimeState = mutableStateOf(0f..24f)
+    private val profile = Profile(userUid = "0", displayName = "me", bio = "bio")
 
   private val testItineraries =
       listOf(FakeItinerary.SAN_FRANCISCO, FakeItinerary.SWITZERLAND, FakeItinerary.TOKYO)
@@ -48,6 +50,8 @@ class OverviewScreenTest {
   @Before
   fun setup() {
     MockKAnnotations.init(this)
+      every { imageRepository.fetchImage(any()) } returns flow { emit(null) }
+      every { profileViewModel.getProfile(any()) } returns flow { emit(profile) }
 
     for (itinerary in testItineraries) {
       itinerary.uid = itinerary.title // set uid for testTags
