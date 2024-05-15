@@ -51,7 +51,7 @@ fun CreationStepPreviewBanner(createItineraryViewModel: CreateItineraryViewModel
 
               item {
                 ItineraryBanner(
-                    itinerary = itinerary,
+                    itinerary = createItineraryViewModel.getFocusedItinerary()?:dummyItinerary,
                     onLikeButtonClick = onLikeButtonClick,
                     onBannerClick = onBannerClick)
               }
