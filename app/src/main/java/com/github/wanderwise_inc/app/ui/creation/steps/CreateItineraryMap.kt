@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -36,6 +37,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.github.wanderwise_inc.app.model.location.Location
 import com.github.wanderwise_inc.app.ui.TestTags
@@ -59,7 +61,7 @@ import kotlinx.coroutines.runBlocking
 fun CreateItineraryMapWithSelector(
     createItineraryViewModel: CreateItineraryViewModel,
 ) {
-  Scaffold(bottomBar = { LocationSelector(createItineraryViewModel) }) { innerPadding ->
+  Scaffold(bottomBar = { ChooseYourWayOfCreation()}) { innerPadding ->
     CreateItineraryMap(
         createItineraryViewModel = createItineraryViewModel, innerPaddingValues = innerPadding)
   }
@@ -139,13 +141,50 @@ fun CreateItineraryMap(
 }
 
 @Composable
+fun ChooseYourWayOfCreation(){
+    BottomAppBar(
+        modifier = Modifier
+            .height(250.dp)
+            .fillMaxWidth(),
+        containerColor = MaterialTheme.colorScheme.primaryContainer,
+        contentColor = MaterialTheme.colorScheme.primary,
+    ) {
+
+        Column(
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+
+            Text(
+                text = "Start your Itinerary creation!",
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.padding(5.dp)
+            )
+            Spacer(modifier = Modifier.height(50.dp))
+            Row(
+                modifier = Modifier.padding(16.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                Button(onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth(0.5f)) {
+                    Text("Create a live Itinerary", textAlign = TextAlign.Center)
+                }
+                Button(onClick = { /*TODO*/ }, modifier= Modifier.fillMaxWidth()) {
+                    Text("Create a previous Itinerary", textAlign = TextAlign.Center)
+                }
+
+            }
+            Spacer(modifier = Modifier.height(50.dp))
+        }
+    }
+}
+
+@Composable
 fun LocationSelector(createItineraryViewModel: CreateItineraryViewModel) {
   var location1 by remember { mutableStateOf("") }
-    val coroutineScope = rememberCoroutineScope()
+
   var location2 by remember { mutableStateOf("") }
-    var isClicked by remember { mutableStateOf(false) }
-    var location by remember { mutableStateOf<android.location.Location?>(null) }
-if (!isClicked) {
+
+
   BottomAppBar(
       modifier = Modifier
           .height(250.dp)
@@ -154,27 +193,6 @@ if (!isClicked) {
       contentColor = MaterialTheme.colorScheme.primary,
   ) {
     Column {
-        Button(onClick = {
-            isClicked = true
-
-            coroutineScope.launch {
-                location = createItineraryViewModel.getUserLocation().first()
-
-                Log.d("LOCATION ENTERED", "Location: ${location?.latitude}, ${location?.longitude}")
-            }
-
-        }) {
-            Log.d("LOCATION BUTTON", "Location: ${location?.latitude}, ${location?.longitude}")
-            location?.let {loc ->
-                Log.d("LOCATION MARKER", "Location: ${loc.latitude}, ${loc.longitude}")
-                Marker(
-                    state = MarkerState(position = LatLng(loc.latitude, loc.longitude)),
-                    icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED),
-
-                    )
-            }
-            Text(text = "Track me")
-        }
 
 
       /*Text(
@@ -219,6 +237,6 @@ if (!isClicked) {
             shape = RoundedCornerShape(20.dp))
       }
     }
-  }
+
 }
 }
