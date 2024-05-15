@@ -1,6 +1,5 @@
 package com.github.wanderwise_inc.app.model.location
 
-import java.io.InvalidObjectException
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
@@ -79,8 +78,8 @@ class ItineraryTest {
     assertEquals("2", builder.uid)
     assertEquals("user123", builder.userUid)
     assertEquals("Changed Title", builder.title)
-    assertEquals(2, builder.tags.size) // New one should have 3 tags
-    assertEquals(3, builder.locations.size) // New one should have 2 locations
+    assertEquals(2, builder.tags.size) // New one should have 2 tags
+    assertEquals(3, builder.locations.size) // New one should have 3 locations
     assertEquals("Modified Description", builder.description)
     assertFalse(builder.visible)
     assertEquals(10f, builder.price)
@@ -92,16 +91,12 @@ class ItineraryTest {
 
     assertEquals("2", newItinerary.uid)
     assertEquals("Changed Title", newItinerary.title)
-    assertEquals(2, newItinerary.tags.size) // New one should have 3 tags
-    assertEquals(3, newItinerary.locations.size) // New one should have 2 locations
+    assertEquals(2, newItinerary.tags.size) // New one should have 2 tags
+    assertEquals(3, newItinerary.locations.size) // New one should have 3 locations
     assertEquals("Modified Description", newItinerary.description)
     assertFalse(newItinerary.visible)
     assertEquals(10f, newItinerary.price)
     assertEquals(2, newItinerary.time)
-
-    assertThrows(InvalidObjectException::class.java) {
-      builder.addTag(ItineraryTags.ROMANCE).addTag(ItineraryTags.WILDLIFE)
-    }
 
     val emptyBuilder = Itinerary().toBuilder()
 

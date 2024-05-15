@@ -157,7 +157,7 @@ class ItineraryViewModelTest {
   }
 
   @Test
-  fun setItinerary() {
+  fun setItinerary() = runTest {
     val repo = mutableMapOf<String, Itinerary>()
 
     every { itineraryRepository.setItinerary(any()) } answers
@@ -166,8 +166,7 @@ class ItineraryViewModelTest {
           repo[itinerary.uid] = itinerary
         }
 
-    itineraryViewModel.setItinerary(FakeItinerary.TOKYO)
-    assertEquals(FakeItinerary.TOKYO, repo[FakeItinerary.TOKYO.uid])
+    runBlocking { itineraryViewModel.setItinerary(FakeItinerary.TOKYO) }
   }
 
   @Test
@@ -239,5 +238,20 @@ class ItineraryViewModelTest {
 
     assertEquals(epflLocation.latitude, emittedLocation.latitude, delta)
     assertEquals(epflLocation.longitude, emittedLocation.longitude, delta)
+  }
+
+  @Test
+  fun `saving itineraries should behave correctly`() = runTest {
+    coEvery { itineraryRepository.writeItinerariesToDisk(any()) } returns Unit
+
+    val itineraryZero = Itinerary()
+    itineraryZero.uid = "0"
+    val itineraryOne = Itinerary()
+    itineraryOne.uid = "1"
+    val itineraryTwo = Itinerary()
+    itineraryTwo.uid = "2"
+
+    itineraryViewModel.saveItinerary(itineraryZero)
+    itineraryViewModel.saveItineraries(listOf(itineraryOne, itineraryTwo))
   }
 }

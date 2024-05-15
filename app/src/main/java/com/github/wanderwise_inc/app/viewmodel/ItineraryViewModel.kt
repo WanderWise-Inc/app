@@ -92,9 +92,19 @@ open class ItineraryViewModel(
     }
   }
 
+  /** saves a list of `Itinerary` to persistent storage */
+  fun saveItineraries(itineraries: List<Itinerary>) {
+    viewModelScope.launch { itineraryRepository.writeItinerariesToDisk(itineraries) }
+  }
+
+  /** saves an `Itinerary` to persistent storage */
+  fun saveItinerary(itinerary: Itinerary) {
+    viewModelScope.launch { itineraryRepository.writeItinerariesToDisk(listOf(itinerary)) }
+  }
+
   /** @brief sets an itinerary in DB */
   fun setItinerary(itinerary: Itinerary) {
-    itineraryRepository.setItinerary(itinerary)
+    viewModelScope.launch { itineraryRepository.setItinerary(itinerary) }
   }
 
   /** @brief deletes an itinerary from the database */
@@ -140,32 +150,4 @@ open class ItineraryViewModel(
   fun getUserLocation(): Flow<Location> {
     return locationClient.getLocationUpdates(1000)
   }
-
-  /**
-   * @return Itinerary being built by the user currently. The composable is responsible for setting
-   *   it to `null` when the creation is finished
-   *
-   * If there is no itinerary currently being created, initializes a new one with the provided
-   * `userUid`
-   *
-   * **USAGE EXAMPLE**
-   *
-   * ```
-   * val newItineraryBuilder = mapViewModel.getNewItinerary()!!
-   * // any attributes that should cause a recomposition should be remembered
-   * var title by remember {
-   *  mutableStateOf(newItinerary.title)
-   * }
-   * Button (
-   *  onClick = {
-   *    title = newTitle                        // update mutableState for recomposition
-   *    newItineraryBuilder.addTitle(newTitle)  // update shared state across screens
-   *  }
-   * )
-   * ```
-   */
-
-  /* fun filterItinerariesByPrice(priceRange: FloatRange): List<Itinerary> {
-    return allItineraries.filter { it.price in priceRange }
-  }*/
 }

@@ -4,16 +4,20 @@ package com.github.wanderwise_inc.app.di
 // import androidx.datastore.core.DataStore
 // import com.github.wanderwise_inc.app.proto.location.SavedItineraries
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
+import androidx.datastore.core.DataStore
 import com.github.wanderwise_inc.app.data.DefaultGoogleSignInLauncher
 import com.github.wanderwise_inc.app.data.DirectionsRepositoryImpl
 import com.github.wanderwise_inc.app.data.ImageRepositoryImpl
 import com.github.wanderwise_inc.app.data.ItineraryRepositoryImpl
 import com.github.wanderwise_inc.app.data.ProfileRepositoryImpl
+import com.github.wanderwise_inc.app.data.ProfileRepositoryTestImpl
 import com.github.wanderwise_inc.app.data.SignInRepositoryImpl
 import com.github.wanderwise_inc.app.network.ApiServiceFactory
+import com.github.wanderwise_inc.app.proto.location.SavedItineraries
 import com.github.wanderwise_inc.app.viewmodel.BottomNavigationViewModel
 import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
@@ -31,8 +35,8 @@ object AppModule {
   private lateinit var signInLauncher: ActivityResultLauncher<Intent>
   private lateinit var sinInIntent: Intent
   private lateinit var locationClient: LocationClient
-  // private lateinit var savedItinerariesDataStore: DataStore<SavedItineraries>
-  // private lateinit var context: Context
+  private lateinit var savedItinerariesDataStore: DataStore<SavedItineraries>
+  private lateinit var context: Context
 
   init {
     Log.d("ModuleProvider", "Using AppModule")
@@ -43,15 +47,15 @@ object AppModule {
       signInLauncher: ActivityResultLauncher<Intent>,
       sinInIntent: Intent,
       locationClient: LocationClient,
-      // savedItinerariesDataStore: DataStore<SavedItineraries>,
-      // context: Context,
+      savedItinerariesDataStore: DataStore<SavedItineraries>,
+      context: Context,
   ) {
     this.imageLauncher = imageLauncher
     this.signInLauncher = signInLauncher
     this.sinInIntent = sinInIntent
     this.locationClient = locationClient
-    // this.savedItinerariesDataStore = savedItinerariesDataStore
-    // this.context = context
+    this.savedItinerariesDataStore = savedItinerariesDataStore
+    this.context = context
   }
 
   val firebaseAuth by lazy { FirebaseAuth.getInstance() }
@@ -67,7 +71,7 @@ object AppModule {
   }
 
   val itineraryRepository by lazy {
-    ItineraryRepositoryImpl(Firebase.firestore /*, context, savedItinerariesDataStore*/)
+    ItineraryRepositoryImpl(Firebase.firestore, context, savedItinerariesDataStore)
     // ItineraryRepositoryTestImpl()
   }
 

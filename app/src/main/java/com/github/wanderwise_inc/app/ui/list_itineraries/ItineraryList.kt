@@ -79,6 +79,10 @@ fun ItinerariesListScrollable(
               modifier = Modifier.padding(5.dp, 10.dp))
         } // PaModifier.padding(5.dp, 10.dp))
   } else {
+    /* store liked itineraries in persistent storage */
+    if (parent == ItineraryListParent.LIKED && itineraries.isNotEmpty())
+        itineraryViewModel.saveItineraries(itineraries)
+
     LazyColumn(
         modifier = Modifier.padding(paddingValues).testTag(TestTags.ITINERARY_LIST_SCROLLABLE),
         verticalArrangement = spacedBy(15.dp)) {

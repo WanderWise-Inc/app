@@ -1,6 +1,7 @@
 package com.github.wanderwise_inc.app
 
 import android.Manifest
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -11,6 +12,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.app.ActivityCompat
+import androidx.datastore.core.DataStore
+import androidx.datastore.dataStore
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -23,6 +26,8 @@ import com.github.wanderwise_inc.app.data.ItineraryRepository
 import com.github.wanderwise_inc.app.data.ProfileRepository
 import com.github.wanderwise_inc.app.data.SignInRepository
 import com.github.wanderwise_inc.app.di.AppModule
+import com.github.wanderwise_inc.app.disk.SavedItinerariesSerializer
+import com.github.wanderwise_inc.app.proto.location.SavedItineraries
 import com.github.wanderwise_inc.app.ui.navigation.graph.RootNavigationGraph
 import com.github.wanderwise_inc.app.ui.theme.WanderWiseTheme
 import com.github.wanderwise_inc.app.viewmodel.BottomNavigationViewModel
@@ -87,6 +92,9 @@ class MainActivity : ComponentActivity() {
         applicationContext, LocationServices.getFusedLocationProviderClient(applicationContext))
   }
 
+  private val Context.savedItinerariesDataStore: DataStore<SavedItineraries> by
+      dataStore(fileName = "saved_itineraries.pb", serializer = SavedItinerariesSerializer)
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
@@ -113,7 +121,13 @@ class MainActivity : ComponentActivity() {
   private fun init() {
     requestPermissions()
 
-    AppModule.initialize(imageLauncher, signInLauncher, signInIntent, locationClient)
+    AppModule.initialize(
+        imageLauncher,
+        signInLauncher,
+        signInIntent,
+        locationClient,
+        savedItinerariesDataStore,
+        applicationContext)
 
     firebaseAuth = AppModule.firebaseAuth
     firebaseStorage = AppModule.firebaseStorage

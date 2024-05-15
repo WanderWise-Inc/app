@@ -1,5 +1,6 @@
 package com.github.wanderwise_inc.app.model.location
 
+import com.github.wanderwise_inc.app.proto.location.ItineraryProto
 import com.google.android.gms.maps.model.LatLng
 import java.io.InvalidObjectException
 
@@ -17,6 +18,18 @@ object ItineraryLabels {
   const val PRICE = "price"
   const val TIME = "time"
   const val NUM_LIKES = "numLikes"
+}
+
+object ItineraryDefaultValues {
+  const val UID: String = ""
+  const val USER_UID: String = ""
+  // val LOCATIONS: MutableList<Location> = mutableListOf()
+  const val TITLE: String = ""
+  // val TAGS: MutableList<Tag> = mutableListOf()
+  const val DESCRIPTION: String = ""
+  const val VISIBLE: Boolean = true
+  const val PRICE: Float = -1f
+  const val TIME: Int = -1
 }
 
 /** @brief score of an itinerary based on some preferences */
@@ -55,15 +68,15 @@ data class Itinerary(
    * @brief builder for an itinerary
    */
   data class Builder(
-      var uid: String = "",
-      val userUid: String,
+      var uid: String? = null,
+      val userUid: String? = null,
       val locations: MutableList<Location> = mutableListOf(),
-      var title: String = "",
+      var title: String? = null,
       val tags: MutableList<Tag> = mutableListOf(),
       var description: String? = null,
-      var visible: Boolean = false,
-      var price: Float = 0f,
-      var time: Int = 0
+      var visible: Boolean = ItineraryDefaultValues.VISIBLE, // could be null but complicated
+      var price: Float? = null,
+      var time: Int? = null
   ) {
     /**
      * @param location the location to be added
@@ -92,8 +105,8 @@ data class Itinerary(
      * @brief add a tag to the itinerary builder list of tags
      */
     fun addTag(tag: Tag): Builder {
-      if (tags.size >= MAX_TAGS)
-          throw InvalidObjectException("An itinerary should not have more than $MAX_TAGS tags")
+      // if (tags.size >= MAX_TAGS)
+      // throw InvalidObjectException("An itinerary should not have more than $MAX_TAGS tags")
       tags.add(tag)
       return this
     }
@@ -150,15 +163,15 @@ data class Itinerary(
       // require(locations.isNotEmpty()) { "At least one location must be provided" }
       // require(title.isNotBlank()) { "Title must not be blank" }
       return Itinerary(
-          uid = uid,
-          userUid = userUid,
+          uid = uid ?: ItineraryDefaultValues.UID,
+          userUid = userUid ?: ItineraryDefaultValues.USER_UID,
           locations = locations.toList(),
-          title = title,
+          title = title ?: ItineraryDefaultValues.TITLE,
           tags = tags.toList(),
-          description = description,
+          description = description ?: ItineraryDefaultValues.DESCRIPTION,
           visible = visible,
-          price = price,
-          time = time)
+          price = price ?: ItineraryDefaultValues.PRICE,
+          time = time ?: ItineraryDefaultValues.TIME)
     }
   }
 
@@ -175,6 +188,19 @@ data class Itinerary(
         ItineraryLabels.PRICE to price,
         ItineraryLabels.TIME to time,
         ItineraryLabels.NUM_LIKES to numLikes)
+  }
+  /** Conversion method for converting to protobuf */
+  fun toProto(): ItineraryProto {
+    return ItineraryProto.newBuilder()
+        .setUid(uid)
+        .setUid(userUid)
+        .addAllLocations(locations.map { it.toProto() })
+        .setTitle(title)
+        .addAllTags(tags)
+        .setDescription(description)
+        .setPrice(price)
+        .setTime(time)
+        .build()
   }
 
   /**
