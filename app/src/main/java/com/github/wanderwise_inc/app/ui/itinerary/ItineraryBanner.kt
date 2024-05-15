@@ -62,9 +62,7 @@ fun ItineraryBanner(
 ) {
 
   val imageId = R.drawable.defaultitinerary
-    /*val defaultImageFlow = remember(itinerary) { imageRepository.fetchImage("itineraryPictures/defaultItinerary.png") }*/
     val imageFlow = remember(itinerary) { imageRepository.fetchImage("itineraryPictures/${itinerary.uid}") }
-    /*val defaultImage by defaultImageFlow.collectAsState(initial = null)*/
     val image by imageFlow.collectAsState(initial = null)
     val painter : Painter = if (image != null) BitmapPainter(image!!.asImageBitmap()) else  painterResource(id = imageId)
   var isLiked by remember { mutableStateOf(isLikedInitially) }
