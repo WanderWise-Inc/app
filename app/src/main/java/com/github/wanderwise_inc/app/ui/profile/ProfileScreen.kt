@@ -110,7 +110,7 @@ fun ProfileScreen(
               // Display the user's username with top padding.
               Username(profile!!, modifier = Modifier.padding(100.dp))
               // Display the user's "Wander Score".
-              WanderScore(profile!!)
+              WanderScore(profile!!, itineraryViewModel)
               // Display badges the user has earned.
               WanderBadges()
               // List scrollable itineraries associated with the user.
@@ -176,7 +176,7 @@ fun WanderBadges() {
 }
 
 @Composable
-fun WanderScore(profile: Profile) {
+fun WanderScore(profile: Profile, itineraryViewModel: ItineraryViewModel) {
   Box(
       modifier =
           Modifier.clip(MaterialTheme.shapes.extraLarge)
@@ -184,8 +184,16 @@ fun WanderScore(profile: Profile) {
               .border(
                   BorderStroke(1.dp, MaterialTheme.colorScheme.inverseOnSurface),
                   shape = MaterialTheme.shapes.extraLarge)) {
+        val ownItineraries by
+            itineraryViewModel
+                .getUserItineraries(profile.userUid)
+                .collectAsState(initial = emptyList())
+        var score = 0
+        for (itinerary in ownItineraries) {
+          score += itinerary.numLikes * 10
+        }
         Text(
-            text = "369 WanderPoints",
+            text = "$score WanderPoints",
             modifier = Modifier.padding(8.dp),
             fontWeight = FontWeight.Bold)
       }
