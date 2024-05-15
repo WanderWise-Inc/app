@@ -139,8 +139,7 @@ open class ItineraryViewModel(
   }
 
   private val _locationsLiveData = MutableLiveData<List<Location>>()
-  private val locationsLiveData: LiveData<List<Location>> =
-      _locationsLiveData // gettable from view
+  private val locationsLiveData: LiveData<List<Location>> = _locationsLiveData // gettable from view
 
   /* gets the places corresponding to the queried name */
   fun fetchPlaces(name: String) {

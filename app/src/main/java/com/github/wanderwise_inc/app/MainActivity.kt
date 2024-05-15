@@ -99,14 +99,14 @@ class MainActivity : ComponentActivity() {
         Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
           navController = rememberNavController()
           RootNavigationGraph(
-          googleSignInLauncher,
-          profileViewModel,
-          itineraryViewModel,
-          createItineraryViewModel,
-          bottomNavigationViewModel,
-          imageRepository,
-          navController,
-          firebaseAuth)
+              googleSignInLauncher,
+              profileViewModel,
+              itineraryViewModel,
+              createItineraryViewModel,
+              bottomNavigationViewModel,
+              imageRepository,
+              navController,
+              firebaseAuth)
         }
       }
     }

@@ -1,9 +1,6 @@
 package com.github.wanderwise_inc.app.network
 
-import android.util.Log
 import com.google.gson.annotations.SerializedName
-import okhttp3.Interceptor
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

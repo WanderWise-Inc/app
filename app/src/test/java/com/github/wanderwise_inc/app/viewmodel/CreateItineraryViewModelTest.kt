@@ -27,7 +27,7 @@ class CreateItineraryViewModelTest() {
   @MockK private lateinit var itineraryRepository: ItineraryRepository
 
   @MockK private lateinit var directionsRepository: DirectionsRepository
-  
+
   @MockK private lateinit var locationsRepository: LocationsRepository
 
   @MockK private lateinit var userLocationClient: UserLocationClient
@@ -42,7 +42,8 @@ class CreateItineraryViewModelTest() {
     Dispatchers.setMain(testDispatcher)
     MockKAnnotations.init(this)
     createItineraryViewModel =
-        CreateItineraryViewModel(itineraryRepository, directionsRepository, locationsRepository, userLocationClient)
+        CreateItineraryViewModel(
+            itineraryRepository, directionsRepository, locationsRepository, userLocationClient)
   }
 
   @Test
