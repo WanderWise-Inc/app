@@ -6,87 +6,103 @@ import androidx.lifecycle.ViewModel
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.data.ProfileRepository
 import com.github.wanderwise_inc.app.model.profile.Profile
+import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.Flow
 
 class ProfileViewModel(
     private val profileRepository: ProfileRepository,
     private val imageRepository: ImageRepository
 ) : ViewModel() {
-  private var isSignInComplete = false // set on sign-in success
-  private lateinit var activeProfile: Profile // set on sign-in
+    private var isSignInComplete = false // set on sign-in success
+    private lateinit var activeProfile: Profile // set on sign-in
 
-  /** @return flow of a user profile */
-  fun getProfile(userUid: String): Flow<Profile?> {
-    Log.d("USER SIGN IN", "CALLING GET PROFILE")
-    return profileRepository.getProfile(userUid)
-  }
-
-  /** @return all profiles in data source */
-  fun getAllProfiles(): Flow<List<Profile>> {
-    return profileRepository.getAllProfiles()
-  }
-
-  /** Sets a profile in data source */
-  fun setProfile(profile: Profile) {
-    profileRepository.setProfile(profile)
-  }
-
-  /** Deletes a profile from the data source */
-  fun deleteProfile(profile: Profile) {
-    profileRepository.deleteProfile(profile)
-  }
-
-  /** @return the profile picture of a user as a bitmap flow for asynchronous drawing */
-  fun getProfilePicture(profile: Profile): Flow<Bitmap?> {
-    return imageRepository.fetchImage("profilePicture/${profile.userUid}")
-  }
-
-  /** @return the default profile picture asset */
-  fun getDefaultProfilePicture(): Flow<Bitmap?> {
-    return imageRepository.fetchImage("profilePicture/defaultProfilePicture.jpg")
-  }
-
-  fun addLikedItinerary(userUid: String, itineraryUid: String) {
-    profileRepository.addItineraryToLiked(userUid, itineraryUid)
-  }
-
-  fun removeLikedItinerary(userUid: String, itineraryUid: String) {
-    profileRepository.removeItineraryFromLiked(userUid, itineraryUid)
-  }
-
-  suspend fun checkIfItineraryIsLikedByActiveProfile(itineraryUid: String): Boolean {
-    return if (isSignInComplete)
-        profileRepository.checkIfItineraryIsLiked(getUserUid(), itineraryUid)
-    else false
-  }
-
-  suspend fun checkIfItineraryIsLiked(userUid: String, itineraryUid: String): Boolean {
-    return profileRepository.checkIfItineraryIsLiked(userUid, itineraryUid)
-  }
-
-  /**
-   * @return all of the profile's liked itineraries, or an empty list if there is no actively signed
-   *   in profile
-   */
-  fun getLikedItineraries(userUid: String): Flow<List<String>> {
-    return profileRepository.getLikedItineraries(userUid)
-  }
-
-  /** Sets the active profile. Called on sign-in and only called once */
-  fun setActiveProfile(profile: Profile) {
-    if (!isSignInComplete) {
-      Log.d("ProfileViewModel", "Setting active profile to: $profile")
-      activeProfile = profile
-      isSignInComplete = true
+    /** @return flow of a user profile */
+    fun getProfile(userUid: String): Flow<Profile?> {
+        Log.d("USER SIGN IN", "CALLING GET PROFILE")
+        return profileRepository.getProfile(userUid)
     }
-  }
 
-  /**
-   * Returns the profile of the active user, as initialized at sign-in. If sign-in in was
-   * unsuccessful, this will return `DEFAULT_OFFLINE_PROFILE` as defined in `Profile.kt`
-   */
-  fun getActiveProfile(): Profile = activeProfile
+    /** @return all profiles in data source */
+    fun getAllProfiles(): Flow<List<Profile>> {
+        return profileRepository.getAllProfiles()
+    }
 
-  /** Returns the UID of the signed in profile */
-  fun getUserUid(): String = activeProfile.userUid
+    /** Sets a profile in data source */
+    fun setProfile(profile: Profile) {
+        profileRepository.setProfile(profile)
+    }
+
+    /** Deletes a profile from the data source */
+    fun deleteProfile(profile: Profile) {
+        profileRepository.deleteProfile(profile)
+    }
+
+    /** @return the profile picture of a user as a bitmap flow for asynchronous drawing */
+    fun getProfilePicture(profile: Profile): Flow<Bitmap?> {
+        return imageRepository.fetchImage("profilePicture/${profile.userUid}")
+    }
+
+    /** @return the default profile picture asset */
+    fun getDefaultProfilePicture(): Flow<Bitmap?> {
+        return imageRepository.fetchImage("profilePicture/defaultProfilePicture.jpg")
+    }
+
+    fun addLikedItinerary(userUid: String, itineraryUid: String) {
+        profileRepository.addItineraryToLiked(userUid, itineraryUid)
+    }
+
+    fun removeLikedItinerary(userUid: String, itineraryUid: String) {
+        profileRepository.removeItineraryFromLiked(userUid, itineraryUid)
+    }
+
+    suspend fun checkIfItineraryIsLikedByActiveProfile(itineraryUid: String): Boolean {
+        return if (isSignInComplete)
+            profileRepository.checkIfItineraryIsLiked(getUserUid(), itineraryUid)
+        else false
+    }
+
+    suspend fun checkIfItineraryIsLiked(userUid: String, itineraryUid: String): Boolean {
+        return profileRepository.checkIfItineraryIsLiked(userUid, itineraryUid)
+    }
+
+    /**
+     * @return all of the profile's liked itineraries, or an empty list if there is no actively signed
+     *   in profile
+     */
+    fun getLikedItineraries(userUid: String): Flow<List<String>> {
+        return profileRepository.getLikedItineraries(userUid)
+    }
+
+    /** Sets the active profile. Called on sign-in and only called once */
+    fun setActiveProfile(profile: Profile) {
+        if (!isSignInComplete) {
+            Log.d("ProfileViewModel", "Setting active profile to: $profile")
+            activeProfile = profile
+            isSignInComplete = true
+        }
+    }
+
+    /**
+     * Returns the profile of the active user, as initialized at sign-in. If sign-in in was
+     * unsuccessful, this will return `DEFAULT_OFFLINE_PROFILE` as defined in `Profile.kt`
+     */
+    fun getActiveProfile(): Profile = activeProfile
+
+    /** Returns the UID of the signed in profile */
+    fun getUserUid(): String = activeProfile.userUid
+
+    /** Creates a profile from a Firebase user */
+    fun createProfileFromFirebaseUser(user: FirebaseUser): Profile {
+        val username = user.displayName
+        val properUsername = username ?: ""
+        val uid = user.uid
+        val description = ""
+
+        return Profile(
+            displayName = properUsername,
+            userUid = uid,
+            bio = description,
+            profilePicture = user.photoUrl
+        )
+    }
 }
