@@ -39,8 +39,8 @@ class CreationStepPreviewKtTest() {
   @Before
   fun setup() {
     MockKAnnotations.init(this)
-      every { profileViewModel.getProfile(any()) } returns flow { emit(profile) }
-      every { imageRepository.fetchImage(any()) } returns flow { emit(null) }
+    every { profileViewModel.getProfile(any()) } returns flow { emit(profile) }
+    every { imageRepository.fetchImage(any()) } returns flow { emit(null) }
   }
 
   @Test
