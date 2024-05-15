@@ -4,18 +4,18 @@ import com.github.wanderwise_inc.app.DEFAULT_USER_UID
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.data.ProfileRepository
 import com.github.wanderwise_inc.app.model.location.FakeItinerary
-import com.github.wanderwise_inc.app.model.profile.DEFAULT_OFFLINE_PROFILE
 import com.github.wanderwise_inc.app.model.profile.Profile
+import com.google.firebase.auth.FirebaseUser
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.mockk
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -45,6 +45,7 @@ class ProfileViewModelTest {
     fun setup() {
         MockKAnnotations.init(this)
         profileViewModel = ProfileViewModel(profileRepository, imageRepository)
+        profileViewModel.setActiveProfile(testProfile)
     }
 
     @Test
@@ -139,7 +140,7 @@ class ProfileViewModelTest {
 
     @Test
     fun checkIfItineraryIsLiked() = runTest {
-        val repo = mutableMapOf(testProfile.uid to mutableListOf(FakeItinerary.TOKYO.uid))
+        val repo = mapOf(testProfile.userUid to listOf(FakeItinerary.TOKYO.uid))
 
         coEvery { profileRepository.checkIfItineraryIsLiked(any(), any()) } answers
                 {
@@ -148,25 +149,22 @@ class ProfileViewModelTest {
                     repo[user]!!.contains(itinerary)
                 }
 
-        val isLiked = profileViewModel.checkIfItineraryIsLiked(testProfile.uid, FakeItinerary.TOKYO.uid)
+        val isLiked = profileViewModel.checkIfItineraryIsLiked(testProfile.userUid, FakeItinerary.TOKYO.uid)
         assertTrue(isLiked)
     }
 
     @Test
     fun checkIfItineraryIsLikedByActiveProfile() = runTest {
-        val repo = mutableMapOf(testProfile.uid to mutableListOf(FakeItinerary.TOKYO.uid))
+        val repo = mapOf(testProfile.userUid to listOf(FakeItinerary.TOKYO.uid))
 
-        var isLiked = profileViewModel.checkIfItineraryIsLikedByActiveProfile(testProfile.uid)
-        assertFalse(isLiked)
-
-        profileViewModel.setActiveProfile(DEFAULT_OFFLINE_PROFILE)
         coEvery { profileRepository.checkIfItineraryIsLiked(any(), any()) } answers {
             val user = invocation.args[0] as String
+            println(user)
             val itinerary = invocation.args[1] as String
             repo[user]!!.contains(itinerary)
         }
 
-        isLiked = profileViewModel.checkIfItineraryIsLikedByActiveProfile(testProfile.uid)
+        val isLiked = profileViewModel.checkIfItineraryIsLikedByActiveProfile(FakeItinerary.TOKYO.uid)
         assertTrue(isLiked)
     }
 
@@ -178,5 +176,39 @@ class ProfileViewModelTest {
         val emittedLikedItineraryList =
             profileViewModel.getLikedItineraries(testProfile.uid).first()
         assertEquals(listOf(FakeItinerary.TOKYO.uid), emittedLikedItineraryList)
+    }
+
+    @Test
+    fun setActiveProfile() {
+        val newProfile = Profile("uwu")
+
+        profileViewModel.setActiveProfile(newProfile)
+
+        assertEquals(testProfile, profileViewModel.getActiveProfile())
+    }
+
+    @Test
+    fun getActiveProfile() {
+        assertEquals(testProfile, profileViewModel.getActiveProfile())
+    }
+
+    @Test
+    fun getActiveUserUid() {
+        assertEquals(testProfile.userUid, profileViewModel.getActiveUserUid())
+    }
+
+    @Test
+    fun createProfileFromFirebaseUser() {
+        val user = mockk<FirebaseUser>()
+        every { user.displayName } returns "276746"
+        every { user.uid } returns "oscarduong"
+        every { user.photoUrl } returns null
+
+        val newProfile = profileViewModel.createProfileFromFirebaseUser(user)
+
+        assertEquals("276746", newProfile.displayName)
+        assertEquals("oscarduong", newProfile.userUid)
+        assertEquals("", newProfile.bio)
+        assertNull(newProfile.profilePicture)
     }
 }
