@@ -15,9 +15,10 @@ import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.itinerary.ItineraryBanner
 import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
+import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 
 @Composable
-fun CreationStepPreviewBanner(createItineraryViewModel: CreateItineraryViewModel) {
+fun CreationStepPreviewBanner(createItineraryViewModel: CreateItineraryViewModel, profileViewModel: ProfileViewModel) {
   val dummyItinerary =
       Itinerary(
           "1",
@@ -46,21 +47,24 @@ fun CreationStepPreviewBanner(createItineraryViewModel: CreateItineraryViewModel
                 ItineraryBanner(
                     itinerary = dummyItinerary,
                     onLikeButtonClick = onLikeButtonClick,
-                    onBannerClick = onBannerClick)
+                    onBannerClick = onBannerClick,
+                    profileViewModel = profileViewModel)
               }
 
               item {
                 ItineraryBanner(
                     itinerary = itinerary,
                     onLikeButtonClick = onLikeButtonClick,
-                    onBannerClick = onBannerClick)
+                    onBannerClick = onBannerClick,
+                    profileViewModel = profileViewModel)
               }
 
               item {
                 ItineraryBanner(
                     itinerary = dummyItinerary,
                     onLikeButtonClick = onLikeButtonClick,
-                    onBannerClick = onBannerClick)
+                    onBannerClick = onBannerClick,
+                    profileViewModel = profileViewModel)
               }
             }
       }

@@ -107,7 +107,7 @@ fun CreationStepPreviewNav(
       startDestination = CreationPreviewOptionsDestinations.PreviewBanner.route,
       modifier = Modifier.padding(padding)) {
         composable(route = CreationPreviewOptionsDestinations.PreviewBanner.route) {
-          CreationStepPreviewBanner(createItineraryViewModel = createItineraryViewModel)
+          CreationStepPreviewBanner(createItineraryViewModel = createItineraryViewModel, profileViewModel = profileViewModel)
         }
         composable(route = CreationPreviewOptionsDestinations.PreviewItinerary.route) {
           CreationStepPreviewItinerary(

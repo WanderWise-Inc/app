@@ -114,7 +114,8 @@ fun ItinerariesListScrollable(
               itinerary = itinerary,
               onLikeButtonClick = onLikeButtonClick,
               onBannerClick = onBannerClick,
-              isLikedInitially = isLikedInitially)
+              isLikedInitially = isLikedInitially,
+                profileViewModel = profileViewModel)
           }
         }
   }
