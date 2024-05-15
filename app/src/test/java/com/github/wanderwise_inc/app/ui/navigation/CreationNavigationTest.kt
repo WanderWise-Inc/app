@@ -13,6 +13,7 @@ import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.model.location.Itinerary
+import com.github.wanderwise_inc.app.model.profile.Profile
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.creation.CreationScreen
 import com.github.wanderwise_inc.app.ui.creation.steps.CreationStepPreview
@@ -44,12 +45,15 @@ class CreationNavigationTest {
   @MockK private lateinit var bottomNavigationViewModel: BottomNavigationViewModel
   @MockK private lateinit var firebaseAuth: FirebaseAuth
   @MockK private lateinit var onFinished: () -> Unit
+  private val profile = Profile(userUid = "0", displayName = "me", bio = "bio")
 
   private lateinit var navController: TestNavHostController
 
   @Before
   fun setupNavHost() {
     MockKAnnotations.init(this)
+    every { imageRepository.fetchImage(any()) } returns flow { emit(null) }
+    every { profileViewModel.getProfile(any()) } returns flow { emit(profile) }
 
     composeTestRule.setContent {
       val itineraryBuilder = Itinerary.Builder(userUid = "")
