@@ -37,114 +37,88 @@ import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
 
-  private lateinit var firebaseAuth: FirebaseAuth
-  private lateinit var firebaseStorage: FirebaseStorage
+    private val appModule by lazy { AppModule(this, navController) }
 
-  private lateinit var imageRepository: ImageRepository
-  private lateinit var itineraryRepository: ItineraryRepository
-  private lateinit var directionsRepository: DirectionsRepository
-  private lateinit var profileRepository: ProfileRepository
-  private lateinit var signInRepository: SignInRepository
+    private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var firebaseStorage: FirebaseStorage
 
-  private lateinit var bottomNavigationViewModel: BottomNavigationViewModel
-  private lateinit var createItineraryViewModel: CreateItineraryViewModel
-  private lateinit var itineraryViewModel: ItineraryViewModel
-  private lateinit var profileViewModel: ProfileViewModel
+    private lateinit var imageRepository: ImageRepository
+    private lateinit var itineraryRepository: ItineraryRepository
+    private lateinit var directionsRepository: DirectionsRepository
+    private lateinit var profileRepository: ProfileRepository
+    private lateinit var signInRepository: SignInRepository
 
-  private lateinit var googleSignInLauncher: GoogleSignInLauncher
+    private lateinit var bottomNavigationViewModel: BottomNavigationViewModel
+    private lateinit var createItineraryViewModel: CreateItineraryViewModel
+    private lateinit var itineraryViewModel: ItineraryViewModel
+    private lateinit var profileViewModel: ProfileViewModel
 
-  private lateinit var navController: NavHostController
+    private lateinit var googleSignInLauncher: GoogleSignInLauncher
 
-  private val providers by lazy { listOf(AuthUI.IdpConfig.GoogleBuilder().build()) }
+    private lateinit var navController: NavHostController
 
-  private val imageLauncher by lazy {
-    registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { res ->
-      if (res.resultCode == RESULT_OK) {
-        res.data?.data?.let {
-          imageRepository.setCurrentFile(it)
-          Log.d("STORE IMAGE", "CURRENT FILE SELECTED")
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        init()
+
+        setContent {
+            WanderWiseTheme {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    navController = rememberNavController()
+                    RootNavigationGraph(
+                        googleSignInLauncher,
+                        profileViewModel,
+                        itineraryViewModel,
+                        createItineraryViewModel,
+                        bottomNavigationViewModel,
+                        imageRepository,
+                        navController,
+                        firebaseAuth
+                    )
+                }
+            }
         }
-      }
     }
-  }
 
-  private val signInLauncher by lazy {
-    registerForActivityResult(FirebaseAuthUIActivityResultContract()) { res ->
-      /* on failure, don't throw an exception. Pass the null value down for proper handling */
-      val currUser = if (res.resultCode == RESULT_OK) firebaseAuth.currentUser else null
+    private fun init() {
+        requestPermissions()
 
-      Log.d("MainActivity", "Firebase sign-in result: $currUser")
-      lifecycleScope.launch { signInRepository.signIn(navController, profileViewModel, currUser) }
+        firebaseAuth = appModule.firebaseAuth
+        firebaseStorage = appModule.firebaseStorage
+
+        initializeRepositories()
+
+        initializeViewModels()
+
+        googleSignInLauncher = appModule.googleSignInLauncher
     }
-  }
 
-  private val signInIntent by lazy {
-    AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers).build()
-  }
-
-  private val locationClient by lazy {
-    UserLocationClient(
-        applicationContext, LocationServices.getFusedLocationProviderClient(applicationContext))
-  }
-
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-
-    init()
-
-    setContent {
-      WanderWiseTheme {
-        Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-          navController = rememberNavController()
-          RootNavigationGraph(
-              googleSignInLauncher,
-              profileViewModel,
-              itineraryViewModel,
-              createItineraryViewModel,
-              bottomNavigationViewModel,
-              imageRepository,
-              navController,
-              firebaseAuth)
-        }
-      }
+    private fun requestPermissions() {
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(
+                Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION
+            ),
+            0
+        )
     }
-  }
 
-  private fun init() {
-    requestPermissions()
+    private fun initializeRepositories() {
+        imageRepository = appModule.imageRepository
+        itineraryRepository = appModule.itineraryRepository
+        directionsRepository = appModule.directionsRepository
+        profileRepository = appModule.profileRepository
+        signInRepository = appModule.signInRepository
+    }
 
-    AppModule.initialize(imageLauncher, signInLauncher, signInIntent, locationClient)
-
-    firebaseAuth = AppModule.firebaseAuth
-    firebaseStorage = AppModule.firebaseStorage
-
-    initializeRepositories()
-
-    initializeViewModels()
-
-    googleSignInLauncher = AppModule.googleSignInLauncher
-  }
-
-  private fun requestPermissions() {
-    ActivityCompat.requestPermissions(
-        this,
-        arrayOf(
-            Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION),
-        0)
-  }
-
-  private fun initializeRepositories() {
-    imageRepository = AppModule.imageRepository
-    itineraryRepository = AppModule.itineraryRepository
-    directionsRepository = AppModule.directionsRepository
-    profileRepository = AppModule.profileRepository
-    signInRepository = AppModule.signInRepository
-  }
-
-  private fun initializeViewModels() {
-    bottomNavigationViewModel = AppModule.bottomNavigationViewModel
-    createItineraryViewModel = AppModule.createItineraryViewModel
-    itineraryViewModel = AppModule.itineraryViewModel
-    profileViewModel = AppModule.profileViewModel
-  }
+    private fun initializeViewModels() {
+        bottomNavigationViewModel = appModule.bottomNavigationViewModel
+        createItineraryViewModel = appModule.createItineraryViewModel
+        itineraryViewModel = appModule.itineraryViewModel
+        profileViewModel = appModule.profileViewModel
+    }
 }
