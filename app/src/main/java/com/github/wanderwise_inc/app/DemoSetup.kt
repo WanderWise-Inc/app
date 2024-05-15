@@ -76,7 +76,7 @@ fun addItineraries(
 
   val itineraryAdventure =
       Itinerary(
-          userUid = profileViewModel.getUserUid(),
+          userUid = profileViewModel.getActiveUserUid(),
           locations = defaultLocations,
           title = "Hike",
           tags =
@@ -101,7 +101,7 @@ fun addItineraries(
 
   val privateItinerary =
       Itinerary(
-          userUid = profileViewModel.getUserUid(),
+          userUid = profileViewModel.getActiveUserUid(),
           locations = defaultLocations,
           title = "My private itinerary",
           tags = listOf(ItineraryTags.ADVENTURE),
@@ -112,7 +112,7 @@ fun addItineraries(
   val publicItinerary =
       Itinerary(
           uid = PREVIEW_ITINERARY_DEMO_UID,
-          userUid = profileViewModel.getUserUid(),
+          userUid = profileViewModel.getActiveUserUid(),
           locations = defaultLocations,
           title = "San Francisco Bike Itinerary",
           tags = listOf(ItineraryTags.CULTURAL, ItineraryTags.NATURE, ItineraryTags.BUDGET),
@@ -127,5 +127,5 @@ fun addItineraries(
   for (i in 0..1023) itineraryViewModel.incrementItineraryLikes(publicItinerary)
 
   // other profile likes their own itinerary
-  profileViewModel.addLikedItinerary(profileViewModel.getUserUid(), itineraryAdventure.uid)
+  profileViewModel.addLikedItinerary(profileViewModel.getActiveUserUid(), itineraryAdventure.uid)
 }

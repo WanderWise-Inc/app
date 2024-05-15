@@ -78,16 +78,16 @@ fun ItinerariesListScrollable(
             runBlocking {
               isLikedInitially =
                   profileViewModel.checkIfItineraryIsLiked(
-                      profileViewModel.getUserUid(), itinerary.uid)
+                      profileViewModel.getActiveUserUid(), itinerary.uid)
             }
 
             val onLikeButtonClick = { it: Itinerary, isLiked: Boolean ->
               if (isLiked) {
                 itineraryViewModel.decrementItineraryLikes(it)
-                profileViewModel.removeLikedItinerary(profileViewModel.getUserUid(), it.uid)
+                profileViewModel.removeLikedItinerary(profileViewModel.getActiveUserUid(), it.uid)
               } else {
                 itineraryViewModel.incrementItineraryLikes(it)
-                profileViewModel.addLikedItinerary(profileViewModel.getUserUid(), it.uid)
+                profileViewModel.addLikedItinerary(profileViewModel.getActiveUserUid(), it.uid)
               }
             }
             val navigationActions = NavigationActions(navController)

@@ -64,7 +64,7 @@ fun ProfileScreen(
     firebaseAuth: FirebaseAuth
 ) {
   val profile = profileViewModel.getActiveProfile()
-  val currentUid = profileViewModel.getUserUid()
+  val currentUid = profileViewModel.getActiveUserUid()
 
   val userItineraries by
       itineraryViewModel.getUserItineraries(currentUid).collectAsState(initial = emptyList())
