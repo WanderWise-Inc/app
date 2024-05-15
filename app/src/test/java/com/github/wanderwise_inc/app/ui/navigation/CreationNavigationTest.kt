@@ -165,6 +165,7 @@ class CreationPreviewNavigationTest {
   @MockK private lateinit var profileViewModel: ProfileViewModel
   @MockK private lateinit var bottomNavigationViewModel: BottomNavigationViewModel
   @MockK private lateinit var firebaseAuth: FirebaseAuth
+  private val profile = Profile(userUid = "0", displayName = "me", bio = "bio")
 
   private lateinit var onFinished: () -> Unit
 
@@ -173,6 +174,8 @@ class CreationPreviewNavigationTest {
   @Before
   fun setupNavHost() {
     MockKAnnotations.init(this)
+    every { imageRepository.fetchImage(any()) } returns flow { emit(null) }
+    every { profileViewModel.getProfile(any()) } returns flow { emit(profile) }
 
     composeTestRule.setContent {
       /*val mockProfile = Profile("", "Test", "0", "Bio", null)
