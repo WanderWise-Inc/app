@@ -65,7 +65,7 @@ fun ItineraryBanner(
     val imageFlow = remember(itinerary) { imageRepository.fetchImage("itineraryPictures/${itinerary.uid}") }
     val image by imageFlow.collectAsState(initial = null)
     val painter : Painter = if (image != null) BitmapPainter(image!!.asImageBitmap()) else  painterResource(id = imageId)
-  var isLiked by remember { mutableStateOf(isLikedInitially) }
+  var isLiked /*by remember { mutableStateOf(isLikedInitially) }*/ = isLikedInitially
   var numLikes by remember { mutableIntStateOf(itinerary.numLikes) }
   var prices by remember { mutableFloatStateOf(itinerary.price) }
   var times by remember { mutableIntStateOf(itinerary.time) }

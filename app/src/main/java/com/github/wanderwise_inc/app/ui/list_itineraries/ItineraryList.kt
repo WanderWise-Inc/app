@@ -96,6 +96,7 @@ fun ItinerariesListScrollable(
                 isLikedInitially =
                     profileViewModel.checkIfItineraryIsLiked(
                         uid, itinerary.uid)
+                Log.d("ItinerariesListScrollable", "0: isLikedInitially: $isLikedInitially")
             }
 
             val onLikeButtonClick = { it: Itinerary, isLiked: Boolean ->
@@ -112,6 +113,7 @@ fun ItinerariesListScrollable(
               itineraryViewModel.setFocusedItinerary(it)
               navigationActions.navigateTo(Destination.TopLevelDestination.Map)
             }
+              Log.d("ItinerariesListScrollable", "1 : isLikedInitially: $isLikedInitially")
             ItineraryBanner(
               itinerary = itinerary,
               onLikeButtonClick = onLikeButtonClick,

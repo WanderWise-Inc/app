@@ -114,7 +114,9 @@ class ProfileRepositoryImpl(db: FirebaseFirestore) : ProfileRepository {
           .addOnSuccessListener { documentSnapshot ->
             val likedItineraries =
                 documentSnapshot.get(ProfileLabels.LIKED_ITINERARIES) as List<String>?
+              Log.d("ProfileRepositoryImpl", "Liked itineraries: $likedItineraries")
             val isLiked = likedItineraries?.contains(itineraryUid) ?: false
+              Log.d("ProfileRepositoryImpl", "Is liked: $isLiked")
             continuation.resume(isLiked)
           }
           .addOnFailureListener { exception -> continuation.resumeWithException(exception) }
