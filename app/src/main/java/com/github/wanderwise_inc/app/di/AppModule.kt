@@ -1,15 +1,11 @@
 package com.github.wanderwise_inc.app.di
 
-import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.result.registerForActivityResult
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavController
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.github.wanderwise_inc.app.MainActivity
@@ -30,6 +26,7 @@ import com.github.wanderwise_inc.app.viewmodel.BottomNavigationViewModel
 import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.LocationClient
+import com.github.wanderwise_inc.app.viewmodel.LoginViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.github.wanderwise_inc.app.viewmodel.UserLocationClient
 import com.google.android.gms.location.LocationServices
@@ -39,7 +36,6 @@ import kotlinx.coroutines.launch
 
 class AppModule(
     activity: MainActivity,
-    navController: NavController
 ) {
 
     init {
@@ -54,16 +50,14 @@ class AppModule(
         ImageRepositoryImpl(imageLauncher, firebaseStorage.reference, null)
     }
 
-    val imageLauncher: ActivityResultLauncher<Intent> by lazy {
-        activity
-            .registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                if (result.resultCode == ComponentActivity.RESULT_OK) {
-                    result.data?.data?.let {
-                        imageRepository.setCurrentFile(it)
-                        Log.d("STORE IMAGE", "CURRENT FILE SELECTED")
-                    }
+    private val imageLauncher: ActivityResultLauncher<Intent> by lazy {
+        activity.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == ComponentActivity.RESULT_OK) {
+                result.data?.data?.let {
+                    imageRepository.setCurrentFile(it)
                 }
             }
+        }
     }
 
     val directionsRepository: DirectionsRepository by lazy {
@@ -73,8 +67,6 @@ class AppModule(
     val itineraryRepository: ItineraryRepository by lazy { ItineraryRepositoryTestImpl() }
 
     val profileRepository: ProfileRepository by lazy { ProfileRepositoryTestImpl() }
-
-    val signInRepository: SignInRepository by lazy { SignInRepositoryImpl() }
 
     val bottomNavigationViewModel: BottomNavigationViewModel by lazy { BottomNavigationViewModel() }
 
@@ -86,27 +78,34 @@ class AppModule(
         ItineraryViewModel(itineraryRepository, directionsRepository, locationClient)
     }
 
-    val locationClient: LocationClient by lazy {
-        UserLocationClient(activity.applicationContext, LocationServices.getFusedLocationProviderClient(activity.applicationContext))
+    private val locationClient: LocationClient by lazy {
+        UserLocationClient(
+            activity.applicationContext,
+            LocationServices.getFusedLocationProviderClient(activity.applicationContext)
+        )
     }
 
-    val profileViewModel: ProfileViewModel by lazy { ProfileViewModel(profileRepository, imageRepository) }
+    val loginViewModel: LoginViewModel by lazy { LoginViewModel(googleSignInLauncher) }
 
-    val googleSignInLauncher: GoogleSignInLauncher by lazy { DefaultGoogleSignInLauncher(signInLauncher, sinInIntent) }
+    val googleSignInLauncher: GoogleSignInLauncher by lazy {
+        DefaultGoogleSignInLauncher(signInLauncher, sinInIntent)
+    }
 
     private val signInLauncher: ActivityResultLauncher<Intent> by lazy {
         activity.registerForActivityResult(FirebaseAuthUIActivityResultContract()) { res ->
-            /* on failure, don't throw an exception. Pass the null value down for proper handling */
-            val currUser = if (res.resultCode == ComponentActivity.RESULT_OK) firebaseAuth.currentUser else null
+            val user = if (res.resultCode == ComponentActivity.RESULT_OK) firebaseAuth.currentUser else null
 
-            Log.d("MainActivity", "Firebase sign-in result: $currUser")
-            activity.lifecycleScope.launch { signInRepository.signIn(navController, profileViewModel, currUser) }
+            activity.lifecycleScope.launch { loginViewModel.handleSignInResult(profileViewModel, user) }
         }
     }
 
-    val sinInIntent: Intent by lazy {
+    private val sinInIntent: Intent by lazy {
         AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers).build()
     }
 
-    val providers by lazy { listOf(AuthUI.IdpConfig.GoogleBuilder().build()) }
+    private val providers: List<AuthUI.IdpConfig> by lazy {
+        listOf(AuthUI.IdpConfig.GoogleBuilder().build())
+    }
+
+    val profileViewModel: ProfileViewModel by lazy { ProfileViewModel(profileRepository, imageRepository) }
 }
