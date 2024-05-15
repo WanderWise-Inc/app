@@ -50,4 +50,5 @@ object TestTags {
 
   const val START_NEW_ITINERARY = "start_new_itinerary"
   const val HINT_POPUP = "hint_popup"
+  const val HINT_POPUP_MESSAGE = "hint_popup_message"
 }

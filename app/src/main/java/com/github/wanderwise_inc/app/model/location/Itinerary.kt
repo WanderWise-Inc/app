@@ -19,6 +19,18 @@ object ItineraryLabels {
   const val NUM_LIKES = "numLikes"
 }
 
+object ItineraryDefaultValues {
+  const val UID: String = ""
+  const val USER_UID: String = ""
+  // val LOCATIONS: MutableList<Location> = mutableListOf()
+  const val TITLE: String = ""
+  // val TAGS: MutableList<Tag> = mutableListOf()
+  const val DESCRIPTION: String = ""
+  const val VISIBLE: Boolean = true
+  const val PRICE: Float = -1f
+  const val TIME: Int = -1
+}
+
 /** @brief score of an itinerary based on some preferences */
 typealias Score = Double
 
@@ -55,15 +67,15 @@ data class Itinerary(
    * @brief builder for an itinerary
    */
   data class Builder(
-      var uid: String = "",
-      val userUid: String,
+      var uid: String? = null,
+      val userUid: String? = null,
       val locations: MutableList<Location> = mutableListOf(),
-      var title: String = "",
+      var title: String? = null,
       val tags: MutableList<Tag> = mutableListOf(),
       var description: String? = null,
-      var visible: Boolean = false,
-      var price: Float = 0f,
-      var time: Int = 0
+      var visible: Boolean = ItineraryDefaultValues.VISIBLE, // could be null but complicated
+      var price: Float? = null,
+      var time: Int? = null
   ) {
     /**
      * @param location the location to be added
@@ -150,15 +162,15 @@ data class Itinerary(
       // require(locations.isNotEmpty()) { "At least one location must be provided" }
       // require(title.isNotBlank()) { "Title must not be blank" }
       return Itinerary(
-          uid = uid,
-          userUid = userUid,
+          uid = uid ?: ItineraryDefaultValues.UID,
+          userUid = userUid ?: ItineraryDefaultValues.USER_UID,
           locations = locations.toList(),
-          title = title,
+          title = title ?: ItineraryDefaultValues.TITLE,
           tags = tags.toList(),
-          description = description,
+          description = description ?: ItineraryDefaultValues.DESCRIPTION,
           visible = visible,
-          price = price,
-          time = time)
+          price = price ?: ItineraryDefaultValues.PRICE,
+          time = time ?: ItineraryDefaultValues.TIME)
     }
   }
 

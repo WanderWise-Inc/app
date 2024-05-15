@@ -50,7 +50,7 @@ fun HintPopup(
             horizontalArrangement = Arrangement.Start) {
               Icon(imageVector = Icons.Filled.Info, contentDescription = "Hint")
               Spacer(modifier = Modifier.width(10.dp))
-              Text(text = message)
+              Text(text = message, modifier = Modifier.testTag(TestTags.HINT_POPUP_MESSAGE))
             }
       }
 }
