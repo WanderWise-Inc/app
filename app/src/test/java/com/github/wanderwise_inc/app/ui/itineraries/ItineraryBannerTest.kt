@@ -8,31 +8,42 @@ import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
 import com.github.wanderwise_inc.app.model.location.Location
+import com.github.wanderwise_inc.app.model.profile.Profile
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.itinerary.ItineraryBanner
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
+import kotlinx.coroutines.flow.flow
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.ArgumentMatchers.anyString
+import org.mockito.Mock
+import org.mockito.Mockito.`when`
+import org.mockito.junit.MockitoJUnit
+import org.mockito.junit.MockitoRule
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class ItineraryBannerTest {
   @get:Rule val composeTestRule = createComposeRule()
+    @get:Rule val mockitoRule: MockitoRule = MockitoJUnit.rule()
 
   private lateinit var itinerary: Itinerary
 
-  @MockK private lateinit var imageRepository: ImageRepository
-  @MockK private lateinit var profileViewModel: ProfileViewModel
+  @Mock private lateinit var imageRepository: ImageRepository
+  @Mock private lateinit var profileViewModel: ProfileViewModel
 
   private var itineraryUid = "some_uid"
+    private val profile = Profile(userUid = "0", displayName = "me", bio = "bio")
 
   @Before
   fun `initialize itinerary`() {
     MockKAnnotations.init(this)
+      `when`(imageRepository.fetchImage(anyString())).thenReturn(flow{emit(null)})
+      `when`(profileViewModel.getProfile(anyString())).thenReturn(flow{emit(null)})
     composeTestRule.setContent {
       itinerary =
           Itinerary(
