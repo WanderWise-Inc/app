@@ -1,4 +1,4 @@
-package com.github.wanderwise_inc.app.data
+package com.github.wanderwise_inc.app.di
 
 import com.firebase.ui.auth.AuthUI
 

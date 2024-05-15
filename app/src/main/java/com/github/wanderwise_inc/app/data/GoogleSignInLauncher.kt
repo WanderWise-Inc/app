@@ -3,6 +3,7 @@ package com.github.wanderwise_inc.app.data
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
 import com.firebase.ui.auth.AuthUI
+import com.github.wanderwise_inc.app.di.SignInProviders
 
 class GoogleSignInLauncher(
     private val activityResultLauncher: ActivityResultLauncher<Intent>,
