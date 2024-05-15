@@ -4,6 +4,7 @@ import android.location.Location
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -17,11 +18,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.DirectionsWalk
+import androidx.compose.material.icons.filled.DirectionsWalk
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Place
+import androidx.compose.material.icons.outlined.DirectionsWalk
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -82,38 +87,93 @@ fun PreviewItineraryScreen(
 
     LaunchedEffect(Unit) { itineraryViewModel.fetchPolylineLocations(itinerary) }
     val polylinePoints by itineraryViewModel.getPolylinePointsLiveData().observeAsState()
+    var isMinimized by remember { mutableStateOf(false) }
+    val onMinimizedClick = { isMinimized = !isMinimized }
+    var isClicked by remember { mutableStateOf(false) }
 
     Scaffold(
-        bottomBar = { PreviewItineraryBanner(itinerary, itineraryViewModel, profileViewModel) },
+        bottomBar = {
+          PreviewItineraryBanner(
+              isMinimized, onMinimizedClick, itinerary, itineraryViewModel, profileViewModel)
+        },
         modifier = Modifier.testTag(TestTags.MAP_PREVIEW_ITINERARY_SCREEN),
         floatingActionButton = {
           CenterButton(cameraPositionState = cameraPositionState, currentLocation = userLocation)
         },
         floatingActionButtonPosition = FabPosition.Start) { paddingValues ->
-          GoogleMap(
-              modifier =
-                  Modifier.fillMaxSize().padding(paddingValues).testTag(TestTags.MAP_GOOGLE_MAPS),
-              cameraPositionState = cameraPositionState) {
-                userLocation?.let {
-                  Marker(
-                      tag = TestTags.MAP_USER_LOCATION,
-                      state = MarkerState(position = LatLng(it.latitude, it.longitude)),
-                      icon =
-                          BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
-                }
-                itinerary.locations.map { location ->
-                  AdvancedMarker(
-                      state = MarkerState(position = location.toLatLng()),
-                      title = location.title ?: "",
-                  )
-                  if (polylinePoints != null) {
-                    Polyline(points = polylinePoints!!, color = MaterialTheme.colorScheme.primary)
+          Box() {
+            GoogleMap(
+                modifier =
+                    Modifier.fillMaxSize().padding(paddingValues).testTag(TestTags.MAP_GOOGLE_MAPS),
+                cameraPositionState = cameraPositionState) {
+                  userLocation?.let {
+                    Marker(
+                        tag = TestTags.MAP_USER_LOCATION,
+                        state = MarkerState(position = LatLng(it.latitude, it.longitude)),
+                        icon =
+                            BitmapDescriptorFactory.defaultMarker(
+                                BitmapDescriptorFactory.HUE_AZURE))
+                  }
+                  itinerary.locations.map { location ->
+                    AdvancedMarker(
+                        state = MarkerState(position = location.toLatLng()),
+                        title = location.title ?: "",
+                    )
+                    if (polylinePoints != null) {
+                      Polyline(points = polylinePoints!!, color = MaterialTheme.colorScheme.primary)
+                    }
                   }
                 }
-              }
+            ExtendedFloatingActionButton(
+                onClick = {
+                  onMinimizedClick()
+                  isClicked = !isClicked
+                },
+                icon = {
+                  Icon(
+                      Icons.AutoMirrored.Filled.DirectionsWalk,
+                      contentDescription = "follow",
+                      modifier = Modifier.size(32.dp))
+                },
+                text = {
+                  Text(text = if (isClicked) "Following..." else "Follow", color = Color.DarkGray)
+                },
+                containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                modifier =
+                    Modifier.align(Alignment.TopCenter)
+                        .padding(12.dp)
+                        .testTag(TestTags.START_NEW_ITINERARY_STARTING))
+          }
         }
   }
 }
+
+/*fun StartButton(onClick: () -> Unit, modifier: Modifier) {
+  var isClicked by remember { mutableStateOf(false) }
+
+  ExtendedFloatingActionButton(
+      onClick = {
+        onClick()
+        isClicked = !isClicked
+      },
+      icon = {
+          Icon(
+              Icons.AutoMirrored.Filled.DirectionsWalk,
+              contentDescription = "finished",
+              modifier = Modifier.size(32.dp))
+      },
+      text = {Text(text = if (isClicked) "Following..." else "Follow", color = Color.DarkGray) },
+      containerColor = MaterialTheme.colorScheme.secondaryContainer,
+      contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+      modifier =
+      Modifier.align(Alignment.TopCenter)
+          .padding(12.dp)
+          .testTag(TestTags.CREATION_FINISH_BUTTON))
+
+      // MaterialTheme.colorScheme.surfaceContainer,
+
+}*/
 
 /**
  * @brief displayed beneath `Maps` composable in `PreviewItineraryScreen`. Variable height with
@@ -121,13 +181,12 @@ fun PreviewItineraryScreen(
  */
 @Composable
 fun PreviewItineraryBanner(
+    isMinimized: Boolean,
+    onMinimizedClick: () -> Unit,
     itinerary: Itinerary,
     itineraryViewModel: ItineraryViewModel,
     profileViewModel: ProfileViewModel
 ) {
-
-  var isMinimized by remember { mutableStateOf(false) }
-  val onMinimizedClick = { isMinimized = !isMinimized }
 
   if (isMinimized)
       PreviewItineraryBannerMinimized(onMinimizedClick = onMinimizedClick, itinerary = itinerary)

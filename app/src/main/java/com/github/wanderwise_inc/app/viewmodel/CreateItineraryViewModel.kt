@@ -18,6 +18,26 @@ class CreateItineraryViewModel(
   /** New itinerary that the signed in user is currently building */
   private var newItineraryBuilder: Itinerary.Builder? = null
 
+  /**
+   * @return Itinerary being built by the user currently. The composable is responsible for setting
+   *   it to `null` when the creation is finished
+   *
+   * **USAGE EXAMPLE**
+   *
+   * ```
+   * val newItineraryBuilder = mapViewModel.getNewItinerary()!!
+   * // any attributes that should cause a recomposition should be remembered
+   * var title by remember {
+   *  mutableStateOf(newItinerary.title)
+   * }
+   * Button (
+   *  onClick = {
+   *    title = newTitle                        // update mutableState for recomposition
+   *    newItineraryBuilder.addTitle(newTitle)  // update shared state across screens
+   *  }
+   * )
+   * ```
+   */
   fun getNewItinerary(): Itinerary.Builder? {
     return newItineraryBuilder
   }

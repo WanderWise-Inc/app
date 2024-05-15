@@ -1,5 +1,6 @@
 package com.github.wanderwise_inc.app.model.location
 
+import com.github.wanderwise_inc.app.proto.location.ItineraryProto
 import com.google.android.gms.maps.model.LatLng
 import java.io.InvalidObjectException
 
@@ -104,8 +105,8 @@ data class Itinerary(
      * @brief add a tag to the itinerary builder list of tags
      */
     fun addTag(tag: Tag): Builder {
-      if (tags.size >= MAX_TAGS)
-          throw InvalidObjectException("An itinerary should not have more than $MAX_TAGS tags")
+      // if (tags.size >= MAX_TAGS)
+      // throw InvalidObjectException("An itinerary should not have more than $MAX_TAGS tags")
       tags.add(tag)
       return this
     }
@@ -187,6 +188,19 @@ data class Itinerary(
         ItineraryLabels.PRICE to price,
         ItineraryLabels.TIME to time,
         ItineraryLabels.NUM_LIKES to numLikes)
+  }
+  /** Conversion method for converting to protobuf */
+  fun toProto(): ItineraryProto {
+    return ItineraryProto.newBuilder()
+        .setUid(uid)
+        .setUid(userUid)
+        .addAllLocations(locations.map { it.toProto() })
+        .setTitle(title)
+        .addAllTags(tags)
+        .setDescription(description)
+        .setPrice(price)
+        .setTime(time)
+        .build()
   }
 
   /**
