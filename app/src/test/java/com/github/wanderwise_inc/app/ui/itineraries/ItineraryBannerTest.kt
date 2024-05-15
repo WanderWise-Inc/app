@@ -43,7 +43,7 @@ class ItineraryBannerTest {
   fun `initialize itinerary`() {
     MockKAnnotations.init(this)
       `when`(imageRepository.fetchImage(anyString())).thenReturn(flow{emit(null)})
-      `when`(profileViewModel.getProfile(anyString())).thenReturn(flow{emit(null)})
+      `when`(profileViewModel.getProfile(anyString())).thenReturn(flow{emit(profile)})
     composeTestRule.setContent {
       itinerary =
           Itinerary(
