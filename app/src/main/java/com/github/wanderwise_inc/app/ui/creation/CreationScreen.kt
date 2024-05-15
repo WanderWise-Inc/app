@@ -60,7 +60,12 @@ fun CreationScreen(
         },
         modifier = Modifier.testTag(TestTags.NEW_CREATION_SCREEN)) { padding ->
           CreationNavGraph(
-              createItineraryViewModel, navController, padding, profileViewModel, onFinished, imageRepository)
+              createItineraryViewModel,
+              navController,
+              padding,
+              profileViewModel,
+              onFinished,
+              imageRepository)
         }
   }
 }

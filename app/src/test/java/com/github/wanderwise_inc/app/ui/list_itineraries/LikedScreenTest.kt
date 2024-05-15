@@ -71,8 +71,7 @@ class LikedScreenTest {
           sliderPositionPriceState,
           sliderPositionTimeState,
           firebaseAuth,
-          imageRepository
-      )
+          imageRepository)
     }
   }
 

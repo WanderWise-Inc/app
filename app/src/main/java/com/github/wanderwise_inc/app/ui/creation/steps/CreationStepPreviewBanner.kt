@@ -19,7 +19,11 @@ import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 
 @Composable
-fun CreationStepPreviewBanner(createItineraryViewModel: CreateItineraryViewModel, profileViewModel: ProfileViewModel, imageRepository: ImageRepository) {
+fun CreationStepPreviewBanner(
+    createItineraryViewModel: CreateItineraryViewModel,
+    profileViewModel: ProfileViewModel,
+    imageRepository: ImageRepository
+) {
   val dummyItinerary =
       Itinerary(
           "1",

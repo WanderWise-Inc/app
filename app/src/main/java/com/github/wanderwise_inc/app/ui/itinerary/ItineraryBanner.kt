@@ -27,7 +27,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -62,14 +61,16 @@ fun ItineraryBanner(
 ) {
 
   val imageId = R.drawable.defaultitinerary
-    val imageFlow = remember(itinerary) { imageRepository.fetchImage("itineraryPictures/${itinerary.uid}") }
-    val image by imageFlow.collectAsState(initial = null)
-    val painter : Painter = if (image != null) BitmapPainter(image!!.asImageBitmap()) else  painterResource(id = imageId)
+  val imageFlow =
+      remember(itinerary) { imageRepository.fetchImage("itineraryPictures/${itinerary.uid}") }
+  val image by imageFlow.collectAsState(initial = null)
+  val painter: Painter =
+      if (image != null) BitmapPainter(image!!.asImageBitmap()) else painterResource(id = imageId)
   var isLiked /*by remember { mutableStateOf(isLikedInitially) }*/ = isLikedInitially
   var numLikes by remember { mutableIntStateOf(itinerary.numLikes) }
   var prices by remember { mutableFloatStateOf(itinerary.price) }
   var times by remember { mutableIntStateOf(itinerary.time) }
-    val user by profileViewModel.getProfile(itinerary.userUid).collectAsState(initial = null)
+  val user by profileViewModel.getProfile(itinerary.userUid).collectAsState(initial = null)
 
   ElevatedCard(
       colors =
@@ -82,10 +83,9 @@ fun ItineraryBanner(
       onClick = { onBannerClick(itinerary) }) {
         Column(
             modifier =
-            Modifier
-                .background(MaterialTheme.colorScheme.primaryContainer)
-                .fillMaxWidth()
-                .aspectRatio(1.34f),
+                Modifier.background(MaterialTheme.colorScheme.primaryContainer)
+                    .fillMaxWidth()
+                    .aspectRatio(1.34f),
             horizontalAlignment = Alignment.CenterHorizontally) {
 
               // Image of the itinerary
@@ -93,10 +93,7 @@ fun ItineraryBanner(
                   painter = painter,
                   contentDescription = itinerary.description,
                   modifier =
-                  Modifier
-                      .fillMaxWidth()
-                      .fillMaxHeight(0.55f)
-                      .clip(RoundedCornerShape(13.dp)),
+                      Modifier.fillMaxWidth().fillMaxHeight(0.55f).clip(RoundedCornerShape(13.dp)),
                   contentScale = ContentScale.Crop,
                   alignment = Alignment.TopCenter)
               // Primary Text Field
@@ -113,13 +110,10 @@ fun ItineraryBanner(
               Row(modifier = Modifier.fillMaxSize()) {
                 Column(
                     modifier =
-                    Modifier
-                        .fillMaxHeight()
-                        .weight(0.7f)
-                        .padding(10.dp, 4.dp, 4.dp, 15.dp),
+                        Modifier.fillMaxHeight().weight(0.7f).padding(10.dp, 4.dp, 4.dp, 15.dp),
                     verticalArrangement = Arrangement.SpaceAround) {
                       // Secondary indicator fields
-                    val textUser = if (user != null) user!!.displayName else "-"
+                      val textUser = if (user != null) user!!.displayName else "-"
                       Text(
                           text = "Wandered by $textUser",
                           color = MaterialTheme.colorScheme.secondary,
@@ -142,18 +136,12 @@ fun ItineraryBanner(
                           modifier = Modifier.padding(4.dp, 0.dp))
                     }
                 Column(
-                    modifier = Modifier
-                        .weight(0.3f)
-                        .fillMaxSize()
-                        .padding(4.dp, 2.dp, 10.dp, 2.dp),
+                    modifier = Modifier.weight(0.3f).fillMaxSize().padding(4.dp, 2.dp, 10.dp, 2.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.SpaceBetween,
                 ) {
                   LazyRow(
-                      modifier = Modifier
-                          .fillMaxWidth()
-                          .weight(0.3f)
-                          .padding(2.dp),
+                      modifier = Modifier.fillMaxWidth().weight(0.3f).padding(2.dp),
                       contentPadding = PaddingValues(horizontal = 2.dp, vertical = 5.dp),
                       horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         items(itinerary.tags) {
@@ -175,9 +163,7 @@ fun ItineraryBanner(
                       }
 
                   Column(
-                      modifier = Modifier
-                          .fillMaxWidth()
-                          .weight(0.5f),
+                      modifier = Modifier.fillMaxWidth().weight(0.5f),
                       horizontalAlignment = Alignment.CenterHorizontally) {
                         // Like Icon
                         Icon(
@@ -189,17 +175,15 @@ fun ItineraryBanner(
                             contentDescription = "like button heart icon",
                             tint = if (isLiked) Color.Red else MaterialTheme.colorScheme.secondary,
                             modifier =
-                            Modifier
-                                .testTag(
-                                    "${TestTags.ITINERARY_BANNER_LIKE_BUTTON}_${itinerary.uid}"
-                                )
-                                .size(width = 40.dp, height = 40.dp)
-                                .clickable(
-                                    onClick = {
-                                        if (isLiked) numLikes-- else numLikes++
-                                        onLikeButtonClick(itinerary, isLiked)
-                                        isLiked = !isLiked
-                                    }))
+                                Modifier.testTag(
+                                        "${TestTags.ITINERARY_BANNER_LIKE_BUTTON}_${itinerary.uid}")
+                                    .size(width = 40.dp, height = 40.dp)
+                                    .clickable(
+                                        onClick = {
+                                          if (isLiked) numLikes-- else numLikes++
+                                          onLikeButtonClick(itinerary, isLiked)
+                                          isLiked = !isLiked
+                                        }))
 
                         Text(
                             text = "$numLikes Likes",

@@ -2,7 +2,6 @@ package com.github.wanderwise_inc.app.ui.profile
 
 import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -18,11 +17,16 @@ import kotlinx.coroutines.flow.flow
 
 /** @brief profile picture composable and coroutine friendly uwu rawr */
 @Composable
-fun ProfilePicture(profile: Profile?, profileViewModel: ProfileViewModel, modifier: Modifier/*, ctr : MutableState<Int>*/) {
+fun ProfilePicture(
+    profile: Profile?,
+    profileViewModel: ProfileViewModel,
+    modifier: Modifier /*, ctr : MutableState<Int>*/
+) {
   // calling `remember` limits recomposition to `Profile` changes
-  val defaultProfilePictureFlow = remember(profile/*, ctr.value*/) { profileViewModel.getDefaultProfilePicture() }
+  val defaultProfilePictureFlow =
+      remember(profile /*, ctr.value*/) { profileViewModel.getDefaultProfilePicture() }
   val profilePictureFlow =
-      remember(profile/*, ctr.value*/) {
+      remember(profile /*, ctr.value*/) {
         if (profile != null) profileViewModel.getProfilePicture(profile) else flow { emit(null) }
       }
 

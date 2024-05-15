@@ -60,7 +60,7 @@ class ImageRepositoryImpl(
    * @return a flow of the bitMap representation of the profile picture
    */
   override fun fetchImage(pathToProfilePic: String): Flow<Bitmap?> {
-      Log.d("FETCH IMAGE", pathToProfilePic)
+    Log.d("FETCH IMAGE", pathToProfilePic)
     return flow {
           if (pathToProfilePic.isBlank()) {
             // the path is empty, there should be no profilePicture at this path
@@ -82,13 +82,14 @@ class ImageRepositoryImpl(
                 }
             // Decode bitmap if byte are is not null
             val bitmap = byteResult?.let { BitmapFactory.decodeByteArray(it, 0, it.size) }
-              Log.d("FETCH IMAGE", bitmap.toString())
+            Log.d("FETCH IMAGE", bitmap.toString())
             emit(bitmap) // Emit bitmap
           }
         }
         .catch {
-            Log.w("FETCH IMAGE", it)
-            emit(null) }
+          Log.w("FETCH IMAGE", it)
+          emit(null)
+        }
   }
 
   /**

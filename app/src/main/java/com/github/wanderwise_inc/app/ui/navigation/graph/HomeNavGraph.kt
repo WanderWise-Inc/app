@@ -5,7 +5,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.github.wanderwise_inc.app.data.ImageRepository
-import com.github.wanderwise_inc.app.demoSetup
 import com.github.wanderwise_inc.app.ui.creation.CreationScreen
 import com.github.wanderwise_inc.app.ui.list_itineraries.LikedScreen
 import com.github.wanderwise_inc.app.ui.list_itineraries.OverviewScreen
@@ -33,7 +32,7 @@ fun HomeNavGraph(
 ) {
 
   // BEGIN DEMO SETUP
-  //demoSetup(itineraryViewModel, profileViewModel, firebaseAuth)
+  // demoSetup(itineraryViewModel, profileViewModel, firebaseAuth)
   /*var itinerary: Itinerary? = null
   runBlocking {
     itinerary = itineraryViewModel.getItineraryFromUids(listOf(PREVIEW_ITINERARY_DEMO_UID)).first()[0]
@@ -48,11 +47,13 @@ fun HomeNavGraph(
   ) {
     composable(route = TopLevelDestination.Overview.route) {
       bottomNavigationViewModel.setSelected(NavigationItem.OVERVIEW.ordinal)
-      OverviewScreen(itineraryViewModel, profileViewModel, navController, firebaseAuth, imageRepository)
+      OverviewScreen(
+          itineraryViewModel, profileViewModel, navController, firebaseAuth, imageRepository)
     }
     composable(route = TopLevelDestination.Liked.route) {
       bottomNavigationViewModel.setSelected(NavigationItem.LIKED.ordinal)
-      LikedScreen(itineraryViewModel, profileViewModel, navController, firebaseAuth, imageRepository)
+      LikedScreen(
+          itineraryViewModel, profileViewModel, navController, firebaseAuth, imageRepository)
     }
     composable(route = TopLevelDestination.Creation.route) {
       bottomNavigationViewModel.setSelected(NavigationItem.CREATE.ordinal)
@@ -62,7 +63,8 @@ fun HomeNavGraph(
           onFinished = {
             NavigationActions(navController).navigateTo(Destination.TopLevelDestination.Profile)
           },
-          firebaseAuth = firebaseAuth, imageRepository = imageRepository)
+          firebaseAuth = firebaseAuth,
+          imageRepository = imageRepository)
     }
     composable(route = TopLevelDestination.Map.route) {
       bottomNavigationViewModel.setSelected(NavigationItem.MAP.ordinal)

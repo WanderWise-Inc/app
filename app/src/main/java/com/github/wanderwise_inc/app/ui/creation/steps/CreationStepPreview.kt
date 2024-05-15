@@ -75,7 +75,8 @@ fun CreationStepPreview(
       },
       modifier = Modifier.testTag(TestTags.CREATION_SCREEN_PREVIEW)) { padding ->
         Box() {
-          CreationStepPreviewNav(navController, padding, createItineraryViewModel, profileViewModel, imageRepository)
+          CreationStepPreviewNav(
+              navController, padding, createItineraryViewModel, profileViewModel, imageRepository)
 
           ExtendedFloatingActionButton(
               onClick = { onFinished() },
@@ -110,7 +111,10 @@ fun CreationStepPreviewNav(
       startDestination = CreationPreviewOptionsDestinations.PreviewBanner.route,
       modifier = Modifier.padding(padding)) {
         composable(route = CreationPreviewOptionsDestinations.PreviewBanner.route) {
-          CreationStepPreviewBanner(createItineraryViewModel = createItineraryViewModel, profileViewModel = profileViewModel, imageRepository = imageRepository)
+          CreationStepPreviewBanner(
+              createItineraryViewModel = createItineraryViewModel,
+              profileViewModel = profileViewModel,
+              imageRepository = imageRepository)
         }
         composable(route = CreationPreviewOptionsDestinations.PreviewItinerary.route) {
           CreationStepPreviewItinerary(

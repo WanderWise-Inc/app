@@ -42,7 +42,6 @@ import com.github.wanderwise_inc.app.ui.navigation.NavigationActions
 import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.runBlocking
 
 /** @brief reusable UI elements for displaying a list of itineraries */
 
@@ -58,7 +57,7 @@ fun ItinerariesListScrollable(
     parent: ItineraryListParent,
     imageRepository: ImageRepository
 ) {
-    val coroutineScope = rememberCoroutineScope()
+  val coroutineScope = rememberCoroutineScope()
   if (itineraries.isEmpty()) {
     val parentVerb =
         when (parent) {
@@ -69,11 +68,10 @@ fun ItinerariesListScrollable(
     Box(
         contentAlignment = Alignment.Center,
         modifier =
-        Modifier
-            .padding(paddingValues)
-            .testTag(TestTags.ITINERARY_LIST_NULL)
-            .fillMaxWidth()
-            .height(100.dp)) {
+            Modifier.padding(paddingValues)
+                .testTag(TestTags.ITINERARY_LIST_NULL)
+                .fillMaxWidth()
+                .height(100.dp)) {
           Text(
               text = "You have not $parentVerb any itineraries yet",
               // color = MaterialTheme.colorScheme.
@@ -82,21 +80,17 @@ fun ItinerariesListScrollable(
         } // PaModifier.padding(5.dp, 10.dp))
   } else {
     LazyColumn(
-        modifier = Modifier
-            .padding(paddingValues)
-            .testTag(TestTags.ITINERARY_LIST_SCROLLABLE),
+        modifier = Modifier.padding(paddingValues).testTag(TestTags.ITINERARY_LIST_SCROLLABLE),
         verticalArrangement = spacedBy(15.dp)) {
           // this.items(itineraries) { itinerary ->
           this.items(itineraries, { (iti) -> iti }) { itinerary ->
-              val uid = firebaseAuth.currentUser?.uid ?: DEFAULT_USER_UID
-              // val uid = profileViewModel.getUserUid() -> CRASH APP
-              var isLikedInitially by remember {mutableStateOf(false)}
+            val uid = firebaseAuth.currentUser?.uid ?: DEFAULT_USER_UID
+            // val uid = profileViewModel.getUserUid() -> CRASH APP
+            var isLikedInitially by remember { mutableStateOf(false) }
             LaunchedEffect(uid) {
-                Log.d("ItinerariesListScrollable", "LaunchedEffect")
-                isLikedInitially =
-                    profileViewModel.checkIfItineraryIsLiked(
-                        uid, itinerary.uid)
-                Log.d("ItinerariesListScrollable", "0: isLikedInitially: $isLikedInitially")
+              Log.d("ItinerariesListScrollable", "LaunchedEffect")
+              isLikedInitially = profileViewModel.checkIfItineraryIsLiked(uid, itinerary.uid)
+              Log.d("ItinerariesListScrollable", "0: isLikedInitially: $isLikedInitially")
             }
 
             val onLikeButtonClick = { it: Itinerary, isLiked: Boolean ->
@@ -113,12 +107,12 @@ fun ItinerariesListScrollable(
               itineraryViewModel.setFocusedItinerary(it)
               navigationActions.navigateTo(Destination.TopLevelDestination.Map)
             }
-              Log.d("ItinerariesListScrollable", "1 : isLikedInitially: $isLikedInitially")
+            Log.d("ItinerariesListScrollable", "1 : isLikedInitially: $isLikedInitially")
             ItineraryBanner(
-              itinerary = itinerary,
-              onLikeButtonClick = onLikeButtonClick,
-              onBannerClick = onBannerClick,
-              isLikedInitially = isLikedInitially,
+                itinerary = itinerary,
+                onLikeButtonClick = onLikeButtonClick,
+                onBannerClick = onBannerClick,
+                isLikedInitially = isLikedInitially,
                 profileViewModel = profileViewModel,
                 imageRepository = imageRepository)
           }
@@ -161,9 +155,7 @@ fun CategorySelector(
                 painter = painterResource(id = category.icon),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                modifier = Modifier
-                    .size(30.dp)
-                    .padding(2.dp))
+                modifier = Modifier.size(30.dp).padding(2.dp))
           },
           modifier = Modifier.testTag("${TestTags.CATEGORY_SELECTOR_TAB}_${index}"))
     }

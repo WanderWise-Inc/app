@@ -148,7 +148,7 @@ private fun PreviewItineraryBannerMaximized(
 ) {
   val titleFontSize = 32.sp
   val innerFontSize = 16.sp
-    var ctr = remember { mutableStateOf(0) }
+  var ctr = remember { mutableStateOf(0) }
 
   val profilePictureModifier =
       Modifier.clip(RoundedCornerShape(5.dp)).size(50.dp).testTag(TestTags.MAP_PROFILE_PIC)
@@ -271,7 +271,7 @@ private fun PreviewItineraryBannerMaximized(
                 profile = profile,
                 profileViewModel = profileViewModel,
                 modifier = profilePictureModifier,
-                /*ctr = ctr*/)
+            /*ctr = ctr*/ )
 
             Spacer(modifier = Modifier.width(10.dp))
 

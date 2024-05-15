@@ -39,7 +39,10 @@ class CreationStepPreviewBannerKtTest {
     composeTestRule.setContent {
       // every { createItineraryViewModelTest.getNewItinerary() } returns itineraryBuilder
 
-      CreationStepPreviewBanner(createItineraryViewModel = createItineraryViewModelTest, imageRepository = imageRepository, profileViewModel = profileViewModel)
+      CreationStepPreviewBanner(
+          createItineraryViewModel = createItineraryViewModelTest,
+          imageRepository = imageRepository,
+          profileViewModel = profileViewModel)
     }
     composeTestRule.onNodeWithTag(TestTags.CREATION_SCREEN_PREVIEW_BANNER).assertIsDisplayed()
   }
@@ -49,7 +52,10 @@ class CreationStepPreviewBannerKtTest {
     composeTestRule.setContent {
       // every { createItineraryViewModelTest.getNewItinerary() } returns itineraryBuilder
 
-      CreationStepPreviewBanner(createItineraryViewModel = createItineraryViewModelTest, imageRepository = imageRepository, profileViewModel = profileViewModel)
+      CreationStepPreviewBanner(
+          createItineraryViewModel = createItineraryViewModelTest,
+          imageRepository = imageRepository,
+          profileViewModel = profileViewModel)
     }
     composeTestRule.onNodeWithText(title).assertIsDisplayed()
   }

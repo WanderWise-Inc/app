@@ -32,7 +32,7 @@ class ItineraryBannerTest {
 
   @Before
   fun `initialize itinerary`() {
-      MockKAnnotations.init(this)
+    MockKAnnotations.init(this)
     composeTestRule.setContent {
       itinerary =
           Itinerary(
@@ -45,7 +45,12 @@ class ItineraryBannerTest {
               visible = true,
               numLikes = 42)
 
-      ItineraryBanner(itinerary = itinerary, onLikeButtonClick = { _, _ -> }, onBannerClick = {}, imageRepository = imageRepository, profileViewModel = profileViewModel)
+      ItineraryBanner(
+          itinerary = itinerary,
+          onLikeButtonClick = { _, _ -> },
+          onBannerClick = {},
+          imageRepository = imageRepository,
+          profileViewModel = profileViewModel)
     }
   }
 

@@ -99,7 +99,12 @@ class CreationNavigationTest {
       onFinished = {}
 
       CreationScreen(
-          createItineraryViewModel, profileViewModel, onFinished, navController, firebaseAuth, imageRepository)
+          createItineraryViewModel,
+          profileViewModel,
+          onFinished,
+          navController,
+          firebaseAuth,
+          imageRepository)
     }
   }
 
