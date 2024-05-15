@@ -6,21 +6,18 @@ import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
-import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.github.wanderwise_inc.app.MainActivity
-import com.github.wanderwise_inc.app.data.DefaultGoogleSignInLauncher
+import com.github.wanderwise_inc.app.data.GoogleSignInLauncher
 import com.github.wanderwise_inc.app.data.DirectionsRepository
 import com.github.wanderwise_inc.app.data.DirectionsRepositoryImpl
-import com.github.wanderwise_inc.app.data.GoogleSignInLauncher
+import com.github.wanderwise_inc.app.data.SignInLauncher
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.data.ImageRepositoryImpl
 import com.github.wanderwise_inc.app.data.ItineraryRepository
 import com.github.wanderwise_inc.app.data.ItineraryRepositoryTestImpl
 import com.github.wanderwise_inc.app.data.ProfileRepository
 import com.github.wanderwise_inc.app.data.ProfileRepositoryTestImpl
-import com.github.wanderwise_inc.app.data.SignInRepository
-import com.github.wanderwise_inc.app.data.SignInRepositoryImpl
 import com.github.wanderwise_inc.app.network.ApiServiceFactory
 import com.github.wanderwise_inc.app.viewmodel.BottomNavigationViewModel
 import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
@@ -85,26 +82,18 @@ class AppModule(
         )
     }
 
-    val loginViewModel: LoginViewModel by lazy { LoginViewModel(googleSignInLauncher) }
+    val loginViewModel: LoginViewModel by lazy { LoginViewModel(signInLauncher) }
 
-    val googleSignInLauncher: GoogleSignInLauncher by lazy {
-        DefaultGoogleSignInLauncher(signInLauncher, sinInIntent)
+    private val signInLauncher: SignInLauncher by lazy {
+        GoogleSignInLauncher(activityResultLauncher)
     }
 
-    private val signInLauncher: ActivityResultLauncher<Intent> by lazy {
+    private val activityResultLauncher: ActivityResultLauncher<Intent> by lazy {
         activity.registerForActivityResult(FirebaseAuthUIActivityResultContract()) { res ->
             val user = if (res.resultCode == ComponentActivity.RESULT_OK) firebaseAuth.currentUser else null
 
             activity.lifecycleScope.launch { loginViewModel.handleSignInResult(profileViewModel, user) }
         }
-    }
-
-    private val sinInIntent: Intent by lazy {
-        AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers).build()
-    }
-
-    private val providers: List<AuthUI.IdpConfig> by lazy {
-        listOf(AuthUI.IdpConfig.GoogleBuilder().build())
     }
 
     val profileViewModel: ProfileViewModel by lazy { ProfileViewModel(profileRepository, imageRepository) }
