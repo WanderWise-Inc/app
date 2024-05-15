@@ -7,7 +7,7 @@ class DefaultGoogleSignInLauncher(
     private val signInLauncher: ActivityResultLauncher<Intent>,
     private val signInIntent: Intent
 ) : GoogleSignInLauncher {
-  override fun launchSignIn() {
+  override fun signIn() {
     signInLauncher.launch(signInIntent)
   }
 }
