@@ -33,10 +33,6 @@ class CreateItineraryViewModel(
    * )
    * ```
    */
-
-  /* fun filterItinerariesByPrice(priceRange: FloatRange): List<Itinerary> {
-    return allItineraries.filter { it.price in priceRange }
-  }*/
   fun getNewItinerary(): Itinerary.Builder? {
     return newItineraryBuilder
   }
