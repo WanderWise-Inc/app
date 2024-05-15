@@ -50,8 +50,8 @@ class LikedScreenTest {
   @Before
   fun setup() {
     MockKAnnotations.init(this)
-      every { imageRepository.fetchImage(any()) } returns flow { emit(null) }
-      every { profileViewModel.getProfile(any()) } returns flow { emit(profile) }
+    every { imageRepository.fetchImage(any()) } returns flow { emit(null) }
+    every { profileViewModel.getProfile(any()) } returns flow { emit(profile) }
 
     for (itinerary in testItineraries) {
       itinerary.uid = itinerary.title // set uid for testTags

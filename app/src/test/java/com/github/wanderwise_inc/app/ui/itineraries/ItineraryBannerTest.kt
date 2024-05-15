@@ -13,7 +13,6 @@ import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.itinerary.ItineraryBanner
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import io.mockk.MockKAnnotations
-import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.flow.flow
 import org.junit.Before
 import org.junit.Rule
@@ -29,7 +28,7 @@ import org.robolectric.RobolectricTestRunner
 @RunWith(RobolectricTestRunner::class)
 class ItineraryBannerTest {
   @get:Rule val composeTestRule = createComposeRule()
-    @get:Rule val mockitoRule: MockitoRule = MockitoJUnit.rule()
+  @get:Rule val mockitoRule: MockitoRule = MockitoJUnit.rule()
 
   private lateinit var itinerary: Itinerary
 
@@ -37,13 +36,13 @@ class ItineraryBannerTest {
   @Mock private lateinit var profileViewModel: ProfileViewModel
 
   private var itineraryUid = "some_uid"
-    private val profile = Profile(userUid = "0", displayName = "me", bio = "bio")
+  private val profile = Profile(userUid = "0", displayName = "me", bio = "bio")
 
   @Before
   fun `initialize itinerary`() {
     MockKAnnotations.init(this)
-      `when`(imageRepository.fetchImage(anyString())).thenReturn(flow{emit(null)})
-      `when`(profileViewModel.getProfile(anyString())).thenReturn(flow{emit(profile)})
+    `when`(imageRepository.fetchImage(anyString())).thenReturn(flow { emit(null) })
+    `when`(profileViewModel.getProfile(anyString())).thenReturn(flow { emit(profile) })
     composeTestRule.setContent {
       itinerary =
           Itinerary(
