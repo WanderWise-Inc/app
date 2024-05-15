@@ -12,7 +12,6 @@ import androidx.core.app.ActivityCompat
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.github.wanderwise_inc.app.data.DirectionsRepository
-import com.github.wanderwise_inc.app.data.GoogleSignInLauncher
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.data.ItineraryRepository
 import com.github.wanderwise_inc.app.data.ProfileRepository
@@ -44,8 +43,6 @@ class MainActivity : ComponentActivity() {
     private lateinit var itineraryViewModel: ItineraryViewModel
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var profileViewModel: ProfileViewModel
-
-    private lateinit var googleSignInLauncher: GoogleSignInLauncher
 
     private lateinit var navController: NavHostController
 
@@ -85,8 +82,6 @@ class MainActivity : ComponentActivity() {
         initializeRepositories()
 
         initializeViewModels()
-
-        googleSignInLauncher = appModule.googleSignInLauncher
     }
 
     private fun requestPermissions() {

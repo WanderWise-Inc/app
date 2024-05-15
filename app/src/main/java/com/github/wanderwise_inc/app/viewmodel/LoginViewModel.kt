@@ -3,19 +3,19 @@ package com.github.wanderwise_inc.app.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.github.wanderwise_inc.app.data.GoogleSignInLauncher
+import com.github.wanderwise_inc.app.data.SignInLauncher
 import com.github.wanderwise_inc.app.model.profile.DEFAULT_OFFLINE_PROFILE
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.first
 
 class LoginViewModel(
-    private val googleSignInLauncher: GoogleSignInLauncher
+    private val signInLauncher: SignInLauncher
 ) : ViewModel() {
     private val _signInState = MutableLiveData(SignInState.NONE)
     val signInState: LiveData<SignInState> get() = _signInState
 
     fun signIn() {
-        googleSignInLauncher.signIn()
+        signInLauncher.signIn()
     }
 
     suspend fun handleSignInResult(
