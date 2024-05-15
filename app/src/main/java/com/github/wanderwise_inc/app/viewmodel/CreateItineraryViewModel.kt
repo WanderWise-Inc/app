@@ -3,7 +3,6 @@ package com.github.wanderwise_inc.app.viewmodel
 import com.github.wanderwise_inc.app.data.DirectionsRepository
 import com.github.wanderwise_inc.app.data.ItineraryRepository
 import com.github.wanderwise_inc.app.model.location.Itinerary
-import com.github.wanderwise_inc.app.model.location.ItineraryDefaultValues
 import com.github.wanderwise_inc.app.model.location.ItineraryLabels
 import java.io.InvalidObjectException
 
@@ -47,16 +46,16 @@ class CreateItineraryViewModel(
       // add error message
       throw InvalidObjectException("Itinerary.Builder is `null`")
     } else {
-      if (newItineraryBuilder!!.price == ItineraryDefaultValues.PRICE) {
+      if (newItineraryBuilder!!.price == null) {
         notSetValues.add(ItineraryLabels.PRICE)
       }
-      if (newItineraryBuilder!!.time == ItineraryDefaultValues.TIME) {
+      if (newItineraryBuilder!!.time == null) {
         notSetValues.add(ItineraryLabels.TIME)
       }
-      if (newItineraryBuilder!!.description == ItineraryDefaultValues.DESCRIPTION) {
+      if (newItineraryBuilder!!.description == null) {
         notSetValues.add(ItineraryLabels.DESCRIPTION)
       }
-      if (newItineraryBuilder!!.title == ItineraryDefaultValues.TITLE) {
+      if (newItineraryBuilder!!.title == null) {
         notSetValues.add(ItineraryLabels.TITLE)
       }
       if (newItineraryBuilder!!.locations.isEmpty()) {

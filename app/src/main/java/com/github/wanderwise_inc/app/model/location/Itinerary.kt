@@ -67,15 +67,15 @@ data class Itinerary(
    * @brief builder for an itinerary
    */
   data class Builder(
-      var uid: String = ItineraryDefaultValues.UID,
-      val userUid: String = ItineraryDefaultValues.USER_UID,
+      var uid: String? = null,
+      val userUid: String? = null,
       val locations: MutableList<Location> = mutableListOf(),
-      var title: String? = ItineraryDefaultValues.TITLE,
+      var title: String? = null,
       val tags: MutableList<Tag> = mutableListOf(),
-      var description: String? = ItineraryDefaultValues.DESCRIPTION,
-      var visible: Boolean = ItineraryDefaultValues.VISIBLE,
-      var price: Float = ItineraryDefaultValues.PRICE,
-      var time: Int = ItineraryDefaultValues.TIME
+      var description: String? = null,
+      var visible: Boolean = ItineraryDefaultValues.VISIBLE, // could be null but complicated
+      var price: Float? = null,
+      var time: Int? = null
   ) {
     /**
      * @param location the location to be added
@@ -162,15 +162,15 @@ data class Itinerary(
       // require(locations.isNotEmpty()) { "At least one location must be provided" }
       // require(title.isNotBlank()) { "Title must not be blank" }
       return Itinerary(
-          uid = uid,
-          userUid = userUid,
+          uid = uid ?: ItineraryDefaultValues.UID,
+          userUid = userUid ?: ItineraryDefaultValues.USER_UID,
           locations = locations.toList(),
-          title = title ?: "",
+          title = title ?: ItineraryDefaultValues.TITLE,
           tags = tags.toList(),
-          description = description,
+          description = description ?: ItineraryDefaultValues.DESCRIPTION,
           visible = visible,
-          price = price,
-          time = time)
+          price = price ?: ItineraryDefaultValues.PRICE,
+          time = time ?: ItineraryDefaultValues.TIME)
     }
   }
 
