@@ -2,15 +2,16 @@ package com.github.wanderwise_inc.app.ui.signin
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.performClick
-import com.github.wanderwise_inc.app.data.GoogleSignInLauncher
-import com.github.wanderwise_inc.app.ui.navigation.graph.Graph
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.navigation.NavController
+import com.github.wanderwise_inc.app.viewmodel.LoginViewModel
+import com.github.wanderwise_inc.app.viewmodel.SignInState
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import org.junit.Assert.*
-import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -20,37 +21,43 @@ import org.robolectric.RobolectricTestRunner
 @RunWith(RobolectricTestRunner::class)
 class LoginScreenKtTest {
 
-  @get:Rule val composeTestRule = createComposeRule()
+    @get:Rule
+    val composeTestRule = createComposeRule()
 
-  private var route = Graph.AUTHENTICATION
+    @MockK
+    private lateinit var loginViewModel: LoginViewModel
 
-  @MockK private lateinit var googleSignInLauncher: MockGoogleSignInLauncher
+    @MockK
+    private lateinit var navController: NavController
 
-  @Before
-  fun setup() {
-    MockKAnnotations.init(this)
-    composeTestRule.setContent { LoginScreen(googleSignInLauncher) }
-    composeTestRule.waitForIdle()
-  }
+    private val _signInState = MutableLiveData(SignInState.NONE)
+    private val signInState: LiveData<SignInState> get() = _signInState
 
-  @Test
-  fun testLoginScreenWithUserAlreadyPresentInDatabaseShouldNavigate() {
-    every { googleSignInLauncher.launchSignIn() } answers { route = Graph.HOME }
+    @Before
+    fun setup() {
+        _signInState.value = SignInState.NONE
 
-    composeTestRule.onNodeWithText("Start Wandering Now").assertExists()
-    composeTestRule.onNodeWithText("Start Wandering Now").assertIsDisplayed()
+        MockKAnnotations.init(this)
 
-    composeTestRule.onNodeWithText("Sign-In with Google").assertExists()
-    // composeTestRule.onNodeWithText("Sign-In with Google").assertIsDisplayed()
+        every { loginViewModel.signInState } returns signInState
 
-    composeTestRule.onNodeWithText("Sign-In with Google").performClick()
+        composeTestRule.setContent { LoginScreen(loginViewModel, navController) }
+        composeTestRule.waitForIdle()
+    }
 
-    assertEquals(Graph.HOME, route)
-  }
-}
+    @Test
+    fun `initial elements are displayed correctly`() {
 
-class MockGoogleSignInLauncher : GoogleSignInLauncher {
-  override fun launchSignIn() {
-    TODO("Not yet implemented")
-  }
+        composeTestRule.onNodeWithText("You can either wander dumb or,").assertIsDisplayed()
+
+        composeTestRule.onNodeWithText("WanderWise").assertIsDisplayed()
+
+        composeTestRule.onNodeWithContentDescription("new_logo_swent 1").assertIsDisplayed()
+
+        composeTestRule.onNodeWithText("Start Wandering Now").assertIsDisplayed()
+
+        composeTestRule.onNodeWithContentDescription("google-logo-9808 1").assertIsDisplayed()
+
+        composeTestRule.onNodeWithText("Sign-In with Google").assertIsDisplayed()
+    }
 }

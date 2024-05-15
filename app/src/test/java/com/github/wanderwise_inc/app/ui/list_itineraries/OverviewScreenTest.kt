@@ -54,7 +54,7 @@ class OverviewScreenTest {
     every { firebaseAuth.currentUser?.uid } returns null
 
     coEvery { profileViewModel.checkIfItineraryIsLiked(any(), any()) } returns false
-    every { profileViewModel.getUserUid() } returns "OverViewScreenTestUserUid"
+    every { profileViewModel.getActiveUserUid() } returns "OverViewScreenTestUserUid"
 
     every { itineraryViewModel.getAllPublicItineraries() } returns flow { emit(testItineraries) }
 

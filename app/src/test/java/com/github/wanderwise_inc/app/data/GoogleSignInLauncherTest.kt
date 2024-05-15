@@ -2,37 +2,40 @@ package com.github.wanderwise_inc.app.data
 
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
+import com.google.firebase.FirebaseApp
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
+import io.mockk.verify
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.junit.MockitoJUnit
-import org.mockito.junit.MockitoRule
-import org.mockito.kotlin.any
-import org.mockito.kotlin.verify
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.RuntimeEnvironment
 
 @RunWith(RobolectricTestRunner::class)
-class SignInLauncherTest {
-    @get:Rule
-    val mockitoRule: MockitoRule = MockitoJUnit.rule()
-
-    private lateinit var googleSignInLauncher: GoogleSignInLauncher
+class GoogleSignInLauncherTest {
 
     @MockK
-    private lateinit var signInLauncher: ActivityResultLauncher<Intent>
+    private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
+
+    private lateinit var googleSignInLauncher: GoogleSignInLauncher
 
     @Before
     fun setup() {
         MockKAnnotations.init(this)
-        googleSignInLauncher = GoogleSignInLauncher(signInLauncher)
+        FirebaseApp.initializeApp(RuntimeEnvironment.getApplication())
+        googleSignInLauncher = GoogleSignInLauncher(activityResultLauncher, listOf())
     }
 
     @Test
-    fun `googleSignInLauncher should launch sign in`() {
+    fun `signIn should launch activityResultLauncher`() {
+        every { activityResultLauncher.launch(any()) } just Runs
+
         googleSignInLauncher.signIn()
-        verify { signInLauncher.launch(any()) }
+
+        verify { activityResultLauncher.launch(any()) }
     }
 }
