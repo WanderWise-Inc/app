@@ -31,8 +31,10 @@ import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.navigation.Destination.CreationPreviewOptionsDestinations
 import com.github.wanderwise_inc.app.ui.navigation.NavigationActions
 import com.github.wanderwise_inc.app.ui.navigation.graph.Graph
+import com.github.wanderwise_inc.app.ui.popup.HintPopup
 import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
+import java.lang.StringBuilder
 
 @Composable
 fun CreationStepPreview(
@@ -43,6 +45,8 @@ fun CreationStepPreview(
 ) {
   var selected by remember { mutableStateOf(PreviewOption.Banner) }
   val navigator = NavigationActions(navController)
+
+  var notSetValues by remember { mutableStateOf(listOf<String>()) }
 
   Scaffold(
       floatingActionButton = {
@@ -76,7 +80,13 @@ fun CreationStepPreview(
           CreationStepPreviewNav(navController, padding, createItineraryViewModel, profileViewModel)
 
           ExtendedFloatingActionButton(
-              onClick = { onFinished() },
+              onClick = {
+                notSetValues = createItineraryViewModel.notSetValues()
+                if (notSetValues.isEmpty()) {
+                  createItineraryViewModel.uploadNewItinerary()
+                  onFinished()
+                }
+              },
               icon = {
                 Icon(
                     Icons.Outlined.CheckBox,
@@ -90,6 +100,10 @@ fun CreationStepPreview(
                   Modifier.align(Alignment.TopCenter)
                       .padding(12.dp)
                       .testTag(TestTags.CREATION_FINISH_BUTTON))
+
+          if (notSetValues.isNotEmpty()) {
+            PopUpValuesToSet(attributes = notSetValues) { notSetValues = listOf() }
+          }
         }
       }
 }
@@ -120,4 +134,13 @@ fun CreationStepPreviewNav(
 enum class PreviewOption {
   Banner,
   Itinerary
+}
+
+@Composable
+fun PopUpValuesToSet(attributes: List<String>, onDismiss: () -> Unit) {
+  val message = StringBuilder("Please fill in the following fields before submitting: ")
+  for (a in attributes) {
+    message.append(a).append(", ")
+  }
+  HintPopup(message = message.toString()) { onDismiss() }
 }

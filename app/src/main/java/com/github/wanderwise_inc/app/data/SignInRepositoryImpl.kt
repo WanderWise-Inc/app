@@ -1,6 +1,7 @@
 package com.github.wanderwise_inc.app.data
 
 import androidx.navigation.NavController
+import com.github.wanderwise_inc.app.model.profile.DEFAULT_OFFLINE_PROFILE
 import com.github.wanderwise_inc.app.model.profile.Profile
 import com.github.wanderwise_inc.app.ui.navigation.graph.Graph
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
@@ -14,7 +15,7 @@ class SignInRepositoryImpl : SignInRepository {
       user: FirebaseUser?,
   ) {
     if (user == null) {
-      throw Exception("User is Null")
+      profileViewModel.setActiveProfile(DEFAULT_OFFLINE_PROFILE)
     } else {
       // Get the user from database
       val currentProfile = profileViewModel.getProfile(user.uid).first()
@@ -38,8 +39,9 @@ class SignInRepositoryImpl : SignInRepository {
 
         // Set the user to the database
         profileViewModel.setProfile(newProfile)
-        navController.navigate(Graph.HOME)
+        profileViewModel.setActiveProfile(newProfile)
       }
     }
+    navController.navigate(Graph.HOME)
   }
 }

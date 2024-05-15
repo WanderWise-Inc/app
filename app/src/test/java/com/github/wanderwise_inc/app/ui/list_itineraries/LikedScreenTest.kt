@@ -56,6 +56,7 @@ class LikedScreenTest {
     coEvery { profileViewModel.checkIfItineraryIsLiked(any(), any()) } returns false
     every { profileViewModel.getLikedItineraries(any()) } returns
         flow { emit(listOf("0", "1", "2")) }
+    every { profileViewModel.getUserUid() } returns "LikedScreenTestUid"
 
     every { itineraryViewModel.getItineraryFromUids(any()) } returns flow { emit(testItineraries) }
 

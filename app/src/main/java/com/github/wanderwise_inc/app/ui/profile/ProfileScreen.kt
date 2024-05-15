@@ -43,7 +43,6 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
 import androidx.navigation.NavHostController
-import com.github.wanderwise_inc.app.DEFAULT_USER_UID
 import com.github.wanderwise_inc.app.R
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.model.profile.Profile
@@ -64,9 +63,8 @@ fun ProfileScreen(
     navHostController: NavHostController,
     firebaseAuth: FirebaseAuth
 ) {
-  val currentUid = firebaseAuth.currentUser?.uid ?: DEFAULT_USER_UID
-
-  val profile by profileViewModel.getProfile(currentUid).collectAsState(initial = null)
+  val profile = profileViewModel.getActiveProfile()
+  val currentUid = profileViewModel.getUserUid()
 
   val userItineraries by
       itineraryViewModel.getUserItineraries(currentUid).collectAsState(initial = emptyList())
