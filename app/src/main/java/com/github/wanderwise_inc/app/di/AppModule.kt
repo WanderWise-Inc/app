@@ -10,12 +10,9 @@ import com.github.wanderwise_inc.app.data.DefaultGoogleSignInLauncher
 import com.github.wanderwise_inc.app.data.DirectionsRepositoryImpl
 import com.github.wanderwise_inc.app.data.ImageRepositoryImpl
 import com.github.wanderwise_inc.app.data.ItineraryRepositoryImpl
-import com.github.wanderwise_inc.app.data.ItineraryRepositoryTestImpl
 import com.github.wanderwise_inc.app.data.LocationsRepositoryImpl
 import com.github.wanderwise_inc.app.data.ProfileRepositoryTestImpl
 import com.github.wanderwise_inc.app.data.SignInRepositoryImpl
-import com.github.wanderwise_inc.app.network.ApiServiceFactory
-import com.github.wanderwise_inc.app.proto.location.SavedItineraries
 import com.github.wanderwise_inc.app.network.DirectionsApiServiceFactory
 import com.github.wanderwise_inc.app.network.LocationsApiServiceFactory
 import com.github.wanderwise_inc.app.viewmodel.BottomNavigationViewModel
