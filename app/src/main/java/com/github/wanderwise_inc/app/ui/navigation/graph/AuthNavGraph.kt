@@ -4,7 +4,6 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.github.wanderwise_inc.app.data.GoogleSignInLauncher
 import com.github.wanderwise_inc.app.ui.navigation.TopLevelRoute
 import com.github.wanderwise_inc.app.ui.signin.LoginScreen
 import com.github.wanderwise_inc.app.viewmodel.LoginViewModel
