@@ -17,16 +17,11 @@ import kotlinx.coroutines.flow.flow
 
 /** @brief profile picture composable and coroutine friendly uwu rawr */
 @Composable
-fun ProfilePicture(
-    profile: Profile?,
-    profileViewModel: ProfileViewModel,
-    modifier: Modifier /*, ctr : MutableState<Int>*/
-) {
+fun ProfilePicture(profile: Profile?, profileViewModel: ProfileViewModel, modifier: Modifier) {
   // calling `remember` limits recomposition to `Profile` changes
-  val defaultProfilePictureFlow =
-      remember(profile /*, ctr.value*/) { profileViewModel.getDefaultProfilePicture() }
+  val defaultProfilePictureFlow = remember(profile) { profileViewModel.getDefaultProfilePicture() }
   val profilePictureFlow =
-      remember(profile /*, ctr.value*/) {
+      remember(profile) {
         if (profile != null) profileViewModel.getProfilePicture(profile) else flow { emit(null) }
       }
 

@@ -23,9 +23,7 @@ fun CreationNavGraph(
     padding: PaddingValues,
     profileViewModel: ProfileViewModel,
     onFinished: () -> Unit,
-    // bottomNavigationViewModel: BottomNavigationViewModel,
     imageRepository: ImageRepository,
-    // firebaseAuth: FirebaseAuth
 ) {
   NavHost(
       navController = navController,

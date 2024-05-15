@@ -1,6 +1,5 @@
 package com.github.wanderwise_inc.app.ui.list_itineraries
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -20,7 +19,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -57,7 +55,6 @@ fun ItinerariesListScrollable(
     parent: ItineraryListParent,
     imageRepository: ImageRepository
 ) {
-  val coroutineScope = rememberCoroutineScope()
   if (itineraries.isEmpty()) {
     val parentVerb =
         when (parent) {
@@ -74,10 +71,9 @@ fun ItinerariesListScrollable(
                 .height(100.dp)) {
           Text(
               text = "You have not $parentVerb any itineraries yet",
-              // color = MaterialTheme.colorScheme.
               textAlign = TextAlign.Center,
               modifier = Modifier.padding(5.dp, 10.dp))
-        } // PaModifier.padding(5.dp, 10.dp))
+        }
   } else {
     /* store liked itineraries in persistent storage */
     if (parent == ItineraryListParent.LIKED && itineraries.isNotEmpty())
@@ -86,15 +82,11 @@ fun ItinerariesListScrollable(
     LazyColumn(
         modifier = Modifier.padding(paddingValues).testTag(TestTags.ITINERARY_LIST_SCROLLABLE),
         verticalArrangement = spacedBy(15.dp)) {
-          // this.items(itineraries) { itinerary ->
           this.items(itineraries, { (iti) -> iti }) { itinerary ->
             val uid = firebaseAuth.currentUser?.uid ?: DEFAULT_USER_UID
-            // val uid = profileViewModel.getUserUid() -> CRASH APP
             var isLikedInitially by remember { mutableStateOf(false) }
             LaunchedEffect(uid) {
-              Log.d("ItinerariesListScrollable", "LaunchedEffect")
               isLikedInitially = profileViewModel.checkIfItineraryIsLiked(uid, itinerary.uid)
-              Log.d("ItinerariesListScrollable", "0: isLikedInitially: $isLikedInitially")
             }
 
             val onLikeButtonClick = { it: Itinerary, isLiked: Boolean ->
@@ -111,7 +103,6 @@ fun ItinerariesListScrollable(
               itineraryViewModel.setFocusedItinerary(it)
               navigationActions.navigateTo(Destination.TopLevelDestination.Map)
             }
-            Log.d("ItinerariesListScrollable", "1 : isLikedInitially: $isLikedInitially")
             ItineraryBanner(
                 itinerary = itinerary,
                 onLikeButtonClick = onLikeButtonClick,

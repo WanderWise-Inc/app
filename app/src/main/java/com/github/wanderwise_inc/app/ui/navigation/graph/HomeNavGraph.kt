@@ -31,19 +31,10 @@ fun HomeNavGraph(
     firebaseAuth: FirebaseAuth
 ) {
 
-  // BEGIN DEMO SETUP
-  // demoSetup(itineraryViewModel, profileViewModel, firebaseAuth)
-  /*var itinerary: Itinerary? = null
-  runBlocking {
-    itinerary = itineraryViewModel.getItineraryFromUids(listOf(PREVIEW_ITINERARY_DEMO_UID)).first()[0]
-  }*/
-  // END DEMO SETUP
-
   NavHost(
       navController = navController,
       route = Graph.HOME,
       startDestination = TopLevelDestination.Overview.route,
-      // modifier = Modifier.padding(innerPadding)
   ) {
     composable(route = TopLevelDestination.Overview.route) {
       bottomNavigationViewModel.setSelected(NavigationItem.OVERVIEW.ordinal)

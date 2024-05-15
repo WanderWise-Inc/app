@@ -71,7 +71,6 @@ object AppModule {
 
   val itineraryRepository by lazy {
     ItineraryRepositoryImpl(db, context, savedItinerariesDataStore)
-    // ItineraryRepositoryTestImpl()
   }
 
   val profileRepository by lazy { ProfileRepositoryImpl(db) }
