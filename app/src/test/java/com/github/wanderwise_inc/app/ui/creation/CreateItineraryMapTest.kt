@@ -89,12 +89,13 @@ class CreateItineraryMapTest {
                 ArgumentMatchers.anyString()))
         .thenReturn(MutableLiveData(listOf(LatLng(epflLat, epflLon))))
     Mockito.`when`(
-        locationsRepository.getPlaces(
-            ArgumentMatchers.anyString(),
-            ArgumentMatchers.anyInt(),
-            ArgumentMatchers.anyString()
-        )
-    ).thenReturn(MutableLiveData(listOf(com.github.wanderwise_inc.app.model.location.Location(epflLat, epflLon))))
+            locationsRepository.getPlaces(
+                ArgumentMatchers.anyString(),
+                ArgumentMatchers.anyInt(),
+                ArgumentMatchers.anyString()))
+        .thenReturn(
+            MutableLiveData(
+                listOf(com.github.wanderwise_inc.app.model.location.Location(epflLat, epflLon))))
     Mockito.`when`(userLocationClient.getLocationUpdates(anyLong()))
         .thenReturn(flow { emit(epflLocation) })
     val itineraryRepository = Mockito.mock(ItineraryRepository::class.java)
@@ -106,7 +107,8 @@ class CreateItineraryMapTest {
         .thenReturn(flow { emit(null) })
 
     createItineraryViewModel =
-        CreateItineraryViewModel(itineraryRepository, directionsRepository, locationsRepository, userLocationClient)
+        CreateItineraryViewModel(
+            itineraryRepository, directionsRepository, locationsRepository, userLocationClient)
     createItineraryViewModel.startNewItinerary(dummyProfile.userUid)
 
     profileViewModel = ProfileViewModel(profileRepository, imageRepository)

@@ -97,11 +97,7 @@ class PreviewItineraryScreenKtTest {
 
     itineraryViewModel =
         ItineraryViewModel(
-            itineraryRepository,
-            directionsRepository,
-            locationsRepository,
-            userLocationClient
-        )
+            itineraryRepository, directionsRepository, locationsRepository, userLocationClient)
     itineraryViewModel.setFocusedItinerary(itinerary)
     profileViewModel = ProfileViewModel(profileRepository, imageRepository)
   }

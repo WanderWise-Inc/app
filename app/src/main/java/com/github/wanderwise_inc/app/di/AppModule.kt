@@ -68,11 +68,13 @@ object AppModule {
   val bottomNavigationViewModel by lazy { BottomNavigationViewModel() }
 
   val createItineraryViewModel by lazy {
-    CreateItineraryViewModel(itineraryRepository, directionsRepository, locationsRepository, locationClient)
+    CreateItineraryViewModel(
+        itineraryRepository, directionsRepository, locationsRepository, locationClient)
   }
 
   val itineraryViewModel by lazy {
-    ItineraryViewModel(itineraryRepository, directionsRepository, locationsRepository, locationClient)
+    ItineraryViewModel(
+        itineraryRepository, directionsRepository, locationsRepository, locationClient)
   }
 
   val profileViewModel by lazy { ProfileViewModel(profileRepository, imageRepository) }

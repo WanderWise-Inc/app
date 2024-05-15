@@ -18,19 +18,9 @@ import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.github.wanderwise_inc.app.data.DirectionsRepository
 import com.github.wanderwise_inc.app.data.GoogleSignInLauncher
-import com.github.wanderwise_inc.app.data.ImageRepositoryImpl
-import com.github.wanderwise_inc.app.data.ItineraryRepositoryTestImpl
-import com.github.wanderwise_inc.app.data.LocationsRepository
-import com.github.wanderwise_inc.app.data.ProfileRepositoryTestImpl
-import com.github.wanderwise_inc.app.data.SignInRepositoryImpl
-import com.github.wanderwise_inc.app.network.DirectionsApiServiceFactory
-import com.github.wanderwise_inc.app.network.LocationsApiServiceFactory
-import com.github.wanderwise_inc.app.ui.creation.CreationScreen
-import com.github.wanderwise_inc.app.ui.creation.steps.CreateItineraryMapWithSelector
-import com.github.wanderwise_inc.app.ui.home.HomeScreen
-import com.github.wanderwise_inc.app.ui.map.SearchLocation
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.data.ItineraryRepository
+import com.github.wanderwise_inc.app.data.LocationsRepository
 import com.github.wanderwise_inc.app.data.ProfileRepository
 import com.github.wanderwise_inc.app.data.SignInRepository
 import com.github.wanderwise_inc.app.di.AppModule
@@ -96,8 +86,7 @@ class MainActivity : ComponentActivity() {
 
   private val locationClient by lazy {
     UserLocationClient(
-      applicationContext, LocationServices.getFusedLocationProviderClient(applicationContext)
-    )
+        applicationContext, LocationServices.getFusedLocationProviderClient(applicationContext))
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -108,22 +97,16 @@ class MainActivity : ComponentActivity() {
     setContent {
       WanderWiseTheme {
         Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-            navController = rememberNavController()
-            SearchLocation(itineraryViewModel)
-            /*CreationScreen(
-                createItineraryViewModel = createItineraryViewModel,
-                profileViewModel = profileViewModel,
-                firebaseAuth = FirebaseAuth.getInstance()
-            )*/
-            /*RootNavigationGraph(
-              googleSignInLauncher,
-              profileViewModel,
-              itineraryViewModel,
-              createItineraryViewModel,
-              bottomNavigationViewModel,
-              imageRepository,
-              navController,
-              firebaseAuth)*/
+          navController = rememberNavController()
+          RootNavigationGraph(
+          googleSignInLauncher,
+          profileViewModel,
+          itineraryViewModel,
+          createItineraryViewModel,
+          bottomNavigationViewModel,
+          imageRepository,
+          navController,
+          firebaseAuth)
         }
       }
     }

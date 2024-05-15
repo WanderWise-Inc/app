@@ -12,12 +12,9 @@ class CreateItineraryViewModel(
     private val directionsRepository: DirectionsRepository,
     private val locationsRepository: LocationsRepository,
     private val locationClient: LocationClient
-) : ItineraryViewModel(
-    itineraryRepository,
-    directionsRepository,
-    locationsRepository,
-    locationClient
-) {
+) :
+    ItineraryViewModel(
+        itineraryRepository, directionsRepository, locationsRepository, locationClient) {
   /** New itinerary that the signed in user is currently building */
   private var newItineraryBuilder: Itinerary.Builder? = null
 

@@ -20,10 +20,10 @@ import kotlinx.coroutines.launch
 private const val DEBUG_TAG: String = "MAP_VIEWMODEL"
 /** @brief ViewModel class for providing `Location`s and `Itinerary`s to the map UI */
 open class ItineraryViewModel(
-  private val itineraryRepository: ItineraryRepository,
-  private val directionsRepository: DirectionsRepository,
-  private val locationsRepository: LocationsRepository,
-  private val locationClient: LocationClient,
+    private val itineraryRepository: ItineraryRepository,
+    private val directionsRepository: DirectionsRepository,
+    private val locationsRepository: LocationsRepository,
+    private val locationClient: LocationClient,
 ) : ViewModel() {
   private var focusedItinerary: Itinerary? = null
 
@@ -140,21 +140,21 @@ open class ItineraryViewModel(
 
   private val _locationsLiveData = MutableLiveData<List<Location>>()
   private val locationsLiveData: LiveData<List<Location>> =
-    _locationsLiveData // gettable from view 
-  
+      _locationsLiveData // gettable from view
+
   /* gets the places corresponding to the queried name */
   fun fetchPlaces(name: String) {
     val key = BuildConfig.GEOCODE_API_KEY
-    viewModelScope.launch { 
-      locationsRepository.getPlaces(name = name, apiKey = key)
-        .observeForever { response -> _locationsLiveData.value = response ?: listOf() }
+    viewModelScope.launch {
+      locationsRepository.getPlaces(name = name, apiKey = key).observeForever { response ->
+        _locationsLiveData.value = response ?: listOf()
+      }
     }
   }
-  
+
   fun getPlacesLiveData(): LiveData<List<Location>> {
     return locationsLiveData
   }
-  
 
   /** @brief get a Flow of the user location updated every second */
   fun getUserLocation(): Flow<android.location.Location> {

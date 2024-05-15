@@ -1,6 +1,5 @@
 package com.github.wanderwise_inc.app.viewmodel
 
-import android.location.Location
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import app.cash.turbine.test
@@ -9,14 +8,13 @@ import com.github.wanderwise_inc.app.data.DirectionsRepository
 import com.github.wanderwise_inc.app.data.ItineraryRepository
 import com.github.wanderwise_inc.app.data.LocationsRepository
 import com.github.wanderwise_inc.app.model.location.FakeItinerary
-import com.github.wanderwise_inc.app.model.location.FakeLocation
 import com.github.wanderwise_inc.app.model.location.FakeLocation.EMPIRE_STATE_BUILDING
 import com.github.wanderwise_inc.app.model.location.FakeLocation.STATUE_OF_LIBERTY
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryPreferences
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
+import com.github.wanderwise_inc.app.model.location.Location
 import com.github.wanderwise_inc.app.utils.MainDispatcherRule
-import com.google.android.gms.maps.model.LatLng
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.every
@@ -46,7 +44,7 @@ class ItineraryViewModelTest {
   @MockK private lateinit var itineraryRepository: ItineraryRepository
 
   @MockK private lateinit var directionsRepository: DirectionsRepository
-  
+
   @MockK private lateinit var locationsRepository: LocationsRepository
 
   @MockK private lateinit var userLocationClient: UserLocationClient
@@ -62,11 +60,7 @@ class ItineraryViewModelTest {
     MockKAnnotations.init(this)
     itineraryViewModel =
         ItineraryViewModel(
-            itineraryRepository,
-            directionsRepository,
-            locationsRepository,
-            userLocationClient
-        )
+            itineraryRepository, directionsRepository, locationsRepository, userLocationClient)
   }
 
   @Test
@@ -240,10 +234,9 @@ class ItineraryViewModelTest {
   @ExperimentalCoroutinesApi
   @Test
   fun fetchPlaces() = runTest {
-    val locationsLatLng = listOf(LatLng(STATUE_OF_LIBERTY.lat, STATUE_OF_LIBERTY.long))
+    val locations = listOf(Location(STATUE_OF_LIBERTY.lat, STATUE_OF_LIBERTY.long))
 
-    every { locationsRepository.getPlaces(any(), any(), any()) } returns
-            MutableLiveData(locationsLatLng)
+    every { locationsRepository.getPlaces(any(), any(), any()) } returns MutableLiveData(locations)
 
     itineraryViewModel.fetchPlaces("Statue of Liberty")
 
@@ -255,32 +248,33 @@ class ItineraryViewModelTest {
 
   @ExperimentalCoroutinesApi
   @Test
-  fun getPlacesLiveData() = runTest {    
-    val statueOfLibertyLatLng = listOf(LatLng(STATUE_OF_LIBERTY.lat, STATUE_OF_LIBERTY.long))
-    val empireStateBuildingLatLng = listOf(LatLng(EMPIRE_STATE_BUILDING.lat, EMPIRE_STATE_BUILDING.long))
+  fun getPlacesLiveData() = runTest {
+    val statueOfLibertyLocation = listOf(Location(STATUE_OF_LIBERTY.lat, STATUE_OF_LIBERTY.long))
+    val empireStateBuildingLocation =
+        listOf(Location(EMPIRE_STATE_BUILDING.lat, EMPIRE_STATE_BUILDING.long))
 
     every { locationsRepository.getPlaces(any(), any(), any()) } returns
-            MutableLiveData(statueOfLibertyLatLng) andThen
-            MutableLiveData(empireStateBuildingLatLng)
+        MutableLiveData(statueOfLibertyLocation) andThen
+        MutableLiveData(empireStateBuildingLocation)
 
     itineraryViewModel.fetchPlaces("Statue of Liberty")
 
     advanceUntilIdle()
 
     var polylineLocations = itineraryViewModel.getPlacesLiveData().value
-    assertEquals(statueOfLibertyLatLng, polylineLocations)
+    assertEquals(statueOfLibertyLocation, polylineLocations)
 
     itineraryViewModel.fetchPlaces("Empire State Building")
 
     advanceUntilIdle()
 
     polylineLocations = itineraryViewModel.getPlacesLiveData().value
-    assertEquals(empireStateBuildingLatLng, polylineLocations)
+    assertEquals(empireStateBuildingLocation, polylineLocations)
   }
 
   @Test
   fun getUserLocation() = runBlocking {
-    val epflLocation = Location("TestProvider")
+    val epflLocation = android.location.Location("TestProvider")
     epflLocation.latitude = 46.5188
     epflLocation.longitude = 6.5593
     val delta = 0.001

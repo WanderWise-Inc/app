@@ -49,7 +49,7 @@ class CreateItineraryMapUITest {
   @Mock private lateinit var profileRepository: ProfileRepository
   @Mock private lateinit var imageRepository: ImageRepository
   @Mock private lateinit var directionsRepository: DirectionsRepository
-    @Mock private lateinit var locationsRepository: LocationsRepository
+  @Mock private lateinit var locationsRepository: LocationsRepository
   @Mock private lateinit var userLocationClient: UserLocationClient
 
   private lateinit var profileViewModel: ProfileViewModel
@@ -83,14 +83,15 @@ class CreateItineraryMapUITest {
                 ArgumentMatchers.anyList(),
                 ArgumentMatchers.anyString()))
         .thenReturn(MutableLiveData(listOf(LatLng(epflLat, epflLon))))
-      Mockito.`when`(
-          locationsRepository.getPlaces(
-              ArgumentMatchers.anyString(),
-              ArgumentMatchers.anyInt(),
-              ArgumentMatchers.anyString()
-          )
-      ).thenReturn(MutableLiveData(listOf(com.github.wanderwise_inc.app.model.location.Location(epflLat, epflLon))))
-      Mockito.`when`(userLocationClient.getLocationUpdates(1000))
+    Mockito.`when`(
+            locationsRepository.getPlaces(
+                ArgumentMatchers.anyString(),
+                ArgumentMatchers.anyInt(),
+                ArgumentMatchers.anyString()))
+        .thenReturn(
+            MutableLiveData(
+                listOf(com.github.wanderwise_inc.app.model.location.Location(epflLat, epflLon))))
+    Mockito.`when`(userLocationClient.getLocationUpdates(1000))
         .thenReturn(flow { emit(epflLocation) })
     val itineraryRepository = Mockito.mock(ItineraryRepository::class.java)
 
@@ -104,7 +105,8 @@ class CreateItineraryMapUITest {
         .thenReturn(flow { emit(null) })
 
     createItineraryViewModel =
-        CreateItineraryViewModel(itineraryRepository, directionsRepository, locationsRepository, userLocationClient)
+        CreateItineraryViewModel(
+            itineraryRepository, directionsRepository, locationsRepository, userLocationClient)
     createItineraryViewModel.startNewItinerary(dummyProfile.userUid)
 
     profileViewModel = ProfileViewModel(profileRepository, imageRepository)
