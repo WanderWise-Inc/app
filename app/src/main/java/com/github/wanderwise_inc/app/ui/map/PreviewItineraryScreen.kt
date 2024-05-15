@@ -18,11 +18,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.DirectionsWalk
+import androidx.compose.material.icons.filled.DirectionsWalk
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Place
+import androidx.compose.material.icons.outlined.DirectionsWalk
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -85,15 +89,9 @@ fun PreviewItineraryScreen(
     val polylinePoints by itineraryViewModel.getPolylinePointsLiveData().observeAsState()
     var isMinimized by remember { mutableStateOf(false) }
     val onMinimizedClick = { isMinimized = !isMinimized }
+    var isClicked by remember { mutableStateOf(false) }
 
     Scaffold(
-        topBar = {
-          Box(modifier = Modifier.background(Color.LightGray).fillMaxWidth()) {
-            StartButton(
-                onClick = onMinimizedClick,
-                modifier = Modifier.align(Alignment.TopStart).fillMaxWidth())
-          }
-        },
         bottomBar = {
           PreviewItineraryBanner(
               isMinimized, onMinimizedClick, itinerary, itineraryViewModel, profileViewModel)
@@ -103,46 +101,79 @@ fun PreviewItineraryScreen(
           CenterButton(cameraPositionState = cameraPositionState, currentLocation = userLocation)
         },
         floatingActionButtonPosition = FabPosition.Start) { paddingValues ->
-          GoogleMap(
-              modifier =
-                  Modifier.fillMaxSize().padding(paddingValues).testTag(TestTags.MAP_GOOGLE_MAPS),
-              cameraPositionState = cameraPositionState) {
-                userLocation?.let {
-                  Marker(
-                      tag = TestTags.MAP_USER_LOCATION,
-                      state = MarkerState(position = LatLng(it.latitude, it.longitude)),
-                      icon =
-                          BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
-                }
-                itinerary.locations.map { location ->
-                  AdvancedMarker(
-                      state = MarkerState(position = location.toLatLng()),
-                      title = location.title ?: "",
-                  )
-                  if (polylinePoints != null) {
-                    Polyline(points = polylinePoints!!, color = MaterialTheme.colorScheme.primary)
+          Box() {
+            GoogleMap(
+                modifier =
+                    Modifier.fillMaxSize().padding(paddingValues).testTag(TestTags.MAP_GOOGLE_MAPS),
+                cameraPositionState = cameraPositionState) {
+                  userLocation?.let {
+                    Marker(
+                        tag = TestTags.MAP_USER_LOCATION,
+                        state = MarkerState(position = LatLng(it.latitude, it.longitude)),
+                        icon =
+                            BitmapDescriptorFactory.defaultMarker(
+                                BitmapDescriptorFactory.HUE_AZURE))
+                  }
+                  itinerary.locations.map { location ->
+                    AdvancedMarker(
+                        state = MarkerState(position = location.toLatLng()),
+                        title = location.title ?: "",
+                    )
+                    if (polylinePoints != null) {
+                      Polyline(points = polylinePoints!!, color = MaterialTheme.colorScheme.primary)
+                    }
                   }
                 }
-              }
+            ExtendedFloatingActionButton(
+                onClick = {
+                  onMinimizedClick()
+                  isClicked = !isClicked
+                },
+                icon = {
+                  Icon(
+                      Icons.AutoMirrored.Filled.DirectionsWalk,
+                      contentDescription = "follow",
+                      modifier = Modifier.size(32.dp))
+                },
+                text = {
+                  Text(text = if (isClicked) "Following..." else "Follow", color = Color.DarkGray)
+                },
+                containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                modifier =
+                    Modifier.align(Alignment.TopCenter)
+                        .padding(12.dp)
+                        .testTag(TestTags.START_NEW_ITINERARY_STARTING))
+          }
         }
   }
 }
 
-@Composable
-fun StartButton(onClick: () -> Unit, modifier: Modifier) {
+/*fun StartButton(onClick: () -> Unit, modifier: Modifier) {
   var isClicked by remember { mutableStateOf(false) }
 
-  FloatingActionButton(
+  ExtendedFloatingActionButton(
       onClick = {
         onClick()
         isClicked = !isClicked
       },
-      containerColor = Color.LightGray,
+      icon = {
+          Icon(
+              Icons.AutoMirrored.Filled.DirectionsWalk,
+              contentDescription = "finished",
+              modifier = Modifier.size(32.dp))
+      },
+      text = {Text(text = if (isClicked) "Following..." else "Follow", color = Color.DarkGray) },
+      containerColor = MaterialTheme.colorScheme.secondaryContainer,
+      contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+      modifier =
+      Modifier.align(Alignment.TopCenter)
+          .padding(12.dp)
+          .testTag(TestTags.CREATION_FINISH_BUTTON))
+
       // MaterialTheme.colorScheme.surfaceContainer,
-      modifier = modifier.testTag(TestTags.START_NEW_ITINERARY_STARTING)) {
-        Text(text = if (isClicked) "Following..." else "Follow", color = Color.DarkGray)
-      }
-}
+
+}*/
 
 /**
  * @brief displayed beneath `Maps` composable in `PreviewItineraryScreen`. Variable height with
