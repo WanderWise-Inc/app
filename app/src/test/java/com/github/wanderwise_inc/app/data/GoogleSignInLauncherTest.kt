@@ -27,7 +27,7 @@ class GoogleSignInLauncherTest {
 
   @Test
   fun `googleSignInLauncher should launch sign in`() {
-    googleSignInLauncher.launchSignIn()
+    googleSignInLauncher.signIn()
     verify(signInLauncher).launch(signInIntent)
   }
 }
