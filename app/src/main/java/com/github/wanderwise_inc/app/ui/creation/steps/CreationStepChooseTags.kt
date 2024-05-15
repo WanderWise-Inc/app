@@ -30,15 +30,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.github.wanderwise_inc.app.ui.TestTags
 
 @Composable
 fun CreationStepChooseTagsScreen() {
   Column(
       horizontalAlignment = Alignment.CenterHorizontally,
-      modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.primaryContainer),
+      modifier =
+          Modifier.testTag(TestTags.CREATION_SCREEN_TAGS)
+              .fillMaxSize()
+              .background(MaterialTheme.colorScheme.primaryContainer),
       verticalArrangement = Arrangement.spacedBy(10.dp)) {
         ItineraryImageBanner(modifier = Modifier.padding(all = 10.dp))
         PriceEstimationTextBox()
