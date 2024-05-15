@@ -1,6 +1,7 @@
 package com.github.wanderwise_inc.app.ui.profile
 
 import android.content.Intent
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -63,6 +64,7 @@ fun ProfileScreen(
     navHostController: NavHostController,
     firebaseAuth: FirebaseAuth
 ) {
+    Log.d("ProfileScreen", "ProfileScreen")
   val profile = profileViewModel.getActiveProfile()
   val currentUid = profileViewModel.getUserUid()
 
@@ -119,6 +121,7 @@ fun ProfileScreen(
                   firebaseAuth = firebaseAuth,
                   paddingValues = PaddingValues(8.dp),
                   parent = ItineraryListParent.PROFILE,
+                    imageRepository = imageRepository
               )
             }
           }

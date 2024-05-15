@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.navigation.NavHostController
 import com.github.wanderwise_inc.app.R
+import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.home.SearchBar
@@ -28,7 +29,8 @@ fun OverviewScreen(
     itineraryViewModel: ItineraryViewModel,
     profileViewModel: ProfileViewModel,
     navController: NavHostController,
-    firebaseAuth: FirebaseAuth
+    firebaseAuth: FirebaseAuth,
+    imageRepository: ImageRepository
 ) {
   val sliderPositionPriceState = remember { mutableStateOf(0f..100f) }
   val sliderPositionTimeState = remember { mutableStateOf(0f..24f) }
@@ -39,7 +41,8 @@ fun OverviewScreen(
       navController = navController,
       firebaseAuth = firebaseAuth,
       sliderPositionPriceState = sliderPositionPriceState,
-      sliderPositionTimeState = sliderPositionTimeState)
+      sliderPositionTimeState = sliderPositionTimeState,
+      imageRepository = imageRepository)
 }
 
 /** Displays global itineraries filtered on some predicates */
@@ -50,7 +53,8 @@ fun DisplayOverviewItineraries(
     navController: NavHostController,
     firebaseAuth: FirebaseAuth,
     sliderPositionPriceState: MutableState<ClosedFloatingPointRange<Float>>,
-    sliderPositionTimeState: MutableState<ClosedFloatingPointRange<Float>>
+    sliderPositionTimeState: MutableState<ClosedFloatingPointRange<Float>>,
+    imageRepository: ImageRepository
 ) {
 
   /* the categories that can be selected by the user during filtering */
@@ -114,6 +118,6 @@ fun DisplayOverviewItineraries(
             firebaseAuth = firebaseAuth,
             paddingValues = innerPadding,
             parent = ItineraryListParent.OVERVIEW,
-        )
+            imageRepository = imageRepository)
       }
 }

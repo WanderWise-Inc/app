@@ -34,6 +34,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.painter.BitmapPainter
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
@@ -43,6 +46,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.wanderwise_inc.app.R
+import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
@@ -53,11 +57,16 @@ fun ItineraryBanner(
     onLikeButtonClick: (Itinerary, Boolean) -> Unit,
     onBannerClick: (Itinerary) -> Unit,
     isLikedInitially: Boolean = false,
-    profileViewModel: ProfileViewModel
+    profileViewModel: ProfileViewModel,
+    imageRepository: ImageRepository
 ) {
 
-  val imageId = R.drawable.underground_2725336_1280
-
+  val imageId = R.drawable.defaultitinerary
+    /*val defaultImageFlow = remember(itinerary) { imageRepository.fetchImage("itineraryPictures/defaultItinerary.png") }*/
+    val imageFlow = remember(itinerary) { imageRepository.fetchImage("itineraryPictures/${itinerary.uid}") }
+    /*val defaultImage by defaultImageFlow.collectAsState(initial = null)*/
+    val image by imageFlow.collectAsState(initial = null)
+    val painter : Painter = if (image != null) BitmapPainter(image!!.asImageBitmap()) else  painterResource(id = imageId)
   var isLiked by remember { mutableStateOf(isLikedInitially) }
   var numLikes by remember { mutableIntStateOf(itinerary.numLikes) }
   var prices by remember { mutableFloatStateOf(itinerary.price) }
@@ -83,7 +92,7 @@ fun ItineraryBanner(
 
               // Image of the itinerary
               Image(
-                  painter = painterResource(id = imageId),
+                  painter = painter,
                   contentDescription = itinerary.description,
                   modifier =
                   Modifier

@@ -24,6 +24,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.navigation.ItineraryCreationNavigationMenu
 import com.github.wanderwise_inc.app.ui.navigation.NavigationActions
@@ -38,7 +39,8 @@ fun CreationScreen(
     profileViewModel: ProfileViewModel,
     onFinished: () -> Unit,
     navController: NavHostController = rememberNavController(),
-    firebaseAuth: FirebaseAuth
+    firebaseAuth: FirebaseAuth,
+    imageRepository: ImageRepository
 ) {
   val userUid = firebaseAuth.currentUser?.uid ?: "NULL"
 
@@ -58,7 +60,7 @@ fun CreationScreen(
         },
         modifier = Modifier.testTag(TestTags.NEW_CREATION_SCREEN)) { padding ->
           CreationNavGraph(
-              createItineraryViewModel, navController, padding, profileViewModel, onFinished)
+              createItineraryViewModel, navController, padding, profileViewModel, onFinished, imageRepository)
         }
   }
 }

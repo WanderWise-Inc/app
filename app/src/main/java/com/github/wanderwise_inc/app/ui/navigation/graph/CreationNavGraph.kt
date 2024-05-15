@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.ui.creation.steps.CreateItineraryMapWithSelector
 import com.github.wanderwise_inc.app.ui.creation.steps.CreationStepChooseDescriptionScreen
 import com.github.wanderwise_inc.app.ui.creation.steps.CreationStepChooseTagsScreen
@@ -23,7 +24,7 @@ fun CreationNavGraph(
     profileViewModel: ProfileViewModel,
     onFinished: () -> Unit,
     // bottomNavigationViewModel: BottomNavigationViewModel,
-    // imageRepository: ImageRepository,
+    imageRepository: ImageRepository,
     // firebaseAuth: FirebaseAuth
 ) {
   NavHost(
@@ -42,7 +43,8 @@ fun CreationNavGraph(
           CreationStepPreview(
               createItineraryViewModel = createItineraryViewModel,
               profileViewModel = profileViewModel,
-              onFinished = onFinished)
+              onFinished = onFinished,
+              imageRepository = imageRepository)
         }
       }
 }

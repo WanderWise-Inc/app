@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.github.wanderwise_inc.app.DEFAULT_USER_UID
+import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.itinerary.ItineraryBanner
@@ -55,6 +56,7 @@ fun ItinerariesListScrollable(
     firebaseAuth: FirebaseAuth,
     paddingValues: PaddingValues,
     parent: ItineraryListParent,
+    imageRepository: ImageRepository
 ) {
     val coroutineScope = rememberCoroutineScope()
   if (itineraries.isEmpty()) {
@@ -115,7 +117,8 @@ fun ItinerariesListScrollable(
               onLikeButtonClick = onLikeButtonClick,
               onBannerClick = onBannerClick,
               isLikedInitially = isLikedInitially,
-                profileViewModel = profileViewModel)
+                profileViewModel = profileViewModel,
+                imageRepository = imageRepository)
           }
         }
   }

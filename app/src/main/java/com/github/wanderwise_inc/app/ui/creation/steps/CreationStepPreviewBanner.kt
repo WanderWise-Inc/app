@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
+import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.model.location.FakeItinerary
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.ui.TestTags
@@ -18,7 +19,7 @@ import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 
 @Composable
-fun CreationStepPreviewBanner(createItineraryViewModel: CreateItineraryViewModel, profileViewModel: ProfileViewModel) {
+fun CreationStepPreviewBanner(createItineraryViewModel: CreateItineraryViewModel, profileViewModel: ProfileViewModel, imageRepository: ImageRepository) {
   val dummyItinerary =
       Itinerary(
           "1",
@@ -48,7 +49,8 @@ fun CreationStepPreviewBanner(createItineraryViewModel: CreateItineraryViewModel
                     itinerary = dummyItinerary,
                     onLikeButtonClick = onLikeButtonClick,
                     onBannerClick = onBannerClick,
-                    profileViewModel = profileViewModel)
+                    profileViewModel = profileViewModel,
+                    imageRepository = imageRepository)
               }
 
               item {
@@ -56,7 +58,8 @@ fun CreationStepPreviewBanner(createItineraryViewModel: CreateItineraryViewModel
                     itinerary = itinerary,
                     onLikeButtonClick = onLikeButtonClick,
                     onBannerClick = onBannerClick,
-                    profileViewModel = profileViewModel)
+                    profileViewModel = profileViewModel,
+                    imageRepository = imageRepository)
               }
 
               item {
@@ -64,7 +67,8 @@ fun CreationStepPreviewBanner(createItineraryViewModel: CreateItineraryViewModel
                     itinerary = dummyItinerary,
                     onLikeButtonClick = onLikeButtonClick,
                     onBannerClick = onBannerClick,
-                    profileViewModel = profileViewModel)
+                    profileViewModel = profileViewModel,
+                    imageRepository = imageRepository)
               }
             }
       }
