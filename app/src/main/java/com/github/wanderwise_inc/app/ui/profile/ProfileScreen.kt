@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -29,6 +30,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -67,6 +69,7 @@ fun ProfileScreen(
     Log.d("ProfileScreen", "ProfileScreen")
   val profile = profileViewModel.getActiveProfile()
   val currentUid = profileViewModel.getUserUid()
+    var ctr = remember { mutableStateOf(0) }
 
   val userItineraries by
       itineraryViewModel.getUserItineraries(currentUid).collectAsState(initial = emptyList())
@@ -83,7 +86,9 @@ fun ProfileScreen(
                     Image(
                         painter = painterResource(id = R.drawable.settings_icon),
                         contentDescription = "Edit Profile",
-                        modifier = Modifier.requiredWidth(35.dp).requiredHeight(35.dp))
+                        modifier = Modifier
+                            .requiredWidth(35.dp)
+                            .requiredHeight(35.dp))
                   }
                 }
               },
@@ -96,16 +101,20 @@ fun ProfileScreen(
                       actionIconContentColor = MaterialTheme.colorScheme.onSecondary),
               modifier = Modifier.padding(bottom = 20.dp))
         },
-        modifier = Modifier.fillMaxSize().testTag(TestTags.PROFILE_SCREEN),
+        modifier = Modifier
+            .fillMaxSize()
+            .testTag(TestTags.PROFILE_SCREEN),
     ) { innerPadding ->
       // Box container to manage padding and alignment of the profile content.
       Box(
-          modifier = Modifier.padding(innerPadding).fillMaxSize(),
+          modifier = Modifier
+              .padding(innerPadding)
+              .fillMaxSize(),
           contentAlignment = Alignment.TopCenter) {
             // Column to layout profile details vertically and centered.
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
               // Display the user's profile picture.
-              ProfilePictureWithDropDown(profile, profileViewModel, imageRepository)
+              ProfilePictureWithDropDown(profile, profileViewModel, imageRepository, ctr)
               // Display the user's username with top padding.
               Username(profile!!, modifier = Modifier.padding(100.dp))
               // Display the user's "Wander Score".
@@ -134,13 +143,17 @@ fun ProfilePictureWithDropDown(
     profile: Profile?,
     profileViewModel: ProfileViewModel,
     imageRepository: ImageRepository,
+    ctr : MutableState<Int>
 ) {
   var isProfilePictureChangeDropdownOpen by remember { mutableStateOf(false) }
   val profilePictureModifier =
-      Modifier.size(100.dp).clickable { isProfilePictureChangeDropdownOpen = true }
+      Modifier
+          .size(100.dp)
+          .clickable { isProfilePictureChangeDropdownOpen = true }
   ProfilePicture(
-      profile = profile, profileViewModel = profileViewModel, modifier = profilePictureModifier)
+      profile = profile, profileViewModel = profileViewModel, modifier = profilePictureModifier, ctr = ctr)
   ProfilePictureChangeDropdownMenu(
+      ctr = ctr,
       expanded = isProfilePictureChangeDropdownOpen,
       onDismissRequest = { isProfilePictureChangeDropdownOpen = false },
       imageRepository = imageRepository,
@@ -159,11 +172,12 @@ fun Username(profile: Profile, modifier: Modifier) {
 fun WanderBadges() {
   Box(
       modifier =
-          Modifier.fillMaxWidth()
-              .height(175.dp)
-              .padding(8.dp)
-              .clip(MaterialTheme.shapes.extraLarge)
-              .background(MaterialTheme.colorScheme.primaryContainer)) {
+      Modifier
+          .fillMaxWidth()
+          .height(175.dp)
+          .padding(8.dp)
+          .clip(MaterialTheme.shapes.extraLarge)
+          .background(MaterialTheme.colorScheme.primaryContainer)) {
         Text(
             text = "WanderBadges",
             style = MaterialTheme.typography.headlineSmall,
@@ -175,11 +189,13 @@ fun WanderBadges() {
 fun WanderScore(profile: Profile) {
   Box(
       modifier =
-          Modifier.clip(MaterialTheme.shapes.extraLarge)
-              .background(MaterialTheme.colorScheme.primaryContainer)
-              .border(
-                  BorderStroke(1.dp, MaterialTheme.colorScheme.inverseOnSurface),
-                  shape = MaterialTheme.shapes.extraLarge)) {
+      Modifier
+          .clip(MaterialTheme.shapes.extraLarge)
+          .background(MaterialTheme.colorScheme.primaryContainer)
+          .border(
+              BorderStroke(1.dp, MaterialTheme.colorScheme.inverseOnSurface),
+              shape = MaterialTheme.shapes.extraLarge
+          )) {
         Text(
             text = "369 WanderPoints",
             modifier = Modifier.padding(8.dp),
@@ -190,6 +206,7 @@ fun WanderScore(profile: Profile) {
 // Composable function for displaying a dropdown menu for changing the profile picture.
 @Composable
 fun ProfilePictureChangeDropdownMenu(
+    ctr : MutableState<Int>,
     expanded: Boolean,
     onDismissRequest: () -> Unit,
     imageRepository: ImageRepository,
@@ -197,7 +214,7 @@ fun ProfilePictureChangeDropdownMenu(
     modifier: Modifier = Modifier,
     offset: DpOffset = DpOffset(0.dp, 0.dp),
     properties: PopupProperties = PopupProperties(focusable = true),
-    content: @Composable ColumnScope.() -> Unit
+    content: @Composable ColumnScope.() -> Unit,
 ) {
 
   if (profile != null) {
@@ -223,6 +240,7 @@ fun ProfilePictureChangeDropdownMenu(
               onClick = {
                 // Call to upload image to storage with a specific path.
                 imageRepository.uploadImageToStorage("profilePicture/${profile.userUid}")
+                  ctr.value++
               })
         }
   }
