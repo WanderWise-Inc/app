@@ -14,6 +14,7 @@ import com.github.wanderwise_inc.app.data.DirectionsRepositoryImpl
 import com.github.wanderwise_inc.app.data.ImageRepositoryImpl
 import com.github.wanderwise_inc.app.data.ItineraryRepositoryImpl
 import com.github.wanderwise_inc.app.data.ProfileRepositoryImpl
+import com.github.wanderwise_inc.app.data.ProfileRepositoryTestImpl
 import com.github.wanderwise_inc.app.data.SignInRepositoryImpl
 import com.github.wanderwise_inc.app.network.ApiServiceFactory
 import com.github.wanderwise_inc.app.proto.location.SavedItineraries
@@ -23,6 +24,7 @@ import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.LocationClient
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
@@ -60,6 +62,7 @@ object AppModule {
   val firebaseAuth by lazy { FirebaseAuth.getInstance() }
 
   val firebaseStorage by lazy { FirebaseStorage.getInstance() }
+  val db by lazy {FirebaseFirestore.getInstance()}
 
   val imageRepository by lazy {
     ImageRepositoryImpl(imageLauncher, firebaseStorage.reference, null)
@@ -70,11 +73,11 @@ object AppModule {
   }
 
   val itineraryRepository by lazy {
-    ItineraryRepositoryImpl(Firebase.firestore, context, savedItinerariesDataStore)
+    ItineraryRepositoryImpl(db, context, savedItinerariesDataStore)
     // ItineraryRepositoryTestImpl()
   }
 
-  val profileRepository by lazy { ProfileRepositoryImpl(Firebase.firestore) }
+  val profileRepository by lazy { ProfileRepositoryImpl(db) }
 
   val signInRepository by lazy { SignInRepositoryImpl() }
 
