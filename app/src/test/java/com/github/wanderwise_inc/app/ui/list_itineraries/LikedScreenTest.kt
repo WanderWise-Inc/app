@@ -10,6 +10,7 @@ import androidx.compose.ui.test.performScrollToIndex
 import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
 import androidx.navigation.NavHostController
+import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.model.location.FakeItinerary
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.ui.TestTags
@@ -36,6 +37,7 @@ class LikedScreenTest {
   @MockK private lateinit var profileViewModel: ProfileViewModel
   @MockK private lateinit var navController: NavHostController
   @MockK private lateinit var firebaseAuth: FirebaseAuth
+  @MockK private lateinit var imageRepository: ImageRepository
 
   private var sliderPositionPriceState = mutableStateOf(0f..100f)
   private var sliderPositionTimeState = mutableStateOf(0f..24f)
@@ -69,6 +71,7 @@ class LikedScreenTest {
           sliderPositionPriceState,
           sliderPositionTimeState,
           firebaseAuth,
+          imageRepository
       )
     }
   }

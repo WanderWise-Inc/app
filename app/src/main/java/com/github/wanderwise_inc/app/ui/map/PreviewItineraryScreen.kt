@@ -271,7 +271,7 @@ private fun PreviewItineraryBannerMaximized(
                 profile = profile,
                 profileViewModel = profileViewModel,
                 modifier = profilePictureModifier,
-                ctr = ctr)
+                /*ctr = ctr*/)
 
             Spacer(modifier = Modifier.width(10.dp))
 

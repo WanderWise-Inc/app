@@ -10,6 +10,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToIndex
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.model.location.FakeItinerary
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.printToLog
@@ -37,6 +38,7 @@ class ScrollableItineraryListTest {
   @MockK private lateinit var profileViewModel: ProfileViewModel
   @MockK private lateinit var navController: NavHostController
   @MockK private lateinit var firebaseAuth: FirebaseAuth
+  @MockK private lateinit var imageRepository: ImageRepository
 
   private val paddingValues: PaddingValues = PaddingValues(0.dp)
 
@@ -71,6 +73,7 @@ class ScrollableItineraryListTest {
           firebaseAuth = firebaseAuth,
           paddingValues = paddingValues,
           parent = ItineraryListParent.PROFILE,
+          imageRepository = imageRepository,
           // could be any parent
       )
     }
@@ -96,6 +99,7 @@ class ScrollableItineraryListTest {
           firebaseAuth = firebaseAuth,
           paddingValues = paddingValues,
           parent = ItineraryListParent.PROFILE,
+          imageRepository = imageRepository,
           // could be any parent
       )
     }
@@ -119,6 +123,7 @@ class ScrollableItineraryListTest {
           firebaseAuth = firebaseAuth,
           paddingValues = paddingValues,
           parent = ItineraryListParent.PROFILE,
+          imageRepository = imageRepository,
           // could be any parent
       )
     }
@@ -163,6 +168,7 @@ class ScrollableItineraryListTest {
           firebaseAuth = firebaseAuth,
           paddingValues = paddingValues,
           parent = ItineraryListParent.PROFILE,
+          imageRepository = imageRepository,
           // could be any parent
       )
     }

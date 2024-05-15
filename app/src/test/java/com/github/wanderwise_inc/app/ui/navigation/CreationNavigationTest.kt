@@ -99,7 +99,7 @@ class CreationNavigationTest {
       onFinished = {}
 
       CreationScreen(
-          createItineraryViewModel, profileViewModel, onFinished, navController, firebaseAuth)
+          createItineraryViewModel, profileViewModel, onFinished, navController, firebaseAuth, imageRepository)
     }
   }
 
@@ -221,7 +221,9 @@ class CreationPreviewNavigationTest {
           navController = navController,
           createItineraryViewModel = createItineraryViewModel,
           profileViewModel = profileViewModel,
-          onFinished = onFinished)
+          onFinished = onFinished,
+          imageRepository = imageRepository,
+      )
     }
   }
 

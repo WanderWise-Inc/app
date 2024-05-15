@@ -4,11 +4,15 @@ import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
+import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
 import com.github.wanderwise_inc.app.model.location.Location
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.itinerary.ItineraryBanner
+import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
+import io.mockk.MockKAnnotations
+import io.mockk.impl.annotations.MockK
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -21,10 +25,14 @@ class ItineraryBannerTest {
 
   private lateinit var itinerary: Itinerary
 
+  @MockK private lateinit var imageRepository: ImageRepository
+  @MockK private lateinit var profileViewModel: ProfileViewModel
+
   private var itineraryUid = "some_uid"
 
   @Before
   fun `initialize itinerary`() {
+      MockKAnnotations.init(this)
     composeTestRule.setContent {
       itinerary =
           Itinerary(
@@ -37,7 +45,7 @@ class ItineraryBannerTest {
               visible = true,
               numLikes = 42)
 
-      ItineraryBanner(itinerary = itinerary, onLikeButtonClick = { _, _ -> }, onBannerClick = {})
+      ItineraryBanner(itinerary = itinerary, onLikeButtonClick = { _, _ -> }, onBannerClick = {}, imageRepository = imageRepository, profileViewModel = profileViewModel)
     }
   }
 

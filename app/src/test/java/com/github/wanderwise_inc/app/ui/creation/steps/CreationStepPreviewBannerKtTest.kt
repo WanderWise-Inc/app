@@ -4,9 +4,11 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.model.location.FakeItinerary
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
+import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import org.junit.Assert.*
@@ -21,6 +23,8 @@ class CreationStepPreviewBannerKtTest {
   @get:Rule val composeTestRule = createComposeRule()
 
   @MockK private lateinit var createItineraryViewModelTest: CreateItineraryViewModel
+  @MockK private lateinit var imageRepository: ImageRepository
+  @MockK private lateinit var profileViewModel: ProfileViewModel
 
   val title = FakeItinerary.SWITZERLAND.title
   // val itineraryBuilder = Itinerary.Builder(uid = "0", userUid = "me", title = title)
@@ -35,7 +39,7 @@ class CreationStepPreviewBannerKtTest {
     composeTestRule.setContent {
       // every { createItineraryViewModelTest.getNewItinerary() } returns itineraryBuilder
 
-      CreationStepPreviewBanner(createItineraryViewModel = createItineraryViewModelTest)
+      CreationStepPreviewBanner(createItineraryViewModel = createItineraryViewModelTest, imageRepository = imageRepository, profileViewModel = profileViewModel)
     }
     composeTestRule.onNodeWithTag(TestTags.CREATION_SCREEN_PREVIEW_BANNER).assertIsDisplayed()
   }
@@ -45,7 +49,7 @@ class CreationStepPreviewBannerKtTest {
     composeTestRule.setContent {
       // every { createItineraryViewModelTest.getNewItinerary() } returns itineraryBuilder
 
-      CreationStepPreviewBanner(createItineraryViewModel = createItineraryViewModelTest)
+      CreationStepPreviewBanner(createItineraryViewModel = createItineraryViewModelTest, imageRepository = imageRepository, profileViewModel = profileViewModel)
     }
     composeTestRule.onNodeWithText(title).assertIsDisplayed()
   }
