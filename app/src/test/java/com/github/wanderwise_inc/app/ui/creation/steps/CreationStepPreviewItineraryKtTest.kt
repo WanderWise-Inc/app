@@ -20,7 +20,6 @@ import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.github.wanderwise_inc.app.viewmodel.UserLocationClient
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.flow.flow
-import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -59,7 +58,7 @@ class CreationStepPreviewItineraryKtTest {
           title = "San Francisco Bike Itinerary",
           tags = listOf(ItineraryTags.CULTURAL, ItineraryTags.NATURE, ItineraryTags.BUDGET),
           description = "A 3-day itinerary to explore the best of San Francisco on a bike.",
-          visible = true)
+          isPublic = true)
 
   @Before
   fun setup() {

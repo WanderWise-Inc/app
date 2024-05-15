@@ -18,7 +18,7 @@ class ItineraryTest {
           title = "Vacation Plan",
           tags = listOf(ItineraryTags.NATURE),
           description = "Summer vacation",
-          visible = true)
+          isPublic = true)
 
   @Test
   fun toMap() {
@@ -59,7 +59,7 @@ class ItineraryTest {
     assertEquals("", emptyItinerary.title)
     assertTrue(emptyItinerary.tags.isEmpty())
     assertNull(emptyItinerary.description)
-    assertFalse(emptyItinerary.visible)
+    assertFalse(emptyItinerary.isPublic)
   }
 
   @Test
@@ -72,9 +72,9 @@ class ItineraryTest {
         .addTag(ItineraryTags.RELAXATION)
         .addLocation(Location(15.0, -10.0))
         .description("Modified Description")
-        .visible(false)
+        .isPublic(false)
         .price(10f)
-        .time(2)
+        .time(2f)
 
     assertEquals("2", builder.uid)
     assertEquals("user123", builder.userUid)
@@ -82,11 +82,11 @@ class ItineraryTest {
     assertEquals(2, builder.tags.size) // New one should have 2 tags
     assertEquals(3, builder.locations.size) // New one should have 3 locations
     assertEquals("Modified Description", builder.description)
-    assertFalse(builder.visible)
+    assertFalse(builder.isPublic)
     assertEquals(10f, builder.price)
-    assertEquals(2, builder.time)
+    assertEquals(2f, builder.time)
     assertThrows(IllegalArgumentException::class.java) { builder.price(-1f) }
-    assertThrows(IllegalArgumentException::class.java) { builder.time(-1) }
+    assertThrows(IllegalArgumentException::class.java) { builder.time(-1f) }
 
     val newItinerary = builder.build()
 
@@ -95,9 +95,9 @@ class ItineraryTest {
     assertEquals(2, newItinerary.tags.size) // New one should have 2 tags
     assertEquals(3, newItinerary.locations.size) // New one should have 3 locations
     assertEquals("Modified Description", newItinerary.description)
-    assertFalse(newItinerary.visible)
+    assertFalse(newItinerary.isPublic)
     assertEquals(10f, newItinerary.price)
-    assertEquals(2, newItinerary.time)
+    assertEquals(2f, newItinerary.time)
 
     assertThrows(InvalidObjectException::class.java) {
       builder.addTag(ItineraryTags.ROMANCE).addTag(ItineraryTags.WILDLIFE)

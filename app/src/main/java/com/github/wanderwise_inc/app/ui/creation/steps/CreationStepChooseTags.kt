@@ -35,9 +35,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.github.wanderwise_inc.app.ui.TestTags
+import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
 
 @Composable
-fun CreationStepChooseTagsScreen() {
+fun CreationStepChooseTagsScreen(createItineraryViewModel: CreateItineraryViewModel) {
   Column(
       horizontalAlignment = Alignment.CenterHorizontally,
       modifier =
@@ -46,9 +47,9 @@ fun CreationStepChooseTagsScreen() {
               .background(MaterialTheme.colorScheme.primaryContainer),
       verticalArrangement = Arrangement.spacedBy(10.dp)) {
         ItineraryImageBanner(modifier = Modifier.padding(all = 10.dp))
-        PriceEstimationTextBox()
-        TimeDurationEstimation()
-        RelevantTags()
+        PriceEstimationTextBox(createItineraryViewModel)
+        TimeDurationEstimation(createItineraryViewModel)
+        RelevantTags(createItineraryViewModel)
         IsPublicSwitchButton()
       }
 }
@@ -72,7 +73,7 @@ fun ItineraryImageBanner(modifier: Modifier = Modifier) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PriceEstimationTextBox() {
+fun PriceEstimationTextBox(createItineraryViewModel: CreateItineraryViewModel) {
   // number text field to estimate price, give the option to choose currency
   val currencies = listOf("USD", "EUR", "JPY", "GBP", "AUD", "CAD", "CHF", "CNY", "SEK", "NZD")
   var isCurrenciesMenuExpanded by remember { mutableStateOf(false) }
@@ -86,8 +87,14 @@ fun PriceEstimationTextBox() {
         value = priceEstimate,
         modifier = Modifier,
         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-        onValueChange = { priceEstimate = it })
+        onValueChange = {
+          priceEstimate = it
+          createItineraryViewModel.setNewItineraryPrice(it.toFloat())
+        })
 
+    /*Dropdown menu for currency selection, the logic for currency conversion isn't implemented yet as it will not contribute to our core features
+    as of now, but it can be implemented in the future if needed. The selected currency will be stored in the `selectedCurrency` variable
+    * */
     ExposedDropdownMenuBox(
         expanded = isCurrenciesMenuExpanded,
         onExpandedChange = { isCurrenciesMenuExpanded = it },
@@ -118,18 +125,21 @@ fun PriceEstimationTextBox() {
 }
 
 @Composable
-fun TimeDurationEstimation() {
+fun TimeDurationEstimation(createItineraryViewModel: CreateItineraryViewModel) {
   var timeEstimate by remember { mutableStateOf("") }
   TextField(
       label = { Text("Time Estimate (in hours)") },
-      value = "",
+      value = timeEstimate,
       modifier = Modifier,
       keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-      onValueChange = { timeEstimate = it })
+      onValueChange = {
+        timeEstimate = it
+        createItineraryViewModel.setNewItineraryTime(it.toFloat())
+      })
 }
 
 @Composable
-fun RelevantTags() {
+fun RelevantTags(createItineraryViewModel: CreateItineraryViewModel) {
   val allTags =
       listOf(
           "Adventure",
@@ -164,6 +174,7 @@ fun RelevantTags() {
             isTagsDDM = false
             if (!selectedTags.contains(tag) && selectedTags.size < 3) {
               selectedTags.add(tag)
+              createItineraryViewModel.setNewItineraryTags(selectedTags)
             } else if (selectedTags.size >= 3) {
               triedToAddMoreThan3Tags = true
             }

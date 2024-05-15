@@ -64,10 +64,10 @@ object FakeItinerary {
           tags = listOf(ItineraryTags.URBAN, ItineraryTags.CULTURAL, ItineraryTags.PHOTOGRAPHY),
           description =
               "Discover the beauty of Tokyo with this tour, visiting iconic landmarks such as Tokyo Skytree, Meiji Shrine, Tsukiji Fish Market, Ueno Park, Shinjuku Gyoen National Garden, Tokyo Disneyland, Shibuya Crossing, Asakusa Temple, and Odaiba, and more!",
-          visible = true,
+          isPublic = true,
           numLikes = 0,
           price = 20f,
-          time = 4)
+          time = 4f)
 
   val SAN_FRANCISCO =
       Itinerary(
@@ -108,10 +108,10 @@ object FakeItinerary {
           tags = listOf(ItineraryTags.URBAN, ItineraryTags.ACTIVE, ItineraryTags.ADVENTURE),
           description =
               "Explore the vibrant city of San Francisco with this exciting itinerary! Discover the best bicycle rental shops and cycling tours in the city, including San Francisco Bicycle Rentals, Mike's Bikes of San Francisco, Blazing Saddles Bike Rentals & Tours, Huckleberry Bicycles, and American Cyclery. Whether you're a casual rider or an avid cyclist, these top-rated locations offer a variety of bike options and guided tours to suit every preference. Get ready to pedal through the iconic streets of San Francisco and experience its stunning scenery and lively atmosphere like never before!",
-          visible = true,
+          isPublic = true,
           numLikes = 2354,
           price = 5f,
-          time = 3)
+          time = 3f)
 
   val SWITZERLAND =
       Itinerary(
@@ -147,8 +147,8 @@ object FakeItinerary {
           tags = listOf(ItineraryTags.ADVENTURE, ItineraryTags.NATURE, ItineraryTags.WILDLIFE),
           description =
               "Embark on an unforgettable journey through Switzerland's breathtaking landscapes and exhilarating experiences. From skiing in Zermatt to paragliding in Interlaken, and indulging in chocolate tasting in Zurich, this tour offers a perfect blend of adventure and relaxation in one of Europe's most picturesque destinations.",
-          visible = true,
+          isPublic = true,
           numLikes = 102,
           price = 50f,
-          time = 10)
+          time = 10f)
 }

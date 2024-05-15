@@ -20,7 +20,7 @@ class ItineraryRepositoryImpl(db: FirebaseFirestore) : ItineraryRepository {
     return flow {
           val itineraries = suspendCancellableCoroutine { continuation ->
             itinerariesCollection
-                .whereEqualTo(ItineraryLabels.VISIBLE, true)
+                .whereEqualTo(ItineraryLabels.ISPUBLIC, true)
                 .get()
                 .addOnSuccessListener { snap ->
                   val documents = snap.documents

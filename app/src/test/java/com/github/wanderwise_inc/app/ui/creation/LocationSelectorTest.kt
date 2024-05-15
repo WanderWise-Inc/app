@@ -63,7 +63,7 @@ class CreateItineraryMapUITest {
           title = "San Francisco Bike Itinerary",
           tags = listOf(ItineraryTags.CULTURAL, ItineraryTags.NATURE, ItineraryTags.BUDGET),
           description = "A 3-day itinerary to explore the best of San Francisco on a bike.",
-          visible = true)
+          isPublic = true)
 
   @Before
   fun setUp() {

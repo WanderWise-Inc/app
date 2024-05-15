@@ -34,7 +34,7 @@ class ItineraryBannerTest {
               title = "Ethan's Itinerary",
               tags = listOf(ItineraryTags.BUDGET, ItineraryTags.SOCIAL),
               description = null,
-              visible = true,
+              isPublic = true,
               numLikes = 42)
 
       ItineraryBanner(itinerary = itinerary, onLikeButtonClick = { _, _ -> }, onBannerClick = {})

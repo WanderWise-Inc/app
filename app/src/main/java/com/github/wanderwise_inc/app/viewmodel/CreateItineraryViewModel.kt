@@ -4,6 +4,7 @@ import com.github.wanderwise_inc.app.data.DirectionsRepository
 import com.github.wanderwise_inc.app.data.ItineraryRepository
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryLabels
+import com.github.wanderwise_inc.app.model.location.Tag
 import java.io.InvalidObjectException
 
 class CreateItineraryViewModel(
@@ -34,6 +35,19 @@ class CreateItineraryViewModel(
 
   fun setNewItineraryDescription(description: String) {
     newItineraryBuilder?.description = description
+  }
+
+  fun setNewItineraryPrice(price: Float) {
+    newItineraryBuilder?.price = price
+  }
+
+  fun setNewItineraryTime(time: Float) {
+    newItineraryBuilder?.time = time
+  }
+
+  fun setNewItineraryTags(tags: MutableList<Tag>) {
+    newItineraryBuilder?.tags?.clear()
+    newItineraryBuilder?.tags?.addAll(tags)
   }
 
   /** @returns a list of ItineraryLabels of fields that haven't been set * */

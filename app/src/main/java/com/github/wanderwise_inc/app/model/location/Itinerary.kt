@@ -12,7 +12,7 @@ object ItineraryLabels {
   const val LOCATIONS = "locations"
   const val TITLE = "title"
   const val DESCRIPTION = "description"
-  const val VISIBLE = "visible"
+  const val ISPUBLIC = "isPublic"
   const val TAGS = "tags"
   const val PRICE = "price"
   const val TIME = "time"
@@ -26,9 +26,9 @@ object ItineraryDefaultValues {
   const val TITLE: String = ""
   // val TAGS: MutableList<Tag> = mutableListOf()
   const val DESCRIPTION: String = ""
-  const val VISIBLE: Boolean = true
+  const val ISPUBLIC: Boolean = true
   const val PRICE: Float = -1f
-  const val TIME: Int = -1
+  const val TIME: Float = -1f
 }
 
 /** @brief score of an itinerary based on some preferences */
@@ -41,7 +41,7 @@ typealias Score = Double
  * @param title the title of the itinerary
  * @param tags a list of tags used for visibility and filtering of itinerary
  * @param description a short description of the itinerary
- * @param visible `true` if the itinerary should be visible publicly
+ * @param isPublic `true` if the itinerary should be visible publicly
  * @brief represents an itinerary
  */
 data class Itinerary(
@@ -51,10 +51,10 @@ data class Itinerary(
     val title: String,
     val tags: List<Tag>,
     val description: String?,
-    val visible: Boolean,
+    val isPublic: Boolean,
     var numLikes: Int = 0,
     val price: Float = 0f,
-    val time: Int = 0
+    val time: Float = 0f
 ) {
 
   /**
@@ -63,7 +63,7 @@ data class Itinerary(
    * @param locations an ordered list of locations
    * @param title the title of the itinerary
    * @param description a short description of the itinerary
-   * @param visible `true` if the itinerary should be visible publicly
+   * @param isPublic `true` if the itinerary should be visible publicly
    * @brief builder for an itinerary
    */
   data class Builder(
@@ -73,9 +73,9 @@ data class Itinerary(
       var title: String? = null,
       val tags: MutableList<Tag> = mutableListOf(),
       var description: String? = null,
-      var visible: Boolean = ItineraryDefaultValues.VISIBLE, // could be null but complicated
+      var isPublic: Boolean = ItineraryDefaultValues.ISPUBLIC, // could be null but complicated
       var price: Float? = null,
-      var time: Int? = null
+      var time: Float? = null
   ) {
     /**
      * @param location the location to be added
@@ -125,8 +125,8 @@ data class Itinerary(
      * @return the builder to support method chaining
      * @brief set the visibility of the itinerary builder
      */
-    fun visible(visible: Boolean): Builder {
-      this.visible = visible
+    fun isPublic(isPublic: Boolean): Builder {
+      this.isPublic = isPublic
       return this
     }
 
@@ -146,7 +146,7 @@ data class Itinerary(
      * @return the builder to support method chaining
      * @brief set the time of the itinerary builder
      */
-    fun time(time: Int): Builder {
+    fun time(time: Float): Builder {
       require(time >= 0)
       this.time = time
       return this
@@ -168,7 +168,7 @@ data class Itinerary(
           title = title ?: ItineraryDefaultValues.TITLE,
           tags = tags.toList(),
           description = description ?: ItineraryDefaultValues.DESCRIPTION,
-          visible = visible,
+          isPublic = isPublic,
           price = price ?: ItineraryDefaultValues.PRICE,
           time = time ?: ItineraryDefaultValues.TIME)
     }
@@ -183,7 +183,7 @@ data class Itinerary(
         ItineraryLabels.TITLE to title,
         ItineraryLabels.TAGS to tags,
         ItineraryLabels.DESCRIPTION to (description ?: ""),
-        ItineraryLabels.VISIBLE to visible,
+        ItineraryLabels.ISPUBLIC to isPublic,
         ItineraryLabels.PRICE to price,
         ItineraryLabels.TIME to time,
         ItineraryLabels.NUM_LIKES to numLikes)
@@ -199,7 +199,7 @@ data class Itinerary(
       tags.addAll(this@Itinerary.tags)
       title = this@Itinerary.title
       description = this@Itinerary.description
-      visible = this@Itinerary.visible
+      isPublic = this@Itinerary.isPublic
       price = this@Itinerary.price
       time = this@Itinerary.time
     }

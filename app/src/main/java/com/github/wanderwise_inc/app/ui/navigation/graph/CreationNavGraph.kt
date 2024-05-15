@@ -37,7 +37,9 @@ fun CreationNavGraph(
         composable(CreationStepsDestinations.ChooseDescription.route) {
           CreationStepChooseDescriptionScreen(createItineraryViewModel)
         }
-        composable(CreationStepsDestinations.ChooseTags.route) { CreationStepChooseTagsScreen() }
+        composable(CreationStepsDestinations.ChooseTags.route) {
+          CreationStepChooseTagsScreen(createItineraryViewModel)
+        }
         composable(CreationStepsDestinations.Preview.route) {
           CreationStepPreview(
               createItineraryViewModel = createItineraryViewModel,

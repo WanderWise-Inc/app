@@ -58,7 +58,7 @@ fun ItineraryBanner(
   var isLiked by remember { mutableStateOf(isLikedInitially) }
   var numLikes by remember { mutableIntStateOf(itinerary.numLikes) }
   var prices by remember { mutableFloatStateOf(itinerary.price) }
-  var times by remember { mutableIntStateOf(itinerary.time) }
+  var times by remember { mutableFloatStateOf(itinerary.time) }
 
   ElevatedCard(
       colors =

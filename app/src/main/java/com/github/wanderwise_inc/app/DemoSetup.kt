@@ -71,7 +71,7 @@ fun addItineraries(
           title = "Shopping then adventure",
           tags = listOf(ItineraryTags.ADVENTURE, ItineraryTags.LUXURY),
           description = "gucci",
-          visible = true,
+          isPublic = true,
       )
 
   val itineraryAdventure =
@@ -90,8 +90,8 @@ fun addItineraries(
                   ItineraryTags.WILDLIFE,
                   ItineraryTags.WELLNESS),
           description = null,
-          visible = true,
-          time = 3,
+          isPublic = true,
+          time = 3f,
           price = 25.0f,
       )
 
@@ -106,7 +106,7 @@ fun addItineraries(
           title = "My private itinerary",
           tags = listOf(ItineraryTags.ADVENTURE),
           description = null,
-          visible = false,
+          isPublic = false,
       )
 
   val publicItinerary =
@@ -117,7 +117,7 @@ fun addItineraries(
           title = "San Francisco Bike Itinerary",
           tags = listOf(ItineraryTags.CULTURAL, ItineraryTags.NATURE, ItineraryTags.BUDGET),
           description = "A 3-day itinerary to explore the best of San Francisco on a bike.",
-          visible = true)
+          isPublic = true)
 
   itineraryViewModel.setItinerary(itineraryAdventure)
   itineraryViewModel.setItinerary(itineraryAdventureAndLuxury)

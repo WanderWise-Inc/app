@@ -68,7 +68,7 @@ class CreateItineraryViewModelTest() {
         ?.addLocation(Location(15.0, -10.0))
         ?.addLocation(Location(20.0, -10.0))
     createItineraryViewModel.getNewItinerary()?.price(20f)
-    createItineraryViewModel.getNewItinerary()?.time(4)
+    createItineraryViewModel.getNewItinerary()?.time(4f)
 
     assert(createItineraryViewModel.notSetValues().isEmpty())
   }

@@ -13,7 +13,7 @@ class ItineraryRepositoryTestImpl : ItineraryRepository {
 
   override fun getPublicItineraries(): Flow<List<Itinerary>> {
     print(itineraries)
-    return flow { emit(itineraries.filter { it.visible }) }
+    return flow { emit(itineraries.filter { it.isPublic }) }
   }
 
   override fun getUserItineraries(userUid: String): Flow<List<Itinerary>> {
