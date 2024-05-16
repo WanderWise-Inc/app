@@ -51,4 +51,8 @@ object TestTags {
   const val START_NEW_ITINERARY = "start_new_itinerary"
   const val HINT_POPUP = "hint_popup"
   const val HINT_POPUP_MESSAGE = "hint_popup_message"
+  const val LIVE_ITINERARY = "live_itinerary"
+  const val START_BUTTON = "start_button"
+  const val STOP_BUTTON = "stop_button"
+  const val BACK_BUTTON = "back_button"
 }

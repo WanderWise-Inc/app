@@ -5,7 +5,13 @@ import com.github.wanderwise_inc.app.data.ItineraryRepository
 import com.github.wanderwise_inc.app.data.LocationsRepository
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryLabels
+import com.github.wanderwise_inc.app.model.location.Location
 import java.io.InvalidObjectException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 
 class CreateItineraryViewModel(
     private val itineraryRepository: ItineraryRepository,
@@ -60,6 +66,34 @@ class CreateItineraryViewModel(
     newItineraryBuilder?.description = description
   }
 
+  /** Coroutine tasked with tracking user location */
+  var locationJob: Job? = null
+  val coroutineScope = CoroutineScope(Dispatchers.Main)
+
+  /**
+   * Adds device's current location to `newItineraryBuilder.locations` every `intervalMillis`
+   * milliseconds
+   */
+  fun startLocationTracking(intervalMillis: Long) {
+    locationJob?.cancel() // cancel some previous job
+    locationJob =
+        coroutineScope.launch {
+          locationClient.getLocationUpdates(intervalMillis).collect { androidLocation ->
+            val currLocation = Location(androidLocation.latitude, androidLocation.longitude)
+            newItineraryBuilder?.addLocation(currLocation)
+          }
+        }
+  }
+
+  /** Stops the job tasked with tracking location (`locationJob`) */
+  fun stopLocationTracking() {
+    locationJob?.cancel()
+  }
+
+  public override fun onCleared() {
+    super.onCleared()
+    coroutineScope.cancel()
+  }
   /** @returns a list of ItineraryLabels of fields that haven't been set * */
   fun notSetValues(): List<String> {
     // look if all values have been set

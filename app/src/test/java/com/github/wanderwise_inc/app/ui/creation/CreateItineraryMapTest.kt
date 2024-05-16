@@ -159,6 +159,5 @@ class CreateItineraryMapTest {
       )
     }
     composeTestRule.onNodeWithTag(TestTags.MAP_GOOGLE_MAPS).isDisplayed()
-    // TODO Imane needs to define the test tag for her composable
   }
 }
