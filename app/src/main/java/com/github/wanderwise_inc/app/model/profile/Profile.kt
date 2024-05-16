@@ -1,32 +1,24 @@
 package com.github.wanderwise_inc.app.model.profile
 
-import android.net.Uri
-
 object ProfileLabels {
-  const val UID = "uid"
   const val USER_UID = "userUid"
-  const val BIO = "bio"
   const val NAME = "displayName"
-  const val PICTURE = "profilePicture"
+  const val BIO = "bio"
   const val LIKED_ITINERARIES = "likedItinerariesUid"
 }
 
 data class Profile(
-    var uid: String = "",
+    var userUid: String,
     val displayName: String,
-    val userUid: String,
     val bio: String,
-    val profilePicture: Uri? = null,
     val likedItinerariesUid: MutableList<String> = mutableListOf()
 ) {
   /** @return a map of a profile */
   fun toMap(): Map<String, Any?> {
     return mapOf(
-        ProfileLabels.UID to uid,
-        ProfileLabels.NAME to displayName,
         ProfileLabels.USER_UID to userUid,
+        ProfileLabels.NAME to displayName,
         ProfileLabels.BIO to bio,
-        ProfileLabels.PICTURE to profilePicture,
         ProfileLabels.LIKED_ITINERARIES to likedItinerariesUid)
   }
 
@@ -42,7 +34,4 @@ data class Profile(
 /** set in `ProfileViewModel` on sign-in failure and when no data is cached */
 val DEFAULT_OFFLINE_PROFILE =
     Profile(
-        uid = "-1",
-        displayName = "Anonymous Wanderer",
-        userUid = "-1",
-        bio = "Wandering without connection")
+        displayName = "Anonymous Wanderer", userUid = "-1", bio = "Wandering without connection")

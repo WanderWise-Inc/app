@@ -13,8 +13,10 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.suspendCancellableCoroutine
 
+const val PROFILE_DB_PATH = "profiles"
+
 class ProfileRepositoryImpl(db: FirebaseFirestore) : ProfileRepository {
-  private val usersCollection = db.collection("users")
+  private val usersCollection = db.collection(PROFILE_DB_PATH)
 
   override fun getProfile(userUid: String): Flow<Profile?> {
     return flow {
@@ -24,7 +26,6 @@ class ProfileRepositoryImpl(db: FirebaseFirestore) : ProfileRepository {
                     .document(userUid)
                     .get()
                     .addOnSuccessListener { documentSnapshot ->
-                      Log.d("ProfileRepositoryImpl", "Successfully got profile")
                       continuation.resume(documentSnapshot)
                     }
                     .addOnFailureListener { exception ->
