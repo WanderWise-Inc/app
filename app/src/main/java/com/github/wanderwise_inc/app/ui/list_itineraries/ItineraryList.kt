@@ -15,6 +15,11 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -25,6 +30,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.itinerary.ItineraryBanner
@@ -33,7 +39,6 @@ import com.github.wanderwise_inc.app.ui.navigation.NavigationActions
 import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.runBlocking
 
 /** @brief reusable UI elements for displaying a list of itineraries */
 
@@ -47,6 +52,7 @@ fun ItinerariesListScrollable(
     firebaseAuth: FirebaseAuth,
     paddingValues: PaddingValues,
     parent: ItineraryListParent,
+    imageRepository: ImageRepository
 ) {
   if (itineraries.isEmpty()) {
     val parentVerb =
@@ -64,10 +70,9 @@ fun ItinerariesListScrollable(
                 .height(100.dp)) {
           Text(
               text = "You have not $parentVerb any itineraries yet",
-              // color = MaterialTheme.colorScheme.
               textAlign = TextAlign.Center,
               modifier = Modifier.padding(5.dp, 10.dp))
-        } // PaModifier.padding(5.dp, 10.dp))
+        }
   } else {
     /* store liked itineraries in persistent storage */
     if (parent == ItineraryListParent.LIKED && itineraries.isNotEmpty())
@@ -76,22 +81,20 @@ fun ItinerariesListScrollable(
     LazyColumn(
         modifier = Modifier.padding(paddingValues).testTag(TestTags.ITINERARY_LIST_SCROLLABLE),
         verticalArrangement = spacedBy(15.dp)) {
-          // this.items(itineraries) { itinerary ->
           this.items(itineraries, { (iti) -> iti }) { itinerary ->
-            val isLikedInitially: Boolean
-            runBlocking {
-              isLikedInitially =
-                  profileViewModel.checkIfItineraryIsLiked(
-                      profileViewModel.getUserUid(), itinerary.uid)
+            val uid = profileViewModel.getUserUid()
+            var isLikedInitially by remember { mutableStateOf(false) }
+            LaunchedEffect(uid) {
+              isLikedInitially = profileViewModel.checkIfItineraryIsLiked(uid, itinerary.uid)
             }
 
             val onLikeButtonClick = { it: Itinerary, isLiked: Boolean ->
               if (isLiked) {
                 itineraryViewModel.decrementItineraryLikes(it)
-                profileViewModel.removeLikedItinerary(profileViewModel.getUserUid(), it.uid)
+                profileViewModel.removeLikedItinerary(uid, it.uid)
               } else {
                 itineraryViewModel.incrementItineraryLikes(it)
-                profileViewModel.addLikedItinerary(profileViewModel.getUserUid(), it.uid)
+                profileViewModel.addLikedItinerary(uid, it.uid)
               }
             }
             val navigationActions = NavigationActions(navController)
@@ -103,7 +106,9 @@ fun ItinerariesListScrollable(
                 itinerary = itinerary,
                 onLikeButtonClick = onLikeButtonClick,
                 onBannerClick = onBannerClick,
-                isLikedInitially = isLikedInitially)
+                isLikedInitially = isLikedInitially,
+                profileViewModel = profileViewModel,
+                imageRepository = imageRepository)
           }
         }
   }

@@ -21,37 +21,7 @@ class ImageRepositoryImpl(
     uri: Uri?
 ) : ImageRepository {
 
-  // private val storage = FirebaseStorage.getInstance()
-  // private val context = application.baseContext
   private var currentFile: Uri? = uri
-  // private var imageReference = storage.reference
-
-  /**
-   * Store image function. This function will create a reference in Firebase to store a bitmap as an
-   * Image in Storage.
-   *
-   * @param bitMap a Bitmap that will be stored in the Firebase Storage
-   */
-  /*    override fun storeImage(bitMap : Bitmap, currentUser : FirebaseAuth) {
-      // We get the uid to create a reference (a path) to the image using the uid
-      //val currentUser = FirebaseAuth.getInstance()
-      val storageRef = imageReference
-      val userProfilePictureRef = storageRef.child("images/profilePicture/${currentUser.uid}")
-      val baos = ByteArrayOutputStream()
-      bitMap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-      val data = baos.toByteArray()
-
-      // Here we create the uploadTask to upload the Image into the Storage
-      var uploadTask = userProfilePictureRef.putBytes(data)
-      uploadTask.addOnFailureListener {
-          // Handle unsuccessful uploads
-          Log.d("STORAGE", "FAIL ON UPLOAD")
-      }.addOnSuccessListener { taskSnapshot ->
-          // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
-          // ...
-          Log.d("STORAGE", "SUCCESS ON UPLOAD")
-      }
-  }*/
 
   /**
    * Fetch image Function. This function will fetch the profile picture from the Storage at a given
@@ -71,11 +41,13 @@ class ImageRepositoryImpl(
             val byteResult =
                 suspendCancellableCoroutine<ByteArray?> { continuation ->
                   profilePictureRef
-                      .getBytes(1024 * 1024)
+                      .getBytes(2048 * 2048)
                       .addOnSuccessListener { byteResult ->
+                        Log.d("FETCH IMAGE", "FETCH SUCCESS")
                         continuation.resume(byteResult) // Resume with byte array
                       }
                       .addOnFailureListener { exception ->
+                        Log.w("FETCH IMAGE", exception)
                         continuation.resumeWithException(exception) // Resume with exception
                       }
                 }
@@ -84,7 +56,10 @@ class ImageRepositoryImpl(
             emit(bitmap) // Emit bitmap
           }
         }
-        .catch { emit(null) }
+        .catch {
+          Log.w("FETCH IMAGE", it)
+          emit(null)
+        }
   }
 
   /**
@@ -107,7 +82,7 @@ class ImageRepositoryImpl(
             .putFile(it)
             .addOnSuccessListener { Log.d("STORE IMAGE", "STORE SUCCESS") }
             .addOnFailureListener {
-              Log.d("STORE IMAGE", "STORE FAILED")
+              Log.w("STORE IMAGE", "STORE FAILED")
               throw it
             }
       }
@@ -117,31 +92,6 @@ class ImageRepositoryImpl(
       return false
     }
   }
-
-  /**
-   * Get bit map function. This function will create a Bitmap representation given a Uri
-   *
-   * @param uri the Uri link to the image
-   * @return a flow of the bitMap representation of the image
-   */
-  /*    override fun getBitMap(uri : Uri?) : Flow<Bitmap?> {
-      return flow {
-          if (uri != null) {
-              val context = application.baseContext
-              Log.d("TEST CASE", "URI NOT NULL")
-              val loading = ImageLoader(context)
-              val request = ImageRequest.Builder(context)
-                  .data(uri)
-                  .build()
-
-              val result = (loading.execute(request) as SuccessResult).drawable
-              emit((result as BitmapDrawable).bitmap)
-          } else {
-              Log.d("TEST CASE", "URI NULL")
-              emit(null)
-          }
-      }
-  }*/
 
   /** @brief used to launch the activity to open the photo gallery */
   override fun launchActivity(it: Intent) {

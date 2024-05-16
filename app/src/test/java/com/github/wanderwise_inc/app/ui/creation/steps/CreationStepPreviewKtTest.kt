@@ -8,13 +8,16 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import com.github.wanderwise_inc.app.model.location.FakeItinerary
 import com.github.wanderwise_inc.app.model.location.Itinerary
+import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.model.location.ItineraryLabels
+import com.github.wanderwise_inc.app.model.profile.Profile
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import kotlinx.coroutines.flow.flow
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
@@ -28,6 +31,8 @@ class CreationStepPreviewKtTest() {
 
   @MockK private lateinit var createItineraryViewModel: CreateItineraryViewModel
   @MockK private lateinit var profileViewModel: ProfileViewModel
+  @MockK private lateinit var imageRepository: ImageRepository
+  private val profile = Profile(userUid = "0", displayName = "Test User", bio = "bio")
 
   private lateinit var onFinished: () -> Unit
 
@@ -39,6 +44,8 @@ class CreationStepPreviewKtTest() {
   @Before
   fun setup() {
     MockKAnnotations.init(this)
+    every { profileViewModel.getProfile(any()) } returns flow { emit(profile) }
+    every { imageRepository.fetchImage(any()) } returns flow { emit(null) }
   }
 
   @Test
@@ -57,7 +64,8 @@ class CreationStepPreviewKtTest() {
       CreationStepPreview(
           createItineraryViewModel = createItineraryViewModel,
           profileViewModel = profileViewModel,
-          onFinished = onFinished)
+          onFinished = onFinished,
+          imageRepository = imageRepository)
     }
 
     composeTestRule.onNodeWithTag(TestTags.CREATION_FINISH_BUTTON).assertIsDisplayed()
@@ -79,7 +87,8 @@ class CreationStepPreviewKtTest() {
       CreationStepPreview(
           createItineraryViewModel = createItineraryViewModel,
           profileViewModel = profileViewModel,
-          onFinished = onFinished)
+          onFinished = onFinished,
+          imageRepository = imageRepository)
     }
     composeTestRule.onNodeWithTag(TestTags.CREATION_FINISH_BUTTON).performClick()
 
@@ -110,7 +119,8 @@ class CreationStepPreviewKtTest() {
       CreationStepPreview(
           createItineraryViewModel = createItineraryViewModel,
           profileViewModel = profileViewModel,
-          onFinished = onFinished)
+          onFinished = onFinished,
+          imageRepository = imageRepository)
     }
     composeTestRule.onNodeWithTag(TestTags.CREATION_FINISH_BUTTON).performClick()
     composeTestRule.onNodeWithTag(TestTags.HINT_POPUP).assertIsNotDisplayed()

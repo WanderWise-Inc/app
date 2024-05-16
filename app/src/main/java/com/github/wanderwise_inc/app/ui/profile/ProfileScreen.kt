@@ -1,6 +1,7 @@
 package com.github.wanderwise_inc.app.ui.profile
 
 import android.content.Intent
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -53,6 +54,8 @@ import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
 
+const val WANDER_POINTS_SCORE_MULTIPLIER = 10
+
 @OptIn(ExperimentalMaterial3Api::class)
 // Declare a composable function for the profile screen.
 @Composable
@@ -63,6 +66,7 @@ fun ProfileScreen(
     navHostController: NavHostController,
     firebaseAuth: FirebaseAuth
 ) {
+  Log.d("ProfileScreen", "ProfileScreen")
   val profile = profileViewModel.getActiveProfile()
   val currentUid = profileViewModel.getUserUid()
 
@@ -107,7 +111,7 @@ fun ProfileScreen(
               // Display the user's username with top padding.
               Username(profile!!, modifier = Modifier.padding(100.dp))
               // Display the user's "Wander Score".
-              WanderScore(profile!!)
+              WanderScore(profile!!, itineraryViewModel)
               // Display badges the user has earned.
               WanderBadges()
               // List scrollable itineraries associated with the user.
@@ -119,7 +123,7 @@ fun ProfileScreen(
                   firebaseAuth = firebaseAuth,
                   paddingValues = PaddingValues(8.dp),
                   parent = ItineraryListParent.PROFILE,
-              )
+                  imageRepository = imageRepository)
             }
           }
     }
@@ -136,7 +140,9 @@ fun ProfilePictureWithDropDown(
   val profilePictureModifier =
       Modifier.size(100.dp).clickable { isProfilePictureChangeDropdownOpen = true }
   ProfilePicture(
-      profile = profile, profileViewModel = profileViewModel, modifier = profilePictureModifier)
+      profile = profile,
+      profileViewModel = profileViewModel,
+      modifier = profilePictureModifier /*, ctr = ctr*/)
   ProfilePictureChangeDropdownMenu(
       expanded = isProfilePictureChangeDropdownOpen,
       onDismissRequest = { isProfilePictureChangeDropdownOpen = false },
@@ -169,7 +175,7 @@ fun WanderBadges() {
 }
 
 @Composable
-fun WanderScore(profile: Profile) {
+fun WanderScore(profile: Profile, itineraryViewModel: ItineraryViewModel) {
   Box(
       modifier =
           Modifier.clip(MaterialTheme.shapes.extraLarge)
@@ -177,8 +183,16 @@ fun WanderScore(profile: Profile) {
               .border(
                   BorderStroke(1.dp, MaterialTheme.colorScheme.inverseOnSurface),
                   shape = MaterialTheme.shapes.extraLarge)) {
+        val ownItineraries by
+            itineraryViewModel
+                .getUserItineraries(profile.userUid)
+                .collectAsState(initial = emptyList())
+        var score = 0
+        for (itinerary in ownItineraries) {
+          score += itinerary.numLikes * WANDER_POINTS_SCORE_MULTIPLIER
+        }
         Text(
-            text = "369 WanderPoints",
+            text = "$score WanderPoints",
             modifier = Modifier.padding(8.dp),
             fontWeight = FontWeight.Bold)
       }
@@ -194,7 +208,7 @@ fun ProfilePictureChangeDropdownMenu(
     modifier: Modifier = Modifier,
     offset: DpOffset = DpOffset(0.dp, 0.dp),
     properties: PopupProperties = PopupProperties(focusable = true),
-    content: @Composable ColumnScope.() -> Unit
+    content: @Composable ColumnScope.() -> Unit,
 ) {
 
   if (profile != null) {
