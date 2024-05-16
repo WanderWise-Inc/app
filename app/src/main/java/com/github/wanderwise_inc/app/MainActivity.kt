@@ -37,6 +37,7 @@ import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.github.wanderwise_inc.app.viewmodel.UserLocationClient
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.launch
 
@@ -127,7 +128,10 @@ class MainActivity : ComponentActivity() {
         signInIntent,
         locationClient,
         savedItinerariesDataStore,
-        applicationContext)
+        applicationContext,
+        FirebaseAuth.getInstance(),
+        FirebaseFirestore.getInstance(),
+        FirebaseStorage.getInstance())
 
     firebaseAuth = AppModule.firebaseAuth
     firebaseStorage = AppModule.firebaseStorage

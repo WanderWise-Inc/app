@@ -1,8 +1,5 @@
 package com.github.wanderwise_inc.app.di
 
-// import android.content.Context
-// import androidx.datastore.core.DataStore
-// import com.github.wanderwise_inc.app.proto.location.SavedItineraries
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
@@ -35,6 +32,9 @@ object AppModule {
   private lateinit var locationClient: LocationClient
   private lateinit var savedItinerariesDataStore: DataStore<SavedItineraries>
   private lateinit var context: Context
+  lateinit var firebaseAuth: FirebaseAuth
+  lateinit var db: FirebaseFirestore
+  lateinit var firebaseStorage: FirebaseStorage
 
   init {
     Log.d("ModuleProvider", "Using AppModule")
@@ -47,6 +47,9 @@ object AppModule {
       locationClient: LocationClient,
       savedItinerariesDataStore: DataStore<SavedItineraries>,
       context: Context,
+      firebaseAuth: FirebaseAuth,
+      firebaseFirestore: FirebaseFirestore,
+      firebaseStorage: FirebaseStorage
   ) {
     this.imageLauncher = imageLauncher
     this.signInLauncher = signInLauncher
@@ -54,12 +57,10 @@ object AppModule {
     this.locationClient = locationClient
     this.savedItinerariesDataStore = savedItinerariesDataStore
     this.context = context
+    this.firebaseAuth = firebaseAuth
+    this.db = firebaseFirestore
+    this.firebaseStorage = firebaseStorage
   }
-
-  val firebaseAuth by lazy { FirebaseAuth.getInstance() }
-
-  val firebaseStorage by lazy { FirebaseStorage.getInstance() }
-  val db by lazy { FirebaseFirestore.getInstance() }
 
   val imageRepository by lazy {
     ImageRepositoryImpl(imageLauncher, firebaseStorage.reference, null)
