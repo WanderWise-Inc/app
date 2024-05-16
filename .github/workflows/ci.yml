@@ -45,6 +45,11 @@ jobs:
         run: |
           # setup maps api key
           echo MAPS_API_KEY = "${{ secrets.MAPS_API_KEY}}" >> ./secrets.properties
+          
+      - name: setup geocode API
+        run: |
+          #setup geocode api key
+          echo GEOCODE_API_KEY = "${{ secrets.GEOCODE_API_KEY}}" >> ./secrets.properties
         
         
       # Caching is a very useful part of a CI, as a workflow is executed in a clean environment every time,
