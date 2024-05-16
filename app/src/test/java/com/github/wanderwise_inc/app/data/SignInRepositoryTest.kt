@@ -69,7 +69,7 @@ class SignInRepositoryTest {
     `when`(mockedUser.uid).thenReturn("0")
     `when`(mockedUser.displayName).thenReturn("Test")
     `when`(mockedUser.photoUrl).thenReturn(null)
-    val p = Profile("Test", "0", "")
+    val p = Profile("0", "Test", "")
 
     var path = "test"
     `when`(navController.navigate(Graph.HOME)).then {
