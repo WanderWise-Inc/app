@@ -47,7 +47,7 @@ fun HomeNavGraph(
           createItineraryViewModel,
           profileViewModel,
           onFinished = {
-            createItineraryViewModel.uploadNewItinerary()
+            createItineraryViewModel.finishItinerary()
             NavigationActions(navController).navigateTo(TopLevelDestination.Profile)
           },
           imageRepository = imageRepository)
