@@ -82,25 +82,18 @@ class CreateItineraryViewModel(
           locationClient.getLocationUpdates(intervalMillis).collect { androidLocation ->
             val currLocation = Location(androidLocation.latitude, androidLocation.longitude)
             newItineraryBuilder?.addLocation(currLocation)
-            Log.d(
-                "Location tracking",
-                "adding (${androidLocation.latitude}, ${androidLocation.longitude})")
-            Log.d(
-                "Location tracking",
-                "builder locations = ${newItineraryBuilder?.locations ?: emptyList()}")
+
           }
         }
   }
 
   /** Stops the job tasked with tracking location (`locationJob`) */
   fun stopLocationTracking() {
-    Log.d("Location tracking", "stopping location tracking")
     locationJob?.cancel()
   }
 
   override fun onCleared() {
     super.onCleared()
-    Log.d("CreateItineraryViewModel", "cancelling coroutine")
     coroutineScope.cancel()
   }
   /** @returns a list of ItineraryLabels of fields that haven't been set * */

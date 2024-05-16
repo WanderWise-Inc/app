@@ -16,6 +16,7 @@ import com.github.wanderwise_inc.app.model.location.ItineraryTags
 import com.github.wanderwise_inc.app.model.location.PlacesReader
 import com.github.wanderwise_inc.app.model.profile.Profile
 import com.github.wanderwise_inc.app.ui.TestTags
+import com.github.wanderwise_inc.app.ui.creation.steps.CreateLiveItinerary
 import com.github.wanderwise_inc.app.ui.creation.steps.LocationSelector
 import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
@@ -58,6 +59,7 @@ class CreateItineraryMapUITest {
   private val epflLat = 46.519126741544575
   private val epflLon = 6.5676006970802145
   private var showLocationSelector = mutableStateOf(false)
+    private var showLiveCreation = mutableStateOf(false)
   // showLocationSelector: MutableState<Boolean>
 
   private val locations = PlacesReader(null).readFromString()
@@ -129,4 +131,25 @@ class CreateItineraryMapUITest {
 
     composeTestRule.onNodeWithTag(TestTags.SECOND_LOCATION).assertIsDisplayed()
   }
+    @Test
+    fun testBackButton() {
+        composeTestRule.setContent { CreateLiveItinerary(showLiveCreation, createItineraryViewModel) }
+
+        composeTestRule.onNodeWithTag(TestTags.BACK_BUTTON).assertIsDisplayed()
+    }
+
+    @Test
+    fun testStartButton() {
+        composeTestRule.setContent { CreateLiveItinerary(showLiveCreation, createItineraryViewModel) }
+
+        composeTestRule.onNodeWithTag(TestTags.START_BUTTON).assertIsDisplayed()
+    }
+
+    @Test
+    fun testStopButton() {
+        composeTestRule.setContent { CreateLiveItinerary(showLiveCreation, createItineraryViewModel) }
+
+        composeTestRule.onNodeWithTag(TestTags.STOP_BUTTON).assertIsDisplayed()
+    }
+
 }

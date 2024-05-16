@@ -256,12 +256,12 @@ fun CreateLiveItinerary(
 
   var isStarted by remember { mutableStateOf(false) }
   BottomAppBar(
-      modifier = Modifier.height(250.dp).fillMaxWidth(),
+      modifier = Modifier.height(250.dp).fillMaxWidth().testTag(TestTags.LIVE_ITINERARY),
       containerColor = MaterialTheme.colorScheme.primaryContainer,
       contentColor = MaterialTheme.colorScheme.primary,
   ) {
     Column {
-      Button(onClick = { showLiveCreation.value = false }) {
+      Button(onClick = { showLiveCreation.value = false }, modifier = Modifier.testTag(TestTags.BACK_BUTTON)) {
         Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Go back")
       }
 
@@ -279,7 +279,8 @@ fun CreateLiveItinerary(
               colors =
                   ButtonDefaults.buttonColors(
                       if (!isStarted) MaterialTheme.colorScheme.primary
-                      else MaterialTheme.colorScheme.surfaceVariant)) {
+                      else MaterialTheme.colorScheme.surfaceVariant),
+              modifier = Modifier.testTag(TestTags.START_BUTTON)) {
                 Text("Start")
               }
           Spacer(Modifier.width(8.dp)) // Add space between buttons
@@ -295,7 +296,8 @@ fun CreateLiveItinerary(
               colors =
                   ButtonDefaults.buttonColors(
                       if (isStarted) MaterialTheme.colorScheme.error
-                      else MaterialTheme.colorScheme.surfaceVariant)) {
+                      else MaterialTheme.colorScheme.surfaceVariant),
+              modifier = Modifier.testTag(TestTags.STOP_BUTTON)) {
                 Text("Stop")
               }
         }
