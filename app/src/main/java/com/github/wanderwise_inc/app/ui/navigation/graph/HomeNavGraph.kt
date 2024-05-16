@@ -46,7 +46,10 @@ fun HomeNavGraph(
       CreationScreen(
           createItineraryViewModel,
           profileViewModel,
-          onFinished = { NavigationActions(navController).navigateTo(TopLevelDestination.Profile) },
+          onFinished = {
+            createItineraryViewModel.uploadNewItinerary()
+            NavigationActions(navController).navigateTo(TopLevelDestination.Profile)
+          },
           imageRepository = imageRepository)
     }
     composable(route = TopLevelDestination.Map.route) {
