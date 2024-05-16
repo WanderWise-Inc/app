@@ -13,6 +13,8 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
+const val TITLE_MAX_LENGTH = 80
+
 class CreateItineraryViewModel(
     private val itineraryRepository: ItineraryRepository,
     private val directionsRepository: DirectionsRepository,
@@ -22,11 +24,10 @@ class CreateItineraryViewModel(
     ItineraryViewModel(
         itineraryRepository, directionsRepository, locationsRepository, locationClient) {
   /** New itinerary that the signed in user is currently building */
-  private val maxTitleLength = 80
   private var newItineraryBuilder: Itinerary.Builder? = null
 
   fun getMaxTitleLength(): Int {
-    return maxTitleLength
+    return TITLE_MAX_LENGTH
   }
 
   /**
@@ -73,11 +74,11 @@ class CreateItineraryViewModel(
 
   /** @returns true if the title is valid * */
   fun validTitle(title: String): Boolean {
-    return title.length < maxTitleLength
+    return title.length < TITLE_MAX_LENGTH
   }
 
   fun invalidTitleMessage(): String {
-    return "title field must be shorter than ${maxTitleLength} characters"
+    return "title field must be shorter than ${TITLE_MAX_LENGTH} characters"
   }
 
   /** Coroutine tasked with tracking user location */

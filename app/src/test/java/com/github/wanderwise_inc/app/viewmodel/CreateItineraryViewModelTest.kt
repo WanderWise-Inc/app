@@ -11,9 +11,9 @@ import com.github.wanderwise_inc.app.utils.MainDispatcherRule
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import java.lang.StringBuilder
 import io.mockk.mockk
 import io.mockk.verify
+import java.lang.StringBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
@@ -23,6 +23,7 @@ import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -145,6 +146,6 @@ class CreateItineraryViewModelTest() {
     createItineraryViewModel.onCleared()
 
     // Verify that the coroutineScope was cancelled
-    assertTrue(createItineraryViewModel.coroutineScope.isActive.not())
+    assert(createItineraryViewModel.coroutineScope.isActive.not())
   }
 }
