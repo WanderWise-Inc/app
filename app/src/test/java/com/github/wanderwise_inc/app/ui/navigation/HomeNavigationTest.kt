@@ -59,7 +59,7 @@ class HomeNavigationTest {
 
       every { profileViewModel.getProfile(any()) } returns flow { emit(mockProfile) }
       every { profileViewModel.getActiveProfile() } returns mockProfile
-      every { profileViewModel.getUserUid() } returns mockProfile.userUid
+      every { profileViewModel.getActiveUserUid() } returns mockProfile.userUid
       every { profileViewModel.setActiveProfile(any()) } returns Unit
       coEvery { profileViewModel.setProfile(any()) } returns Unit
       every { profileViewModel.addLikedItinerary(any(), any()) } returns Unit

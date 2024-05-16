@@ -1,10 +1,14 @@
+import com.google.protobuf.gradle.id
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.gms.google-services")
 
+
     //needed for MAPS_API_KEY
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+
+    id("com.google.protobuf") version "0.9.4"
 
     /*
     alias(libs.plugins.androidApplication)
@@ -201,6 +205,8 @@ dependencies {
     implementation("com.google.maps.android:maps-compose-widgets:4.3.3")
     implementation ("com.google.code.gson:gson:2.8.6") //added gson
 
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.0")
+
     // Coil
     implementation("io.coil-kt:coil:2.6.0")
     implementation("io.coil-kt:coil-compose:2.6.0")
@@ -272,6 +278,31 @@ dependencies {
     androidTestImplementation("androidx.arch.core:core-testing:2.1.0")
 
     testImplementation("androidx.arch.core:core-testing:2.2.0")
+
+    // ---------- Datastore + ProtoBuf ------------
+    implementation("androidx.datastore:datastore:1.1.1")
+    implementation("com.google.protobuf:protobuf-javalite:3.18.0")
+    implementation("com.google.protobuf:protobuf-kotlin-lite:3.23.0")
+}
+
+/* protobuf configuration */
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.19.4"
+    }
+
+    generateProtoTasks {
+        all().forEach { task ->
+            task.plugins {
+                create("kotlin") {
+                    option("lite")
+                }
+                create("java") {
+                    option("lite")
+                }
+            }
+        }
+    }
 }
 
 tasks.register("jacocoTestReport", JacocoReport::class) {

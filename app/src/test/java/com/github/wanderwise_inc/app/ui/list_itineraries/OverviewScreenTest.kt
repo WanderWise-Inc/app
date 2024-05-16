@@ -10,8 +10,10 @@ import androidx.compose.ui.test.performScrollToIndex
 import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
 import androidx.navigation.NavHostController
+import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.model.location.FakeItinerary
 import com.github.wanderwise_inc.app.model.location.Itinerary
+import com.github.wanderwise_inc.app.model.profile.Profile
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
@@ -36,9 +38,11 @@ class OverviewScreenTest {
   @MockK private lateinit var profileViewModel: ProfileViewModel
   @MockK private lateinit var navController: NavHostController
   @MockK private lateinit var firebaseAuth: FirebaseAuth
+  @MockK private lateinit var imageRepository: ImageRepository
 
   private var sliderPositionPriceState = mutableStateOf(0f..100f)
   private var sliderPositionTimeState = mutableStateOf(0f..24f)
+  private val profile = Profile(userUid = "0", displayName = "me", bio = "bio")
 
   private val testItineraries =
       listOf(FakeItinerary.SAN_FRANCISCO, FakeItinerary.SWITZERLAND, FakeItinerary.TOKYO)
@@ -46,6 +50,8 @@ class OverviewScreenTest {
   @Before
   fun setup() {
     MockKAnnotations.init(this)
+    every { imageRepository.fetchImage(any()) } returns flow { emit(null) }
+    every { profileViewModel.getProfile(any()) } returns flow { emit(profile) }
 
     for (itinerary in testItineraries) {
       itinerary.uid = itinerary.title // set uid for testTags
@@ -54,7 +60,7 @@ class OverviewScreenTest {
     every { firebaseAuth.currentUser?.uid } returns null
 
     coEvery { profileViewModel.checkIfItineraryIsLiked(any(), any()) } returns false
-    every { profileViewModel.getUserUid() } returns "OverViewScreenTestUserUid"
+    every { profileViewModel.getActiveUserUid() } returns "OverViewScreenTestUserUid"
 
     every { itineraryViewModel.getAllPublicItineraries() } returns flow { emit(testItineraries) }
 
@@ -66,7 +72,8 @@ class OverviewScreenTest {
           navController,
           firebaseAuth,
           sliderPositionPriceState,
-          sliderPositionTimeState)
+          sliderPositionTimeState,
+          imageRepository)
     }
   }
 

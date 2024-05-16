@@ -17,6 +17,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.navigation.NavHostController
 import com.github.wanderwise_inc.app.DEFAULT_USER_UID
 import com.github.wanderwise_inc.app.R
+import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
 import com.github.wanderwise_inc.app.model.location.Tag
 import com.github.wanderwise_inc.app.ui.TestTags
@@ -41,7 +42,8 @@ fun LikedScreen(
     itineraryViewModel: ItineraryViewModel,
     profileViewModel: ProfileViewModel,
     navController: NavHostController,
-    firebaseAuth: FirebaseAuth
+    firebaseAuth: FirebaseAuth,
+    imageRepository: ImageRepository
 ) {
   val sliderPositionPriceState = remember { mutableStateOf(0f..100f) }
   val sliderPositionTimeState = remember { mutableStateOf(0f..24f) }
@@ -51,7 +53,8 @@ fun LikedScreen(
       navController = navController,
       sliderPositionPriceState = sliderPositionPriceState,
       sliderPositionTimeState = sliderPositionTimeState,
-      firebaseAuth = firebaseAuth)
+      firebaseAuth = firebaseAuth,
+      imageRepository = imageRepository)
 }
 
 /** Displays itineraries liked by the user */
@@ -62,7 +65,8 @@ fun DisplayLikedItineraries(
     navController: NavHostController,
     sliderPositionPriceState: MutableState<ClosedFloatingPointRange<Float>>,
     sliderPositionTimeState: MutableState<ClosedFloatingPointRange<Float>>,
-    firebaseAuth: FirebaseAuth
+    firebaseAuth: FirebaseAuth,
+    imageRepository: ImageRepository
 ) {
 
   /* the categories that can be selected by the user during filtering */
@@ -129,6 +133,6 @@ fun DisplayLikedItineraries(
             firebaseAuth = firebaseAuth,
             paddingValues = innerPadding,
             parent = ItineraryListParent.LIKED,
-        )
+            imageRepository = imageRepository)
       }
 }

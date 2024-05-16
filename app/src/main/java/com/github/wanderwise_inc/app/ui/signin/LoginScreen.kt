@@ -14,7 +14,9 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -28,12 +30,23 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.github.wanderwise_inc.app.R
-import com.github.wanderwise_inc.app.data.GoogleSignInLauncher
+import com.github.wanderwise_inc.app.ui.navigation.graph.Graph
+import com.github.wanderwise_inc.app.viewmodel.LoginViewModel
+import com.github.wanderwise_inc.app.viewmodel.SignInState
 
 @Composable
-fun LoginScreen(googleSignInLauncher: GoogleSignInLauncher, modifier: Modifier = Modifier) {
-  Box(modifier = modifier.requiredWidth(width = 1280.dp).requiredHeight(height = 1100.dp)) {
+fun LoginScreen(loginViewModel: LoginViewModel, navController: NavController) {
+  val signInState by loginViewModel.signInState.observeAsState()
+
+  LaunchedEffect(signInState) {
+    if (signInState == SignInState.SUCCESS) {
+      navController.navigate(Graph.HOME)
+    }
+  }
+
+  Box(modifier = Modifier.requiredWidth(width = 1280.dp).requiredHeight(height = 1100.dp)) {
     Image(
         painter = painterResource(id = R.drawable.logo_swent),
         contentDescription = "new_logo_swent 1",
@@ -51,7 +64,7 @@ fun LoginScreen(googleSignInLauncher: GoogleSignInLauncher, modifier: Modifier =
                 .requiredHeight(height = 39.dp)
                 .clip(shape = RoundedCornerShape(16.dp))
                 .background(color = Color(0xFFE6F0FE))) {
-          SignInButton(googleSignInLauncher)
+          SignInButton(onClick = { loginViewModel.signIn() })
         }
     Image(
         painter = painterResource(id = R.drawable.google__g__logo_svg),
@@ -92,9 +105,11 @@ fun LoginScreen(googleSignInLauncher: GoogleSignInLauncher, modifier: Modifier =
 }
 
 @Composable
-fun SignInButton(googleSignInLauncher: GoogleSignInLauncher) {
+fun SignInButton(
+    onClick: () -> Unit,
+) {
   Button(
-      onClick = { googleSignInLauncher.launchSignIn() },
+      onClick = onClick,
       modifier =
           Modifier.requiredWidth(width = 289.dp)
               .requiredHeight(height = 39.dp)

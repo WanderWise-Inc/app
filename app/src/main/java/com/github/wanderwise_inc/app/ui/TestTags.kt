@@ -29,6 +29,8 @@ object TestTags {
   const val CREATION_SCREEN_NAV_BAR = "Creation Screen Top navigation bar"
   const val CREATION_FINISH_BUTTON = "Preview Finish Itinerary Creation Button"
 
+  const val INVALID_INPUT = "invalid input"
+
   const val PRICE_SEARCH = "Price Search"
   const val TIME_SEARCH = "Time Search"
   const val SEARCH_ICON = "Search Icon"
@@ -47,8 +49,12 @@ object TestTags {
   const val PROFILE_SCREEN = "Profile Screen"
   const val FIRST_LOCATION = "First Location"
   const val SECOND_LOCATION = "Second Location"
-
+  const val START_NEW_ITINERARY_STARTING = "start_new_itinerary_starting"
   const val START_NEW_ITINERARY = "start_new_itinerary"
   const val HINT_POPUP = "hint_popup"
   const val HINT_POPUP_MESSAGE = "hint_popup_message"
+  const val LIVE_ITINERARY = "live_itinerary"
+  const val START_BUTTON = "start_button"
+  const val STOP_BUTTON = "stop_button"
+  const val BACK_BUTTON = "back_button"
 }

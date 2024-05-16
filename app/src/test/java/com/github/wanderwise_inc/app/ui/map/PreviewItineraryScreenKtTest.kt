@@ -14,6 +14,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.wanderwise_inc.app.data.DirectionsRepository
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.data.ItineraryRepository
+import com.github.wanderwise_inc.app.data.LocationsRepository
 import com.github.wanderwise_inc.app.data.ProfileRepository
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
@@ -21,8 +22,8 @@ import com.github.wanderwise_inc.app.model.location.PlacesReader
 import com.github.wanderwise_inc.app.model.profile.Profile
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
+import com.github.wanderwise_inc.app.viewmodel.LocationClient
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
-import com.github.wanderwise_inc.app.viewmodel.UserLocationClient
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.CameraPositionState
@@ -54,7 +55,8 @@ class PreviewItineraryScreenKtTest {
   @Mock private lateinit var profileRepository: ProfileRepository
   @Mock private lateinit var imageRepository: ImageRepository
   @Mock private lateinit var directionsRepository: DirectionsRepository
-  @Mock private lateinit var userLocationClient: UserLocationClient
+  @Mock private lateinit var locationsRepository: LocationsRepository
+  @Mock private lateinit var locationClient: LocationClient
 
   private lateinit var profileViewModel: ProfileViewModel
 
@@ -83,18 +85,17 @@ class PreviewItineraryScreenKtTest {
             directionsRepository.getPolylineWayPoints(
                 anyString(), anyString(), anyList(), anyString()))
         .thenReturn(MutableLiveData(listOf(LatLng(epflLat, epflLon))))
-    `when`(userLocationClient.getLocationUpdates(1000)).thenReturn(flow { emit(epflLocation) })
+    `when`(locationClient.getLocationUpdates(1000)).thenReturn(flow { emit(epflLocation) })
     val itineraryRepository = mock(ItineraryRepository::class.java)
-
-    // `when`(itineraryViewModel.getUserLocation()).thenReturn(flow { emit(epflLocation) })
-    // `when`(itineraryViewModel.getPolylinePointsLiveData()).thenReturn(polylinePoints)
 
     val dummyProfile = Profile("-")
     `when`(profileRepository.getProfile(anyString())).thenReturn(flow { emit(dummyProfile) })
     `when`(imageRepository.fetchImage(anyString())).thenReturn(flow { emit(null) })
 
     itineraryViewModel =
-        ItineraryViewModel(itineraryRepository, directionsRepository, userLocationClient)
+        ItineraryViewModel(
+            itineraryRepository, directionsRepository, locationsRepository, locationClient)
+
     itineraryViewModel.setFocusedItinerary(itinerary)
     profileViewModel = ProfileViewModel(profileRepository, imageRepository)
   }
@@ -146,6 +147,13 @@ class PreviewItineraryScreenKtTest {
     composeTestRule.onNodeWithTag(TestTags.MAP_MINIMIZED_BANNER).assertIsNotDisplayed()
     composeTestRule.onNodeWithTag(TestTags.MAP_ITINERARY_TITLE).assertIsNotDisplayed()
     composeTestRule.onNodeWithTag(TestTags.MAP_ITINERARY_DESCRIPTION).assertIsNotDisplayed()
+  }
+
+  @Test
+  fun `Clicking on the Start Button should go to starting mode`() {
+    composeTestRule.setContent { PreviewItineraryScreen(itineraryViewModel, profileViewModel) }
+
+    composeTestRule.onNodeWithTag(TestTags.START_NEW_ITINERARY_STARTING).assertIsDisplayed()
   }
 
   @Test

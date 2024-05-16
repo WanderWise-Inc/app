@@ -1,6 +1,5 @@
 package com.github.wanderwise_inc.app.data
 
-import android.util.Log
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.Tag
 import kotlinx.coroutines.flow.Flow
@@ -12,7 +11,6 @@ class ItineraryRepositoryTestImpl : ItineraryRepository {
   private var uidCtr = 0
 
   override fun getPublicItineraries(): Flow<List<Itinerary>> {
-    print(itineraries)
     return flow { emit(itineraries.filter { it.visible }) }
   }
 
@@ -43,10 +41,14 @@ class ItineraryRepositoryTestImpl : ItineraryRepository {
     assert(oldUid == new.uid)
     itineraries.removeIf { it.uid == oldUid }
     itineraries.add(new)
-    Log.d("ITINERARY_UPDATE", "$new")
   }
 
   override fun deleteItinerary(itinerary: Itinerary) {
     itineraries.remove(itinerary)
+  }
+
+  override suspend fun writeItinerariesToDisk(itineraries: List<Itinerary>) {
+    /* this test implementation has no disk interaction, so has the same effect as setting */
+    for (itinerary in itineraries) setItinerary(itinerary)
   }
 }

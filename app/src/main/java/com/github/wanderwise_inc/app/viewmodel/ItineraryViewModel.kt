@@ -1,6 +1,5 @@
 package com.github.wanderwise_inc.app.viewmodel
 
-import android.location.Location
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,8 +8,10 @@ import androidx.lifecycle.viewModelScope
 import com.github.wanderwise_inc.app.BuildConfig
 import com.github.wanderwise_inc.app.data.DirectionsRepository
 import com.github.wanderwise_inc.app.data.ItineraryRepository
+import com.github.wanderwise_inc.app.data.LocationsRepository
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryPreferences
+import com.github.wanderwise_inc.app.model.location.Location
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -19,9 +20,10 @@ import kotlinx.coroutines.launch
 private const val DEBUG_TAG: String = "MAP_VIEWMODEL"
 /** @brief ViewModel class for providing `Location`s and `Itinerary`s to the map UI */
 open class ItineraryViewModel(
-    private val itineraryRepository: ItineraryRepository,
-    private val directionsRepository: DirectionsRepository,
-    private val locationClient: LocationClient,
+    protected val itineraryRepository: ItineraryRepository,
+    protected val directionsRepository: DirectionsRepository,
+    protected val locationsRepository: LocationsRepository,
+    protected val locationClient: LocationClient,
 ) : ViewModel() {
   private var focusedItinerary: Itinerary? = null
 
@@ -48,7 +50,7 @@ open class ItineraryViewModel(
   /** @return the total number of likes from a list of itineraries */
   fun getItineraryLikes(itineraries: List<Itinerary>): Int {
 
-    var totalLikes: Int = 0
+    var totalLikes = 0
 
     for (itinerary in itineraries) totalLikes += itinerary.numLikes
     return totalLikes
@@ -92,9 +94,19 @@ open class ItineraryViewModel(
     }
   }
 
+  /** saves a list of `Itinerary` to persistent storage */
+  fun saveItineraries(itineraries: List<Itinerary>) {
+    viewModelScope.launch { itineraryRepository.writeItinerariesToDisk(itineraries) }
+  }
+
+  /** saves an `Itinerary` to persistent storage */
+  fun saveItinerary(itinerary: Itinerary) {
+    viewModelScope.launch { itineraryRepository.writeItinerariesToDisk(listOf(itinerary)) }
+  }
+
   /** @brief sets an itinerary in DB */
   fun setItinerary(itinerary: Itinerary) {
-    itineraryRepository.setItinerary(itinerary)
+    viewModelScope.launch { itineraryRepository.setItinerary(itinerary) }
   }
 
   /** @brief deletes an itinerary from the database */
@@ -136,36 +148,25 @@ open class ItineraryViewModel(
     return polylinePointsLiveData
   }
 
-  /** @brief get a Flow of the user location updated every second */
-  fun getUserLocation(): Flow<Location> {
-    return locationClient.getLocationUpdates(1000)
+  private val _locationsLiveData = MutableLiveData<List<Location>>()
+  private val locationsLiveData: LiveData<List<Location>> = _locationsLiveData // gettable from view
+
+  /* gets the places corresponding to the queried name */
+  fun fetchPlaces(name: String) {
+    val key = BuildConfig.GEOCODE_API_KEY
+    viewModelScope.launch {
+      locationsRepository.getPlaces(name = name, apiKey = key).observeForever { response ->
+        _locationsLiveData.value = response ?: listOf()
+      }
+    }
   }
 
-  /**
-   * @return Itinerary being built by the user currently. The composable is responsible for setting
-   *   it to `null` when the creation is finished
-   *
-   * If there is no itinerary currently being created, initializes a new one with the provided
-   * `userUid`
-   *
-   * **USAGE EXAMPLE**
-   *
-   * ```
-   * val newItineraryBuilder = mapViewModel.getNewItinerary()!!
-   * // any attributes that should cause a recomposition should be remembered
-   * var title by remember {
-   *  mutableStateOf(newItinerary.title)
-   * }
-   * Button (
-   *  onClick = {
-   *    title = newTitle                        // update mutableState for recomposition
-   *    newItineraryBuilder.addTitle(newTitle)  // update shared state across screens
-   *  }
-   * )
-   * ```
-   */
+  fun getPlacesLiveData(): LiveData<List<Location>> {
+    return locationsLiveData
+  }
 
-  /* fun filterItinerariesByPrice(priceRange: FloatRange): List<Itinerary> {
-    return allItineraries.filter { it.price in priceRange }
-  }*/
+  /** @brief get a Flow of the user location updated every second */
+  fun getUserLocation(): Flow<android.location.Location> {
+    return locationClient.getLocationUpdates(1000)
+  }
 }

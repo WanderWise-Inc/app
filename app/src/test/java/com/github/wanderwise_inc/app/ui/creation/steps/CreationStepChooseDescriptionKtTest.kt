@@ -50,6 +50,8 @@ class CreationStepChooseDescriptionKtTest {
     composeTestRule.setContent {
       nullItineraryBuilder = Itinerary.Builder(userUid = "1")
       every { createItineraryViewModelTest.getNewItinerary() } returns nullItineraryBuilder
+      every { createItineraryViewModelTest.validTitle(any()) } returns true
+      every { createItineraryViewModelTest.invalidTitleMessage() } returns "error"
 
       CreationStepChooseDescriptionScreen(createItineraryViewModel = createItineraryViewModelTest)
     }
@@ -65,11 +67,29 @@ class CreationStepChooseDescriptionKtTest {
   }
 
   @Test
+  fun `writing invalid title says that we have an error and sets title to null`() {
+    MockKAnnotations.init(this)
+    composeTestRule.setContent {
+      nullItineraryBuilder = Itinerary.Builder(userUid = "1")
+      every { createItineraryViewModelTest.getNewItinerary() } returns nullItineraryBuilder
+      every { createItineraryViewModelTest.validTitle(any()) } returns false
+      every { createItineraryViewModelTest.invalidTitleMessage() } returns "error"
+
+      CreationStepChooseDescriptionScreen(createItineraryViewModel = createItineraryViewModelTest)
+    }
+    composeTestRule.onNodeWithTag(TestTags.CREATION_SCREEN_TITLE).performTextInput("Invalid Title")
+    composeTestRule.onNodeWithTag(TestTags.INVALID_INPUT).assertIsDisplayed()
+
+    assert(nullItineraryBuilder.title == null)
+  }
+
+  @Test
   fun `writing inside the text and description box changes createItineraryViewModel newItinerary`() {
     MockKAnnotations.init(this)
     composeTestRule.setContent {
       nullItineraryBuilder = Itinerary.Builder(userUid = "1")
       every { createItineraryViewModelTest.getNewItinerary() } returns nullItineraryBuilder
+      every { createItineraryViewModelTest.validTitle(any()) } returns true
 
       CreationStepChooseDescriptionScreen(createItineraryViewModel = createItineraryViewModelTest)
     }
@@ -89,6 +109,7 @@ class CreationStepChooseDescriptionKtTest {
       setItineraryBuilder =
           Itinerary.Builder(userUid = "1", title = title, description = description)
       every { createItineraryViewModelTest.getNewItinerary() } returns setItineraryBuilder
+      every { createItineraryViewModelTest.validTitle(any()) } returns true
 
       CreationStepChooseDescriptionScreen(createItineraryViewModel = createItineraryViewModelTest)
     }

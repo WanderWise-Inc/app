@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.data.ProfileRepository
 import com.github.wanderwise_inc.app.model.profile.Profile
+import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.Flow
 
 class ProfileViewModel(
@@ -54,14 +55,14 @@ class ProfileViewModel(
     profileRepository.removeItineraryFromLiked(userUid, itineraryUid)
   }
 
-  suspend fun checkIfItineraryIsLikedByActiveProfile(itineraryUid: String): Boolean {
-    return if (isSignInComplete)
-        profileRepository.checkIfItineraryIsLiked(getUserUid(), itineraryUid)
-    else false
-  }
-
   suspend fun checkIfItineraryIsLiked(userUid: String, itineraryUid: String): Boolean {
     return profileRepository.checkIfItineraryIsLiked(userUid, itineraryUid)
+  }
+
+  suspend fun checkIfItineraryIsLikedByActiveProfile(itineraryUid: String): Boolean {
+    return if (isSignInComplete)
+        profileRepository.checkIfItineraryIsLiked(getActiveUserUid(), itineraryUid)
+    else false
   }
 
   /**
@@ -88,5 +89,19 @@ class ProfileViewModel(
   fun getActiveProfile(): Profile = activeProfile
 
   /** Returns the UID of the signed in profile */
-  fun getUserUid(): String = activeProfile.userUid
+  fun getActiveUserUid(): String = activeProfile.userUid
+
+  /** Creates a profile from a Firebase user */
+  fun createProfileFromFirebaseUser(user: FirebaseUser): Profile {
+    val username = user.displayName
+    val properUsername = username ?: ""
+    val uid = user.uid
+    val description = ""
+
+    return Profile(
+        displayName = properUsername,
+        userUid = uid,
+        bio = description,
+        profilePicture = user.photoUrl)
+  }
 }

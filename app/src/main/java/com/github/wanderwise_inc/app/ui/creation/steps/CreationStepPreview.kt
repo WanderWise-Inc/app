@@ -27,6 +27,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.navigation.Destination.CreationPreviewOptionsDestinations
 import com.github.wanderwise_inc.app.ui.navigation.NavigationActions
@@ -42,11 +43,14 @@ fun CreationStepPreview(
     createItineraryViewModel: CreateItineraryViewModel,
     profileViewModel: ProfileViewModel,
     onFinished: () -> Unit,
+    imageRepository: ImageRepository
 ) {
   var selected by remember { mutableStateOf(PreviewOption.Banner) }
   val navigator = NavigationActions(navController)
 
   var notSetValues by remember { mutableStateOf(listOf<String>()) }
+
+  createItineraryViewModel.setFocusedItinerary(createItineraryViewModel.getNewItinerary()?.build())
 
   Scaffold(
       floatingActionButton = {
@@ -77,7 +81,8 @@ fun CreationStepPreview(
       },
       modifier = Modifier.testTag(TestTags.CREATION_SCREEN_PREVIEW)) { padding ->
         Box() {
-          CreationStepPreviewNav(navController, padding, createItineraryViewModel, profileViewModel)
+          CreationStepPreviewNav(
+              navController, padding, createItineraryViewModel, profileViewModel, imageRepository)
 
           ExtendedFloatingActionButton(
               onClick = {
@@ -113,7 +118,8 @@ fun CreationStepPreviewNav(
     navController: NavHostController,
     padding: PaddingValues,
     createItineraryViewModel: CreateItineraryViewModel,
-    profileViewModel: ProfileViewModel
+    profileViewModel: ProfileViewModel,
+    imageRepository: ImageRepository
 ) {
   NavHost(
       navController = navController,
@@ -121,7 +127,10 @@ fun CreationStepPreviewNav(
       startDestination = CreationPreviewOptionsDestinations.PreviewBanner.route,
       modifier = Modifier.padding(padding)) {
         composable(route = CreationPreviewOptionsDestinations.PreviewBanner.route) {
-          CreationStepPreviewBanner(createItineraryViewModel = createItineraryViewModel)
+          CreationStepPreviewBanner(
+              createItineraryViewModel = createItineraryViewModel,
+              profileViewModel = profileViewModel,
+              imageRepository = imageRepository)
         }
         composable(route = CreationPreviewOptionsDestinations.PreviewItinerary.route) {
           CreationStepPreviewItinerary(
