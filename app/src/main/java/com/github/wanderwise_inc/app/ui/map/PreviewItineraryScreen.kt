@@ -1,6 +1,5 @@
 package com.github.wanderwise_inc.app.ui.map
 
-import android.location.Location
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -53,6 +52,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.wanderwise_inc.app.R
 import com.github.wanderwise_inc.app.model.location.Itinerary
+import com.github.wanderwise_inc.app.model.location.Location
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.profile.ProfilePicture
 import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
@@ -101,7 +101,7 @@ fun PreviewItineraryScreen(
           CenterButton(cameraPositionState = cameraPositionState, currentLocation = userLocation)
         },
         floatingActionButtonPosition = FabPosition.Start) { paddingValues ->
-          Box() {
+          Box {
             GoogleMap(
                 modifier =
                     Modifier.fillMaxSize().padding(paddingValues).testTag(TestTags.MAP_GOOGLE_MAPS),
@@ -109,7 +109,7 @@ fun PreviewItineraryScreen(
                   userLocation?.let {
                     Marker(
                         tag = TestTags.MAP_USER_LOCATION,
-                        state = MarkerState(position = LatLng(it.latitude, it.longitude)),
+                        state = MarkerState(position = it.toLatLng()),
                         icon =
                             BitmapDescriptorFactory.defaultMarker(
                                 BitmapDescriptorFactory.HUE_AZURE))
@@ -399,7 +399,7 @@ fun CenterButton(cameraPositionState: CameraPositionState, currentLocation: Loca
   FloatingActionButton(
       onClick = {
         currentLocation?.let {
-          val latLng = LatLng(it.latitude, it.longitude)
+          val latLng = it.toLatLng()
           cameraPositionState.move(CameraUpdateFactory.newLatLngZoom(latLng, 13f))
         }
       },
@@ -426,7 +426,7 @@ fun NullItinerary(userLocation: Location?) {
           Text("Loading...", modifier = Modifier.testTag(TestTags.MAP_NULL_ITINERARY))
         }
   } else {
-    val userLocationLatLng = LatLng(userLocation!!.latitude, userLocation!!.longitude)
+    val userLocationLatLng = userLocation.toLatLng()
     val cameraPositionState = rememberCameraPositionState {
       position = CameraPosition.fromLatLngZoom(userLocationLatLng, 13f)
     }

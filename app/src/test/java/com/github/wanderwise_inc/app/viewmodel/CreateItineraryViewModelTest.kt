@@ -39,7 +39,7 @@ class CreateItineraryViewModelTest() {
 
   @MockK private lateinit var locationsRepository: LocationsRepository
 
-  @MockK private lateinit var mockAndroidLocation: android.location.Location
+  @MockK private lateinit var locatation: Location
 
   @MockK private lateinit var userLocationClient: UserLocationClient
 
@@ -50,12 +50,12 @@ class CreateItineraryViewModelTest() {
   @OptIn(ExperimentalCoroutinesApi::class)
   @Before
   fun setup() {
-    mockAndroidLocation = mockk()
-    every { mockAndroidLocation.latitude } returns 0.0
-    every { mockAndroidLocation.longitude } returns 0.0
+    locatation = mockk()
+    every { locatation.lat } returns 0.0
+    every { locatation.long } returns 0.0
     userLocationClient = mockk()
     every { userLocationClient.getLocationUpdates(any()) } returns
-        flow { emit(mockAndroidLocation) }
+        flow { emit(locatation) }
     Dispatchers.setMain(testDispatcher)
     MockKAnnotations.init(this)
     createItineraryViewModel =

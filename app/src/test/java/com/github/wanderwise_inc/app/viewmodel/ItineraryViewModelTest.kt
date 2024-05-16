@@ -273,9 +273,7 @@ class ItineraryViewModelTest {
 
   @Test
   fun getUserLocation() = runBlocking {
-    val epflLocation = android.location.Location("TestProvider")
-    epflLocation.latitude = 46.5188
-    epflLocation.longitude = 6.5593
+    val epflLocation = Location(46.5188, 6.5593)
     val delta = 0.001
 
     every { userLocationClient.getLocationUpdates(any()) } returns flow { emit(epflLocation) }
@@ -283,8 +281,8 @@ class ItineraryViewModelTest {
     val userLocationFlow = itineraryViewModel.getUserLocation()
     val emittedLocation = userLocationFlow.first()
 
-    assertEquals(epflLocation.latitude, emittedLocation.latitude, delta)
-    assertEquals(epflLocation.longitude, emittedLocation.longitude, delta)
+    assertEquals(epflLocation.lat, emittedLocation.lat, delta)
+    assertEquals(epflLocation.long, emittedLocation.long, delta)
   }
 
   @Test
