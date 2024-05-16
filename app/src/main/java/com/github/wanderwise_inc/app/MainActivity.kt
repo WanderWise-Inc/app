@@ -29,6 +29,7 @@ import com.github.wanderwise_inc.app.data.SignInRepository
 import com.github.wanderwise_inc.app.di.AppModule
 import com.github.wanderwise_inc.app.disk.SavedItinerariesSerializer
 import com.github.wanderwise_inc.app.proto.location.SavedItineraries
+import com.github.wanderwise_inc.app.ui.map.SearchLocation
 import com.github.wanderwise_inc.app.ui.navigation.graph.RootNavigationGraph
 import com.github.wanderwise_inc.app.ui.theme.WanderWiseTheme
 import com.github.wanderwise_inc.app.viewmodel.BottomNavigationViewModel
@@ -106,7 +107,9 @@ class MainActivity : ComponentActivity() {
       WanderWiseTheme {
         Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
           navController = rememberNavController()
-          RootNavigationGraph(
+          SearchLocation(itineraryViewModel)
+            
+            /*RootNavigationGraph(
               googleSignInLauncher,
               profileViewModel,
               itineraryViewModel,
@@ -114,7 +117,7 @@ class MainActivity : ComponentActivity() {
               bottomNavigationViewModel,
               imageRepository,
               navController,
-              firebaseAuth)
+              firebaseAuth)*/
         }
       }
     }
