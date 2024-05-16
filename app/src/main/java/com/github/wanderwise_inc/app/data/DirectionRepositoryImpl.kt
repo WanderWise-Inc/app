@@ -10,7 +10,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-const val DEBUG_TAG: String = "DIRECTIONS_REPOSITORY"
+private const val DEBUG_TAG: String = "DIRECTIONS_REPOSITORY"
 
 /** Handles interactions with maps API */
 class DirectionsRepositoryImpl(private val directionsApiService: DirectionsApiService) :

@@ -71,6 +71,15 @@ class AppModuleTest {
   }
 
   @Test
+  fun `locationsRepository should return only one instance of LocationsRepository`() {
+    val result1 = AppModule.locationsRepository
+    assertNotNull(result1)
+
+    val result2 = AppModule.locationsRepository
+    assertEquals(result1, result2)
+  }
+
+  @Test
   fun `itineraryRepository should return only one instance of ItineraryRepository`() {
     val result1 = AppModule.itineraryRepository
     assertNotNull(result1)

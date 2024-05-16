@@ -3,6 +3,7 @@ package com.github.wanderwise_inc.app.viewmodel
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.github.wanderwise_inc.app.data.DirectionsRepository
 import com.github.wanderwise_inc.app.data.ItineraryRepository
+import com.github.wanderwise_inc.app.data.LocationsRepository
 import com.github.wanderwise_inc.app.model.location.ItineraryLabels
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
 import com.github.wanderwise_inc.app.model.location.Location
@@ -27,6 +28,8 @@ class CreateItineraryViewModelTest() {
 
   @MockK private lateinit var directionsRepository: DirectionsRepository
 
+  @MockK private lateinit var locationsRepository: LocationsRepository
+
   @MockK private lateinit var userLocationClient: UserLocationClient
 
   private lateinit var createItineraryViewModel: CreateItineraryViewModel
@@ -39,7 +42,8 @@ class CreateItineraryViewModelTest() {
     Dispatchers.setMain(testDispatcher)
     MockKAnnotations.init(this)
     createItineraryViewModel =
-        CreateItineraryViewModel(itineraryRepository, directionsRepository, userLocationClient)
+        CreateItineraryViewModel(
+            itineraryRepository, directionsRepository, locationsRepository, userLocationClient)
   }
 
   @Test
