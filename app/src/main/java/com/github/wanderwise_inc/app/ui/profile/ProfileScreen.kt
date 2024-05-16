@@ -54,6 +54,8 @@ import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
 
+const val WANDER_POINTS_SCORE_MULTIPLIER = 10
+
 @OptIn(ExperimentalMaterial3Api::class)
 // Declare a composable function for the profile screen.
 @Composable
@@ -187,7 +189,7 @@ fun WanderScore(profile: Profile, itineraryViewModel: ItineraryViewModel) {
                 .collectAsState(initial = emptyList())
         var score = 0
         for (itinerary in ownItineraries) {
-          score += itinerary.numLikes * 10
+          score += itinerary.numLikes * WANDER_POINTS_SCORE_MULTIPLIER
         }
         Text(
             text = "$score WanderPoints",

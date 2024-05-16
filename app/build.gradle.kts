@@ -195,8 +195,6 @@ dependencies {
     // --------------- Google Maps --------------------
     implementation("com.google.android.gms:play-services-maps:18.2.0")
     implementation("com.google.android.gms:play-services-location:21.2.0")
-    // ADDED THIS
-    //implementation("com.google.android.gms:play-services-basement:17.0.0")
     implementation("com.google.maps.android:maps-compose:4.3.3")
 
     // Optionally, you can include the Compose utils library for Clustering,

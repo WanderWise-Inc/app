@@ -30,7 +30,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.github.wanderwise_inc.app.DEFAULT_USER_UID
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.ui.TestTags
@@ -83,7 +82,7 @@ fun ItinerariesListScrollable(
         modifier = Modifier.padding(paddingValues).testTag(TestTags.ITINERARY_LIST_SCROLLABLE),
         verticalArrangement = spacedBy(15.dp)) {
           this.items(itineraries, { (iti) -> iti }) { itinerary ->
-            val uid = firebaseAuth.currentUser?.uid ?: DEFAULT_USER_UID
+            val uid = profileViewModel.getUserUid()
             var isLikedInitially by remember { mutableStateOf(false) }
             LaunchedEffect(uid) {
               isLikedInitially = profileViewModel.checkIfItineraryIsLiked(uid, itinerary.uid)

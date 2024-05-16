@@ -39,8 +39,8 @@ class ProfileRepositoryImpl(db: FirebaseFirestore) : ProfileRepository {
             emit(null)
           }
         }
-        .catch {
-          Log.w("ProfileRepositoryImpl", it)
+        .catch { error ->
+          Log.w("ProfileRepositoryImpl", error)
           emit(null)
         }
   }
@@ -63,8 +63,8 @@ class ProfileRepositoryImpl(db: FirebaseFirestore) : ProfileRepository {
           }
           emit(allProfiles)
         }
-        .catch {
-          Log.w("ProfileRepositoryImpl", it)
+        .catch { error ->
+          Log.w("ProfileRepositoryImpl", error)
           emit(listOf())
         }
   }
@@ -75,9 +75,9 @@ class ProfileRepositoryImpl(db: FirebaseFirestore) : ProfileRepository {
         .document(profile.userUid)
         .set(userMap)
         .addOnSuccessListener { Log.d("ProfileRepositoryImpl", "Successfully set profile") }
-        .addOnFailureListener {
+        .addOnFailureListener { exception ->
           Log.d("ProfileRepositoryImpl", "Failed to set profile")
-          throw it
+          throw exception
         }
   }
 
@@ -86,9 +86,9 @@ class ProfileRepositoryImpl(db: FirebaseFirestore) : ProfileRepository {
         .document(profile.userUid)
         .delete()
         .addOnSuccessListener { Log.d("ProfileRepositoryImpl", "Successfully deleted profile") }
-        .addOnFailureListener {
+        .addOnFailureListener { exception ->
           Log.d("ProfileRepositoryImpl", "Failed to delete profile")
-          throw it
+          throw exception
         }
   }
 
@@ -99,9 +99,9 @@ class ProfileRepositoryImpl(db: FirebaseFirestore) : ProfileRepository {
         .addOnSuccessListener {
           Log.d("ProfileRepositoryImpl", "Successfully added itinerary to liked")
         }
-        .addOnFailureListener {
+        .addOnFailureListener { exception ->
           Log.d("ProfileRepositoryImpl", "Failed to add itinerary to liked")
-          throw it
+          throw exception
         }
   }
 
@@ -112,9 +112,9 @@ class ProfileRepositoryImpl(db: FirebaseFirestore) : ProfileRepository {
         .addOnSuccessListener {
           Log.d("ProfileRepositoryImpl", "Successfully removed itinerary from liked")
         }
-        .addOnFailureListener {
+        .addOnFailureListener { exception ->
           Log.d("ProfileRepositoryImpl", "Failed to remove itinerary from liked")
-          throw it
+          throw exception
         }
   }
 
@@ -155,8 +155,8 @@ class ProfileRepositoryImpl(db: FirebaseFirestore) : ProfileRepository {
           }
           emit(likedItineraries)
         }
-        .catch {
-          Log.w("ProfileRepositoryImpl", it)
+        .catch { error ->
+          Log.w("ProfileRepositoryImpl", error)
           emit(listOf())
         }
   }

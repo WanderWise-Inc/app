@@ -60,13 +60,14 @@ fun ItineraryBanner(
     imageRepository: ImageRepository
 ) {
 
-  val imageId = R.drawable.defaultitinerary
+  val defaultImageId = R.drawable.defaultitinerary
   val imageFlow =
       remember(itinerary) { imageRepository.fetchImage("itineraryPictures/${itinerary.uid}") }
   val image by imageFlow.collectAsState(initial = null)
   val painter: Painter =
-      if (image != null) BitmapPainter(image!!.asImageBitmap()) else painterResource(id = imageId)
-  var isLiked /*by remember { mutableStateOf(isLikedInitially) }*/ = isLikedInitially
+      if (image != null) BitmapPainter(image!!.asImageBitmap())
+      else painterResource(id = defaultImageId)
+  var isLiked = isLikedInitially
   var numLikes by remember { mutableIntStateOf(itinerary.numLikes) }
   var prices by remember { mutableFloatStateOf(itinerary.price) }
   var times by remember { mutableIntStateOf(itinerary.time) }
@@ -103,9 +104,7 @@ fun ItineraryBanner(
                   fontFamily = FontFamily.Monospace,
                   fontSize = 14.sp,
                   fontWeight = FontWeight.Bold,
-                  modifier = Modifier.padding(2.dp)
-                  // textDecoration = TextDecoration.Underline
-                  )
+                  modifier = Modifier.padding(2.dp))
 
               Row(modifier = Modifier.fillMaxSize()) {
                 Column(
