@@ -47,13 +47,11 @@ class ScrollableItineraryListTest {
 
   private lateinit var testItineraries: List<Itinerary>
 
-  var itinerariesAreLiked = false
-
   @Before
   fun setup() {
     MockKAnnotations.init(this)
     every { firebaseAuth.currentUser?.uid } returns null
-    every { profileViewModel.getUserUid() } returns "TestUid"
+    every { profileViewModel.getActiveUserUid() } returns "TestUid"
     every { imageRepository.fetchImage(any()) } returns flow { emit(null) }
     every { profileViewModel.getProfile(any()) } returns flow { emit(profile) }
     every { profileViewModel.getLikedItineraries(any()) } returns flow { emit(emptyList()) }
@@ -136,7 +134,7 @@ class ScrollableItineraryListTest {
 
     var itineraryLikesBackend = testItineraries.first().numLikes
 
-    var likedItineraryListBackend = mutableListOf<String>()
+    val likedItineraryListBackend = mutableListOf<String>()
 
     every { itineraryViewModel.incrementItineraryLikes(any()) } answers { itineraryLikesBackend++ }
 
@@ -181,7 +179,7 @@ class ScrollableItineraryListTest {
 
     var itineraryLikesBackend = testItineraries.first().numLikes
 
-    var likedItineraryListBackend = mutableListOf<String>(testItineraries.first().uid)
+    val likedItineraryListBackend = mutableListOf(testItineraries.first().uid)
 
     every { itineraryViewModel.decrementItineraryLikes(any()) } answers { itineraryLikesBackend-- }
 

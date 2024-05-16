@@ -134,7 +134,6 @@ class ProfileViewModelTest {
 
   @Test
   fun checkIfItineraryIsLiked() = runTest {
-    val repo = mutableMapOf(testProfile.userUid to mutableListOf(FakeItinerary.TOKYO.uid))
     val repo = mapOf(testProfile.userUid to listOf(FakeItinerary.TOKYO.uid))
 
     coEvery { profileRepository.checkIfItineraryIsLiked(any(), any()) } answers
@@ -161,8 +160,6 @@ class ProfileViewModelTest {
           repo[user]!!.contains(itinerary)
         }
 
-    val isLiked =
-        profileViewModel.checkIfItineraryIsLiked(testProfile.userUid, FakeItinerary.TOKYO.uid)
     val isLiked = profileViewModel.checkIfItineraryIsLikedByActiveProfile(FakeItinerary.TOKYO.uid)
     assertTrue(isLiked)
   }
@@ -201,13 +198,11 @@ class ProfileViewModelTest {
     val user = mockk<FirebaseUser>()
     every { user.displayName } returns "276746"
     every { user.uid } returns "oscarduong"
-    every { user.photoUrl } returns null
 
     val newProfile = profileViewModel.createProfileFromFirebaseUser(user)
 
     assertEquals("276746", newProfile.displayName)
     assertEquals("oscarduong", newProfile.userUid)
     assertEquals("", newProfile.bio)
-    assertNull(newProfile.profilePicture)
   }
 }

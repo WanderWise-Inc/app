@@ -50,6 +50,7 @@ class OverviewScreenTest {
   @Before
   fun setup() {
     MockKAnnotations.init(this)
+
     every { imageRepository.fetchImage(any()) } returns flow { emit(null) }
     every { profileViewModel.getProfile(any()) } returns flow { emit(profile) }
 
@@ -58,7 +59,7 @@ class OverviewScreenTest {
     }
 
     coEvery { profileViewModel.checkIfItineraryIsLiked(any(), any()) } returns false
-    every { profileViewModel.getUserUid() } returns "OverViewScreenTestUserUid"
+    every { profileViewModel.getActiveUserUid() } returns "OverViewScreenTestUserUid"
     every { profileViewModel.getLikedItineraries(any()) } returns flow { emit(emptyList()) }
 
     every { itineraryViewModel.getAllPublicItineraries() } returns flow { emit(testItineraries) }
@@ -178,7 +179,7 @@ class OverviewScreenTest {
             .onNodeWithTag("${TestTags.ITINERARY_BANNER}_${expectedItineraries[i].uid}")
             .assertIsDisplayed()
       }
-      for (itinerary in testItineraries.minus(expectedItineraries)) {
+      for (itinerary in testItineraries.minus(expectedItineraries.toSet())) {
         composeTestRule
             .onNodeWithTag("${TestTags.ITINERARY_BANNER}_${itinerary.uid}")
             .assertDoesNotExist()

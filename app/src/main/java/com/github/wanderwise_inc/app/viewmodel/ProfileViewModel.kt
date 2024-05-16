@@ -95,15 +95,14 @@ class ProfileViewModel(
 
   /** Creates a profile from a Firebase user */
   fun createProfileFromFirebaseUser(user: FirebaseUser): Profile {
-    val username = user.displayName
-    val properUsername = username ?: ""
     val uid = user.uid
-    val description = ""
+    val displayName = user.displayName ?: ""
+    val bio = ""
 
     return Profile(
-        displayName = properUsername,
         userUid = uid,
-        bio = description,
-        profilePicture = user.photoUrl)
+        displayName = displayName,
+        bio = bio
+    )
   }
 }
