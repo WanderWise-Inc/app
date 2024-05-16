@@ -2,6 +2,7 @@ package com.github.wanderwise_inc.app.ui.creation.steps
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -34,6 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.github.wanderwise_inc.app.model.location.Location
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.popup.HintPopup
@@ -51,8 +53,9 @@ import com.google.maps.android.compose.rememberCameraPositionState
 @Composable
 fun CreateItineraryMapWithSelector(
     createItineraryViewModel: CreateItineraryViewModel,
+    navController: NavHostController
 ) {
-  Scaffold(bottomBar = { LocationSelector(createItineraryViewModel) }) { innerPadding ->
+  Scaffold(bottomBar = { LocationSelector(createItineraryViewModel, navController) }) { innerPadding ->
     CreateItineraryMap(
         createItineraryViewModel = createItineraryViewModel, innerPaddingValues = innerPadding)
   }
@@ -129,7 +132,10 @@ fun CreateItineraryMap(
 }
 
 @Composable
-fun LocationSelector(createItineraryViewModel: CreateItineraryViewModel) {
+fun LocationSelector(
+    createItineraryViewModel: CreateItineraryViewModel,
+    navController: NavHostController
+) {
   var location1 by remember { mutableStateOf("") }
   var location2 by remember { mutableStateOf("") }
 
@@ -154,7 +160,10 @@ fun LocationSelector(createItineraryViewModel: CreateItineraryViewModel) {
             onValueChange = { location1 = it },
             label = { Text("location 1...") },
             placeholder = { Text("location 1...") },
-            modifier = Modifier.padding(start = 25.dp).testTag(TestTags.FIRST_LOCATION),
+            modifier = Modifier.padding(start = 25.dp).testTag(TestTags.FIRST_LOCATION)
+                .clickable { 
+                           navController.navigate("ChooseLocationSearch")
+                },
             shape = RoundedCornerShape(20.dp),
             singleLine = true)
       }

@@ -18,6 +18,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -39,7 +40,9 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.github.wanderwise_inc.app.model.location.Location
+import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.CameraPosition
@@ -55,14 +58,15 @@ import kotlinx.coroutines.flow.debounce
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchLocation(
-    itineraryViewModel: ItineraryViewModel
+    createItineraryViewModel: CreateItineraryViewModel,
+    navController: NavHostController
 ) {
     var focusedLocation: Location? by remember { mutableStateOf(null) }
     
     val keyboard = LocalSoftwareKeyboardController.current
     
     val onSearch = { query: String ->
-        itineraryViewModel.fetchPlaces(query)
+        createItineraryViewModel.fetchPlaces(query)
         keyboard?.hide() // hide keyboard once search concludes
         focusedLocation = null // remove marker and focus on new search propositions
     }
@@ -88,8 +92,20 @@ fun SearchLocation(
     }
     
     Scaffold(
-        topBar = { LocationSearchBar(onSearch, focusOnLocation, itineraryViewModel) },
-        floatingActionButton = { AddWaypointButton() },
+        topBar = { LocationSearchBar(onSearch, focusOnLocation, createItineraryViewModel) },
+        floatingActionButton = { 
+            ExtendedFloatingActionButton(
+                onClick = { 
+                    // add new location to backstack to add it to the 
+                    // TODO: MAYBE NOT EVEN NECESSARY -> JUST ADD TO ITINERARY BUILDER
+                    navController.previousBackStackEntry
+                        ?.savedStateHandle
+                        ?.set("NewLocation", focusedLocation!!)
+                          navController.popBackStack()
+                          },
+                icon = { Icon(imageVector = Icons.Filled.Add, contentDescription = null) },
+                text = { Text("Add Location")}
+        )},
         floatingActionButtonPosition = FabPosition.Center
     ) {padding ->
         GoogleMap(
@@ -103,20 +119,5 @@ fun SearchLocation(
                 )
             }
         }        
-    }
-}
-
-@Composable
-fun AddWaypointButton() {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .size(200.dp, 40.dp)
-            .background(MaterialTheme.colorScheme.primaryContainer)
-            .clickable { }
-    ) {
-        Icon(imageVector = Icons.Filled.Add, contentDescription = "add waypoint icon")
-        Text(text = "Add Waypoint")
     }
 }
