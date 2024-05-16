@@ -15,7 +15,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.navigation.NavHostController
-import com.github.wanderwise_inc.app.DEFAULT_USER_UID
 import com.github.wanderwise_inc.app.R
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
@@ -24,7 +23,6 @@ import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.home.SearchBar
 import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
-import com.google.firebase.auth.FirebaseAuth
 
 /** @brief Search categories displayed on the top bar. */
 data class SearchCategory(
@@ -42,7 +40,6 @@ fun LikedScreen(
     itineraryViewModel: ItineraryViewModel,
     profileViewModel: ProfileViewModel,
     navController: NavHostController,
-    firebaseAuth: FirebaseAuth,
     imageRepository: ImageRepository
 ) {
   val sliderPositionPriceState = remember { mutableStateOf(0f..100f) }
@@ -53,7 +50,6 @@ fun LikedScreen(
       navController = navController,
       sliderPositionPriceState = sliderPositionPriceState,
       sliderPositionTimeState = sliderPositionTimeState,
-      firebaseAuth = firebaseAuth,
       imageRepository = imageRepository)
 }
 
@@ -65,7 +61,6 @@ fun DisplayLikedItineraries(
     navController: NavHostController,
     sliderPositionPriceState: MutableState<ClosedFloatingPointRange<Float>>,
     sliderPositionTimeState: MutableState<ClosedFloatingPointRange<Float>>,
-    firebaseAuth: FirebaseAuth,
     imageRepository: ImageRepository
 ) {
 
@@ -78,7 +73,7 @@ fun DisplayLikedItineraries(
           SearchCategory(ItineraryTags.FOODIE, R.drawable.drinks_icon, "Drinks"),
       )
 
-  val uid = firebaseAuth.currentUser?.uid ?: DEFAULT_USER_UID
+  val uid = profileViewModel.getUserUid()
   var selectedIndex by remember { mutableIntStateOf(0) }
   var searchQuery by remember { mutableStateOf("") }
   var priceRange by remember { mutableStateOf(0f) }
@@ -130,7 +125,6 @@ fun DisplayLikedItineraries(
             itineraryViewModel = itineraryViewModel,
             profileViewModel = profileViewModel,
             navController = navController,
-            firebaseAuth = firebaseAuth,
             paddingValues = innerPadding,
             parent = ItineraryListParent.LIKED,
             imageRepository = imageRepository)

@@ -31,7 +31,6 @@ import com.github.wanderwise_inc.app.ui.navigation.NavigationActions
 import com.github.wanderwise_inc.app.ui.navigation.graph.CreationNavGraph
 import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
-import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun CreationScreen(
@@ -39,10 +38,9 @@ fun CreationScreen(
     profileViewModel: ProfileViewModel,
     onFinished: () -> Unit,
     navController: NavHostController = rememberNavController(),
-    firebaseAuth: FirebaseAuth,
     imageRepository: ImageRepository
 ) {
-  val userUid = firebaseAuth.currentUser?.uid ?: "NULL"
+  val userUid = profileViewModel.getUserUid()
 
   var isNewItineraryNull by remember {
     mutableStateOf(createItineraryViewModel.getNewItinerary() == null)
