@@ -59,6 +59,10 @@ fun CreateItineraryMapWithSelector(
             innerPaddingValues = innerPadding
         )
     }
+  Scaffold(bottomBar = { LocationSelector(createItineraryViewModel) }) { innerPadding ->
+    CreateItineraryMap(
+        createItineraryViewModel = createItineraryViewModel, innerPaddingValues = innerPadding)
+  }
 }
 
 @Composable
@@ -145,7 +149,35 @@ fun CreateItineraryMap(
 fun LocationSelector() {
     var location1 by remember { mutableStateOf("") }
     var location2 by remember { mutableStateOf("") }
+fun LocationSelector(createItineraryViewModel: CreateItineraryViewModel) {
+  var location1 by remember { mutableStateOf("") }
+  var location2 by remember { mutableStateOf("") }
 
+  BottomAppBar(
+      modifier = Modifier.height(250.dp).fillMaxWidth(),
+      containerColor = MaterialTheme.colorScheme.primaryContainer,
+      contentColor = MaterialTheme.colorScheme.primary,
+  ) {
+    Column {
+      /*Text(
+          modifier = Modifier.padding(10.dp),
+          textAlign = TextAlign.Center,
+          text = "Create a new itinerary",
+      )*/
+      Row(verticalAlignment = Alignment.CenterVertically) {
+        Icon(
+            Icons.Filled.LocationOn,
+            contentDescription = "Location 1",
+            modifier = Modifier.padding(start = 10.dp))
+        OutlinedTextField(
+            value = location1,
+            onValueChange = { location1 = it },
+            label = { Text("location 1...") },
+            placeholder = { Text("location 1...") },
+            modifier = Modifier.padding(start = 25.dp).testTag(TestTags.FIRST_LOCATION),
+            shape = RoundedCornerShape(20.dp),
+            singleLine = true)
+      }
     BottomAppBar(
         modifier = Modifier
             .height(250.dp)

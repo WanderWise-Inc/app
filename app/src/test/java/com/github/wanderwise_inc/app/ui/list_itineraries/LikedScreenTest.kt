@@ -59,6 +59,7 @@ class LikedScreenTest {
     every { profileViewModel.getActiveUserUid() } returns "LikedScreenTestUid"
 
     every { itineraryViewModel.getItineraryFromUids(any()) } returns flow { emit(testItineraries) }
+    every { itineraryViewModel.saveItineraries(any()) } returns Unit
 
     composeTestRule.setContent {
       FirebaseApp.initializeApp(LocalContext.current)
