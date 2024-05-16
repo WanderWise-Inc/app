@@ -1,5 +1,6 @@
 package com.github.wanderwise_inc.app.ui.list_itineraries
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -16,6 +17,7 @@ import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -77,15 +79,22 @@ fun ItinerariesListScrollable(
     /* store liked itineraries in persistent storage */
     if (parent == ItineraryListParent.LIKED && itineraries.isNotEmpty())
         itineraryViewModel.saveItineraries(itineraries)
+    val likedItineraries by
+        profileViewModel
+            .getLikedItineraries(profileViewModel.getUserUid())
+            .collectAsState(initial = emptyList())
 
     LazyColumn(
         modifier = Modifier.padding(paddingValues).testTag(TestTags.ITINERARY_LIST_SCROLLABLE),
         verticalArrangement = spacedBy(15.dp)) {
           this.items(itineraries, { (iti) -> iti }) { itinerary ->
-            val uid = profileViewModel.getActiveUserUid()
-            var isLikedInitially by remember { mutableStateOf(false) }
-            LaunchedEffect(uid) {
+            val uid = profileViewModel.getUserUid()
+            var isLikedInitially by remember {
+              mutableStateOf(likedItineraries.contains(itinerary.uid))
+            }
+            LaunchedEffect(Unit) {
               isLikedInitially = profileViewModel.checkIfItineraryIsLiked(uid, itinerary.uid)
+              Log.d("ItineraryList", "isLiked = $isLikedInitially")
             }
 
             val onLikeButtonClick = { it: Itinerary, isLiked: Boolean ->

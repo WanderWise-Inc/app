@@ -48,6 +48,7 @@ class ProfileViewModel(
   }
 
   fun addLikedItinerary(userUid: String, itineraryUid: String) {
+    Log.d("ProfileViewModel", "adding liked itinerary")
     profileRepository.addItineraryToLiked(userUid, itineraryUid)
   }
 
@@ -56,6 +57,7 @@ class ProfileViewModel(
   }
 
   suspend fun checkIfItineraryIsLiked(userUid: String, itineraryUid: String): Boolean {
+    Log.d("ProfileViewModel", "checking if itinerary $itineraryUid is liked...")
     return profileRepository.checkIfItineraryIsLiked(userUid, itineraryUid)
   }
 

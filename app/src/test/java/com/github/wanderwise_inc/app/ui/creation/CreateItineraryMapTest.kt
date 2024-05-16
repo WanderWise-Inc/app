@@ -19,6 +19,10 @@ import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.data.ItineraryRepository
 import com.github.wanderwise_inc.app.data.LocationsRepository
 import com.github.wanderwise_inc.app.data.ProfileRepository
+import com.github.wanderwise_inc.app.model.location.Itinerary
+import com.github.wanderwise_inc.app.model.location.ItineraryTags
+import com.github.wanderwise_inc.app.model.location.Location
+import com.github.wanderwise_inc.app.model.location.PlacesReader
 import com.github.wanderwise_inc.app.model.location.Location
 import com.github.wanderwise_inc.app.model.profile.Profile
 import com.github.wanderwise_inc.app.ui.TestTags
@@ -64,6 +68,7 @@ class CreateItineraryMapTest {
 
   @Before
   fun setup() {
+    val epflLocation = Location(epflLat, epflLon)
     MockKAnnotations.init(this)
 
     val epflLocation = mockk<android.location.Location>()

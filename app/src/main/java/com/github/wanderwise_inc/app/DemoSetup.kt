@@ -96,8 +96,7 @@ fun addItineraries(
       )
 
   /** default profile for demo-ing */
-  val dummyProfile =
-      Profile(uid = DEFAULT_USER_UID, userUid = "-1", bio = "uwu", displayName = "John Doe")
+  val dummyProfile = Profile(userUid = "-1", bio = "uwu", displayName = "John Doe")
 
   val privateItinerary =
       Itinerary(
