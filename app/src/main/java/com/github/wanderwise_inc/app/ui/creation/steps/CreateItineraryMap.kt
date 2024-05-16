@@ -164,7 +164,7 @@ fun ChooseYourWayOfCreation(
     Column(
         verticalArrangement = Arrangement.Top, horizontalAlignment = Alignment.CenterHorizontally) {
           Text(
-              text = "Start your Itinerary creation!",
+              text = "Start creating an Itinerary!",
               style = MaterialTheme.typography.bodyLarge,
               modifier = Modifier.padding(5.dp))
           Spacer(modifier = Modifier.height(50.dp))
@@ -172,7 +172,7 @@ fun ChooseYourWayOfCreation(
             Button(
                 onClick = { showLocationSelector.value = true },
                 modifier = Modifier.fillMaxWidth(0.5f)) {
-                  Text("Create a previous Itinerary", textAlign = TextAlign.Center)
+                  Text("Create a known itinerary", textAlign = TextAlign.Center)
                 }
             Button(
                 onClick = { showLiveCreation.value = true }, modifier = Modifier.fillMaxWidth()) {
@@ -252,7 +252,6 @@ fun CreateLiveItinerary(
     showLiveCreation: MutableState<Boolean>,
     createItineraryViewModel: CreateItineraryViewModel
 ) {
-  // starts tracking
 
   var isStarted by remember { mutableStateOf(false) }
   BottomAppBar(
@@ -274,7 +273,7 @@ fun CreateLiveItinerary(
           Button(
               onClick = {
                 isStarted = true
-                createItineraryViewModel.startLocationTracking(1000)
+                createItineraryViewModel.startLocationTracking(LOCATION_UPDATE_INTERVAL_MILLIS)
                 Log.d("CreateLiveItinerary", "currently creating live itinerary")
               },
               enabled = !isStarted, // Button is disabled if isStarted is true
