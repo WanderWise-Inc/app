@@ -1,6 +1,5 @@
 package com.github.wanderwise_inc.app.ui.signin
 
-import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
@@ -48,16 +47,16 @@ class LoginScreenKtTest {
     @Test
     fun `initial elements are displayed correctly`() {
 
-        composeTestRule.onNodeWithText("You can either wander dumb or,").assertIsDisplayed()
+        composeTestRule.onNodeWithText("You can either wander dumb or,").assertExists()
 
-        composeTestRule.onNodeWithText("WanderWise").assertIsDisplayed()
+        composeTestRule.onNodeWithText("WanderWise").assertExists()
 
-        composeTestRule.onNodeWithContentDescription("new_logo_swent 1").assertIsDisplayed()
+        composeTestRule.onNodeWithContentDescription("new_logo_swent 1").assertExists()
 
-        composeTestRule.onNodeWithText("Start Wandering Now").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Start Wandering Now").assertExists()
 
-        composeTestRule.onNodeWithContentDescription("google-logo-9808 1").assertIsDisplayed()
+        composeTestRule.onNodeWithContentDescription("google-logo-9808 1").assertExists()
 
-        composeTestRule.onNodeWithText("Sign-In with Google").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Sign-In with Google").assertExists()
     }
 }

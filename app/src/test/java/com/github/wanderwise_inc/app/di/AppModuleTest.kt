@@ -7,8 +7,10 @@ import androidx.activity.result.contract.ActivityResultContract
 import com.github.wanderwise_inc.app.MainActivity
 import com.google.firebase.FirebaseApp
 import io.mockk.MockKAnnotations
+import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
@@ -39,7 +41,14 @@ class AppModuleTest {
         }
 
         FirebaseApp.initializeApp(RuntimeEnvironment.getApplication())
+
         appModule = AppModule(mainActivity)
+    }
+
+    @After
+    fun tearDown() {
+        clearAllMocks()
+        FirebaseApp.getInstance().delete()
     }
 
     @Test
@@ -114,8 +123,9 @@ class AppModuleTest {
         assertEquals(result1, result2)
     }
 
+
     @Test
-    fun `itineraryViewModel should return only one instance of ItineraryVewModel`() {
+    fun `itineraryViewModel should return only one instance of ItineraryViewModel`() {
         val result1 = appModule.itineraryViewModel
         assertNotNull(result1)
 

@@ -19,8 +19,8 @@ import kotlinx.coroutines.launch
 private const val DEBUG_TAG: String = "MAP_VIEWMODEL"
 /** @brief ViewModel class for providing `Location`s and `Itinerary`s to the map UI */
 open class ItineraryViewModel(
-    private val itineraryRepository: ItineraryRepository,
-    private val directionsRepository: DirectionsRepository,
+    protected val itineraryRepository: ItineraryRepository,
+    protected val directionsRepository: DirectionsRepository,
     private val locationClient: LocationClient,
 ) : ViewModel() {
   private var focusedItinerary: Itinerary? = null
@@ -48,7 +48,7 @@ open class ItineraryViewModel(
   /** @return the total number of likes from a list of itineraries */
   fun getItineraryLikes(itineraries: List<Itinerary>): Int {
 
-    var totalLikes: Int = 0
+    var totalLikes = 0
 
     for (itinerary in itineraries) totalLikes += itinerary.numLikes
     return totalLikes

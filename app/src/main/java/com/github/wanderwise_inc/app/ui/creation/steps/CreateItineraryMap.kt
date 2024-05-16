@@ -1,6 +1,5 @@
 package com.github.wanderwise_inc.app.ui.creation.steps
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -52,130 +51,152 @@ import com.google.maps.android.compose.rememberCameraPositionState
 fun CreateItineraryMapWithSelector(
     createItineraryViewModel: CreateItineraryViewModel,
 ) {
-  Scaffold(bottomBar = { LocationSelector() }) { innerPadding ->
-    CreateItineraryMap(
-        createItineraryViewModel = createItineraryViewModel, innerPaddingValues = innerPadding)
-  }
+    Scaffold(
+        bottomBar = { LocationSelector() }
+    ) { innerPadding ->
+        CreateItineraryMap(
+            createItineraryViewModel = createItineraryViewModel,
+            innerPaddingValues = innerPadding
+        )
+    }
 }
 
-@SuppressLint("MutableCollectionMutableState")
 @Composable
 fun CreateItineraryMap(
     createItineraryViewModel: CreateItineraryViewModel,
     innerPaddingValues: PaddingValues
 ) {
-  val itineraryBuilder = createItineraryViewModel.getNewItinerary()!!
+    val itineraryBuilder = createItineraryViewModel.getNewItinerary()!!
 
-  val locations = remember { mutableStateListOf<Location>() }
-  for (location in itineraryBuilder.locations) {
-    locations += location
-  }
-  var locationsCtr by remember { mutableIntStateOf(0) }
-  val userLocation by createItineraryViewModel.getUserLocation().collectAsState(initial = null)
-
-  LaunchedEffect(locationsCtr) {
-    createItineraryViewModel.fetchPolylineLocations(itineraryBuilder.build())
-  }
-
-  var isHintPopupOpen by remember { mutableStateOf(true) }
-
-  if (userLocation != null) {
-    val userLocationLatLng = LatLng(userLocation!!.latitude, userLocation!!.longitude)
-    val cameraPositionState = rememberCameraPositionState {
-      position = CameraPosition.fromLatLngZoom(userLocationLatLng, 13f)
+    val locations = remember { mutableStateListOf<Location>() }
+    for (location in itineraryBuilder.locations) {
+        locations += location
     }
-    val polylinePoints by createItineraryViewModel.getPolylinePointsLiveData().observeAsState()
-    GoogleMap(
-        modifier =
-            Modifier.padding(paddingValues = innerPaddingValues).testTag(TestTags.MAP_GOOGLE_MAPS),
-        onMapClick = {
-          itineraryBuilder.addLocation(Location.fromLatLng(it))
-          locations.add(Location.fromLatLng(it))
-          locationsCtr++ // force a redraw
-        },
-        cameraPositionState = cameraPositionState) {
-          userLocation?.let {
-            Marker(
-                tag = TestTags.MAP_USER_LOCATION,
-                state = MarkerState(position = LatLng(it.latitude, it.longitude)),
-                icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE),
-                contentDescription = TestTags.MAP_USER_LOCATION)
-          }
+    var locationsCtr by remember { mutableIntStateOf(0) }
+    val userLocation by createItineraryViewModel.getUserLocation().collectAsState(initial = null)
 
-          locations.map { location ->
-            AdvancedMarker(
-                state = MarkerState(position = location.toLatLng()),
-                title = location.title,
-            )
-          }
-          if (polylinePoints != null)
-              Polyline(points = polylinePoints!!, color = MaterialTheme.colorScheme.primary)
+    LaunchedEffect(locationsCtr) {
+        createItineraryViewModel.fetchPolylineLocations(itineraryBuilder.build())
+    }
+
+    var isHintPopupOpen by remember { mutableStateOf(true) }
+
+    if (userLocation != null) {
+        val userLocationLatLng = LatLng(userLocation!!.latitude, userLocation!!.longitude)
+        val cameraPositionState = rememberCameraPositionState {
+            position = CameraPosition.fromLatLngZoom(userLocationLatLng, 13f)
         }
-    if (isHintPopupOpen) {
-      HintPopup(message = "Try pressing your screen to add waypoints!") { isHintPopupOpen = false }
-    }
-  } else {
-    Column(
-        modifier =
-            Modifier.testTag(TestTags.MAP_NULL_ITINERARY)
+        val polylinePoints by createItineraryViewModel.getPolylinePointsLiveData().observeAsState()
+        GoogleMap(
+            modifier = Modifier
+                .padding(paddingValues = innerPaddingValues)
+                .testTag(TestTags.MAP_GOOGLE_MAPS),
+            onMapClick = {
+                itineraryBuilder.addLocation(Location.fromLatLng(it))
+                locations.add(Location.fromLatLng(it))
+                locationsCtr++ // force a redraw
+            },
+            cameraPositionState = cameraPositionState
+        ) {
+            userLocation?.let {
+                Marker(
+                    tag = TestTags.MAP_USER_LOCATION,
+                    state = MarkerState(position = LatLng(it.latitude, it.longitude)),
+                    icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE),
+                    contentDescription = TestTags.MAP_USER_LOCATION
+                )
+            }
+
+            locations.map { location ->
+                AdvancedMarker(
+                    state = MarkerState(position = location.toLatLng()),
+                    title = location.title,
+                )
+            }
+
+            if (polylinePoints != null)
+                Polyline(points = polylinePoints!!, color = MaterialTheme.colorScheme.primary)
+        }
+        if (isHintPopupOpen) {
+            HintPopup(message = "Try pressing your screen to add waypoints!") {
+                isHintPopupOpen = false
+            }
+        }
+    } else {
+        Column(
+            modifier =
+            Modifier
+                .testTag(TestTags.MAP_NULL_ITINERARY)
                 .fillMaxSize()
                 .padding(innerPaddingValues)
                 .background(MaterialTheme.colorScheme.background),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center) {
-          Text("Loading your location...", modifier = Modifier.testTag(TestTags.MAP_NULL_ITINERARY))
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(
+                "Loading your location...",
+                modifier = Modifier.testTag(TestTags.MAP_NULL_ITINERARY)
+            )
         }
-  }
+    }
 }
 
 @Composable
 fun LocationSelector() {
-  var location1 by remember { mutableStateOf("") }
-  var location2 by remember { mutableStateOf("") }
+    var location1 by remember { mutableStateOf("") }
+    var location2 by remember { mutableStateOf("") }
 
-  BottomAppBar(
-      modifier = Modifier.height(250.dp).fillMaxWidth(),
-      containerColor = MaterialTheme.colorScheme.primaryContainer,
-      contentColor = MaterialTheme.colorScheme.primary,
-  ) {
-    Column {
-      /*Text(
-          modifier = Modifier.padding(10.dp),
-          textAlign = TextAlign.Center,
-          text = "Create a new itinerary",
-      )*/
-      Row(verticalAlignment = Alignment.CenterVertically) {
-        Icon(
-            Icons.Filled.LocationOn,
-            contentDescription = "Location 1",
-            modifier = Modifier.padding(start = 10.dp))
-        OutlinedTextField(
-            value = location1,
-            onValueChange = { location1 = it },
-            label = { Text("location 1...") },
-            placeholder = { Text("location 1...") },
-            modifier = Modifier.padding(start = 25.dp).testTag(TestTags.FIRST_LOCATION),
-            shape = RoundedCornerShape(20.dp))
-      }
+    BottomAppBar(
+        modifier = Modifier
+            .height(250.dp)
+            .fillMaxWidth(),
+        containerColor = MaterialTheme.colorScheme.primaryContainer,
+        contentColor = MaterialTheme.colorScheme.primary,
+    ) {
+        Column {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    Icons.Filled.LocationOn,
+                    contentDescription = "Location 1",
+                    modifier = Modifier.padding(start = 10.dp)
+                )
 
-      Icon(
-          Icons.Filled.MoreVert,
-          contentDescription = "more",
-          modifier = Modifier.padding(start = 10.dp))
+                OutlinedTextField(
+                    value = location1,
+                    onValueChange = { location1 = it },
+                    label = { Text("location 1...") },
+                    placeholder = { Text("location 1...") },
+                    modifier = Modifier
+                        .padding(start = 25.dp)
+                        .testTag(TestTags.FIRST_LOCATION),
+                    shape = RoundedCornerShape(20.dp)
+                )
+            }
 
-      Row(verticalAlignment = Alignment.CenterVertically) {
-        Icon(
-            Icons.Filled.LocationOn,
-            contentDescription = "Location 2",
-            modifier = Modifier.padding(start = 10.dp))
-        OutlinedTextField(
-            value = location2,
-            onValueChange = { location2 = it },
-            label = { Text("location 2...") },
-            placeholder = { Text("location 2...") },
-            modifier = Modifier.padding(start = 25.dp).testTag(TestTags.SECOND_LOCATION),
-            shape = RoundedCornerShape(20.dp))
-      }
+            Icon(
+                Icons.Filled.MoreVert,
+                contentDescription = "more",
+                modifier = Modifier.padding(start = 10.dp)
+            )
+
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    Icons.Filled.LocationOn,
+                    contentDescription = "Location 2",
+                    modifier = Modifier.padding(start = 10.dp)
+                )
+
+                OutlinedTextField(
+                    value = location2,
+                    onValueChange = { location2 = it },
+                    label = { Text("location 2...") },
+                    placeholder = { Text("location 2...") },
+                    modifier = Modifier
+                        .padding(start = 25.dp)
+                        .testTag(TestTags.SECOND_LOCATION),
+                    shape = RoundedCornerShape(20.dp)
+                )
+            }
+        }
     }
-  }
 }

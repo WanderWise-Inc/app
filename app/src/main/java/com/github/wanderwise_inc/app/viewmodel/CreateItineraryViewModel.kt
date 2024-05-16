@@ -7,9 +7,9 @@ import com.github.wanderwise_inc.app.model.location.ItineraryLabels
 import java.io.InvalidObjectException
 
 class CreateItineraryViewModel(
-    private val itineraryRepository: ItineraryRepository,
-    private val directionsRepository: DirectionsRepository,
-    private val locationClient: LocationClient
+    itineraryRepository: ItineraryRepository,
+    directionsRepository: DirectionsRepository,
+    locationClient: LocationClient
 ) : ItineraryViewModel(itineraryRepository, directionsRepository, locationClient) {
   /** New itinerary that the signed in user is currently building */
   private var newItineraryBuilder: Itinerary.Builder? = null

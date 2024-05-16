@@ -19,9 +19,7 @@ import com.github.wanderwise_inc.app.data.DirectionsRepository
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.data.ItineraryRepository
 import com.github.wanderwise_inc.app.data.ProfileRepository
-import com.github.wanderwise_inc.app.model.location.Itinerary
-import com.github.wanderwise_inc.app.model.location.ItineraryTags
-import com.github.wanderwise_inc.app.model.location.PlacesReader
+import com.github.wanderwise_inc.app.di.AppModule
 import com.github.wanderwise_inc.app.model.profile.Profile
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.creation.steps.CreateItineraryMap
@@ -30,8 +28,12 @@ import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.github.wanderwise_inc.app.viewmodel.UserLocationClient
 import com.google.android.gms.maps.model.LatLng
+import io.mockk.MockKAnnotations
+import io.mockk.every
+import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runTest
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -40,74 +42,65 @@ import org.mockito.ArgumentMatchers
 import org.mockito.ArgumentMatchers.anyLong
 import org.mockito.Mock
 import org.mockito.Mockito
-import org.mockito.junit.MockitoJUnit
-import org.mockito.junit.MockitoRule
 
 @RunWith(AndroidJUnit4::class)
 class CreateItineraryMapTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    @get:Rule
-    val mockitoRule: MockitoRule = MockitoJUnit.rule()
+    @MockK
+    private lateinit var itineraryRepository: ItineraryRepository
 
-    @Mock
-    private lateinit var createItineraryViewModel: CreateItineraryViewModel
-
-    @Mock
+    @MockK
     private lateinit var profileRepository: ProfileRepository
-    @Mock
+
+    @MockK
     private lateinit var imageRepository: ImageRepository
-    @Mock
+
+    @MockK
     private lateinit var directionsRepository: DirectionsRepository
-    @Mock
-    private lateinit var userLocationClient: UserLocationClient
+
+    @MockK
+    private lateinit var locationClient: UserLocationClient
+
+    private lateinit var createItineraryViewModel: CreateItineraryViewModel
 
     private lateinit var profileViewModel: ProfileViewModel
 
     private val epflLat = 46.519126741544575
     private val epflLon = 6.5676006970802145
 
-    private val locations = PlacesReader(null).readFromString()
-    private val itinerary =
-        Itinerary(
-            userUid = "",
-            locations = locations,
-            title = "San Francisco Bike Itinerary",
-            tags = listOf(ItineraryTags.CULTURAL, ItineraryTags.NATURE, ItineraryTags.BUDGET),
-            description = "A 3-day itinerary to explore the best of San Francisco on a bike.",
-            visible = true
-        )
-
     @Before
     fun setup() {
+        MockKAnnotations.init(this)
+
         val epflLocation = Mockito.mock(Location::class.java)
         epflLocation.latitude = epflLat
         epflLocation.longitude = epflLon
+
         val polylinePoints = MutableLiveData<List<LatLng>>()
         polylinePoints.value = listOf(LatLng(epflLat, epflLon))
 
-        Mockito.`when`(
-            directionsRepository.getPolylineWayPoints(
-                ArgumentMatchers.anyString(),
-                ArgumentMatchers.anyString(),
-                ArgumentMatchers.anyList(),
-                ArgumentMatchers.anyString()
-            )
-        )
-            .thenReturn(MutableLiveData(listOf(LatLng(epflLat, epflLon))))
-        Mockito.`when`(userLocationClient.getLocationUpdates(anyLong()))
-            .thenReturn(flow { emit(epflLocation) })
-        val itineraryRepository = Mockito.mock(ItineraryRepository::class.java)
-
         val dummyProfile = Profile("-")
-        Mockito.`when`(profileRepository.getProfile(ArgumentMatchers.anyString()))
-            .thenReturn(flow { emit(dummyProfile) })
-        Mockito.`when`(imageRepository.fetchImage(ArgumentMatchers.anyString()))
-            .thenReturn(flow { emit(null) })
 
-        createItineraryViewModel =
-            CreateItineraryViewModel(itineraryRepository, directionsRepository, userLocationClient)
+        every {
+            directionsRepository.getPolylineWayPoints(any(), any(), any(), any())
+        } returns polylinePoints
+
+        every {
+            locationClient.getLocationUpdates(any())
+        } returns flow { emit(epflLocation) }
+
+        every {
+            profileRepository.getProfile(any())
+        } returns flow { emit(dummyProfile) }
+
+        every {
+            imageRepository.fetchImage(any())
+        } returns flow { emit(null) }
+
+
+        createItineraryViewModel = CreateItineraryViewModel(itineraryRepository, directionsRepository, locationClient)
         createItineraryViewModel.startNewItinerary(dummyProfile.userUid)
 
         profileViewModel = ProfileViewModel(profileRepository, imageRepository)
