@@ -11,6 +11,7 @@ import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import io.mockk.MockKAnnotations
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runTest
@@ -49,7 +50,7 @@ class CreationStepPreviewBannerKtTest {
   @Test
   fun `test if the banner screen is composed`() = runTest {
     composeTestRule.setContent {
-      // every { createItineraryViewModelTest.getNewItinerary() } returns itineraryBuilder
+      every { createItineraryViewModelTest.getFocusedItinerary() } returns FakeItinerary.SWITZERLAND
 
       CreationStepPreviewBanner(
           createItineraryViewModel = createItineraryViewModelTest,
@@ -62,7 +63,7 @@ class CreationStepPreviewBannerKtTest {
   @Test
   fun `title is displayed`() = runTest {
     composeTestRule.setContent {
-      // every { createItineraryViewModelTest.getNewItinerary() } returns itineraryBuilder
+      every { createItineraryViewModelTest.getFocusedItinerary() } returns FakeItinerary.SWITZERLAND
 
       CreationStepPreviewBanner(
           createItineraryViewModel = createItineraryViewModelTest,

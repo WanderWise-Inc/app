@@ -13,6 +13,7 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.verify
+import java.lang.StringBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
@@ -21,7 +22,8 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -59,6 +61,27 @@ class CreateItineraryViewModelTest() {
     createItineraryViewModel =
         CreateItineraryViewModel(
             itineraryRepository, directionsRepository, locationsRepository, userLocationClient)
+  }
+
+  @Test
+  fun `validTitle works as intended`() {
+    val maxTitleLength = createItineraryViewModel.getMaxTitleLength()
+    val n = (maxTitleLength / 5) + 3
+    val sb = StringBuilder()
+    for (i in 0 until n) {
+      sb.append("title")
+    }
+
+    assert(createItineraryViewModel.validTitle("title"))
+    assert(!createItineraryViewModel.validTitle(sb.toString()))
+  }
+
+  @Test
+  fun `invalid title message works as intended`() {
+    val maxTitleLength = createItineraryViewModel.getMaxTitleLength()
+    assertEquals(
+        createItineraryViewModel.invalidTitleMessage(),
+        "title field must be shorter than ${maxTitleLength} characters")
   }
 
   @Test
@@ -123,6 +146,6 @@ class CreateItineraryViewModelTest() {
     createItineraryViewModel.onCleared()
 
     // Verify that the coroutineScope was cancelled
-    assertTrue(createItineraryViewModel.coroutineScope.isActive.not())
+    assert(createItineraryViewModel.coroutineScope.isActive.not())
   }
 }
