@@ -1,6 +1,5 @@
 package com.github.wanderwise_inc.app.ui.navigation
 
-import android.location.Location
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -11,6 +10,7 @@ import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.model.location.FakeItinerary
+import com.github.wanderwise_inc.app.model.location.Location
 import com.github.wanderwise_inc.app.model.profile.Profile
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.home.HomeScreen
@@ -51,9 +51,9 @@ class HomeNavigationTest {
     MockKAnnotations.init(this)
 
     composeTestRule.setContent {
-      val mockProfile = Profile("", "Test", "0", "Bio", null)
+      val mockProfile = Profile("Test", "0", "Bio")
       val mockItinerary = FakeItinerary.SAN_FRANCISCO
-      val mockLocation = Location("")
+      val mockLocation = Location(0.0, 0.0)
 
       every { imageRepository.fetchImage(any()) } returns flowOf(null)
 
@@ -70,7 +70,7 @@ class HomeNavigationTest {
       every { itineraryViewModel.setItinerary(any()) } returns Unit
       every { itineraryViewModel.incrementItineraryLikes(any()) } returns Unit
       every { itineraryViewModel.getAllPublicItineraries() } returns flow { emit(emptyList()) }
-      every { itineraryViewModel.getUserLocation() } returns flow { emit(Location("")) }
+      every { itineraryViewModel.getUserLocation() } returns flow { emit(Location(0.0, 0.0)) }
       every { itineraryViewModel.getUserItineraries(any()) } returns flow { emit(emptyList()) }
       every { itineraryViewModel.getItineraryFromUids(any()) } returns flow { emit(emptyList()) }
       every { itineraryViewModel.getFocusedItinerary() } returns null
@@ -93,8 +93,7 @@ class HomeNavigationTest {
           createItineraryViewModel,
           bottomNavigationViewModel,
           profileViewModel,
-          navController,
-          firebaseAuth)
+          navController)
     }
   }
 

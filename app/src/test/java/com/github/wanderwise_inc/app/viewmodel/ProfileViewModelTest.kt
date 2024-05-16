@@ -1,6 +1,5 @@
 package com.github.wanderwise_inc.app.viewmodel
 
-import com.github.wanderwise_inc.app.DEFAULT_USER_UID
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.data.ProfileRepository
 import com.github.wanderwise_inc.app.model.location.FakeItinerary
@@ -29,11 +28,9 @@ class ProfileViewModelTest {
 
   private val testProfile =
       Profile(
-          uid = DEFAULT_USER_UID,
           displayName = "276746",
-          userUid = "oscarduong",
           bio = "testing",
-          profilePicture = null,
+          userUid = "oscarduong",
           likedItinerariesUid = mutableListOf(FakeItinerary.TOKYO.uid))
 
   @Before
@@ -113,13 +110,13 @@ class ProfileViewModelTest {
           repo[user] = listOf(itinerary)
         }
 
-    profileViewModel.addLikedItinerary(testProfile.uid, FakeItinerary.TOKYO.uid)
-    assertEquals(listOf(FakeItinerary.TOKYO.uid), repo[testProfile.uid])
+    profileViewModel.addLikedItinerary(testProfile.userUid, FakeItinerary.TOKYO.uid)
+    assertEquals(listOf(FakeItinerary.TOKYO.uid), repo[testProfile.userUid])
   }
 
   @Test
   fun removeLikedItinerary() {
-    val repo = mutableMapOf(testProfile.uid to mutableListOf(FakeItinerary.TOKYO.uid))
+    val repo = mutableMapOf(testProfile.userUid to mutableListOf(FakeItinerary.TOKYO.uid))
 
     every { profileRepository.removeItineraryFromLiked(any(), any()) } answers
         {
@@ -128,13 +125,13 @@ class ProfileViewModelTest {
           repo[user]!!.remove(itinerary)
         }
 
-    profileViewModel.removeLikedItinerary(testProfile.uid, FakeItinerary.TOKYO.uid)
-    assertEquals(0, repo[testProfile.uid]!!.size)
+    profileViewModel.removeLikedItinerary(testProfile.userUid, FakeItinerary.TOKYO.uid)
+    assertEquals(0, repo[testProfile.userUid]!!.size)
   }
 
   @Test
   fun checkIfItineraryIsLiked() = runTest {
-    val repo = mutableMapOf(testProfile.uid to mutableListOf(FakeItinerary.TOKYO.uid))
+    val repo = mutableMapOf(testProfile.userUid to mutableListOf(FakeItinerary.TOKYO.uid))
 
     coEvery { profileRepository.checkIfItineraryIsLiked(any(), any()) } answers
         {
@@ -143,7 +140,8 @@ class ProfileViewModelTest {
           repo[user]!!.contains(itinerary)
         }
 
-    val isLiked = profileViewModel.checkIfItineraryIsLiked(testProfile.uid, FakeItinerary.TOKYO.uid)
+    val isLiked =
+        profileViewModel.checkIfItineraryIsLiked(testProfile.userUid, FakeItinerary.TOKYO.uid)
     assertTrue(isLiked)
   }
 
@@ -152,7 +150,8 @@ class ProfileViewModelTest {
     every { profileRepository.getLikedItineraries(any()) } returns
         flow { emit(listOf(FakeItinerary.TOKYO.uid)) }
 
-    val emittedLikedItineraryList = profileViewModel.getLikedItineraries(testProfile.uid).first()
+    val emittedLikedItineraryList =
+        profileViewModel.getLikedItineraries(testProfile.userUid).first()
     assertEquals(listOf(FakeItinerary.TOKYO.uid), emittedLikedItineraryList)
   }
 }

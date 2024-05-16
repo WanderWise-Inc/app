@@ -49,7 +49,6 @@ import com.github.wanderwise_inc.app.ui.popup.HintPopup
 import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.AdvancedMarker
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.Marker
@@ -101,7 +100,7 @@ fun CreateItineraryMap(
   var isHintPopupOpen by remember { mutableStateOf(true) }
 
   if (userLocation != null) {
-    val userLocationLatLng = LatLng(userLocation!!.latitude, userLocation!!.longitude)
+    val userLocationLatLng = userLocation!!.toLatLng()
     val cameraPositionState = rememberCameraPositionState {
       position = CameraPosition.fromLatLngZoom(userLocationLatLng, 13f)
     }
@@ -118,7 +117,7 @@ fun CreateItineraryMap(
           userLocation?.let {
             Marker(
                 tag = TestTags.MAP_USER_LOCATION,
-                state = MarkerState(position = LatLng(it.latitude, it.longitude)),
+                state = MarkerState(position = it.toLatLng()),
                 icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE),
                 contentDescription = TestTags.MAP_USER_LOCATION)
           }

@@ -57,10 +57,9 @@ class OverviewScreenTest {
       itinerary.uid = itinerary.title // set uid for testTags
     }
 
-    every { firebaseAuth.currentUser?.uid } returns null
-
     coEvery { profileViewModel.checkIfItineraryIsLiked(any(), any()) } returns false
     every { profileViewModel.getUserUid() } returns "OverViewScreenTestUserUid"
+    every { profileViewModel.getLikedItineraries(any()) } returns flow { emit(emptyList()) }
 
     every { itineraryViewModel.getAllPublicItineraries() } returns flow { emit(testItineraries) }
 
@@ -70,7 +69,6 @@ class OverviewScreenTest {
           itineraryViewModel,
           profileViewModel,
           navController,
-          firebaseAuth,
           sliderPositionPriceState,
           sliderPositionTimeState,
           imageRepository)

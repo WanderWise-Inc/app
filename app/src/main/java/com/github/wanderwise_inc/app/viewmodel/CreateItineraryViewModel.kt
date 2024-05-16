@@ -1,11 +1,11 @@
 package com.github.wanderwise_inc.app.viewmodel
 
+import android.util.Log
 import com.github.wanderwise_inc.app.data.DirectionsRepository
 import com.github.wanderwise_inc.app.data.ItineraryRepository
 import com.github.wanderwise_inc.app.data.LocationsRepository
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryLabels
-import com.github.wanderwise_inc.app.model.location.Location
 import java.io.InvalidObjectException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -59,6 +59,16 @@ class CreateItineraryViewModel(
     newItineraryBuilder = Itinerary.Builder(userUid = userUid)
   }
 
+  /** uploads new itinerary and clears the builder */
+  fun finishItinerary() {
+    try {
+      uploadNewItinerary()
+    } catch (e: InvalidObjectException) {
+      Log.d("CreateItineraryViewModel", "cannot complete a null itinerary. $e")
+    }
+    newItineraryBuilder = null
+  }
+
   fun uploadNewItinerary() {
     if (newItineraryBuilder != null) itineraryRepository.setItinerary(newItineraryBuilder!!.build())
     else throw InvalidObjectException("Itinerary.Builder is `null`")
@@ -93,9 +103,8 @@ class CreateItineraryViewModel(
     locationJob?.cancel() // cancel some previous job
     locationJob =
         coroutineScope.launch {
-          locationClient.getLocationUpdates(intervalMillis).collect { androidLocation ->
-            val currLocation = Location(androidLocation.latitude, androidLocation.longitude)
-            newItineraryBuilder?.addLocation(currLocation)
+          locationClient.getLocationUpdates(intervalMillis).collect { location ->
+            newItineraryBuilder?.addLocation(location)
           }
         }
   }
@@ -109,6 +118,7 @@ class CreateItineraryViewModel(
     super.onCleared()
     coroutineScope.cancel()
   }
+
   /** @returns a list of ItineraryLabels of fields that haven't been set * */
   fun notSetValues(): List<String> {
     // look if all values have been set

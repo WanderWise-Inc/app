@@ -1,5 +1,6 @@
 package com.github.wanderwise_inc.app.data
 
+import android.util.Log
 import androidx.navigation.NavController
 import com.github.wanderwise_inc.app.model.profile.DEFAULT_OFFLINE_PROFILE
 import com.github.wanderwise_inc.app.model.profile.Profile
@@ -19,6 +20,7 @@ class SignInRepositoryImpl : SignInRepository {
     } else {
       // Get the user from database
       val currentProfile = profileViewModel.getProfile(user.uid).first()
+      Log.d("SignInRepository", "current_profile: $currentProfile")
 
       // User already present in the database, navigate to the Home page
       if (currentProfile != null) {
@@ -30,13 +32,10 @@ class SignInRepositoryImpl : SignInRepository {
         val properUsername = username ?: ""
         val uid = user.uid
         val description = ""
+        Log.d("SignInRepository", "new profile user = $user")
+        Log.d("SignInRepository", "fields = $username, $properUsername, $uid")
 
-        val newProfile =
-            Profile(
-                displayName = properUsername,
-                userUid = uid,
-                bio = description,
-                profilePicture = user.photoUrl)
+        val newProfile = Profile(displayName = properUsername, userUid = uid, bio = description)
 
         // Set the user to the database
         profileViewModel.setProfile(newProfile)

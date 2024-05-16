@@ -22,14 +22,12 @@ import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.home.SearchBar
 import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
-import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun OverviewScreen(
     itineraryViewModel: ItineraryViewModel,
     profileViewModel: ProfileViewModel,
     navController: NavHostController,
-    firebaseAuth: FirebaseAuth,
     imageRepository: ImageRepository
 ) {
   val sliderPositionPriceState = remember { mutableStateOf(0f..100f) }
@@ -39,7 +37,6 @@ fun OverviewScreen(
       itineraryViewModel = itineraryViewModel,
       profileViewModel = profileViewModel,
       navController = navController,
-      firebaseAuth = firebaseAuth,
       sliderPositionPriceState = sliderPositionPriceState,
       sliderPositionTimeState = sliderPositionTimeState,
       imageRepository = imageRepository)
@@ -51,7 +48,6 @@ fun DisplayOverviewItineraries(
     itineraryViewModel: ItineraryViewModel,
     profileViewModel: ProfileViewModel,
     navController: NavHostController,
-    firebaseAuth: FirebaseAuth,
     sliderPositionPriceState: MutableState<ClosedFloatingPointRange<Float>>,
     sliderPositionTimeState: MutableState<ClosedFloatingPointRange<Float>>,
     imageRepository: ImageRepository
@@ -115,7 +111,6 @@ fun DisplayOverviewItineraries(
             itineraryViewModel = itineraryViewModel,
             profileViewModel = profileViewModel,
             navController = navController,
-            firebaseAuth = firebaseAuth,
             paddingValues = innerPadding,
             parent = ItineraryListParent.OVERVIEW,
             imageRepository = imageRepository)

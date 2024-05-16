@@ -47,8 +47,6 @@ class ScrollableItineraryListTest {
 
   private lateinit var testItineraries: List<Itinerary>
 
-  var itinerariesAreLiked = false
-
   @Before
   fun setup() {
     MockKAnnotations.init(this)
@@ -56,6 +54,7 @@ class ScrollableItineraryListTest {
     every { profileViewModel.getUserUid() } returns "TestUid"
     every { imageRepository.fetchImage(any()) } returns flow { emit(null) }
     every { profileViewModel.getProfile(any()) } returns flow { emit(profile) }
+    every { profileViewModel.getLikedItineraries(any()) } returns flow { emit(emptyList()) }
   }
 
   @Test
@@ -75,7 +74,6 @@ class ScrollableItineraryListTest {
           itineraryViewModel = itineraryViewModel,
           profileViewModel = profileViewModel,
           navController = navController,
-          firebaseAuth = firebaseAuth,
           paddingValues = paddingValues,
           parent = ItineraryListParent.PROFILE,
           imageRepository = imageRepository,
@@ -101,7 +99,6 @@ class ScrollableItineraryListTest {
           itineraryViewModel = itineraryViewModel,
           profileViewModel = profileViewModel,
           navController = navController,
-          firebaseAuth = firebaseAuth,
           paddingValues = paddingValues,
           parent = ItineraryListParent.PROFILE,
           imageRepository = imageRepository,
@@ -125,7 +122,6 @@ class ScrollableItineraryListTest {
           itineraryViewModel = itineraryViewModel,
           profileViewModel = profileViewModel,
           navController = navController,
-          firebaseAuth = firebaseAuth,
           paddingValues = paddingValues,
           parent = ItineraryListParent.PROFILE,
           imageRepository = imageRepository,
@@ -134,8 +130,7 @@ class ScrollableItineraryListTest {
     }
 
     var itineraryLikesBackend = testItineraries.first().numLikes
-
-    var likedItineraryListBackend = mutableListOf<String>()
+    val likedItineraryListBackend = mutableListOf<String>()
 
     every { itineraryViewModel.incrementItineraryLikes(any()) } answers { itineraryLikesBackend++ }
 
@@ -170,7 +165,6 @@ class ScrollableItineraryListTest {
           itineraryViewModel = itineraryViewModel,
           profileViewModel = profileViewModel,
           navController = navController,
-          firebaseAuth = firebaseAuth,
           paddingValues = paddingValues,
           parent = ItineraryListParent.PROFILE,
           imageRepository = imageRepository,
@@ -180,7 +174,7 @@ class ScrollableItineraryListTest {
 
     var itineraryLikesBackend = testItineraries.first().numLikes
 
-    var likedItineraryListBackend = mutableListOf<String>(testItineraries.first().uid)
+    val likedItineraryListBackend = mutableListOf(testItineraries.first().uid)
 
     every { itineraryViewModel.decrementItineraryLikes(any()) } answers { itineraryLikesBackend-- }
 

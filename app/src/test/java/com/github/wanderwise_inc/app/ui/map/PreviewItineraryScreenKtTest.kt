@@ -18,6 +18,7 @@ import com.github.wanderwise_inc.app.data.LocationsRepository
 import com.github.wanderwise_inc.app.data.ProfileRepository
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
+import com.github.wanderwise_inc.app.model.location.Location
 import com.github.wanderwise_inc.app.model.location.PlacesReader
 import com.github.wanderwise_inc.app.model.profile.Profile
 import com.github.wanderwise_inc.app.ui.TestTags
@@ -37,7 +38,6 @@ import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.anyList
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mock
-import org.mockito.Mockito
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
 import org.mockito.junit.MockitoJUnit
@@ -75,9 +75,7 @@ class PreviewItineraryScreenKtTest {
 
   @Before
   fun setup() {
-    val epflLocation = mock(android.location.Location::class.java)
-    epflLocation.latitude = epflLat
-    epflLocation.longitude = epflLon
+    val epflLocation = Location(epflLat, epflLon)
     val polylinePoints = MutableLiveData<List<LatLng>>()
     polylinePoints.value = listOf(LatLng(epflLat, epflLon))
 
@@ -160,9 +158,7 @@ class PreviewItineraryScreenKtTest {
 
   @Test
   fun `pressing center button should update camera position`() {
-    val epflLocation = Mockito.mock(android.location.Location::class.java)
-    epflLocation.latitude = epflLat
-    epflLocation.longitude = epflLon
+    val epflLocation = Location(epflLat, epflLon)
 
     var cameraPositionStateObserver: CameraPositionState? = null
 
