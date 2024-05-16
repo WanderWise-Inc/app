@@ -50,6 +50,8 @@ fun CreationStepPreview(
 
   var notSetValues by remember { mutableStateOf(listOf<String>()) }
 
+  createItineraryViewModel.setFocusedItinerary(createItineraryViewModel.getNewItinerary()?.build())
+
   Scaffold(
       floatingActionButton = {
         FloatingActionButton(

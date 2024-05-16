@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.github.wanderwise_inc.app.data.ImageRepository
-import com.github.wanderwise_inc.app.model.location.FakeItinerary
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.itinerary.ItineraryBanner
@@ -35,9 +34,6 @@ fun CreationStepPreviewBanner(
           true,
       )
 
-  // set the itineary, not permanent, will do later when logic is applied
-  val itinerary = FakeItinerary.SWITZERLAND
-
   // function that do nothing
   val onBannerClick = { i: Itinerary -> }
   val onLikeButtonClick = { i: Itinerary, b: Boolean -> }
@@ -59,7 +55,7 @@ fun CreationStepPreviewBanner(
 
               item {
                 ItineraryBanner(
-                    itinerary = itinerary,
+                    itinerary = createItineraryViewModel.getFocusedItinerary() ?: dummyItinerary,
                     onLikeButtonClick = onLikeButtonClick,
                     onBannerClick = onBannerClick,
                     profileViewModel = profileViewModel,

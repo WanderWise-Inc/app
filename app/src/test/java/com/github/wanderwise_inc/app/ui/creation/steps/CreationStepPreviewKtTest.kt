@@ -7,6 +7,8 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import com.github.wanderwise_inc.app.data.ImageRepository
+import com.github.wanderwise_inc.app.model.location.FakeItinerary
+import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryLabels
 import com.github.wanderwise_inc.app.model.profile.Profile
 import com.github.wanderwise_inc.app.ui.TestTags
@@ -35,6 +37,9 @@ class CreationStepPreviewKtTest() {
   private lateinit var onFinished: () -> Unit
 
   private var success: Boolean = false
+  val setItineraryBuilder =
+      Itinerary.Builder(userUid = "1", title = "title", description = "description")
+  val itinerary = FakeItinerary.SWITZERLAND
 
   @Before
   fun setup() {
@@ -49,6 +54,9 @@ class CreationStepPreviewKtTest() {
       every { createItineraryViewModel.notSetValues() } returns
           listOf(ItineraryLabels.TITLE, ItineraryLabels.DESCRIPTION)
       every { createItineraryViewModel.uploadNewItinerary() } returns Unit
+      every { createItineraryViewModel.getNewItinerary() } returns setItineraryBuilder
+      every { createItineraryViewModel.setFocusedItinerary(any()) } returns Unit
+      every { createItineraryViewModel.getFocusedItinerary() } returns itinerary
 
       success = false
       onFinished = { success = true }
@@ -69,6 +77,9 @@ class CreationStepPreviewKtTest() {
       every { createItineraryViewModel.notSetValues() } returns
           listOf(ItineraryLabels.TITLE, ItineraryLabels.DESCRIPTION)
       every { createItineraryViewModel.uploadNewItinerary() } returns Unit
+      every { createItineraryViewModel.getNewItinerary() } returns setItineraryBuilder
+      every { createItineraryViewModel.setFocusedItinerary(any()) } returns Unit
+      every { createItineraryViewModel.getFocusedItinerary() } returns itinerary
 
       success = false
       onFinished = { success = true }
@@ -98,6 +109,9 @@ class CreationStepPreviewKtTest() {
     composeTestRule.setContent {
       every { createItineraryViewModel.notSetValues() } returns listOf()
       every { createItineraryViewModel.uploadNewItinerary() } returns Unit
+      every { createItineraryViewModel.getNewItinerary() } returns setItineraryBuilder
+      every { createItineraryViewModel.setFocusedItinerary(any()) } returns Unit
+      every { createItineraryViewModel.getFocusedItinerary() } returns itinerary
 
       success = false
       onFinished = { success = true }

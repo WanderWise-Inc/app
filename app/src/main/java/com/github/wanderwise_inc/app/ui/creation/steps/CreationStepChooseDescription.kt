@@ -15,6 +15,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -31,6 +32,8 @@ fun CreationStepChooseDescriptionScreen(createItineraryViewModel: CreateItinerar
     mutableStateOf(createItineraryViewModel.getNewItinerary()?.description ?: "")
   }
 
+  var validTitle by remember { mutableStateOf(true) }
+
   LazyColumn(
       modifier =
           Modifier.padding(top = 10.dp)
@@ -44,7 +47,14 @@ fun CreationStepChooseDescriptionScreen(createItineraryViewModel: CreateItinerar
               value = title,
               onValueChange = {
                 title = it
-                createItineraryViewModel.getNewItinerary()?.title(it)
+                validTitle =
+                    if (createItineraryViewModel.validTitle(it)) {
+                      createItineraryViewModel.getNewItinerary()?.title(it)
+                      true
+                    } else {
+                      createItineraryViewModel.getNewItinerary()?.title(null)
+                      false
+                    }
               },
               maxLines = 2,
               textStyle =
@@ -58,6 +68,15 @@ fun CreationStepChooseDescriptionScreen(createItineraryViewModel: CreateItinerar
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(bottom = 8.dp))
               })
+        }
+
+        item {
+          if (!validTitle) {
+            Text(
+                text = createItineraryViewModel.invalidTitleMessage(),
+                color = Color.Red,
+                modifier = Modifier.testTag(TestTags.INVALID_INPUT))
+          }
         }
 
         item {
