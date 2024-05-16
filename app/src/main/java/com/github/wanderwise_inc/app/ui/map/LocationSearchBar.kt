@@ -1,5 +1,6 @@
 package com.github.wanderwise_inc.app.ui.map
 
+import android.util.Log
 import android.view.KeyEvent.KEYCODE_ENTER
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -18,6 +19,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -57,53 +59,61 @@ fun LocationSearchBar(
     var searchOccurred by remember { mutableStateOf(false) }
     var focusedOnLocation by remember { mutableStateOf(false) }
 
-    OutlinedTextField(
-        value = query,
-        onValueChange = { s: String ->
-            query = s
-        },
-        placeholder = {
-            Text(text = "Wander where?", color = MaterialTheme.colorScheme.onPrimaryContainer)
-        },
-        leadingIcon = {
-            Icon(
-                painter = painterResource(id = R.drawable.les_controles),
-                contentDescription = "search icon",
-                tint = Color.Black,
-                modifier =
-                Modifier.clickable { isDropdownOpen = true }
-                    .padding(2.dp)
-                    .size(30.dp)
-                    .testTag(TestTags.SEARCH_ICON))
-        },
-        singleLine = true,
-        shape = RoundedCornerShape(30.dp),
-        modifier =
-            Modifier.background(MaterialTheme.colorScheme.primaryContainer)
-            .fillMaxWidth()
-            .padding(5.dp)
-                .onKeyEvent { 
+    val onSearchExpanded = { query: String ->
+        onSearch(query)
+        isDropdownOpen = true
+        focusedOnLocation = false
+        searchOccurred = true
+    }
+    
+    Column {
+        OutlinedTextField(
+            value = query,
+            onValueChange = { s: String ->
+                query = s
+            },
+            placeholder = {
+                Text(text = "Search a location", color = MaterialTheme.colorScheme.onPrimaryContainer)
+            },
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Filled.Search,
+                    contentDescription = "search icon",
+                    tint = Color.Black,
+                    modifier =
+                    Modifier
+                        .clickable {
+                            onSearchExpanded(query)
+                        }
+                        .padding(2.dp)
+                        .size(30.dp)
+                        .testTag(TestTags.SEARCH_ICON))
+            },
+            singleLine = true,
+            shape = RoundedCornerShape(30.dp),
+            modifier =
+            Modifier
+                .background(MaterialTheme.colorScheme.primaryContainer)
+                .fillMaxWidth()
+                .padding(5.dp)
+                .onKeyEvent {
                     if (it.nativeKeyEvent.keyCode == KEYCODE_ENTER) { // overwrite enter key
-                        onSearch(query)
-                        focusedOnLocation = false
+                        onSearchExpanded(query)
                         true
                     }
                     false
                 }
-            .testTag(TestTags.SEARCH_BAR),
-        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-        keyboardActions = KeyboardActions(
-            onDone = { 
-                onSearch(query)
-                focusedOnLocation = false
-            }
+                .testTag(TestTags.SEARCH_BAR),
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    onSearchExpanded(query)
+                }
+            )
         )
-    )
-
-    DropdownMenu(
-    expanded = isDropdownOpen,
-    onDismissRequest = { isDropdownOpen = false },
-    modifier = Modifier.fillMaxWidth()) {
+    
+    
+        Log.d("DEBUG_LOCATION_BAR", "searched locations: $searchedLocations")
         if (searchOccurred) {
             if (searchedLocations.isEmpty()) {
                 Row(
@@ -111,6 +121,7 @@ fun LocationSearchBar(
                     horizontalArrangement = Arrangement.Start,
                     modifier = Modifier
                         .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.primaryContainer)
                         .height(50.dp)
                         .border(
                             1.dp,
@@ -121,56 +132,36 @@ fun LocationSearchBar(
                     Text("No results found")
                 }
             } else {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    LazyColumn {
-                        items(searchedLocations) {loc ->
-                            Row(
-                                verticalAlignment = Alignment.Top,
-                                horizontalArrangement = Arrangement.Start,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(46.dp)
-                                    .border(
-                                        1.dp,
-                                        MaterialTheme.colorScheme.outline
-                                    )
-                                    .padding(6.dp)
-                                    .clickable {
-                                        focusOnLocation(loc)
-                                        focusedOnLocation = true
-                                    }
-                            ) {
-                                Text(
-                                    text = loc.address?: "address undefined",
-                                    fontSize = 12.sp,
-                                    lineHeight = 18.sp,
-                                    maxLines = 2
+                LazyColumn(modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer)) {
+                    items(searchedLocations) {loc ->
+                        Row(
+                            verticalAlignment = Alignment.Top,
+                            horizontalArrangement = Arrangement.Start,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(46.dp)
+                                .border(
+                                    1.dp,
+                                    MaterialTheme.colorScheme.outline
                                 )
-                            }
+                                .padding(6.dp)
+                                .clickable {
+                                    focusOnLocation(loc)
+                                    focusedOnLocation = true
+                                }
+                        ) {
+                            Text(
+                                text = loc.address?: "address undefined",
+                                fontSize = 12.sp,
+                                lineHeight = 18.sp,
+                                maxLines = 2
+                            )
                         }
-                    }
-                    if (focusedOnLocation) {
-                        AddWaypointButton()
                     }
                 }
             }
+    
         }
-
     }
-}
-
-@Composable
-fun AddWaypointButton() {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .size(200.dp, 40.dp)
-            .clickable { }
-    ) {
-        Icon(imageVector = Icons.Filled.Add, contentDescription = "add waypoint icon")
-        Text(text = "Add Waypoint")
-    }
+    
 }

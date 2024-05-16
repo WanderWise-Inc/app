@@ -1,6 +1,7 @@
 package com.github.wanderwise_inc.app.ui.map
 
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -17,6 +18,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -85,17 +87,36 @@ fun SearchLocation(
         }
     }
     
-    LocationSearchBar(onSearch, focusOnLocation, itineraryViewModel)
-    
-    GoogleMap(
-        //modifier = Modifier.padding(padding),
-        cameraPositionState = cameraPositionState
+    Scaffold(
+        topBar = { LocationSearchBar(onSearch, focusOnLocation, itineraryViewModel) },
+        floatingActionButton = { AddWaypointButton() },
+        floatingActionButtonPosition = FabPosition.Center
+    ) {padding ->
+        GoogleMap(
+            modifier = Modifier.padding(padding),
+            cameraPositionState = cameraPositionState
+        ) {
+            if (focusedLocation != null) {
+                AdvancedMarker(
+                    state = MarkerState(position = focusedLocation!!.toLatLng()),
+                    title = focusedLocation!!.title
+                )
+            }
+        }        
+    }
+}
+
+@Composable
+fun AddWaypointButton() {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .size(200.dp, 40.dp)
+            .background(MaterialTheme.colorScheme.primaryContainer)
+            .clickable { }
     ) {
-        if (focusedLocation != null) {
-            AdvancedMarker(
-                state = MarkerState(position = focusedLocation!!.toLatLng()),
-                title = focusedLocation!!.title
-            )
-        }
+        Icon(imageVector = Icons.Filled.Add, contentDescription = "add waypoint icon")
+        Text(text = "Add Waypoint")
     }
 }
