@@ -28,6 +28,16 @@ class SignInRepositoryImpl : SignInRepository {
                 val properUsername = username ?: ""
                 val uid = user.uid
                 val description = ""
+      // User already present in the database, navigate to the Home page
+      if (currentProfile != null) {
+        profileViewModel.setActiveProfile(currentProfile)
+        navController.navigate(Graph.HOME)
+      } else {
+        // Define properly the fields, because some of them could be empty
+        val username = user.displayName
+        val properUsername = username ?: ""
+        val uid = user.uid
+        val description = ""
 
                 val newProfile =
                     Profile(

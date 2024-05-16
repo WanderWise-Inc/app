@@ -10,8 +10,10 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToIndex
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.model.location.FakeItinerary
 import com.github.wanderwise_inc.app.model.location.Itinerary
+import com.github.wanderwise_inc.app.model.profile.Profile
 import com.github.wanderwise_inc.app.printToLog
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
@@ -23,6 +25,7 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import junit.framework.TestCase.assertEquals
+import kotlinx.coroutines.flow.flow
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -37,6 +40,8 @@ class ScrollableItineraryListTest {
   @MockK private lateinit var profileViewModel: ProfileViewModel
   @MockK private lateinit var navController: NavHostController
   @MockK private lateinit var firebaseAuth: FirebaseAuth
+  @MockK private lateinit var imageRepository: ImageRepository
+  private val profile = Profile(userUid = "TestUid", displayName = "me", bio = "bio")
 
   private val paddingValues: PaddingValues = PaddingValues(0.dp)
 
@@ -48,6 +53,9 @@ class ScrollableItineraryListTest {
   fun setup() {
     MockKAnnotations.init(this)
     every { firebaseAuth.currentUser?.uid } returns null
+    every { profileViewModel.getUserUid() } returns "TestUid"
+    every { imageRepository.fetchImage(any()) } returns flow { emit(null) }
+    every { profileViewModel.getProfile(any()) } returns flow { emit(profile) }
     every { profileViewModel.getActiveUserUid() } returns "TestUid"
   }
 
@@ -71,6 +79,7 @@ class ScrollableItineraryListTest {
           firebaseAuth = firebaseAuth,
           paddingValues = paddingValues,
           parent = ItineraryListParent.PROFILE,
+          imageRepository = imageRepository,
           // could be any parent
       )
     }
@@ -96,6 +105,7 @@ class ScrollableItineraryListTest {
           firebaseAuth = firebaseAuth,
           paddingValues = paddingValues,
           parent = ItineraryListParent.PROFILE,
+          imageRepository = imageRepository,
           // could be any parent
       )
     }
@@ -119,6 +129,7 @@ class ScrollableItineraryListTest {
           firebaseAuth = firebaseAuth,
           paddingValues = paddingValues,
           parent = ItineraryListParent.PROFILE,
+          imageRepository = imageRepository,
           // could be any parent
       )
     }
@@ -163,6 +174,7 @@ class ScrollableItineraryListTest {
           firebaseAuth = firebaseAuth,
           paddingValues = paddingValues,
           parent = ItineraryListParent.PROFILE,
+          imageRepository = imageRepository,
           // could be any parent
       )
     }

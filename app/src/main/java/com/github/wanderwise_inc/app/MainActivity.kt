@@ -31,6 +31,7 @@ import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.LoginViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 
 class MainActivity : ComponentActivity() {
@@ -88,6 +89,19 @@ class MainActivity : ComponentActivity() {
         private fun init() {
             requestPermissions()
 
+    AppModule.initialize(
+        imageLauncher,
+        signInLauncher,
+        signInIntent,
+        locationClient,
+        savedItinerariesDataStore,
+        applicationContext,
+        FirebaseAuth.getInstance(),
+        FirebaseFirestore.getInstance(),
+        FirebaseStorage.getInstance())
+
+    firebaseAuth = AppModule.firebaseAuth
+    firebaseStorage = AppModule.firebaseStorage
             firebaseAuth = appModule.firebaseAuth
             firebaseStorage = appModule.firebaseStorage
 
