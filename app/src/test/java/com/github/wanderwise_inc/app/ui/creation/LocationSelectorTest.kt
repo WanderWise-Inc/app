@@ -1,9 +1,7 @@
 package com.github.wanderwise_inc.app.ui.creation
 
 import android.location.Location
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
@@ -55,13 +53,12 @@ class CreateItineraryMapUITest {
   @Mock private lateinit var locationsRepository: LocationsRepository
   @Mock private lateinit var userLocationClient: UserLocationClient
 
-
   private lateinit var profileViewModel: ProfileViewModel
 
   private val epflLat = 46.519126741544575
   private val epflLon = 6.5676006970802145
-    private var showLocationSelector =  mutableStateOf(false)
-    //showLocationSelector: MutableState<Boolean>
+  private var showLocationSelector = mutableStateOf(false)
+  // showLocationSelector: MutableState<Boolean>
 
   private val locations = PlacesReader(null).readFromString()
   private val itinerary =
