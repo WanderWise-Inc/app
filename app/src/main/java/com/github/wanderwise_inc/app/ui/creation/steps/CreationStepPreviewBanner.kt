@@ -10,14 +10,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
+import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.model.location.FakeItinerary
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.itinerary.ItineraryBanner
 import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
+import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 
 @Composable
-fun CreationStepPreviewBanner(createItineraryViewModel: CreateItineraryViewModel) {
+fun CreationStepPreviewBanner(
+    createItineraryViewModel: CreateItineraryViewModel,
+    profileViewModel: ProfileViewModel,
+    imageRepository: ImageRepository
+) {
   val dummyItinerary =
       Itinerary(
           "1",
@@ -46,21 +52,27 @@ fun CreationStepPreviewBanner(createItineraryViewModel: CreateItineraryViewModel
                 ItineraryBanner(
                     itinerary = dummyItinerary,
                     onLikeButtonClick = onLikeButtonClick,
-                    onBannerClick = onBannerClick)
+                    onBannerClick = onBannerClick,
+                    profileViewModel = profileViewModel,
+                    imageRepository = imageRepository)
               }
 
               item {
                 ItineraryBanner(
                     itinerary = itinerary,
                     onLikeButtonClick = onLikeButtonClick,
-                    onBannerClick = onBannerClick)
+                    onBannerClick = onBannerClick,
+                    profileViewModel = profileViewModel,
+                    imageRepository = imageRepository)
               }
 
               item {
                 ItineraryBanner(
                     itinerary = dummyItinerary,
                     onLikeButtonClick = onLikeButtonClick,
-                    onBannerClick = onBannerClick)
+                    onBannerClick = onBannerClick,
+                    profileViewModel = profileViewModel,
+                    imageRepository = imageRepository)
               }
             }
       }

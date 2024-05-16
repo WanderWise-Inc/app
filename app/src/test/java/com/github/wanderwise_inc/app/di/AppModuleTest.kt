@@ -6,7 +6,12 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.datastore.core.DataStore
 import com.github.wanderwise_inc.app.proto.location.SavedItineraries
 import com.github.wanderwise_inc.app.viewmodel.LocationClient
-import com.google.firebase.FirebaseApp
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import io.mockk.every
 import io.mockk.mockk
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -14,21 +19,30 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
 
 @RunWith(RobolectricTestRunner::class)
 class AppModuleTest {
 
   @Before
   fun setUp() {
-    FirebaseApp.initializeApp(RuntimeEnvironment.getApplication())
+    val mockCollectionRef = mockk<CollectionReference>()
+    val mockStorageref = mockk<StorageReference>()
+    val mockDb = mockk<FirebaseFirestore>()
+    val mockStorage = mockk<FirebaseStorage>()
+    every { mockDb.collection(any()) } returns mockCollectionRef
+    every { mockStorage.getReference() } returns mockStorageref
+
+    // FirebaseApp.initializeApp(RuntimeEnvironment.getApplication())
     AppModule.initialize(
         mockk<ActivityResultLauncher<Intent>>(),
         mockk<ActivityResultLauncher<Intent>>(),
         mockk<Intent>(),
         mockk<LocationClient>(),
         mockk<DataStore<SavedItineraries>>(),
-        mockk<Context>())
+        mockk<Context>(),
+        mockk<FirebaseAuth>(),
+        mockDb,
+        mockStorage)
   }
 
   @Test

@@ -149,32 +149,6 @@ fun PreviewItineraryScreen(
   }
 }
 
-/*fun StartButton(onClick: () -> Unit, modifier: Modifier) {
-  var isClicked by remember { mutableStateOf(false) }
-
-  ExtendedFloatingActionButton(
-      onClick = {
-        onClick()
-        isClicked = !isClicked
-      },
-      icon = {
-          Icon(
-              Icons.AutoMirrored.Filled.DirectionsWalk,
-              contentDescription = "finished",
-              modifier = Modifier.size(32.dp))
-      },
-      text = {Text(text = if (isClicked) "Following..." else "Follow", color = Color.DarkGray) },
-      containerColor = MaterialTheme.colorScheme.secondaryContainer,
-      contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
-      modifier =
-      Modifier.align(Alignment.TopCenter)
-          .padding(12.dp)
-          .testTag(TestTags.CREATION_FINISH_BUTTON))
-
-      // MaterialTheme.colorScheme.surfaceContainer,
-
-}*/
-
 /**
  * @brief displayed beneath `Maps` composable in `PreviewItineraryScreen`. Variable height with
  *   different modes depending on whether it is minimized or maximized
@@ -207,6 +181,7 @@ private fun PreviewItineraryBannerMaximized(
 ) {
   val titleFontSize = 32.sp
   val innerFontSize = 16.sp
+  var ctr = remember { mutableStateOf(0) }
 
   val profilePictureModifier =
       Modifier.clip(RoundedCornerShape(5.dp)).size(50.dp).testTag(TestTags.MAP_PROFILE_PIC)
@@ -328,7 +303,8 @@ private fun PreviewItineraryBannerMaximized(
             ProfilePicture(
                 profile = profile,
                 profileViewModel = profileViewModel,
-                modifier = profilePictureModifier)
+                modifier = profilePictureModifier,
+            /*ctr = ctr*/ )
 
             Spacer(modifier = Modifier.width(10.dp))
 

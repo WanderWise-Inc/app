@@ -205,6 +205,8 @@ dependencies {
     implementation("com.google.maps.android:maps-compose-widgets:4.3.3")
     implementation ("com.google.code.gson:gson:2.8.6") //added gson
 
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.0")
+
     // Coil
     implementation("io.coil-kt:coil:2.6.0")
     implementation("io.coil-kt:coil-compose:2.6.0")

@@ -23,16 +23,19 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.painter.BitmapPainter
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
@@ -42,23 +45,33 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.wanderwise_inc.app.R
+import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.ui.TestTags
+import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 
 @Composable
 fun ItineraryBanner(
     itinerary: Itinerary,
     onLikeButtonClick: (Itinerary, Boolean) -> Unit,
     onBannerClick: (Itinerary) -> Unit,
-    isLikedInitially: Boolean = false
+    isLikedInitially: Boolean = false,
+    profileViewModel: ProfileViewModel,
+    imageRepository: ImageRepository
 ) {
 
-  val imageId = R.drawable.underground_2725336_1280
-
-  var isLiked by remember { mutableStateOf(isLikedInitially) }
+  val defaultImageId = R.drawable.defaultitinerary
+  val imageFlow =
+      remember(itinerary) { imageRepository.fetchImage("itineraryPictures/${itinerary.uid}") }
+  val image by imageFlow.collectAsState(initial = null)
+  val painter: Painter =
+      if (image != null) BitmapPainter(image!!.asImageBitmap())
+      else painterResource(id = defaultImageId)
+  var isLiked = isLikedInitially
   var numLikes by remember { mutableIntStateOf(itinerary.numLikes) }
   var prices by remember { mutableFloatStateOf(itinerary.price) }
   var times by remember { mutableIntStateOf(itinerary.time) }
+  val user by profileViewModel.getProfile(itinerary.userUid).collectAsState(initial = null)
 
   ElevatedCard(
       colors =
@@ -78,7 +91,7 @@ fun ItineraryBanner(
 
               // Image of the itinerary
               Image(
-                  painter = painterResource(id = imageId),
+                  painter = painter,
                   contentDescription = itinerary.description,
                   modifier =
                       Modifier.fillMaxWidth().fillMaxHeight(0.55f).clip(RoundedCornerShape(13.dp)),
@@ -91,9 +104,7 @@ fun ItineraryBanner(
                   fontFamily = FontFamily.Monospace,
                   fontSize = 14.sp,
                   fontWeight = FontWeight.Bold,
-                  modifier = Modifier.padding(2.dp)
-                  // textDecoration = TextDecoration.Underline
-                  )
+                  modifier = Modifier.padding(2.dp))
 
               Row(modifier = Modifier.fillMaxSize()) {
                 Column(
@@ -101,8 +112,9 @@ fun ItineraryBanner(
                         Modifier.fillMaxHeight().weight(0.7f).padding(10.dp, 4.dp, 4.dp, 15.dp),
                     verticalArrangement = Arrangement.SpaceAround) {
                       // Secondary indicator fields
+                      val textUser = if (user != null) user!!.displayName else "-"
                       Text(
-                          text = "Wandered by - ",
+                          text = "Wandered by $textUser",
                           color = MaterialTheme.colorScheme.secondary,
                           fontFamily = FontFamily.Monospace,
                           fontSize = 12.sp,
