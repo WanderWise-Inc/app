@@ -24,9 +24,11 @@ class ProfileRepositoryImpl(db: FirebaseFirestore) : ProfileRepository {
                     .document(userUid)
                     .get()
                     .addOnSuccessListener { documentSnapshot ->
+                      Log.d("ProfileRepositoryImpl", "Successfully got profile")
                       continuation.resume(documentSnapshot)
                     }
                     .addOnFailureListener { exception ->
+                      Log.w("ProfileRepositoryImpl", exception)
                       continuation.resumeWithException(exception)
                     }
               }
@@ -37,7 +39,10 @@ class ProfileRepositoryImpl(db: FirebaseFirestore) : ProfileRepository {
             emit(null)
           }
         }
-        .catch { emit(null) }
+        .catch { error ->
+          Log.w("ProfileRepositoryImpl", error)
+          emit(null)
+        }
   }
 
   override fun getAllProfiles(): Flow<List<Profile>> {
@@ -46,15 +51,22 @@ class ProfileRepositoryImpl(db: FirebaseFirestore) : ProfileRepository {
             usersCollection
                 .get()
                 .addOnSuccessListener { querySnapshot ->
+                  Log.d("ProfileRepositoryImpl", "Successfully got all profiles")
                   val documents = querySnapshot.documents
                   val profiles = documents.mapNotNull { it.toObject(Profile::class.java) }
                   continuation.resume(profiles)
                 }
-                .addOnFailureListener { exception -> continuation.resumeWithException(exception) }
+                .addOnFailureListener { exception ->
+                  Log.w("ProfileRepositoryImpl", exception)
+                  continuation.resumeWithException(exception)
+                }
           }
           emit(allProfiles)
         }
-        .catch { emit(listOf()) }
+        .catch { error ->
+          Log.w("ProfileRepositoryImpl", error)
+          emit(listOf())
+        }
   }
 
   override fun setProfile(profile: Profile) {
@@ -63,9 +75,9 @@ class ProfileRepositoryImpl(db: FirebaseFirestore) : ProfileRepository {
         .document(profile.userUid)
         .set(userMap)
         .addOnSuccessListener { Log.d("ProfileRepositoryImpl", "Successfully set profile") }
-        .addOnFailureListener {
+        .addOnFailureListener { exception ->
           Log.d("ProfileRepositoryImpl", "Failed to set profile")
-          throw it
+          throw exception
         }
   }
 
@@ -74,9 +86,9 @@ class ProfileRepositoryImpl(db: FirebaseFirestore) : ProfileRepository {
         .document(profile.userUid)
         .delete()
         .addOnSuccessListener { Log.d("ProfileRepositoryImpl", "Successfully deleted profile") }
-        .addOnFailureListener {
+        .addOnFailureListener { exception ->
           Log.d("ProfileRepositoryImpl", "Failed to delete profile")
-          throw it
+          throw exception
         }
   }
 
@@ -87,9 +99,9 @@ class ProfileRepositoryImpl(db: FirebaseFirestore) : ProfileRepository {
         .addOnSuccessListener {
           Log.d("ProfileRepositoryImpl", "Successfully added itinerary to liked")
         }
-        .addOnFailureListener {
+        .addOnFailureListener { exception ->
           Log.d("ProfileRepositoryImpl", "Failed to add itinerary to liked")
-          throw it
+          throw exception
         }
   }
 
@@ -100,9 +112,9 @@ class ProfileRepositoryImpl(db: FirebaseFirestore) : ProfileRepository {
         .addOnSuccessListener {
           Log.d("ProfileRepositoryImpl", "Successfully removed itinerary from liked")
         }
-        .addOnFailureListener {
+        .addOnFailureListener { exception ->
           Log.d("ProfileRepositoryImpl", "Failed to remove itinerary from liked")
-          throw it
+          throw exception
         }
   }
 
@@ -114,7 +126,9 @@ class ProfileRepositoryImpl(db: FirebaseFirestore) : ProfileRepository {
           .addOnSuccessListener { documentSnapshot ->
             val likedItineraries =
                 documentSnapshot.get(ProfileLabels.LIKED_ITINERARIES) as List<String>?
+            Log.d("ProfileRepositoryImpl", "Liked itineraries: $likedItineraries")
             val isLiked = likedItineraries?.contains(itineraryUid) ?: false
+            Log.d("ProfileRepositoryImpl", "Is liked: $isLiked")
             continuation.resume(isLiked)
           }
           .addOnFailureListener { exception -> continuation.resumeWithException(exception) }
@@ -131,12 +145,19 @@ class ProfileRepositoryImpl(db: FirebaseFirestore) : ProfileRepository {
                 .addOnSuccessListener { documentSnapshot ->
                   val likedItineraries =
                       documentSnapshot.get(ProfileLabels.LIKED_ITINERARIES) as List<String>?
+                  Log.d("ProfileRepositoryImpl", "Liked itineraries: $likedItineraries")
                   continuation.resume(likedItineraries ?: listOf())
                 }
-                .addOnFailureListener { exception -> continuation.resumeWithException(exception) }
+                .addOnFailureListener { exception ->
+                  Log.w("ProfileRepositoryImpl", exception)
+                  continuation.resumeWithException(exception)
+                }
           }
           emit(likedItineraries)
         }
-        .catch { emit(listOf()) }
+        .catch { error ->
+          Log.w("ProfileRepositoryImpl", error)
+          emit(listOf())
+        }
   }
 }

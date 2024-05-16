@@ -50,7 +50,5 @@ class LoginScreenKtTest {
 }
 
 class MockGoogleSignInLauncher : GoogleSignInLauncher {
-  override fun launchSignIn() {
-    TODO("Not yet implemented")
-  }
+  override fun launchSignIn() {}
 }

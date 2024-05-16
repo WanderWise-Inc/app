@@ -31,27 +31,20 @@ fun HomeNavGraph(
     firebaseAuth: FirebaseAuth
 ) {
 
-  // BEGIN DEMO SETUP
-  // demoSetup(itineraryViewModel, profileViewModel, firebaseAuth)
-  /*var itinerary: Itinerary? = null
-  runBlocking {
-    itinerary = itineraryViewModel.getItineraryFromUids(listOf(PREVIEW_ITINERARY_DEMO_UID)).first()[0]
-  }*/
-  // END DEMO SETUP
-
   NavHost(
       navController = navController,
       route = Graph.HOME,
       startDestination = TopLevelDestination.Overview.route,
-      // modifier = Modifier.padding(innerPadding)
   ) {
     composable(route = TopLevelDestination.Overview.route) {
       bottomNavigationViewModel.setSelected(NavigationItem.OVERVIEW.ordinal)
-      OverviewScreen(itineraryViewModel, profileViewModel, navController, firebaseAuth)
+      OverviewScreen(
+          itineraryViewModel, profileViewModel, navController, firebaseAuth, imageRepository)
     }
     composable(route = TopLevelDestination.Liked.route) {
       bottomNavigationViewModel.setSelected(NavigationItem.LIKED.ordinal)
-      LikedScreen(itineraryViewModel, profileViewModel, navController, firebaseAuth)
+      LikedScreen(
+          itineraryViewModel, profileViewModel, navController, firebaseAuth, imageRepository)
     }
     composable(route = TopLevelDestination.Creation.route) {
       bottomNavigationViewModel.setSelected(NavigationItem.CREATE.ordinal)
@@ -61,7 +54,8 @@ fun HomeNavGraph(
           onFinished = {
             NavigationActions(navController).navigateTo(Destination.TopLevelDestination.Profile)
           },
-          firebaseAuth = firebaseAuth)
+          firebaseAuth = firebaseAuth,
+          imageRepository = imageRepository)
     }
     composable(route = TopLevelDestination.Map.route) {
       bottomNavigationViewModel.setSelected(NavigationItem.MAP.ordinal)

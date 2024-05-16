@@ -11,7 +11,7 @@ import com.github.wanderwise_inc.app.data.DirectionsRepositoryImpl
 import com.github.wanderwise_inc.app.data.ImageRepositoryImpl
 import com.github.wanderwise_inc.app.data.ItineraryRepositoryImpl
 import com.github.wanderwise_inc.app.data.LocationsRepositoryImpl
-import com.github.wanderwise_inc.app.data.ProfileRepositoryTestImpl
+import com.github.wanderwise_inc.app.data.ProfileRepositoryImpl
 import com.github.wanderwise_inc.app.data.SignInRepositoryImpl
 import com.github.wanderwise_inc.app.network.DirectionsApiServiceFactory
 import com.github.wanderwise_inc.app.network.LocationsApiServiceFactory
@@ -22,8 +22,7 @@ import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.LocationClient
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 
 @SuppressLint("StaticFieldLeak")
@@ -35,6 +34,9 @@ object AppModule {
   private lateinit var locationClient: LocationClient
   private lateinit var savedItinerariesDataStore: DataStore<SavedItineraries>
   private lateinit var context: Context
+  lateinit var firebaseAuth: FirebaseAuth
+  lateinit var db: FirebaseFirestore
+  lateinit var firebaseStorage: FirebaseStorage
 
   init {
     Log.d("ModuleProvider", "Using AppModule")
@@ -47,6 +49,9 @@ object AppModule {
       locationClient: LocationClient,
       savedItinerariesDataStore: DataStore<SavedItineraries>,
       context: Context,
+      firebaseAuth: FirebaseAuth,
+      firebaseFirestore: FirebaseFirestore,
+      firebaseStorage: FirebaseStorage
   ) {
     this.imageLauncher = imageLauncher
     this.signInLauncher = signInLauncher
@@ -54,11 +59,10 @@ object AppModule {
     this.locationClient = locationClient
     this.savedItinerariesDataStore = savedItinerariesDataStore
     this.context = context
+    this.firebaseAuth = firebaseAuth
+    this.db = firebaseFirestore
+    this.firebaseStorage = firebaseStorage
   }
-
-  val firebaseAuth by lazy { FirebaseAuth.getInstance() }
-
-  val firebaseStorage by lazy { FirebaseStorage.getInstance() }
 
   val imageRepository by lazy {
     ImageRepositoryImpl(imageLauncher, firebaseStorage.reference, null)
@@ -73,11 +77,10 @@ object AppModule {
   }
 
   val itineraryRepository by lazy {
-    ItineraryRepositoryImpl(Firebase.firestore, context, savedItinerariesDataStore)
-    // ItineraryRepositoryTestImpl()
+    ItineraryRepositoryImpl(db, context, savedItinerariesDataStore)
   }
 
-  val profileRepository by lazy { ProfileRepositoryTestImpl() }
+  val profileRepository by lazy { ProfileRepositoryImpl(db) }
 
   val signInRepository by lazy { SignInRepositoryImpl() }
 
