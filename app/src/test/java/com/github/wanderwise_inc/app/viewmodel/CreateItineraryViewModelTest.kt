@@ -18,6 +18,8 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import io.mockk.verify
+import kotlinx.coroutines.isActive
 
 class CreateItineraryViewModelTest() {
   @ExperimentalCoroutinesApi @get:Rule val mainDispatcherRule = MainDispatcherRule()
@@ -31,6 +33,7 @@ class CreateItineraryViewModelTest() {
   @MockK private lateinit var locationsRepository: LocationsRepository
 
   @MockK private lateinit var userLocationClient: UserLocationClient
+  @MockK private lateinit var locationClient: LocationClient
 
   private lateinit var createItineraryViewModel: CreateItineraryViewModel
 
@@ -75,5 +78,37 @@ class CreateItineraryViewModelTest() {
     createItineraryViewModel.getNewItinerary()?.time(4)
 
     assert(createItineraryViewModel.notSetValues().isEmpty())
+  }
+
+  @Test
+  fun `test startLocationTracking`() {
+    val intervalMillis = 1000L
+    createItineraryViewModel.startLocationTracking(intervalMillis)
+
+    // Verify that the locationClient.getLocationUpdates() method was called with the correct argument
+    verify { locationClient.getLocationUpdates(intervalMillis) }
+
+    // TODO: Add more assertions based on what you expect to happen when startLocationTracking() is called
+  }
+
+  @Test
+  fun `test stopLocationTracking`() {
+    createItineraryViewModel.startLocationTracking(1000L)
+    createItineraryViewModel.stopLocationTracking()
+
+    // Verify that the job tasked with tracking location was cancelled
+    assertNull(createItineraryViewModel.locationJob)
+
+    // TODO: Add more assertions based on what you expect to happen when stopLocationTracking() is called
+  }
+
+  @Test
+  fun `test onCleared`() {
+    createItineraryViewModel.onCleared()
+
+    // Verify that the coroutineScope was cancelled
+    assertTrue(createItineraryViewModel.coroutineScope.isActive.not())
+
+    // TODO: Add more assertions based on what you expect to happen when onCleared() is called
   }
 }

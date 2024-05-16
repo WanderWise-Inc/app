@@ -67,8 +67,8 @@ class CreateItineraryViewModel(
   }
 
   /** Coroutine tasked with tracking user location */
-  private var locationJob: Job? = null
-  private val coroutineScope = CoroutineScope(Dispatchers.Main)
+  var locationJob: Job? = null
+  val coroutineScope = CoroutineScope(Dispatchers.Main)
 
   /**
    * Adds device's current location to `newItineraryBuilder.locations` every `intervalMillis`
@@ -90,7 +90,7 @@ class CreateItineraryViewModel(
     locationJob?.cancel()
   }
 
-  override fun onCleared() {
+  public override fun onCleared() {
     super.onCleared()
     coroutineScope.cancel()
   }
