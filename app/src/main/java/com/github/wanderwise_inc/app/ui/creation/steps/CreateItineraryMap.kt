@@ -251,9 +251,9 @@ fun CreateLiveItinerary(
     showLiveCreation: MutableState<Boolean>,
     createItineraryViewModel: CreateItineraryViewModel
 ) {
-  createItineraryViewModel.startLocationTracking(1000) // starts tracking
+   // starts tracking
 
-  Log.d("CreateLiveItinerary", "currently creating live itinerary")
+
   var isStarted by remember { mutableStateOf(false) }
   BottomAppBar(
       modifier = Modifier.height(250.dp).fillMaxWidth(),
@@ -270,7 +270,10 @@ fun CreateLiveItinerary(
         Row {
           // Button to start
           Button(
-              onClick = { isStarted = true },
+              onClick = { isStarted = true
+                  createItineraryViewModel.startLocationTracking(1000)
+                  Log.d("CreateLiveItinerary", "currently creating live itinerary")
+                        },
               enabled = !isStarted, // Button is disabled if isStarted is true
               colors =
                   ButtonDefaults.buttonColors(
@@ -282,7 +285,11 @@ fun CreateLiveItinerary(
 
           // Button to stop
           Button(
-              onClick = { isStarted = false },
+              onClick = { isStarted = false
+                  createItineraryViewModel.stopLocationTracking()
+                  Log.d("CreateLiveItinerary", "currently stopping live itinerary")
+
+                        },
               enabled = isStarted, // Button is disabled if isStarted is false
               colors =
                   ButtonDefaults.buttonColors(
