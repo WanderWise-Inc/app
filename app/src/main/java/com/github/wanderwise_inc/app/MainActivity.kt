@@ -42,14 +42,9 @@ class MainActivity : ComponentActivity() {
 
     private lateinit var imageRepository: ImageRepository
     private lateinit var itineraryRepository: ItineraryRepository
-    private lateinit var directionsRepository: DirectionsRepository
     private lateinit var profileRepository: ProfileRepository
-  private lateinit var imageRepository: ImageRepository
-  private lateinit var itineraryRepository: ItineraryRepository
-  private lateinit var directionsRepository: DirectionsRepository
-  private lateinit var locationsRepository: LocationsRepository
-  private lateinit var profileRepository: ProfileRepository
-  private lateinit var signInRepository: SignInRepository
+    private lateinit var directionsRepository: DirectionsRepository
+    private lateinit var locationsRepository: LocationsRepository
 
     private lateinit var bottomNavigationViewModel: BottomNavigationViewModel
     private lateinit var createItineraryViewModel: CreateItineraryViewModel
@@ -59,43 +54,10 @@ class MainActivity : ComponentActivity() {
 
     private lateinit var navController: NavHostController
 
-  private val providers by lazy { listOf(AuthUI.IdpConfig.GoogleBuilder().build()) }
 
-  private val imageLauncher by lazy {
-    registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { res ->
-      if (res.resultCode == RESULT_OK) {
-        res.data?.data?.let {
-          imageRepository.setCurrentFile(it)
-          Log.d("STORE IMAGE", "CURRENT FILE SELECTED")
-        }
-      }
-    }
-  }
+    private val Context.savedItinerariesDataStore: DataStore<SavedItineraries> by
+    dataStore(fileName = "saved_itineraries.pb", serializer = SavedItinerariesSerializer)
 
-  private val signInLauncher by lazy {
-    registerForActivityResult(FirebaseAuthUIActivityResultContract()) { res ->
-      /* on failure, don't throw an exception. Pass the null value down for proper handling */
-      val currUser = if (res.resultCode == RESULT_OK) firebaseAuth.currentUser else null
-
-      Log.d("MainActivity", "Firebase sign-in result: $currUser")
-      lifecycleScope.launch { signInRepository.signIn(navController, profileViewModel, currUser) }
-    }
-  }
-
-  private val signInIntent by lazy {
-    AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers).build()
-  }
-
-  private val locationClient by lazy {
-    UserLocationClient(
-        applicationContext, LocationServices.getFusedLocationProviderClient(applicationContext))
-  }
-
-  private val Context.savedItinerariesDataStore: DataStore<SavedItineraries> by
-      dataStore(fileName = "saved_itineraries.pb", serializer = SavedItinerariesSerializer)
-
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -123,57 +85,41 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun init() {
-        requestPermissions()
+        private fun init() {
+            requestPermissions()
 
-        firebaseAuth = appModule.firebaseAuth
-        firebaseStorage = appModule.firebaseStorage
-    AppModule.initialize(
-        imageLauncher,
-        signInLauncher,
-        signInIntent,
-        locationClient,
-        savedItinerariesDataStore,
-        applicationContext)
+            firebaseAuth = appModule.firebaseAuth
+            firebaseStorage = appModule.firebaseStorage
 
-    firebaseAuth = AppModule.firebaseAuth
-    firebaseStorage = AppModule.firebaseStorage
+            initializeRepositories()
 
-        initializeRepositories()
+            initializeViewModels()
+        }
 
-        initializeViewModels()
+        private fun requestPermissions() {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ),
+                0
+            )
+        }
+
+        private fun initializeRepositories() {
+            directionsRepository = appModule.directionsRepository
+            imageRepository = appModule.imageRepository
+            itineraryRepository = appModule.itineraryRepository
+            locationsRepository = appModule.locationsRepository
+            profileRepository = appModule.profileRepository
+        }
+
+        private fun initializeViewModels() {
+            bottomNavigationViewModel = appModule.bottomNavigationViewModel
+            createItineraryViewModel = appModule.createItineraryViewModel
+            itineraryViewModel = appModule.itineraryViewModel
+            loginViewModel = appModule.loginViewModel
+            profileViewModel = appModule.profileViewModel
+        }
     }
-
-    private fun requestPermissions() {
-        ActivityCompat.requestPermissions(
-            this,
-            arrayOf(
-                Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION
-            ),
-            0
-        )
-    }
-
-  private fun initializeRepositories() {
-    imageRepository = AppModule.imageRepository
-    itineraryRepository = AppModule.itineraryRepository
-    directionsRepository = AppModule.directionsRepository
-    locationsRepository = AppModule.locationsRepository
-    profileRepository = AppModule.profileRepository
-    signInRepository = AppModule.signInRepository
-  }
-    private fun initializeRepositories() {
-        imageRepository = appModule.imageRepository
-        itineraryRepository = appModule.itineraryRepository
-        directionsRepository = appModule.directionsRepository
-        profileRepository = appModule.profileRepository
-    }
-
-    private fun initializeViewModels() {
-        bottomNavigationViewModel = appModule.bottomNavigationViewModel
-        createItineraryViewModel = appModule.createItineraryViewModel
-        itineraryViewModel = appModule.itineraryViewModel
-        loginViewModel = appModule.loginViewModel
-        profileViewModel = appModule.profileViewModel
-    }
-}

@@ -22,6 +22,7 @@ import com.github.wanderwise_inc.app.model.location.PlacesReader
 import com.github.wanderwise_inc.app.model.profile.Profile
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
+import com.github.wanderwise_inc.app.viewmodel.LocationClient
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.github.wanderwise_inc.app.viewmodel.UserLocationClient
 import com.google.android.gms.maps.model.CameraPosition
@@ -46,152 +47,173 @@ import org.mockito.junit.MockitoRule
 @RunWith(AndroidJUnit4::class)
 class PreviewItineraryScreenKtTest {
 
-  @get:Rule val composeTestRule = createComposeRule()
+    @get:Rule
+    val composeTestRule = createComposeRule()
 
-  @get:Rule val mockitoRule: MockitoRule = MockitoJUnit.rule()
+    @get:Rule
+    val mockitoRule: MockitoRule = MockitoJUnit.rule()
 
-  @Mock private lateinit var itineraryViewModel: ItineraryViewModel
+    @Mock
+    private lateinit var itineraryViewModel: ItineraryViewModel
 
-  @Mock private lateinit var profileRepository: ProfileRepository
-  @Mock private lateinit var imageRepository: ImageRepository
-  @Mock private lateinit var directionsRepository: DirectionsRepository
-  @Mock private lateinit var locationsRepository: LocationsRepository
-  @Mock private lateinit var userLocationClient: UserLocationClient
+    @Mock
+    private lateinit var profileRepository: ProfileRepository
+    @Mock
+    private lateinit var imageRepository: ImageRepository
+    @Mock
+    private lateinit var directionsRepository: DirectionsRepository
+    @Mock
+    private lateinit var locationsRepository: LocationsRepository
+    @Mock
+    private lateinit var locationClient: LocationClient
 
-  private lateinit var profileViewModel: ProfileViewModel
+    private lateinit var profileViewModel: ProfileViewModel
 
-  private val epflLat = 46.519126741544575
-  private val epflLon = 6.5676006970802145
+    private val epflLat = 46.519126741544575
+    private val epflLon = 6.5676006970802145
 
-  private val locations = PlacesReader(null).readFromString()
-  private val itinerary =
-      Itinerary(
-          userUid = "",
-          locations = locations,
-          title = "San Francisco Bike Itinerary",
-          tags = listOf(ItineraryTags.CULTURAL, ItineraryTags.NATURE, ItineraryTags.BUDGET),
-          description = "A 3-day itinerary to explore the best of San Francisco on a bike.",
-          visible = true)
+    private val locations = PlacesReader(null).readFromString()
+    private val itinerary =
+        Itinerary(
+            userUid = "",
+            locations = locations,
+            title = "San Francisco Bike Itinerary",
+            tags = listOf(ItineraryTags.CULTURAL, ItineraryTags.NATURE, ItineraryTags.BUDGET),
+            description = "A 3-day itinerary to explore the best of San Francisco on a bike.",
+            visible = true
+        )
 
-  @Before
-  fun setup() {
-    val epflLocation = mock(android.location.Location::class.java)
-    epflLocation.latitude = epflLat
-    epflLocation.longitude = epflLon
-    val polylinePoints = MutableLiveData<List<LatLng>>()
-    polylinePoints.value = listOf(LatLng(epflLat, epflLon))
+    @Before
+    fun setup() {
+        val epflLocation = mock(android.location.Location::class.java)
+        epflLocation.latitude = epflLat
+        epflLocation.longitude = epflLon
+        val polylinePoints = MutableLiveData<List<LatLng>>()
+        polylinePoints.value = listOf(LatLng(epflLat, epflLon))
 
-    `when`(
+        `when`(
             directionsRepository.getPolylineWayPoints(
-                anyString(), anyString(), anyList(), anyString()))
-        .thenReturn(MutableLiveData(listOf(LatLng(epflLat, epflLon))))
-    `when`(userLocationClient.getLocationUpdates(1000)).thenReturn(flow { emit(epflLocation) })
-    val itineraryRepository = mock(ItineraryRepository::class.java)
+                anyString(), anyString(), anyList(), anyString()
+            )
+        )
+            .thenReturn(MutableLiveData(listOf(LatLng(epflLat, epflLon))))
+        `when`(locationClient.getLocationUpdates(1000)).thenReturn(flow { emit(epflLocation) })
+        val itineraryRepository = mock(ItineraryRepository::class.java)
 
-    // `when`(itineraryViewModel.getUserLocation()).thenReturn(flow { emit(epflLocation) })
-    // `when`(itineraryViewModel.getPolylinePointsLiveData()).thenReturn(polylinePoints)
 
-    val dummyProfile = Profile("-")
-    `when`(profileRepository.getProfile(anyString())).thenReturn(flow { emit(dummyProfile) })
-    `when`(imageRepository.fetchImage(anyString())).thenReturn(flow { emit(null) })
+        val dummyProfile = Profile("-")
+        `when`(profileRepository.getProfile(anyString())).thenReturn(flow { emit(dummyProfile) })
+        `when`(imageRepository.fetchImage(anyString())).thenReturn(flow { emit(null) })
 
-    itineraryViewModel =
-        ItineraryViewModel(
-            itineraryRepository, directionsRepository, locationsRepository, userLocationClient)
-    itineraryViewModel = ItineraryViewModel(itineraryRepository, directionsRepository, userLocationClient)
-    itineraryViewModel.setFocusedItinerary(itinerary)
-    profileViewModel = ProfileViewModel(profileRepository, imageRepository)
-  }
+        itineraryViewModel = ItineraryViewModel(
+            itineraryRepository,
+            directionsRepository,
+            locationsRepository,
+            locationClient
+        )
 
-  @Test
-  fun `initial elements are displayed correctly`() {
-    composeTestRule.setContent { PreviewItineraryScreen(itineraryViewModel, profileViewModel) }
-
-    composeTestRule.onNodeWithTag(TestTags.MAP_PREVIEW_ITINERARY_SCREEN).assertIsDisplayed()
-    composeTestRule.onNodeWithTag(TestTags.MAP_MAXIMIZED_BANNER).assertIsDisplayed()
-    composeTestRule.onNodeWithTag(TestTags.MAP_BANNER_BUTTON).assertIsDisplayed()
-    composeTestRule.onNodeWithTag(TestTags.MAP_CENTER_CAMERA_BUTTON).assertIsDisplayed()
-    composeTestRule.onNodeWithTag(TestTags.MAP_PROFILE_PIC).assertIsDisplayed()
-  }
-
-  @Test
-  fun `pressing banner button should minimize and maximize the banner`() {
-    composeTestRule.setContent { PreviewItineraryScreen(itineraryViewModel, profileViewModel) }
-
-    composeTestRule.onNodeWithTag(TestTags.MAP_MAXIMIZED_BANNER).assertIsDisplayed()
-    composeTestRule.onNodeWithTag(TestTags.MAP_MINIMIZED_BANNER).assertIsNotDisplayed()
-
-    // minimize the banner
-    composeTestRule.onNodeWithTag(TestTags.MAP_BANNER_BUTTON).performClick()
-
-    composeTestRule.onNodeWithTag(TestTags.MAP_MAXIMIZED_BANNER).assertIsNotDisplayed()
-    composeTestRule.onNodeWithTag(TestTags.MAP_MINIMIZED_BANNER).assertIsDisplayed()
-    composeTestRule.onNodeWithTag(TestTags.MAP_ITINERARY_TITLE).assertIsDisplayed()
-    composeTestRule.onNodeWithTag(TestTags.MAP_ITINERARY_DESCRIPTION).assertIsNotDisplayed()
-
-    // maximize the banner
-    composeTestRule.onNodeWithTag(TestTags.MAP_BANNER_BUTTON).performClick()
-
-    composeTestRule.onNodeWithTag(TestTags.MAP_MAXIMIZED_BANNER).assertIsDisplayed()
-    composeTestRule.onNodeWithTag(TestTags.MAP_MINIMIZED_BANNER).assertIsNotDisplayed()
-    composeTestRule.onNodeWithTag(TestTags.MAP_ITINERARY_TITLE).assertIsDisplayed()
-    composeTestRule.onNodeWithTag(TestTags.MAP_ITINERARY_DESCRIPTION).assertIsDisplayed()
-  }
-
-  @Test
-  fun `NullItineraryScreen is displayed when focusedItinerary is null`() {
-    itineraryViewModel.setFocusedItinerary(null)
-    composeTestRule.setContent { PreviewItineraryScreen(itineraryViewModel, profileViewModel) }
-
-    composeTestRule.onNodeWithTag(TestTags.MAP_NULL_ITINERARY).assertIsDisplayed()
-
-    // this shouldn't be displayed
-    composeTestRule.onNodeWithTag(TestTags.MAP_MAXIMIZED_BANNER).assertIsNotDisplayed()
-    composeTestRule.onNodeWithTag(TestTags.MAP_MINIMIZED_BANNER).assertIsNotDisplayed()
-    composeTestRule.onNodeWithTag(TestTags.MAP_ITINERARY_TITLE).assertIsNotDisplayed()
-    composeTestRule.onNodeWithTag(TestTags.MAP_ITINERARY_DESCRIPTION).assertIsNotDisplayed()
-  }
-
-  @Test
-  fun `Clicking on the Start Button should go to starting mode`() {
-    composeTestRule.setContent { PreviewItineraryScreen(itineraryViewModel, profileViewModel) }
-
-    composeTestRule.onNodeWithTag(TestTags.START_NEW_ITINERARY_STARTING).assertIsDisplayed()
-  }
-
-  @Test
-  fun `pressing center button should update camera position`() {
-    val epflLocation = Mockito.mock(android.location.Location::class.java)
-    epflLocation.latitude = epflLat
-    epflLocation.longitude = epflLon
-
-    var cameraPositionStateObserver: CameraPositionState? = null
-
-    val delta = 0.0001
-
-    composeTestRule.setContent {
-      Box {
-        val cameraPositionState = rememberCameraPositionState {
-          position =
-              CameraPosition.fromLatLngZoom(itinerary.computeCenterOfGravity().toLatLng(), 13f)
-        }
-        cameraPositionStateObserver = cameraPositionState
-        Scaffold(floatingActionButton = { CenterButton(cameraPositionState, epflLocation) }) {
-            paddingValues ->
-          GoogleMap(
-              modifier = Modifier.padding(paddingValues), cameraPositionState = cameraPositionState)
-        }
-      }
+        itineraryViewModel.setFocusedItinerary(itinerary)
+        profileViewModel = ProfileViewModel(profileRepository, imageRepository)
     }
 
-    composeTestRule.onNodeWithTag(TestTags.MAP_CENTER_CAMERA_BUTTON).assertIsDisplayed()
-    // TODO test fails: java.lang.NullPointerException: CameraUpdateFactory is not initialized
-    // composeTestRule.onNodeWithTag("Center Button").performClick()
-    /*
-    cameraPositionStateObserver?.let {
-      assertEquals(it.position.target.latitude, epflLat, delta)
-      assertEquals(it.position.target.longitude, epflLon, delta)
+    @Test
+    fun `initial elements are displayed correctly`() {
+        composeTestRule.setContent { PreviewItineraryScreen(itineraryViewModel, profileViewModel) }
+
+        composeTestRule.onNodeWithTag(TestTags.MAP_PREVIEW_ITINERARY_SCREEN).assertIsDisplayed()
+        composeTestRule.onNodeWithTag(TestTags.MAP_MAXIMIZED_BANNER).assertIsDisplayed()
+        composeTestRule.onNodeWithTag(TestTags.MAP_BANNER_BUTTON).assertIsDisplayed()
+        composeTestRule.onNodeWithTag(TestTags.MAP_CENTER_CAMERA_BUTTON).assertIsDisplayed()
+        composeTestRule.onNodeWithTag(TestTags.MAP_PROFILE_PIC).assertIsDisplayed()
     }
-    */
-  }
+
+    @Test
+    fun `pressing banner button should minimize and maximize the banner`() {
+        composeTestRule.setContent { PreviewItineraryScreen(itineraryViewModel, profileViewModel) }
+
+        composeTestRule.onNodeWithTag(TestTags.MAP_MAXIMIZED_BANNER).assertIsDisplayed()
+        composeTestRule.onNodeWithTag(TestTags.MAP_MINIMIZED_BANNER).assertIsNotDisplayed()
+
+        // minimize the banner
+        composeTestRule.onNodeWithTag(TestTags.MAP_BANNER_BUTTON).performClick()
+
+        composeTestRule.onNodeWithTag(TestTags.MAP_MAXIMIZED_BANNER).assertIsNotDisplayed()
+        composeTestRule.onNodeWithTag(TestTags.MAP_MINIMIZED_BANNER).assertIsDisplayed()
+        composeTestRule.onNodeWithTag(TestTags.MAP_ITINERARY_TITLE).assertIsDisplayed()
+        composeTestRule.onNodeWithTag(TestTags.MAP_ITINERARY_DESCRIPTION).assertIsNotDisplayed()
+
+        // maximize the banner
+        composeTestRule.onNodeWithTag(TestTags.MAP_BANNER_BUTTON).performClick()
+
+        composeTestRule.onNodeWithTag(TestTags.MAP_MAXIMIZED_BANNER).assertIsDisplayed()
+        composeTestRule.onNodeWithTag(TestTags.MAP_MINIMIZED_BANNER).assertIsNotDisplayed()
+        composeTestRule.onNodeWithTag(TestTags.MAP_ITINERARY_TITLE).assertIsDisplayed()
+        composeTestRule.onNodeWithTag(TestTags.MAP_ITINERARY_DESCRIPTION).assertIsDisplayed()
+    }
+
+    @Test
+    fun `NullItineraryScreen is displayed when focusedItinerary is null`() {
+        itineraryViewModel.setFocusedItinerary(null)
+        composeTestRule.setContent { PreviewItineraryScreen(itineraryViewModel, profileViewModel) }
+
+        composeTestRule.onNodeWithTag(TestTags.MAP_NULL_ITINERARY).assertIsDisplayed()
+
+        // this shouldn't be displayed
+        composeTestRule.onNodeWithTag(TestTags.MAP_MAXIMIZED_BANNER).assertIsNotDisplayed()
+        composeTestRule.onNodeWithTag(TestTags.MAP_MINIMIZED_BANNER).assertIsNotDisplayed()
+        composeTestRule.onNodeWithTag(TestTags.MAP_ITINERARY_TITLE).assertIsNotDisplayed()
+        composeTestRule.onNodeWithTag(TestTags.MAP_ITINERARY_DESCRIPTION).assertIsNotDisplayed()
+    }
+
+    @Test
+    fun `Clicking on the Start Button should go to starting mode`() {
+        composeTestRule.setContent { PreviewItineraryScreen(itineraryViewModel, profileViewModel) }
+
+        composeTestRule.onNodeWithTag(TestTags.START_NEW_ITINERARY_STARTING).assertIsDisplayed()
+    }
+
+    @Test
+    fun `pressing center button should update camera position`() {
+        val epflLocation = Mockito.mock(android.location.Location::class.java)
+        epflLocation.latitude = epflLat
+        epflLocation.longitude = epflLon
+
+        var cameraPositionStateObserver: CameraPositionState? = null
+
+        val delta = 0.0001
+
+        composeTestRule.setContent {
+            Box {
+                val cameraPositionState = rememberCameraPositionState {
+                    position =
+                        CameraPosition.fromLatLngZoom(
+                            itinerary.computeCenterOfGravity().toLatLng(),
+                            13f
+                        )
+                }
+                cameraPositionStateObserver = cameraPositionState
+                Scaffold(floatingActionButton = {
+                    CenterButton(
+                        cameraPositionState,
+                        epflLocation
+                    )
+                }) { paddingValues ->
+                    GoogleMap(
+                        modifier = Modifier.padding(paddingValues),
+                        cameraPositionState = cameraPositionState
+                    )
+                }
+            }
+        }
+
+        composeTestRule.onNodeWithTag(TestTags.MAP_CENTER_CAMERA_BUTTON).assertIsDisplayed()
+        // TODO test fails: java.lang.NullPointerException: CameraUpdateFactory is not initialized
+        // composeTestRule.onNodeWithTag("Center Button").performClick()
+        /*
+        cameraPositionStateObserver?.let {
+          assertEquals(it.position.target.latitude, epflLat, delta)
+          assertEquals(it.position.target.longitude, epflLon, delta)
+        }
+        */
+    }
 }
