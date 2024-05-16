@@ -92,7 +92,7 @@ data class Itinerary(
      * @return the builder to support method chaining
      * @brief set the title of the itinerary builder
      */
-    fun title(title: String): Builder {
+    fun title(title: String?): Builder {
       this.title = title
       return this
     }
