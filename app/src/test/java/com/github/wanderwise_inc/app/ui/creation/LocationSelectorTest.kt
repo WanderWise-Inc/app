@@ -1,9 +1,13 @@
 package com.github.wanderwise_inc.app.ui.creation
 
 import android.location.Location
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsEnabled
+import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
 import androidx.lifecycle.MutableLiveData
 import com.github.wanderwise_inc.app.data.DirectionsRepository
 import com.github.wanderwise_inc.app.data.ImageRepository
@@ -15,6 +19,7 @@ import com.github.wanderwise_inc.app.model.location.ItineraryTags
 import com.github.wanderwise_inc.app.model.location.PlacesReader
 import com.github.wanderwise_inc.app.model.profile.Profile
 import com.github.wanderwise_inc.app.ui.TestTags
+import com.github.wanderwise_inc.app.ui.creation.steps.CreateLiveItinerary
 import com.github.wanderwise_inc.app.ui.creation.steps.LocationSelector
 import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
@@ -56,6 +61,8 @@ class CreateItineraryMapUITest {
 
   private val epflLat = 46.519126741544575
   private val epflLon = 6.5676006970802145
+  private var showLocationSelector = mutableStateOf(false)
+  private var showLiveCreation = mutableStateOf(false)
 
   private val locations = PlacesReader(null).readFromString()
   private val itinerary =
@@ -115,15 +122,50 @@ class CreateItineraryMapUITest {
   @Test
   fun testLocation1TextField() {
 
-    composeTestRule.setContent { LocationSelector(createItineraryViewModel) }
+    composeTestRule.setContent { LocationSelector(createItineraryViewModel, showLocationSelector) }
 
     composeTestRule.onNodeWithTag(TestTags.FIRST_LOCATION).assertIsDisplayed()
   }
 
   @Test
   fun testLocation2TextField() {
-    composeTestRule.setContent { LocationSelector(createItineraryViewModel) }
+    composeTestRule.setContent { LocationSelector(createItineraryViewModel, showLocationSelector) }
 
     composeTestRule.onNodeWithTag(TestTags.SECOND_LOCATION).assertIsDisplayed()
+  }
+
+  @Test
+  fun testBackButton() {
+    composeTestRule.setContent { CreateLiveItinerary(showLiveCreation, createItineraryViewModel) }
+
+    composeTestRule.onNodeWithTag(TestTags.BACK_BUTTON).assertIsDisplayed()
+  }
+
+  @Test
+  fun testStartButton() {
+    composeTestRule.setContent { CreateLiveItinerary(showLiveCreation, createItineraryViewModel) }
+
+    // Assert that the Start button is initially enabled
+    composeTestRule.onNodeWithTag(TestTags.START_BUTTON).assertIsEnabled()
+
+    // Click the Start button
+    composeTestRule.onNodeWithTag(TestTags.START_BUTTON).performClick()
+
+    // Assert that the Start button is now disabled
+    composeTestRule.onNodeWithTag(TestTags.START_BUTTON).assertIsNotEnabled()
+  }
+
+  @Test
+  fun testStopButton() {
+    composeTestRule.setContent { CreateLiveItinerary(showLiveCreation, createItineraryViewModel) }
+
+    // Assert that the Stop button is initially disabled
+    composeTestRule.onNodeWithTag(TestTags.STOP_BUTTON).assertIsNotEnabled()
+
+    // Click the Start button to start the tracking
+    composeTestRule.onNodeWithTag(TestTags.START_BUTTON).performClick()
+
+    // Assert that the Stop button is now enabled
+    composeTestRule.onNodeWithTag(TestTags.STOP_BUTTON).assertIsEnabled()
   }
 }

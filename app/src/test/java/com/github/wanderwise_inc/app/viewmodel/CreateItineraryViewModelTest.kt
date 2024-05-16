@@ -9,11 +9,18 @@ import com.github.wanderwise_inc.app.model.location.ItineraryTags
 import com.github.wanderwise_inc.app.model.location.Location
 import com.github.wanderwise_inc.app.utils.MainDispatcherRule
 import io.mockk.MockKAnnotations
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import java.lang.StringBuilder
+import io.mockk.mockk
+import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -31,6 +38,8 @@ class CreateItineraryViewModelTest() {
 
   @MockK private lateinit var locationsRepository: LocationsRepository
 
+  @MockK private lateinit var mockAndroidLocation: android.location.Location
+
   @MockK private lateinit var userLocationClient: UserLocationClient
 
   private lateinit var createItineraryViewModel: CreateItineraryViewModel
@@ -40,6 +49,12 @@ class CreateItineraryViewModelTest() {
   @OptIn(ExperimentalCoroutinesApi::class)
   @Before
   fun setup() {
+    mockAndroidLocation = mockk()
+    every { mockAndroidLocation.latitude } returns 0.0
+    every { mockAndroidLocation.longitude } returns 0.0
+    userLocationClient = mockk()
+    every { userLocationClient.getLocationUpdates(any()) } returns
+        flow { emit(mockAndroidLocation) }
     Dispatchers.setMain(testDispatcher)
     MockKAnnotations.init(this)
     createItineraryViewModel =
@@ -97,5 +112,39 @@ class CreateItineraryViewModelTest() {
     createItineraryViewModel.getNewItinerary()?.time(4)
 
     assert(createItineraryViewModel.notSetValues().isEmpty())
+  }
+
+  @Test
+  fun `startLocationTracking initializes locationJob and adds locations to the builder`() =
+      runTest {
+        createItineraryViewModel.startNewItinerary("ME")
+        assert(createItineraryViewModel.getNewItinerary() != null)
+        assert(createItineraryViewModel.getNewItinerary()!!.build().locations.isEmpty())
+
+        val intervalMillis = 1000L
+        createItineraryViewModel.startLocationTracking(intervalMillis)
+
+        // delay for some time because of coroutines...
+        delay(5000L)
+        assertNotNull(createItineraryViewModel.locationJob)
+        verify { userLocationClient.getLocationUpdates(intervalMillis) }
+        assert(createItineraryViewModel.getNewItinerary()!!.build().locations.isNotEmpty())
+      }
+
+  @Test
+  fun `stopLocationTracking cancels locationJob`() = runTest {
+    createItineraryViewModel.startLocationTracking(1000L)
+    createItineraryViewModel.stopLocationTracking()
+    delay(5000L)
+    assertNotNull(createItineraryViewModel.locationJob)
+    assert(createItineraryViewModel.locationJob!!.isCancelled)
+  }
+
+  @Test
+  fun `test onCleared`() {
+    createItineraryViewModel.onCleared()
+
+    // Verify that the coroutineScope was cancelled
+    assertTrue(createItineraryViewModel.coroutineScope.isActive.not())
   }
 }
