@@ -52,7 +52,7 @@ import com.google.maps.android.compose.rememberCameraPositionState
 fun CreateItineraryMapWithSelector(
     createItineraryViewModel: CreateItineraryViewModel,
 ) {
-  Scaffold(bottomBar = { LocationSelector() }) { innerPadding ->
+  Scaffold(bottomBar = { LocationSelector(createItineraryViewModel) }) { innerPadding ->
     CreateItineraryMap(
         createItineraryViewModel = createItineraryViewModel, innerPaddingValues = innerPadding)
   }
@@ -129,7 +129,7 @@ fun CreateItineraryMap(
 }
 
 @Composable
-fun LocationSelector() {
+fun LocationSelector(createItineraryViewModel: CreateItineraryViewModel) {
   var location1 by remember { mutableStateOf("") }
   var location2 by remember { mutableStateOf("") }
 
@@ -155,7 +155,8 @@ fun LocationSelector() {
             label = { Text("location 1...") },
             placeholder = { Text("location 1...") },
             modifier = Modifier.padding(start = 25.dp).testTag(TestTags.FIRST_LOCATION),
-            shape = RoundedCornerShape(20.dp))
+            shape = RoundedCornerShape(20.dp),
+            singleLine = true)
       }
 
       Icon(

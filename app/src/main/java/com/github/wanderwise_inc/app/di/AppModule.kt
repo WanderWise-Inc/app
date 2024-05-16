@@ -10,9 +10,11 @@ import com.github.wanderwise_inc.app.data.DefaultGoogleSignInLauncher
 import com.github.wanderwise_inc.app.data.DirectionsRepositoryImpl
 import com.github.wanderwise_inc.app.data.ImageRepositoryImpl
 import com.github.wanderwise_inc.app.data.ItineraryRepositoryImpl
+import com.github.wanderwise_inc.app.data.LocationsRepositoryImpl
 import com.github.wanderwise_inc.app.data.ProfileRepositoryTestImpl
 import com.github.wanderwise_inc.app.data.SignInRepositoryImpl
-import com.github.wanderwise_inc.app.network.ApiServiceFactory
+import com.github.wanderwise_inc.app.network.DirectionsApiServiceFactory
+import com.github.wanderwise_inc.app.network.LocationsApiServiceFactory
 import com.github.wanderwise_inc.app.proto.location.SavedItineraries
 import com.github.wanderwise_inc.app.viewmodel.BottomNavigationViewModel
 import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
@@ -63,7 +65,11 @@ object AppModule {
   }
 
   val directionsRepository by lazy {
-    DirectionsRepositoryImpl(ApiServiceFactory.createDirectionsApiService())
+    DirectionsRepositoryImpl(DirectionsApiServiceFactory.createDirectionsApiService())
+  }
+
+  val locationsRepository by lazy {
+    LocationsRepositoryImpl(LocationsApiServiceFactory.createLocationsApiService())
   }
 
   val itineraryRepository by lazy {
@@ -78,11 +84,13 @@ object AppModule {
   val bottomNavigationViewModel by lazy { BottomNavigationViewModel() }
 
   val createItineraryViewModel by lazy {
-    CreateItineraryViewModel(itineraryRepository, directionsRepository, locationClient)
+    CreateItineraryViewModel(
+        itineraryRepository, directionsRepository, locationsRepository, locationClient)
   }
 
   val itineraryViewModel by lazy {
-    ItineraryViewModel(itineraryRepository, directionsRepository, locationClient)
+    ItineraryViewModel(
+        itineraryRepository, directionsRepository, locationsRepository, locationClient)
   }
 
   val profileViewModel by lazy { ProfileViewModel(profileRepository, imageRepository) }

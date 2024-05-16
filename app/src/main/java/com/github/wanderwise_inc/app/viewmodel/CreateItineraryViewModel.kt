@@ -2,6 +2,7 @@ package com.github.wanderwise_inc.app.viewmodel
 
 import com.github.wanderwise_inc.app.data.DirectionsRepository
 import com.github.wanderwise_inc.app.data.ItineraryRepository
+import com.github.wanderwise_inc.app.data.LocationsRepository
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryLabels
 import java.io.InvalidObjectException
@@ -9,8 +10,11 @@ import java.io.InvalidObjectException
 class CreateItineraryViewModel(
     private val itineraryRepository: ItineraryRepository,
     private val directionsRepository: DirectionsRepository,
+    private val locationsRepository: LocationsRepository,
     private val locationClient: LocationClient
-) : ItineraryViewModel(itineraryRepository, directionsRepository, locationClient) {
+) :
+    ItineraryViewModel(
+        itineraryRepository, directionsRepository, locationsRepository, locationClient) {
   /** New itinerary that the signed in user is currently building */
   private var newItineraryBuilder: Itinerary.Builder? = null
 
