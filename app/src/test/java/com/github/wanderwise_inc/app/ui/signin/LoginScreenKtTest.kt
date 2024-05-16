@@ -60,7 +60,3 @@ class LoginScreenKtTest {
         composeTestRule.onNodeWithText("Sign-In with Google").assertExists()
     }
 }
-
-class MockGoogleSignInLauncher : GoogleSignInLauncher {
-  override fun launchSignIn() {}
-}

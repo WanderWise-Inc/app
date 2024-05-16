@@ -61,32 +61,25 @@ import com.google.maps.android.compose.rememberCameraPositionState
 fun CreateItineraryMapWithSelector(
     createItineraryViewModel: CreateItineraryViewModel,
 ) {
-  var showLocationSelector = remember { mutableStateOf(false) }
-  var showLiveCreation = remember { mutableStateOf(false) }
-  Scaffold(
-      bottomBar = {
-        if (!showLocationSelector.value && !showLiveCreation.value) {
-          // CreateLiveItinerary()
-          ChooseYourWayOfCreation(createItineraryViewModel, showLocationSelector, showLiveCreation)
-        } else if (showLiveCreation.value) {
-          CreateLiveItinerary(showLiveCreation, createItineraryViewModel)
-        } else {
-          LocationSelector(createItineraryViewModel, showLocationSelector)
-        }
-      }) { innerPadding ->
+    val showLocationSelector = remember { mutableStateOf(false) }
+    val showLiveCreation = remember { mutableStateOf(false) }
+    Scaffold(
+        bottomBar = {
+            if (!showLocationSelector.value && !showLiveCreation.value) {
+                // CreateLiveItinerary()
+                ChooseYourWayOfCreation(createItineraryViewModel, showLocationSelector, showLiveCreation)
+            } else if (showLiveCreation.value) {
+                CreateLiveItinerary(showLiveCreation, createItineraryViewModel)
+            } else {
+                LocationSelector(createItineraryViewModel, showLocationSelector)
+            }
+        }) { innerPadding ->
         CreateItineraryMap(
             createItineraryViewModel = createItineraryViewModel, innerPaddingValues = innerPadding)
-      }
-    Scaffold(
-        bottomBar = { LocationSelector(createItineraryViewModel) }
-    ) { innerPadding ->
-        CreateItineraryMap(
-            createItineraryViewModel = createItineraryViewModel,
-            innerPaddingValues = innerPadding
-        )
     }
 }
 
+@SuppressLint("MutableCollectionMutableState")
 @Composable
 fun CreateItineraryMap(
     createItineraryViewModel: CreateItineraryViewModel,
@@ -114,23 +107,20 @@ fun CreateItineraryMap(
         }
         val polylinePoints by createItineraryViewModel.getPolylinePointsLiveData().observeAsState()
         GoogleMap(
-            modifier = Modifier
-                .padding(paddingValues = innerPaddingValues)
-                .testTag(TestTags.MAP_GOOGLE_MAPS),
+            modifier =
+            Modifier.padding(paddingValues = innerPaddingValues).testTag(TestTags.MAP_GOOGLE_MAPS),
             onMapClick = {
                 itineraryBuilder.addLocation(Location.fromLatLng(it))
                 locations.add(Location.fromLatLng(it))
                 locationsCtr++ // force a redraw
             },
-            cameraPositionState = cameraPositionState
-        ) {
+            cameraPositionState = cameraPositionState) {
             userLocation?.let {
                 Marker(
                     tag = TestTags.MAP_USER_LOCATION,
                     state = MarkerState(position = LatLng(it.latitude, it.longitude)),
                     icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE),
-                    contentDescription = TestTags.MAP_USER_LOCATION
-                )
+                    contentDescription = TestTags.MAP_USER_LOCATION)
             }
 
             locations.map { location ->
@@ -139,29 +129,22 @@ fun CreateItineraryMap(
                     title = location.title,
                 )
             }
-
             if (polylinePoints != null)
                 Polyline(points = polylinePoints!!, color = MaterialTheme.colorScheme.primary)
         }
         if (isHintPopupOpen) {
-            HintPopup(message = "Try pressing your screen to add waypoints!") {
-                isHintPopupOpen = false
-            }
+            HintPopup(message = "Try pressing your screen to add waypoints!") { isHintPopupOpen = false }
         }
     } else {
         Column(
-            modifier = Modifier
-                .testTag(TestTags.MAP_NULL_ITINERARY)
+            modifier =
+            Modifier.testTag(TestTags.MAP_NULL_ITINERARY)
                 .fillMaxSize()
                 .padding(innerPaddingValues)
                 .background(MaterialTheme.colorScheme.background),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text(
-                "Loading your location...",
-                modifier = Modifier.testTag(TestTags.MAP_NULL_ITINERARY)
-            )
+            verticalArrangement = Arrangement.Center) {
+            Text("Loading your location...", modifier = Modifier.testTag(TestTags.MAP_NULL_ITINERARY))
         }
     }
 }
@@ -173,32 +156,32 @@ fun ChooseYourWayOfCreation(
     showLiveCreation: MutableState<Boolean>
 ) {
 
-  BottomAppBar(
-      modifier = Modifier.height(250.dp).fillMaxWidth(),
-      containerColor = MaterialTheme.colorScheme.primaryContainer,
-      contentColor = MaterialTheme.colorScheme.primary,
-  ) {
-    Column(
-        verticalArrangement = Arrangement.Top, horizontalAlignment = Alignment.CenterHorizontally) {
-          Text(
-              text = "Start creating an Itinerary!",
-              style = MaterialTheme.typography.bodyLarge,
-              modifier = Modifier.padding(5.dp))
-          Spacer(modifier = Modifier.height(50.dp))
-          Row(modifier = Modifier.padding(16.dp), horizontalArrangement = Arrangement.SpaceEvenly) {
-            Button(
-                onClick = { showLocationSelector.value = true },
-                modifier = Modifier.fillMaxWidth(0.5f)) {
-                  Text("Create a known itinerary", textAlign = TextAlign.Center)
+    BottomAppBar(
+        modifier = Modifier.height(250.dp).fillMaxWidth(),
+        containerColor = MaterialTheme.colorScheme.primaryContainer,
+        contentColor = MaterialTheme.colorScheme.primary,
+    ) {
+        Column(
+            verticalArrangement = Arrangement.Top, horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(
+                text = "Start creating an Itinerary!",
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.padding(5.dp))
+            Spacer(modifier = Modifier.height(50.dp))
+            Row(modifier = Modifier.padding(16.dp), horizontalArrangement = Arrangement.SpaceEvenly) {
+                Button(
+                    onClick = { showLocationSelector.value = true },
+                    modifier = Modifier.fillMaxWidth(0.5f)) {
+                    Text("Create a known itinerary", textAlign = TextAlign.Center)
                 }
-            Button(
-                onClick = { showLiveCreation.value = true }, modifier = Modifier.fillMaxWidth()) {
-                  Text("Create a live itinerary", textAlign = TextAlign.Center)
+                Button(
+                    onClick = { showLiveCreation.value = true }, modifier = Modifier.fillMaxWidth()) {
+                    Text("Create a live itinerary", textAlign = TextAlign.Center)
                 }
-          }
-          Spacer(modifier = Modifier.height(50.dp))
+            }
+            Spacer(modifier = Modifier.height(50.dp))
         }
-  }
+    }
 }
 
 @Composable
@@ -206,102 +189,51 @@ fun LocationSelector(
     createItineraryViewModel: CreateItineraryViewModel,
     showLocationSelector: MutableState<Boolean>
 ) {
-  var location1 by remember { mutableStateOf("") }
-
-  var location2 by remember { mutableStateOf("") }
-fun LocationSelector(createItineraryViewModel: CreateItineraryViewModel) {
     var location1 by remember { mutableStateOf("") }
+
     var location2 by remember { mutableStateOf("") }
 
     BottomAppBar(
-        modifier = Modifier
-            .height(250.dp)
-            .fillMaxWidth(),
+        modifier = Modifier.height(250.dp).fillMaxWidth(),
         containerColor = MaterialTheme.colorScheme.primaryContainer,
         contentColor = MaterialTheme.colorScheme.primary,
     ) {
         Column {
-            BottomAppBar(
-                modifier = Modifier
-                    .height(250.dp)
-                    .fillMaxWidth(),
-                containerColor = MaterialTheme.colorScheme.primaryContainer,
-                contentColor = MaterialTheme.colorScheme.primary,
-            ) {
-                Column {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            Icons.Filled.LocationOn,
-                            contentDescription = "Location 1",
-                            modifier = Modifier.padding(start = 10.dp)
-                        )
+            Button(onClick = { showLocationSelector.value = false }) {
+                Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Go back")
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    Icons.Filled.LocationOn,
+                    contentDescription = "Location 1",
+                    modifier = Modifier.padding(start = 10.dp))
+                OutlinedTextField(
+                    value = location1,
+                    onValueChange = { location1 = it },
+                    label = { Text("location 1...") },
+                    placeholder = { Text("location 1...") },
+                    modifier = Modifier.padding(start = 25.dp).testTag(TestTags.FIRST_LOCATION),
+                    shape = RoundedCornerShape(20.dp),
+                    singleLine = true)
+            }
 
-                        OutlinedTextField(
-                            value = location1,
-                            onValueChange = { location1 = it },
-                            label = { Text("location 1...") },
-                            placeholder = { Text("location 1...") },
-                            modifier = Modifier
-                                .padding(start = 25.dp)
-                                .testTag(TestTags.FIRST_LOCATION),
-                            shape = RoundedCornerShape(20.dp)
-                        )
-                    }
-  BottomAppBar(
-      modifier = Modifier.height(250.dp).fillMaxWidth(),
-      containerColor = MaterialTheme.colorScheme.primaryContainer,
-      contentColor = MaterialTheme.colorScheme.primary,
-  ) {
-    Column {
-      Button(onClick = { showLocationSelector.value = false }) {
-        Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Go back")
-      }
+            Icon(
+                Icons.Filled.MoreVert,
+                contentDescription = "more",
+                modifier = Modifier.padding(start = 10.dp))
 
-      /*Text(
-          modifier = Modifier.padding(10.dp),
-          textAlign = TextAlign.Center,
-          text = "Create a new itinerary",
-      )*/
-      Row(verticalAlignment = Alignment.CenterVertically) {
-        Icon(
-            Icons.Filled.LocationOn,
-            contentDescription = "Location 1",
-            modifier = Modifier.padding(start = 10.dp))
-        OutlinedTextField(
-            value = location1,
-            onValueChange = { location1 = it },
-            label = { Text("location 1...") },
-            placeholder = { Text("location 1...") },
-            modifier = Modifier.padding(start = 25.dp).testTag(TestTags.FIRST_LOCATION),
-            shape = RoundedCornerShape(20.dp),
-            singleLine = true)
-      }
-
-                    Icon(
-                        Icons.Filled.MoreVert,
-                        contentDescription = "more",
-                        modifier = Modifier.padding(start = 10.dp)
-                    )
-
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            Icons.Filled.LocationOn,
-                            contentDescription = "Location 2",
-                            modifier = Modifier.padding(start = 10.dp)
-                        )
-
-                        OutlinedTextField(
-                            value = location2,
-                            onValueChange = { location2 = it },
-                            label = { Text("location 2...") },
-                            placeholder = { Text("location 2...") },
-                            modifier = Modifier
-                                .padding(start = 25.dp)
-                                .testTag(TestTags.SECOND_LOCATION),
-                            shape = RoundedCornerShape(20.dp)
-                        )
-                    }
-                }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    Icons.Filled.LocationOn,
+                    contentDescription = "Location 2",
+                    modifier = Modifier.padding(start = 10.dp))
+                OutlinedTextField(
+                    value = location2,
+                    onValueChange = { location2 = it },
+                    label = { Text("location 2...") },
+                    placeholder = { Text("location 2...") },
+                    modifier = Modifier.padding(start = 25.dp).testTag(TestTags.SECOND_LOCATION),
+                    shape = RoundedCornerShape(20.dp))
             }
         }
     }
@@ -315,56 +247,56 @@ fun CreateLiveItinerary(
     createItineraryViewModel: CreateItineraryViewModel
 ) {
 
-  var isStarted by remember { mutableStateOf(false) }
-  BottomAppBar(
-      modifier = Modifier.height(250.dp).fillMaxWidth().testTag(TestTags.LIVE_ITINERARY),
-      containerColor = MaterialTheme.colorScheme.primaryContainer,
-      contentColor = MaterialTheme.colorScheme.primary,
-  ) {
-    Column {
-      Button(
-          onClick = { showLiveCreation.value = false },
-          modifier = Modifier.testTag(TestTags.BACK_BUTTON)) {
-            Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Go back")
-          }
+    var isStarted by remember { mutableStateOf(false) }
+    BottomAppBar(
+        modifier = Modifier.height(250.dp).fillMaxWidth().testTag(TestTags.LIVE_ITINERARY),
+        containerColor = MaterialTheme.colorScheme.primaryContainer,
+        contentColor = MaterialTheme.colorScheme.primary,
+    ) {
+        Column {
+            Button(
+                onClick = { showLiveCreation.value = false },
+                modifier = Modifier.testTag(TestTags.BACK_BUTTON)) {
+                Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Go back")
+            }
 
-      // Center the Row within the BottomAppBar
-      Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-        Row {
-          // Button to start
-          Button(
-              onClick = {
-                isStarted = true
-                createItineraryViewModel.startLocationTracking(LOCATION_UPDATE_INTERVAL_MILLIS)
-                Log.d("CreateLiveItinerary", "currently creating live itinerary")
-              },
-              enabled = !isStarted, // Button is disabled if isStarted is true
-              colors =
-                  ButtonDefaults.buttonColors(
-                      if (!isStarted) MaterialTheme.colorScheme.primary
-                      else MaterialTheme.colorScheme.surfaceVariant),
-              modifier = Modifier.testTag(TestTags.START_BUTTON)) {
-                Text("Start")
-              }
-          Spacer(Modifier.width(8.dp)) // Add space between buttons
+            // Center the Row within the BottomAppBar
+            Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                Row {
+                    // Button to start
+                    Button(
+                        onClick = {
+                            isStarted = true
+                            createItineraryViewModel.startLocationTracking(LOCATION_UPDATE_INTERVAL_MILLIS)
+                            Log.d("CreateLiveItinerary", "currently creating live itinerary")
+                        },
+                        enabled = !isStarted, // Button is disabled if isStarted is true
+                        colors =
+                        ButtonDefaults.buttonColors(
+                            if (!isStarted) MaterialTheme.colorScheme.primary
+                            else MaterialTheme.colorScheme.surfaceVariant),
+                        modifier = Modifier.testTag(TestTags.START_BUTTON)) {
+                        Text("Start")
+                    }
+                    Spacer(Modifier.width(8.dp)) // Add space between buttons
 
-          // Button to stop
-          Button(
-              onClick = {
-                isStarted = false
-                createItineraryViewModel.stopLocationTracking()
-                Log.d("CreateLiveItinerary", "currently stopping live itinerary")
-              },
-              enabled = isStarted, // Button is disabled if isStarted is false
-              colors =
-                  ButtonDefaults.buttonColors(
-                      if (isStarted) MaterialTheme.colorScheme.error
-                      else MaterialTheme.colorScheme.surfaceVariant),
-              modifier = Modifier.testTag(TestTags.STOP_BUTTON)) {
-                Text("Stop")
-              }
+                    // Button to stop
+                    Button(
+                        onClick = {
+                            isStarted = false
+                            createItineraryViewModel.stopLocationTracking()
+                            Log.d("CreateLiveItinerary", "currently stopping live itinerary")
+                        },
+                        enabled = isStarted, // Button is disabled if isStarted is false
+                        colors =
+                        ButtonDefaults.buttonColors(
+                            if (isStarted) MaterialTheme.colorScheme.error
+                            else MaterialTheme.colorScheme.surfaceVariant),
+                        modifier = Modifier.testTag(TestTags.STOP_BUTTON)) {
+                        Text("Stop")
+                    }
+                }
+            }
         }
-      }
     }
-  }
 }

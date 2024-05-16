@@ -23,7 +23,7 @@ open class ItineraryViewModel(
     protected val itineraryRepository: ItineraryRepository,
     protected val directionsRepository: DirectionsRepository,
     protected val locationsRepository: LocationsRepository,
-    private val locationClient: LocationClient,
+    protected val locationClient: LocationClient,
 ) : ViewModel() {
   private var focusedItinerary: Itinerary? = null
 

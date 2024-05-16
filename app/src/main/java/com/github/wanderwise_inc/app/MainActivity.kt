@@ -1,7 +1,6 @@
 package com.github.wanderwise_inc.app
 
 import android.Manifest
-import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -10,9 +9,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.app.ActivityCompat
-import androidx.datastore.core.DataStore
-import androidx.datastore.dataStore
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.github.wanderwise_inc.app.data.DirectionsRepository
@@ -21,8 +17,6 @@ import com.github.wanderwise_inc.app.data.ItineraryRepository
 import com.github.wanderwise_inc.app.data.LocationsRepository
 import com.github.wanderwise_inc.app.data.ProfileRepository
 import com.github.wanderwise_inc.app.di.AppModule
-import com.github.wanderwise_inc.app.disk.SavedItinerariesSerializer
-import com.github.wanderwise_inc.app.proto.location.SavedItineraries
 import com.github.wanderwise_inc.app.ui.navigation.graph.RootNavigationGraph
 import com.github.wanderwise_inc.app.ui.theme.WanderWiseTheme
 import com.github.wanderwise_inc.app.viewmodel.BottomNavigationViewModel
@@ -31,7 +25,6 @@ import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.LoginViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 
 class MainActivity : ComponentActivity() {
@@ -54,10 +47,6 @@ class MainActivity : ComponentActivity() {
     private lateinit var profileViewModel: ProfileViewModel
 
     private lateinit var navController: NavHostController
-
-
-    private val Context.savedItinerariesDataStore: DataStore<SavedItineraries> by
-    dataStore(fileName = "saved_itineraries.pb", serializer = SavedItinerariesSerializer)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,54 +75,41 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-        private fun init() {
-            requestPermissions()
+    private fun init() {
+        requestPermissions()
 
-    AppModule.initialize(
-        imageLauncher,
-        signInLauncher,
-        signInIntent,
-        locationClient,
-        savedItinerariesDataStore,
-        applicationContext,
-        FirebaseAuth.getInstance(),
-        FirebaseFirestore.getInstance(),
-        FirebaseStorage.getInstance())
+        firebaseAuth = appModule.firebaseAuth
+        firebaseStorage = appModule.firebaseStorage
 
-    firebaseAuth = AppModule.firebaseAuth
-    firebaseStorage = AppModule.firebaseStorage
-            firebaseAuth = appModule.firebaseAuth
-            firebaseStorage = appModule.firebaseStorage
+        initializeRepositories()
 
-            initializeRepositories()
-
-            initializeViewModels()
-        }
-
-        private fun requestPermissions() {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(
-                    Manifest.permission.ACCESS_COARSE_LOCATION,
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                ),
-                0
-            )
-        }
-
-        private fun initializeRepositories() {
-            directionsRepository = appModule.directionsRepository
-            imageRepository = appModule.imageRepository
-            itineraryRepository = appModule.itineraryRepository
-            locationsRepository = appModule.locationsRepository
-            profileRepository = appModule.profileRepository
-        }
-
-        private fun initializeViewModels() {
-            bottomNavigationViewModel = appModule.bottomNavigationViewModel
-            createItineraryViewModel = appModule.createItineraryViewModel
-            itineraryViewModel = appModule.itineraryViewModel
-            loginViewModel = appModule.loginViewModel
-            profileViewModel = appModule.profileViewModel
-        }
+        initializeViewModels()
     }
+
+    private fun requestPermissions() {
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ),
+            0
+        )
+    }
+
+    private fun initializeRepositories() {
+        directionsRepository = appModule.directionsRepository
+        imageRepository = appModule.imageRepository
+        itineraryRepository = appModule.itineraryRepository
+        locationsRepository = appModule.locationsRepository
+        profileRepository = appModule.profileRepository
+    }
+
+    private fun initializeViewModels() {
+        bottomNavigationViewModel = appModule.bottomNavigationViewModel
+        createItineraryViewModel = appModule.createItineraryViewModel
+        itineraryViewModel = appModule.itineraryViewModel
+        loginViewModel = appModule.loginViewModel
+        profileViewModel = appModule.profileViewModel
+    }
+}

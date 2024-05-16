@@ -17,7 +17,6 @@ import com.github.wanderwise_inc.app.data.SignInLauncher
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.data.ImageRepositoryImpl
 import com.github.wanderwise_inc.app.data.ItineraryRepository
-import com.github.wanderwise_inc.app.data.ProfileRepository
 import com.github.wanderwise_inc.app.data.ItineraryRepositoryImpl
 import com.github.wanderwise_inc.app.data.LocationsRepositoryImpl
 import com.github.wanderwise_inc.app.data.ProfileRepositoryImpl
@@ -33,8 +32,10 @@ import com.github.wanderwise_inc.app.viewmodel.LoginViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.github.wanderwise_inc.app.viewmodel.UserLocationClient
 import com.google.android.gms.location.LocationServices
+import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.firestore
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.launch
 
@@ -44,52 +45,16 @@ class AppModule(
     init {
         Log.d("ModuleProvider", "Using AppModule")
     }
-  private lateinit var imageLauncher: ActivityResultLauncher<Intent>
-  private lateinit var signInLauncher: ActivityResultLauncher<Intent>
-  private lateinit var sinInIntent: Intent
-  private lateinit var locationClient: LocationClient
-  private lateinit var savedItinerariesDataStore: DataStore<SavedItineraries>
-  private lateinit var context: Context
-  lateinit var firebaseAuth: FirebaseAuth
-  lateinit var db: FirebaseFirestore
-  lateinit var firebaseStorage: FirebaseStorage
-
-  init {
-    Log.d("ModuleProvider", "Using AppModule")
-  }
 
     val firebaseAuth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
 
     val firebaseStorage: FirebaseStorage by lazy { FirebaseStorage.getInstance() }
 
+    private val firestore: FirebaseFirestore by lazy { Firebase.firestore }
+
     val imageRepository: ImageRepository by lazy {
         ImageRepositoryImpl(imageLauncher, firebaseStorage.reference, null)
     }
-  fun initialize(
-      imageLauncher: ActivityResultLauncher<Intent>,
-      signInLauncher: ActivityResultLauncher<Intent>,
-      sinInIntent: Intent,
-      locationClient: LocationClient,
-      savedItinerariesDataStore: DataStore<SavedItineraries>,
-      context: Context,
-      firebaseAuth: FirebaseAuth,
-      firebaseFirestore: FirebaseFirestore,
-      firebaseStorage: FirebaseStorage
-  ) {
-    this.imageLauncher = imageLauncher
-    this.signInLauncher = signInLauncher
-    this.sinInIntent = sinInIntent
-    this.locationClient = locationClient
-    this.savedItinerariesDataStore = savedItinerariesDataStore
-    this.context = context
-    this.firebaseAuth = firebaseAuth
-    this.db = firebaseFirestore
-    this.firebaseStorage = firebaseStorage
-  }
-
-  val imageRepository by lazy {
-    ImageRepositoryImpl(imageLauncher, firebaseStorage.reference, null)
-  }
 
     private val imageLauncher: ActivityResultLauncher<Intent> by lazy {
         activity.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -111,21 +76,19 @@ class AppModule(
 
     val itineraryRepository: ItineraryRepository by lazy {
         ItineraryRepositoryImpl(
-            Firebase.firestore,
+            firestore,
             activity.applicationContext,
             activity.applicationContext.savedItinerariesDataStore
         )
     }
-  val itineraryRepository by lazy {
-    ItineraryRepositoryImpl(db, context, savedItinerariesDataStore)
-  }
 
-    private val Context.savedItinerariesDataStore: DataStore<SavedItineraries> by
-    dataStore("saved_itineraries.pb", SavedItinerariesSerializer)
-  val profileRepository by lazy { ProfileRepositoryImpl(db) }
+    private val Context.savedItinerariesDataStore: DataStore<SavedItineraries> by dataStore(
+        "saved_itineraries.pb",
+        SavedItinerariesSerializer
+    )
 
+    val profileRepository by lazy { ProfileRepositoryImpl(firestore) }
 
-    val profileRepository: ProfileRepository by lazy { ProfileRepositoryTestImpl() }
 
     val bottomNavigationViewModel: BottomNavigationViewModel by lazy { BottomNavigationViewModel() }
 
@@ -156,7 +119,10 @@ class AppModule(
 
     private val activityResultLauncher: ActivityResultLauncher<Intent> by lazy {
         activity.registerForActivityResult(FirebaseAuthUIActivityResultContract()) { res ->
-            val user = if (res.resultCode == ComponentActivity.RESULT_OK) firebaseAuth.currentUser else null
+            val user = if (res.resultCode == ComponentActivity.RESULT_OK)
+                firebaseAuth.currentUser
+            else
+                null
 
             activity.lifecycleScope.launch {
                 loginViewModel.handleSignInResult(profileViewModel, user)
