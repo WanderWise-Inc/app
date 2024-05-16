@@ -92,7 +92,7 @@ fun ItinerariesListScrollable(
             var isLikedInitially by remember {
               mutableStateOf(likedItineraries.contains(itinerary.uid))
             }
-            LaunchedEffect(Unit) {
+            LaunchedEffect(uid) {
               isLikedInitially = profileViewModel.checkIfItineraryIsLiked(uid, itinerary.uid)
               Log.d("ItineraryList", "isLiked = $isLikedInitially")
             }
