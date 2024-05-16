@@ -22,6 +22,7 @@ class SignInRepositoryImpl : SignInRepository {
 
       // User already present in the database, navigate to the Home page
       if (currentProfile != null) {
+        profileViewModel.setActiveProfile(currentProfile)
         navController.navigate(Graph.HOME)
       } else {
         // Define properly the fields, because some of them could be empty
