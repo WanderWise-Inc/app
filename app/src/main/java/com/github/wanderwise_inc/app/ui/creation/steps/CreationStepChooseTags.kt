@@ -33,6 +33,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.core.text.isDigitsOnly
 import com.github.wanderwise_inc.app.model.location.Tag
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
@@ -83,7 +84,7 @@ fun PriceEstimationTextBox(createItineraryViewModel: CreateItineraryViewModel) {
   var isCurrenciesMenuExpanded by remember { mutableStateOf(false) }
   var selectedCurrency by remember { mutableStateOf(currencies[0]) }
   var priceEstimateDisplay by remember {
-    mutableStateOf(createItineraryViewModel.getNewItinerary()?.price?.toString() ?: "")
+    mutableStateOf(createItineraryViewModel.getNewItinerary()!!.price?.toString() ?: "")
   }
 
   Row(Modifier.fillMaxWidth().padding(all = 10.dp).clip(MaterialTheme.shapes.medium)) {
@@ -92,9 +93,12 @@ fun PriceEstimationTextBox(createItineraryViewModel: CreateItineraryViewModel) {
         value = priceEstimateDisplay,
         modifier = Modifier,
         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-        onValueChange = {
-          createItineraryViewModel.getNewItinerary()?.price(it.toFloat())
-          priceEstimateDisplay = it
+        onValueChange = { input ->
+          // ensures that we can only set digits and points (and don't crash with input.toFloat())
+          if (input.isNotBlank() && input.isDigitsOnly()) {
+            createItineraryViewModel.getNewItinerary()!!.price(input.toFloat())
+          }
+          priceEstimateDisplay = input
         })
 
     ExposedDropdownMenuBox(
@@ -136,9 +140,10 @@ fun TimeDurationEstimation(createItineraryViewModel: CreateItineraryViewModel) {
       value = timeEstimateDisplay,
       modifier = Modifier,
       keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-      onValueChange = {
-        createItineraryViewModel.getNewItinerary()?.time(it.toInt())
-        timeEstimateDisplay = it
+      onValueChange = { input ->
+        if (input.isNotBlank() && input.isDigitsOnly())
+            createItineraryViewModel.getNewItinerary()?.time(input.toInt())
+        timeEstimateDisplay = input
       })
 }
 
