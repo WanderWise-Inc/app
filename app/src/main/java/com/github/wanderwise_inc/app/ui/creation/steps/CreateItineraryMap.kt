@@ -219,7 +219,8 @@ fun LocationSelector(
             label = { Text("location 1...") },
             placeholder = { Text("location 1...") },
             modifier = Modifier.padding(start = 25.dp).testTag(TestTags.FIRST_LOCATION),
-            shape = RoundedCornerShape(20.dp))
+            shape = RoundedCornerShape(20.dp),
+            singleLine = true)
       }
 
       Icon(

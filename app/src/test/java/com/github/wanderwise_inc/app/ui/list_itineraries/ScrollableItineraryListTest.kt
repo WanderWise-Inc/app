@@ -48,6 +48,7 @@ class ScrollableItineraryListTest {
   fun setup() {
     MockKAnnotations.init(this)
     every { firebaseAuth.currentUser?.uid } returns null
+    every { profileViewModel.getUserUid() } returns "TestUid"
   }
 
   @Test
