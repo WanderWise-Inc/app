@@ -1,6 +1,5 @@
 package com.github.wanderwise_inc.app.ui.navigation
 
-import android.location.Location
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsDisplayed
@@ -13,6 +12,7 @@ import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.model.location.Itinerary
+import com.github.wanderwise_inc.app.model.location.Location
 import com.github.wanderwise_inc.app.model.profile.Profile
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.creation.steps.CreationStepPreview
@@ -75,7 +75,7 @@ class CreationPreviewNavigationTest {
       every { createItineraryViewModel.incrementItineraryLikes(any()) } returns Unit
       every { createItineraryViewModel.getAllPublicItineraries() } returns
           flow { emit(emptyList()) }
-      every { createItineraryViewModel.getUserLocation() } returns flow { emit(Location("")) }
+      every { createItineraryViewModel.getUserLocation() } returns flow { emit(Location(0.0, 0.0)) }
       every { createItineraryViewModel.getUserItineraries(any()) } returns
           flow { emit(emptyList()) }
       every { createItineraryViewModel.getItineraryFromUids(any()) } returns

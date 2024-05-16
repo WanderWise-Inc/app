@@ -1,6 +1,5 @@
 package com.github.wanderwise_inc.app.ui.creation.steps
 
-import android.location.Location
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
@@ -12,6 +11,7 @@ import com.github.wanderwise_inc.app.data.LocationsRepository
 import com.github.wanderwise_inc.app.data.ProfileRepository
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
+import com.github.wanderwise_inc.app.model.location.Location
 import com.github.wanderwise_inc.app.model.location.PlacesReader
 import com.github.wanderwise_inc.app.model.profile.Profile
 import com.github.wanderwise_inc.app.ui.TestTags
@@ -65,9 +65,7 @@ class CreationStepPreviewItineraryKtTest {
 
   @Before
   fun setup() {
-    val epflLocation = Mockito.mock(Location::class.java)
-    epflLocation.latitude = epflLat
-    epflLocation.longitude = epflLon
+    val epflLocation = Location(epflLat, epflLon)
     val polylinePoints = MutableLiveData<List<LatLng>>()
     polylinePoints.value = listOf(LatLng(epflLat, epflLon))
 

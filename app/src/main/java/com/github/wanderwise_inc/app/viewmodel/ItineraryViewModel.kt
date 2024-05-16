@@ -166,7 +166,7 @@ open class ItineraryViewModel(
   }
 
   /** @brief get a Flow of the user location updated every second */
-  fun getUserLocation(): Flow<android.location.Location> {
+  fun getUserLocation(): Flow<Location> {
     return locationClient.getLocationUpdates(1000)
   }
 }
