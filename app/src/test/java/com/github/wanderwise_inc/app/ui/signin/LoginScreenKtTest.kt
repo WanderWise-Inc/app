@@ -20,43 +20,41 @@ import org.robolectric.RobolectricTestRunner
 @RunWith(RobolectricTestRunner::class)
 class LoginScreenKtTest {
 
-    @get:Rule
-    val composeTestRule = createComposeRule()
+  @get:Rule val composeTestRule = createComposeRule()
 
-    @MockK
-    private lateinit var loginViewModel: LoginViewModel
+  @MockK private lateinit var loginViewModel: LoginViewModel
 
-    @MockK
-    private lateinit var navController: NavController
+  @MockK private lateinit var navController: NavController
 
-    private val _signInState = MutableLiveData(SignInState.NONE)
-    private val signInState: LiveData<SignInState> get() = _signInState
+  private val _signInState = MutableLiveData(SignInState.NONE)
+  private val signInState: LiveData<SignInState>
+    get() = _signInState
 
-    @Before
-    fun setup() {
-        _signInState.value = SignInState.NONE
+  @Before
+  fun setup() {
+    _signInState.value = SignInState.NONE
 
-        MockKAnnotations.init(this)
+    MockKAnnotations.init(this)
 
-        every { loginViewModel.signInState } returns signInState
+    every { loginViewModel.signInState } returns signInState
 
-        composeTestRule.setContent { LoginScreen(loginViewModel, navController) }
-        composeTestRule.waitForIdle()
-    }
+    composeTestRule.setContent { LoginScreen(loginViewModel, navController) }
+    composeTestRule.waitForIdle()
+  }
 
-    @Test
-    fun `initial elements are displayed correctly`() {
+  @Test
+  fun `initial elements are displayed correctly`() {
 
-        composeTestRule.onNodeWithText("You can either wander dumb or,").assertExists()
+    composeTestRule.onNodeWithText("You can either wander dumb or,").assertExists()
 
-        composeTestRule.onNodeWithText("WanderWise").assertExists()
+    composeTestRule.onNodeWithText("WanderWise").assertExists()
 
-        composeTestRule.onNodeWithContentDescription("new_logo_swent 1").assertExists()
+    composeTestRule.onNodeWithContentDescription("new_logo_swent 1").assertExists()
 
-        composeTestRule.onNodeWithText("Start Wandering Now").assertExists()
+    composeTestRule.onNodeWithText("Start Wandering Now").assertExists()
 
-        composeTestRule.onNodeWithContentDescription("google-logo-9808 1").assertExists()
+    composeTestRule.onNodeWithContentDescription("google-logo-9808 1").assertExists()
 
-        composeTestRule.onNodeWithText("Sign-In with Google").assertExists()
-    }
+    composeTestRule.onNodeWithText("Sign-In with Google").assertExists()
+  }
 }

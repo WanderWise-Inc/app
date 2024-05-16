@@ -8,10 +8,7 @@ import com.github.wanderwise_inc.app.ui.navigation.TopLevelRoute
 import com.github.wanderwise_inc.app.ui.signin.LoginScreen
 import com.github.wanderwise_inc.app.viewmodel.LoginViewModel
 
-fun NavGraphBuilder.authNavGraph(
-    loginViewModel: LoginViewModel,
-    navController: NavController
-) {
+fun NavGraphBuilder.authNavGraph(loginViewModel: LoginViewModel, navController: NavController) {
   navigation(
       route = Graph.AUTHENTICATION,
       startDestination = AuthScreen.SignIn.route,

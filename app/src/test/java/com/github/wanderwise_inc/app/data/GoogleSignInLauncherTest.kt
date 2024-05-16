@@ -18,24 +18,23 @@ import org.robolectric.RuntimeEnvironment
 @RunWith(RobolectricTestRunner::class)
 class GoogleSignInLauncherTest {
 
-    @MockK
-    private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
+  @MockK private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
 
-    private lateinit var googleSignInLauncher: GoogleSignInLauncher
+  private lateinit var googleSignInLauncher: GoogleSignInLauncher
 
-    @Before
-    fun setup() {
-        MockKAnnotations.init(this)
-        FirebaseApp.initializeApp(RuntimeEnvironment.getApplication())
-        googleSignInLauncher = GoogleSignInLauncher(activityResultLauncher, listOf())
-    }
+  @Before
+  fun setup() {
+    MockKAnnotations.init(this)
+    FirebaseApp.initializeApp(RuntimeEnvironment.getApplication())
+    googleSignInLauncher = GoogleSignInLauncher(activityResultLauncher, listOf())
+  }
 
-    @Test
-    fun `signIn should launch activityResultLauncher`() {
-        every { activityResultLauncher.launch(any()) } just Runs
+  @Test
+  fun `signIn should launch activityResultLauncher`() {
+    every { activityResultLauncher.launch(any()) } just Runs
 
-        googleSignInLauncher.signIn()
+    googleSignInLauncher.signIn()
 
-        verify { activityResultLauncher.launch(any()) }
-    }
+    verify { activityResultLauncher.launch(any()) }
+  }
 }

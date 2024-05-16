@@ -11,15 +11,15 @@ import androidx.datastore.dataStore
 import androidx.lifecycle.lifecycleScope
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.github.wanderwise_inc.app.MainActivity
-import com.github.wanderwise_inc.app.data.GoogleSignInLauncher
 import com.github.wanderwise_inc.app.data.DirectionsRepositoryImpl
-import com.github.wanderwise_inc.app.data.SignInLauncher
+import com.github.wanderwise_inc.app.data.GoogleSignInLauncher
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.data.ImageRepositoryImpl
 import com.github.wanderwise_inc.app.data.ItineraryRepository
 import com.github.wanderwise_inc.app.data.ItineraryRepositoryImpl
 import com.github.wanderwise_inc.app.data.LocationsRepositoryImpl
 import com.github.wanderwise_inc.app.data.ProfileRepositoryImpl
+import com.github.wanderwise_inc.app.data.SignInLauncher
 import com.github.wanderwise_inc.app.disk.SavedItinerariesSerializer
 import com.github.wanderwise_inc.app.network.DirectionsApiServiceFactory
 import com.github.wanderwise_inc.app.network.LocationsApiServiceFactory
@@ -42,98 +42,82 @@ import kotlinx.coroutines.launch
 class AppModule(
     activity: MainActivity,
 ) {
-    init {
-        Log.d("ModuleProvider", "Using AppModule")
+  init {
+    Log.d("ModuleProvider", "Using AppModule")
+  }
+
+  val firebaseAuth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
+
+  val firebaseStorage: FirebaseStorage by lazy { FirebaseStorage.getInstance() }
+
+  private val firestore: FirebaseFirestore by lazy { Firebase.firestore }
+
+  val imageRepository: ImageRepository by lazy {
+    ImageRepositoryImpl(imageLauncher, firebaseStorage.reference, null)
+  }
+
+  private val imageLauncher: ActivityResultLauncher<Intent> by lazy {
+    activity.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+      if (result.resultCode == ComponentActivity.RESULT_OK) {
+        result.data?.data?.let { imageRepository.setCurrentFile(it) }
+      }
     }
+  }
 
-    val firebaseAuth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
+  val directionsRepository by lazy {
+    DirectionsRepositoryImpl(DirectionsApiServiceFactory.createDirectionsApiService())
+  }
 
-    val firebaseStorage: FirebaseStorage by lazy { FirebaseStorage.getInstance() }
+  val locationsRepository by lazy {
+    LocationsRepositoryImpl(LocationsApiServiceFactory.createLocationsApiService())
+  }
 
-    private val firestore: FirebaseFirestore by lazy { Firebase.firestore }
+  val itineraryRepository: ItineraryRepository by lazy {
+    ItineraryRepositoryImpl(
+        firestore,
+        activity.applicationContext,
+        activity.applicationContext.savedItinerariesDataStore)
+  }
 
-    val imageRepository: ImageRepository by lazy {
-        ImageRepositoryImpl(imageLauncher, firebaseStorage.reference, null)
+  private val Context.savedItinerariesDataStore: DataStore<SavedItineraries> by
+      dataStore("saved_itineraries.pb", SavedItinerariesSerializer)
+
+  val profileRepository by lazy { ProfileRepositoryImpl(firestore) }
+
+  val bottomNavigationViewModel: BottomNavigationViewModel by lazy { BottomNavigationViewModel() }
+
+  val createItineraryViewModel by lazy {
+    CreateItineraryViewModel(
+        itineraryRepository, directionsRepository, locationsRepository, locationClient)
+  }
+
+  val itineraryViewModel: ItineraryViewModel by lazy {
+    ItineraryViewModel(
+        itineraryRepository, directionsRepository, locationsRepository, locationClient)
+  }
+
+  private val locationClient: LocationClient by lazy {
+    UserLocationClient(
+        activity.applicationContext,
+        LocationServices.getFusedLocationProviderClient(activity.applicationContext))
+  }
+
+  val loginViewModel: LoginViewModel by lazy { LoginViewModel(signInLauncher) }
+
+  private val signInLauncher: SignInLauncher by lazy {
+    GoogleSignInLauncher(activityResultLauncher)
+  }
+
+  private val activityResultLauncher: ActivityResultLauncher<Intent> by lazy {
+    activity.registerForActivityResult(FirebaseAuthUIActivityResultContract()) { res ->
+      val user =
+          if (res.resultCode == ComponentActivity.RESULT_OK) firebaseAuth.currentUser else null
+
+      activity.lifecycleScope.launch { loginViewModel.handleSignInResult(profileViewModel, user) }
     }
+  }
 
-    private val imageLauncher: ActivityResultLauncher<Intent> by lazy {
-        activity.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == ComponentActivity.RESULT_OK) {
-                result.data?.data?.let {
-                    imageRepository.setCurrentFile(it)
-                }
-            }
-        }
-    }
-
-    val directionsRepository by lazy {
-        DirectionsRepositoryImpl(DirectionsApiServiceFactory.createDirectionsApiService())
-    }
-
-    val locationsRepository by lazy {
-        LocationsRepositoryImpl(LocationsApiServiceFactory.createLocationsApiService())
-    }
-
-    val itineraryRepository: ItineraryRepository by lazy {
-        ItineraryRepositoryImpl(
-            firestore,
-            activity.applicationContext,
-            activity.applicationContext.savedItinerariesDataStore
-        )
-    }
-
-    private val Context.savedItinerariesDataStore: DataStore<SavedItineraries> by dataStore(
-        "saved_itineraries.pb",
-        SavedItinerariesSerializer
-    )
-
-    val profileRepository by lazy { ProfileRepositoryImpl(firestore) }
-
-
-    val bottomNavigationViewModel: BottomNavigationViewModel by lazy { BottomNavigationViewModel() }
-
-    val createItineraryViewModel by lazy {
-        CreateItineraryViewModel(
-            itineraryRepository, directionsRepository, locationsRepository, locationClient
-        )
-    }
-
-    val itineraryViewModel: ItineraryViewModel by lazy {
-        ItineraryViewModel(
-            itineraryRepository, directionsRepository, locationsRepository, locationClient
-        )
-    }
-
-    private val locationClient: LocationClient by lazy {
-        UserLocationClient(
-            activity.applicationContext,
-            LocationServices.getFusedLocationProviderClient(activity.applicationContext)
-        )
-    }
-
-    val loginViewModel: LoginViewModel by lazy { LoginViewModel(signInLauncher) }
-
-    private val signInLauncher: SignInLauncher by lazy {
-        GoogleSignInLauncher(activityResultLauncher)
-    }
-
-    private val activityResultLauncher: ActivityResultLauncher<Intent> by lazy {
-        activity.registerForActivityResult(FirebaseAuthUIActivityResultContract()) { res ->
-            val user = if (res.resultCode == ComponentActivity.RESULT_OK)
-                firebaseAuth.currentUser
-            else
-                null
-
-            activity.lifecycleScope.launch {
-                loginViewModel.handleSignInResult(profileViewModel, user)
-            }
-        }
-    }
-
-    val profileViewModel: ProfileViewModel by lazy {
-        ProfileViewModel(
-            profileRepository,
-            imageRepository
-        )
-    }
+  val profileViewModel: ProfileViewModel by lazy {
+    ProfileViewModel(profileRepository, imageRepository)
+  }
 }

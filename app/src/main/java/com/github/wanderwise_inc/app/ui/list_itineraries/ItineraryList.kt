@@ -54,64 +54,64 @@ fun ItinerariesListScrollable(
     parent: ItineraryListParent,
     imageRepository: ImageRepository
 ) {
-    if (itineraries.isEmpty()) {
-        val parentVerb =
-            when (parent) {
-                ItineraryListParent.OVERVIEW -> "searched"
-                ItineraryListParent.LIKED -> "liked"
-                ItineraryListParent.PROFILE -> "created"
-            }
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier =
+  if (itineraries.isEmpty()) {
+    val parentVerb =
+        when (parent) {
+          ItineraryListParent.OVERVIEW -> "searched"
+          ItineraryListParent.LIKED -> "liked"
+          ItineraryListParent.PROFILE -> "created"
+        }
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier =
             Modifier.padding(paddingValues)
                 .testTag(TestTags.ITINERARY_LIST_NULL)
                 .fillMaxWidth()
                 .height(100.dp)) {
-            Text(
-                text = "You have not $parentVerb any itineraries yet",
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(5.dp, 10.dp))
+          Text(
+              text = "You have not $parentVerb any itineraries yet",
+              textAlign = TextAlign.Center,
+              modifier = Modifier.padding(5.dp, 10.dp))
         }
-    } else {
-        /* store liked itineraries in persistent storage */
-        if (parent == ItineraryListParent.LIKED && itineraries.isNotEmpty())
-            itineraryViewModel.saveItineraries(itineraries)
+  } else {
+    /* store liked itineraries in persistent storage */
+    if (parent == ItineraryListParent.LIKED && itineraries.isNotEmpty())
+        itineraryViewModel.saveItineraries(itineraries)
 
-        LazyColumn(
-            modifier = Modifier.padding(paddingValues).testTag(TestTags.ITINERARY_LIST_SCROLLABLE),
-            verticalArrangement = spacedBy(15.dp)) {
-            this.items(itineraries, { (iti) -> iti }) { itinerary ->
-                val uid = profileViewModel.getActiveUserUid()
-                var isLikedInitially by remember { mutableStateOf(false) }
-                LaunchedEffect(uid) {
-                    isLikedInitially = profileViewModel.checkIfItineraryIsLiked(uid, itinerary.uid)
-                }
-
-                val onLikeButtonClick = { it: Itinerary, isLiked: Boolean ->
-                    if (isLiked) {
-                        itineraryViewModel.decrementItineraryLikes(it)
-                        profileViewModel.removeLikedItinerary(uid, it.uid)
-                    } else {
-                        itineraryViewModel.incrementItineraryLikes(it)
-                        profileViewModel.addLikedItinerary(uid, it.uid)
-                    }
-                }
-                val navigationActions = NavigationActions(navController)
-                val onBannerClick = { it: Itinerary ->
-                    itineraryViewModel.setFocusedItinerary(it)
-                    navigationActions.navigateTo(Destination.TopLevelDestination.Map)
-                }
-                ItineraryBanner(
-                    itinerary = itinerary,
-                    onLikeButtonClick = onLikeButtonClick,
-                    onBannerClick = onBannerClick,
-                    isLikedInitially = isLikedInitially,
-                    profileViewModel = profileViewModel,
-                    imageRepository = imageRepository)
+    LazyColumn(
+        modifier = Modifier.padding(paddingValues).testTag(TestTags.ITINERARY_LIST_SCROLLABLE),
+        verticalArrangement = spacedBy(15.dp)) {
+          this.items(itineraries, { (iti) -> iti }) { itinerary ->
+            val uid = profileViewModel.getActiveUserUid()
+            var isLikedInitially by remember { mutableStateOf(false) }
+            LaunchedEffect(uid) {
+              isLikedInitially = profileViewModel.checkIfItineraryIsLiked(uid, itinerary.uid)
             }
+
+            val onLikeButtonClick = { it: Itinerary, isLiked: Boolean ->
+              if (isLiked) {
+                itineraryViewModel.decrementItineraryLikes(it)
+                profileViewModel.removeLikedItinerary(uid, it.uid)
+              } else {
+                itineraryViewModel.incrementItineraryLikes(it)
+                profileViewModel.addLikedItinerary(uid, it.uid)
+              }
+            }
+            val navigationActions = NavigationActions(navController)
+            val onBannerClick = { it: Itinerary ->
+              itineraryViewModel.setFocusedItinerary(it)
+              navigationActions.navigateTo(Destination.TopLevelDestination.Map)
+            }
+            ItineraryBanner(
+                itinerary = itinerary,
+                onLikeButtonClick = onLikeButtonClick,
+                onBannerClick = onBannerClick,
+                isLikedInitially = isLikedInitially,
+                profileViewModel = profileViewModel,
+                imageRepository = imageRepository)
+          }
         }
-    }
+  }
 }
 
 /** @brief a bar that allows for selecting a category and updating parent state */
@@ -121,43 +121,43 @@ fun CategorySelector(
     categoriesList: List<SearchCategory>,
     onCategorySelected: (Int) -> Unit
 ) {
-    TabRow(
-        selectedTabIndex = selectedIndex,
-        containerColor = MaterialTheme.colorScheme.surfaceVariant,
-    ) {
-        categoriesList.forEachIndexed { index, category ->
-            Tab(
-                selected = index == selectedIndex,
-                onClick = { onCategorySelected(index) },
-                text = {
-                    Text(
-                        text = category.title,
-                        modifier = Modifier.padding(0.dp, 2.dp),
-                        style =
-                        TextStyle(
-                            fontSize = 9.sp,
-                            lineHeight = 16.sp,
-                            // fontFamily = FontFamily(Font(R.font.roboto)),
-                            fontWeight = FontWeight(600),
-                            color = MaterialTheme.colorScheme.onPrimaryContainer,
-                            textAlign = TextAlign.Center,
-                            letterSpacing = 0.5.sp,
-                        ))
-                },
-                icon = {
-                    Icon(
-                        painter = painterResource(id = category.icon),
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                        modifier = Modifier.size(30.dp).padding(2.dp))
-                },
-                modifier = Modifier.testTag("${TestTags.CATEGORY_SELECTOR_TAB}_${index}"))
-        }
+  TabRow(
+      selectedTabIndex = selectedIndex,
+      containerColor = MaterialTheme.colorScheme.surfaceVariant,
+  ) {
+    categoriesList.forEachIndexed { index, category ->
+      Tab(
+          selected = index == selectedIndex,
+          onClick = { onCategorySelected(index) },
+          text = {
+            Text(
+                text = category.title,
+                modifier = Modifier.padding(0.dp, 2.dp),
+                style =
+                    TextStyle(
+                        fontSize = 9.sp,
+                        lineHeight = 16.sp,
+                        // fontFamily = FontFamily(Font(R.font.roboto)),
+                        fontWeight = FontWeight(600),
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        textAlign = TextAlign.Center,
+                        letterSpacing = 0.5.sp,
+                    ))
+          },
+          icon = {
+            Icon(
+                painter = painterResource(id = category.icon),
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                modifier = Modifier.size(30.dp).padding(2.dp))
+          },
+          modifier = Modifier.testTag("${TestTags.CATEGORY_SELECTOR_TAB}_${index}"))
     }
+  }
 }
 
 enum class ItineraryListParent {
-    OVERVIEW,
-    LIKED,
-    PROFILE
+  OVERVIEW,
+  LIKED,
+  PROFILE
 }

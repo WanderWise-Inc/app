@@ -9,15 +9,11 @@ class GoogleSignInLauncher(
     private val activityResultLauncher: ActivityResultLauncher<Intent>,
     private val providers: List<AuthUI.IdpConfig> = SignInProviders.providers
 ) : SignInLauncher {
-    private val signInIntent by lazy {
-        AuthUI
-            .getInstance()
-            .createSignInIntentBuilder()
-            .setAvailableProviders(providers)
-            .build()
-    }
+  private val signInIntent by lazy {
+    AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers).build()
+  }
 
-    override fun signIn() {
-        activityResultLauncher.launch(signInIntent)
-    }
+  override fun signIn() {
+    activityResultLauncher.launch(signInIntent)
+  }
 }

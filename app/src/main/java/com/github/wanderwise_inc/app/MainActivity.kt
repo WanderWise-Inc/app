@@ -29,87 +29,80 @@ import com.google.firebase.storage.FirebaseStorage
 
 class MainActivity : ComponentActivity() {
 
-    private val appModule by lazy { AppModule(this) }
+  private val appModule by lazy { AppModule(this) }
 
-    private lateinit var firebaseAuth: FirebaseAuth
-    private lateinit var firebaseStorage: FirebaseStorage
+  private lateinit var firebaseAuth: FirebaseAuth
+  private lateinit var firebaseStorage: FirebaseStorage
 
-    private lateinit var imageRepository: ImageRepository
-    private lateinit var itineraryRepository: ItineraryRepository
-    private lateinit var profileRepository: ProfileRepository
-    private lateinit var directionsRepository: DirectionsRepository
-    private lateinit var locationsRepository: LocationsRepository
+  private lateinit var imageRepository: ImageRepository
+  private lateinit var itineraryRepository: ItineraryRepository
+  private lateinit var profileRepository: ProfileRepository
+  private lateinit var directionsRepository: DirectionsRepository
+  private lateinit var locationsRepository: LocationsRepository
 
-    private lateinit var bottomNavigationViewModel: BottomNavigationViewModel
-    private lateinit var createItineraryViewModel: CreateItineraryViewModel
-    private lateinit var itineraryViewModel: ItineraryViewModel
-    private lateinit var loginViewModel: LoginViewModel
-    private lateinit var profileViewModel: ProfileViewModel
+  private lateinit var bottomNavigationViewModel: BottomNavigationViewModel
+  private lateinit var createItineraryViewModel: CreateItineraryViewModel
+  private lateinit var itineraryViewModel: ItineraryViewModel
+  private lateinit var loginViewModel: LoginViewModel
+  private lateinit var profileViewModel: ProfileViewModel
 
-    private lateinit var navController: NavHostController
+  private lateinit var navController: NavHostController
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
 
-        init()
+    init()
 
-        setContent {
-            WanderWiseTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    navController = rememberNavController()
-                    RootNavigationGraph(
-                        profileViewModel,
-                        itineraryViewModel,
-                        createItineraryViewModel,
-                        bottomNavigationViewModel,
-                        loginViewModel,
-                        imageRepository,
-                        navController,
-                        firebaseAuth
-                    )
-                }
-            }
+    setContent {
+      WanderWiseTheme {
+        Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
+          navController = rememberNavController()
+          RootNavigationGraph(
+              profileViewModel,
+              itineraryViewModel,
+              createItineraryViewModel,
+              bottomNavigationViewModel,
+              loginViewModel,
+              imageRepository,
+              navController,
+              firebaseAuth)
         }
+      }
     }
+  }
 
-    private fun init() {
-        requestPermissions()
+  private fun init() {
+    requestPermissions()
 
-        firebaseAuth = appModule.firebaseAuth
-        firebaseStorage = appModule.firebaseStorage
+    firebaseAuth = appModule.firebaseAuth
+    firebaseStorage = appModule.firebaseStorage
 
-        initializeRepositories()
+    initializeRepositories()
 
-        initializeViewModels()
-    }
+    initializeViewModels()
+  }
 
-    private fun requestPermissions() {
-        ActivityCompat.requestPermissions(
-            this,
-            arrayOf(
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ),
-            0
-        )
-    }
+  private fun requestPermissions() {
+    ActivityCompat.requestPermissions(
+        this,
+        arrayOf(
+            Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION),
+        0)
+  }
 
-    private fun initializeRepositories() {
-        directionsRepository = appModule.directionsRepository
-        imageRepository = appModule.imageRepository
-        itineraryRepository = appModule.itineraryRepository
-        locationsRepository = appModule.locationsRepository
-        profileRepository = appModule.profileRepository
-    }
+  private fun initializeRepositories() {
+    directionsRepository = appModule.directionsRepository
+    imageRepository = appModule.imageRepository
+    itineraryRepository = appModule.itineraryRepository
+    locationsRepository = appModule.locationsRepository
+    profileRepository = appModule.profileRepository
+  }
 
-    private fun initializeViewModels() {
-        bottomNavigationViewModel = appModule.bottomNavigationViewModel
-        createItineraryViewModel = appModule.createItineraryViewModel
-        itineraryViewModel = appModule.itineraryViewModel
-        loginViewModel = appModule.loginViewModel
-        profileViewModel = appModule.profileViewModel
-    }
+  private fun initializeViewModels() {
+    bottomNavigationViewModel = appModule.bottomNavigationViewModel
+    createItineraryViewModel = appModule.createItineraryViewModel
+    itineraryViewModel = appModule.itineraryViewModel
+    loginViewModel = appModule.loginViewModel
+    profileViewModel = appModule.profileViewModel
+  }
 }

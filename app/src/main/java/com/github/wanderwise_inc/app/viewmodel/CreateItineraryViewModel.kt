@@ -20,7 +20,9 @@ class CreateItineraryViewModel(
     directionsRepository: DirectionsRepository,
     locationsRepository: LocationsRepository,
     locationClient: LocationClient
-) : ItineraryViewModel(itineraryRepository, directionsRepository, locationsRepository, locationClient) {
+) :
+    ItineraryViewModel(
+        itineraryRepository, directionsRepository, locationsRepository, locationClient) {
 
   /** New itinerary that the signed in user is currently building */
   private var newItineraryBuilder: Itinerary.Builder? = null
