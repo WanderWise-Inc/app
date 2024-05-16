@@ -1,6 +1,6 @@
 package com.github.wanderwise_inc.app.viewmodel
 
-import android.location.Location
+import com.github.wanderwise_inc.app.model.location.Location
 import kotlinx.coroutines.flow.Flow
 
 interface LocationClient {
