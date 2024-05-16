@@ -47,7 +47,7 @@ class SignInRepositoryTest {
 
   @Test
   fun `if user already in database then just navigate`() = runTest {
-    val profile = Profile("", "Test", "0", "Bio", null)
+    val profile = Profile("Test", "0", "Bio")
     val flow = flow<Profile?> { emit(profile) }
     var path = "begin"
     `when`(mockedUser.uid).thenReturn("0")
@@ -69,7 +69,7 @@ class SignInRepositoryTest {
     `when`(mockedUser.uid).thenReturn("0")
     `when`(mockedUser.displayName).thenReturn("Test")
     `when`(mockedUser.photoUrl).thenReturn(null)
-    val p = Profile("", "Test", "0", "", null)
+    val p = Profile("Test", "0", "")
 
     var path = "test"
     `when`(navController.navigate(Graph.HOME)).then {

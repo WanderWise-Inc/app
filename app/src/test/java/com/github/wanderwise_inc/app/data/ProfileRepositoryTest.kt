@@ -54,9 +54,9 @@ class ProfileRepositoryTest {
     profileRepositoryTestImpl = ProfileRepositoryTestImpl()
     `when`(db.collection(anyString())).thenReturn(userCollection)
     profileRepositoryImpl = ProfileRepositoryImpl(db)
-    profile0 = Profile("0", "Profile0", "0", "bio of Profile0", null)
-    profile1 = Profile("1", "Profile1", "1", "bio of Profile1", null)
-    profile2 = Profile("2", "Profile2", "2", "bio of Profile2", null)
+    profile0 = Profile("Profile0", "0", "bio of Profile0")
+    profile1 = Profile("Profile1", "1", "bio of Profile1")
+    profile2 = Profile("Profile2", "2", "bio of Profile2")
     profiles = mutableListOf(profile0, profile1, profile2)
   }
 
@@ -103,9 +103,9 @@ class ProfileRepositoryTest {
 
   @Test
   fun `setProfile should set a profile with uidCtr if the uid is blank`() = runTest {
-    val p0 = Profile("", "Profile0", "0", "bio of Profile0", null)
-    val p1 = Profile("", "Profile1", "1", "bio of Profile1", null)
-    val p2 = Profile("", "Profile2", "2", "bio of Profile2", null)
+    val p0 = Profile("Profile0", "0", "bio of Profile0")
+    val p1 = Profile("Profile1", "1", "bio of Profile1")
+    val p2 = Profile("Profile2", "2", "bio of Profile2")
     profileRepositoryTestImpl.setProfile(p0)
     profileRepositoryTestImpl.setProfile(p1)
     profileRepositoryTestImpl.setProfile(p2)
