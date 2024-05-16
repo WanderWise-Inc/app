@@ -9,6 +9,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.lifecycle.MutableLiveData
+import androidx.navigation.NavHostController
 import com.github.wanderwise_inc.app.data.DirectionsRepository
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.data.ItineraryRepository
@@ -56,6 +57,7 @@ class CreateItineraryMapUITest {
   @Mock private lateinit var directionsRepository: DirectionsRepository
   @Mock private lateinit var locationsRepository: LocationsRepository
   @Mock private lateinit var userLocationClient: UserLocationClient
+  @Mock private lateinit var navController: NavHostController
 
   private lateinit var profileViewModel: ProfileViewModel
 
@@ -122,14 +124,14 @@ class CreateItineraryMapUITest {
   @Test
   fun testLocation1TextField() {
 
-    composeTestRule.setContent { LocationSelector(createItineraryViewModel, showLocationSelector) }
+    composeTestRule.setContent { LocationSelector(createItineraryViewModel, showLocationSelector, navController) }
 
     composeTestRule.onNodeWithTag(TestTags.FIRST_LOCATION).assertIsDisplayed()
   }
 
   @Test
   fun testLocation2TextField() {
-    composeTestRule.setContent { LocationSelector(createItineraryViewModel, showLocationSelector) }
+    composeTestRule.setContent { LocationSelector(createItineraryViewModel, showLocationSelector, navController) }
 
     composeTestRule.onNodeWithTag(TestTags.SECOND_LOCATION).assertIsDisplayed()
   }

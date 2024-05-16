@@ -69,6 +69,8 @@ class ItineraryTest {
     builder
         .title("Changed Title")
         .addTag(ItineraryTags.RELAXATION)
+        .resetLocations()
+        .addLocation(Location(12.0, -11.0))
         .addLocation(Location(15.0, -10.0))
         .description("Modified Description")
         .visible(false)
@@ -79,7 +81,7 @@ class ItineraryTest {
     assertEquals("user123", builder.userUid)
     assertEquals("Changed Title", builder.title)
     assertEquals(2, builder.tags.size) // New one should have 2 tags
-    assertEquals(3, builder.locations.size) // New one should have 3 locations
+    assertEquals(2, builder.locations.size) // New one should have 3 locations
     assertEquals("Modified Description", builder.description)
     assertFalse(builder.visible)
     assertEquals(10f, builder.price)
@@ -92,7 +94,7 @@ class ItineraryTest {
     assertEquals("2", newItinerary.uid)
     assertEquals("Changed Title", newItinerary.title)
     assertEquals(2, newItinerary.tags.size) // New one should have 2 tags
-    assertEquals(3, newItinerary.locations.size) // New one should have 3 locations
+    assertEquals(2, newItinerary.locations.size) // New one should have 3 locations
     assertEquals("Modified Description", newItinerary.description)
     assertFalse(newItinerary.visible)
     assertEquals(10f, newItinerary.price)
