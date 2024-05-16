@@ -1,8 +1,11 @@
 package com.github.wanderwise_inc.app.ui.map
 
 import android.util.Log
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -20,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.github.wanderwise_inc.app.model.location.Location
 import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -40,8 +44,10 @@ fun SearchLocation(
 ) {
     var query by remember { mutableStateOf("") }
 
+    var isSearching by remember { mutableStateOf(false) }
     val searchedLocations by itineraryViewModel.getPlacesLiveData().observeAsState(emptyList())
-
+    val focusedLocation by remember { mutableStateOf(null) }
+    
     val onSearch = { query: String ->
         itineraryViewModel.fetchPlaces(query)
     }
@@ -67,11 +73,18 @@ fun SearchLocation(
         query = query,
         onQueryChange = { query = it },
         onSearch = { onSearch(query) },
-        active = true,
-        onActiveChange = {},
+        active = isSearching,
+        onActiveChange = { isSearching = !isSearching },
     ) {
         if (searchedLocations.isNotEmpty()) {
             LazyColumn() {
+                items(searchedLocations) {loc ->
+                    Box(modifier = Modifier
+                        .fillMaxWidth()
+                        .height(30.dp)) {
+                        Text(text = loc.address?: "address undefined")
+                    }
+                }
                 Log.d(
                     "LOCATIONS_LLIST",
                     "searchedLocations: ${searchedLocations}"

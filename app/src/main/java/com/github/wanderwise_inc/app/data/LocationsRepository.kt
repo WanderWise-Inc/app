@@ -7,7 +7,7 @@ import com.github.wanderwise_inc.app.model.location.Location
 interface LocationsRepository {
   fun getPlaces(
       name: String,
-      limit: Int = 1, // for the moment only fetch 1 place, can be increased later
+      limit: Int = 5,
       apiKey: String,
   ): LiveData<List<Location>?>
 }
