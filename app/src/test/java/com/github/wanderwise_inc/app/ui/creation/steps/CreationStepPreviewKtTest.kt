@@ -6,9 +6,9 @@ import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
+import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.model.location.FakeItinerary
 import com.github.wanderwise_inc.app.model.location.Itinerary
-import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.model.location.ItineraryLabels
 import com.github.wanderwise_inc.app.model.profile.Profile
 import com.github.wanderwise_inc.app.ui.TestTags
