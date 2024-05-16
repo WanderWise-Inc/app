@@ -102,6 +102,7 @@ class CreateItineraryViewModel(
     super.onCleared()
     Log.d("CreateItineraryViewModel", "cancelling coroutine")
     coroutineScope.cancel()
+  }
     /** @returns a list of ItineraryLabels of fields that haven't been set * */
     fun notSetValues(): List<String> {
       // look if all values have been set
@@ -136,4 +137,4 @@ class CreateItineraryViewModel(
       return notSetValues
     }
   }
-}
+
