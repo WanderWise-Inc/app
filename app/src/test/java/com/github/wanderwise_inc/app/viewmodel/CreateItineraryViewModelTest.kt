@@ -54,8 +54,7 @@ class CreateItineraryViewModelTest() {
     every { locatation.lat } returns 0.0
     every { locatation.long } returns 0.0
     userLocationClient = mockk()
-    every { userLocationClient.getLocationUpdates(any()) } returns
-        flow { emit(locatation) }
+    every { userLocationClient.getLocationUpdates(any()) } returns flow { emit(locatation) }
     Dispatchers.setMain(testDispatcher)
     MockKAnnotations.init(this)
     createItineraryViewModel =
