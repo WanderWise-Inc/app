@@ -159,6 +159,5 @@ class CreateItineraryMapTest {
       )
     }
     composeTestRule.onNodeWithTag(TestTags.MAP_GOOGLE_MAPS).isDisplayed()
-
   }
 }

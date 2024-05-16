@@ -1,6 +1,5 @@
 package com.github.wanderwise_inc.app.viewmodel
 
-import android.util.Log
 import com.github.wanderwise_inc.app.data.DirectionsRepository
 import com.github.wanderwise_inc.app.data.ItineraryRepository
 import com.github.wanderwise_inc.app.data.LocationsRepository
@@ -82,7 +81,6 @@ class CreateItineraryViewModel(
           locationClient.getLocationUpdates(intervalMillis).collect { androidLocation ->
             val currLocation = Location(androidLocation.latitude, androidLocation.longitude)
             newItineraryBuilder?.addLocation(currLocation)
-
           }
         }
   }

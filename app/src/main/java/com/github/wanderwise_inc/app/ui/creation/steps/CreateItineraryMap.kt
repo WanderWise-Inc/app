@@ -261,9 +261,11 @@ fun CreateLiveItinerary(
       contentColor = MaterialTheme.colorScheme.primary,
   ) {
     Column {
-      Button(onClick = { showLiveCreation.value = false }, modifier = Modifier.testTag(TestTags.BACK_BUTTON)) {
-        Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Go back")
-      }
+      Button(
+          onClick = { showLiveCreation.value = false },
+          modifier = Modifier.testTag(TestTags.BACK_BUTTON)) {
+            Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Go back")
+          }
 
       // Center the Row within the BottomAppBar
       Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
