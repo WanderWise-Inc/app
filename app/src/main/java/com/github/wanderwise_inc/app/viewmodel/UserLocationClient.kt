@@ -2,9 +2,9 @@ package com.github.wanderwise_inc.app.viewmodel
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.location.Location
 import android.location.LocationManager
 import android.os.Looper
+import com.github.wanderwise_inc.app.model.location.Location
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -57,7 +57,9 @@ class UserLocationClient(
           object : LocationCallback() {
             override fun onLocationResult(result: LocationResult) {
               super.onLocationResult(result)
-              result.locations.lastOrNull()?.let { location -> launch { send(location) } }
+              result.locations.lastOrNull()?.let { androidLocation ->
+                launch { send(Location(androidLocation.latitude, androidLocation.longitude)) }
+              }
             }
           }
 
