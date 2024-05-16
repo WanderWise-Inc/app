@@ -12,7 +12,6 @@ class ItineraryRepositoryTestImpl : ItineraryRepository {
   private var uidCtr = 0
 
   override fun getPublicItineraries(): Flow<List<Itinerary>> {
-    print(itineraries)
     return flow { emit(itineraries.filter { it.visible }) }
   }
 
@@ -48,5 +47,10 @@ class ItineraryRepositoryTestImpl : ItineraryRepository {
 
   override fun deleteItinerary(itinerary: Itinerary) {
     itineraries.remove(itinerary)
+  }
+
+  override suspend fun writeItinerariesToDisk(itineraries: List<Itinerary>) {
+    /* this test implementation has no disk interaction, so has the same effect as setting */
+    for (itinerary in itineraries) setItinerary(itinerary)
   }
 }

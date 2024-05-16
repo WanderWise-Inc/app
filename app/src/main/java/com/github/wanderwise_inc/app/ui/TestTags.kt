@@ -49,7 +49,7 @@ object TestTags {
   const val PROFILE_SCREEN = "Profile Screen"
   const val FIRST_LOCATION = "First Location"
   const val SECOND_LOCATION = "Second Location"
-
+  const val START_NEW_ITINERARY_STARTING = "start_new_itinerary_starting"
   const val START_NEW_ITINERARY = "start_new_itinerary"
   const val HINT_POPUP = "hint_popup"
   const val HINT_POPUP_MESSAGE = "hint_popup_message"

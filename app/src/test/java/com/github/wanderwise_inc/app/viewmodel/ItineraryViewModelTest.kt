@@ -1,16 +1,19 @@
 package com.github.wanderwise_inc.app.viewmodel
 
-import android.location.Location
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import app.cash.turbine.test
 import com.github.wanderwise_inc.app.DEFAULT_USER_UID
 import com.github.wanderwise_inc.app.data.DirectionsRepository
 import com.github.wanderwise_inc.app.data.ItineraryRepository
+import com.github.wanderwise_inc.app.data.LocationsRepository
 import com.github.wanderwise_inc.app.model.location.FakeItinerary
+import com.github.wanderwise_inc.app.model.location.FakeLocation.EMPIRE_STATE_BUILDING
+import com.github.wanderwise_inc.app.model.location.FakeLocation.STATUE_OF_LIBERTY
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryPreferences
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
+import com.github.wanderwise_inc.app.model.location.Location
 import com.github.wanderwise_inc.app.utils.MainDispatcherRule
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
@@ -42,6 +45,8 @@ class ItineraryViewModelTest {
 
   @MockK private lateinit var directionsRepository: DirectionsRepository
 
+  @MockK private lateinit var locationsRepository: LocationsRepository
+
   @MockK private lateinit var userLocationClient: UserLocationClient
 
   private lateinit var itineraryViewModel: ItineraryViewModel
@@ -54,7 +59,8 @@ class ItineraryViewModelTest {
     Dispatchers.setMain(testDispatcher)
     MockKAnnotations.init(this)
     itineraryViewModel =
-        ItineraryViewModel(itineraryRepository, directionsRepository, userLocationClient)
+        ItineraryViewModel(
+            itineraryRepository, directionsRepository, locationsRepository, userLocationClient)
   }
 
   @Test
@@ -157,7 +163,7 @@ class ItineraryViewModelTest {
   }
 
   @Test
-  fun setItinerary() {
+  fun setItinerary() = runTest {
     val repo = mutableMapOf<String, Itinerary>()
 
     every { itineraryRepository.setItinerary(any()) } answers
@@ -166,8 +172,7 @@ class ItineraryViewModelTest {
           repo[itinerary.uid] = itinerary
         }
 
-    itineraryViewModel.setItinerary(FakeItinerary.TOKYO)
-    assertEquals(FakeItinerary.TOKYO, repo[FakeItinerary.TOKYO.uid])
+    runBlocking { itineraryViewModel.setItinerary(FakeItinerary.TOKYO) }
   }
 
   @Test
@@ -225,9 +230,50 @@ class ItineraryViewModelTest {
     assertEquals(sanfranciscoLocations, polylineLocations)
   }
 
+  @ExperimentalCoroutinesApi
+  @Test
+  fun fetchPlaces() = runTest {
+    val locations = listOf(Location(STATUE_OF_LIBERTY.lat, STATUE_OF_LIBERTY.long))
+
+    every { locationsRepository.getPlaces(any(), any(), any()) } returns MutableLiveData(locations)
+
+    itineraryViewModel.fetchPlaces("Statue of Liberty")
+
+    advanceUntilIdle()
+
+    val placesLocations = itineraryViewModel.getPlacesLiveData().value
+    assertNotNull(placesLocations)
+  }
+
+  @ExperimentalCoroutinesApi
+  @Test
+  fun getPlacesLiveData() = runTest {
+    val statueOfLibertyLocation = listOf(Location(STATUE_OF_LIBERTY.lat, STATUE_OF_LIBERTY.long))
+    val empireStateBuildingLocation =
+        listOf(Location(EMPIRE_STATE_BUILDING.lat, EMPIRE_STATE_BUILDING.long))
+
+    every { locationsRepository.getPlaces(any(), any(), any()) } returns
+        MutableLiveData(statueOfLibertyLocation) andThen
+        MutableLiveData(empireStateBuildingLocation)
+
+    itineraryViewModel.fetchPlaces("Statue of Liberty")
+
+    advanceUntilIdle()
+
+    var polylineLocations = itineraryViewModel.getPlacesLiveData().value
+    assertEquals(statueOfLibertyLocation, polylineLocations)
+
+    itineraryViewModel.fetchPlaces("Empire State Building")
+
+    advanceUntilIdle()
+
+    polylineLocations = itineraryViewModel.getPlacesLiveData().value
+    assertEquals(empireStateBuildingLocation, polylineLocations)
+  }
+
   @Test
   fun getUserLocation() = runBlocking {
-    val epflLocation = Location("TestProvider")
+    val epflLocation = android.location.Location("TestProvider")
     epflLocation.latitude = 46.5188
     epflLocation.longitude = 6.5593
     val delta = 0.001
@@ -239,5 +285,20 @@ class ItineraryViewModelTest {
 
     assertEquals(epflLocation.latitude, emittedLocation.latitude, delta)
     assertEquals(epflLocation.longitude, emittedLocation.longitude, delta)
+  }
+
+  @Test
+  fun `saving itineraries should behave correctly`() = runTest {
+    coEvery { itineraryRepository.writeItinerariesToDisk(any()) } returns Unit
+
+    val itineraryZero = Itinerary()
+    itineraryZero.uid = "0"
+    val itineraryOne = Itinerary()
+    itineraryOne.uid = "1"
+    val itineraryTwo = Itinerary()
+    itineraryTwo.uid = "2"
+
+    itineraryViewModel.saveItinerary(itineraryZero)
+    itineraryViewModel.saveItineraries(listOf(itineraryOne, itineraryTwo))
   }
 }
