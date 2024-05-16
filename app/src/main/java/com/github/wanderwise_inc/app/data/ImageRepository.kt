@@ -1,5 +1,6 @@
 package com.github.wanderwise_inc.app.data
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
@@ -20,7 +21,7 @@ interface ImageRepository {
    * @param uri the current Uri that we want to convert to a bitmap
    * @return a flow of a bitmap, that can be use to be stored or to be displayed
    */
-  /*fun getBitMap(uri: Uri?) : Flow<Bitmap?>*/
+  fun getBitMap(uri: Uri?, context: Context): Flow<Bitmap?>
 
   /** @param fileName the fileName (path) that we want to store to the storage */
   fun uploadImageToStorage(fileName: String): Boolean

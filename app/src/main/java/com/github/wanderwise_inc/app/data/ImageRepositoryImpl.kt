@@ -1,11 +1,16 @@
 package com.github.wanderwise_inc.app.data
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
+import coil.ImageLoader
+import coil.request.ImageRequest
+import coil.request.SuccessResult
 import com.google.firebase.storage.StorageReference
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -124,24 +129,22 @@ class ImageRepositoryImpl(
    * @param uri the Uri link to the image
    * @return a flow of the bitMap representation of the image
    */
-  /*    override fun getBitMap(uri : Uri?) : Flow<Bitmap?> {
-      return flow {
-          if (uri != null) {
-              val context = application.baseContext
-              Log.d("TEST CASE", "URI NOT NULL")
-              val loading = ImageLoader(context)
-              val request = ImageRequest.Builder(context)
-                  .data(uri)
-                  .build()
+  override fun getBitMap(uri: Uri?, context: Context): Flow<Bitmap?> {
+    return flow {
+      if (uri != null) {
+        // val context = application.baseContext
+        Log.d("TEST CASE", "URI NOT NULL")
+        val loading = ImageLoader(context)
+        val request = ImageRequest.Builder(context).data(uri).build()
 
-              val result = (loading.execute(request) as SuccessResult).drawable
-              emit((result as BitmapDrawable).bitmap)
-          } else {
-              Log.d("TEST CASE", "URI NULL")
-              emit(null)
-          }
+        val result = (loading.execute(request) as SuccessResult).drawable
+        emit((result as BitmapDrawable).bitmap)
+      } else {
+        Log.d("TEST CASE", "URI NULL")
+        emit(null)
       }
-  }*/
+    }
+  }
 
   /** @brief used to launch the activity to open the photo gallery */
   override fun launchActivity(it: Intent) {

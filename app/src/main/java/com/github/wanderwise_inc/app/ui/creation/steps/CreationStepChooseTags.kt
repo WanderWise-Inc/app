@@ -1,14 +1,18 @@
 package com.github.wanderwise_inc.app.ui.creation.steps
 
+import android.content.Intent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
@@ -33,20 +37,36 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.PopupProperties
+import com.github.wanderwise_inc.app.data.ImageRepository
+import com.github.wanderwise_inc.app.model.profile.Profile
 import com.github.wanderwise_inc.app.ui.TestTags
+import com.github.wanderwise_inc.app.ui.profile.ProfilePicture
+import com.github.wanderwise_inc.app.ui.profile.ProfilePictureChangeDropdownMenu
 import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
+import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 
 @Composable
-fun CreationStepChooseTagsScreen(createItineraryViewModel: CreateItineraryViewModel) {
+fun CreationStepChooseTagsScreen(
+    createItineraryViewModel: CreateItineraryViewModel,
+    profileViewModel: ProfileViewModel
+) {
+
+
+
+
   Column(
       horizontalAlignment = Alignment.CenterHorizontally,
       modifier =
-          Modifier.fillMaxSize()
-              .testTag(TestTags.CREATION_SCREEN_TAGS)
-              .background(MaterialTheme.colorScheme.primaryContainer),
+      Modifier
+          .fillMaxSize()
+          .testTag(TestTags.CREATION_SCREEN_TAGS)
+          .background(MaterialTheme.colorScheme.primaryContainer),
       verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        ItineraryImageBanner(modifier = Modifier.padding(all = 10.dp))
+        ItineraryImageBanner(
+            createItineraryViewModel, profileViewModel, modifier = Modifier.padding(all = 10.dp))
         PriceEstimationTextBox(createItineraryViewModel)
         TimeDurationEstimation(createItineraryViewModel)
         RelevantTags(createItineraryViewModel)
@@ -55,20 +75,62 @@ fun CreationStepChooseTagsScreen(createItineraryViewModel: CreateItineraryViewMo
 }
 
 @Composable
-fun ItineraryImageBanner(modifier: Modifier = Modifier) {
-  // TODO: on click upload image using Context Drop Down Menu
-  // default image = Please Upload Image
+fun ItineraryImageBanner(
+    createItineraryViewModel: CreateItineraryViewModel,
+    profileViewModel: ProfileViewModel,
+    modifier: Modifier = Modifier
+) {
+
+    var isBannerPictureChangeDDMOpen by remember { mutableStateOf(false) }
 
   Box(
       modifier =
-          Modifier.fillMaxWidth()
-              .padding(all = 10.dp)
-              .height(120.dp)
-              .clip(MaterialTheme.shapes.medium)
-              .background(MaterialTheme.colorScheme.surface),
+      Modifier
+          .fillMaxWidth()
+          .padding(all = 10.dp)
+          .height(120.dp)
+          .clip(MaterialTheme.shapes.medium)
+          .background(MaterialTheme.colorScheme.surface),
       contentAlignment = Alignment.Center) {
+
         Text("Itinerary Banner Please Upload Image")
+     // composable to display the banner picture
+      BannerPictureChangeDropdownMenu(
+          expanded = isBannerPictureChangeDDMOpen,
+          onDismissRequest = { isBannerPictureChangeDDMOpen = false},
+          createItineraryViewModel = createItineraryViewModel,
+      ) {
+
       }
+
+      }
+}
+@Composable
+fun BannerPictureChangeDropdownMenu(
+    expanded: Boolean,
+    onDismissRequest: () -> Unit,
+    createItineraryViewModel: CreateItineraryViewModel,
+    modifier: Modifier = Modifier,
+    offset: DpOffset = DpOffset(0.dp, 0.dp),
+    properties: PopupProperties = PopupProperties(focusable = true),
+    content: @Composable ColumnScope.() -> Unit
+) {
+
+    DropdownMenu(
+        expanded = expanded,
+        onDismissRequest = onDismissRequest,
+        offset = offset,
+        properties = properties,
+        modifier = modifier
+    ) {
+        // Dropdown menu item for searching and selecting a photo from the device.
+        DropdownMenuItem(
+            text = { Text("SEARCH PHOTO") },
+            onClick = {
+                createItineraryViewModel.startItineraryBannerPictureUploadActivity()
+            })
+
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -79,7 +141,11 @@ fun PriceEstimationTextBox(createItineraryViewModel: CreateItineraryViewModel) {
   var isCurrenciesMenuExpanded by remember { mutableStateOf(false) }
   var selectedCurrency by remember { mutableStateOf(currencies[0]) }
 
-  Row(Modifier.fillMaxWidth().padding(all = 10.dp).clip(MaterialTheme.shapes.medium)) {
+  Row(
+      Modifier
+          .fillMaxWidth()
+          .padding(all = 10.dp)
+          .clip(MaterialTheme.shapes.medium)) {
     var priceEstimate by remember { mutableStateOf("") }
 
     TextField(
@@ -98,7 +164,9 @@ fun PriceEstimationTextBox(createItineraryViewModel: CreateItineraryViewModel) {
     ExposedDropdownMenuBox(
         expanded = isCurrenciesMenuExpanded,
         onExpandedChange = { isCurrenciesMenuExpanded = it },
-        modifier = Modifier.clip(MaterialTheme.shapes.medium).shadow(5.dp)) {
+        modifier = Modifier
+            .clip(MaterialTheme.shapes.medium)
+            .shadow(5.dp)) {
           TextField(
               modifier = Modifier.menuAnchor(),
               value = selectedCurrency,
