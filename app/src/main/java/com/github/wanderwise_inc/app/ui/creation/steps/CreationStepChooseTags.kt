@@ -202,7 +202,7 @@ fun TimeDurationEstimation(createItineraryViewModel: CreateItineraryViewModel) {
       keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
       onValueChange = {
         timeEstimate = it
-        createItineraryViewModel.setNewItineraryTime(it.toFloat())
+        createItineraryViewModel.setNewItineraryTime(it.toInt())
       })
 }
 

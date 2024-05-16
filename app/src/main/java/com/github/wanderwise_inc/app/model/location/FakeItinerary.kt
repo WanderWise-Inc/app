@@ -67,7 +67,7 @@ object FakeItinerary {
           isPublic = true,
           numLikes = 0,
           price = 20f,
-          time = 4f)
+          time = 4)
 
   val SAN_FRANCISCO =
       Itinerary(
@@ -111,7 +111,7 @@ object FakeItinerary {
           isPublic = true,
           numLikes = 2354,
           price = 5f,
-          time = 3f)
+          time = 3)
 
   val SWITZERLAND =
       Itinerary(
@@ -150,5 +150,5 @@ object FakeItinerary {
           isPublic = true,
           numLikes = 102,
           price = 50f,
-          time = 10f)
+          time = 10)
 }

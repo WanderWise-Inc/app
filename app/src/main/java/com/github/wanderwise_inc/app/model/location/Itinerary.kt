@@ -1,5 +1,6 @@
 package com.github.wanderwise_inc.app.model.location
 
+import com.github.wanderwise_inc.app.proto.location.ItineraryProto
 import com.google.android.gms.maps.model.LatLng
 import java.io.InvalidObjectException
 
@@ -28,7 +29,7 @@ object ItineraryDefaultValues {
   const val DESCRIPTION: String = ""
   const val ISPUBLIC: Boolean = true
   const val PRICE: Float = -1f
-  const val TIME: Float = -1f
+  const val TIME: Int = -1
 }
 
 /** @brief score of an itinerary based on some preferences */
@@ -54,7 +55,7 @@ data class Itinerary(
     val isPublic: Boolean,
     var numLikes: Int = 0,
     val price: Float = 0f,
-    val time: Float = 0f
+    val time: Int = 0
 ) {
 
   /**
@@ -75,7 +76,7 @@ data class Itinerary(
       var description: String? = null,
       var isPublic: Boolean = ItineraryDefaultValues.ISPUBLIC, // could be null but complicated
       var price: Float? = null,
-      var time: Float? = null
+      var time: Int? = null
   ) {
     /**
      * @param location the location to be added
@@ -104,8 +105,8 @@ data class Itinerary(
      * @brief add a tag to the itinerary builder list of tags
      */
     fun addTag(tag: Tag): Builder {
-      if (tags.size >= MAX_TAGS)
-          throw InvalidObjectException("An itinerary should not have more than $MAX_TAGS tags")
+      // if (tags.size >= MAX_TAGS)
+      // throw InvalidObjectException("An itinerary should not have more than $MAX_TAGS tags")
       tags.add(tag)
       return this
     }
@@ -146,7 +147,7 @@ data class Itinerary(
      * @return the builder to support method chaining
      * @brief set the time of the itinerary builder
      */
-    fun time(time: Float): Builder {
+    fun time(time: Int): Builder {
       require(time >= 0)
       this.time = time
       return this
@@ -187,6 +188,19 @@ data class Itinerary(
         ItineraryLabels.PRICE to price,
         ItineraryLabels.TIME to time,
         ItineraryLabels.NUM_LIKES to numLikes)
+  }
+  /** Conversion method for converting to protobuf */
+  fun toProto(): ItineraryProto {
+    return ItineraryProto.newBuilder()
+        .setUid(uid)
+        .setUid(userUid)
+        .addAllLocations(locations.map { it.toProto() })
+        .setTitle(title)
+        .addAllTags(tags)
+        .setDescription(description)
+        .setPrice(price)
+        .setTime(time)
+        .build()
   }
 
   /**

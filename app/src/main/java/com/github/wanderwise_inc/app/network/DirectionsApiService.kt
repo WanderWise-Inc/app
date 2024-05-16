@@ -46,8 +46,8 @@ data class DirectionsResponseBody(val routes: List<Route>) {
   }
 }
 
-/** Factory for creating `ApiService` design patterns uwu */
-object ApiServiceFactory {
+/** Factory for creating `ApiService` design patterns for Directions API uwu */
+object DirectionsApiServiceFactory {
   private const val BASE_URL = "https://maps.googleapis.com/maps/api/directions/"
 
   fun createDirectionsApiService(): DirectionsApiService {

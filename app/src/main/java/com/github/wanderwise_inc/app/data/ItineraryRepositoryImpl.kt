@@ -1,22 +1,66 @@
 package com.github.wanderwise_inc.app.data
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.util.Log
+import androidx.datastore.core.DataStore
+import com.github.wanderwise_inc.app.disk.toModel
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryLabels
 import com.github.wanderwise_inc.app.model.location.Tag
+import com.github.wanderwise_inc.app.proto.location.SavedItineraries
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withContext
 
-class ItineraryRepositoryImpl(db: FirebaseFirestore) : ItineraryRepository {
+/**
+ * Fetches and sets `Itinerary` data type on a best-effort basis
+ * - if network is available, interaction will happen with firestore database
+ * - if network is unavailable, interaction will happen with persistent storage
+ */
+class ItineraryRepositoryImpl(
+    db: FirebaseFirestore,
+    private val context: Context,
+    private val datastore: DataStore<SavedItineraries>
+) : ItineraryRepository {
   private val itinerariesCollection = db.collection("itineraries")
 
+  /** @return `true` iff the device is connected to the internet */
+  private fun isNetworkAvailable(): Boolean {
+    val connectivityManager =
+        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    val networkInfo = connectivityManager.activeNetwork
+    val networkCapabilities = connectivityManager.getNetworkCapabilities(networkInfo)
+    val ret =
+        networkCapabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) ?: false
+    Log.d("ItineraryRepositoryImpl", "Network available: $ret")
+    return ret
+  }
+
+  /**
+   * @return a `flow` of all public itineraries, or the list of saved itineraries from persistent
+   *   storage when internet connection isn't available
+   */
   override fun getPublicItineraries(): Flow<List<Itinerary>> {
+    return when (isNetworkAvailable()) {
+      true -> getPublicItinerariesFirebase()
+      false -> getSavedItineraries()
+    }
+  }
+
+  /** fetches all public itineraries from Firebase */
+  private fun getPublicItinerariesFirebase(): Flow<List<Itinerary>> {
+    Log.d("ItineraryRepository", "Fetching itineraries from firebase")
     return flow {
           val itineraries = suspendCancellableCoroutine { continuation ->
             itinerariesCollection
@@ -31,10 +75,21 @@ class ItineraryRepositoryImpl(db: FirebaseFirestore) : ItineraryRepository {
           }
           emit(itineraries)
         }
-        .catch { emit(listOf()) }
+        .catch { emit(emptyList()) }
   }
 
+  /**
+   * @return a `flow` of all user-created itineraries, or the list of user-created itineraries from
+   *   persistent storage when internet connection isn't available
+   */
   override fun getUserItineraries(userUid: String): Flow<List<Itinerary>> {
+    return when (isNetworkAvailable()) {
+      true -> getUserItinerariesFireBase(userUid)
+      false -> getSavedItineraries().map { list -> list.filter { it.userUid == userUid } }
+    }
+  }
+
+  private fun getUserItinerariesFireBase(userUid: String): Flow<List<Itinerary>> {
     return flow {
           val itineraries = suspendCancellableCoroutine { continuation ->
             itinerariesCollection
@@ -57,6 +112,16 @@ class ItineraryRepositoryImpl(db: FirebaseFirestore) : ItineraryRepository {
   }
 
   override fun getItinerariesWithTags(tags: List<Tag>): Flow<List<Itinerary>> {
+    return when (isNetworkAvailable()) {
+      true -> getItinerariesWithTagsFirebase(tags)
+      false ->
+          getSavedItineraries().map { list ->
+            list.filter { itinerary -> tags.any { tag -> itinerary.tags.contains(tag) } }
+          }
+    }
+  }
+
+  fun getItinerariesWithTagsFirebase(tags: List<Tag>): Flow<List<Itinerary>> {
     return flow {
           val itineraries = suspendCancellableCoroutine { continuation ->
             itinerariesCollection
@@ -133,5 +198,22 @@ class ItineraryRepositoryImpl(db: FirebaseFirestore) : ItineraryRepository {
           Log.d("ItineraryRepository", "Failed to delete itinerary")
           throw it
         }
+  }
+
+  /** @return a flow of saved itineraries from local storage */
+  private fun getSavedItineraries(): Flow<List<Itinerary>> {
+    Log.d("Itinerary Repository", "Reading itineraries from disk")
+    val savedItineraries = datastore.data
+    return savedItineraries.map { saved ->
+      saved.itinerariesList.map { itineraryProto -> itineraryProto.toModel() }
+    }
+  }
+
+  /** Replaces the stored saved itineraries protobuf with `itineraries` */
+  override suspend fun writeItinerariesToDisk(itineraries: List<Itinerary>) {
+    Log.d("Itinerary Repository", "Updating saved itineraries to $itineraries")
+    val savedItineraries =
+        SavedItineraries.newBuilder().addAllItineraries(itineraries.map { it.toProto() }).build()
+    withContext(Dispatchers.IO) { datastore.updateData { savedItineraries } }
   }
 }

@@ -91,7 +91,7 @@ fun addItineraries(
                   ItineraryTags.WELLNESS),
           description = null,
           isPublic = true,
-          time = 3f,
+          time = 3,
           price = 25.0f,
       )
 

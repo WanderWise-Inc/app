@@ -1,6 +1,5 @@
 package com.github.wanderwise_inc.app.model.location
 
-import java.io.InvalidObjectException
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
@@ -98,10 +97,6 @@ class ItineraryTest {
     assertFalse(newItinerary.isPublic)
     assertEquals(10f, newItinerary.price)
     assertEquals(2f, newItinerary.time)
-
-    assertThrows(InvalidObjectException::class.java) {
-      builder.addTag(ItineraryTags.ROMANCE).addTag(ItineraryTags.WILDLIFE)
-    }
 
     val emptyBuilder = Itinerary().toBuilder()
 

@@ -14,6 +14,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.wanderwise_inc.app.data.DirectionsRepository
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.data.ItineraryRepository
+import com.github.wanderwise_inc.app.data.LocationsRepository
 import com.github.wanderwise_inc.app.data.ProfileRepository
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
@@ -54,6 +55,7 @@ class PreviewItineraryScreenKtTest {
   @Mock private lateinit var profileRepository: ProfileRepository
   @Mock private lateinit var imageRepository: ImageRepository
   @Mock private lateinit var directionsRepository: DirectionsRepository
+  @Mock private lateinit var locationsRepository: LocationsRepository
   @Mock private lateinit var userLocationClient: UserLocationClient
 
   private lateinit var profileViewModel: ProfileViewModel
@@ -94,7 +96,8 @@ class PreviewItineraryScreenKtTest {
     `when`(imageRepository.fetchImage(anyString())).thenReturn(flow { emit(null) })
 
     itineraryViewModel =
-        ItineraryViewModel(itineraryRepository, directionsRepository, userLocationClient)
+        ItineraryViewModel(
+            itineraryRepository, directionsRepository, locationsRepository, userLocationClient)
     itineraryViewModel.setFocusedItinerary(itinerary)
     profileViewModel = ProfileViewModel(profileRepository, imageRepository)
   }
@@ -146,6 +149,13 @@ class PreviewItineraryScreenKtTest {
     composeTestRule.onNodeWithTag(TestTags.MAP_MINIMIZED_BANNER).assertIsNotDisplayed()
     composeTestRule.onNodeWithTag(TestTags.MAP_ITINERARY_TITLE).assertIsNotDisplayed()
     composeTestRule.onNodeWithTag(TestTags.MAP_ITINERARY_DESCRIPTION).assertIsNotDisplayed()
+  }
+
+  @Test
+  fun `Clicking on the Start Button should go to starting mode`() {
+    composeTestRule.setContent { PreviewItineraryScreen(itineraryViewModel, profileViewModel) }
+
+    composeTestRule.onNodeWithTag(TestTags.START_NEW_ITINERARY_STARTING).assertIsDisplayed()
   }
 
   @Test

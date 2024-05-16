@@ -1,5 +1,6 @@
 package com.github.wanderwise_inc.app.model.location
 
+import com.github.wanderwise_inc.app.proto.location.LocationProto
 import com.google.android.gms.maps.model.LatLng
 import kotlin.math.atan2
 import kotlin.math.cos
@@ -37,6 +38,16 @@ data class Location(
         LocationLabels.TITLE to title,
         LocationLabels.ADDRESS to address,
         LocationLabels.GOOGLE_RATING to googleRating)
+  }
+
+  fun toProto(): LocationProto {
+    return LocationProto.newBuilder()
+        .setLat(lat)
+        .setLong(long)
+        .setAddress(address)
+        .setTitle(title)
+        .setGoogleRating(googleRating ?: 0f)
+        .build()
   }
 
   /** @return the distance in kilometers to another point */
