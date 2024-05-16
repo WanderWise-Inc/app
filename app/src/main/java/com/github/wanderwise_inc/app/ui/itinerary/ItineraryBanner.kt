@@ -60,7 +60,7 @@ fun ItineraryBanner(
     imageRepository: ImageRepository
 ) {
 
-  val defaultImageId = R.drawable.defaultitinerary
+  val defaultImageId = R.drawable.underground
   val imageFlow =
       remember(itinerary) { imageRepository.fetchImage("itineraryPictures/${itinerary.uid}") }
   val image by imageFlow.collectAsState(initial = null)

@@ -51,7 +51,7 @@ class HomeNavigationTest {
     MockKAnnotations.init(this)
 
     composeTestRule.setContent {
-      val mockProfile = Profile("", "Test", "0", "Bio", null)
+      val mockProfile = Profile("Test", "0", "Bio")
       val mockItinerary = FakeItinerary.SAN_FRANCISCO
       val mockLocation = Location(0.0, 0.0)
 

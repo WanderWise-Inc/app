@@ -24,8 +24,8 @@ class ProfileRepositoryTestImpl : ProfileRepository {
 
   override fun setProfile(profile: Profile) {
     profiles.remove(profile) // remove profile if it already contained
-    if (profile.uid.isBlank()) {
-      profile.uid = uidCtr.toString()
+    if (profile.userUid.isBlank()) {
+      profile.userUid = uidCtr.toString()
       uidCtr++
     }
     profiles.add(profile)
