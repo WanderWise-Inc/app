@@ -9,11 +9,12 @@ import com.github.wanderwise_inc.app.model.location.Location
 import com.github.wanderwise_inc.app.utils.MainDispatcherRule
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
+import java.lang.StringBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.setMain
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -40,6 +41,27 @@ class CreateItineraryViewModelTest() {
     MockKAnnotations.init(this)
     createItineraryViewModel =
         CreateItineraryViewModel(itineraryRepository, directionsRepository, userLocationClient)
+  }
+
+  @Test
+  fun `validTitle works as intended`() {
+    val maxTitleLength = createItineraryViewModel.getMaxTitleLength()
+    val n = (maxTitleLength / 5) + 3
+    val sb = StringBuilder()
+    for (i in 0 until n) {
+      sb.append("title")
+    }
+
+    assert(createItineraryViewModel.validTitle("title"))
+    assert(!createItineraryViewModel.validTitle(sb.toString()))
+  }
+
+  @Test
+  fun `invalid title message works as intended`() {
+    val maxTitleLength = createItineraryViewModel.getMaxTitleLength()
+    assertEquals(
+        createItineraryViewModel.invalidTitleMessage(),
+        "title field must be shorter than ${maxTitleLength} characters")
   }
 
   @Test

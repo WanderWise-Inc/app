@@ -12,9 +12,12 @@ class CreateItineraryViewModel(
     private val locationClient: LocationClient
 ) : ItineraryViewModel(itineraryRepository, directionsRepository, locationClient) {
   /** New itinerary that the signed in user is currently building */
-
-  private val maxTitleLength = 60
+  private val maxTitleLength = 80
   private var newItineraryBuilder: Itinerary.Builder? = null
+
+  fun getMaxTitleLength(): Int {
+    return maxTitleLength
+  }
 
   fun getNewItinerary(): Itinerary.Builder? {
     return newItineraryBuilder
@@ -38,8 +41,8 @@ class CreateItineraryViewModel(
     newItineraryBuilder?.description = description
   }
 
-  /** @returns true if the title is valid **/
-  fun validTitle(title: String): Boolean{
+  /** @returns true if the title is valid * */
+  fun validTitle(title: String): Boolean {
     return title.length < maxTitleLength
   }
 

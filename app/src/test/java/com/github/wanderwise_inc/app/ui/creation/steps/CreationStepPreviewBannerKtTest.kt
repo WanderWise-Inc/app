@@ -8,6 +8,7 @@ import com.github.wanderwise_inc.app.model.location.FakeItinerary
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
 import io.mockk.MockKAnnotations
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import org.junit.Assert.*
 import org.junit.Before
@@ -33,7 +34,7 @@ class CreationStepPreviewBannerKtTest {
   @Test
   fun `test if the banner screen is composed`() {
     composeTestRule.setContent {
-      // every { createItineraryViewModelTest.getNewItinerary() } returns itineraryBuilder
+      every { createItineraryViewModelTest.getFocusedItinerary() } returns FakeItinerary.SWITZERLAND
 
       CreationStepPreviewBanner(createItineraryViewModel = createItineraryViewModelTest)
     }
@@ -43,7 +44,7 @@ class CreationStepPreviewBannerKtTest {
   @Test
   fun `title is displayed`() {
     composeTestRule.setContent {
-      // every { createItineraryViewModelTest.getNewItinerary() } returns itineraryBuilder
+      every { createItineraryViewModelTest.getFocusedItinerary() } returns FakeItinerary.SWITZERLAND
 
       CreationStepPreviewBanner(createItineraryViewModel = createItineraryViewModelTest)
     }

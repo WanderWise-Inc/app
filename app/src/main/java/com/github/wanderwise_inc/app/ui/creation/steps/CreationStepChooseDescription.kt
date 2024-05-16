@@ -32,31 +32,29 @@ fun CreationStepChooseDescriptionScreen(createItineraryViewModel: CreateItinerar
     mutableStateOf(createItineraryViewModel.getNewItinerary()?.description ?: "")
   }
 
-    var validTitle by remember {mutableStateOf(true)}
+  var validTitle by remember { mutableStateOf(true) }
 
   LazyColumn(
       modifier =
-      Modifier
-          .padding(top = 10.dp)
-          .background(color = MaterialTheme.colorScheme.background)
-          .testTag(TestTags.CREATION_SCREEN_DESCRIPTION_TITLE),
+          Modifier.padding(top = 10.dp)
+              .background(color = MaterialTheme.colorScheme.background)
+              .testTag(TestTags.CREATION_SCREEN_DESCRIPTION_TITLE),
       contentPadding = PaddingValues(24.dp),
       verticalArrangement = Arrangement.Absolute.spacedBy(52.dp)) {
         item {
           OutlinedTextField(
-              modifier = Modifier
-                  .fillMaxSize()
-                  .testTag(TestTags.CREATION_SCREEN_TITLE),
+              modifier = Modifier.fillMaxSize().testTag(TestTags.CREATION_SCREEN_TITLE),
               value = title,
               onValueChange = {
-                  title = it
-                  validTitle = if(createItineraryViewModel.validTitle(it)) {
+                title = it
+                validTitle =
+                    if (createItineraryViewModel.validTitle(it)) {
                       createItineraryViewModel.getNewItinerary()?.title(it)
                       true
-                  } else {
+                    } else {
                       createItineraryViewModel.getNewItinerary()?.title(null)
                       false
-                  }
+                    }
               },
               maxLines = 2,
               textStyle =
@@ -73,16 +71,17 @@ fun CreationStepChooseDescriptionScreen(createItineraryViewModel: CreateItinerar
         }
 
         item {
-            if(!validTitle){
-                Text(text = createItineraryViewModel.invalidTitleMessage(), color = Color.Red)
-            }
+          if (!validTitle) {
+            Text(
+                text = createItineraryViewModel.invalidTitleMessage(),
+                color = Color.Red,
+                modifier = Modifier.testTag(TestTags.INVALID_INPUT))
+          }
         }
 
         item {
           OutlinedTextField(
-              modifier = Modifier
-                  .fillMaxSize()
-                  .testTag(TestTags.CREATION_SCREEN_DESCRIPTION),
+              modifier = Modifier.fillMaxSize().testTag(TestTags.CREATION_SCREEN_DESCRIPTION),
               value = description,
               onValueChange = {
                 description = it

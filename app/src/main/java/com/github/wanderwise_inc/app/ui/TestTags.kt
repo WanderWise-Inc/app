@@ -29,6 +29,8 @@ object TestTags {
   const val CREATION_SCREEN_NAV_BAR = "Creation Screen Top navigation bar"
   const val CREATION_FINISH_BUTTON = "Preview Finish Itinerary Creation Button"
 
+  const val INVALID_INPUT = "invalid input"
+
   const val PRICE_SEARCH = "Price Search"
   const val TIME_SEARCH = "Time Search"
   const val SEARCH_ICON = "Search Icon"

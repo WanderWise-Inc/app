@@ -18,6 +18,7 @@ import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
 
 @Composable
 fun CreationStepPreviewBanner(createItineraryViewModel: CreateItineraryViewModel) {
+  // these are stupid for now, but will be changed for ms4
   val dummyItinerary =
       Itinerary(
           "1",
@@ -29,7 +30,7 @@ fun CreationStepPreviewBanner(createItineraryViewModel: CreateItineraryViewModel
           true,
       )
 
-  // set the itineary, not permanent, will do later when logic is applied
+  // set the itinerary, not permanent, will do later when logic is applied
   val itinerary = FakeItinerary.SWITZERLAND
 
   // function that do nothing
@@ -51,7 +52,7 @@ fun CreationStepPreviewBanner(createItineraryViewModel: CreateItineraryViewModel
 
               item {
                 ItineraryBanner(
-                    itinerary = createItineraryViewModel.getFocusedItinerary()?:dummyItinerary,
+                    itinerary = createItineraryViewModel.getFocusedItinerary() ?: dummyItinerary,
                     onLikeButtonClick = onLikeButtonClick,
                     onBannerClick = onBannerClick)
               }
