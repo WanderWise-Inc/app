@@ -15,7 +15,6 @@ import com.github.wanderwise_inc.app.viewmodel.BottomNavigationViewModel
 import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
-import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun HomeScreen(
@@ -25,7 +24,6 @@ fun HomeScreen(
     bottomNavigationViewModel: BottomNavigationViewModel,
     profileViewModel: ProfileViewModel,
     navController: NavHostController = rememberNavController(),
-    firebaseAuth: FirebaseAuth,
 ) {
   val navigationActions = NavigationActions(navController)
   Scaffold(
@@ -39,8 +37,7 @@ fun HomeScreen(
               createItineraryViewModel,
               profileViewModel,
               bottomNavigationViewModel,
-              imageRepository,
-              firebaseAuth)
+              imageRepository)
         }
       }
 }

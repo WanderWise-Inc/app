@@ -11,7 +11,6 @@ import com.github.wanderwise_inc.app.viewmodel.BottomNavigationViewModel
 import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
-import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun RootNavigationGraph(
@@ -22,7 +21,6 @@ fun RootNavigationGraph(
     bottomNavigationViewModel: BottomNavigationViewModel,
     imageRepository: ImageRepository,
     navController: NavHostController,
-    firebaseAuth: FirebaseAuth
 ) {
   NavHost(
       navController = navController, route = Graph.ROOT, startDestination = Graph.AUTHENTICATION) {
@@ -33,8 +31,7 @@ fun RootNavigationGraph(
               itineraryViewModel = itineraryViewModel,
               createItineraryViewModel = createItineraryViewModel,
               bottomNavigationViewModel = bottomNavigationViewModel,
-              profileViewModel = profileViewModel,
-              firebaseAuth = firebaseAuth)
+              profileViewModel = profileViewModel)
         }
       }
 }

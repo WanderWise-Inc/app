@@ -114,8 +114,7 @@ class MainActivity : ComponentActivity() {
               createItineraryViewModel,
               bottomNavigationViewModel,
               imageRepository,
-              navController,
-              firebaseAuth)
+              navController)
         }
       }
     }

@@ -52,7 +52,6 @@ import com.github.wanderwise_inc.app.ui.list_itineraries.ItinerariesListScrollab
 import com.github.wanderwise_inc.app.ui.list_itineraries.ItineraryListParent
 import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
-import com.google.firebase.auth.FirebaseAuth
 
 const val WANDER_POINTS_SCORE_MULTIPLIER = 10
 
@@ -64,7 +63,6 @@ fun ProfileScreen(
     profileViewModel: ProfileViewModel,
     imageRepository: ImageRepository,
     navHostController: NavHostController,
-    firebaseAuth: FirebaseAuth
 ) {
   Log.d("ProfileScreen", "ProfileScreen")
   val profile = profileViewModel.getActiveProfile()
@@ -120,7 +118,6 @@ fun ProfileScreen(
                   itineraryViewModel = itineraryViewModel,
                   profileViewModel = profileViewModel,
                   navController = navHostController,
-                  firebaseAuth = firebaseAuth,
                   paddingValues = PaddingValues(8.dp),
                   parent = ItineraryListParent.PROFILE,
                   imageRepository = imageRepository)
