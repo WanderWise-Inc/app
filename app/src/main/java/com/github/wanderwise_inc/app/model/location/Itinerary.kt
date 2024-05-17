@@ -150,6 +150,7 @@ data class Itinerary(
     fun price(price: Float): Builder {
       require(price >= 0f)
       this.price = price
+      Log.d("ItineraryBuilder", "Builder price updated to ${this.price}")
       return this
     }
 
