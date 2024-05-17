@@ -9,6 +9,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
@@ -44,5 +45,5 @@ fun ProfilePicture(
   if (painter.state is AsyncImagePainter.State.Loading) {
     CircularProgressIndicator()
   }
-  Image(painter = painter, contentDescription = "profile_icon", modifier = modifier)
+  Image(painter = painter, contentDescription = "profile_icon", modifier = modifier, contentScale = ContentScale.Crop)
 }
