@@ -73,11 +73,13 @@ fun SearchLocation(
                 // sure if this is necessary
                 navController.popBackStack()
               },
+              modifier = Modifier.testTag(TestTags.ADD_LOCATION_BUTTON),
               icon = { Icon(imageVector = Icons.Filled.Add, contentDescription = null) },
               text = { Text("Add Location") })
         }
       },
-      floatingActionButtonPosition = FabPosition.Center) { padding ->
+      floatingActionButtonPosition = FabPosition.Center,
+      modifier = Modifier.testTag(TestTags.LOCATION_SEARCH_SCAFFOLD)) { padding ->
         if (userLocation != null) {
           val userLocationLatLng = LatLng(userLocation!!.lat, userLocation!!.long)
           val cameraPositionState = rememberCameraPositionState {
@@ -97,11 +99,11 @@ fun SearchLocation(
               modifier = Modifier.padding(padding), cameraPositionState = cameraPositionState) {
                 userLocation?.let {
                   Marker(
-                      tag = TestTags.MAP_USER_LOCATION,
+                      tag = TestTags.MAP_SEARCH_LOCATION,
                       state = MarkerState(position = LatLng(it.lat, it.long)),
                       icon =
                           BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE),
-                      contentDescription = TestTags.MAP_USER_LOCATION)
+                      contentDescription = TestTags.MAP_SEARCH_LOCATION)
                 }
 
                 if (focusedLocation != null) {
@@ -119,9 +121,7 @@ fun SearchLocation(
                       .background(MaterialTheme.colorScheme.background),
               horizontalAlignment = Alignment.CenterHorizontally,
               verticalArrangement = Arrangement.Center) {
-                Text(
-                    "Loading your location...",
-                    modifier = Modifier.testTag(TestTags.MAP_NULL_ITINERARY))
+                Text("Loading your location...")
               }
         }
       }

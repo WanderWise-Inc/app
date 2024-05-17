@@ -87,6 +87,8 @@ class CreationNavigationTest {
       //      every { createItineraryViewModel.getNewItinerary() } returns itineraryBuilder
       every { createItineraryViewModel.getNewItinerary() } returns
           Itinerary.Builder(userUid = "uniqueUserUID")
+      every { createItineraryViewModel.createItineraryManually } returns false
+      every { createItineraryViewModel.createItineraryByTracking } returns false
       // coEvery { createItineraryViewModel.getItineraryFromUids(any()) } returns flow {
       // listOf(mockItinerary) }
 

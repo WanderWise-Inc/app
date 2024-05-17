@@ -119,6 +119,8 @@ class CreateItineraryMapTest {
     composeTestRule.setContent {
       CreateItineraryMap(
           createItineraryViewModel = createItineraryViewModel,
+          onMapClick = {},
+          locations = emptyList(),
           innerPaddingValues = PaddingValues(10.dp),
       )
     }
@@ -137,6 +139,8 @@ class CreateItineraryMapTest {
       Box(modifier = Modifier.fillMaxSize().testTag(boxTag)) {
         CreateItineraryMap(
             createItineraryViewModel = createItineraryViewModel,
+            onMapClick = {},
+            locations = emptyList(),
             innerPaddingValues = PaddingValues(10.dp),
         )
       }

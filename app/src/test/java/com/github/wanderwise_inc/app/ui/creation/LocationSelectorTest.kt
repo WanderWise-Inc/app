@@ -120,29 +120,29 @@ class CreateItineraryMapUITest {
   }
 
   @Test
-  fun testLocation1TextField() {
+  fun testBackButton() {
+    composeTestRule.setContent { CreateLiveItinerary(showLiveCreation, createItineraryViewModel) }
+
+    composeTestRule.onNodeWithTag(TestTags.BACK_BUTTON).assertIsDisplayed()
+  }
+    
+  @Test
+  fun testAddLocationButton() {
 
     composeTestRule.setContent {
-      LocationSelector(createItineraryViewModel, showLocationSelector, navController)
+      LocationSelector(createItineraryViewModel, showLocationSelector, emptyList(), {}, navController)
     }
 
-    composeTestRule.onNodeWithTag(TestTags.FIRST_LOCATION).assertIsDisplayed()
+    composeTestRule.onNodeWithTag(TestTags.ADD_LOCATION_BUTTON).assertIsDisplayed()
   }
 
   @Test
   fun testLocation2TextField() {
     composeTestRule.setContent {
-      LocationSelector(createItineraryViewModel, showLocationSelector, navController)
+      LocationSelector(createItineraryViewModel, showLocationSelector, emptyList(), {}, navController)
     }
 
-    composeTestRule.onNodeWithTag(TestTags.SECOND_LOCATION).assertIsDisplayed()
-  }
-
-  @Test
-  fun testBackButton() {
-    composeTestRule.setContent { CreateLiveItinerary(showLiveCreation, createItineraryViewModel) }
-
-    composeTestRule.onNodeWithTag(TestTags.BACK_BUTTON).assertIsDisplayed()
+    composeTestRule.onNodeWithTag(TestTags.RESTART_ITINERARY_BUTTON).assertIsDisplayed()
   }
 
   @Test

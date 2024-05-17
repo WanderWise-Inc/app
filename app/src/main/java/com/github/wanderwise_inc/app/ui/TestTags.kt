@@ -2,6 +2,7 @@ package com.github.wanderwise_inc.app.ui
 
 /* helps us avoid typos / inconsistencies between the test files and this file */
 object TestTags {
+  const val MAP_SEARCH_LOCATION = "Map Search Location"
   const val BOTTOM_NAV = "Bottom navigation bar"
   const val SEARCH_DROPDOWN = "Search Dropdown"
   const val OVERVIEW_SCREEN = "Overview Screen"
@@ -13,11 +14,17 @@ object TestTags {
   const val FILTER_PRICE_RANGE = "Filter Price Range"
   const val FILTER_TIME_RANGE = "Filter Time Range"
   const val SEARCH_BAR = "Search Bar"
+  const val LOCATION_SEARCH_SCAFFOLD = "Location Search Scaffold"
+  const val LOCATION_SEARCH_BAR = "Location Search Bar"
+  const val LOCATION_SEARCH_RESULTS = "Location Search Results"
+  const val LOCATION_SEARCH_NO_RESULTS = "Location Search No Results"
   const val CATEGORY_SELECTOR = "Category Selector"
   const val CATEGORY_SELECTOR_TAB = "Category Selector Tab"
   const val NEW_CREATION_SCREEN = "New Creation Screen"
   const val NO_NEW_CREATION_SCREEN = "No New Creation Screen"
   const val CREATION_SCREEN_LOCATIONS = "Creation Screen Choose Locations"
+  const val ADD_LOCATION_BUTTON = "Add Location to Itinerary"
+  const val RESTART_ITINERARY_BUTTON = "Restart Itinerary Location"
   const val CREATION_SCREEN_DESCRIPTION_TITLE = "Creation Screen Choose Title and Description"
   const val CREATION_SCREEN_TITLE = "Creation Screen Choose Title"
   const val CREATION_SCREEN_DESCRIPTION = "Creation Screen Choose Description"

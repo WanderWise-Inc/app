@@ -257,13 +257,19 @@ fun LocationSelector(
       Row(
           modifier = Modifier.fillMaxWidth().padding(8.dp),
           horizontalArrangement = Arrangement.SpaceEvenly) {
-            OutlinedButton(onClick = { navController.navigate("ChooseLocationSearch") }) {
+            OutlinedButton(
+                onClick = { navController.navigate("ChooseLocationSearch") },
+                modifier = Modifier.testTag(TestTags.ADD_LOCATION_BUTTON)
+            ) {
               Row {
                 Icon(imageVector = Icons.Filled.Add, contentDescription = null)
                 Text("Add Location")
               }
             }
-            OutlinedButton(onClick = { resetLocations() }) {
+            OutlinedButton(
+                onClick = { resetLocations() },
+                modifier = Modifier.testTag(TestTags.RESTART_ITINERARY_BUTTON)
+            ) {
               Row {
                 Icon(imageVector = Icons.Filled.RestartAlt, contentDescription = null)
                 Text("Restart itinerary")
