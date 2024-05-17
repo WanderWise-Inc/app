@@ -13,6 +13,7 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.MutableLiveData
+import androidx.navigation.NavHostController
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.wanderwise_inc.app.data.DirectionsRepository
 import com.github.wanderwise_inc.app.data.ImageRepository
@@ -57,6 +58,7 @@ class CreateItineraryMapTest {
   @Mock private lateinit var directionsRepository: DirectionsRepository
   @Mock private lateinit var locationsRepository: LocationsRepository
   @Mock private lateinit var userLocationClient: UserLocationClient
+  @Mock private lateinit var navController: NavHostController
 
   private lateinit var profileViewModel: ProfileViewModel
 
@@ -117,6 +119,8 @@ class CreateItineraryMapTest {
     composeTestRule.setContent {
       CreateItineraryMap(
           createItineraryViewModel = createItineraryViewModel,
+          onMapClick = {},
+          locations = emptyList(),
           innerPaddingValues = PaddingValues(10.dp),
       )
     }
@@ -135,6 +139,8 @@ class CreateItineraryMapTest {
       Box(modifier = Modifier.fillMaxSize().testTag(boxTag)) {
         CreateItineraryMap(
             createItineraryViewModel = createItineraryViewModel,
+            onMapClick = {},
+            locations = emptyList(),
             innerPaddingValues = PaddingValues(10.dp),
         )
       }
@@ -153,8 +159,7 @@ class CreateItineraryMapTest {
   fun `map with selector should display both elements correctly`() = runTest {
     composeTestRule.setContent {
       CreateItineraryMapWithSelector(
-          createItineraryViewModel = createItineraryViewModel,
-      )
+          createItineraryViewModel = createItineraryViewModel, navController = navController)
     }
     composeTestRule.onNodeWithTag(TestTags.MAP_GOOGLE_MAPS).isDisplayed()
   }

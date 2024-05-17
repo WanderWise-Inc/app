@@ -3,6 +3,7 @@ package com.github.wanderwise_inc.app.ui.creation.steps
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,27 +15,27 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.RestartAlt
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -43,25 +44,47 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.github.wanderwise_inc.app.model.location.Location
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.popup.HintPopup
 import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.AdvancedMarker
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
-import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
 
 @Composable
 fun CreateItineraryMapWithSelector(
     createItineraryViewModel: CreateItineraryViewModel,
+    navController: NavHostController
 ) {
-  var showLocationSelector = remember { mutableStateOf(false) }
-  var showLiveCreation = remember { mutableStateOf(false) }
+  var showLocationSelector = remember {
+    mutableStateOf(createItineraryViewModel.createItineraryManually)
+  }
+  var showLiveCreation = remember {
+    mutableStateOf(createItineraryViewModel.createItineraryByTracking)
+  }
+
+  val itineraryBuilder = createItineraryViewModel.getNewItinerary()!!
+
+  var locations by remember { mutableStateOf(itineraryBuilder.locations.toList()) }
+
+  val onMapClick = { latLng: LatLng ->
+    itineraryBuilder.addLocation(Location.fromLatLng(latLng))
+    locations += Location.fromLatLng(latLng)
+  }
+
+  val resetLocations = {
+    itineraryBuilder.resetLocations()
+    locations = emptyList()
+  }
+
   Scaffold(
       bottomBar = {
         if (!showLocationSelector.value && !showLiveCreation.value) {
@@ -70,11 +93,15 @@ fun CreateItineraryMapWithSelector(
         } else if (showLiveCreation.value) {
           CreateLiveItinerary(showLiveCreation, createItineraryViewModel)
         } else {
-          LocationSelector(createItineraryViewModel, showLocationSelector)
+          LocationSelector(
+              createItineraryViewModel,
+              showLocationSelector,
+              locations,
+              resetLocations,
+              navController)
         }
       }) { innerPadding ->
-        CreateItineraryMap(
-            createItineraryViewModel = createItineraryViewModel, innerPaddingValues = innerPadding)
+        CreateItineraryMap(createItineraryViewModel, onMapClick, locations, innerPadding)
       }
 }
 
@@ -82,20 +109,12 @@ fun CreateItineraryMapWithSelector(
 @Composable
 fun CreateItineraryMap(
     createItineraryViewModel: CreateItineraryViewModel,
+    onMapClick: (LatLng) -> Unit,
+    locations: List<Location>,
     innerPaddingValues: PaddingValues
 ) {
-  val itineraryBuilder = createItineraryViewModel.getNewItinerary()!!
 
-  val locations = remember { mutableStateListOf<Location>() }
-  for (location in itineraryBuilder.locations) {
-    locations += location
-  }
-  var locationsCtr by remember { mutableIntStateOf(0) }
   val userLocation by createItineraryViewModel.getUserLocation().collectAsState(initial = null)
-
-  LaunchedEffect(locationsCtr) {
-    createItineraryViewModel.fetchPolylineLocations(itineraryBuilder.build())
-  }
 
   var isHintPopupOpen by remember { mutableStateOf(true) }
 
@@ -104,15 +123,10 @@ fun CreateItineraryMap(
     val cameraPositionState = rememberCameraPositionState {
       position = CameraPosition.fromLatLngZoom(userLocationLatLng, 13f)
     }
-    val polylinePoints by createItineraryViewModel.getPolylinePointsLiveData().observeAsState()
     GoogleMap(
         modifier =
             Modifier.padding(paddingValues = innerPaddingValues).testTag(TestTags.MAP_GOOGLE_MAPS),
-        onMapClick = {
-          itineraryBuilder.addLocation(Location.fromLatLng(it))
-          locations.add(Location.fromLatLng(it))
-          locationsCtr++ // force a redraw
-        },
+        onMapClick = { onMapClick(it) },
         cameraPositionState = cameraPositionState) {
           userLocation?.let {
             Marker(
@@ -128,8 +142,6 @@ fun CreateItineraryMap(
                 title = location.title,
             )
           }
-          if (polylinePoints != null)
-              Polyline(points = polylinePoints!!, color = MaterialTheme.colorScheme.primary)
         }
     if (isHintPopupOpen) {
       HintPopup(message = "Try pressing your screen to add waypoints!") { isHintPopupOpen = false }
@@ -169,12 +181,19 @@ fun ChooseYourWayOfCreation(
           Spacer(modifier = Modifier.height(50.dp))
           Row(modifier = Modifier.padding(16.dp), horizontalArrangement = Arrangement.SpaceEvenly) {
             Button(
-                onClick = { showLocationSelector.value = true },
+                onClick = {
+                  createItineraryViewModel.createItineraryManually = true
+                  showLocationSelector.value = true
+                },
                 modifier = Modifier.fillMaxWidth(0.5f)) {
                   Text("Create a known itinerary", textAlign = TextAlign.Center)
                 }
             Button(
-                onClick = { showLiveCreation.value = true }, modifier = Modifier.fillMaxWidth()) {
+                onClick = {
+                  createItineraryViewModel.createItineraryManually = true
+                  showLiveCreation.value = true
+                },
+                modifier = Modifier.fillMaxWidth()) {
                   Text("Create a live itinerary", textAlign = TextAlign.Center)
                 }
           }
@@ -183,63 +202,78 @@ fun ChooseYourWayOfCreation(
   }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LocationSelector(
     createItineraryViewModel: CreateItineraryViewModel,
-    showLocationSelector: MutableState<Boolean>
+    showLocationSelector: MutableState<Boolean>,
+    locations: List<Location>,
+    resetLocations: () -> Unit,
+    navController: NavHostController,
 ) {
-  var location1 by remember { mutableStateOf("") }
-
-  var location2 by remember { mutableStateOf("") }
-
   BottomAppBar(
       modifier = Modifier.height(250.dp).fillMaxWidth(),
       containerColor = MaterialTheme.colorScheme.primaryContainer,
       contentColor = MaterialTheme.colorScheme.primary,
   ) {
-    Column {
+    Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceBetween) {
       Button(onClick = { showLocationSelector.value = false }) {
         Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Go back")
       }
 
-      /*Text(
-          modifier = Modifier.padding(10.dp),
-          textAlign = TextAlign.Center,
-          text = "Create a new itinerary",
-      )*/
-      Row(verticalAlignment = Alignment.CenterVertically) {
-        Icon(
-            Icons.Filled.LocationOn,
-            contentDescription = "Location 1",
-            modifier = Modifier.padding(start = 10.dp))
-        OutlinedTextField(
-            value = location1,
-            onValueChange = { location1 = it },
-            label = { Text("location 1...") },
-            placeholder = { Text("location 1...") },
-            modifier = Modifier.padding(start = 25.dp).testTag(TestTags.FIRST_LOCATION),
-            shape = RoundedCornerShape(20.dp),
-            singleLine = true)
+      Box(modifier = Modifier.fillMaxWidth().height(128.dp)) {
+        if (locations.isEmpty()) {
+          Text(
+              modifier = Modifier.fillMaxWidth().padding(8.dp),
+              text = "You have no waypoints yet, try adding some")
+        } else {
+          LazyColumn(horizontalAlignment = Alignment.Start) {
+            items(locations) { loc ->
+              Row(
+                  verticalAlignment = Alignment.CenterVertically,
+                  modifier =
+                      Modifier.padding(4.dp)
+                          .fillMaxWidth()
+                          .border(
+                              1.dp,
+                              MaterialTheme.colorScheme.outline,
+                              shape = RoundedCornerShape(4.dp))) {
+                    Icon(
+                        Icons.Filled.LocationOn,
+                        contentDescription = "Location 2",
+                        modifier = Modifier.padding(start = 10.dp))
+                    Text(
+                        text =
+                            "${loc.title ?: "Placed marker"}, ${
+                                    loc.address ?: "lat/lng: (${loc.lat.toFloat()},${loc.long.toFloat()})"
+                                }",
+                        fontSize = 15.sp,
+                        maxLines = 1)
+                  }
+            }
+          }
+        }
       }
-
-      Icon(
-          Icons.Filled.MoreVert,
-          contentDescription = "more",
-          modifier = Modifier.padding(start = 10.dp))
-
-      Row(verticalAlignment = Alignment.CenterVertically) {
-        Icon(
-            Icons.Filled.LocationOn,
-            contentDescription = "Location 2",
-            modifier = Modifier.padding(start = 10.dp))
-        OutlinedTextField(
-            value = location2,
-            onValueChange = { location2 = it },
-            label = { Text("location 2...") },
-            placeholder = { Text("location 2...") },
-            modifier = Modifier.padding(start = 25.dp).testTag(TestTags.SECOND_LOCATION),
-            shape = RoundedCornerShape(20.dp))
-      }
+      Row(
+          modifier = Modifier.fillMaxWidth().padding(8.dp),
+          horizontalArrangement = Arrangement.SpaceEvenly) {
+            OutlinedButton(
+                onClick = { navController.navigate("ChooseLocationSearch") },
+                modifier = Modifier.testTag(TestTags.ADD_LOCATION_BUTTON)) {
+                  Row {
+                    Icon(imageVector = Icons.Filled.Add, contentDescription = null)
+                    Text("Add Location")
+                  }
+                }
+            OutlinedButton(
+                onClick = { resetLocations() },
+                modifier = Modifier.testTag(TestTags.RESTART_ITINERARY_BUTTON)) {
+                  Row {
+                    Icon(imageVector = Icons.Filled.RestartAlt, contentDescription = null)
+                    Text("Restart itinerary")
+                  }
+                }
+          }
     }
   }
 }

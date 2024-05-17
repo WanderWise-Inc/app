@@ -75,6 +75,8 @@ class CreationNavigationTest {
       every { createItineraryViewModel.getPolylinePointsLiveData() } returns dummyLiveData
       every { createItineraryViewModel.getNewItinerary() } returns
           Itinerary.Builder(userUid = "uniqueUserUID")
+      every { createItineraryViewModel.createItineraryManually } returns false
+      every { createItineraryViewModel.createItineraryByTracking } returns false
 
       every { firebaseAuth.currentUser?.uid } returns null
 

@@ -90,6 +90,16 @@ data class Itinerary(
     }
 
     /**
+     * @return the builder to support method chaining
+     * @brief resets the list of locations
+     */
+    fun resetLocations(): Builder {
+      locations.clear()
+      Log.d("DEBUG_RESET_LOCATIONS", "locations reset")
+      return this
+    }
+
+    /**
      * @param title the new title
      * @return the builder to support method chaining
      * @brief set the title of the itinerary builder
