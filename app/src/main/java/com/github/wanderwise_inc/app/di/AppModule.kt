@@ -1,9 +1,9 @@
 package com.github.wanderwise_inc.app.di
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.datastore.core.DataStore
@@ -58,7 +58,7 @@ class AppModule(
 
   private val imageLauncher: ActivityResultLauncher<Intent> by lazy {
     activity.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-      if (result.resultCode == ComponentActivity.RESULT_OK) {
+      if (result.resultCode == Activity.RESULT_OK) {
         result.data?.data?.let { imageRepository.setCurrentFile(it) }
       }
     }
@@ -111,7 +111,7 @@ class AppModule(
   private val activityResultLauncher: ActivityResultLauncher<Intent> by lazy {
     activity.registerForActivityResult(FirebaseAuthUIActivityResultContract()) { res ->
       val user =
-          if (res.resultCode == ComponentActivity.RESULT_OK) firebaseAuth.currentUser else null
+          if (res.resultCode == Activity.RESULT_OK) firebaseAuth.currentUser else null
 
       activity.lifecycleScope.launch { loginViewModel.handleSignInResult(profileViewModel, user) }
     }
