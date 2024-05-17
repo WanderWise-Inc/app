@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -141,7 +142,7 @@ fun ProfilePictureWithDropDown(
 ) {
   var isProfilePictureChangeDropdownOpen by remember { mutableStateOf(false) }
   val profilePictureModifier =
-      Modifier.size(100.dp).clickable { isProfilePictureChangeDropdownOpen = true }
+      Modifier.size(100.dp).clip(CircleShape).clickable { isProfilePictureChangeDropdownOpen = true }
   ProfilePicture(
       profile = profile,
       profileViewModel = profileViewModel,
@@ -212,7 +213,7 @@ fun ProfilePictureChangeDropdownMenu(
     ctr: MutableIntState,
     profile: Profile?,
     modifier: Modifier = Modifier,
-    offset: DpOffset = DpOffset(0.dp, 0.dp),
+    offset: DpOffset = DpOffset(0.dp, 105.dp),
     properties: PopupProperties = PopupProperties(focusable = true),
     content: @Composable ColumnScope.() -> Unit,
 ) {
