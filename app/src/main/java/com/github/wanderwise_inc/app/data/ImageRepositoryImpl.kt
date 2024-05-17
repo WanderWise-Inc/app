@@ -1,8 +1,6 @@
 package com.github.wanderwise_inc.app.data
 
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
@@ -30,7 +28,7 @@ class ImageRepositoryImpl(
    * @return a flow of the bitMap representation of the profile picture
    */
   override fun fetchImage(pathToProfilePic: String): Flow<Uri?> {
-      Log.d("FETCH IMAGE COUNTER", "FETCHING IMAGE")
+    Log.d("FETCH IMAGE COUNTER", "FETCHING IMAGE")
     return flow {
           if (pathToProfilePic.isBlank()) {
             // the path is empty, there should be no profilePicture at this path
@@ -41,8 +39,7 @@ class ImageRepositoryImpl(
             // the byte array that is at the given path (if any)
             val uriResult =
                 suspendCancellableCoroutine<Uri?> { continuation ->
-                  profilePictureRef
-                      .downloadUrl
+                  profilePictureRef.downloadUrl
                       .addOnSuccessListener { result ->
                         Log.d("FETCH IMAGE", "FETCH SUCCESS")
                         continuation.resume(result) // Resume with byte array
@@ -71,38 +68,23 @@ class ImageRepositoryImpl(
     if (fileName == "") {
       throw Exception("fileName is empty")
     }
-
-/*    try {
-      // The currentFile is set with the "setCurrentFile()" function
-      // This will put the given file (the one selected by the user) to store in storage
-      currentFile?.let {
-        imageReference
-            .child("images/${fileName}")
-            .putFile(it)
-            .addOnSuccessListener { Log.d("STORE IMAGE", "STORE SUCCESS") }
-            .addOnFailureListener {
-              Log.w("STORE IMAGE", "STORE FAILED")
-              throw it
-            }
-      }
-      return currentFile != null
-    } catch (e: Exception) {
-      Log.w("STORE IMAGE", e)
-      return false
-    }*/
-      val result = suspendCancellableCoroutine<Boolean> {continuation ->
+    val result =
+        suspendCancellableCoroutine<Boolean> { continuation ->
           currentFile?.let {
-              imageReference
-                  .child("images/${fileName}")
-                  .putFile(it)
-                  .addOnSuccessListener { Log.d("STORE IMAGE", "STORE SUCCESS"); continuation.resume(true) }
-                  .addOnFailureListener {error ->
-                      Log.w("STORE IMAGE", error)
-                      continuation.resume(false)
-                  }
+            imageReference
+                .child("images/${fileName}")
+                .putFile(it)
+                .addOnSuccessListener {
+                  Log.d("STORE IMAGE", "STORE SUCCESS")
+                  continuation.resume(true)
+                }
+                .addOnFailureListener { error ->
+                  Log.w("STORE IMAGE", error)
+                  continuation.resume(false)
+                }
           }
-      }
-      return result
+        }
+    return result
   }
 
   /** @brief used to launch the activity to open the photo gallery */

@@ -1,7 +1,6 @@
 package com.github.wanderwise_inc.app.data
 
 import android.content.Intent
-import android.graphics.Bitmap
 import android.net.Uri
 import kotlinx.coroutines.flow.Flow
 

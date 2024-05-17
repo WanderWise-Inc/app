@@ -30,7 +30,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableIntState
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -56,7 +55,6 @@ import com.github.wanderwise_inc.app.ui.list_itineraries.ItinerariesListScrollab
 import com.github.wanderwise_inc.app.ui.list_itineraries.ItineraryListParent
 import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 const val WANDER_POINTS_SCORE_MULTIPLIER = 10
@@ -76,7 +74,7 @@ fun ProfileScreen(
 
   val userItineraries by
       itineraryViewModel.getUserItineraries(currentUid).collectAsState(initial = emptyList())
-    var ctr = remember { mutableIntStateOf(0) }
+  var ctr = remember { mutableIntStateOf(0) }
 
   if (profile != null) {
     Scaffold(
@@ -139,7 +137,7 @@ fun ProfilePictureWithDropDown(
     profile: Profile?,
     profileViewModel: ProfileViewModel,
     imageRepository: ImageRepository,
-    ctr : MutableIntState
+    ctr: MutableIntState
 ) {
   var isProfilePictureChangeDropdownOpen by remember { mutableStateOf(false) }
   val profilePictureModifier =
@@ -218,7 +216,7 @@ fun ProfilePictureChangeDropdownMenu(
     properties: PopupProperties = PopupProperties(focusable = true),
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    val coroutineScope = rememberCoroutineScope()
+  val coroutineScope = rememberCoroutineScope()
   if (profile != null) {
     DropdownMenu(
         expanded = expanded,
@@ -241,11 +239,11 @@ fun ProfilePictureChangeDropdownMenu(
               text = { Text("UPLOAD PHOTO") },
               onClick = {
                 // Call to upload image to storage with a specific path.
-                  coroutineScope.launch {
-                      imageRepository.uploadImageToStorage("profilePicture/${profile.userUid}")
-                      ctr.intValue++
-                      imageRepository.setCurrentFile(null)
-                  }
+                coroutineScope.launch {
+                  imageRepository.uploadImageToStorage("profilePicture/${profile.userUid}")
+                  ctr.intValue++
+                  imageRepository.setCurrentFile(null)
+                }
               })
         }
   }

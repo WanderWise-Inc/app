@@ -1,6 +1,5 @@
 package com.github.wanderwise_inc.app.viewmodel
 
-import android.graphics.Bitmap
 import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -18,7 +17,8 @@ class ProfileViewModel(
   private var isSignInComplete = false // set on sign-in success
   private lateinit var activeProfile: Profile // set on sign-in
   private val _profilePictureUri = MutableStateFlow<Uri?>(null)
-  val profilePictureUri: StateFlow<Uri?> get() = _profilePictureUri
+  val profilePictureUri: StateFlow<Uri?>
+    get() = _profilePictureUri
 
   /** @return flow of a user profile */
   fun getProfile(userUid: String): Flow<Profile?> {
