@@ -190,7 +190,7 @@ class ProfileViewModelTest {
 
   @Test
   fun getActiveUserUid() {
-    assertEquals(testProfile.userUid, profileViewModel.getActiveUserUid())
+    assertEquals(testProfile.userUid, profileViewModel.getUserUid())
   }
 
   @Test

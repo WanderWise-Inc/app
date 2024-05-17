@@ -66,7 +66,7 @@ fun ProfileScreen(
 ) {
   Log.d("ProfileScreen", "ProfileScreen")
   val profile = profileViewModel.getActiveProfile()
-  val currentUid = profileViewModel.getActiveUserUid()
+  val currentUid = profileViewModel.getUserUid()
 
   val userItineraries by
       itineraryViewModel.getUserItineraries(currentUid).collectAsState(initial = emptyList())

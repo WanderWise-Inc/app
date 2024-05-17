@@ -63,7 +63,7 @@ class ProfileViewModel(
 
   suspend fun checkIfItineraryIsLikedByActiveProfile(itineraryUid: String): Boolean {
     return if (isSignInComplete)
-        profileRepository.checkIfItineraryIsLiked(getActiveUserUid(), itineraryUid)
+        profileRepository.checkIfItineraryIsLiked(getUserUid(), itineraryUid)
     else false
   }
 
@@ -91,7 +91,7 @@ class ProfileViewModel(
   fun getActiveProfile(): Profile = activeProfile
 
   /** Returns the UID of the signed in profile */
-  fun getActiveUserUid(): String = activeProfile.userUid
+  fun getUserUid(): String = activeProfile.userUid
 
   /** Creates a profile from a Firebase user */
   fun createProfileFromFirebaseUser(user: FirebaseUser): Profile {
