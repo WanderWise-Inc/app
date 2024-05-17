@@ -1,5 +1,6 @@
 package com.github.wanderwise_inc.app.viewmodel
 
+import android.util.Log
 import com.github.wanderwise_inc.app.data.DirectionsRepository
 import com.github.wanderwise_inc.app.data.ItineraryRepository
 import com.github.wanderwise_inc.app.data.LocationsRepository
@@ -25,6 +26,10 @@ class CreateItineraryViewModel(
 
   /** New itinerary that the signed in user is currently building */
   private var newItineraryBuilder: Itinerary.Builder? = null
+
+  /** used to store how the itinerary is being created */
+  var createItineraryManually: Boolean = false
+  var createItineraryByTracking: Boolean = false
 
   fun getMaxTitleLength(): Int {
     return TITLE_MAX_LENGTH
@@ -57,6 +62,16 @@ class CreateItineraryViewModel(
   /** initializes a new `MutableItinerary` */
   fun startNewItinerary(userUid: String) {
     newItineraryBuilder = Itinerary.Builder(userUid = userUid)
+  }
+
+  /** uploads new itinerary and clears the builder */
+  fun finishItinerary() {
+    try {
+      uploadNewItinerary()
+    } catch (e: InvalidObjectException) {
+      Log.d("CreateItineraryViewModel", "cannot complete a null itinerary. $e")
+    }
+    newItineraryBuilder = null
   }
 
   fun uploadNewItinerary() {

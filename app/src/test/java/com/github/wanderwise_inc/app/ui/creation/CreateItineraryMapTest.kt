@@ -13,13 +13,17 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.MutableLiveData
+import androidx.navigation.NavHostController
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.wanderwise_inc.app.data.DirectionsRepository
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.data.ItineraryRepository
 import com.github.wanderwise_inc.app.data.LocationsRepository
 import com.github.wanderwise_inc.app.data.ProfileRepository
+import com.github.wanderwise_inc.app.model.location.Itinerary
+import com.github.wanderwise_inc.app.model.location.ItineraryTags
 import com.github.wanderwise_inc.app.model.location.Location
+import com.github.wanderwise_inc.app.model.location.PlacesReader
 import com.github.wanderwise_inc.app.model.profile.Profile
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.creation.steps.CreateItineraryMap
@@ -28,70 +32,86 @@ import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.github.wanderwise_inc.app.viewmodel.UserLocationClient
 import com.google.android.gms.maps.model.LatLng
-import io.mockk.MockKAnnotations
-import io.mockk.every
-import io.mockk.impl.annotations.MockK
-import io.mockk.mockk
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.ArgumentMatchers
+import org.mockito.ArgumentMatchers.anyLong
+import org.mockito.Mock
+import org.mockito.Mockito
+import org.mockito.junit.MockitoJUnit
+import org.mockito.junit.MockitoRule
 
 @RunWith(AndroidJUnit4::class)
 class CreateItineraryMapTest {
   @get:Rule val composeTestRule = createComposeRule()
 
-  @MockK private lateinit var directionsRepository: DirectionsRepository
+  @get:Rule val mockitoRule: MockitoRule = MockitoJUnit.rule()
 
-  @MockK private lateinit var imageRepository: ImageRepository
+  @Mock private lateinit var createItineraryViewModel: CreateItineraryViewModel
 
-  @MockK private lateinit var itineraryRepository: ItineraryRepository
-
-  @MockK private lateinit var locationsRepository: LocationsRepository
-
-  @MockK private lateinit var profileRepository: ProfileRepository
-
-  @MockK private lateinit var locationClient: UserLocationClient
-
-  private lateinit var createItineraryViewModel: CreateItineraryViewModel
+  @Mock private lateinit var profileRepository: ProfileRepository
+  @Mock private lateinit var imageRepository: ImageRepository
+  @Mock private lateinit var directionsRepository: DirectionsRepository
+  @Mock private lateinit var locationsRepository: LocationsRepository
+  @Mock private lateinit var userLocationClient: UserLocationClient
+  @Mock private lateinit var navController: NavHostController
 
   private lateinit var profileViewModel: ProfileViewModel
 
   private val epflLat = 46.519126741544575
   private val epflLon = 6.5676006970802145
 
+  private val locations = PlacesReader(null).readFromString()
+  private val itinerary =
+      Itinerary(
+          userUid = "",
+          locations = locations,
+          title = "San Francisco Bike Itinerary",
+          tags = listOf(ItineraryTags.CULTURAL, ItineraryTags.NATURE, ItineraryTags.BUDGET),
+          description = "A 3-day itinerary to explore the best of San Francisco on a bike.",
+          visible = true)
+
   @Before
   fun setup() {
-    MockKAnnotations.init(this)
-
     val epflLocation = Location(epflLat, epflLon)
-
     val polylinePoints = MutableLiveData<List<LatLng>>()
     polylinePoints.value = listOf(LatLng(epflLat, epflLon))
 
+    Mockito.`when`(
+            directionsRepository.getPolylineWayPoints(
+                ArgumentMatchers.anyString(),
+                ArgumentMatchers.anyString(),
+                ArgumentMatchers.anyList(),
+                ArgumentMatchers.anyString()))
+        .thenReturn(MutableLiveData(listOf(LatLng(epflLat, epflLon))))
+    Mockito.`when`(
+            locationsRepository.getPlaces(
+                ArgumentMatchers.anyString(),
+                ArgumentMatchers.anyInt(),
+                ArgumentMatchers.anyString()))
+        .thenReturn(
+            MutableLiveData(
+                listOf(com.github.wanderwise_inc.app.model.location.Location(epflLat, epflLon))))
+    Mockito.`when`(userLocationClient.getLocationUpdates(anyLong()))
+        .thenReturn(flow { emit(epflLocation) })
+    val itineraryRepository = Mockito.mock(ItineraryRepository::class.java)
+
     val dummyProfile = Profile("-")
-
-    every { directionsRepository.getPolylineWayPoints(any(), any(), any(), any()) } returns
-        polylinePoints
-
-    every { imageRepository.fetchImage(any()) } returns flow { emit(null) }
-
-    every { locationsRepository.getPlaces(any(), any(), any()) } returns
-        MutableLiveData(listOf(Location(epflLat, epflLon)))
-
-    every { profileRepository.getProfile(any()) } returns flow { emit(dummyProfile) }
-
-    every { locationClient.getLocationUpdates(any()) } returns flow { emit(epflLocation) }
+    Mockito.`when`(profileRepository.getProfile(ArgumentMatchers.anyString()))
+        .thenReturn(flow { emit(dummyProfile) })
+    Mockito.`when`(imageRepository.fetchImage(ArgumentMatchers.anyString()))
+        .thenReturn(flow { emit(null) })
 
     createItineraryViewModel =
         CreateItineraryViewModel(
-            itineraryRepository, directionsRepository, locationsRepository, locationClient)
+            itineraryRepository, directionsRepository, locationsRepository, userLocationClient)
+    createItineraryViewModel.startNewItinerary(dummyProfile.userUid)
 
     profileViewModel = ProfileViewModel(profileRepository, imageRepository)
-
-    createItineraryViewModel.startNewItinerary(dummyProfile.userUid)
   }
 
   @Test
@@ -99,6 +119,8 @@ class CreateItineraryMapTest {
     composeTestRule.setContent {
       CreateItineraryMap(
           createItineraryViewModel = createItineraryViewModel,
+          onMapClick = {},
+          locations = emptyList(),
           innerPaddingValues = PaddingValues(10.dp),
       )
     }
@@ -117,6 +139,8 @@ class CreateItineraryMapTest {
       Box(modifier = Modifier.fillMaxSize().testTag(boxTag)) {
         CreateItineraryMap(
             createItineraryViewModel = createItineraryViewModel,
+            onMapClick = {},
+            locations = emptyList(),
             innerPaddingValues = PaddingValues(10.dp),
         )
       }
@@ -135,8 +159,7 @@ class CreateItineraryMapTest {
   fun `map with selector should display both elements correctly`() = runTest {
     composeTestRule.setContent {
       CreateItineraryMapWithSelector(
-          createItineraryViewModel = createItineraryViewModel,
-      )
+          createItineraryViewModel = createItineraryViewModel, navController = navController)
     }
     composeTestRule.onNodeWithTag(TestTags.MAP_GOOGLE_MAPS).isDisplayed()
   }

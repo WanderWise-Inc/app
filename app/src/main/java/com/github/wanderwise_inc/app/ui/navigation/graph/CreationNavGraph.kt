@@ -8,7 +8,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.github.wanderwise_inc.app.data.ImageRepository
-import com.github.wanderwise_inc.app.ui.creation.steps.CreateItineraryMapWithSelector
+import com.github.wanderwise_inc.app.ui.creation.steps.CreateItineraryChooseLocations
 import com.github.wanderwise_inc.app.ui.creation.steps.CreationStepChooseDescriptionScreen
 import com.github.wanderwise_inc.app.ui.creation.steps.CreationStepChooseTagsScreen
 import com.github.wanderwise_inc.app.ui.creation.steps.CreationStepPreview
@@ -31,12 +31,14 @@ fun CreationNavGraph(
       startDestination = CreationStepsDestinations.ChooseLocations.route,
       modifier = Modifier.padding(padding)) {
         composable(CreationStepsDestinations.ChooseLocations.route) {
-          CreateItineraryMapWithSelector(createItineraryViewModel)
+          CreateItineraryChooseLocations(createItineraryViewModel)
         }
         composable(CreationStepsDestinations.ChooseDescription.route) {
           CreationStepChooseDescriptionScreen(createItineraryViewModel)
         }
-        composable(CreationStepsDestinations.ChooseTags.route) { CreationStepChooseTagsScreen() }
+        composable(CreationStepsDestinations.ChooseTags.route) {
+          CreationStepChooseTagsScreen(createItineraryViewModel)
+        }
         composable(CreationStepsDestinations.Preview.route) {
           CreationStepPreview(
               createItineraryViewModel = createItineraryViewModel,

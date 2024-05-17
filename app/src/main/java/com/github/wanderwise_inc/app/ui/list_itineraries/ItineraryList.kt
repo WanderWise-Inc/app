@@ -40,7 +40,6 @@ import com.github.wanderwise_inc.app.ui.navigation.Destination
 import com.github.wanderwise_inc.app.ui.navigation.NavigationActions
 import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
-import com.google.firebase.auth.FirebaseAuth
 
 /** @brief reusable UI elements for displaying a list of itineraries */
 
@@ -51,7 +50,6 @@ fun ItinerariesListScrollable(
     itineraryViewModel: ItineraryViewModel,
     profileViewModel: ProfileViewModel,
     navController: NavHostController,
-    firebaseAuth: FirebaseAuth,
     paddingValues: PaddingValues,
     parent: ItineraryListParent,
     imageRepository: ImageRepository
@@ -92,7 +90,7 @@ fun ItinerariesListScrollable(
             var isLikedInitially by remember {
               mutableStateOf(likedItineraries.contains(itinerary.uid))
             }
-            LaunchedEffect(Unit) {
+            LaunchedEffect(uid) {
               isLikedInitially = profileViewModel.checkIfItineraryIsLiked(uid, itinerary.uid)
               Log.d("ItineraryList", "isLiked = $isLikedInitially")
             }

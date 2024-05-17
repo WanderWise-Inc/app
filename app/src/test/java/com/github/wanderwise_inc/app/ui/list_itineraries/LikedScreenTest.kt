@@ -75,7 +75,6 @@ class LikedScreenTest {
           navController,
           sliderPositionPriceState,
           sliderPositionTimeState,
-          firebaseAuth,
           imageRepository)
     }
   }

@@ -64,8 +64,7 @@ class MainActivity : ComponentActivity() {
               bottomNavigationViewModel,
               loginViewModel,
               imageRepository,
-              navController,
-              firebaseAuth)
+              navController)
         }
       }
     }
