@@ -29,7 +29,7 @@ class ImageRepositoryImpl(
    *
    * @return a flow of the bitMap representation of the profile picture
    */
-  override fun fetchImage(pathToProfilePic: String): Flow<Bitmap?> {
+  override fun fetchImage(pathToProfilePic: String): Flow<Uri?> {
     return flow {
           if (pathToProfilePic.isBlank()) {
             // the path is empty, there should be no profilePicture at this path
@@ -38,22 +38,20 @@ class ImageRepositoryImpl(
             val profilePictureRef = imageReference.child("images/${pathToProfilePic}")
 
             // the byte array that is at the given path (if any)
-            val byteResult =
-                suspendCancellableCoroutine<ByteArray?> { continuation ->
+            val uriResult =
+                suspendCancellableCoroutine<Uri?> { continuation ->
                   profilePictureRef
-                      .getBytes(2048 * 2048)
-                      .addOnSuccessListener { byteResult ->
+                      .downloadUrl
+                      .addOnSuccessListener { result ->
                         Log.d("FETCH IMAGE", "FETCH SUCCESS")
-                        continuation.resume(byteResult) // Resume with byte array
+                        continuation.resume(result) // Resume with byte array
                       }
                       .addOnFailureListener { exception ->
                         Log.w("FETCH IMAGE", exception)
                         continuation.resumeWithException(exception) // Resume with exception
                       }
                 }
-            // Decode bitmap if byte are is not null
-            val bitmap = byteResult?.let { BitmapFactory.decodeByteArray(it, 0, it.size) }
-            emit(bitmap) // Emit bitmap
+            emit(uriResult) // Emit bitmap
           }
         }
         .catch {
