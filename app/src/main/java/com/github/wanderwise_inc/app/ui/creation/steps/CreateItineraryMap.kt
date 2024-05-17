@@ -58,6 +58,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.Location
@@ -85,10 +86,6 @@ fun CreateItineraryMapWithSelector(
   val itineraryBuilder = createItineraryViewModel.getNewItinerary()!!
     
   var locations by remember { mutableStateOf(itineraryBuilder.locations.toList()) }
-
-  /*LaunchedEffect(locations) {
-    createItineraryViewModel.fetchPolylineLocations(itineraryBuilder.build())
-  }*/
     
   val onMapClick = { latLng: LatLng ->
     itineraryBuilder.addLocation(Location.fromLatLng(latLng))
@@ -100,7 +97,6 @@ fun CreateItineraryMapWithSelector(
       locations = emptyList()
   }
 
-  //Log.d("DEBUG_SHOW_ITINERARY_CREATION", "$showLiveCreation, $showLocationSelector")
   Scaffold(
       bottomBar = {
         if (!showLocationSelector.value && !showLiveCreation.value) {
@@ -230,12 +226,6 @@ fun LocationSelector(
     resetLocations: () -> Unit,
     navController: NavHostController,
 ) {
-    /*val locations = remember { mutableStateListOf<Location>() }
-    for (location in itineraryBuilder.locations) {
-        Log.d("DEBUG_ADD_LOCATION", "adding location: $location")
-        locations += location
-    }*/
-
   BottomAppBar(
       modifier = Modifier
           .height(250.dp)
@@ -260,7 +250,6 @@ fun LocationSelector(
                 )
             } else {
                 LazyColumn(horizontalAlignment = Alignment.Start) {
-                    Log.d("DEBUG_LOCATIONS", "${locations.toList().size}")
                     items(locations) { loc ->
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
@@ -280,8 +269,9 @@ fun LocationSelector(
                             )
                             Text(
                                 text = "${loc.title ?: "Placed marker"}, ${
-                                    loc.address ?: loc.toLatLng().toString()
+                                    loc.address ?: "lat/lng: (${loc.lat.toFloat()},${loc.long.toFloat()})"
                                 }",
+                                fontSize = 15.sp,
                                 maxLines = 1
                             )
                         }
@@ -294,7 +284,6 @@ fun LocationSelector(
             .padding(8.dp),
             horizontalArrangement = Arrangement.SpaceEvenly) {
             OutlinedButton(onClick = {
-                Log.d("DEBUG_NAVIGATOR", "navigate to ChooseLocationSearch")
                 navController.navigate("ChooseLocationSearch")
             }) {
                 Row {
