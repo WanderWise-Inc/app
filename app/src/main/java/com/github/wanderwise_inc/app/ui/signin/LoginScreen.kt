@@ -41,7 +41,7 @@ fun LoginScreen(googleSignInLauncher: GoogleSignInLauncher) {
     var currentImageIndex by remember { mutableStateOf(0) }
     val infiniteTransition = rememberInfiniteTransition()
     val alpha by infiniteTransition.animateFloat(
-        initialValue = 0.4f,
+        initialValue = 0.6f,
         targetValue = 0.6f,
         animationSpec = infiniteRepeatable(
             animation = tween(5000, easing = LinearEasing),
@@ -71,7 +71,8 @@ fun LoginScreen(googleSignInLauncher: GoogleSignInLauncher) {
         Box(modifier = Modifier.fillMaxSize()) {
             Crossfade(
                 targetState = currentImageIndex,
-                animationSpec = tween(durationMillis = 1000)  // Adjust the duration to control the speed of the crossfade
+                animationSpec = tween(durationMillis = 2000),
+                label = ""  // Adjust the duration to control the speed of the crossfade
             ) { index ->
                 Image(
                     painter = painterResource(id = imageList[index]),
