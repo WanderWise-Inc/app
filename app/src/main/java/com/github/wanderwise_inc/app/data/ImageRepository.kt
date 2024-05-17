@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 /** @brief data source for fetching and retrieving images */
 interface ImageRepository {
   /** @return a bitmap flow of queried image */
-  fun fetchImage(pathToProfilePic: String): Flow<Bitmap?>
+  fun fetchImage(pathToProfilePic: String): Flow<Uri?>
 
   /**
    * @param bitMap the image's bitMap we want to store
