@@ -23,6 +23,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
@@ -32,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.github.wanderwise_inc.app.R
+import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.navigation.graph.Graph
 import com.github.wanderwise_inc.app.viewmodel.LoginViewModel
 import com.github.wanderwise_inc.app.viewmodel.SignInState
@@ -61,7 +63,11 @@ fun LoginScreen(
             text = "You can either wander dumb or,",
             fontWeight = FontWeight.Normal,
             textAlign = TextAlign.Center,
-            style = TextStyle(fontSize = 22.sp, fontWeight = FontWeight.Medium, fontStyle = FontStyle.Italic),
+            style = TextStyle(
+                fontSize = 22.sp,
+                fontWeight = FontWeight.Medium,
+                fontStyle = FontStyle.Italic
+            ),
             modifier = Modifier
                 .padding(top = 16.dp)
                 .offset(y = 60.dp)
@@ -81,9 +87,9 @@ fun LoginScreen(
 
         Image(
             painter = painterResource(id = R.drawable.logo_swent),
-            contentDescription = "WanderWise Logo",
+            contentDescription = "WanderWise logo",
             modifier = Modifier
-                .size(400.dp)
+                .size(275.dp)
                 .align(Alignment.CenterHorizontally)
         )
 
@@ -113,13 +119,14 @@ fun SignInButton(
         colors = ButtonDefaults.buttonColors(Color.Transparent),
         modifier = Modifier
             .padding(bottom = 16.dp)
+            .testTag(TestTags.SIGN_IN_BUTTON)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
                 painter = painterResource(id = R.drawable.google__g__logo_svg),
-                contentDescription = "Google Logo",
+                contentDescription = "Google logo",
                 modifier = Modifier
                     .size(17.dp)
             )
