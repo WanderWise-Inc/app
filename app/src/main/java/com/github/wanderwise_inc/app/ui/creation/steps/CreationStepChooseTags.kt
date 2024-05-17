@@ -22,7 +22,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -34,10 +33,13 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.core.text.isDigitsOnly
+import com.github.wanderwise_inc.app.model.location.Tag
 import com.github.wanderwise_inc.app.ui.TestTags
+import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
 
 @Composable
-fun CreationStepChooseTagsScreen() {
+fun CreationStepChooseTagsScreen(createItineraryViewModel: CreateItineraryViewModel) {
   Column(
       horizontalAlignment = Alignment.CenterHorizontally,
       modifier =
@@ -45,16 +47,20 @@ fun CreationStepChooseTagsScreen() {
               .testTag(TestTags.CREATION_SCREEN_TAGS)
               .background(MaterialTheme.colorScheme.primaryContainer),
       verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        ItineraryImageBanner(modifier = Modifier.padding(all = 10.dp))
-        PriceEstimationTextBox()
-        TimeDurationEstimation()
-        RelevantTags()
-        IsPublicSwitchButton()
+        ItineraryImageBanner(
+            createItineraryViewModel = createItineraryViewModel, Modifier.padding(all = 10.dp))
+        PriceEstimationTextBox(createItineraryViewModel)
+        TimeDurationEstimation(createItineraryViewModel)
+        RelevantTags(createItineraryViewModel)
+        IsPublicSwitchButton(createItineraryViewModel)
       }
 }
 
 @Composable
-fun ItineraryImageBanner(modifier: Modifier = Modifier) {
+fun ItineraryImageBanner(
+    createItineraryViewModel: CreateItineraryViewModel,
+    modifier: Modifier = Modifier
+) {
   // TODO: on click upload image using Context Drop Down Menu
   // default image = Please Upload Image
 
@@ -72,21 +78,28 @@ fun ItineraryImageBanner(modifier: Modifier = Modifier) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PriceEstimationTextBox() {
+fun PriceEstimationTextBox(createItineraryViewModel: CreateItineraryViewModel) {
   // number text field to estimate price, give the option to choose currency
   val currencies = listOf("USD", "EUR", "JPY", "GBP", "AUD", "CAD", "CHF", "CNY", "SEK", "NZD")
   var isCurrenciesMenuExpanded by remember { mutableStateOf(false) }
   var selectedCurrency by remember { mutableStateOf(currencies[0]) }
+  var priceEstimateDisplay by remember {
+    mutableStateOf(createItineraryViewModel.getNewItinerary()!!.price?.toString() ?: "")
+  }
 
   Row(Modifier.fillMaxWidth().padding(all = 10.dp).clip(MaterialTheme.shapes.medium)) {
-    var priceEstimate by remember { mutableStateOf("") }
-
     TextField(
         label = { Text("Price Estimate") },
-        value = priceEstimate,
+        value = priceEstimateDisplay,
         modifier = Modifier,
         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-        onValueChange = { priceEstimate = it })
+        onValueChange = { input ->
+          // ensures that we can only set digits and points (and don't crash with input.toFloat())
+          if (input.isNotBlank() && input.isDigitsOnly()) {
+            createItineraryViewModel.getNewItinerary()!!.price(input.toFloat())
+          }
+          priceEstimateDisplay = input
+        })
 
     ExposedDropdownMenuBox(
         expanded = isCurrenciesMenuExpanded,
@@ -118,18 +131,24 @@ fun PriceEstimationTextBox() {
 }
 
 @Composable
-fun TimeDurationEstimation() {
-  var timeEstimate by remember { mutableStateOf("") }
+fun TimeDurationEstimation(createItineraryViewModel: CreateItineraryViewModel) {
+  var timeEstimateDisplay by remember {
+    mutableStateOf(createItineraryViewModel.getNewItinerary()?.price?.toString() ?: "")
+  }
   TextField(
       label = { Text("Time Estimate (in hours)") },
-      value = "",
+      value = timeEstimateDisplay,
       modifier = Modifier,
       keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-      onValueChange = { timeEstimate = it })
+      onValueChange = { input ->
+        if (input.isNotBlank() && input.isDigitsOnly())
+            createItineraryViewModel.getNewItinerary()?.time(input.toInt())
+        timeEstimateDisplay = input
+      })
 }
 
 @Composable
-fun RelevantTags() {
+fun RelevantTags(createItineraryViewModel: CreateItineraryViewModel) {
   val allTags =
       listOf(
           "Adventure",
@@ -141,11 +160,16 @@ fun RelevantTags() {
           "Shopping",
           "Nightlife")
   var isTagsDDM by remember { mutableStateOf(false) }
-  val selectedTags = remember { mutableStateListOf<String>() }
+
+  var selectedTags = mutableListOf<Tag>()
+  for (tag in createItineraryViewModel.getNewItinerary()?.tags!!) {
+    selectedTags.add(tag)
+  }
+  val dispTags by remember(selectedTags) { mutableStateOf(selectedTags) }
   var triedToAddMoreThan3Tags by remember { mutableStateOf(false) }
 
   Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-    Text("Selected Tags: ${selectedTags.joinToString(", ")}")
+    Text("Selected Tags: ${dispTags.joinToString(", ")}")
     if (triedToAddMoreThan3Tags) {
       Text(
           "You can only select up to 3 tags",
@@ -164,6 +188,8 @@ fun RelevantTags() {
             isTagsDDM = false
             if (!selectedTags.contains(tag) && selectedTags.size < 3) {
               selectedTags.add(tag)
+              createItineraryViewModel.getNewItinerary()!!.tags.clear()
+              createItineraryViewModel.getNewItinerary()!!.tags.addAll(selectedTags)
             } else if (selectedTags.size >= 3) {
               triedToAddMoreThan3Tags = true
             }
@@ -173,15 +199,21 @@ fun RelevantTags() {
 }
 
 @Composable
-fun IsPublicSwitchButton() {
-  var isPrivate by remember { mutableStateOf(false) }
+fun IsPublicSwitchButton(createItineraryViewModel: CreateItineraryViewModel) {
+  var isVisible by remember {
+    mutableStateOf(createItineraryViewModel.getNewItinerary()?.visible ?: false)
+  }
+
   Switch(
-      checked = isPrivate,
-      onCheckedChange = { isPrivate = it },
+      checked = isVisible,
+      onCheckedChange = {
+        isVisible = it
+        createItineraryViewModel.getNewItinerary()!!.visible(isVisible)
+      },
       modifier = Modifier.padding(top = 20.dp))
-  if (isPrivate) {
-    Text("This itinerary is private", fontWeight = FontWeight.Bold)
-  } else {
+  if (isVisible) {
     Text("This itinerary is public", fontWeight = FontWeight.Bold)
+  } else {
+    Text("This itinerary is private", fontWeight = FontWeight.Bold)
   }
 }
