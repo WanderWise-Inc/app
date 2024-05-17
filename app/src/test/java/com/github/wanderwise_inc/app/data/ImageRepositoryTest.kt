@@ -1,7 +1,6 @@
 package com.github.wanderwise_inc.app.data
 
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.activity.result.ActivityResultLauncher
 import com.google.android.gms.tasks.OnFailureListener
@@ -37,6 +36,7 @@ class ImageRepositoryTest {
   @Mock private lateinit var activityLauncher: ActivityResultLauncher<Intent>
   @Mock private lateinit var uploadTask: UploadTask
   @Mock private lateinit var taskByteArray: Task<ByteArray>
+  @Mock private lateinit var taskUri: Task<Uri>
 
   private lateinit var imageRepositoryImpl: ImageRepositoryImpl
 
@@ -85,7 +85,7 @@ class ImageRepositoryTest {
   }
 
   @Test
-  fun `upload image should correctly store the Uri in storage`() {
+  fun `upload image should correctly store the Uri in storage`() = runTest {
     val testPath = "testPath"
 
     `when`(imageReference.child(anyString())).thenReturn(storageReference)
@@ -105,7 +105,7 @@ class ImageRepositoryTest {
   }
 
   @Test
-  fun `upload image when putFile failed should return false`() {
+  fun `upload image when putFile failed should return false`() = runTest {
     val testPath = "testPath"
 
     `when`(imageReference.child(anyString())).thenReturn(storageReference)
@@ -125,20 +125,20 @@ class ImageRepositoryTest {
   }
 
   @Test(expected = Exception::class)
-  fun `if path is empty, uploadImageToStorage should throw an exception`() {
+  fun `if path is empty, uploadImageToStorage should throw an exception`() = runTest {
     val testPath = ""
     imageRepositoryImpl.uploadImageToStorage(testPath)
   }
 
   @Test
-  fun `if file is null, uploadImageToStorage should return false`() {
+  fun `if file is null, uploadImageToStorage should return false`() = runTest {
     val testPath = "random"
     imageRepositoryImpl.setCurrentFile(null)
     assertEquals(false, imageRepositoryImpl.uploadImageToStorage(testPath))
   }
 
   @Test(expected = Exception::class)
-  fun `if putFile throws an exception, the method should return false`() {
+  fun `if putFile throws an exception, the method should return false`() = runTest {
     val testPath = "random"
 
     `when`(imageReference.child(anyString())).thenReturn(storageReference)
@@ -155,54 +155,46 @@ class ImageRepositoryTest {
   }
 
   @Test
-  fun `fetch image with a correct path should correctly return a bitMap`() = runTest {
-    val byteArray = byteArrayOf(1, 2, 3)
+  fun `fetch image with a correct path should correctly return a Uri`() = runTest {
     `when`(imageReference.child(anyString())).thenReturn(storageReference)
-    `when`(storageReference.getBytes(any(Long::class.java))).thenReturn(taskByteArray)
-    `when`(taskByteArray.addOnSuccessListener(any())).thenAnswer {
-      val listener = it.arguments[0] as OnSuccessListener<ByteArray>
-      listener.onSuccess(byteArray)
-      taskByteArray
+    `when`(storageReference.downloadUrl).thenReturn(taskUri)
+    `when`(taskUri.addOnSuccessListener(any())).thenAnswer {
+      val listener = it.arguments[0] as OnSuccessListener<Uri>
+      listener.onSuccess(uri)
+      taskUri
     }
 
-    val byteR = imageRepositoryImpl.fetchImage("testPath").first()
-    val bitMap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
-    assertNotNull(byteR)
-    assertEquals(bitMap.width, byteR!!.width)
-    assertEquals(bitMap.height, byteR.height)
-    for (x in 0 until bitMap.width) {
-      for (y in 0 until bitMap.height) {
-        assertEquals(bitMap.getPixel(x, y), byteR.getPixel(x, y))
+    val uriRes = imageRepositoryImpl.fetchImage("testPath").first()
+    assertEquals(uri, uriRes)
+  }
+
+  @Test
+  fun `fetch image with an error while getting the download URL should return a null Uri`() =
+      runTest {
+        `when`(imageReference.child(anyString())).thenReturn(storageReference)
+        `when`(storageReference.downloadUrl).thenReturn(taskUri)
+        `when`(taskUri.addOnSuccessListener(any())).thenReturn(taskUri)
+        `when`(taskUri.addOnFailureListener(any())).thenAnswer {
+          val listener = it.arguments[0] as OnFailureListener
+          listener.onFailure(Exception("Get bytes return an exception"))
+          taskUri
+        }
+
+        val uriRes = imageRepositoryImpl.fetchImage("testPath").first()
+        assertNull(uriRes)
       }
-    }
-  }
 
   @Test
-  fun `fetch image with an error while getting the bytes should return a null bitmap`() = runTest {
+  fun `fetch image with downloadURL that returns null should return a null Uri`() = runTest {
     `when`(imageReference.child(anyString())).thenReturn(storageReference)
-    `when`(storageReference.getBytes(any(Long::class.java))).thenReturn(taskByteArray)
-    `when`(taskByteArray.addOnSuccessListener(any())).thenReturn(taskByteArray)
-    `when`(taskByteArray.addOnFailureListener(any())).thenAnswer {
-      val listener = it.arguments[0] as OnFailureListener
-      listener.onFailure(Exception("Get bytes return an exception"))
-      taskByteArray
-    }
-
-    val bitmap = imageRepositoryImpl.fetchImage("testPath").first()
-    assertNull(bitmap)
-  }
-
-  @Test
-  fun `fetch image with getBytes that returns null should return a null bitmap`() = runTest {
-    `when`(imageReference.child(anyString())).thenReturn(storageReference)
-    `when`(storageReference.getBytes(any(Long::class.java))).thenReturn(taskByteArray)
-    `when`(taskByteArray.addOnSuccessListener(any())).thenAnswer {
-      val listener = it.arguments[0] as OnSuccessListener<ByteArray>
+    `when`(storageReference.downloadUrl).thenReturn(taskUri)
+    `when`(taskUri.addOnSuccessListener(any())).thenAnswer {
+      val listener = it.arguments[0] as OnSuccessListener<Uri>
       listener.onSuccess(null)
-      taskByteArray
+      taskUri
     }
 
-    val bitmap = imageRepositoryImpl.fetchImage("testPath").first()
-    assertNull(bitmap)
+    val uriRes = imageRepositoryImpl.fetchImage("testPath").first()
+    assertNull(uriRes)
   }
 }

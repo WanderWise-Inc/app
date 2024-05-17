@@ -83,6 +83,10 @@ class ImageRepositoryImpl(
                   continuation.resume(false)
                 }
           }
+              ?: run {
+                Log.w("STORE IMAGE", "currentFile is null")
+                continuation.resume(false)
+              }
         }
     return result
   }
