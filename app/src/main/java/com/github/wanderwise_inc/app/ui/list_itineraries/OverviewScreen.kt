@@ -1,5 +1,6 @@
 package com.github.wanderwise_inc.app.ui.list_itineraries
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Scaffold
@@ -57,7 +58,7 @@ fun DisplayOverviewItineraries(
   val categoriesList =
       listOf(
           SearchCategory(ItineraryTags.ADVENTURE, R.drawable.adventure_icon, "Adventure"),
-          SearchCategory(ItineraryTags.LUXURY, R.drawable.shopping_icon, "Shopping"),
+          SearchCategory(ItineraryTags.SHOPPING, R.drawable.shopping_icon, "Shopping"),
           SearchCategory(ItineraryTags.PHOTOGRAPHY, R.drawable.sight_seeing_icon, "Sight Seeing"),
           SearchCategory(ItineraryTags.FOODIE, R.drawable.drinks_icon, "Drinks"),
       )
@@ -87,7 +88,8 @@ fun DisplayOverviewItineraries(
       modifier = Modifier.testTag(TestTags.OVERVIEW_SCREEN)) { innerPadding ->
         val filtered =
             itineraries
-                .filter { itinerary -> itinerary.tags.contains(categoriesList[selectedIndex].tag) }
+                .filter { itinerary ->
+                    itinerary.tags.contains(categoriesList[selectedIndex].tag) }
                 .filter { itinerary ->
                   searchQuery.isBlank() ||
                       itinerary.title.contains(searchQuery, ignoreCase = true) ||

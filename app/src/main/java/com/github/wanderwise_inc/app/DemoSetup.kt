@@ -69,7 +69,7 @@ fun addItineraries(
           userUid = OTHER_USER_UID,
           locations = defaultLocations,
           title = "Shopping then adventure",
-          tags = listOf(ItineraryTags.ADVENTURE, ItineraryTags.LUXURY),
+          tags = listOf(ItineraryTags.ADVENTURE, ItineraryTags.SHOPPING),
           description = "gucci",
           visible = true,
       )
