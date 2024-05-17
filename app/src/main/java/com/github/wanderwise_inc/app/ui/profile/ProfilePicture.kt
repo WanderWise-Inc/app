@@ -28,8 +28,8 @@ fun ProfilePicture(profile: Profile?, profileViewModel: ProfileViewModel, modifi
   val profilePicture by profilePictureFlow.collectAsState(initial = null)
     val model = ImageRequest.Builder(LocalContext.current).data(profilePicture).error(R.drawable.profile_icon).crossfade(500).build()
     val painter = rememberAsyncImagePainter(model = model)
-    Image(painter = painter, contentDescription = "profile_icon", modifier = modifier)
     if (painter.state is AsyncImagePainter.State.Loading) {
         CircularProgressIndicator()
     }
+    Image(painter = painter, contentDescription = "profile_icon", modifier = modifier)
 }
