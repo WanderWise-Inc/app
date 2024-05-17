@@ -231,6 +231,7 @@ fun ProfilePictureChangeDropdownMenu(
               onClick = {
                 // Call to upload image to storage with a specific path.
                 imageRepository.uploadImageToStorage("profilePicture/${profile.userUid}")
+                  imageRepository.setCurrentFile(null)
               })
         }
   }

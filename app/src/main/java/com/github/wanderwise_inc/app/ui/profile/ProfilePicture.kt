@@ -1,18 +1,13 @@
 package com.github.wanderwise_inc.app.ui.profile
 
 import androidx.compose.foundation.Image
-import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.graphics.painter.BitmapPainter
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
@@ -31,17 +26,10 @@ fun ProfilePicture(profile: Profile?, profileViewModel: ProfileViewModel, modifi
       }
 
   val profilePicture by profilePictureFlow.collectAsState(initial = null)
-    val painter = rememberAsyncImagePainter(model = ImageRequest.Builder(LocalContext.current).data(profilePicture).build())
-    if (painter.state is AsyncImagePainter.State.Error) {
-        Image(
-            painter = painterResource(id = R.drawable.profile_icon),
-            contentDescription = "profile_icon",
-            modifier = modifier
-        )
-    } else {
-        Image(painter = painter, contentDescription = "profile_icon", modifier = modifier)
-        if (painter.state is AsyncImagePainter.State.Loading) {
-            CircularProgressIndicator()
-        }
+    val model = ImageRequest.Builder(LocalContext.current).data(profilePicture).error(R.drawable.profile_icon).crossfade(500).build()
+    val painter = rememberAsyncImagePainter(model = model)
+    Image(painter = painter, contentDescription = "profile_icon", modifier = modifier)
+    if (painter.state is AsyncImagePainter.State.Loading) {
+        CircularProgressIndicator()
     }
 }
