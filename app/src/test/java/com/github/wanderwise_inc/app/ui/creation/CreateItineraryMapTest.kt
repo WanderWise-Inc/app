@@ -155,8 +155,7 @@ class CreateItineraryMapTest {
   fun `map with selector should display both elements correctly`() = runTest {
     composeTestRule.setContent {
       CreateItineraryMapWithSelector(
-          createItineraryViewModel = createItineraryViewModel, navController = navController
-      )
+          createItineraryViewModel = createItineraryViewModel, navController = navController)
     }
     composeTestRule.onNodeWithTag(TestTags.MAP_GOOGLE_MAPS).isDisplayed()
   }

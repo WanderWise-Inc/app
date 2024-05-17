@@ -13,7 +13,7 @@ fun CreateItineraryChooseLocations(
     createItineraryViewModel: CreateItineraryViewModel,
     navController: NavHostController = rememberNavController()
 ) {
-    CreationLocationSearchNavGraph(createItineraryViewModel, navController)
+  CreationLocationSearchNavGraph(createItineraryViewModel, navController)
 }
 
 @Composable
@@ -21,12 +21,10 @@ fun CreationLocationSearchNavGraph(
     createItineraryViewModel: CreateItineraryViewModel,
     navController: NavHostController
 ) {
-    NavHost(navController = navController, startDestination = "ChooseLocationOverview") {
-        composable("ChooseLocationOverview") {
-            CreateItineraryMapWithSelector(createItineraryViewModel, navController)
-        }
-        composable("ChooseLocationSearch") {
-            SearchLocation(createItineraryViewModel, navController)
-        }
+  NavHost(navController = navController, startDestination = "ChooseLocationOverview") {
+    composable("ChooseLocationOverview") {
+      CreateItineraryMapWithSelector(createItineraryViewModel, navController)
     }
+    composable("ChooseLocationSearch") { SearchLocation(createItineraryViewModel, navController) }
+  }
 }

@@ -9,7 +9,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.ui.creation.steps.CreateItineraryChooseLocations
-import com.github.wanderwise_inc.app.ui.creation.steps.CreateItineraryMapWithSelector
 import com.github.wanderwise_inc.app.ui.creation.steps.CreationStepChooseDescriptionScreen
 import com.github.wanderwise_inc.app.ui.creation.steps.CreationStepChooseTagsScreen
 import com.github.wanderwise_inc.app.ui.creation.steps.CreationStepPreview

@@ -18,13 +18,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.RangeSlider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -37,11 +34,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.github.wanderwise_inc.app.R
 import com.github.wanderwise_inc.app.model.location.Location
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
@@ -52,116 +47,93 @@ fun LocationSearchBar(
     focusOnLocation: (Location?) -> Unit,
     itineraryViewModel: ItineraryViewModel
 ) {
-    var query by remember { mutableStateOf("") }
-    var isDropdownOpen by remember { mutableStateOf(false) }
-    
-    val searchedLocations by itineraryViewModel.getPlacesLiveData().observeAsState(emptyList())
-    var searchOccurred by remember { mutableStateOf(false) }
-    var focusedOnLocation by remember { mutableStateOf(false) }
+  var query by remember { mutableStateOf("") }
+  var isDropdownOpen by remember { mutableStateOf(false) }
 
-    val onSearchExpanded = { query: String ->
-        onSearch(query)
-        isDropdownOpen = true
-        focusedOnLocation = false
-        searchOccurred = true
-    }
-    
-    Column {
-        OutlinedTextField(
-            value = query,
-            onValueChange = { s: String ->
-                query = s
-            },
-            placeholder = {
-                Text(text = "Search a location", color = MaterialTheme.colorScheme.onPrimaryContainer)
-            },
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Filled.Search,
-                    contentDescription = "search icon",
-                    tint = Color.Black,
-                    modifier =
-                    Modifier
-                        .clickable {
-                            onSearchExpanded(query)
-                        }
-                        .padding(2.dp)
-                        .size(30.dp)
-                        .testTag(TestTags.SEARCH_ICON))
-            },
-            singleLine = true,
-            shape = RoundedCornerShape(30.dp),
-            modifier =
-            Modifier
-                .background(MaterialTheme.colorScheme.primaryContainer)
+  val searchedLocations by itineraryViewModel.getPlacesLiveData().observeAsState(emptyList())
+  var searchOccurred by remember { mutableStateOf(false) }
+  var focusedOnLocation by remember { mutableStateOf(false) }
+
+  val onSearchExpanded = { query: String ->
+    onSearch(query)
+    isDropdownOpen = true
+    focusedOnLocation = false
+    searchOccurred = true
+  }
+
+  Column {
+    OutlinedTextField(
+        value = query,
+        onValueChange = { s: String -> query = s },
+        placeholder = {
+          Text(text = "Search a location", color = MaterialTheme.colorScheme.onPrimaryContainer)
+        },
+        leadingIcon = {
+          Icon(
+              imageVector = Icons.Filled.Search,
+              contentDescription = "search icon",
+              tint = Color.Black,
+              modifier =
+                  Modifier.clickable { onSearchExpanded(query) }
+                      .padding(2.dp)
+                      .size(30.dp)
+                      .testTag(TestTags.SEARCH_ICON))
+        },
+        singleLine = true,
+        shape = RoundedCornerShape(30.dp),
+        modifier =
+            Modifier.background(MaterialTheme.colorScheme.primaryContainer)
                 .fillMaxWidth()
                 .padding(5.dp)
                 .onKeyEvent {
-                    if (it.nativeKeyEvent.keyCode == KEYCODE_ENTER) { // overwrite enter key
-                        onSearchExpanded(query)
-                        true
-                    }
-                    false
+                  if (it.nativeKeyEvent.keyCode == KEYCODE_ENTER) { // overwrite enter key
+                    onSearchExpanded(query)
+                    true
+                  }
+                  false
                 }
                 .testTag(TestTags.SEARCH_BAR),
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-            keyboardActions = KeyboardActions(
-                onDone = {
-                    onSearchExpanded(query)
-                }
-            )
-        )
-    
-    
-        Log.d("DEBUG_LOCATION_BAR", "searched locations: $searchedLocations")
-        if (searchOccurred) {
-            if (searchedLocations.isEmpty()) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Start,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.primaryContainer)
-                        .height(50.dp)
-                        .border(
-                            1.dp,
-                            MaterialTheme.colorScheme.outline
-                        )
-                        .padding(8.dp)
-                ) {
-                    Text("No results found")
-                }
-            } else {
-                LazyColumn(modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer)) {
-                    items(searchedLocations) {loc ->
-                        Row(
-                            verticalAlignment = Alignment.Top,
-                            horizontalArrangement = Arrangement.Start,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(46.dp)
-                                .border(
-                                    1.dp,
-                                    MaterialTheme.colorScheme.outline
-                                )
-                                .padding(6.dp)
-                                .clickable {
-                                    focusOnLocation(loc)
-                                    focusedOnLocation = true
-                                }
-                        ) {
-                            Text(
-                                text = loc.address?: "address undefined",
-                                fontSize = 12.sp,
-                                lineHeight = 18.sp,
-                                maxLines = 2
-                            )
-                        }
-                    }
-                }
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+        keyboardActions = KeyboardActions(onDone = { onSearchExpanded(query) }))
+
+    Log.d("DEBUG_LOCATION_BAR", "searched locations: $searchedLocations")
+    if (searchOccurred) {
+      if (searchedLocations.isEmpty()) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start,
+            modifier =
+                Modifier.fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.primaryContainer)
+                    .height(50.dp)
+                    .border(1.dp, MaterialTheme.colorScheme.outline)
+                    .padding(8.dp)) {
+              Text("No results found")
             }
-    
+      } else {
+        LazyColumn(modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer)) {
+          items(searchedLocations) { loc ->
+            Row(
+                verticalAlignment = Alignment.Top,
+                horizontalArrangement = Arrangement.Start,
+                modifier =
+                    Modifier.fillMaxWidth()
+                        .height(46.dp)
+                        .border(1.dp, MaterialTheme.colorScheme.outline)
+                        .padding(6.dp)
+                        .clickable {
+                          focusOnLocation(loc)
+                          focusedOnLocation = true
+                        }) {
+                  Text(
+                      text = loc.address ?: "address undefined",
+                      fontSize = 12.sp,
+                      lineHeight = 18.sp,
+                      maxLines = 2)
+                }
+          }
         }
+      }
     }
-    
+  }
 }

@@ -24,11 +24,11 @@ class CreateItineraryViewModel(
         itineraryRepository, directionsRepository, locationsRepository, locationClient) {
   /** New itinerary that the signed in user is currently building */
   private var newItineraryBuilder: Itinerary.Builder? = null
-  
+
   /** used to store how the itinerary is being created */
   var createItineraryManually: Boolean = false
   var createItineraryByTracking: Boolean = false
-  
+
   fun getMaxTitleLength(): Int {
     return TITLE_MAX_LENGTH
   }
