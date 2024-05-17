@@ -243,7 +243,6 @@ fun ProfilePictureChangeDropdownMenu(
                 // Call to upload image to storage with a specific path.
                   coroutineScope.launch {
                       imageRepository.uploadImageToStorage("profilePicture/${profile.userUid}")
-                      delay(5000)
                       ctr.intValue++
                       imageRepository.setCurrentFile(null)
                   }

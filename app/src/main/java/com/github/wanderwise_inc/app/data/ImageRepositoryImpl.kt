@@ -72,7 +72,7 @@ class ImageRepositoryImpl(
       throw Exception("fileName is empty")
     }
 
-    try {
+/*    try {
       // The currentFile is set with the "setCurrentFile()" function
       // This will put the given file (the one selected by the user) to store in storage
       currentFile?.let {
@@ -89,7 +89,20 @@ class ImageRepositoryImpl(
     } catch (e: Exception) {
       Log.w("STORE IMAGE", e)
       return false
-    }
+    }*/
+      val result = suspendCancellableCoroutine<Boolean> {continuation ->
+          currentFile?.let {
+              imageReference
+                  .child("images/${fileName}")
+                  .putFile(it)
+                  .addOnSuccessListener { Log.d("STORE IMAGE", "STORE SUCCESS"); continuation.resume(true) }
+                  .addOnFailureListener {error ->
+                      Log.w("STORE IMAGE", error)
+                      continuation.resume(false)
+                  }
+          }
+      }
+      return result
   }
 
   /** @brief used to launch the activity to open the photo gallery */
