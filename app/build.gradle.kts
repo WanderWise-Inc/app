@@ -1,4 +1,5 @@
 import com.google.protobuf.gradle.id
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -10,10 +11,6 @@ plugins {
 
     id("com.google.protobuf") version "0.9.4"
 
-    /*
-    alias(libs.plugins.androidApplication)
-    alias(libs.plugins.jetbrainsKotlinAndroid)
-     */
     alias(libs.plugins.ktfmt)
     alias(libs.plugins.sonar)
     id("jacoco")
@@ -134,50 +131,31 @@ fun DependencyHandlerScope.globalTestImplementation(dep: Any) {
 }
 
 dependencies {
-    /*// DEFAULT DEPENDENCIES
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
-    implementation("androidx.activity:activity-compose:1.8.2")
-    implementation(platform("androidx.compose:compose-bom:2023.08.00"))
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.ui:ui-graphics")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation(platform("androidx.compose:compose-bom:2023.08.00"))
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
-    debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
-    debugImplementation("androidx.customview:customview-poolingcontainer:1.0.0")*/
-
     //extra icons
-    implementation("androidx.compose.material:material-icons-extended:1.6.2")
+    implementation(libs.androidx.material.icons.extended)
 
     // ------------------- Firebase -------------------
-    implementation("com.google.firebase:firebase-database-ktx:20.3.0")
-    implementation("com.google.firebase:firebase-firestore:24.10.0")
-    implementation("com.google.firebase:firebase-auth:22.3.1")
-    implementation("com.firebaseui:firebase-ui-auth:7.2.0")
+    implementation(libs.firebase.database.ktx)
+    implementation(libs.firebase.firestore)
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.ui.auth)
 
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:$version")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation(platform("androidx.compose:compose-bom:2023.08.00"))
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(platform(libs.compose.bom))
 
-    androidTestImplementation("org.mockito:mockito-core:3.12.4")
-    androidTestImplementation("org.mockito:mockito-android:3.12.4")
+    androidTestImplementation(libs.mockito.core)
+    androidTestImplementation(libs.mockito.android)
 
 
-    debugImplementation("androidx.compose.ui:ui-test-manifest:$rootProject.composeVersion")
+    debugImplementation(libs.androidx.ui.test.manifest)
 
     // ------------------ Navigation ------------------
-    val nav_version = "2.7.7"
-    implementation("androidx.navigation:navigation-compose:$nav_version")
+    implementation(libs.androidx.navigation.compose)
 
 
-    implementation("com.google.android.play:core-ktx:1.7.0")
+    implementation(libs.core.ktx)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -187,34 +165,34 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.navigation.testing)
     testImplementation(libs.junit)
-    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
-    androidTestImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
+    testImplementation(libs.junit.jupiter)
+    androidTestImplementation(libs.junit.jupiter)
     globalTestImplementation(libs.androidx.junit)
     globalTestImplementation(libs.androidx.espresso.core)
 
     // --------------- Google Maps --------------------
-    implementation("com.google.android.gms:play-services-maps:18.2.0")
-    implementation("com.google.android.gms:play-services-location:21.2.0")
-    implementation("com.google.maps.android:maps-compose:4.3.3")
+    implementation(libs.play.services.maps)
+    implementation(libs.play.services.location)
+    implementation(libs.maps.compose)
 
     // Optionally, you can include the Compose utils library for Clustering,
     // Street View metadata checks, etc.
-    implementation("com.google.maps.android:maps-compose-utils:4.3.3")
+    implementation(libs.maps.compose.utils)
 
     // Optionally, you can include the widgets library for ScaleBar, etc.
-    implementation("com.google.maps.android:maps-compose-widgets:4.3.3")
-    implementation ("com.google.code.gson:gson:2.8.6") //added gson
+    implementation(libs.maps.compose.widgets)
+    implementation (libs.gson) //added gson
 
-    implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.0")
+    implementation(libs.kotlin.reflect)
 
     // Coil
-    implementation("io.coil-kt:coil:2.6.0")
-    implementation("io.coil-kt:coil-compose:2.6.0")
+    implementation(libs.coil)
+    implementation(libs.coil.compose)
 
     // Add the dependency for the Cloud Storage library
     // When using the BoM, you don't specify versions in Firebase library dependencies
     // implementation("com.google.firebase:firebase-storage")
-    implementation("com.google.firebase:firebase-storage:20.3.0")
+    implementation(libs.firebase.storage)
 
 
     // ------------- Jetpack Compose ------------------
@@ -225,9 +203,9 @@ dependencies {
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.graphics)
     // Material components
-    implementation("androidx.compose.material:material:1.1.1")
-    implementation("androidx.compose.material3:material3:1.1.2")
-    implementation("com.google.android.material:material:1.10.0")
+    implementation(libs.androidx.material)
+    implementation(libs.androidx.material3)
+    implementation(libs.material)
     // Material Design 3
     implementation(libs.compose.material3)
 
@@ -243,7 +221,7 @@ dependencies {
     debugImplementation(libs.compose.test.manifest)
 
     // Android navigation test
-    androidTestImplementation("androidx.navigation:navigation-testing:2.7.7")
+    androidTestImplementation(libs.androidx.navigation.testing)
 
     // --------- Kaspresso test framework ----------
     globalTestImplementation(libs.kaspresso)
@@ -254,35 +232,35 @@ dependencies {
     //androidTestImplementation(libs.robolectric)
 
     // ----------       Mock ------------
-    testImplementation("org.mockito.kotlin:mockito-kotlin:5.3.1")
-    androidTestImplementation("org.mockito.kotlin:mockito-kotlin:5.3.1")
+    testImplementation(libs.mockito.kotlin)
+    androidTestImplementation(libs.mockito.kotlin)
 
-    testImplementation("app.cash.turbine:turbine:1.1.0")
-    testImplementation("com.google.truth:truth:1.3.0")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.0")
-    testImplementation("org.mockito:mockito-core:5.7.0")
+    testImplementation(libs.turbine)
+    testImplementation(libs.truth)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.mockito.core)
 
     // ----------       Retrofit ------------
     // Retrofit
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation(libs.retrofit)
     // Retrofit with Scalar Converter
-    implementation("com.squareup.retrofit2:converter-scalars:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation(libs.converter.scalars)
+    implementation(libs.converter.gson)
 
-    implementation("androidx.compose.runtime:runtime-livedata:1.0.0-beta01")
+    implementation(libs.androidx.runtime.livedata)
 
-    testImplementation ("io.mockk:mockk:1.13.10")
+    testImplementation (libs.mockk)
 
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.1.0")
-    androidTestImplementation("io.mockk:mockk-android:1.13.10")
-    androidTestImplementation("androidx.arch.core:core-testing:2.1.0")
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+    androidTestImplementation(libs.mockk.android)
+    androidTestImplementation(libs.androidx.core.testing)
 
-    testImplementation("androidx.arch.core:core-testing:2.2.0")
+    testImplementation(libs.androidx.core.testing)
 
     // ---------- Datastore + ProtoBuf ------------
-    implementation("androidx.datastore:datastore:1.1.1")
-    implementation("com.google.protobuf:protobuf-javalite:3.18.0")
-    implementation("com.google.protobuf:protobuf-kotlin-lite:3.23.0")
+    implementation(libs.androidx.datastore)
+    implementation(libs.protobuf.javalite)
+    implementation(libs.protobuf.kotlin.lite)
 }
 
 /* protobuf configuration */
