@@ -39,59 +39,41 @@ import com.github.wanderwise_inc.app.viewmodel.LoginViewModel
 import com.github.wanderwise_inc.app.viewmodel.SignInState
 
 @Composable
-fun LoginScreen(
-    loginViewModel: LoginViewModel,
-    navController: NavController
-) {
-    val signInState by loginViewModel.signInState.observeAsState()
+fun LoginScreen(loginViewModel: LoginViewModel, navController: NavController) {
+  val signInState by loginViewModel.signInState.observeAsState()
 
-    LaunchedEffect(signInState) {
-        if (signInState == SignInState.SUCCESS) {
-            navController.navigate(Graph.HOME)
-        }
+  LaunchedEffect(signInState) {
+    if (signInState == SignInState.SUCCESS) {
+      navController.navigate(Graph.HOME)
     }
+  }
 
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-            .padding(16.dp)
-    ) {
+  Column(
+      horizontalAlignment = Alignment.CenterHorizontally,
+      verticalArrangement = Arrangement.SpaceBetween,
+      modifier = Modifier.fillMaxSize().background(Color.White).padding(16.dp)) {
         Text(
             text = "You can either wander dumb or,",
             fontWeight = FontWeight.Normal,
             textAlign = TextAlign.Center,
-            style = TextStyle(
-                fontSize = 22.sp,
-                fontWeight = FontWeight.Medium,
-                fontStyle = FontStyle.Italic
-            ),
-            modifier = Modifier
-                .padding(top = 16.dp)
-                .offset(y = 60.dp)
-        )
+            style =
+                TextStyle(
+                    fontSize = 22.sp, fontWeight = FontWeight.Medium, fontStyle = FontStyle.Italic),
+            modifier = Modifier.padding(top = 16.dp).offset(y = 60.dp))
 
         Text(
             text = "WanderWise",
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
             style = TextStyle(fontSize = 32.sp, fontWeight = FontWeight.Medium),
-            modifier = Modifier
-                .padding(top = 8.dp)
-                .offset(y = 60.dp)
-        )
+            modifier = Modifier.padding(top = 8.dp).offset(y = 60.dp))
 
         Spacer(modifier = Modifier.weight(1f))
 
         Image(
             painter = painterResource(id = R.drawable.logo_swent),
             contentDescription = "WanderWise logo",
-            modifier = Modifier
-                .size(275.dp)
-                .align(Alignment.CenterHorizontally)
-        )
+            modifier = Modifier.size(275.dp).align(Alignment.CenterHorizontally))
 
         Spacer(modifier = Modifier.weight(1f))
 
@@ -100,44 +82,32 @@ fun LoginScreen(
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
             style = TextStyle(fontSize = 32.sp, fontWeight = FontWeight.Medium),
-            modifier = Modifier
-                .offset(y = (-60).dp)
-        )
+            modifier = Modifier.offset(y = (-60).dp))
 
         SignInButton(loginViewModel)
-    }
+      }
 }
 
 @Composable
-fun SignInButton(
-    loginViewModel: LoginViewModel
-) {
-    Button(
-        onClick = { loginViewModel.signIn() },
-        shape = RoundedCornerShape(16.dp),
-        border = BorderStroke(1.dp, Color.Black),
-        colors = ButtonDefaults.buttonColors(Color.Transparent),
-        modifier = Modifier
-            .padding(bottom = 16.dp)
-            .testTag(TestTags.SIGN_IN_BUTTON)
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.google__g__logo_svg),
-                contentDescription = "Google logo",
-                modifier = Modifier
-                    .size(17.dp)
-            )
+fun SignInButton(loginViewModel: LoginViewModel) {
+  Button(
+      onClick = { loginViewModel.signIn() },
+      shape = RoundedCornerShape(16.dp),
+      border = BorderStroke(1.dp, Color.Black),
+      colors = ButtonDefaults.buttonColors(Color.Transparent),
+      modifier = Modifier.padding(bottom = 16.dp).testTag(TestTags.SIGN_IN_BUTTON)) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+          Image(
+              painter = painterResource(id = R.drawable.google__g__logo_svg),
+              contentDescription = "Google logo",
+              modifier = Modifier.size(17.dp))
 
-            Spacer(modifier = Modifier.width(8.dp))
+          Spacer(modifier = Modifier.width(8.dp))
 
-            Text(
-                text = "Sign-In with Google",
-                color = Color.Black,
-                style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.Medium)
-            )
+          Text(
+              text = "Sign-In with Google",
+              color = Color.Black,
+              style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.Medium))
         }
-    }
+      }
 }

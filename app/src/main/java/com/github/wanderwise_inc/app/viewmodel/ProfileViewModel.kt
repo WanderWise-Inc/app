@@ -99,10 +99,6 @@ class ProfileViewModel(
     val displayName = user.displayName ?: ""
     val bio = ""
 
-    return Profile(
-        userUid = uid,
-        displayName = displayName,
-        bio = bio
-    )
+    return Profile(userUid = uid, displayName = displayName, bio = bio)
   }
 }
