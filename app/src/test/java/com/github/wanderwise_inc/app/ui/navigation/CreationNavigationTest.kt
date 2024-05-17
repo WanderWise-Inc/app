@@ -77,7 +77,7 @@ class CreationNavigationTest {
           Itinerary.Builder(userUid = "uniqueUserUID")
       every { createItineraryViewModel.createItineraryManually } returns false
       every { createItineraryViewModel.createItineraryByTracking } returns false
-        
+
       every { firebaseAuth.currentUser?.uid } returns null
 
       FirebaseApp.initializeApp(LocalContext.current)
