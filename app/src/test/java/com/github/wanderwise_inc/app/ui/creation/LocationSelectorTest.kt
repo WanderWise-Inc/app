@@ -125,12 +125,13 @@ class CreateItineraryMapUITest {
 
     composeTestRule.onNodeWithTag(TestTags.BACK_BUTTON).assertIsDisplayed()
   }
-    
+
   @Test
   fun testAddLocationButton() {
 
     composeTestRule.setContent {
-      LocationSelector(createItineraryViewModel, showLocationSelector, emptyList(), {}, navController)
+      LocationSelector(
+          createItineraryViewModel, showLocationSelector, emptyList(), {}, navController)
     }
 
     composeTestRule.onNodeWithTag(TestTags.ADD_LOCATION_BUTTON).assertIsDisplayed()
@@ -139,7 +140,8 @@ class CreateItineraryMapUITest {
   @Test
   fun testLocation2TextField() {
     composeTestRule.setContent {
-      LocationSelector(createItineraryViewModel, showLocationSelector, emptyList(), {}, navController)
+      LocationSelector(
+          createItineraryViewModel, showLocationSelector, emptyList(), {}, navController)
     }
 
     composeTestRule.onNodeWithTag(TestTags.RESTART_ITINERARY_BUTTON).assertIsDisplayed()

@@ -72,28 +72,26 @@ fun LocationSearchBar(
               contentDescription = "search icon",
               tint = Color.Black,
               modifier =
-              Modifier
-                  .clickable { onSearchExpanded(query) }
-                  .padding(2.dp)
-                  .size(30.dp)
-                  .testTag(TestTags.SEARCH_ICON))
+                  Modifier.clickable { onSearchExpanded(query) }
+                      .padding(2.dp)
+                      .size(30.dp)
+                      .testTag(TestTags.SEARCH_ICON))
         },
         singleLine = true,
         shape = RoundedCornerShape(30.dp),
         modifier =
-        Modifier
-            .testTag(TestTags.LOCATION_SEARCH_BAR)
-            .background(MaterialTheme.colorScheme.primaryContainer)
-            .fillMaxWidth()
-            .padding(5.dp)
-            .onKeyEvent {
-                if (it.nativeKeyEvent.keyCode == KEYCODE_ENTER) { // overwrite enter key
+            Modifier.testTag(TestTags.LOCATION_SEARCH_BAR)
+                .background(MaterialTheme.colorScheme.primaryContainer)
+                .fillMaxWidth()
+                .padding(5.dp)
+                .onKeyEvent {
+                  if (it.nativeKeyEvent.keyCode == KEYCODE_ENTER) { // overwrite enter key
                     onSearchExpanded(query)
                     true
+                  }
+                  false
                 }
-                false
-            }
-            .testTag(TestTags.SEARCH_BAR),
+                .testTag(TestTags.SEARCH_BAR),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
         keyboardActions = KeyboardActions(onDone = { onSearchExpanded(query) }))
 
@@ -104,42 +102,41 @@ fun LocationSearchBar(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start,
             modifier =
-            Modifier
-                .testTag(TestTags.LOCATION_SEARCH_NO_RESULTS)
-                .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.primaryContainer)
-                .height(50.dp)
-                .border(1.dp, MaterialTheme.colorScheme.outline)
-                .padding(8.dp)) {
+                Modifier.testTag(TestTags.LOCATION_SEARCH_NO_RESULTS)
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.primaryContainer)
+                    .height(50.dp)
+                    .border(1.dp, MaterialTheme.colorScheme.outline)
+                    .padding(8.dp)) {
               Text("No results found")
             }
       } else {
         LazyColumn(
-            modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer).testTag(TestTags.LOCATION_SEARCH_RESULTS)
-        ) {
-          items(searchedLocations) { loc ->
-            Row(
-                verticalAlignment = Alignment.Top,
-                horizontalArrangement = Arrangement.Start,
-                modifier =
-                    Modifier
-                        .testTag("${TestTags.LOCATION_SEARCH_RESULTS}_${loc.title}")
-                        .fillMaxWidth()
-                        .height(46.dp)
-                        .border(1.dp, MaterialTheme.colorScheme.outline)
-                        .padding(6.dp)
-                        .clickable {
-                          focusOnLocation(loc)
-                          focusedOnLocation = true
-                        }) {
-                  Text(
-                      text = loc.address ?: "address undefined",
-                      fontSize = 12.sp,
-                      lineHeight = 18.sp,
-                      maxLines = 2)
-                }
-          }
-        }
+            modifier =
+                Modifier.background(MaterialTheme.colorScheme.primaryContainer)
+                    .testTag(TestTags.LOCATION_SEARCH_RESULTS)) {
+              items(searchedLocations) { loc ->
+                Row(
+                    verticalAlignment = Alignment.Top,
+                    horizontalArrangement = Arrangement.Start,
+                    modifier =
+                        Modifier.testTag("${TestTags.LOCATION_SEARCH_RESULTS}_${loc.title}")
+                            .fillMaxWidth()
+                            .height(46.dp)
+                            .border(1.dp, MaterialTheme.colorScheme.outline)
+                            .padding(6.dp)
+                            .clickable {
+                              focusOnLocation(loc)
+                              focusedOnLocation = true
+                            }) {
+                      Text(
+                          text = loc.address ?: "address undefined",
+                          fontSize = 12.sp,
+                          lineHeight = 18.sp,
+                          maxLines = 2)
+                    }
+              }
+            }
       }
     }
   }

@@ -259,22 +259,20 @@ fun LocationSelector(
           horizontalArrangement = Arrangement.SpaceEvenly) {
             OutlinedButton(
                 onClick = { navController.navigate("ChooseLocationSearch") },
-                modifier = Modifier.testTag(TestTags.ADD_LOCATION_BUTTON)
-            ) {
-              Row {
-                Icon(imageVector = Icons.Filled.Add, contentDescription = null)
-                Text("Add Location")
-              }
-            }
+                modifier = Modifier.testTag(TestTags.ADD_LOCATION_BUTTON)) {
+                  Row {
+                    Icon(imageVector = Icons.Filled.Add, contentDescription = null)
+                    Text("Add Location")
+                  }
+                }
             OutlinedButton(
                 onClick = { resetLocations() },
-                modifier = Modifier.testTag(TestTags.RESTART_ITINERARY_BUTTON)
-            ) {
-              Row {
-                Icon(imageVector = Icons.Filled.RestartAlt, contentDescription = null)
-                Text("Restart itinerary")
-              }
-            }
+                modifier = Modifier.testTag(TestTags.RESTART_ITINERARY_BUTTON)) {
+                  Row {
+                    Icon(imageVector = Icons.Filled.RestartAlt, contentDescription = null)
+                    Text("Restart itinerary")
+                  }
+                }
           }
     }
   }
