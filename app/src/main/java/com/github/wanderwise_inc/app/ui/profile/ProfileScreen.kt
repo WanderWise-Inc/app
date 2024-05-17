@@ -102,7 +102,7 @@ fun ProfileScreen(
       Box(
           modifier = Modifier.padding(innerPadding).fillMaxSize(),
           contentAlignment = Alignment.TopCenter) {
-            // Column to layout profile details vertically and centered.
+            // Column to fonts profile details vertically and centered.
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
               // Display the user's profile picture.
               ProfilePictureWithDropDown(profile, profileViewModel, imageRepository)
