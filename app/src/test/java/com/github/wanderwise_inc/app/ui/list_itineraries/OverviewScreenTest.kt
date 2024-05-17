@@ -69,7 +69,6 @@ class OverviewScreenTest {
           itineraryViewModel,
           profileViewModel,
           navController,
-          firebaseAuth,
           sliderPositionPriceState,
           sliderPositionTimeState,
           imageRepository)

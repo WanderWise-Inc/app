@@ -93,8 +93,7 @@ class HomeNavigationTest {
           createItineraryViewModel,
           bottomNavigationViewModel,
           profileViewModel,
-          navController,
-          firebaseAuth)
+          navController)
     }
   }
 

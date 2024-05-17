@@ -52,23 +52,12 @@ class CreationNavigationTest {
     MockKAnnotations.init(this)
     every { imageRepository.fetchImage(any()) } returns flow { emit(null) }
     every { profileViewModel.getProfile(any()) } returns flow { emit(profile) }
+    every { profileViewModel.getUserUid() } returns profile.userUid
 
     composeTestRule.setContent {
       val itineraryBuilder = Itinerary.Builder(userUid = "")
       val dummyLiveData: LiveData<List<LatLng>> = MutableLiveData(listOf())
-      /*val mockProfile = Profile("", "Test", "0", "Bio", null)
-                  val mockItinerary = FakeItinerary.SAN_FRANCISCO
-                  val mockLocation = Location("")
 
-                  every { imageRepository.fetchImage(any()) } returns flowOf(null)
-
-                  every { profileViewModel.getProfile(any()) } returns flow { emit(mockProfile) }
-                  coEvery { profileViewModel.setProfile(any()) } returns Unit
-                  every { profileViewModel.addLikedItinerary(any(), any()) } returns Unit
-                  every { profileViewModel.getLikedItineraries(any()) } returns flow { emit(emptyList()) }
-                  every { profileViewModel.getDefaultProfilePicture() } returns flow { emit(null) }
-                  every { profileViewModel.getProfilePicture(any()) } returns flow { emit(null) }
-      */
       every { createItineraryViewModel.setItinerary(any()) } returns Unit
       every { createItineraryViewModel.incrementItineraryLikes(any()) } returns Unit
       every { createItineraryViewModel.getAllPublicItineraries() } returns
@@ -84,14 +73,8 @@ class CreationNavigationTest {
       every { createItineraryViewModel.getNewItinerary() } returns itineraryBuilder
       every { createItineraryViewModel.fetchPolylineLocations(any()) } returns Unit
       every { createItineraryViewModel.getPolylinePointsLiveData() } returns dummyLiveData
-      //      every { createItineraryViewModel.getNewItinerary() } returns itineraryBuilder
       every { createItineraryViewModel.getNewItinerary() } returns
           Itinerary.Builder(userUid = "uniqueUserUID")
-      // coEvery { createItineraryViewModel.getItineraryFromUids(any()) } returns flow {
-      // listOf(mockItinerary) }
-
-      /*every { bottomNavigationViewModel.setSelected(any()) } returns Unit
-      every { bottomNavigationViewModel.selected } returns liveData { 0 }*/
 
       every { firebaseAuth.currentUser?.uid } returns null
 
@@ -101,12 +84,7 @@ class CreationNavigationTest {
       onFinished = {}
 
       CreationScreen(
-          createItineraryViewModel,
-          profileViewModel,
-          onFinished,
-          navController,
-          firebaseAuth,
-          imageRepository)
+          createItineraryViewModel, profileViewModel, onFinished, navController, imageRepository)
     }
   }
 
