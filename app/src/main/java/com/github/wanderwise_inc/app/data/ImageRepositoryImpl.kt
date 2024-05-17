@@ -30,6 +30,7 @@ class ImageRepositoryImpl(
    * @return a flow of the bitMap representation of the profile picture
    */
   override fun fetchImage(pathToProfilePic: String): Flow<Uri?> {
+      Log.d("FETCH IMAGE COUNTER", "FETCHING IMAGE")
     return flow {
           if (pathToProfilePic.isBlank()) {
             // the path is empty, there should be no profilePicture at this path
@@ -66,7 +67,7 @@ class ImageRepositoryImpl(
    *
    * @param fileName the fileName (path) where we want to store the currentFile
    */
-  override fun uploadImageToStorage(fileName: String): Boolean {
+  override suspend fun uploadImageToStorage(fileName: String): Boolean {
     if (fileName == "") {
       throw Exception("fileName is empty")
     }

@@ -23,7 +23,7 @@ interface ImageRepository {
   /*fun getBitMap(uri: Uri?) : Flow<Bitmap?>*/
 
   /** @param fileName the fileName (path) that we want to store to the storage */
-  fun uploadImageToStorage(fileName: String): Boolean
+  suspend fun uploadImageToStorage(fileName: String): Boolean
 
   /** @brief used to launch the activity to open the photo gallery */
   fun launchActivity(it: Intent)

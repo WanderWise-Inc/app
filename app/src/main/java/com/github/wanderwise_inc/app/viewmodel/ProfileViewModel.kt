@@ -8,6 +8,8 @@ import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.data.ProfileRepository
 import com.github.wanderwise_inc.app.model.profile.Profile
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 class ProfileViewModel(
     private val profileRepository: ProfileRepository,
@@ -15,6 +17,8 @@ class ProfileViewModel(
 ) : ViewModel() {
   private var isSignInComplete = false // set on sign-in success
   private lateinit var activeProfile: Profile // set on sign-in
+  private val _profilePictureUri = MutableStateFlow<Uri?>(null)
+  val profilePictureUri: StateFlow<Uri?> get() = _profilePictureUri
 
   /** @return flow of a user profile */
   fun getProfile(userUid: String): Flow<Profile?> {

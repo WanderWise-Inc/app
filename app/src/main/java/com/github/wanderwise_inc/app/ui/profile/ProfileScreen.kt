@@ -29,10 +29,14 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableIntState
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,6 +56,8 @@ import com.github.wanderwise_inc.app.ui.list_itineraries.ItinerariesListScrollab
 import com.github.wanderwise_inc.app.ui.list_itineraries.ItineraryListParent
 import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 const val WANDER_POINTS_SCORE_MULTIPLIER = 10
 
@@ -70,6 +76,7 @@ fun ProfileScreen(
 
   val userItineraries by
       itineraryViewModel.getUserItineraries(currentUid).collectAsState(initial = emptyList())
+    var ctr = remember { mutableIntStateOf(0) }
 
   if (profile != null) {
     Scaffold(
@@ -105,7 +112,7 @@ fun ProfileScreen(
             // Column to layout profile details vertically and centered.
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
               // Display the user's profile picture.
-              ProfilePictureWithDropDown(profile, profileViewModel, imageRepository)
+              ProfilePictureWithDropDown(profile, profileViewModel, imageRepository, ctr)
               // Display the user's username with top padding.
               Username(profile!!, modifier = Modifier.padding(100.dp))
               // Display the user's "Wander Score".
@@ -132,6 +139,7 @@ fun ProfilePictureWithDropDown(
     profile: Profile?,
     profileViewModel: ProfileViewModel,
     imageRepository: ImageRepository,
+    ctr : MutableIntState
 ) {
   var isProfilePictureChangeDropdownOpen by remember { mutableStateOf(false) }
   val profilePictureModifier =
@@ -139,12 +147,14 @@ fun ProfilePictureWithDropDown(
   ProfilePicture(
       profile = profile,
       profileViewModel = profileViewModel,
-      modifier = profilePictureModifier /*, ctr = ctr*/)
+      modifier = profilePictureModifier,
+      ctr = ctr)
   ProfilePictureChangeDropdownMenu(
       expanded = isProfilePictureChangeDropdownOpen,
       onDismissRequest = { isProfilePictureChangeDropdownOpen = false },
       imageRepository = imageRepository,
-      profile = profile) {}
+      profile = profile,
+      ctr = ctr) {}
 }
 
 @Composable
@@ -201,13 +211,14 @@ fun ProfilePictureChangeDropdownMenu(
     expanded: Boolean,
     onDismissRequest: () -> Unit,
     imageRepository: ImageRepository,
+    ctr: MutableIntState,
     profile: Profile?,
     modifier: Modifier = Modifier,
     offset: DpOffset = DpOffset(0.dp, 0.dp),
     properties: PopupProperties = PopupProperties(focusable = true),
     content: @Composable ColumnScope.() -> Unit,
 ) {
-
+    val coroutineScope = rememberCoroutineScope()
   if (profile != null) {
     DropdownMenu(
         expanded = expanded,
@@ -230,8 +241,12 @@ fun ProfilePictureChangeDropdownMenu(
               text = { Text("UPLOAD PHOTO") },
               onClick = {
                 // Call to upload image to storage with a specific path.
-                imageRepository.uploadImageToStorage("profilePicture/${profile.userUid}")
-                  imageRepository.setCurrentFile(null)
+                  coroutineScope.launch {
+                      imageRepository.uploadImageToStorage("profilePicture/${profile.userUid}")
+                      delay(5000)
+                      ctr.intValue++
+                      imageRepository.setCurrentFile(null)
+                  }
               })
         }
   }

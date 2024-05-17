@@ -37,6 +37,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -51,6 +52,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.wanderwise_inc.app.R
+import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.Location
 import com.github.wanderwise_inc.app.ui.TestTags
@@ -103,7 +105,10 @@ fun PreviewItineraryScreen(
           Box {
             GoogleMap(
                 modifier =
-                    Modifier.fillMaxSize().padding(paddingValues).testTag(TestTags.MAP_GOOGLE_MAPS),
+                Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .testTag(TestTags.MAP_GOOGLE_MAPS),
                 cameraPositionState = cameraPositionState) {
                   userLocation?.let {
                     Marker(
@@ -140,9 +145,10 @@ fun PreviewItineraryScreen(
                 containerColor = MaterialTheme.colorScheme.secondaryContainer,
                 contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
                 modifier =
-                    Modifier.align(Alignment.TopCenter)
-                        .padding(12.dp)
-                        .testTag(TestTags.START_NEW_ITINERARY_STARTING))
+                Modifier
+                    .align(Alignment.TopCenter)
+                    .padding(12.dp)
+                    .testTag(TestTags.START_NEW_ITINERARY_STARTING))
           }
         }
   }
@@ -176,14 +182,17 @@ private fun PreviewItineraryBannerMaximized(
     onMinimizedClick: () -> Unit,
     itinerary: Itinerary,
     itineraryViewModel: ItineraryViewModel,
-    profileViewModel: ProfileViewModel
+    profileViewModel: ProfileViewModel,
 ) {
   val titleFontSize = 32.sp
   val innerFontSize = 16.sp
-  var ctr = remember { mutableStateOf(0) }
+  var ctr = remember { mutableIntStateOf(0) }
 
   val profilePictureModifier =
-      Modifier.clip(RoundedCornerShape(5.dp)).size(50.dp).testTag(TestTags.MAP_PROFILE_PIC)
+      Modifier
+          .clip(RoundedCornerShape(5.dp))
+          .size(50.dp)
+          .testTag(TestTags.MAP_PROFILE_PIC)
 
   val profile by profileViewModel.getProfile(itinerary.userUid).collectAsState(initial = null)
 
@@ -195,10 +204,11 @@ private fun PreviewItineraryBannerMaximized(
       modifier = Modifier.testTag(TestTags.MAP_MAXIMIZED_BANNER)) {
         Column(
             modifier =
-                Modifier.background(MaterialTheme.colorScheme.primaryContainer)
-                    .fillMaxWidth()
-                    .aspectRatio(1.2f)
-                    .padding(30.dp),
+            Modifier
+                .background(MaterialTheme.colorScheme.primaryContainer)
+                .fillMaxWidth()
+                .aspectRatio(1.2f)
+                .padding(30.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top,
         ) {
@@ -208,7 +218,9 @@ private fun PreviewItineraryBannerMaximized(
                 imageVector = Icons.Filled.KeyboardArrowDown,
                 contentDescription = "minimize_button",
                 modifier =
-                    Modifier.clickable { onMinimizedClick() }.testTag(TestTags.MAP_BANNER_BUTTON))
+                Modifier
+                    .clickable { onMinimizedClick() }
+                    .testTag(TestTags.MAP_BANNER_BUTTON))
             // Itinerary Title
             Text(
                 text = itinerary.title,
@@ -216,7 +228,9 @@ private fun PreviewItineraryBannerMaximized(
                 fontFamily = MaterialTheme.typography.displayLarge.fontFamily,
                 fontSize = titleFontSize,
                 fontWeight = FontWeight.Normal,
-                modifier = Modifier.padding(2.dp).testTag(TestTags.MAP_ITINERARY_TITLE),
+                modifier = Modifier
+                    .padding(2.dp)
+                    .testTag(TestTags.MAP_ITINERARY_TITLE),
                 textAlign = TextAlign.Center)
           }
 
@@ -303,7 +317,7 @@ private fun PreviewItineraryBannerMaximized(
                 profile = profile,
                 profileViewModel = profileViewModel,
                 modifier = profilePictureModifier,
-            /*ctr = ctr*/ )
+                ctr = ctr)
 
             Spacer(modifier = Modifier.width(10.dp))
 
@@ -328,7 +342,9 @@ private fun PreviewItineraryBannerMaximized(
                   fontFamily = MaterialTheme.typography.displayMedium.fontFamily,
                   fontSize = innerFontSize,
                   fontWeight = FontWeight.Light,
-                  modifier = Modifier.padding(2.dp).fillMaxHeight(),
+                  modifier = Modifier
+                      .padding(2.dp)
+                      .fillMaxHeight(),
                   textAlign = TextAlign.Center,
               )
             }
@@ -347,7 +363,9 @@ private fun PreviewItineraryBannerMaximized(
                 fontFamily = MaterialTheme.typography.displayMedium.fontFamily,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Normal,
-                modifier = Modifier.padding(2.dp).testTag(TestTags.MAP_ITINERARY_DESCRIPTION),
+                modifier = Modifier
+                    .padding(2.dp)
+                    .testTag(TestTags.MAP_ITINERARY_DESCRIPTION),
                 textAlign = TextAlign.Center)
           }
         }
@@ -366,10 +384,11 @@ private fun PreviewItineraryBannerMinimized(onMinimizedClick: () -> Unit, itiner
       modifier = Modifier.testTag(TestTags.MAP_MINIMIZED_BANNER)) {
         Column(
             modifier =
-                Modifier.background(MaterialTheme.colorScheme.primaryContainer)
-                    .fillMaxWidth()
-                    .aspectRatio(3f)
-                    .padding(30.dp),
+            Modifier
+                .background(MaterialTheme.colorScheme.primaryContainer)
+                .fillMaxWidth()
+                .aspectRatio(3f)
+                .padding(30.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
           Row {
@@ -378,7 +397,9 @@ private fun PreviewItineraryBannerMinimized(onMinimizedClick: () -> Unit, itiner
                 imageVector = Icons.Filled.KeyboardArrowUp,
                 contentDescription = "minimize_button",
                 modifier =
-                    Modifier.clickable { onMinimizedClick() }.testTag(TestTags.MAP_BANNER_BUTTON))
+                Modifier
+                    .clickable { onMinimizedClick() }
+                    .testTag(TestTags.MAP_BANNER_BUTTON))
             // Itinerary Title
             Text(
                 text = itinerary.title,
@@ -386,7 +407,9 @@ private fun PreviewItineraryBannerMinimized(onMinimizedClick: () -> Unit, itiner
                 fontFamily = MaterialTheme.typography.displayLarge.fontFamily,
                 fontSize = titleFontSize,
                 fontWeight = FontWeight.Normal,
-                modifier = Modifier.padding(2.dp).testTag(TestTags.MAP_ITINERARY_TITLE),
+                modifier = Modifier
+                    .padding(2.dp)
+                    .testTag(TestTags.MAP_ITINERARY_TITLE),
                 textAlign = TextAlign.Center)
           }
         }
@@ -417,9 +440,10 @@ fun NullItinerary(userLocation: Location?) {
   if (userLocation == null) {
     Column(
         modifier =
-            Modifier.testTag(TestTags.MAP_NULL_ITINERARY)
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background),
+        Modifier
+            .testTag(TestTags.MAP_NULL_ITINERARY)
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center) {
           Text("Loading...", modifier = Modifier.testTag(TestTags.MAP_NULL_ITINERARY))
@@ -430,7 +454,9 @@ fun NullItinerary(userLocation: Location?) {
       position = CameraPosition.fromLatLngZoom(userLocationLatLng, 13f)
     }
     GoogleMap(
-        modifier = Modifier.fillMaxSize().testTag(TestTags.MAP_NULL_ITINERARY),
+        modifier = Modifier
+            .fillMaxSize()
+            .testTag(TestTags.MAP_NULL_ITINERARY),
         cameraPositionState = cameraPositionState) {
           Marker(
               tag = TestTags.MAP_USER_LOCATION,
