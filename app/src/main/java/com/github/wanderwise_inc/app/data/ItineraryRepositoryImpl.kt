@@ -18,6 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -144,6 +145,13 @@ class ItineraryRepositoryImpl(
   }
 
   override suspend fun getItinerary(uid: String): Itinerary? {
+    return when (isNetworkAvailable()) {
+      true -> getItineraryFirebase(uid)
+      false -> getItineraryLocal(uid)
+    }
+  }
+
+  private suspend fun getItineraryFirebase(uid: String): Itinerary? {
     val document =
         suspendCancellableCoroutine<DocumentSnapshot> { continuation ->
           itinerariesCollection
@@ -157,6 +165,14 @@ class ItineraryRepositoryImpl(
     } else {
       null
     }
+  }
+
+  private suspend fun getItineraryLocal(uid: String): Itinerary? {
+    return getSavedItineraries()
+        .map { itineraryList ->
+          if (itineraryList.any { it.uid == uid }) itineraryList.first { it.uid == uid } else null
+        }
+        .first()
   }
 
   override fun setItinerary(itinerary: Itinerary) {
