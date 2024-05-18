@@ -45,5 +45,9 @@ fun ProfilePicture(
   if (painter.state is AsyncImagePainter.State.Loading) {
     CircularProgressIndicator()
   }
-  Image(painter = painter, contentDescription = "profile_icon", modifier = modifier, contentScale = ContentScale.Crop)
+  Image(
+      painter = painter,
+      contentDescription = "profile_icon",
+      modifier = modifier,
+      contentScale = ContentScale.Crop)
 }

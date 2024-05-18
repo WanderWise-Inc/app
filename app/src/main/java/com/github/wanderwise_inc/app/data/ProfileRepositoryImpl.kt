@@ -107,9 +107,9 @@ class ProfileRepositoryImpl(db: FirebaseFirestore) : ProfileRepository {
   }
 
   override fun removeItineraryFromLiked(userUid: String, itineraryUid: String) {
-      Log.d("ProfileRepositoryImplREMOVE", "Removing itinerary from liked")
-      Log.d("ProfileRepositoryImplREMOVE", "User: $userUid")
-      Log.d("ProfileRepositoryImplREMOVE", "Itinerary: $itineraryUid")
+    Log.d("ProfileRepositoryImplREMOVE", "Removing itinerary from liked")
+    Log.d("ProfileRepositoryImplREMOVE", "User: $userUid")
+    Log.d("ProfileRepositoryImplREMOVE", "Itinerary: $itineraryUid")
     usersCollection
         .document(userUid)
         .update(ProfileLabels.LIKED_ITINERARIES, FieldValue.arrayRemove(itineraryUid))

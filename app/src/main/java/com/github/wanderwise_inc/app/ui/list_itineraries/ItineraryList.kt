@@ -99,7 +99,7 @@ fun ItinerariesListScrollable(
               if (isLiked) {
                 itineraryViewModel.decrementItineraryLikes(it)
                 profileViewModel.removeLikedItinerary(uid, it.uid)
-                  itineraryViewModel.removeUserFromLiked(uid, it.uid)
+                itineraryViewModel.removeUserFromLiked(uid, it.uid)
               } else {
                 itineraryViewModel.incrementItineraryLikes(it)
                 profileViewModel.addLikedItinerary(uid, it.uid)

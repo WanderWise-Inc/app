@@ -1,6 +1,5 @@
 package com.github.wanderwise_inc.app.ui.list_itineraries
 
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Scaffold
@@ -88,8 +87,7 @@ fun DisplayOverviewItineraries(
       modifier = Modifier.testTag(TestTags.OVERVIEW_SCREEN)) { innerPadding ->
         val filtered =
             itineraries
-                .filter { itinerary ->
-                    itinerary.tags.contains(categoriesList[selectedIndex].tag) }
+                .filter { itinerary -> itinerary.tags.contains(categoriesList[selectedIndex].tag) }
                 .filter { itinerary ->
                   searchQuery.isBlank() ||
                       itinerary.title.contains(searchQuery, ignoreCase = true) ||

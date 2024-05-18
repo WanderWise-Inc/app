@@ -19,7 +19,7 @@ object ItineraryLabels {
   const val PRICE = "price"
   const val TIME = "time"
   const val NUM_LIKES = "numLikes"
-    const val LIKED_USERS = "likedUsers"
+  const val LIKED_USERS = "likedUsers"
 }
 
 object ItineraryDefaultValues {
@@ -58,7 +58,7 @@ data class Itinerary(
     var numLikes: Int = 0,
     val price: Float = 0f,
     val time: Int = 0,
-    val likedUsers : MutableList<String> = mutableListOf()
+    val likedUsers: MutableList<String> = mutableListOf()
 ) {
 
   /**

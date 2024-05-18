@@ -47,7 +47,7 @@ open class ItineraryViewModel(
   }
 
   fun removeUserFromLiked(userUid: String, itineraryUid: String) {
-      itineraryRepository.removeUserFromLiked(userUid, itineraryUid)
+    itineraryRepository.removeUserFromLiked(userUid, itineraryUid)
   }
 
   /** @return a flow of all `Itinerary`s associated to the currently logged in user */
@@ -122,7 +122,11 @@ open class ItineraryViewModel(
     itineraryRepository.deleteItinerary(itinerary)
   }
 
-  fun removeItineraryToUsersLiked(itineraryUid: String, profileViewModel: ProfileViewModel, likedUsers : List<String>) {
+  fun removeItineraryToUsersLiked(
+      itineraryUid: String,
+      profileViewModel: ProfileViewModel,
+      likedUsers: List<String>
+  ) {
     Log.d("ItineraryViewModelREMOVE", "USER LIKED ITINERARIES : ${likedUsers}")
     for (user in likedUsers) {
       Log.d("ItineraryViewModelREMOVE", "Removing itinerary from user's liked itineraries")

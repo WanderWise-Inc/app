@@ -29,9 +29,9 @@ class ItineraryRepositoryTestImpl : ItineraryRepository {
     return
   }
 
-    override fun removeUserFromLiked(userUid: String, itineraryUid: String) {
-        return
-    }
+  override fun removeUserFromLiked(userUid: String, itineraryUid: String) {
+    return
+  }
 
   override suspend fun getItinerary(uid: String): Itinerary {
     return itineraries.first { it.uid == uid }

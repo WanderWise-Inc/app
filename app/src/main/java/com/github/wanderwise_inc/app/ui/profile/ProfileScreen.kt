@@ -142,7 +142,9 @@ fun ProfilePictureWithDropDown(
 ) {
   var isProfilePictureChangeDropdownOpen by remember { mutableStateOf(false) }
   val profilePictureModifier =
-      Modifier.size(100.dp).clip(CircleShape).clickable { isProfilePictureChangeDropdownOpen = true }
+      Modifier.size(100.dp).clip(CircleShape).clickable {
+        isProfilePictureChangeDropdownOpen = true
+      }
   ProfilePicture(
       profile = profile,
       profileViewModel = profileViewModel,
