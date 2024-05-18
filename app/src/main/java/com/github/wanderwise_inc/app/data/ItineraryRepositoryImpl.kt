@@ -9,6 +9,7 @@ import com.github.wanderwise_inc.app.disk.toModel
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryLabels
 import com.github.wanderwise_inc.app.model.location.Tag
+import com.github.wanderwise_inc.app.model.profile.ProfileLabels
 import com.github.wanderwise_inc.app.proto.location.SavedItineraries
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
@@ -201,6 +202,8 @@ class ItineraryRepositoryImpl(
             }
     }
 
+
+
   override fun updateItinerary(oldUid: String, new: Itinerary) {
     if (oldUid != new.uid) {
       throw Exception("UIDs do not match")
@@ -227,7 +230,31 @@ class ItineraryRepositoryImpl(
         }
   }
 
-  /** @return a flow of saved itineraries from local storage */
+    override fun getLikedUsers(itineraryUid: String): Flow<List<String>> {
+        return flow {
+            val likedUsers = suspendCancellableCoroutine { continuation ->
+                itinerariesCollection
+                    .document(itineraryUid)
+                    .get()
+                    .addOnSuccessListener { documentSnapshot ->
+                        val usersLiked =
+                            documentSnapshot.get(ItineraryLabels.LIKED_USERS) as List<String>?
+                        continuation.resume(usersLiked ?: listOf())
+                    }
+                    .addOnFailureListener { exception ->
+                        Log.w("ProfileRepositoryImpl", exception)
+                        continuation.resumeWithException(exception)
+                    }
+            }
+            emit(likedUsers)
+        }
+            .catch { error ->
+                Log.w("ProfileRepositoryImpl", error)
+                emit(listOf())
+            }
+    }
+
+    /** @return a flow of saved itineraries from local storage */
   private fun getSavedItineraries(): Flow<List<Itinerary>> {
     Log.d("Itinerary Repository", "Reading itineraries from disk")
     val savedItineraries = datastore.data

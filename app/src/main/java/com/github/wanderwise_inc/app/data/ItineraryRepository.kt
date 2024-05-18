@@ -35,6 +35,8 @@ interface ItineraryRepository {
   /** @brief deletes an itinerary */
   fun deleteItinerary(itinerary: Itinerary)
 
+  fun getLikedUsers(itineraryUid: String): Flow<List<String>>
+
   /** @brief writes itineraries to persistent storage */
   suspend fun writeItinerariesToDisk(itineraries: List<Itinerary>)
 }

@@ -57,6 +57,10 @@ class ItineraryRepositoryTestImpl : ItineraryRepository {
     itineraries.remove(itinerary)
   }
 
+  override fun getLikedUsers(itineraryUid: String): Flow<List<String>> {
+    return flow { emit(itineraries.first { it.uid == itineraryUid }.likedUsers) }
+  }
+
   override suspend fun writeItinerariesToDisk(itineraries: List<Itinerary>) {
     /* this test implementation has no disk interaction, so has the same effect as setting */
     for (itinerary in itineraries) setItinerary(itinerary)

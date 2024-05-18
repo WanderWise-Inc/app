@@ -1,5 +1,6 @@
 package com.github.wanderwise_inc.app.ui.map
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -41,6 +42,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -74,6 +76,7 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
+import kotlinx.coroutines.launch
 
 /** @brief previews an itinerary */
 @Composable
@@ -204,6 +207,7 @@ private fun PreviewItineraryBannerMaximized(
           .testTag(TestTags.MAP_PROFILE_PIC)
 
   val profile by profileViewModel.getProfile(itinerary.userUid).collectAsState(initial = null)
+    val likedUsers by itineraryViewModel.getLikedUsers(itinerary.uid).collectAsState(null)
 
   Card(
       colors =
@@ -378,13 +382,20 @@ private fun PreviewItineraryBannerMaximized(
                 textAlign = TextAlign.Center)
           }
             Spacer(modifier = Modifier.height(20.dp))
-
+            val coroutineScope = rememberCoroutineScope()
             val uid = profileViewModel.getUserUid()
+
 
             if (uid == itinerary.userUid) {
                 Button(onClick = {
-                    itineraryViewModel.deleteItinerary(itinerary)
-                    NavigationActions(navController).navigateTo(TOP_LEVEL_DESTINATIONS[4])
+                    coroutineScope.launch {
+                        Log.d("PreviewItineraryScreen", "Delete Itinerary Button Clicked")
+                        itineraryViewModel.removeItineraryToUsersLiked(itinerary.uid, profileViewModel, likedUsers ?: emptyList())
+                        Log.d("PreviewItineraryScreen", "Itinerary removed from liked itineraries")
+                        itineraryViewModel.deleteItinerary(itinerary)
+                        Log.d("PreviewItineraryScreen", "Itinerary deleted")
+                        NavigationActions(navController).navigateTo(TOP_LEVEL_DESTINATIONS[4])
+                    }
                 }) {
                     Text(text = "Delete Itinerary")
                 }
