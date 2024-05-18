@@ -19,6 +19,7 @@ object ItineraryLabels {
   const val PRICE = "price"
   const val TIME = "time"
   const val NUM_LIKES = "numLikes"
+    const val LIKED_USERS = "likedUsers"
 }
 
 object ItineraryDefaultValues {
@@ -56,7 +57,8 @@ data class Itinerary(
     val visible: Boolean,
     var numLikes: Int = 0,
     val price: Float = 0f,
-    val time: Int = 0
+    val time: Int = 0,
+    val likedUsers : MutableList<String> = mutableListOf()
 ) {
 
   /**
@@ -199,7 +201,8 @@ data class Itinerary(
         ItineraryLabels.VISIBLE to visible,
         ItineraryLabels.PRICE to price,
         ItineraryLabels.TIME to time,
-        ItineraryLabels.NUM_LIKES to numLikes)
+        ItineraryLabels.NUM_LIKES to numLikes,
+        ItineraryLabels.LIKED_USERS to likedUsers)
   }
   /** Conversion method for converting to protobuf */
   fun toProto(): ItineraryProto {
