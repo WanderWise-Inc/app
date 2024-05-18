@@ -4,10 +4,8 @@ option java_package = "com.github.wanderwise_inc.app.proto.profile";
 option java_multiple_files = true;
 
 message ProfileProto {
-  string uid = 1;
+  string userUid = 1;
   string displayName = 2;
-  string userUid = 3;
-  string bio = 4;
-  string profilePicture = 5;
-  repeated string likedItinerariesUid = 6;
+  string bio = 3;
+  repeated string likedItinerariesUid = 4;
 }
