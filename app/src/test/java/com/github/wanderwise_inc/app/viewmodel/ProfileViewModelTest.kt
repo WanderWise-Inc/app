@@ -36,8 +36,8 @@ class ProfileViewModelTest {
   @Before
   fun setup() {
     MockKAnnotations.init(this)
-    profileViewModel.setActiveProfile(testProfile)
     profileViewModel = ProfileViewModel(profileRepository, imageRepository)
+    profileViewModel.setActiveProfile(testProfile)
   }
 
   @Test
