@@ -5,8 +5,10 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.data.ProfileRepository
+import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.profile.Profile
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class ProfileViewModel(
     private val profileRepository: ProfileRepository,
@@ -65,7 +67,11 @@ class ProfileViewModel(
    *   in profile
    */
   fun getLikedItineraries(userUid: String): Flow<List<String>> {
-    return profileRepository.getLikedItineraries(userUid)
+    return if (userUid == getUserUid()) {
+      Log.d("ProfileViewModel", "Returning in-memory liked itineraries.")
+      flow { emit(getActiveProfile().likedItinerariesUid) }
+    }
+    else profileRepository.getLikedItineraries(userUid)
   }
 
   /** Sets the active profile. Called on sign-in and only called once */
@@ -85,4 +91,13 @@ class ProfileViewModel(
 
   /** Returns the UID of the signed in profile */
   fun getUserUid(): String = activeProfile.userUid
+
+  /** Updates liked itineraries of active profile locally */
+  fun setActiveProfileLikedItineraries(itineraries: List<Itinerary>) {
+    if (itineraries.isNotEmpty()) {
+      Log.d("ProfileViewModel", "Updating active profile liked: ${itineraries.map{ it.uid }}")
+      activeProfile.likedItinerariesUid.clear()
+      activeProfile.likedItinerariesUid.addAll(itineraries.map { it.uid })
+    }
+  }
 }

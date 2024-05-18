@@ -1,8 +1,6 @@
 package com.github.wanderwise_inc.app.data
 
 import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
 import android.util.Log
 import androidx.datastore.core.DataStore
 import com.github.wanderwise_inc.app.disk.toModel
@@ -157,8 +155,10 @@ class ItineraryRepositoryImpl(
   }
 
   private suspend fun getItineraryLocal(uid: String): Itinerary? {
+    Log.d("ItineraryRepositoryImpl", "Getting itinerary from disk")
     return getSavedItineraries()
         .map { itineraryList ->
+          Log.d("ItineraryRepositoryImpl", "Local itineraries = $itineraryList")
           if (itineraryList.any { it.uid == uid }) itineraryList.first { it.uid == uid } else null
         }
         .first()

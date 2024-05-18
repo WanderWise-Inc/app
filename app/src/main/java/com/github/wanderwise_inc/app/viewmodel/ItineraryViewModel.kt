@@ -90,6 +90,7 @@ open class ItineraryViewModel(
   fun getItineraryFromUids(uidList: List<String>): Flow<List<Itinerary>> {
     return flow {
       val result = uidList.mapNotNull { uid -> itineraryRepository.getItinerary(uid) }
+      Log.d("ItineraryViewModel", "emitting $result")
       emit(result)
     }
   }

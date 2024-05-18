@@ -1,5 +1,6 @@
 package com.github.wanderwise_inc.app.ui.list_itineraries
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Scaffold
@@ -24,6 +25,7 @@ import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.home.SearchBar
 import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
+import kotlinx.coroutines.flow.map
 
 /** @brief Search categories displayed on the top bar. */
 data class SearchCategory(
@@ -75,15 +77,19 @@ fun DisplayLikedItineraries(
   var searchQuery by remember { mutableStateOf("") }
   var priceRange by remember { mutableFloatStateOf(0f) }
 
-  val itineraryUids by profileViewModel.getLikedItineraries(uid).collectAsState(initial = listOf())
-  val itineraries by
-      itineraryViewModel.getItineraryFromUids(itineraryUids).collectAsState(initial = listOf())
+  val itineraryUids by profileViewModel.getLikedItineraries(uid).collectAsState(initial = emptyList())
+  Log.d("LikedScreen", "itineraryUids = ${itineraryUids}")
+  val itineraries by itineraryViewModel.getItineraryFromUids(itineraryUids).collectAsState(initial = emptyList())
+
+  profileViewModel.setActiveProfileLikedItineraries(itineraries)
 
   Scaffold(
       topBar = {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxWidth().testTag(TestTags.CATEGORY_SELECTOR)) {
+            modifier = Modifier
+              .fillMaxWidth()
+              .testTag(TestTags.CATEGORY_SELECTOR)) {
               SearchBar(
                   onSearchChange = { searchQuery = it },
                   onPriceChange = { priceRange = it },
@@ -106,7 +112,7 @@ fun DisplayLikedItineraries(
                       itinerary.description?.contains(searchQuery, ignoreCase = true) ?: false
                 }
                 .filter { itinerary ->
-                  val price = itinerary.price.toFloat()
+                  val price = itinerary.price
                   price in
                       sliderPositionPriceState.value.start..sliderPositionPriceState.value
                               .endInclusive
