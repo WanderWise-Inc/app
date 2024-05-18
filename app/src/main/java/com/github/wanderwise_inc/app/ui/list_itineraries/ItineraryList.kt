@@ -74,9 +74,6 @@ fun ItinerariesListScrollable(
               modifier = Modifier.padding(5.dp, 10.dp))
         }
   } else {
-    /* store liked itineraries in persistent storage */
-    if (parent == ItineraryListParent.LIKED && itineraries.isNotEmpty())
-        itineraryViewModel.saveItineraries(itineraries)
     val likedItineraries by
         profileViewModel
             .getLikedItineraries(profileViewModel.getUserUid())
