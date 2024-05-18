@@ -110,8 +110,7 @@ class AppModule(
 
   private val activityResultLauncher: ActivityResultLauncher<Intent> by lazy {
     activity.registerForActivityResult(FirebaseAuthUIActivityResultContract()) { res ->
-      val user =
-          if (res.resultCode == Activity.RESULT_OK) firebaseAuth.currentUser else null
+      val user = if (res.resultCode == Activity.RESULT_OK) firebaseAuth.currentUser else null
 
       activity.lifecycleScope.launch { loginViewModel.handleSignInResult(profileViewModel, user) }
     }
