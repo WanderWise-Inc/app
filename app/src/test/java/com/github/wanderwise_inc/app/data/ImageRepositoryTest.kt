@@ -35,7 +35,6 @@ class ImageRepositoryTest {
   @Mock private lateinit var storageReference: StorageReference
   @Mock private lateinit var activityLauncher: ActivityResultLauncher<Intent>
   @Mock private lateinit var uploadTask: UploadTask
-  @Mock private lateinit var taskByteArray: Task<ByteArray>
   @Mock private lateinit var taskUri: Task<Uri>
 
   private lateinit var imageRepositoryImpl: ImageRepositoryImpl

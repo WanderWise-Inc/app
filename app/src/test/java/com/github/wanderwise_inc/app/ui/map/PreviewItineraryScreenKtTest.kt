@@ -105,7 +105,6 @@ class PreviewItineraryScreenKtTest {
   @Test
   fun `initial elements are displayed correctly`() {
     profileViewModel.setActiveProfile(Profile("uid"))
-    `when`(itineraryViewModel.getLikedUsers(anyString())).thenReturn(flow { emit(emptyList()) })
     composeTestRule.setContent {
       PreviewItineraryScreen(itineraryViewModel, profileViewModel, navController)
     }
@@ -120,7 +119,6 @@ class PreviewItineraryScreenKtTest {
   @Test
   fun `pressing banner button should minimize and maximize the banner`() {
     profileViewModel.setActiveProfile(Profile("uid"))
-    `when`(itineraryViewModel.getLikedUsers(anyString())).thenReturn(flow { emit(emptyList()) })
     composeTestRule.setContent {
       PreviewItineraryScreen(itineraryViewModel, profileViewModel, navController)
     }
@@ -164,7 +162,6 @@ class PreviewItineraryScreenKtTest {
   @Test
   fun `Clicking on the Start Button should go to starting mode`() {
     profileViewModel.setActiveProfile(Profile("uid"))
-    `when`(itineraryViewModel.getLikedUsers(anyString())).thenReturn(flow { emit(emptyList()) })
     composeTestRule.setContent {
       PreviewItineraryScreen(itineraryViewModel, profileViewModel, navController)
     }

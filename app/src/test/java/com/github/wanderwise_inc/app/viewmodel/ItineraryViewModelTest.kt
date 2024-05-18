@@ -3,7 +3,6 @@ package com.github.wanderwise_inc.app.viewmodel
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import app.cash.turbine.test
-import com.github.wanderwise_inc.app.DEFAULT_USER_UID
 import com.github.wanderwise_inc.app.data.DirectionsRepository
 import com.github.wanderwise_inc.app.data.ItineraryRepository
 import com.github.wanderwise_inc.app.data.LocationsRepository
@@ -20,7 +19,6 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
-import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -78,7 +76,7 @@ class ItineraryViewModelTest {
     every { itineraryRepository.getUserItineraries(any()) } returns
         flow { emit(listOf(FakeItinerary.TOKYO)) }
 
-    val emittedItineraryList = itineraryViewModel.getUserItineraries(DEFAULT_USER_UID).first()
+    val emittedItineraryList = itineraryViewModel.getUserItineraries("DEFAULT_USER_UID").first()
     assertEquals(listOf(FakeItinerary.TOKYO), emittedItineraryList)
   }
 
@@ -299,26 +297,5 @@ class ItineraryViewModelTest {
 
     itineraryViewModel.saveItinerary(itineraryZero)
     itineraryViewModel.saveItineraries(listOf(itineraryOne, itineraryTwo))
-  }
-
-  @Test
-  fun `remove itinerary to users like should correctly call the func`() = runTest {
-    val likedUsers = listOf("0", "1", "2")
-    val profileViewModel = mockk<ProfileViewModel>(relaxed = true)
-    itineraryViewModel.removeItineraryToUsersLiked("uid", profileViewModel, likedUsers)
-    for (user in likedUsers) {
-      // verify that the function is called for each user
-      // profileViewModel.removeLikedItinerary(user, itineraryUid)
-      verify { profileViewModel.removeLikedItinerary(user, "uid") }
-    }
-  }
-
-  @Test
-  fun `get liked users should correctly call the function`() = runTest {
-    val likedUsers = listOf("0", "1", "2")
-    every { itineraryRepository.getLikedUsers("uid") } returns flow { emit(likedUsers) }
-    val emittedLikedUsers = itineraryViewModel.getLikedUsers("uid").first()
-    assertEquals(likedUsers, emittedLikedUsers)
-    verify { itineraryRepository.getLikedUsers("uid") }
   }
 }

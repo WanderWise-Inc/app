@@ -205,7 +205,6 @@ private fun PreviewItineraryBannerMaximized(
       Modifier.clip(RoundedCornerShape(5.dp)).size(50.dp).testTag(TestTags.MAP_PROFILE_PIC)
 
   val profile by profileViewModel.getProfile(itinerary.userUid).collectAsState(initial = null)
-  val likedUsers by itineraryViewModel.getLikedUsers(itinerary.uid).collectAsState(null)
 
   Card(
       colors =
@@ -379,12 +378,8 @@ private fun PreviewItineraryBannerMaximized(
           if (uid == itinerary.userUid) {
             Button(
                 onClick = {
-                  coroutineScope.launch {
-                    itineraryViewModel.removeItineraryToUsersLiked(
-                        itinerary.uid, profileViewModel, likedUsers ?: emptyList())
-                    itineraryViewModel.deleteItinerary(itinerary)
-                    NavigationActions(navController).navigateTo(TOP_LEVEL_DESTINATIONS[4])
-                  }
+                  coroutineScope.launch { itineraryViewModel.deleteItinerary(itinerary) }
+                  NavigationActions(navController).navigateTo(TOP_LEVEL_DESTINATIONS[4])
                 },
                 colors =
                     ButtonDefaults.buttonColors(

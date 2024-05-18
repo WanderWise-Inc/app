@@ -42,14 +42,6 @@ open class ItineraryViewModel(
     return itineraryRepository.getPublicItineraries()
   }
 
-  fun addUserToLiked(userUid: String, itineraryUid: String) {
-    itineraryRepository.addUserToLiked(userUid, itineraryUid)
-  }
-
-  fun removeUserFromLiked(userUid: String, itineraryUid: String) {
-    itineraryRepository.removeUserFromLiked(userUid, itineraryUid)
-  }
-
   /** @return a flow of all `Itinerary`s associated to the currently logged in user */
   fun getUserItineraries(userUid: String): Flow<List<Itinerary>> {
     return itineraryRepository.getUserItineraries(userUid)
@@ -120,20 +112,6 @@ open class ItineraryViewModel(
   /** @brief deletes an itinerary from the database */
   fun deleteItinerary(itinerary: Itinerary) {
     itineraryRepository.deleteItinerary(itinerary)
-  }
-
-  fun removeItineraryToUsersLiked(
-      itineraryUid: String,
-      profileViewModel: ProfileViewModel,
-      likedUsers: List<String>
-  ) {
-    for (user in likedUsers) {
-      profileViewModel.removeLikedItinerary(user, itineraryUid)
-    }
-  }
-
-  fun getLikedUsers(itineraryUid: String): Flow<List<String>> {
-    return itineraryRepository.getLikedUsers(itineraryUid)
   }
 
   private val _polylinePointsLiveData = MutableLiveData<List<LatLng>>()

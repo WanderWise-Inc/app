@@ -111,8 +111,6 @@ class CreationStepPreviewItineraryKtTest {
   @Test
   fun `PreviewItineraryScreen is called`() {
     profileViewModel.setActiveProfile(Profile("uid"))
-    `when`(createItineraryViewModel.getLikedUsers(anyString()))
-        .thenReturn(flow { emit(emptyList()) })
     composeTestRule.setContent {
       PreviewItineraryScreen(
           itineraryViewModel = createItineraryViewModel,

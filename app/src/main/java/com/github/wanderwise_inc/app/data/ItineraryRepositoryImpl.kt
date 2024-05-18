@@ -11,7 +11,6 @@ import com.github.wanderwise_inc.app.model.location.ItineraryLabels
 import com.github.wanderwise_inc.app.model.location.Tag
 import com.github.wanderwise_inc.app.proto.location.SavedItineraries
 import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
