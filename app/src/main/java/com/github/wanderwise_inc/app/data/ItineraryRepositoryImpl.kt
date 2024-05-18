@@ -216,7 +216,7 @@ class ItineraryRepositoryImpl(
 
   /** Replaces the stored saved itineraries protobuf with `itineraries` */
   override suspend fun writeItinerariesToDisk(itineraries: List<Itinerary>) {
-    Log.d("Itinerary Repository", "Updating saved itineraries to $itineraries")
+    Log.d("Itinerary Repository", "writing itineraries to disk: ${itineraries.map { it.uid }}")
     val savedItineraries =
         SavedItineraries.newBuilder().addAllItineraries(itineraries.map { it.toProto() }).build()
     withContext(Dispatchers.IO) { datastore.updateData { savedItineraries } }
