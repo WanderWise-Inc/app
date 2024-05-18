@@ -444,4 +444,95 @@ class ItineraryRepositoryTest {
     itineraryRepository.deleteItinerary(itineraryObject.SAN_FRANCISCO)
     assertTrue(testList.isEmpty())
   }
+
+  @Test(expected = Exception::class)
+  fun `add user to liked should throw an exception if failure occurred`() = runTest {
+    `when`(itineraryColl.document(anyString())).thenReturn(documentRef)
+    `when`(documentRef.update(anyString(), any())).thenReturn(voidTask)
+    `when`(voidTask.addOnSuccessListener(any())).thenReturn(voidTask)
+    `when`(voidTask.addOnFailureListener(any())).thenAnswer {
+      val listener = it.arguments[0] as OnFailureListener
+      listener.onFailure(Exception("Get bytes return an exception"))
+      voidTask
+    }
+    itineraryRepository.addUserToLiked(itineraryObject.SAN_FRANCISCO.uid, "testUser")
+  }
+
+  @Test
+  fun `add user to liked should correctly add the uid to the itinerary likedUsers list`() = runTest {
+    val testItinerary = itineraryObject.SWITZERLAND
+    assertTrue(testItinerary.likedUsers.isEmpty())
+    `when`(itineraryColl.document(anyString())).thenReturn(documentRef)
+    `when`(documentRef.update(anyString(), any())).thenReturn(voidTask)
+    `when`(voidTask.addOnSuccessListener(any())).thenAnswer {
+      val listener = it.arguments[0] as OnSuccessListener<Void>
+      listener.onSuccess(null)
+      testItinerary.likedUsers.add("testUser")
+      voidTask
+    }
+    `when`(voidTask.addOnFailureListener(any())).thenReturn(voidTask)
+    itineraryRepository.addUserToLiked(testItinerary.uid, "testUser")
+    assertTrue(testItinerary.likedUsers.contains("testUser"))
+  }
+
+  @Test(expected = Exception::class)
+  fun `remove user from liked should throw an exception if failure occurred`() = runTest {
+    `when`(itineraryColl.document(anyString())).thenReturn(documentRef)
+    `when`(documentRef.update(anyString(), any())).thenReturn(voidTask)
+    `when`(voidTask.addOnSuccessListener(any())).thenReturn(voidTask)
+    `when`(voidTask.addOnFailureListener(any())).thenAnswer {
+      val listener = it.arguments[0] as OnFailureListener
+      listener.onFailure(Exception("Get bytes return an exception"))
+      voidTask
+    }
+    itineraryRepository.removeUserFromLiked(itineraryObject.SAN_FRANCISCO.uid, "testUser")
+  }
+
+  @Test
+  fun `remove user from liked should correctly remove the userUid to the itinerary likedUsers list`() = runTest {
+    val testItinerary = itineraryObject.TOKYO
+    testItinerary.likedUsers.add("testUser")
+    assertFalse(testItinerary.likedUsers.isEmpty())
+    `when`(itineraryColl.document(anyString())).thenReturn(documentRef)
+    `when`(documentRef.update(anyString(), any())).thenReturn(voidTask)
+    `when`(voidTask.addOnSuccessListener(any())).thenAnswer {
+      val listener = it.arguments[0] as OnSuccessListener<Void>
+      listener.onSuccess(null)
+      testItinerary.likedUsers.remove("testUser")
+      voidTask
+    }
+    `when`(voidTask.addOnFailureListener(any())).thenReturn(voidTask)
+    itineraryRepository.addUserToLiked(testItinerary.uid, "testUser")
+    assertTrue(testItinerary.likedUsers.isEmpty())
+  }
+
+  @Test
+  fun `get liked users should return an empty list if an error occurred`() = runTest {
+    `when`(itineraryColl.document(anyString())).thenReturn(documentRef)
+    `when`(documentRef.get()).thenReturn(docTask)
+    `when`(docTask.addOnSuccessListener(any())).thenReturn(docTask)
+    `when`(docTask.addOnFailureListener(any())).thenAnswer {
+      val listener = it.arguments[0] as OnFailureListener
+      listener.onFailure(Exception("Get bytes return an exception"))
+      null
+    }
+    val likedUsers = itineraryRepository.getLikedUsers(itineraryObject.SAN_FRANCISCO.uid).first()
+    assertTrue(likedUsers.isEmpty())
+  }
+
+  @Test
+  fun `get liked users should correctly return the likedUser list`() = runTest {
+    val testItinerary = itineraryObject.SAN_FRANCISCO
+    testItinerary.likedUsers.add("testUser")
+    `when`(itineraryColl.document(anyString())).thenReturn(documentRef)
+    `when`(documentRef.get()).thenReturn(docTask)
+    `when`(docTask.addOnSuccessListener(any())).thenAnswer {
+      val listener = it.arguments[0] as OnSuccessListener<DocumentSnapshot>
+      listener.onSuccess(documentSnapshot)
+      docTask
+    }
+    `when`(documentSnapshot.get(anyString())).thenReturn(testItinerary.likedUsers)
+    val likedUsers = itineraryRepository.getLikedUsers(itineraryObject.SAN_FRANCISCO.uid).first()
+    assertEquals(testItinerary.likedUsers, likedUsers)
+  }
 }

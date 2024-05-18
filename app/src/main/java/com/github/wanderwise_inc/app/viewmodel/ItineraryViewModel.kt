@@ -127,15 +127,12 @@ open class ItineraryViewModel(
       profileViewModel: ProfileViewModel,
       likedUsers: List<String>
   ) {
-    Log.d("ItineraryViewModelREMOVE", "USER LIKED ITINERARIES : ${likedUsers}")
     for (user in likedUsers) {
-      Log.d("ItineraryViewModelREMOVE", "Removing itinerary from user's liked itineraries")
       profileViewModel.removeLikedItinerary(user, itineraryUid)
     }
   }
 
   fun getLikedUsers(itineraryUid: String): Flow<List<String>> {
-    Log.d("LIKED USERS", "TEST")
     return itineraryRepository.getLikedUsers(itineraryUid)
   }
 
