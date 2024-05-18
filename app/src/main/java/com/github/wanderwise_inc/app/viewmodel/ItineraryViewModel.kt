@@ -89,7 +89,7 @@ open class ItineraryViewModel(
   /** @return list of itineraries queried based on their UIDs */
   fun getItineraryFromUids(uidList: List<String>): Flow<List<Itinerary>> {
     return flow {
-      val result = uidList.map { uid -> itineraryRepository.getItinerary(uid) }
+      val result = uidList.mapNotNull { uid -> itineraryRepository.getItinerary(uid) }
       emit(result)
     }
   }

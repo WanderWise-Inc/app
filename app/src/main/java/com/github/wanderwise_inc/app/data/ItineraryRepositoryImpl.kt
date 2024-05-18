@@ -143,7 +143,7 @@ class ItineraryRepositoryImpl(
         .catch { emit(listOf()) }
   }
 
-  override suspend fun getItinerary(uid: String): Itinerary {
+  override suspend fun getItinerary(uid: String): Itinerary? {
     val document =
         suspendCancellableCoroutine<DocumentSnapshot> { continuation ->
           itinerariesCollection
@@ -152,10 +152,10 @@ class ItineraryRepositoryImpl(
               .addOnSuccessListener { document -> continuation.resume(document) }
               .addOnFailureListener { exception -> continuation.resumeWithException(exception) }
         }
-    if (document.exists()) {
-      return document.toObject(Itinerary::class.java)!!
+    return if (document.exists()) {
+      document.toObject(Itinerary::class.java)!!
     } else {
-      throw Exception("Itinerary not found")
+      null
     }
   }
 

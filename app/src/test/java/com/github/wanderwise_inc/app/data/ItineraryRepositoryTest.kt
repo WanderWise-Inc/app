@@ -317,8 +317,8 @@ class ItineraryRepositoryTest {
     itineraryRepository.getItinerary("0")
   }
 
-  @Test(expected = Exception::class)
-  fun `get itinerary should throw an error if the document doesn't exist (FIREBASE)`() = runTest {
+  @Test
+  fun `get itinerary should return null if the document doesn't exist (FIREBASE)`() = runTest {
     `when`(itineraryColl.document(anyString())).thenReturn(documentRef)
     `when`(documentRef.get()).thenReturn(docTask)
     `when`(docTask.addOnSuccessListener(any())).thenAnswer {
@@ -327,7 +327,8 @@ class ItineraryRepositoryTest {
       docTask
     }
     `when`(documentSnapshot.exists()).thenReturn(false)
-    itineraryRepository.getItinerary("0")
+    val ret = itineraryRepository.getItinerary("0")
+    assert(ret == null)
   }
 
   @Test
