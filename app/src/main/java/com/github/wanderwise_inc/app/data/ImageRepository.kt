@@ -27,6 +27,8 @@ interface ImageRepository {
   /** @brief used to launch the activity to open the photo gallery */
   fun launchActivity(it: Intent)
 
+  fun setOnImageSelectedListener(listener: (Uri?) -> Unit)
+
   /**
    * @brief set the currentFile to this the Uri given, useful for other functions that will use the
    *   currentFile

@@ -2,6 +2,7 @@ package com.github.wanderwise_inc.app.ui.creation.steps
 
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -27,29 +28,36 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.core.text.isDigitsOnly
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.model.location.Tag
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun CreationStepChooseTagsScreen(createItineraryViewModel: CreateItineraryViewModel, imageRepository: ImageRepository) {
   Column(
       horizontalAlignment = Alignment.CenterHorizontally,
       modifier =
-          Modifier.fillMaxSize()
-              .testTag(TestTags.CREATION_SCREEN_TAGS)
-              .background(MaterialTheme.colorScheme.primaryContainer),
+      Modifier
+          .fillMaxSize()
+          .testTag(TestTags.CREATION_SCREEN_TAGS)
+          .background(MaterialTheme.colorScheme.primaryContainer),
       verticalArrangement = Arrangement.spacedBy(10.dp)) {
         ItineraryImageBanner(
             createItineraryViewModel = createItineraryViewModel, Modifier.padding(all = 10.dp), imageRepository)
@@ -68,24 +76,38 @@ fun ItineraryImageBanner(
 ) {
   // TODO: on click upload image using Context Drop Down Menu
   // default image = Please Upload Image
+    val coroutineScope = rememberCoroutineScope()
     var imageUploaded by remember { mutableStateOf<Uri?>(null)}
+    var isUploaded by remember {
+        mutableStateOf(false)
+    }
+
+    imageRepository.setOnImageSelectedListener { uri ->
+        imageUploaded = uri
+    }
+
 
   Box(
       modifier =
-          Modifier.fillMaxWidth()
-              .padding(all = 10.dp)
-              .height(120.dp)
-              .clip(MaterialTheme.shapes.medium)
-              .background(MaterialTheme.colorScheme.surface)
-              .clickable {
+      Modifier
+          .fillMaxWidth()
+          .padding(all = 10.dp)
+          .height(120.dp)
+          .clip(MaterialTheme.shapes.medium)
+          .background(MaterialTheme.colorScheme.surface)
+          .clickable {
+              coroutineScope.launch {
                   Intent(Intent.ACTION_GET_CONTENT).also {
                       it.type = "image/*" // Set type to any image format.
                       imageRepository.launchActivity(it) // Launch activity to select an image.
                   }
-              },
+              }
+          },
       contentAlignment = Alignment.Center) {
+      imageUploaded = imageRepository.getCurrentFile()
         if (imageUploaded != null) {
           // display image
+            AsyncImage(model = ImageRequest.Builder(LocalContext.current).data(imageUploaded).build(), contentDescription = "itinerary_image")
         } else {
             Text("Itinerary Banner Please Upload Image")
         }
@@ -103,7 +125,11 @@ fun PriceEstimationTextBox(createItineraryViewModel: CreateItineraryViewModel) {
     mutableStateOf(createItineraryViewModel.getNewItinerary()!!.price?.toString() ?: "")
   }
 
-  Row(Modifier.fillMaxWidth().padding(all = 10.dp).clip(MaterialTheme.shapes.medium)) {
+  Row(
+      Modifier
+          .fillMaxWidth()
+          .padding(all = 10.dp)
+          .clip(MaterialTheme.shapes.medium)) {
     TextField(
         label = { Text("Price Estimate") },
         value = priceEstimateDisplay,
@@ -120,7 +146,9 @@ fun PriceEstimationTextBox(createItineraryViewModel: CreateItineraryViewModel) {
     ExposedDropdownMenuBox(
         expanded = isCurrenciesMenuExpanded,
         onExpandedChange = { isCurrenciesMenuExpanded = it },
-        modifier = Modifier.clip(MaterialTheme.shapes.medium).shadow(5.dp)) {
+        modifier = Modifier
+            .clip(MaterialTheme.shapes.medium)
+            .shadow(5.dp)) {
           TextField(
               modifier = Modifier.menuAnchor(),
               value = selectedCurrency,

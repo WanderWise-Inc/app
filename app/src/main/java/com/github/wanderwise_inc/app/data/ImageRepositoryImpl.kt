@@ -20,6 +20,7 @@ class ImageRepositoryImpl(
 ) : ImageRepository {
 
   private var currentFile: Uri? = uri
+    private var onImageSelected: ((Uri?) -> Unit)? = null
 
   /**
    * Fetch image Function. This function will fetch the profile picture from the Storage at a given
@@ -102,7 +103,12 @@ class ImageRepositoryImpl(
    */
   override fun setCurrentFile(uri: Uri?) {
     currentFile = uri
+      onImageSelected?.invoke(uri)
   }
+
+    override fun setOnImageSelectedListener(listener: (Uri?) -> Unit) {
+        onImageSelected = listener
+    }
 
   /** @return the currentFile */
   override fun getCurrentFile(): Uri? {
