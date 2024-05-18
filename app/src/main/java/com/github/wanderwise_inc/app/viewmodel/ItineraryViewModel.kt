@@ -114,6 +114,10 @@ open class ItineraryViewModel(
     itineraryRepository.deleteItinerary(itinerary)
   }
 
+  fun getNewId() : String {
+    return itineraryRepository.getNewId()
+  }
+
   private val _polylinePointsLiveData = MutableLiveData<List<LatLng>>()
   private val polylinePointsLiveData: LiveData<List<LatLng>> =
       _polylinePointsLiveData // gettable from view

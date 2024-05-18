@@ -78,14 +78,9 @@ fun ItineraryImageBanner(
   // default image = Please Upload Image
     val coroutineScope = rememberCoroutineScope()
     var imageUploaded by remember { mutableStateOf<Uri?>(null)}
-    var isUploaded by remember {
-        mutableStateOf(false)
-    }
-
     imageRepository.setOnImageSelectedListener { uri ->
         imageUploaded = uri
     }
-
 
   Box(
       modifier =

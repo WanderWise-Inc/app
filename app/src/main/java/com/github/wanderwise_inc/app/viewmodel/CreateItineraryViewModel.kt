@@ -58,9 +58,18 @@ class CreateItineraryViewModel(
     return newItineraryBuilder
   }
 
+  fun getCurrentUid(): String {
+    if (newItineraryBuilder == null) {
+      throw InvalidObjectException("Itinerary.Builder is `null`")
+    }
+    return newItineraryBuilder!!.uid!!
+  }
+
   /** initializes a new `MutableItinerary` */
   fun startNewItinerary(userUid: String) {
-    newItineraryBuilder = Itinerary.Builder(userUid = userUid)
+    val newUid = getNewId()
+    newItineraryBuilder = Itinerary.Builder(userUid = userUid, uid = newUid)
+    Log.d("CreateItineraryViewModel", "new itinerary created with uid: ${newItineraryBuilder!!.uid}")
   }
 
   /** uploads new itinerary and clears the builder */

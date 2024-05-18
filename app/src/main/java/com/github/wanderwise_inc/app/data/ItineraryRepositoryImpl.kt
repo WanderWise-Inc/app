@@ -216,4 +216,8 @@ class ItineraryRepositoryImpl(
         SavedItineraries.newBuilder().addAllItineraries(itineraries.map { it.toProto() }).build()
     withContext(Dispatchers.IO) { datastore.updateData { savedItineraries } }
   }
+
+    override fun getNewId(): String {
+        return itinerariesCollection.document().id
+    }
 }
