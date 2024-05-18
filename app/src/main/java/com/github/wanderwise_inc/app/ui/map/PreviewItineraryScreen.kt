@@ -61,8 +61,8 @@ import com.github.wanderwise_inc.app.R
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.Location
 import com.github.wanderwise_inc.app.ui.TestTags
+import com.github.wanderwise_inc.app.ui.navigation.Destination
 import com.github.wanderwise_inc.app.ui.navigation.NavigationActions
-import com.github.wanderwise_inc.app.ui.navigation.TOP_LEVEL_DESTINATIONS
 import com.github.wanderwise_inc.app.ui.profile.ProfilePicture
 import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
@@ -379,7 +379,8 @@ private fun PreviewItineraryBannerMaximized(
             Button(
                 onClick = {
                   coroutineScope.launch { itineraryViewModel.deleteItinerary(itinerary) }
-                  NavigationActions(navController).navigateTo(TOP_LEVEL_DESTINATIONS[4])
+                  NavigationActions(navController)
+                      .navigateTo(Destination.TopLevelDestination.Profile)
                 },
                 colors =
                     ButtonDefaults.buttonColors(
