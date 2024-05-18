@@ -15,8 +15,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.DirectionsWalk
 import androidx.compose.material.icons.filled.DirectionsWalk
@@ -210,12 +213,14 @@ private fun PreviewItineraryBannerMaximized(
               containerColor = MaterialTheme.colorScheme.primaryContainer,
           ),
       modifier = Modifier.testTag(TestTags.MAP_MAXIMIZED_BANNER)) {
+        val scrollState = rememberScrollState()
         Column(
             modifier =
                 Modifier.background(MaterialTheme.colorScheme.primaryContainer)
                     .fillMaxWidth()
                     .aspectRatio(1.2f)
-                    .padding(30.dp),
+                    .padding(30.dp)
+                    .verticalScroll(scrollState),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top,
         ) {
@@ -380,9 +385,14 @@ private fun PreviewItineraryBannerMaximized(
                     itineraryViewModel.deleteItinerary(itinerary)
                     NavigationActions(navController).navigateTo(TOP_LEVEL_DESTINATIONS[4])
                   }
-                }) {
-                  Text(text = "Delete Itinerary")
-                }
+                },
+                colors =
+                    ButtonDefaults.buttonColors(
+                        backgroundColor = MaterialTheme.colorScheme.errorContainer),
+                // contentColor = MaterialTheme.colorScheme.onErrorContainer
+            ) {
+              Text(text = "Delete Itinerary")
+            }
           }
         }
       }
