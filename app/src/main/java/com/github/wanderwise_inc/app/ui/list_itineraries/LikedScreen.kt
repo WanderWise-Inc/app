@@ -81,6 +81,7 @@ fun DisplayLikedItineraries(
       itineraryViewModel.getItineraryFromUids(itineraryUids).collectAsState(initial = emptyList())
 
   profileViewModel.setActiveProfileLikedItineraries(itineraries)
+  if (itineraries.isNotEmpty()) itineraryViewModel.saveItineraries(itineraries)
 
   Scaffold(
       topBar = {
