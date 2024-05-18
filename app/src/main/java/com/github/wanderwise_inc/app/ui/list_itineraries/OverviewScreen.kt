@@ -2,6 +2,11 @@ package com.github.wanderwise_inc.app.ui.list_itineraries
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Fastfood
+import androidx.compose.material.icons.filled.Hiking
+import androidx.compose.material.icons.filled.RemoveRedEye
+import androidx.compose.material.icons.filled.ShoppingBag
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -56,10 +61,10 @@ fun DisplayOverviewItineraries(
   /* the categories that can be selected by the user during filtering */
   val categoriesList =
       listOf(
-          SearchCategory(ItineraryTags.ADVENTURE, R.drawable.adventure_icon, "Adventure"),
-          SearchCategory(ItineraryTags.LUXURY, R.drawable.shopping_icon, "Shopping"),
-          SearchCategory(ItineraryTags.PHOTOGRAPHY, R.drawable.sight_seeing_icon, "Sight Seeing"),
-          SearchCategory(ItineraryTags.FOODIE, R.drawable.drinks_icon, "Drinks"),
+          SearchCategory(ItineraryTags.ADVENTURE, Icons.Filled.Hiking, "Adventure"),
+          SearchCategory(ItineraryTags.LUXURY, Icons.Filled.ShoppingBag, "Shopping"),
+          SearchCategory(ItineraryTags.PHOTOGRAPHY, Icons.Filled.RemoveRedEye, "Sight Seeing"),
+          SearchCategory(ItineraryTags.FOODIE, Icons.Filled.Fastfood, "Drinks"),
       )
 
   var selectedIndex by remember { mutableIntStateOf(0) }
