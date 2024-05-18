@@ -69,6 +69,7 @@ fun ProfileScreen(
     imageRepository: ImageRepository,
     navHostController: NavHostController,
 ) {
+  imageRepository.setIsItineraryImage(false)
   Log.d("ProfileScreen", "ProfileScreen")
   val profile = profileViewModel.getActiveProfile()
   val currentUid = profileViewModel.getUserUid()

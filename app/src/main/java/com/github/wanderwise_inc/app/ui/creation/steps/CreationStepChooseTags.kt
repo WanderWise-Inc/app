@@ -77,6 +77,7 @@ fun ItineraryImageBanner(
     modifier: Modifier = Modifier,
     imageRepository: ImageRepository
 ) {
+  imageRepository.setIsItineraryImage(true)
   // TODO: on click upload image using Context Drop Down Menu
   // default image = Please Upload Image
   val coroutineScope = rememberCoroutineScope()

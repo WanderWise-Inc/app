@@ -19,6 +19,9 @@ class ImageRepositoryImpl(
     uri: Uri?
 ) : ImageRepository {
 
+  private var currentFileItinerary: Uri? = uri
+  private var currentFileProfile: Uri? = uri
+  private var isItineraryImage = false
   private var currentFile: Uri? = uri
   private var onImageSelected: ((Uri?) -> Unit)? = null
 
@@ -71,6 +74,7 @@ class ImageRepositoryImpl(
     }
     val result =
         suspendCancellableCoroutine<Boolean> { continuation ->
+          currentFile = if (isItineraryImage) currentFileItinerary else currentFileProfile
           currentFile?.let {
             imageReference
                 .child("images/${fileName}")
@@ -102,7 +106,14 @@ class ImageRepositoryImpl(
    *   currentFile
    */
   override fun setCurrentFile(uri: Uri?) {
-    currentFile = uri
+    if (isItineraryImage) {
+      Log.d("CURRENT FILE TYPE", "SET ITINERARY IMAGE")
+      currentFileItinerary = uri
+    } else {
+      Log.d("CURRENT FILE TYPE", "SET PROFILE IMAGE")
+      currentFileProfile = uri
+    }
+
     onImageSelected?.invoke(uri)
   }
 
@@ -112,7 +123,21 @@ class ImageRepositoryImpl(
 
   /** @return the currentFile */
   override fun getCurrentFile(): Uri? {
-    return currentFile
+    return if (isItineraryImage) {
+      Log.d("CURRENT FILE TYPE", "GET ITINERARY IMAGE")
+      currentFileItinerary
+    } else {
+      Log.d("CURRENT FILE TYPE", "GET PROFILE IMAGE")
+      currentFileProfile
+    }
+  }
+
+  override fun getIsItineraryImage(): Boolean {
+    return isItineraryImage
+  }
+
+  override fun setIsItineraryImage(type: Boolean) {
+    isItineraryImage = type
   }
 
   override fun deleteImageFromStorage(fileName: String) {

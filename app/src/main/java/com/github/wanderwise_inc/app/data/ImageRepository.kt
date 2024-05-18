@@ -37,5 +37,9 @@ interface ImageRepository {
 
   fun getCurrentFile(): Uri?
 
+  fun getIsItineraryImage(): Boolean
+
+  fun setIsItineraryImage(isItineraryImage: Boolean)
+
   fun deleteImageFromStorage(fileName: String)
 }

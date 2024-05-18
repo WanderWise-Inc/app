@@ -63,6 +63,7 @@ fun ItineraryBanner(
     imageRepository: ImageRepository,
     inCreation: Boolean = false
 ) {
+  if (inCreation) imageRepository.setIsItineraryImage(true)
   val currentImage = imageRepository.getCurrentFile()
   val imageFlow =
       remember(itinerary) { imageRepository.fetchImage("itineraryPictures/${itinerary.uid}") }
