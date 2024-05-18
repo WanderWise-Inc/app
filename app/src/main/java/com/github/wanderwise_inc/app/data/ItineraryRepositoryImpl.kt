@@ -217,7 +217,7 @@ class ItineraryRepositoryImpl(
     withContext(Dispatchers.IO) { datastore.updateData { savedItineraries } }
   }
 
-    override fun getNewId(): String {
-        return itinerariesCollection.document().id
-    }
+  override fun getNewId(): String {
+    return itinerariesCollection.document().id
+  }
 }

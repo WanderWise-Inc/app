@@ -36,8 +36,8 @@ import com.github.wanderwise_inc.app.ui.navigation.graph.Graph
 import com.github.wanderwise_inc.app.ui.popup.HintPopup
 import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
-import kotlinx.coroutines.launch
 import java.lang.StringBuilder
+import kotlinx.coroutines.launch
 
 @Composable
 fun CreationStepPreview(
@@ -51,7 +51,7 @@ fun CreationStepPreview(
   val navigator = NavigationActions(navController)
 
   var notSetValues by remember { mutableStateOf(listOf<String>()) }
-    val coroutineScope = rememberCoroutineScope()
+  val coroutineScope = rememberCoroutineScope()
 
   createItineraryViewModel.setFocusedItinerary(createItineraryViewModel.getNewItinerary()?.build())
 
@@ -89,15 +89,15 @@ fun CreationStepPreview(
 
           ExtendedFloatingActionButton(
               onClick = {
-                  coroutineScope.launch {
-                      notSetValues = createItineraryViewModel.notSetValues()
-                      if (notSetValues.isEmpty()) {
-                          createItineraryViewModel.uploadNewItinerary()
-                          val itineraryUid = createItineraryViewModel.getCurrentUid()
-                          imageRepository.uploadImageToStorage("itineraryPictures/$itineraryUid")
-                          onFinished()
-                      }
+                coroutineScope.launch {
+                  notSetValues = createItineraryViewModel.notSetValues()
+                  if (notSetValues.isEmpty()) {
+                    createItineraryViewModel.uploadNewItinerary()
+                    val itineraryUid = createItineraryViewModel.getCurrentUid()
+                    imageRepository.uploadImageToStorage("itineraryPictures/$itineraryUid")
+                    onFinished()
                   }
+                }
               },
               icon = {
                 Icon(
@@ -143,6 +143,7 @@ fun CreationStepPreviewNav(
           CreationStepPreviewItinerary(
               createItineraryViewModel = createItineraryViewModel,
               profileViewModel = profileViewModel,
+              imageRepository = imageRepository,
               navController = navController)
         }
       }

@@ -36,4 +36,6 @@ interface ImageRepository {
   fun setCurrentFile(uri: Uri?)
 
   fun getCurrentFile(): Uri?
+
+  fun deleteImageFromStorage(fileName: String)
 }

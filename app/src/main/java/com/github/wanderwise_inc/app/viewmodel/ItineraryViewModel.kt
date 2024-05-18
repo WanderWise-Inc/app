@@ -114,7 +114,7 @@ open class ItineraryViewModel(
     itineraryRepository.deleteItinerary(itinerary)
   }
 
-  fun getNewId() : String {
+  fun getNewId(): String {
     return itineraryRepository.getNewId()
   }
 

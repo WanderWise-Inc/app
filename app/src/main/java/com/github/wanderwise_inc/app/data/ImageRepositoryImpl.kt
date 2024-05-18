@@ -20,7 +20,7 @@ class ImageRepositoryImpl(
 ) : ImageRepository {
 
   private var currentFile: Uri? = uri
-    private var onImageSelected: ((Uri?) -> Unit)? = null
+  private var onImageSelected: ((Uri?) -> Unit)? = null
 
   /**
    * Fetch image Function. This function will fetch the profile picture from the Storage at a given
@@ -28,19 +28,19 @@ class ImageRepositoryImpl(
    *
    * @return a flow of the bitMap representation of the profile picture
    */
-  override fun fetchImage(pathToProfilePic: String): Flow<Uri?> {
+  override fun fetchImage(fileName: String): Flow<Uri?> {
     Log.d("FETCH IMAGE COUNTER", "FETCHING IMAGE")
     return flow {
-          if (pathToProfilePic.isBlank()) {
+          if (fileName.isBlank()) {
             // the path is empty, there should be no profilePicture at this path
             emit(null)
           } else {
-            val profilePictureRef = imageReference.child("images/${pathToProfilePic}")
+            val pictureRef = imageReference.child("images/${fileName}")
 
             // the byte array that is at the given path (if any)
             val uriResult =
                 suspendCancellableCoroutine<Uri?> { continuation ->
-                  profilePictureRef.downloadUrl
+                  pictureRef.downloadUrl
                       .addOnSuccessListener { result ->
                         Log.d("FETCH IMAGE", "FETCH SUCCESS")
                         continuation.resume(result) // Resume with byte array
@@ -103,15 +103,23 @@ class ImageRepositoryImpl(
    */
   override fun setCurrentFile(uri: Uri?) {
     currentFile = uri
-      onImageSelected?.invoke(uri)
+    onImageSelected?.invoke(uri)
   }
 
-    override fun setOnImageSelectedListener(listener: (Uri?) -> Unit) {
-        onImageSelected = listener
-    }
+  override fun setOnImageSelectedListener(listener: (Uri?) -> Unit) {
+    onImageSelected = listener
+  }
 
   /** @return the currentFile */
   override fun getCurrentFile(): Uri? {
     return currentFile
+  }
+
+  override fun deleteImageFromStorage(fileName: String) {
+    imageReference
+        .child("images/${fileName}")
+        .delete()
+        .addOnSuccessListener { Log.d("DELETE IMAGE", "DELETE SUCCESS") }
+        .addOnFailureListener { error -> Log.w("DELETE IMAGE", error) }
   }
 }

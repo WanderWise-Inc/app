@@ -69,7 +69,8 @@ class CreateItineraryViewModel(
   fun startNewItinerary(userUid: String) {
     val newUid = getNewId()
     newItineraryBuilder = Itinerary.Builder(userUid = userUid, uid = newUid)
-    Log.d("CreateItineraryViewModel", "new itinerary created with uid: ${newItineraryBuilder!!.uid}")
+    Log.d(
+        "CreateItineraryViewModel", "new itinerary created with uid: ${newItineraryBuilder!!.uid}")
   }
 
   /** uploads new itinerary and clears the builder */
