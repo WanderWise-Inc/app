@@ -376,12 +376,9 @@ private fun PreviewItineraryBannerMaximized(
             Button(
                 onClick = {
                   coroutineScope.launch {
-                    Log.d("PreviewItineraryScreen", "Delete Itinerary Button Clicked")
                     itineraryViewModel.removeItineraryToUsersLiked(
                         itinerary.uid, profileViewModel, likedUsers ?: emptyList())
-                    Log.d("PreviewItineraryScreen", "Itinerary removed from liked itineraries")
                     itineraryViewModel.deleteItinerary(itinerary)
-                    Log.d("PreviewItineraryScreen", "Itinerary deleted")
                     NavigationActions(navController).navigateTo(TOP_LEVEL_DESTINATIONS[4])
                   }
                 }) {
