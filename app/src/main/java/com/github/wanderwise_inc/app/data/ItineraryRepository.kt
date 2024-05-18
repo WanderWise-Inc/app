@@ -20,6 +20,10 @@ interface ItineraryRepository {
    */
   fun getItinerariesWithTags(tags: List<Tag>): Flow<List<Itinerary>>
 
+  fun addUserToLiked(userUid: String, itineraryUid: String)
+
+  fun removeUserFromLiked(userUid: String, itineraryUid: String)
+
   suspend fun getItinerary(uid: String): Itinerary
 
   /** @brief sets an itinerary. If the itinerary has a blank UID, one will be generated */

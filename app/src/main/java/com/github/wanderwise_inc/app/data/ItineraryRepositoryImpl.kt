@@ -11,6 +11,7 @@ import com.github.wanderwise_inc.app.model.location.ItineraryLabels
 import com.github.wanderwise_inc.app.model.location.Tag
 import com.github.wanderwise_inc.app.proto.location.SavedItineraries
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -173,6 +174,32 @@ class ItineraryRepositoryImpl(
           throw it
         }
   }
+
+    override fun addUserToLiked(userUid: String, itineraryUid: String) {
+        itinerariesCollection
+            .document(itineraryUid)
+            .update(ItineraryLabels.LIKED_USERS, FieldValue.arrayUnion(userUid))
+            .addOnSuccessListener {
+                Log.d("ItineraryRepository", "Successfully added user to liked")
+            }
+            .addOnFailureListener {
+                Log.d("ItineraryRepository", "Failed to add user to liked")
+                throw it
+            }
+    }
+
+    override fun removeUserFromLiked(userUid: String, itineraryUid: String) {
+        itinerariesCollection
+            .document(itineraryUid)
+            .update(ItineraryLabels.LIKED_USERS, FieldValue.arrayRemove(userUid))
+            .addOnSuccessListener {
+                Log.d("ItineraryRepository", "Successfully added user to liked")
+            }
+            .addOnFailureListener {
+                Log.d("ItineraryRepository", "Failed to add user to liked")
+                throw it
+            }
+    }
 
   override fun updateItinerary(oldUid: String, new: Itinerary) {
     if (oldUid != new.uid) {

@@ -42,6 +42,14 @@ open class ItineraryViewModel(
     return itineraryRepository.getPublicItineraries()
   }
 
+  fun addUserToLiked(userUid: String, itineraryUid: String) {
+    itineraryRepository.addUserToLiked(userUid, itineraryUid)
+  }
+
+  fun removeUserFromLiked(userUid: String, itineraryUid: String) {
+      itineraryRepository.removeUserFromLiked(userUid, itineraryUid)
+  }
+
   /** @return a flow of all `Itinerary`s associated to the currently logged in user */
   fun getUserItineraries(userUid: String): Flow<List<Itinerary>> {
     return itineraryRepository.getUserItineraries(userUid)
