@@ -1,5 +1,6 @@
 package com.github.wanderwise_inc.app.ui.itinerary
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -44,6 +45,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
@@ -60,18 +62,28 @@ fun ItineraryBanner(
     onBannerClick: (Itinerary) -> Unit,
     isLikedInitially: Boolean = false,
     profileViewModel: ProfileViewModel,
-    imageRepository: ImageRepository
+    imageRepository: ImageRepository,
+    inCreation : Boolean = false
 ) {
-
+    val currentImage = imageRepository.getCurrentFile()
   val imageFlow =
       remember(itinerary) { imageRepository.fetchImage("itineraryPictures/${itinerary.uid}") }
   val image by imageFlow.collectAsState(initial = null)
-    val model =
+    val model = if (inCreation) {
+        Log.d("ItineraryBanner", "In creation")
+        ImageRequest.Builder(LocalContext.current)
+            .data(currentImage)
+            .error(R.drawable.underground)
+            .crossfade(500)
+            .build()
+    } else {
         ImageRequest.Builder(LocalContext.current)
             .data(image)
             .error(R.drawable.underground)
             .crossfade(500)
             .build()
+    }
+
   val painter = rememberAsyncImagePainter(model = model)
     if (painter.state is AsyncImagePainter.State.Loading) {
         CircularProgressIndicator()
@@ -93,19 +105,22 @@ fun ItineraryBanner(
       onClick = { onBannerClick(itinerary) }) {
         Column(
             modifier =
-                Modifier.background(MaterialTheme.colorScheme.primaryContainer)
-                    .fillMaxWidth()
-                    .aspectRatio(1.34f),
+            Modifier
+                .background(MaterialTheme.colorScheme.primaryContainer)
+                .fillMaxWidth()
+                .aspectRatio(1.34f),
             horizontalAlignment = Alignment.CenterHorizontally) {
-
+                Image(
+                    painter = painter,
+                    contentDescription = itinerary.description,
+                    modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(0.55f)
+                        .clip(RoundedCornerShape(13.dp)),
+                    contentScale = ContentScale.Crop,
+                    alignment = Alignment.TopCenter)
               // Image of the itinerary
-              Image(
-                  painter = painter,
-                  contentDescription = itinerary.description,
-                  modifier =
-                      Modifier.fillMaxWidth().fillMaxHeight(0.55f).clip(RoundedCornerShape(13.dp)),
-                  contentScale = ContentScale.Crop,
-                  alignment = Alignment.TopCenter)
               // Primary Text Field
               Text(
                   text = itinerary.title,
@@ -118,7 +133,10 @@ fun ItineraryBanner(
               Row(modifier = Modifier.fillMaxSize()) {
                 Column(
                     modifier =
-                        Modifier.fillMaxHeight().weight(0.7f).padding(10.dp, 4.dp, 4.dp, 15.dp),
+                    Modifier
+                        .fillMaxHeight()
+                        .weight(0.7f)
+                        .padding(10.dp, 4.dp, 4.dp, 15.dp),
                     verticalArrangement = Arrangement.SpaceAround) {
                       // Secondary indicator fields
                       val textUser = if (user != null) user!!.displayName else "-"
@@ -144,12 +162,18 @@ fun ItineraryBanner(
                           modifier = Modifier.padding(4.dp, 0.dp))
                     }
                 Column(
-                    modifier = Modifier.weight(0.3f).fillMaxSize().padding(4.dp, 2.dp, 10.dp, 2.dp),
+                    modifier = Modifier
+                        .weight(0.3f)
+                        .fillMaxSize()
+                        .padding(4.dp, 2.dp, 10.dp, 2.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.SpaceBetween,
                 ) {
                   LazyRow(
-                      modifier = Modifier.fillMaxWidth().weight(0.3f).padding(2.dp),
+                      modifier = Modifier
+                          .fillMaxWidth()
+                          .weight(0.3f)
+                          .padding(2.dp),
                       contentPadding = PaddingValues(horizontal = 2.dp, vertical = 5.dp),
                       horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         items(itinerary.tags) {
@@ -171,7 +195,9 @@ fun ItineraryBanner(
                       }
 
                   Column(
-                      modifier = Modifier.fillMaxWidth().weight(0.5f),
+                      modifier = Modifier
+                          .fillMaxWidth()
+                          .weight(0.5f),
                       horizontalAlignment = Alignment.CenterHorizontally) {
                         // Like Icon
                         Icon(
@@ -183,15 +209,17 @@ fun ItineraryBanner(
                             contentDescription = "like button heart icon",
                             tint = if (isLiked) Color.Red else MaterialTheme.colorScheme.secondary,
                             modifier =
-                                Modifier.testTag(
-                                        "${TestTags.ITINERARY_BANNER_LIKE_BUTTON}_${itinerary.uid}")
-                                    .size(width = 40.dp, height = 40.dp)
-                                    .clickable(
-                                        onClick = {
-                                          if (isLiked) numLikes-- else numLikes++
-                                          onLikeButtonClick(itinerary, isLiked)
-                                          isLiked = !isLiked
-                                        }))
+                            Modifier
+                                .testTag(
+                                    "${TestTags.ITINERARY_BANNER_LIKE_BUTTON}_${itinerary.uid}"
+                                )
+                                .size(width = 40.dp, height = 40.dp)
+                                .clickable(
+                                    onClick = {
+                                        if (isLiked) numLikes-- else numLikes++
+                                        onLikeButtonClick(itinerary, isLiked)
+                                        isLiked = !isLiked
+                                    }))
 
                         Text(
                             text = "$numLikes Likes",

@@ -46,29 +46,12 @@ fun CreationStepPreviewBanner(
             modifier = Modifier.testTag(TestTags.CREATION_SCREEN_PREVIEW_BANNER)) {
               item {
                 ItineraryBanner(
-                    itinerary = dummyItinerary,
-                    onLikeButtonClick = onLikeButtonClick,
-                    onBannerClick = onBannerClick,
-                    profileViewModel = profileViewModel,
-                    imageRepository = imageRepository)
-              }
-
-              item {
-                ItineraryBanner(
                     itinerary = createItineraryViewModel.getFocusedItinerary() ?: dummyItinerary,
                     onLikeButtonClick = onLikeButtonClick,
                     onBannerClick = onBannerClick,
                     profileViewModel = profileViewModel,
-                    imageRepository = imageRepository)
-              }
-
-              item {
-                ItineraryBanner(
-                    itinerary = dummyItinerary,
-                    onLikeButtonClick = onLikeButtonClick,
-                    onBannerClick = onBannerClick,
-                    profileViewModel = profileViewModel,
-                    imageRepository = imageRepository)
+                    imageRepository = imageRepository,
+                    inCreation = true)
               }
             }
       }
