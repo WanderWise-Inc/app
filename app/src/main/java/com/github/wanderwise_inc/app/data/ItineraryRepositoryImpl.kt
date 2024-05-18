@@ -175,28 +175,6 @@ class ItineraryRepositoryImpl(
         }
   }
 
-  override fun addUserToLiked(userUid: String, itineraryUid: String) {
-    itinerariesCollection
-        .document(itineraryUid)
-        .update(ItineraryLabels.LIKED_USERS, FieldValue.arrayUnion(userUid))
-        .addOnSuccessListener { Log.d("ItineraryRepository", "Successfully added user to liked") }
-        .addOnFailureListener {
-          Log.d("ItineraryRepository", "Failed to add user to liked")
-          throw it
-        }
-  }
-
-  override fun removeUserFromLiked(userUid: String, itineraryUid: String) {
-    itinerariesCollection
-        .document(itineraryUid)
-        .update(ItineraryLabels.LIKED_USERS, FieldValue.arrayRemove(userUid))
-        .addOnSuccessListener { Log.d("ItineraryRepository", "Successfully added user to liked") }
-        .addOnFailureListener {
-          Log.d("ItineraryRepository", "Failed to add user to liked")
-          throw it
-        }
-  }
-
   override fun updateItinerary(oldUid: String, new: Itinerary) {
     if (oldUid != new.uid) {
       throw Exception("UIDs do not match")
@@ -220,30 +198,6 @@ class ItineraryRepositoryImpl(
         .addOnFailureListener {
           Log.d("ItineraryRepository", "Failed to delete itinerary")
           throw it
-        }
-  }
-
-  override fun getLikedUsers(itineraryUid: String): Flow<List<String>> {
-    return flow {
-          val likedUsers = suspendCancellableCoroutine { continuation ->
-            itinerariesCollection
-                .document(itineraryUid)
-                .get()
-                .addOnSuccessListener { documentSnapshot ->
-                  val usersLiked =
-                      documentSnapshot.get(ItineraryLabels.LIKED_USERS) as List<String>?
-                  continuation.resume(usersLiked ?: listOf())
-                }
-                .addOnFailureListener { exception ->
-                  Log.w("ProfileRepositoryImpl", exception)
-                  continuation.resumeWithException(exception)
-                }
-          }
-          emit(likedUsers)
-        }
-        .catch { error ->
-          Log.w("ProfileRepositoryImpl", error)
-          emit(listOf())
         }
   }
 
