@@ -1,18 +1,24 @@
 import com.google.protobuf.gradle.id
 
 plugins {
+    // Android and Kotlin
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+
+    // Google Services
     id("com.google.gms.google-services")
-
-
-    //needed for MAPS_API_KEY
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 
+    // Protobuf
     id("com.google.protobuf") version "0.9.4"
 
+    // Code Formatting
     alias(libs.plugins.ktfmt)
+
+    // Code Quality
     alias(libs.plugins.sonar)
+
+    // Code Coverage
     id("jacoco")
 }
 
@@ -62,16 +68,20 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
     buildFeatures {
         buildConfig = true
         compose = true
     }
+
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
     }
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -79,6 +89,7 @@ android {
             excludes += "META-INF/LICENSE-notice.md"
         }
     }
+
     testOptions {
         packaging {
             jniLibs {
@@ -90,6 +101,7 @@ android {
             isReturnDefaultValues = true
         }
     }
+
     // Robolectric needs to be run only in debug. But its tests are placed in the shared source set (test)
     // The next lines transfers the src/test/* from shared to the testDebug one
     //
@@ -131,136 +143,101 @@ fun DependencyHandlerScope.globalTestImplementation(dep: Any) {
 }
 
 dependencies {
-    //extra icons
-    implementation(libs.androidx.material.icons.extended)
+    // ------------------- Core -------------------
+    implementation(libs.core.ktx)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.runtime.livedata)
+    implementation(libs.kotlin.reflect)
 
-    // ------------------- Firebase -------------------
+// ------------------- Firebase -------------------
     implementation(libs.firebase.database.ktx)
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.auth)
     implementation(libs.firebase.ui.auth)
-
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:$version")
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.compose.bom))
-
-    androidTestImplementation(libs.mockito.core)
-    androidTestImplementation(libs.mockito.android)
-
-
-    debugImplementation(libs.androidx.ui.test.manifest)
-
-    // ------------------ Navigation ------------------
-    implementation(libs.androidx.navigation.compose)
-
-
-    implementation(libs.core.ktx)
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(platform(libs.compose.bom))
-    implementation(libs.androidx.navigation.runtime.ktx)
-    implementation(libs.androidx.navigation.compose)
-    implementation(libs.androidx.navigation.testing)
-    testImplementation(libs.junit)
-    testImplementation(libs.junit.jupiter)
-    androidTestImplementation(libs.junit.jupiter)
-    globalTestImplementation(libs.androidx.junit)
-    globalTestImplementation(libs.androidx.espresso.core)
-
-    // --------------- Google Maps --------------------
-    implementation(libs.play.services.maps)
-    implementation(libs.play.services.location)
-    implementation(libs.maps.compose)
-
-    // Optionally, you can include the Compose utils library for Clustering,
-    // Street View metadata checks, etc.
-    implementation(libs.maps.compose.utils)
-
-    // Optionally, you can include the widgets library for ScaleBar, etc.
-    implementation(libs.maps.compose.widgets)
-    implementation (libs.gson) //added gson
-
-    implementation(libs.kotlin.reflect)
-
-    // Coil
-    implementation(libs.coil)
-    implementation(libs.coil.compose)
-
-    // Add the dependency for the Cloud Storage library
-    // When using the BoM, you don't specify versions in Firebase library dependencies
-    // implementation("com.google.firebase:firebase-storage")
     implementation(libs.firebase.storage)
 
-
-    // ------------- Jetpack Compose ------------------
+// ------------------- Jetpack Compose ------------------
     val composeBom = platform(libs.compose.bom)
     implementation(composeBom)
-    globalTestImplementation(composeBom)
-
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.graphics)
-    // Material components
-    implementation(libs.androidx.material)
-    implementation(libs.androidx.material3)
-    implementation(libs.material)
-    // Material Design 3
-    implementation(libs.compose.material3)
-
-    // Integration with activities
     implementation(libs.compose.activity)
-    // Integration with ViewModels
     implementation(libs.compose.viewmodel)
-    // Android Studio Preview support
     implementation(libs.compose.preview)
     debugImplementation(libs.compose.tooling)
-    // UI Tests
     globalTestImplementation(libs.compose.test.junit)
     debugImplementation(libs.compose.test.manifest)
 
-    // Android navigation test
+// ------------------- Material -------------------
+    implementation(libs.androidx.material.icons.extended)
+    implementation(libs.androidx.material)
+    implementation(libs.androidx.material3)
+    implementation(libs.material)
+    implementation(libs.compose.material3)
+
+// ------------------- Navigation ------------------
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.navigation.runtime.ktx)
+    implementation(libs.androidx.navigation.testing)
     androidTestImplementation(libs.androidx.navigation.testing)
 
-    // --------- Kaspresso test framework ----------
-    globalTestImplementation(libs.kaspresso)
-    globalTestImplementation(libs.kaspresso.compose)
+// --------------- Google Maps --------------------
+    implementation(libs.play.services.maps)
+    implementation(libs.play.services.location)
+    implementation(libs.maps.compose)
+    implementation(libs.maps.compose.utils)
+    implementation(libs.maps.compose.widgets)
 
-    // ----------       Robolectric     ------------
-    testImplementation(libs.robolectric)
-    //androidTestImplementation(libs.robolectric)
+// ------------------- Coil -------------------
+    implementation(libs.coil)
+    implementation(libs.coil.compose)
 
-    // ----------       Mock ------------
-    testImplementation(libs.mockito.kotlin)
-    androidTestImplementation(libs.mockito.kotlin)
+// ------------------- Gson -------------------
+    implementation(libs.gson)
 
-    testImplementation(libs.turbine)
-    testImplementation(libs.truth)
-    testImplementation(libs.kotlinx.coroutines.test)
-    testImplementation(libs.mockito.core)
-
-    // ----------       Retrofit ------------
-    // Retrofit
+// ------------------- Retrofit -------------------
     implementation(libs.retrofit)
-    // Retrofit with Scalar Converter
     implementation(libs.converter.scalars)
     implementation(libs.converter.gson)
 
-    implementation(libs.androidx.runtime.livedata)
+// ------------------- Datastore + ProtoBuf ------------
+    implementation(libs.androidx.datastore)
+    implementation(libs.protobuf.javalite)
+    implementation(libs.protobuf.kotlin.lite)
 
-    testImplementation (libs.mockk)
-
+// ------------------- Testing -------------------
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4:$version")
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(composeBom)
+    androidTestImplementation(libs.mockito.core)
+    androidTestImplementation(libs.mockito.android)
     androidTestImplementation(libs.androidx.ui.test.junit4)
     androidTestImplementation(libs.mockk.android)
     androidTestImplementation(libs.androidx.core.testing)
 
+    testImplementation(libs.junit)
+    testImplementation(libs.junit.jupiter)
+    globalTestImplementation(libs.androidx.junit)
+    globalTestImplementation(libs.androidx.espresso.core)
+    testImplementation(libs.mockito.kotlin)
+    testImplementation(libs.turbine)
+    testImplementation(libs.truth)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockk)
     testImplementation(libs.androidx.core.testing)
 
-    // ---------- Datastore + ProtoBuf ------------
-    implementation(libs.androidx.datastore)
-    implementation(libs.protobuf.javalite)
-    implementation(libs.protobuf.kotlin.lite)
+// ------------------- Kaspresso test framework ----------
+    globalTestImplementation(libs.kaspresso)
+    globalTestImplementation(libs.kaspresso.compose)
+
+// ----------       Robolectric     ------------
+    testImplementation(libs.robolectric)
+
+    debugImplementation(libs.androidx.ui.test.manifest)
 }
 
 /* protobuf configuration */

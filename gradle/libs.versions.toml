@@ -1,56 +1,116 @@
 [versions]
+# Android Gradle Plugin
 agp = "8.3.2"
-coil = "2.6.0"
-converterScalars = "2.9.0"
-coreKtxVersion = "1.8.1"
-coreTesting = "2.2.0"
-datastore = "1.1.1"
-firebaseAuth = "23.0.0"
-firebaseDatabaseKtx = "21.0.0"
-firebaseFirestore = "25.0.0"
-firebaseUiAuth = "7.2.0"
-gson = "2.10.1"
-junitJupiter = "5.8.2"
+
+# Kotlin
 kotlin = "1.8.10"
-coreKtx = "1.13.1"
 kotlinReflect = "1.9.10"
 kotlinxCoroutinesTest = "1.8.0"
-ktfmt = "0.17.0"
-junit = "4.13.2"
-junitVersion = "1.1.5"
-espressoCore = "3.5.1"
+
+# AndroidX
+coreKtxVersion = "1.8.1"
+coreKtx = "1.13.1"
 appcompat = "1.6.1"
-mapsCompose = "4.3.3"
-material = "1.12.0"
+lifecycleRuntimeKtx = "2.8.0"
+runtimeLivedata = "1.6.7"
+
+# Compose
 composeBom = "2024.05.00"
 composeActivity = "1.9.0"
 composeViewModel = "2.8.0"
-lifecycleRuntimeKtx = "2.8.0"
-kaspresso = "1.5.5"
+material = "1.12.0"
 material3 = "1.2.1"
 materialIconsExtended = "1.6.7"
+
+# Testing
+junit = "4.13.2"
+junitVersion = "1.1.5"
+junitJupiter = "5.8.2"
+espressoCore = "3.5.1"
+kaspresso = "1.5.5"
+truth = "1.3.0"
+turbine = "1.1.0"
+uiTestJunit4 = "1.6.7"
+uiTestManifest = "1.6.7"
+coreTesting = "2.2.0"
+
+# Mocking
 mockitoAndroid = "5.11.0"
 mockitoCore = "5.11.0"
 mockitoKotlin = "5.3.1"
 mockk = "1.13.10"
 mockkAndroid = "1.13.10"
+
+# Firebase
+firebaseAuth = "23.0.0"
+firebaseDatabaseKtx = "21.0.0"
+firebaseFirestore = "25.0.0"
+firebaseUiAuth = "7.2.0"
+firebase-analytics = "22.0.0"
+firebase-storage = "21.0.0"
+
+# Google Services
 playServicesLocation = "21.2.0"
 playServicesMaps = "18.2.0"
+mapsCompose = "4.3.3"
+
+# Retrofit
+retrofit = "2.9.0"
+converterScalars = "2.9.0"
+
+# Gson
+gson = "2.10.1"
+
+# Coil
+coil = "2.6.0"
+
+# Protobuf
 protobufJavalite = "3.23.0"
 protobufKotlinLite = "3.23.0"
-retrofit = "2.9.0"
+
+# Datastore
+datastore = "1.1.1"
+
+# Robolectric
 robolectric = "4.11.1"
-runtimeLivedata = "1.6.7"
+
+# Sonar
 sonar = "4.4.1.3373"
+
+# Navigation
 navigationRuntimeKtx = "2.7.7"
 navigationCompose = "2.7.7"
 navigationTesting = "2.7.7"
-firebase-analytics = "22.0.0"
-firebase-storage = "21.0.0"
-truth = "1.3.0"
-turbine = "1.1.0"
-uiTestJunit4 = "1.6.7"
-uiTestManifest = "1.6.7"
+
+# Ktfmt
+ktfmt = "0.17.0"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 [libraries]
