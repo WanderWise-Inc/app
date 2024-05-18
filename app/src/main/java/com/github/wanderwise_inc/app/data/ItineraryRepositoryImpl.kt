@@ -6,6 +6,7 @@ import android.net.NetworkCapabilities
 import android.util.Log
 import androidx.datastore.core.DataStore
 import com.github.wanderwise_inc.app.disk.toModel
+import com.github.wanderwise_inc.app.isNetworkAvailable
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryLabels
 import com.github.wanderwise_inc.app.model.location.Tag
@@ -36,24 +37,12 @@ class ItineraryRepositoryImpl(
 ) : ItineraryRepository {
   private val itinerariesCollection = db.collection("itineraries")
 
-  /** @return `true` iff the device is connected to the internet */
-  private fun isNetworkAvailable(): Boolean {
-    val connectivityManager =
-        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-    val networkInfo = connectivityManager.activeNetwork
-    val networkCapabilities = connectivityManager.getNetworkCapabilities(networkInfo)
-    val ret =
-        networkCapabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) ?: false
-    Log.d("ItineraryRepositoryImpl", "Network available: $ret")
-    return ret
-  }
-
   /**
    * @return a `flow` of all public itineraries, or the list of saved itineraries from persistent
    *   storage when internet connection isn't available
    */
   override fun getPublicItineraries(): Flow<List<Itinerary>> {
-    return when (isNetworkAvailable()) {
+    return when (context.isNetworkAvailable()) {
       true -> getPublicItinerariesFirebase()
       false -> getSavedItineraries()
     }
@@ -84,7 +73,7 @@ class ItineraryRepositoryImpl(
    *   persistent storage when internet connection isn't available
    */
   override fun getUserItineraries(userUid: String): Flow<List<Itinerary>> {
-    return when (isNetworkAvailable()) {
+    return when (context.isNetworkAvailable()) {
       true -> getUserItinerariesFireBase(userUid)
       false -> getSavedItineraries().map { list -> list.filter { it.userUid == userUid } }
     }
@@ -113,7 +102,7 @@ class ItineraryRepositoryImpl(
   }
 
   override fun getItinerariesWithTags(tags: List<Tag>): Flow<List<Itinerary>> {
-    return when (isNetworkAvailable()) {
+    return when (context.isNetworkAvailable()) {
       true -> getItinerariesWithTagsFirebase(tags)
       false ->
           getSavedItineraries().map { list ->
@@ -145,7 +134,7 @@ class ItineraryRepositoryImpl(
   }
 
   override suspend fun getItinerary(uid: String): Itinerary? {
-    return when (isNetworkAvailable()) {
+    return when (context.isNetworkAvailable()) {
       true -> getItineraryFirebase(uid)
       false -> getItineraryLocal(uid)
     }
