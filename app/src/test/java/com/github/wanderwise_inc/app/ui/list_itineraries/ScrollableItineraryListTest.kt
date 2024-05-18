@@ -21,9 +21,11 @@ import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.flow.flow
 import org.junit.Before
@@ -139,6 +141,8 @@ class ScrollableItineraryListTest {
           likedItineraryListBackend.add(testItineraries.first().uid)
         }
 
+    every { itineraryViewModel.addUserToLiked("TestUid", "") } just Runs
+    every { itineraryViewModel.addUserToLiked("TestUid", testItineraries.first().uid) } just Runs
     // composeTestRule.onNodeWithTag("$")
     composeTestRule.onRoot(useUnmergedTree = true).printToLog()
 
@@ -182,6 +186,10 @@ class ScrollableItineraryListTest {
         {
           likedItineraryListBackend.remove(testItineraries.first().uid)
         }
+
+    every { itineraryViewModel.removeUserFromLiked("TestUid", "") } just Runs
+    every { itineraryViewModel.removeUserFromLiked("TestUid", testItineraries.first().uid) } just
+        Runs
 
     // composeTestRule.onRoot(useUnmergedTree = true).printToLog()
 

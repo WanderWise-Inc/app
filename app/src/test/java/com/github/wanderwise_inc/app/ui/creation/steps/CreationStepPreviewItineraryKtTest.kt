@@ -18,7 +18,6 @@ import com.github.wanderwise_inc.app.model.profile.Profile
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.map.PreviewItineraryScreen
 import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
-import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.github.wanderwise_inc.app.viewmodel.UserLocationClient
 import com.google.android.gms.maps.model.LatLng
@@ -50,7 +49,7 @@ class CreationStepPreviewItineraryKtTest {
   @Mock private lateinit var directionsRepository: DirectionsRepository
   @Mock private lateinit var locationsRepository: LocationsRepository
   @Mock private lateinit var userLocationClient: UserLocationClient
-  @Mock private lateinit var navController : NavHostController
+  @Mock private lateinit var navController: NavHostController
 
   private lateinit var profileViewModel: ProfileViewModel
 
@@ -112,10 +111,13 @@ class CreationStepPreviewItineraryKtTest {
   @Test
   fun `PreviewItineraryScreen is called`() {
     profileViewModel.setActiveProfile(Profile("uid"))
-      `when`(createItineraryViewModel.getLikedUsers(anyString())).thenReturn(flow { emit(emptyList()) })
+    `when`(createItineraryViewModel.getLikedUsers(anyString()))
+        .thenReturn(flow { emit(emptyList()) })
     composeTestRule.setContent {
       PreviewItineraryScreen(
-          itineraryViewModel = createItineraryViewModel, profileViewModel = profileViewModel, navController = navController)
+          itineraryViewModel = createItineraryViewModel,
+          profileViewModel = profileViewModel,
+          navController = navController)
     }
 
     composeTestRule.onNodeWithTag(TestTags.MAP_PREVIEW_ITINERARY_SCREEN).assertIsDisplayed()
