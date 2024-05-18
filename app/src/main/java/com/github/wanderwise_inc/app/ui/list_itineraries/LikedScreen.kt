@@ -78,7 +78,6 @@ fun DisplayLikedItineraries(
   var priceRange by remember { mutableFloatStateOf(0f) }
 
   val itineraryUids by profileViewModel.getLikedItineraries(uid).collectAsState(initial = emptyList())
-  Log.d("LikedScreen", "itineraryUids = ${itineraryUids}")
   val itineraries by itineraryViewModel.getItineraryFromUids(itineraryUids).collectAsState(initial = emptyList())
 
   profileViewModel.setActiveProfileLikedItineraries(itineraries)
