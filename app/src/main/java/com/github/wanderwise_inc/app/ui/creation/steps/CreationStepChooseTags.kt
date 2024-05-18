@@ -1,6 +1,9 @@
 package com.github.wanderwise_inc.app.ui.creation.steps
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,12 +37,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.core.text.isDigitsOnly
+import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.model.location.Tag
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
 
 @Composable
-fun CreationStepChooseTagsScreen(createItineraryViewModel: CreateItineraryViewModel) {
+fun CreationStepChooseTagsScreen(createItineraryViewModel: CreateItineraryViewModel, imageRepository: ImageRepository) {
   Column(
       horizontalAlignment = Alignment.CenterHorizontally,
       modifier =
@@ -48,7 +52,7 @@ fun CreationStepChooseTagsScreen(createItineraryViewModel: CreateItineraryViewMo
               .background(MaterialTheme.colorScheme.primaryContainer),
       verticalArrangement = Arrangement.spacedBy(10.dp)) {
         ItineraryImageBanner(
-            createItineraryViewModel = createItineraryViewModel, Modifier.padding(all = 10.dp))
+            createItineraryViewModel = createItineraryViewModel, Modifier.padding(all = 10.dp), imageRepository)
         PriceEstimationTextBox(createItineraryViewModel)
         TimeDurationEstimation(createItineraryViewModel)
         RelevantTags(createItineraryViewModel)
@@ -59,10 +63,12 @@ fun CreationStepChooseTagsScreen(createItineraryViewModel: CreateItineraryViewMo
 @Composable
 fun ItineraryImageBanner(
     createItineraryViewModel: CreateItineraryViewModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    imageRepository : ImageRepository
 ) {
   // TODO: on click upload image using Context Drop Down Menu
   // default image = Please Upload Image
+    var imageUploaded by remember { mutableStateOf<Uri?>(null)}
 
   Box(
       modifier =
@@ -70,9 +76,19 @@ fun ItineraryImageBanner(
               .padding(all = 10.dp)
               .height(120.dp)
               .clip(MaterialTheme.shapes.medium)
-              .background(MaterialTheme.colorScheme.surface),
+              .background(MaterialTheme.colorScheme.surface)
+              .clickable {
+                  Intent(Intent.ACTION_GET_CONTENT).also {
+                      it.type = "image/*" // Set type to any image format.
+                      imageRepository.launchActivity(it) // Launch activity to select an image.
+                  }
+              },
       contentAlignment = Alignment.Center) {
-        Text("Itinerary Banner Please Upload Image")
+        if (imageUploaded != null) {
+          // display image
+        } else {
+            Text("Itinerary Banner Please Upload Image")
+        }
       }
 }
 
