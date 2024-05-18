@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,10 +31,6 @@ data class SearchCategory(
     val icon: Int,
     val title: String,
 )
-
-object LikedScreenTestTags {
-  const val CATEGORY_SELECTOR = "category selector"
-}
 
 @Composable
 fun LikedScreen(
@@ -76,7 +73,7 @@ fun DisplayLikedItineraries(
   val uid = profileViewModel.getUserUid()
   var selectedIndex by remember { mutableIntStateOf(0) }
   var searchQuery by remember { mutableStateOf("") }
-  var priceRange by remember { mutableStateOf(0f) }
+  var priceRange by remember { mutableFloatStateOf(0f) }
 
   val itineraryUids by profileViewModel.getLikedItineraries(uid).collectAsState(initial = listOf())
   val itineraries by
