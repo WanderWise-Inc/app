@@ -20,6 +20,7 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
+import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -298,5 +299,26 @@ class ItineraryViewModelTest {
 
     itineraryViewModel.saveItinerary(itineraryZero)
     itineraryViewModel.saveItineraries(listOf(itineraryOne, itineraryTwo))
+  }
+
+  @Test
+  fun `remove itinerary to users like should correctly call the func`() = runTest {
+    val likedUsers = listOf("0", "1", "2")
+    val profileViewModel = mockk<ProfileViewModel>(relaxed = true)
+    itineraryViewModel.removeItineraryToUsersLiked("uid", profileViewModel, likedUsers)
+    for (user in likedUsers) {
+      // verify that the function is called for each user
+      // profileViewModel.removeLikedItinerary(user, itineraryUid)
+      verify { profileViewModel.removeLikedItinerary(user, "uid") }
+    }
+  }
+
+  @Test
+  fun `get liked users should correctly call the function`() = runTest {
+    val likedUsers = listOf("0", "1", "2")
+    every { itineraryRepository.getLikedUsers("uid") } returns flow { emit(likedUsers) }
+    val emittedLikedUsers = itineraryViewModel.getLikedUsers("uid").first()
+    assertEquals(likedUsers, emittedLikedUsers)
+    verify { itineraryRepository.getLikedUsers("uid") }
   }
 }
