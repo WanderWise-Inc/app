@@ -8,7 +8,6 @@ import com.github.wanderwise_inc.app.data.ProfileRepository
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.profile.Profile
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 
 class ProfileViewModel(
     private val profileRepository: ProfileRepository,
@@ -67,11 +66,7 @@ class ProfileViewModel(
    *   in profile
    */
   fun getLikedItineraries(userUid: String): Flow<List<String>> {
-    return if (userUid == getUserUid()) {
-      Log.d("ProfileViewModel", "Returning in-memory liked itineraries.")
-      flow { emit(getActiveProfile().likedItinerariesUid) }
-    }
-    else profileRepository.getLikedItineraries(userUid)
+    return profileRepository.getLikedItineraries(userUid)
   }
 
   /** Sets the active profile. Called on sign-in and only called once */

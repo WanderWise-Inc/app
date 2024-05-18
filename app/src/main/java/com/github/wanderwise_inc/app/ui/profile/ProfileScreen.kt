@@ -52,6 +52,8 @@ import com.github.wanderwise_inc.app.ui.list_itineraries.ItinerariesListScrollab
 import com.github.wanderwise_inc.app.ui.list_itineraries.ItineraryListParent
 import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
 
 const val WANDER_POINTS_SCORE_MULTIPLIER = 10
 
@@ -69,7 +71,11 @@ fun ProfileScreen(
   val currentUid = profileViewModel.getUserUid()
 
   val userItineraries by
-      itineraryViewModel.getUserItineraries(currentUid).collectAsState(initial = emptyList())
+      itineraryViewModel
+          .getAllPublicItineraries()
+          .map { list -> list.filter { it.userUid == currentUid } }
+          .collectAsState(initial = emptyList())
+  Log.d("User itineraries", "$userItineraries")
 
   if (profile != null) {
     Scaffold(

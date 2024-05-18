@@ -85,7 +85,7 @@ fun ItinerariesListScrollable(
     LazyColumn(
         modifier = Modifier.padding(paddingValues).testTag(TestTags.ITINERARY_LIST_SCROLLABLE),
         verticalArrangement = spacedBy(15.dp)) {
-          this.items(itineraries, { (iti) -> iti }) { itinerary ->
+          this.items(itineraries, key = { it.uid }) { itinerary ->
             val uid = profileViewModel.getUserUid()
             var isLikedInitially by remember {
               mutableStateOf(likedItineraries.contains(itinerary.uid))

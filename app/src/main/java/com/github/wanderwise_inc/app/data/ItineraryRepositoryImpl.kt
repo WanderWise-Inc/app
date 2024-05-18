@@ -158,7 +158,7 @@ class ItineraryRepositoryImpl(
     Log.d("ItineraryRepositoryImpl", "Getting itinerary from disk")
     return getSavedItineraries()
         .map { itineraryList ->
-          Log.d("ItineraryRepositoryImpl", "Local itineraries = $itineraryList")
+          Log.d("ItineraryRepositoryImpl", "Local itineraries = ${itineraryList.map{ it.uid }}")
           if (itineraryList.any { it.uid == uid }) itineraryList.first { it.uid == uid } else null
         }
         .first()
