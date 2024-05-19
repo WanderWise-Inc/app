@@ -1,4 +1,4 @@
-package com.github.wanderwise_inc.app
+package com.github.wanderwise_inc.app.di
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry

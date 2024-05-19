@@ -1,4 +1,4 @@
-package com.github.wanderwise_inc.app /*
+package com.github.wanderwise_inc.app.di /*
                                       import androidx.compose.runtime.mutableStateOf
                                       import androidx.compose.ui.test.*
                                       import androidx.compose.ui.test.junit4.createComposeRule
