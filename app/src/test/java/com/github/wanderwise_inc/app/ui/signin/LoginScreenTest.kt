@@ -11,6 +11,7 @@ import androidx.navigation.NavController
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.viewmodel.LoginViewModel
+import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.github.wanderwise_inc.app.viewmodel.SignInState
 import io.mockk.MockKAnnotations
 import io.mockk.clearAllMocks
@@ -28,7 +29,7 @@ class LoginScreenTest {
   @get:Rule val composeTestRule = createComposeRule()
 
   @MockK private lateinit var loginViewModel: LoginViewModel
-
+  @MockK private lateinit var profileViewModel: ProfileViewModel
   @MockK private lateinit var navController: NavController
 
   private val _signInState = MutableLiveData<SignInState>()
@@ -43,7 +44,7 @@ class LoginScreenTest {
 
     every { loginViewModel.signInState } returns signInState
 
-    composeTestRule.setContent { LoginScreen(loginViewModel, navController) }
+    composeTestRule.setContent { LoginScreen(loginViewModel, profileViewModel, navController) }
     composeTestRule.waitForIdle()
   }
 

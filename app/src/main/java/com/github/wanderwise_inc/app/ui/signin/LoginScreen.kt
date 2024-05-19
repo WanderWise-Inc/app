@@ -23,18 +23,27 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.github.wanderwise_inc.app.R
+import com.github.wanderwise_inc.app.model.profile.DEFAULT_OFFLINE_PROFILE
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.navigation.graph.Graph
 import com.github.wanderwise_inc.app.viewmodel.LoginViewModel
+import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.github.wanderwise_inc.app.viewmodel.SignInState
 import kotlinx.coroutines.delay
 
 @Composable
-fun LoginScreen(loginViewModel: LoginViewModel, navController: NavController) {
+fun LoginScreen(
+    loginViewModel: LoginViewModel,
+    profileViewModel: ProfileViewModel,
+    navController: NavController
+) {
   val signInState by loginViewModel.signInState.observeAsState()
 
   LaunchedEffect(signInState) {
     if (signInState == SignInState.SUCCESS) {
+      navController.navigate(Graph.HOME)
+    } else if (signInState == SignInState.OFFLINE) {
+      profileViewModel.setActiveProfile(DEFAULT_OFFLINE_PROFILE)
       navController.navigate(Graph.HOME)
     }
   }
@@ -45,8 +54,8 @@ fun LoginScreen(loginViewModel: LoginViewModel, navController: NavController) {
           R.drawable.venice,
           R.drawable.waterfall,
           R.drawable.cathedral)
-  var currentImageIndex by remember { mutableStateOf(0) }
-  val infiniteTransition = rememberInfiniteTransition()
+  var currentImageIndex by remember { mutableIntStateOf(0) }
+  val infiniteTransition = rememberInfiniteTransition(label = "Sign-in Infinite Transition")
   val alpha by
       infiniteTransition.animateFloat(
           initialValue = 0.6f,
@@ -123,6 +132,8 @@ fun LoginScreen(loginViewModel: LoginViewModel, navController: NavController) {
 
 @Composable
 fun SignInButton(loginViewModel: LoginViewModel) {
+  var signInState = loginViewModel.signInState.observeAsState()
+
   Button(
       onClick = { loginViewModel.signIn() },
       shape = RoundedCornerShape(16.dp),
