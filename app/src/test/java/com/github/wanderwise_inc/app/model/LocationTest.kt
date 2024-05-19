@@ -24,7 +24,7 @@ class LocationTest {
     val actual = Location.fromLatLng(LatLng(epflLat, epflLon))
     assertEquals(epflLocation, actual)
   }
-  
+
   @Test
   fun placeLocationTest() {
     val actual = Location.placeLocation(LatLng(epflLat, epflLon))

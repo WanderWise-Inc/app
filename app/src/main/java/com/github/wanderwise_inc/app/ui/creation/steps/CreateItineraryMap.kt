@@ -238,10 +238,7 @@ fun LocationSelector(
                         Icons.Filled.LocationOn,
                         contentDescription = "Location 2",
                         modifier = Modifier.padding(start = 10.dp))
-                    Text(
-                        text = "${loc.title}, ${loc.address}",
-                        fontSize = 15.sp,
-                        maxLines = 1)
+                    Text(text = "${loc.title}, ${loc.address}", fontSize = 15.sp, maxLines = 1)
                   }
             }
           }

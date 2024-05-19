@@ -59,7 +59,11 @@ class UserLocationClient(
             override fun onLocationResult(result: LocationResult) {
               super.onLocationResult(result)
               result.locations.lastOrNull()?.let { androidLocation ->
-                launch { send(Location.placeLocation(LatLng(androidLocation.latitude, androidLocation.longitude))) }
+                launch {
+                  send(
+                      Location.placeLocation(
+                          LatLng(androidLocation.latitude, androidLocation.longitude)))
+                }
               }
             }
           }
