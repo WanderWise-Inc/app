@@ -49,11 +49,11 @@ class CreationStepPreviewKtTest() {
     MockKAnnotations.init(this)
     every { profileViewModel.getProfile(any()) } returns flow { emit(profile) }
     every { imageRepository.fetchImage(any()) } returns flow { emit(null) }
-      every { imageRepository.setIsItineraryImage(any()) } just Runs
-      every { imageRepository.getCurrentFile() } returns null
-      every { createItineraryViewModel.getCurrentUid() } returns "0"
-      coEvery { imageRepository.uploadImageToStorage(any()) } returns true
-      every { imageRepository.setCurrentFile(any()) } just Runs
+    every { imageRepository.setIsItineraryImage(any()) } just Runs
+    every { imageRepository.getCurrentFile() } returns null
+    every { createItineraryViewModel.getCurrentUid() } returns "0"
+    coEvery { imageRepository.uploadImageToStorage(any()) } returns true
+    every { imageRepository.setCurrentFile(any()) } just Runs
   }
 
   @Test

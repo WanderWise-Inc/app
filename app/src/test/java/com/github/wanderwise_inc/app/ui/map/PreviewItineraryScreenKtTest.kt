@@ -32,32 +32,20 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.CameraPositionState
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.rememberCameraPositionState
-import io.mockk.every
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.TestCoroutineDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TestWatcher
-import org.junit.runner.Description
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.anyList
 import org.mockito.Mock
+import org.mockito.Mockito.anyString
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
-import org.mockito.Mockito.any
-import org.mockito.Mockito.anyString
 
 @RunWith(AndroidJUnit4::class)
 class PreviewItineraryScreenKtTest {
@@ -176,7 +164,7 @@ class PreviewItineraryScreenKtTest {
   fun `Clicking on the Start Button should go to starting mode`() {
     profileViewModel.setActiveProfile(Profile("uid"))
     composeTestRule.setContent {
-      PreviewItineraryScreen(itineraryViewModel, profileViewModel, imageRepository,navController)
+      PreviewItineraryScreen(itineraryViewModel, profileViewModel, imageRepository, navController)
     }
 
     composeTestRule.onNodeWithTag(TestTags.START_NEW_ITINERARY_STARTING).assertIsDisplayed()
@@ -238,24 +226,22 @@ class PreviewItineraryScreenKtTest {
     composeTestRule.onNodeWithTag(TestTags.MAP_DELETE_ITINERARY_BUTTON).assertDoesNotExist()
   }
 
-    @Test
-    fun `delete itinerary Button should correctly delete the itinerary`() = runTest {
-      val itineraryList = mutableListOf(itinerary)
-      `when`(imageRepository.deleteImageFromStorage(anyString())).thenAnswer {
-        Unit
-      }
-      `when`(itineraryViewModel.deleteItinerary(itinerary)).thenAnswer {
-        itineraryList.remove(itinerary)
-        Unit
-      }
-      profileViewModel.setActiveProfile(Profile("uid"))
-      composeTestRule.setContent {
-        PreviewItineraryScreen(itineraryViewModel, profileViewModel, imageRepository, navController)
-      }
-      composeTestRule.onNodeWithTag(TestTags.MAP_DELETE_ITINERARY_BUTTON).performScrollTo()
-      composeTestRule.onNodeWithTag(TestTags.MAP_DELETE_ITINERARY_BUTTON).assertExists()
-      composeTestRule.onNodeWithTag(TestTags.MAP_DELETE_ITINERARY_BUTTON).performClick()
-
-      assertTrue(itineraryList.isEmpty())
+  @Test
+  fun `delete itinerary Button should correctly delete the itinerary`() = runTest {
+    val itineraryList = mutableListOf(itinerary)
+    `when`(imageRepository.deleteImageFromStorage(anyString())).thenAnswer { Unit }
+    `when`(itineraryViewModel.deleteItinerary(itinerary)).thenAnswer {
+      itineraryList.remove(itinerary)
+      Unit
     }
+    profileViewModel.setActiveProfile(Profile("uid"))
+    composeTestRule.setContent {
+      PreviewItineraryScreen(itineraryViewModel, profileViewModel, imageRepository, navController)
+    }
+    composeTestRule.onNodeWithTag(TestTags.MAP_DELETE_ITINERARY_BUTTON).performScrollTo()
+    composeTestRule.onNodeWithTag(TestTags.MAP_DELETE_ITINERARY_BUTTON).assertExists()
+    composeTestRule.onNodeWithTag(TestTags.MAP_DELETE_ITINERARY_BUTTON).performClick()
+
+    assertTrue(itineraryList.isEmpty())
+  }
 }

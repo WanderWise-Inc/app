@@ -43,7 +43,9 @@ class LikedScreenTest {
   @MockK private lateinit var firebaseAuth: FirebaseAuth
   @MockK private lateinit var imageRepository: ImageRepository
   private val profile = Profile(userUid = "0", displayName = "me", bio = "bio")
-  private val imageUri = Uri.parse("https://firebasestorage.googleapis.com/v0/b/wanderwise-d8d36.appspot.com/o/images%2FitineraryPictures%2FdefaultItinerary.png?alt=media&token=b7170586-9168-445b-8784-8ad3ac5345bc")
+  private val imageUri =
+      Uri.parse(
+          "https://firebasestorage.googleapis.com/v0/b/wanderwise-d8d36.appspot.com/o/images%2FitineraryPictures%2FdefaultItinerary.png?alt=media&token=b7170586-9168-445b-8784-8ad3ac5345bc")
 
   private var sliderPositionPriceState = mutableStateOf(0f..100f)
   private var sliderPositionTimeState = mutableStateOf(0f..24f)

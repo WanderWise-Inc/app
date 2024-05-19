@@ -46,7 +46,9 @@ class HomeNavigationTest {
   @MockK private lateinit var profileViewModel: ProfileViewModel
   @MockK private lateinit var bottomNavigationViewModel: BottomNavigationViewModel
   @MockK private lateinit var firebaseAuth: FirebaseAuth
-  private val imageUri = Uri.parse("https://firebasestorage.googleapis.com/v0/b/wanderwise-d8d36.appspot.com/o/images%2FitineraryPictures%2FdefaultItinerary.png?alt=media&token=b7170586-9168-445b-8784-8ad3ac5345bc")
+  private val imageUri =
+      Uri.parse(
+          "https://firebasestorage.googleapis.com/v0/b/wanderwise-d8d36.appspot.com/o/images%2FitineraryPictures%2FdefaultItinerary.png?alt=media&token=b7170586-9168-445b-8784-8ad3ac5345bc")
   private lateinit var navController: TestNavHostController
 
   @Before

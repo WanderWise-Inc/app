@@ -395,9 +395,9 @@ private fun PreviewItineraryBannerMaximized(
                         backgroundColor = MaterialTheme.colorScheme.errorContainer),
                 modifier = Modifier.testTag(TestTags.MAP_DELETE_ITINERARY_BUTTON)
                 // contentColor = MaterialTheme.colorScheme.onErrorContainer
-            ) {
-              Text(text = "Delete Itinerary")
-            }
+                ) {
+                  Text(text = "Delete Itinerary")
+                }
           }
         }
       }

@@ -103,7 +103,11 @@ fun ItineraryImageBanner(
         if (imageUploaded != null) {
           // display image
           AsyncImage(
-              model = ImageRequest.Builder(LocalContext.current).data(imageUploaded).crossfade(500).build(),
+              model =
+                  ImageRequest.Builder(LocalContext.current)
+                      .data(imageUploaded)
+                      .crossfade(500)
+                      .build(),
               contentDescription = "itinerary_image",
               contentScale = ContentScale.Crop,
               modifier = Modifier.testTag(TestTags.CREATION_SCREEN_IMAGE_BANNER))
@@ -217,7 +221,9 @@ fun RelevantTags(createItineraryViewModel: CreateItineraryViewModel) {
     }
   }
 
-  Button(onClick = { isTagsDDM = true }, modifier = Modifier.testTag("Tags Button")) { Text("Add Tags") }
+  Button(onClick = { isTagsDDM = true }, modifier = Modifier.testTag("Tags Button")) {
+    Text("Add Tags")
+  }
 
   DropdownMenu(expanded = isTagsDDM, onDismissRequest = { isTagsDDM = false }) {
     allTags.forEach { tag ->
