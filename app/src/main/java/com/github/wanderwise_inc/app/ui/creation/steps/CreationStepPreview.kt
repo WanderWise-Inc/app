@@ -81,7 +81,7 @@ fun CreationStepPreview(
       },
       modifier = Modifier.testTag(TestTags.CREATION_SCREEN_PREVIEW)) { padding ->
         Box() {
-          CreationStepPreviewNav(
+          CreationStepPreviewNavGraph(
               navController, padding, createItineraryViewModel, profileViewModel, imageRepository)
 
           ExtendedFloatingActionButton(
@@ -114,7 +114,7 @@ fun CreationStepPreview(
 }
 
 @Composable
-fun CreationStepPreviewNav(
+fun CreationStepPreviewNavGraph(
     navController: NavHostController,
     padding: PaddingValues,
     createItineraryViewModel: CreateItineraryViewModel,

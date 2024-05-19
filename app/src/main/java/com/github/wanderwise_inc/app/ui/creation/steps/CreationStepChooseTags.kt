@@ -43,9 +43,10 @@ fun CreationStepChooseTagsScreen(createItineraryViewModel: CreateItineraryViewMo
   Column(
       horizontalAlignment = Alignment.CenterHorizontally,
       modifier =
-          Modifier.fillMaxSize()
-              .testTag(TestTags.CREATION_SCREEN_TAGS)
-              .background(MaterialTheme.colorScheme.primaryContainer),
+      Modifier
+          .fillMaxSize()
+          .testTag(TestTags.CREATION_SCREEN_TAGS)
+          .background(MaterialTheme.colorScheme.primaryContainer),
       verticalArrangement = Arrangement.spacedBy(10.dp)) {
         ItineraryImageBanner(
             createItineraryViewModel = createItineraryViewModel, Modifier.padding(all = 10.dp))
@@ -66,11 +67,12 @@ fun ItineraryImageBanner(
 
   Box(
       modifier =
-          Modifier.fillMaxWidth()
-              .padding(all = 10.dp)
-              .height(120.dp)
-              .clip(MaterialTheme.shapes.medium)
-              .background(MaterialTheme.colorScheme.surface),
+      Modifier
+          .fillMaxWidth()
+          .padding(all = 10.dp)
+          .height(120.dp)
+          .clip(MaterialTheme.shapes.medium)
+          .background(MaterialTheme.colorScheme.surface),
       contentAlignment = Alignment.Center) {
         Text("Itinerary Banner Please Upload Image")
       }
@@ -87,11 +89,15 @@ fun PriceEstimationTextBox(createItineraryViewModel: CreateItineraryViewModel) {
     mutableStateOf(createItineraryViewModel.getNewItinerary()!!.price?.toString() ?: "")
   }
 
-  Row(Modifier.fillMaxWidth().padding(all = 10.dp).clip(MaterialTheme.shapes.medium)) {
+  Row(
+      Modifier
+          .fillMaxWidth()
+          .padding(all = 10.dp)
+          .clip(MaterialTheme.shapes.medium)) {
     TextField(
         label = { Text("Price Estimate") },
         value = priceEstimateDisplay,
-        modifier = Modifier,
+        modifier = Modifier.testTag(TestTags.ITINERARY_CREATION_PRICE_ESTIMATION),
         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
         onValueChange = { input ->
           // ensures that we can only set digits and points (and don't crash with input.toFloat())
@@ -104,7 +110,9 @@ fun PriceEstimationTextBox(createItineraryViewModel: CreateItineraryViewModel) {
     ExposedDropdownMenuBox(
         expanded = isCurrenciesMenuExpanded,
         onExpandedChange = { isCurrenciesMenuExpanded = it },
-        modifier = Modifier.clip(MaterialTheme.shapes.medium).shadow(5.dp)) {
+        modifier = Modifier
+            .clip(MaterialTheme.shapes.medium)
+            .shadow(5.dp)) {
           TextField(
               modifier = Modifier.menuAnchor(),
               value = selectedCurrency,
@@ -138,7 +146,7 @@ fun TimeDurationEstimation(createItineraryViewModel: CreateItineraryViewModel) {
   TextField(
       label = { Text("Time Estimate (in hours)") },
       value = timeEstimateDisplay,
-      modifier = Modifier,
+      modifier = Modifier.testTag(TestTags.ITINERARY_CREATION_TIME_ESTIMATION),
       keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
       onValueChange = { input ->
         if (input.isNotBlank() && input.isDigitsOnly())
@@ -178,12 +186,16 @@ fun RelevantTags(createItineraryViewModel: CreateItineraryViewModel) {
     }
   }
 
-  Button(onClick = { isTagsDDM = true }) { Text("Add Tags") }
+  Button(
+      modifier = Modifier.testTag(TestTags.ITINERARY_CREATION_TAGS),
+      onClick = { isTagsDDM = true }
+  ) { Text("Add Tags") }
 
   DropdownMenu(expanded = isTagsDDM, onDismissRequest = { isTagsDDM = false }) {
     allTags.forEach { tag ->
       DropdownMenuItem(
           text = { Text(tag) },
+          modifier = Modifier.testTag("${TestTags.ITINERARY_CREATION_TAGS}_$tag"),
           onClick = {
             isTagsDDM = false
             if (!selectedTags.contains(tag) && selectedTags.size < 3) {
