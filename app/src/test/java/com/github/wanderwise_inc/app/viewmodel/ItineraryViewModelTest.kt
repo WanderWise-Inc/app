@@ -3,7 +3,6 @@ package com.github.wanderwise_inc.app.viewmodel
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import app.cash.turbine.test
-import com.github.wanderwise_inc.app.DEFAULT_USER_UID
 import com.github.wanderwise_inc.app.data.DirectionsRepository
 import com.github.wanderwise_inc.app.data.ItineraryRepository
 import com.github.wanderwise_inc.app.data.LocationsRepository
@@ -77,7 +76,7 @@ class ItineraryViewModelTest {
     every { itineraryRepository.getUserItineraries(any()) } returns
         flow { emit(listOf(FakeItinerary.TOKYO)) }
 
-    val emittedItineraryList = itineraryViewModel.getUserItineraries(DEFAULT_USER_UID).first()
+    val emittedItineraryList = itineraryViewModel.getUserItineraries("DEFAULT_USER_UID").first()
     assertEquals(listOf(FakeItinerary.TOKYO), emittedItineraryList)
   }
 
