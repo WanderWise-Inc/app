@@ -27,6 +27,8 @@ interface ImageRepository {
   /** @brief used to launch the activity to open the photo gallery */
   fun launchActivity(it: Intent)
 
+  fun setOnImageSelectedListener(listener: (Uri?) -> Unit)
+
   /**
    * @brief set the currentFile to this the Uri given, useful for other functions that will use the
    *   currentFile
@@ -34,4 +36,10 @@ interface ImageRepository {
   fun setCurrentFile(uri: Uri?)
 
   fun getCurrentFile(): Uri?
+
+  fun getIsItineraryImage(): Boolean
+
+  fun setIsItineraryImage(isItineraryImage: Boolean)
+
+  fun deleteImageFromStorage(fileName: String)
 }

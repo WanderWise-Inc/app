@@ -15,8 +15,11 @@ import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import kotlinx.coroutines.flow.flow
 import org.junit.Assert.*
 import org.junit.Before
@@ -46,6 +49,11 @@ class CreationStepPreviewKtTest() {
     MockKAnnotations.init(this)
     every { profileViewModel.getProfile(any()) } returns flow { emit(profile) }
     every { imageRepository.fetchImage(any()) } returns flow { emit(null) }
+    every { imageRepository.setIsItineraryImage(any()) } just Runs
+    every { imageRepository.getCurrentFile() } returns null
+    every { createItineraryViewModel.getCurrentUid() } returns "0"
+    coEvery { imageRepository.uploadImageToStorage(any()) } returns true
+    every { imageRepository.setCurrentFile(any()) } just Runs
   }
 
   @Test

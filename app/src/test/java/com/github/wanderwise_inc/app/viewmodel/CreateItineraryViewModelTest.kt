@@ -1,7 +1,9 @@
 package com.github.wanderwise_inc.app.viewmodel
 
+import android.net.Uri
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.github.wanderwise_inc.app.data.DirectionsRepository
+import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.data.ItineraryRepository
 import com.github.wanderwise_inc.app.data.LocationsRepository
 import com.github.wanderwise_inc.app.model.location.ItineraryLabels
@@ -9,8 +11,10 @@ import com.github.wanderwise_inc.app.model.location.ItineraryTags
 import com.github.wanderwise_inc.app.model.location.Location
 import com.github.wanderwise_inc.app.utils.MainDispatcherRule
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import java.lang.StringBuilder
@@ -43,9 +47,15 @@ class CreateItineraryViewModelTest() {
 
   @MockK private lateinit var userLocationClient: UserLocationClient
 
+  @MockK private lateinit var imageRepository: ImageRepository
+
   private lateinit var createItineraryViewModel: CreateItineraryViewModel
 
   private val testDispatcher = StandardTestDispatcher()
+
+  private val imageUri =
+      Uri.parse(
+          "https://firebasestorage.googleapis.com/v0/b/wanderwise-d8d36.appspot.com/o/images%2FitineraryPictures%2FdefaultItinerary.png?alt=media&token=b7170586-9168-445b-8784-8ad3ac5345bc")
 
   @OptIn(ExperimentalCoroutinesApi::class)
   @Before
@@ -57,6 +67,11 @@ class CreateItineraryViewModelTest() {
     every { userLocationClient.getLocationUpdates(any()) } returns flow { emit(locatation) }
     Dispatchers.setMain(testDispatcher)
     MockKAnnotations.init(this)
+    every { imageRepository.getCurrentFile() } returns imageUri
+    every { imageRepository.setCurrentFile(any()) } just Runs
+    every { imageRepository.setIsItineraryImage(any()) } just Runs
+    every { imageRepository.setOnImageSelectedListener(any()) } just Runs
+    every { itineraryRepository.getNewId() } returns "uid"
     createItineraryViewModel =
         CreateItineraryViewModel(
             itineraryRepository, directionsRepository, locationsRepository, userLocationClient)

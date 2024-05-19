@@ -58,6 +58,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.github.wanderwise_inc.app.R
+import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.Location
 import com.github.wanderwise_inc.app.ui.TestTags
@@ -83,6 +84,7 @@ import kotlinx.coroutines.launch
 fun PreviewItineraryScreen(
     itineraryViewModel: ItineraryViewModel,
     profileViewModel: ProfileViewModel,
+    imageRepository: ImageRepository,
     navController: NavHostController
 ) {
   val userLocation by itineraryViewModel.getUserLocation().collectAsState(null)
@@ -109,6 +111,7 @@ fun PreviewItineraryScreen(
               itinerary,
               itineraryViewModel,
               profileViewModel,
+              imageRepository,
               navController)
         },
         modifier = Modifier.testTag(TestTags.MAP_PREVIEW_ITINERARY_SCREEN),
@@ -175,6 +178,7 @@ fun PreviewItineraryBanner(
     itinerary: Itinerary,
     itineraryViewModel: ItineraryViewModel,
     profileViewModel: ProfileViewModel,
+    imageRepository: ImageRepository,
     navController: NavHostController
 ) {
 
@@ -186,6 +190,7 @@ fun PreviewItineraryBanner(
           itinerary = itinerary,
           itineraryViewModel = itineraryViewModel,
           profileViewModel = profileViewModel,
+          imageRepository = imageRepository,
           navController = navController)
 }
 
@@ -195,6 +200,7 @@ private fun PreviewItineraryBannerMaximized(
     itinerary: Itinerary,
     itineraryViewModel: ItineraryViewModel,
     profileViewModel: ProfileViewModel,
+    imageRepository: ImageRepository,
     navController: NavHostController
 ) {
   val titleFontSize = 32.sp
@@ -374,21 +380,24 @@ private fun PreviewItineraryBannerMaximized(
           Spacer(modifier = Modifier.height(20.dp))
           val coroutineScope = rememberCoroutineScope()
           val uid = profileViewModel.getUserUid()
-
           if (uid == itinerary.userUid) {
             Button(
                 onClick = {
-                  coroutineScope.launch { itineraryViewModel.deleteItinerary(itinerary) }
+                  coroutineScope.launch {
+                    imageRepository.deleteImageFromStorage("itineraryPictures/${itinerary.uid}")
+                    itineraryViewModel.deleteItinerary(itinerary)
+                  }
                   NavigationActions(navController)
                       .navigateTo(Destination.TopLevelDestination.Profile)
                 },
                 colors =
                     ButtonDefaults.buttonColors(
                         backgroundColor = MaterialTheme.colorScheme.errorContainer),
+                modifier = Modifier.testTag(TestTags.MAP_DELETE_ITINERARY_BUTTON)
                 // contentColor = MaterialTheme.colorScheme.onErrorContainer
-            ) {
-              Text(text = "Delete Itinerary")
-            }
+                ) {
+                  Text(text = "Delete Itinerary")
+                }
           }
         }
       }

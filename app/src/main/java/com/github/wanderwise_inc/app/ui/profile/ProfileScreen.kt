@@ -69,6 +69,8 @@ fun ProfileScreen(
     imageRepository: ImageRepository,
     navHostController: NavHostController,
 ) {
+  imageRepository.setIsItineraryImage(false)
+  imageRepository.setCurrentFile(null)
   Log.d("ProfileScreen", "ProfileScreen")
   val profile = profileViewModel.getActiveProfile()
   val userItineraries by

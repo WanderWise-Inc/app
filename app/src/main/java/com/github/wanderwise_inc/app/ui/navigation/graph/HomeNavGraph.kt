@@ -54,7 +54,7 @@ fun HomeNavGraph(
     }
     composable(route = TopLevelDestination.Map.route) {
       bottomNavigationViewModel.setSelected(NavigationItem.MAP.ordinal)
-      PreviewItineraryScreen(itineraryViewModel, profileViewModel, navController)
+      PreviewItineraryScreen(itineraryViewModel, profileViewModel, imageRepository, navController)
     }
     composable(route = TopLevelDestination.Profile.route) {
       bottomNavigationViewModel.setSelected(NavigationItem.PROFILE.ordinal)
