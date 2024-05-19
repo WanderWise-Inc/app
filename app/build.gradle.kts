@@ -1,5 +1,3 @@
-import com.google.protobuf.gradle.id
-
 plugins {
     // Android and Kotlin
     id("com.android.application")
@@ -238,6 +236,14 @@ dependencies {
     testImplementation(libs.robolectric)
 
     debugImplementation(libs.androidx.ui.test.manifest)
+}
+
+// fixes androidTests not running via dark magic
+configurations.all {
+    resolutionStrategy.dependencySubstitution {
+        substitute(module("com.google.protobuf:protobuf-lite"))
+            .using(module("com.google.protobuf:protobuf-javalite:3.23.0"))
+    }
 }
 
 /* protobuf configuration */
