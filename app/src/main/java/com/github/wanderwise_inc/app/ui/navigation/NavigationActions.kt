@@ -4,6 +4,7 @@ import androidx.annotation.StringRes
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import com.github.wanderwise_inc.app.R
+import com.github.wanderwise_inc.app.ui.TestTags
 
 object TopLevelRoute {
   const val SIGNIN = "SignIn"
@@ -26,80 +27,100 @@ object CreationPreviewOptions {
   const val PREVIEW_ITINERARY = "Itinerary"
 }
 
-sealed class Destination(val route: String, val icon: Int, @StringRes val textId: Int) {
-  sealed class TopLevelDestination(route: String, icon: Int, textId: Int) :
-      Destination(route, icon, textId) {
+sealed class Destination(
+    val route: String,
+    val icon: Int,
+    @StringRes val textId: Int,
+    val testTag: String
+) {
+  sealed class TopLevelDestination(route: String, icon: Int, textId: Int, testTag: String) :
+      Destination(route, icon, textId, testTag) {
     data object Overview :
         TopLevelDestination(
             route = TopLevelRoute.OVERVIEW,
             icon = R.drawable.menu_icon,
-            textId = R.string.overview_string)
+            textId = R.string.overview_string,
+            testTag = TestTags.BOTTOM_NAV_OVERVIEW)
 
     data object Liked :
         TopLevelDestination(
             route = TopLevelRoute.LIKED,
             icon = R.drawable.liked_icon,
-            textId = R.string.liked_string)
+            textId = R.string.liked_string,
+            testTag = TestTags.BOTTOM_NAV_LIKED)
 
     data object Creation :
         TopLevelDestination(
             route = TopLevelRoute.CREATION,
             icon = R.drawable.add_icon,
             textId = R.string.creation_string,
-        )
+            testTag = TestTags.BOTTOM_NAV_CREATION)
 
     data object Map :
         TopLevelDestination(
-            route = TopLevelRoute.MAP, icon = R.drawable.map_icon, textId = R.string.map_string)
+            route = TopLevelRoute.MAP,
+            icon = R.drawable.map_icon,
+            textId = R.string.map_string,
+            testTag = TestTags.BOTTOM_NAV_MAP)
 
     data object Profile :
         TopLevelDestination(
             route = TopLevelRoute.PROFILE,
             icon = R.drawable.profile_icon,
-            textId = R.string.profile_string)
+            textId = R.string.profile_string,
+            testTag = TestTags.BOTTOM_NAV_PROFILE)
   }
 
-  sealed class CreationStepsDestinations(route: String, icon: Int, textId: Int) :
-      Destination("Creation/$route", icon, textId) {
+  sealed class CreationStepsDestinations(route: String, icon: Int, textId: Int, testTag: String) :
+      Destination("Creation/$route", icon, textId, testTag) {
     data object ChooseLocations :
         CreationStepsDestinations(
             route = CreationStepsRoute.LOCATIONS,
             icon = R.drawable.location_icon,
-            textId = R.string.locations_string)
+            textId = R.string.locations_string,
+            testTag = TestTags.ITINERARY_CREATION_BAR_LOCATIONS)
 
     data object ChooseDescription :
         CreationStepsDestinations(
             route = CreationStepsRoute.DESCRIPTION,
             icon = R.drawable.chat_icon,
-            textId = R.string.description_string)
+            textId = R.string.description_string,
+            testTag = TestTags.ITINERARY_CREATION_BAR_DESCRIPTION)
 
     data object ChooseTags :
         CreationStepsDestinations(
             route = CreationStepsRoute.TAGS,
             icon = R.drawable.tag_icon,
             textId = R.string.tags_string,
-        )
+            testTag = TestTags.ITINERARY_CREATION_BAR_TAGS)
 
     data object Preview :
         CreationStepsDestinations(
             route = CreationStepsRoute.PREVIEW,
             icon = R.drawable.tick_icon,
-            textId = R.string.preview_string)
+            textId = R.string.preview_string,
+            testTag = TestTags.ITINERARY_CREATION_BAR_PREVIEW)
   }
 
-  sealed class CreationPreviewOptionsDestinations(route: String, icon: Int, textId: Int) :
-      Destination("Creation/Preview/$route", icon, textId) {
+  sealed class CreationPreviewOptionsDestinations(
+      route: String,
+      icon: Int,
+      textId: Int,
+      testTag: String
+  ) : Destination("Creation/Preview/$route", icon, textId, testTag) {
     data object PreviewBanner :
         CreationStepsDestinations(
             route = CreationPreviewOptions.PREVIEW_BANNER,
             icon = R.drawable.map_icon,
-            textId = R.string.preview_string)
+            textId = R.string.preview_string,
+            testTag = TestTags.CREATION_PREVIEW_BANNER)
 
     data object PreviewItinerary :
         CreationStepsDestinations(
             route = CreationPreviewOptions.PREVIEW_ITINERARY,
             icon = R.drawable.home_icon,
-            textId = R.string.preview_string)
+            textId = R.string.preview_string,
+            testTag = TestTags.CREATION_PREVIEW_ITINERARY)
   }
 }
 

@@ -13,18 +13,16 @@ import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.github.wanderwise_inc.app.MainActivity
 import com.github.wanderwise_inc.app.data.DirectionsRepository
 import com.github.wanderwise_inc.app.data.DirectionsRepositoryImpl
-import com.github.wanderwise_inc.app.data.GoogleSignInLauncher
+import com.github.wanderwise_inc.app.data.E2EItineraryRepository
+import com.github.wanderwise_inc.app.data.E2EProfileRepository
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.data.ImageRepositoryImpl
 import com.github.wanderwise_inc.app.data.ItineraryRepository
-import com.github.wanderwise_inc.app.data.ItineraryRepositoryImpl
 import com.github.wanderwise_inc.app.data.LocationsRepository
 import com.github.wanderwise_inc.app.data.LocationsRepositoryImpl
 import com.github.wanderwise_inc.app.data.ProfileRepository
-import com.github.wanderwise_inc.app.data.ProfileRepositoryImpl
 import com.github.wanderwise_inc.app.data.SignInLauncher
 import com.github.wanderwise_inc.app.disk.SavedItinerariesSerializer
-import com.github.wanderwise_inc.app.isNetworkAvailable
 import com.github.wanderwise_inc.app.network.DirectionsApiServiceFactory
 import com.github.wanderwise_inc.app.network.LocationsApiServiceFactory
 import com.github.wanderwise_inc.app.proto.location.SavedItineraries
@@ -38,16 +36,19 @@ import com.github.wanderwise_inc.app.viewmodel.UserLocationClient
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 import com.google.firebase.storage.FirebaseStorage
+import io.mockk.every
+import io.mockk.mockk
 import kotlinx.coroutines.launch
 
 class AppModule(
     activity: MainActivity,
 ) {
   init {
-    Log.d("ModuleProvider", "Using AppModule")
+    Log.d("ModuleProvider", "Using TestModule")
   }
 
   val firebaseAuth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
@@ -72,12 +73,7 @@ class AppModule(
     }
   }
 
-  val itineraryRepository: ItineraryRepository by lazy {
-    ItineraryRepositoryImpl(
-        firestore,
-        activity.applicationContext,
-        activity.applicationContext.savedItinerariesDataStore)
-  }
+  val itineraryRepository: ItineraryRepository by lazy { E2EItineraryRepository() }
 
   private val Context.savedItinerariesDataStore: DataStore<SavedItineraries> by
       dataStore("saved_itineraries.pb", SavedItinerariesSerializer)
@@ -86,9 +82,7 @@ class AppModule(
     LocationsRepositoryImpl(LocationsApiServiceFactory.createLocationsApiService())
   }
 
-  val profileRepository: ProfileRepository by lazy {
-    ProfileRepositoryImpl(firestore, activity.applicationContext)
-  }
+  val profileRepository: ProfileRepository by lazy { E2EProfileRepository() }
 
   val bottomNavigationViewModel: BottomNavigationViewModel by lazy { BottomNavigationViewModel() }
 
@@ -108,12 +102,20 @@ class AppModule(
         LocationServices.getFusedLocationProviderClient(activity.applicationContext))
   }
 
-  val loginViewModel: LoginViewModel by lazy {
-    LoginViewModel(signInLauncher, activity.applicationContext.isNetworkAvailable())
-  }
+  val loginViewModel: LoginViewModel by lazy { LoginViewModel(signInLauncher, true) }
 
   private val signInLauncher: SignInLauncher by lazy {
-    GoogleSignInLauncher(activityResultLauncher)
+    val testUser = mockk<FirebaseUser>()
+    every { testUser.uid } returns "e2e_test_user_uid"
+    every { testUser.displayName } returns "E2E Test User"
+
+    object : SignInLauncher {
+      override fun signIn() {
+        activity.lifecycleScope.launch {
+          loginViewModel.handleSignInResult(profileViewModel, testUser)
+        }
+      }
+    }
   }
 
   private val activityResultLauncher: ActivityResultLauncher<Intent> by lazy {

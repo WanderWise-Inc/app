@@ -3,6 +3,7 @@ package com.github.wanderwise_inc.app.model.location
 object FakeItinerary {
   val TOKYO =
       Itinerary(
+          uid = "fake_itinerary_tokyo_uid",
           userUid = "Sophia Reynolds",
           locations =
               listOf(
@@ -71,6 +72,7 @@ object FakeItinerary {
 
   val SAN_FRANCISCO =
       Itinerary(
+          uid = "fake_itinerary_san_francisco_uid",
           userUid = "Elena Cruz",
           locations =
               listOf(
@@ -115,6 +117,7 @@ object FakeItinerary {
 
   val SWITZERLAND =
       Itinerary(
+          uid = "fake_itinerary_switzerland_uid",
           userUid = "Liam Bennett",
           locations =
               listOf(
