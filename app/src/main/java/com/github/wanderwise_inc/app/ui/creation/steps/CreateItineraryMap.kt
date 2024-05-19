@@ -85,20 +85,17 @@ fun CreateItineraryMapWithSelector(
     locations = emptyList()
   }
 
+  val addLiveLocation = { location: Location -> locations += location }
+
   Scaffold(
       bottomBar = {
         if (!showLocationSelector.value && !showLiveCreation.value) {
           // CreateLiveItinerary()
           ChooseYourWayOfCreation(createItineraryViewModel, showLocationSelector, showLiveCreation)
         } else if (showLiveCreation.value) {
-          CreateLiveItinerary(showLiveCreation, createItineraryViewModel)
+          CreateLiveItinerary(showLiveCreation, createItineraryViewModel, addLiveLocation)
         } else {
-          LocationSelector(
-              createItineraryViewModel,
-              showLocationSelector,
-              locations,
-              resetLocations,
-              navController)
+          LocationSelector(showLocationSelector, locations, resetLocations, navController)
         }
       }) { innerPadding ->
         CreateItineraryMap(createItineraryViewModel, onMapClick, locations, innerPadding)
@@ -205,7 +202,6 @@ fun ChooseYourWayOfCreation(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LocationSelector(
-    createItineraryViewModel: CreateItineraryViewModel,
     showLocationSelector: MutableState<Boolean>,
     locations: List<Location>,
     resetLocations: () -> Unit,
@@ -283,7 +279,8 @@ const val LOCATION_UPDATE_INTERVAL_MILLIS: Long = 1_000 // 1 second
 @Composable
 fun CreateLiveItinerary(
     showLiveCreation: MutableState<Boolean>,
-    createItineraryViewModel: CreateItineraryViewModel
+    createItineraryViewModel: CreateItineraryViewModel,
+    addLiveLocations: (Location) -> Unit,
 ) {
 
   var isStarted by remember { mutableStateOf(false) }
@@ -306,7 +303,8 @@ fun CreateLiveItinerary(
           Button(
               onClick = {
                 isStarted = true
-                createItineraryViewModel.startLocationTracking(LOCATION_UPDATE_INTERVAL_MILLIS)
+                createItineraryViewModel.startLocationTracking(
+                    LOCATION_UPDATE_INTERVAL_MILLIS, addLiveLocations)
                 Log.d("CreateLiveItinerary", "currently creating live itinerary")
               },
               enabled = !isStarted, // Button is disabled if isStarted is true
