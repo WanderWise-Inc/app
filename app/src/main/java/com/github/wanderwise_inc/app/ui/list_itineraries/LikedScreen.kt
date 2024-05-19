@@ -2,11 +2,6 @@ package com.github.wanderwise_inc.app.ui.list_itineraries
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Fastfood
-import androidx.compose.material.icons.filled.Hiking
-import androidx.compose.material.icons.filled.RemoveRedEye
-import androidx.compose.material.icons.filled.ShoppingBag
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -18,9 +13,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.navigation.NavHostController
+import com.github.wanderwise_inc.app.R
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
 import com.github.wanderwise_inc.app.model.location.Tag
@@ -32,7 +27,7 @@ import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 /** @brief Search categories displayed on the top bar. */
 data class SearchCategory(
     val tag: Tag,
-    val icon: ImageVector,
+    val icon: Int,
     val title: String,
 )
 
@@ -72,10 +67,10 @@ fun DisplayLikedItineraries(
   /* the categories that can be selected by the user during filtering */
   val categoriesList =
       listOf(
-          SearchCategory(ItineraryTags.ADVENTURE, Icons.Filled.Hiking, "Adventure"),
-          SearchCategory(ItineraryTags.LUXURY, Icons.Filled.ShoppingBag, "Shopping"),
-          SearchCategory(ItineraryTags.PHOTOGRAPHY, Icons.Filled.RemoveRedEye, "Sight Seeing"),
-          SearchCategory(ItineraryTags.FOODIE, Icons.Filled.Fastfood, "Drinks"),
+          SearchCategory(ItineraryTags.ADVENTURE, R.drawable.adventure_icon, "Adventure"),
+          SearchCategory(ItineraryTags.LUXURY, R.drawable.shopping_icon, "Shopping"),
+          SearchCategory(ItineraryTags.PHOTOGRAPHY, R.drawable.sight_seeing_icon, "Sight Seeing"),
+          SearchCategory(ItineraryTags.FOODIE, R.drawable.drinks_icon, "Drinks"),
       )
 
   val uid = profileViewModel.getUserUid()
