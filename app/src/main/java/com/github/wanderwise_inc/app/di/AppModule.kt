@@ -86,7 +86,9 @@ class AppModule(
     LocationsRepositoryImpl(LocationsApiServiceFactory.createLocationsApiService())
   }
 
-  val profileRepository: ProfileRepository by lazy { ProfileRepositoryImpl(firestore, activity.applicationContext) }
+  val profileRepository: ProfileRepository by lazy {
+    ProfileRepositoryImpl(firestore, activity.applicationContext)
+  }
 
   val bottomNavigationViewModel: BottomNavigationViewModel by lazy { BottomNavigationViewModel() }
 
