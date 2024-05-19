@@ -45,4 +45,8 @@ class E2EItineraryRepository : ItineraryRepository {
   override suspend fun writeItinerariesToDisk(itineraries: List<Itinerary>) {
     TODO("Not yet implemented")
   }
+
+  override fun getNewId(): String {
+    TODO("Not yet implemented")
+  }
 }
