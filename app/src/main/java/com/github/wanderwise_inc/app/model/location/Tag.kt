@@ -15,7 +15,7 @@ object ItineraryTags {
   const val CULTURAL = "Cultural"
   const val FOOD = "Food"
   const val FOODIE = "Foodie"
-  const val LUXURY = "Luxury"
+  const val SHOPPING = "Shopping"
   const val NATURE = "Nature"
   const val PHOTOGRAPHY = "Photography"
   const val RELAXATION = "Relaxation"

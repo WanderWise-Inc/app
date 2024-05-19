@@ -15,7 +15,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.DirectionsWalk
 import androidx.compose.material.icons.filled.DirectionsWalk
@@ -37,8 +41,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,10 +56,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.github.wanderwise_inc.app.R
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.Location
 import com.github.wanderwise_inc.app.ui.TestTags
+import com.github.wanderwise_inc.app.ui.navigation.Destination
+import com.github.wanderwise_inc.app.ui.navigation.NavigationActions
 import com.github.wanderwise_inc.app.ui.profile.ProfilePicture
 import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
@@ -67,12 +76,14 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
+import kotlinx.coroutines.launch
 
 /** @brief previews an itinerary */
 @Composable
 fun PreviewItineraryScreen(
     itineraryViewModel: ItineraryViewModel,
-    profileViewModel: ProfileViewModel
+    profileViewModel: ProfileViewModel,
+    navController: NavHostController
 ) {
   val userLocation by itineraryViewModel.getUserLocation().collectAsState(null)
   val itinerary = itineraryViewModel.getFocusedItinerary()
@@ -93,7 +104,12 @@ fun PreviewItineraryScreen(
     Scaffold(
         bottomBar = {
           PreviewItineraryBanner(
-              isMinimized, onMinimizedClick, itinerary, itineraryViewModel, profileViewModel)
+              isMinimized,
+              onMinimizedClick,
+              itinerary,
+              itineraryViewModel,
+              profileViewModel,
+              navController)
         },
         modifier = Modifier.testTag(TestTags.MAP_PREVIEW_ITINERARY_SCREEN),
         floatingActionButton = {
@@ -158,7 +174,8 @@ fun PreviewItineraryBanner(
     onMinimizedClick: () -> Unit,
     itinerary: Itinerary,
     itineraryViewModel: ItineraryViewModel,
-    profileViewModel: ProfileViewModel
+    profileViewModel: ProfileViewModel,
+    navController: NavHostController
 ) {
 
   if (isMinimized)
@@ -168,7 +185,8 @@ fun PreviewItineraryBanner(
           onMinimizedClick = onMinimizedClick,
           itinerary = itinerary,
           itineraryViewModel = itineraryViewModel,
-          profileViewModel = profileViewModel)
+          profileViewModel = profileViewModel,
+          navController = navController)
 }
 
 @Composable
@@ -176,11 +194,12 @@ private fun PreviewItineraryBannerMaximized(
     onMinimizedClick: () -> Unit,
     itinerary: Itinerary,
     itineraryViewModel: ItineraryViewModel,
-    profileViewModel: ProfileViewModel
+    profileViewModel: ProfileViewModel,
+    navController: NavHostController
 ) {
   val titleFontSize = 32.sp
   val innerFontSize = 16.sp
-  var ctr = remember { mutableStateOf(0) }
+  var ctr = remember { mutableIntStateOf(0) }
 
   val profilePictureModifier =
       Modifier.clip(RoundedCornerShape(5.dp)).size(50.dp).testTag(TestTags.MAP_PROFILE_PIC)
@@ -193,12 +212,14 @@ private fun PreviewItineraryBannerMaximized(
               containerColor = MaterialTheme.colorScheme.primaryContainer,
           ),
       modifier = Modifier.testTag(TestTags.MAP_MAXIMIZED_BANNER)) {
+        val scrollState = rememberScrollState()
         Column(
             modifier =
                 Modifier.background(MaterialTheme.colorScheme.primaryContainer)
                     .fillMaxWidth()
                     .aspectRatio(1.2f)
-                    .padding(30.dp),
+                    .padding(30.dp)
+                    .verticalScroll(scrollState),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top,
         ) {
@@ -303,7 +324,7 @@ private fun PreviewItineraryBannerMaximized(
                 profile = profile,
                 profileViewModel = profileViewModel,
                 modifier = profilePictureModifier,
-            /*ctr = ctr*/ )
+                ctr = ctr)
 
             Spacer(modifier = Modifier.width(10.dp))
 
@@ -349,6 +370,25 @@ private fun PreviewItineraryBannerMaximized(
                 fontWeight = FontWeight.Normal,
                 modifier = Modifier.padding(2.dp).testTag(TestTags.MAP_ITINERARY_DESCRIPTION),
                 textAlign = TextAlign.Center)
+          }
+          Spacer(modifier = Modifier.height(20.dp))
+          val coroutineScope = rememberCoroutineScope()
+          val uid = profileViewModel.getUserUid()
+
+          if (uid == itinerary.userUid) {
+            Button(
+                onClick = {
+                  coroutineScope.launch { itineraryViewModel.deleteItinerary(itinerary) }
+                  NavigationActions(navController)
+                      .navigateTo(Destination.TopLevelDestination.Profile)
+                },
+                colors =
+                    ButtonDefaults.buttonColors(
+                        backgroundColor = MaterialTheme.colorScheme.errorContainer),
+                // contentColor = MaterialTheme.colorScheme.onErrorContainer
+            ) {
+              Text(text = "Delete Itinerary")
+            }
           }
         }
       }

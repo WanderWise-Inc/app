@@ -1,14 +1,13 @@
 package com.github.wanderwise_inc.app.data
 
 import android.content.Intent
-import android.graphics.Bitmap
 import android.net.Uri
 import kotlinx.coroutines.flow.Flow
 
 /** @brief data source for fetching and retrieving images */
 interface ImageRepository {
   /** @return a bitmap flow of queried image */
-  fun fetchImage(pathToProfilePic: String): Flow<Bitmap?>
+  fun fetchImage(pathToProfilePic: String): Flow<Uri?>
 
   /**
    * @param bitMap the image's bitMap we want to store
@@ -23,7 +22,7 @@ interface ImageRepository {
   /*fun getBitMap(uri: Uri?) : Flow<Bitmap?>*/
 
   /** @param fileName the fileName (path) that we want to store to the storage */
-  fun uploadImageToStorage(fileName: String): Boolean
+  suspend fun uploadImageToStorage(fileName: String): Boolean
 
   /** @brief used to launch the activity to open the photo gallery */
   fun launchActivity(it: Intent)
