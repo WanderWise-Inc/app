@@ -6,6 +6,7 @@ import com.github.wanderwise_inc.app.data.ItineraryRepository
 import com.github.wanderwise_inc.app.data.LocationsRepository
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryLabels
+import com.github.wanderwise_inc.app.model.location.Location
 import java.io.InvalidObjectException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -114,12 +115,13 @@ class CreateItineraryViewModel(
    * Adds device's current location to `newItineraryBuilder.locations` every `intervalMillis`
    * milliseconds
    */
-  fun startLocationTracking(intervalMillis: Long) {
+  fun startLocationTracking(intervalMillis: Long, addLiveLocation: (Location) -> Unit) {
     locationJob?.cancel() // cancel some previous job
     locationJob =
         coroutineScope.launch {
           locationClient.getLocationUpdates(intervalMillis).collect { location ->
             newItineraryBuilder?.addLocation(location)
+            addLiveLocation(location)
             Log.d("CreateItineraryViewModel", "build = $newItineraryBuilder")
             Log.d("CreateItineraryViewModel", "locations = ${newItineraryBuilder?.locations}")
           }

@@ -135,7 +135,7 @@ class CreateItineraryViewModelTest() {
         assert(createItineraryViewModel.getNewItinerary()!!.build().locations.isEmpty())
 
         val intervalMillis = 1000L
-        createItineraryViewModel.startLocationTracking(intervalMillis)
+        createItineraryViewModel.startLocationTracking(intervalMillis, {})
 
         // delay for some time because of coroutines...
         delay(5000L)
@@ -146,7 +146,7 @@ class CreateItineraryViewModelTest() {
 
   @Test
   fun `stopLocationTracking cancels locationJob`() = runTest {
-    createItineraryViewModel.startLocationTracking(1000L)
+    createItineraryViewModel.startLocationTracking(1000L, {})
     createItineraryViewModel.stopLocationTracking()
     delay(5000L)
     assertNotNull(createItineraryViewModel.locationJob)
