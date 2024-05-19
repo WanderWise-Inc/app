@@ -31,9 +31,9 @@ class LocationTest {
         mapOf(
             "lat" to epflLat,
             "long" to epflLon,
-            "title" to null,
-            "address" to null,
-            "googleRating" to null)
+            "title" to "",
+            "address" to "",
+            "googleRating" to 0f)
     assertEquals(expected, epflLocation.toMap())
   }
 

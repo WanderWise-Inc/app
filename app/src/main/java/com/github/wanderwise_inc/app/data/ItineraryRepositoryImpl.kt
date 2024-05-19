@@ -1,11 +1,10 @@
 package com.github.wanderwise_inc.app.data
 
 import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
 import android.util.Log
 import androidx.datastore.core.DataStore
 import com.github.wanderwise_inc.app.disk.toModel
+import com.github.wanderwise_inc.app.isNetworkAvailable
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryLabels
 import com.github.wanderwise_inc.app.model.location.Tag
@@ -18,6 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -35,24 +35,12 @@ class ItineraryRepositoryImpl(
 ) : ItineraryRepository {
   private val itinerariesCollection = db.collection("itineraries")
 
-  /** @return `true` iff the device is connected to the internet */
-  private fun isNetworkAvailable(): Boolean {
-    val connectivityManager =
-        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-    val networkInfo = connectivityManager.activeNetwork
-    val networkCapabilities = connectivityManager.getNetworkCapabilities(networkInfo)
-    val ret =
-        networkCapabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) ?: false
-    Log.d("ItineraryRepositoryImpl", "Network available: $ret")
-    return ret
-  }
-
   /**
    * @return a `flow` of all public itineraries, or the list of saved itineraries from persistent
    *   storage when internet connection isn't available
    */
   override fun getPublicItineraries(): Flow<List<Itinerary>> {
-    return when (isNetworkAvailable()) {
+    return when (context.isNetworkAvailable()) {
       true -> getPublicItinerariesFirebase()
       false -> getSavedItineraries()
     }
@@ -83,7 +71,7 @@ class ItineraryRepositoryImpl(
    *   persistent storage when internet connection isn't available
    */
   override fun getUserItineraries(userUid: String): Flow<List<Itinerary>> {
-    return when (isNetworkAvailable()) {
+    return when (context.isNetworkAvailable()) {
       true -> getUserItinerariesFireBase(userUid)
       false -> getSavedItineraries().map { list -> list.filter { it.userUid == userUid } }
     }
@@ -112,7 +100,7 @@ class ItineraryRepositoryImpl(
   }
 
   override fun getItinerariesWithTags(tags: List<Tag>): Flow<List<Itinerary>> {
-    return when (isNetworkAvailable()) {
+    return when (context.isNetworkAvailable()) {
       true -> getItinerariesWithTagsFirebase(tags)
       false ->
           getSavedItineraries().map { list ->
@@ -143,7 +131,14 @@ class ItineraryRepositoryImpl(
         .catch { emit(listOf()) }
   }
 
-  override suspend fun getItinerary(uid: String): Itinerary {
+  override suspend fun getItinerary(uid: String): Itinerary? {
+    return when (context.isNetworkAvailable()) {
+      true -> getItineraryFirebase(uid)
+      false -> getItineraryLocal(uid)
+    }
+  }
+
+  private suspend fun getItineraryFirebase(uid: String): Itinerary? {
     val document =
         suspendCancellableCoroutine<DocumentSnapshot> { continuation ->
           itinerariesCollection
@@ -152,11 +147,21 @@ class ItineraryRepositoryImpl(
               .addOnSuccessListener { document -> continuation.resume(document) }
               .addOnFailureListener { exception -> continuation.resumeWithException(exception) }
         }
-    if (document.exists()) {
-      return document.toObject(Itinerary::class.java)!!
+    return if (document.exists()) {
+      document.toObject(Itinerary::class.java)!!
     } else {
-      throw Exception("Itinerary not found")
+      null
     }
+  }
+
+  private suspend fun getItineraryLocal(uid: String): Itinerary? {
+    Log.d("ItineraryRepositoryImpl", "Getting itinerary $uid from disk")
+    return getSavedItineraries()
+        .map { itineraryList ->
+          Log.d("ItineraryRepositoryImpl", "Local itineraries = ${itineraryList.map{ it.uid }}")
+          if (itineraryList.any { it.uid == uid }) itineraryList.first { it.uid == uid } else null
+        }
+        .first()
   }
 
   override fun setItinerary(itinerary: Itinerary) {
@@ -211,7 +216,7 @@ class ItineraryRepositoryImpl(
 
   /** Replaces the stored saved itineraries protobuf with `itineraries` */
   override suspend fun writeItinerariesToDisk(itineraries: List<Itinerary>) {
-    Log.d("Itinerary Repository", "Updating saved itineraries to $itineraries")
+    Log.d("Itinerary Repository", "writing itineraries to disk: ${itineraries.map { it.uid }}")
     val savedItineraries =
         SavedItineraries.newBuilder().addAllItineraries(itineraries.map { it.toProto() }).build()
     withContext(Dispatchers.IO) { datastore.updateData { savedItineraries } }

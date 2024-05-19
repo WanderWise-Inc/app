@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.data.ProfileRepository
+import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.profile.Profile
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.Flow
@@ -92,6 +93,15 @@ class ProfileViewModel(
 
   /** Returns the UID of the signed in profile */
   fun getUserUid(): String = activeProfile.userUid
+
+  /** Updates liked itineraries of active profile locally */
+  fun setActiveProfileLikedItineraries(itineraries: List<Itinerary>) {
+    if (itineraries.isNotEmpty()) {
+      Log.d("ProfileViewModel", "Updating active profile liked: ${itineraries.map { it.uid }}")
+      activeProfile.likedItinerariesUid.clear()
+      activeProfile.likedItinerariesUid.addAll(itineraries.map { it.uid })
+    }
+  }
 
   /** Creates a profile from a Firebase user */
   fun createProfileFromFirebaseUser(user: FirebaseUser): Profile {
