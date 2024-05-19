@@ -124,6 +124,8 @@ fun PriceEstimationTextBox(createItineraryViewModel: CreateItineraryViewModel) {
     mutableStateOf(createItineraryViewModel.getNewItinerary()!!.price?.toString() ?: "")
   }
 
+  val regex = "^[0-9]*\\.?[0-9]{2}$".toRegex()
+
   Row(Modifier.fillMaxWidth().padding(all = 10.dp).clip(MaterialTheme.shapes.medium)) {
     TextField(
         label = { Text("Price Estimate") },
@@ -132,7 +134,7 @@ fun PriceEstimationTextBox(createItineraryViewModel: CreateItineraryViewModel) {
         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
         onValueChange = { input ->
           // ensures that we can only set digits and points (and don't crash with input.toFloat())
-          if (input.isNotBlank() && input.isDigitsOnly()) {
+          if (input.isNotBlank() && input.matches(regex)) {
             createItineraryViewModel.getNewItinerary()!!.price(input.toFloat())
           }
           priceEstimateDisplay = input
@@ -170,7 +172,7 @@ fun PriceEstimationTextBox(createItineraryViewModel: CreateItineraryViewModel) {
 @Composable
 fun TimeDurationEstimation(createItineraryViewModel: CreateItineraryViewModel) {
   var timeEstimateDisplay by remember {
-    mutableStateOf(createItineraryViewModel.getNewItinerary()?.price?.toString() ?: "")
+    mutableStateOf(createItineraryViewModel.getNewItinerary()?.time?.toString() ?: "")
   }
   TextField(
       label = { Text("Time Estimate (in hours)") },
