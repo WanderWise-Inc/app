@@ -70,6 +70,7 @@ class CreationStepChooseTagsTest {
         every { itineraryBuilder.tags } returns tagsList
         every { itineraryBuilder.build() } returns itinerary
         every { itineraryBuilder.visible } returns itinerary.visible
+        every { itineraryBuilder.time } returns itinerary.time
     }
 
     @Test
