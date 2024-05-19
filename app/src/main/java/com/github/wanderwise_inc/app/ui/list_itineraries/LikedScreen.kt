@@ -2,11 +2,18 @@ package com.github.wanderwise_inc.app.ui.list_itineraries
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -14,6 +21,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.github.wanderwise_inc.app.R
 import com.github.wanderwise_inc.app.data.ImageRepository
@@ -21,6 +30,7 @@ import com.github.wanderwise_inc.app.model.location.ItineraryTags
 import com.github.wanderwise_inc.app.model.location.Tag
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.home.SearchBar
+import com.github.wanderwise_inc.app.ui.popup.HintPopup
 import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 
@@ -30,10 +40,6 @@ data class SearchCategory(
     val icon: Int,
     val title: String,
 )
-
-object LikedScreenTestTags {
-  const val CATEGORY_SELECTOR = "category selector"
-}
 
 @Composable
 fun LikedScreen(
@@ -76,11 +82,12 @@ fun DisplayLikedItineraries(
   val uid = profileViewModel.getUserUid()
   var selectedIndex by remember { mutableIntStateOf(0) }
   var searchQuery by remember { mutableStateOf("") }
-  var priceRange by remember { mutableStateOf(0f) }
+  var priceRange by remember { mutableFloatStateOf(0f) }
 
-  val itineraryUids by profileViewModel.getLikedItineraries(uid).collectAsState(initial = listOf())
+  val itineraryUids by
+      profileViewModel.getLikedItineraries(uid).collectAsState(initial = emptyList())
   val itineraries by
-      itineraryViewModel.getItineraryFromUids(itineraryUids).collectAsState(initial = listOf())
+      itineraryViewModel.getItineraryFromUids(itineraryUids).collectAsState(initial = emptyList())
 
   Scaffold(
       topBar = {
@@ -99,6 +106,19 @@ fun DisplayLikedItineraries(
                   onCategorySelected = { selectedIndex = it })
             }
       },
+      floatingActionButton = {
+        Button(
+            onClick = { itineraryViewModel.saveItineraries(itineraries) },
+            colors =
+                ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.secondaryContainer)) {
+              Icon(
+                  painter = painterResource(R.drawable.floppy_disk),
+                  contentDescription = "Save Itineraries",
+                  tint = MaterialTheme.colorScheme.onSecondaryContainer,
+                  modifier = Modifier.size(30.dp).padding(2.dp))
+            }
+      },
       modifier = Modifier.testTag(TestTags.LIKED_SCREEN)) { innerPadding ->
         val filtered =
             itineraries
@@ -109,7 +129,7 @@ fun DisplayLikedItineraries(
                       itinerary.description?.contains(searchQuery, ignoreCase = true) ?: false
                 }
                 .filter { itinerary ->
-                  val price = itinerary.price.toFloat()
+                  val price = itinerary.price
                   price in
                       sliderPositionPriceState.value.start..sliderPositionPriceState.value
                               .endInclusive
@@ -129,4 +149,10 @@ fun DisplayLikedItineraries(
             parent = ItineraryListParent.LIKED,
             imageRepository = imageRepository)
       }
+  var isHintVisible by remember { mutableStateOf(true) }
+  if (isHintVisible) {
+    HintPopup(message = "Press the floppy disk button to save your liked itineraries for later!") {
+      isHintVisible = false
+    }
+  }
 }

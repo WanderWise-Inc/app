@@ -71,10 +71,12 @@ fun ProfileScreen(
 ) {
   Log.d("ProfileScreen", "ProfileScreen")
   val profile = profileViewModel.getActiveProfile()
-  val currentUid = profileViewModel.getUserUid()
-
   val userItineraries by
-      itineraryViewModel.getUserItineraries(currentUid).collectAsState(initial = emptyList())
+      itineraryViewModel
+          .getUserItineraries(profileViewModel.getUserUid())
+          .collectAsState(initial = emptyList())
+
+  Log.d("User itineraries", "$userItineraries")
   var ctr = remember { mutableIntStateOf(0) }
 
   if (profile != null) {
