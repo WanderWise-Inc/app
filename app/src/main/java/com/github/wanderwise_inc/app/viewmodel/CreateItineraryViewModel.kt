@@ -16,13 +16,14 @@ import kotlinx.coroutines.launch
 const val TITLE_MAX_LENGTH = 80
 
 class CreateItineraryViewModel(
-    private val itineraryRepository: ItineraryRepository,
-    private val directionsRepository: DirectionsRepository,
-    private val locationsRepository: LocationsRepository,
-    private val locationClient: LocationClient
+    itineraryRepository: ItineraryRepository,
+    directionsRepository: DirectionsRepository,
+    locationsRepository: LocationsRepository,
+    locationClient: LocationClient
 ) :
     ItineraryViewModel(
         itineraryRepository, directionsRepository, locationsRepository, locationClient) {
+
   /** New itinerary that the signed in user is currently building */
   private var newItineraryBuilder: Itinerary.Builder? = null
 

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.data.ProfileRepository
 import com.github.wanderwise_inc.app.model.profile.Profile
+import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.Flow
 
 class ProfileViewModel(
@@ -60,6 +61,12 @@ class ProfileViewModel(
     return profileRepository.checkIfItineraryIsLiked(userUid, itineraryUid)
   }
 
+  suspend fun checkIfItineraryIsLikedByActiveProfile(itineraryUid: String): Boolean {
+    return if (isSignInComplete)
+        profileRepository.checkIfItineraryIsLiked(getUserUid(), itineraryUid)
+    else false
+  }
+
   /**
    * @return all of the profile's liked itineraries, or an empty list if there is no actively signed
    *   in profile
@@ -85,4 +92,13 @@ class ProfileViewModel(
 
   /** Returns the UID of the signed in profile */
   fun getUserUid(): String = activeProfile.userUid
+
+  /** Creates a profile from a Firebase user */
+  fun createProfileFromFirebaseUser(user: FirebaseUser): Profile {
+    val uid = user.uid
+    val displayName = user.displayName ?: ""
+    val bio = ""
+
+    return Profile(userUid = uid, displayName = displayName, bio = bio)
+  }
 }
