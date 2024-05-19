@@ -85,6 +85,7 @@ fun ItineraryImageBanner(
   Box(
       modifier =
           Modifier.fillMaxWidth()
+              .testTag(TestTags.CREATION_SCREEN_IMAGE_BANNER)
               .padding(all = 10.dp)
               .height(120.dp)
               .clip(MaterialTheme.shapes.medium)
