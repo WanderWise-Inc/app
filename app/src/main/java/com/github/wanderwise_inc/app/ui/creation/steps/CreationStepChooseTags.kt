@@ -85,7 +85,7 @@ fun ItineraryImageBanner(
   Box(
       modifier =
           Modifier.fillMaxWidth()
-              .testTag(TestTags.CREATION_SCREEN_IMAGE_BANNER)
+              .testTag(TestTags.CREATION_SCREEN_IMAGE_BANNER_BOX)
               .padding(all = 10.dp)
               .height(120.dp)
               .clip(MaterialTheme.shapes.medium)
@@ -103,9 +103,10 @@ fun ItineraryImageBanner(
         if (imageUploaded != null) {
           // display image
           AsyncImage(
-              model = ImageRequest.Builder(LocalContext.current).data(imageUploaded).build(),
+              model = ImageRequest.Builder(LocalContext.current).data(imageUploaded).crossfade(500).build(),
               contentDescription = "itinerary_image",
-              contentScale = ContentScale.Crop)
+              contentScale = ContentScale.Crop,
+              modifier = Modifier.testTag(TestTags.CREATION_SCREEN_IMAGE_BANNER))
         } else {
           Text("Itinerary Banner Please Upload Image")
         }
