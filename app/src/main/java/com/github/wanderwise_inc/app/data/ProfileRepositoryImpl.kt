@@ -127,7 +127,7 @@ class ProfileRepositoryImpl(db: FirebaseFirestore, val context: Context) : Profi
   override suspend fun checkIfItineraryIsLiked(userUid: String, itineraryUid: String): Boolean {
     return when (context.isNetworkAvailable()) {
       true -> checkIfItineraryIsLikedOnline(userUid, itineraryUid)
-      false -> false // if an itinerary is available offline, it was liked by user
+      false -> false // sensible default. Applies only to locally saved itineraries
     }
   }
 
