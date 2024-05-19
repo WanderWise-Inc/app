@@ -64,6 +64,18 @@ val DarkColorPalette =
         surfaceVariant = BlueGrey30,
         onSurfaceVariant = BlueGrey80,
         outline = BlueGrey80)
+/*MaterialTheme(
+colorScheme = lightColorScheme(
+primary = Color(0xFFB0E0E6),  // seafoam Green
+secondary = Color(0xFFF88379),  // sunset Coral
+onPrimary = Color.Black,
+onSecondary = Color.White,
+background = Color(0xFFE6E6FA),  // pastel Lavender
+surface = Color(0xFFE6CEA8),  // warm Sand
+onBackground = Color.DarkGray,
+onSurface = Color.Black,
+)
+)*/
 
 @Composable
 fun WanderWiseTheme(
