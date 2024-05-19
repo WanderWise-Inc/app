@@ -1,18 +1,19 @@
 package com.github.wanderwise_inc.app.ui.navigation.graph
 
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.github.wanderwise_inc.app.data.GoogleSignInLauncher
 import com.github.wanderwise_inc.app.ui.navigation.TopLevelRoute
 import com.github.wanderwise_inc.app.ui.signin.LoginScreen
+import com.github.wanderwise_inc.app.viewmodel.LoginViewModel
 
-fun NavGraphBuilder.authNavGraph(googleSignInLauncher: GoogleSignInLauncher) {
+fun NavGraphBuilder.authNavGraph(loginViewModel: LoginViewModel, navController: NavController) {
   navigation(
       route = Graph.AUTHENTICATION,
       startDestination = AuthScreen.SignIn.route,
   ) {
-    composable(route = AuthScreen.SignIn.route) { LoginScreen(googleSignInLauncher) }
+    composable(route = AuthScreen.SignIn.route) { LoginScreen(loginViewModel, navController) }
   }
 }
 

@@ -64,4 +64,6 @@ object TestTags {
   const val START_BUTTON = "start_button"
   const val STOP_BUTTON = "stop_button"
   const val BACK_BUTTON = "back_button"
+
+  const val SIGN_IN_BUTTON = "sign_in_button"
 }

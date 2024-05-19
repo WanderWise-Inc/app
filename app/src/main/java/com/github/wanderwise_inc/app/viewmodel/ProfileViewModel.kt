@@ -7,6 +7,7 @@ import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.data.ProfileRepository
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.profile.Profile
+import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.Flow
 
 class ProfileViewModel(
@@ -61,6 +62,12 @@ class ProfileViewModel(
     return profileRepository.checkIfItineraryIsLiked(userUid, itineraryUid)
   }
 
+  suspend fun checkIfItineraryIsLikedByActiveProfile(itineraryUid: String): Boolean {
+    return if (isSignInComplete)
+        profileRepository.checkIfItineraryIsLiked(getUserUid(), itineraryUid)
+    else false
+  }
+
   /**
    * @return all of the profile's liked itineraries, or an empty list if there is no actively signed
    *   in profile
@@ -90,9 +97,18 @@ class ProfileViewModel(
   /** Updates liked itineraries of active profile locally */
   fun setActiveProfileLikedItineraries(itineraries: List<Itinerary>) {
     if (itineraries.isNotEmpty()) {
-      Log.d("ProfileViewModel", "Updating active profile liked: ${itineraries.map{ it.uid }}")
+      Log.d("ProfileViewModel", "Updating active profile liked: ${itineraries.map { it.uid }}")
       activeProfile.likedItinerariesUid.clear()
       activeProfile.likedItinerariesUid.addAll(itineraries.map { it.uid })
     }
+  }
+
+  /** Creates a profile from a Firebase user */
+  fun createProfileFromFirebaseUser(user: FirebaseUser): Profile {
+    val uid = user.uid
+    val displayName = user.displayName ?: ""
+    val bio = ""
+
+    return Profile(userUid = uid, displayName = displayName, bio = bio)
   }
 }
