@@ -82,8 +82,8 @@ fun CreateItineraryMapWithSelector(
 
   val resetLocations =
       {
-        // itineraryBuilder.resetLocations()
-        // locations = emptyList()
+         itineraryBuilder.resetLocations()
+         locations = emptyList()
       }
 
   val addLiveLocation = { location: Location -> locations += location }
