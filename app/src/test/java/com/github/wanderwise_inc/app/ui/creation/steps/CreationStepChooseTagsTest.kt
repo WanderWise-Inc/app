@@ -131,6 +131,8 @@ class CreationStepChooseTagsTest {
         composeTestRule.onNodeWithTag("Tags Button").performClick()
         for (tag in allTags) {
             composeTestRule.onNodeWithText(tag).assertIsDisplayed()
+            composeTestRule.onNodeWithText(tag).performClick()
+            composeTestRule.onNodeWithTag("Tags Button").performClick()
         }
     }
 }
