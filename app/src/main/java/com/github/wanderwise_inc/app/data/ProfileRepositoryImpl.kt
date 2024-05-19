@@ -1,6 +1,8 @@
 package com.github.wanderwise_inc.app.data
 
+import android.content.Context
 import android.util.Log
+import com.github.wanderwise_inc.app.isNetworkAvailable
 import com.github.wanderwise_inc.app.model.profile.Profile
 import com.github.wanderwise_inc.app.model.profile.ProfileLabels
 import com.google.firebase.firestore.DocumentSnapshot
@@ -15,7 +17,7 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 
 const val PROFILE_DB_PATH = "profiles"
 
-class ProfileRepositoryImpl(db: FirebaseFirestore) : ProfileRepository {
+class ProfileRepositoryImpl(db: FirebaseFirestore, val context: Context) : ProfileRepository {
   private val usersCollection = db.collection(PROFILE_DB_PATH)
 
   override fun getProfile(userUid: String): Flow<Profile?> {
@@ -123,6 +125,16 @@ class ProfileRepositoryImpl(db: FirebaseFirestore) : ProfileRepository {
   }
 
   override suspend fun checkIfItineraryIsLiked(userUid: String, itineraryUid: String): Boolean {
+    return when (context.isNetworkAvailable()) {
+      true -> checkIfItineraryIsLikedOnline(userUid, itineraryUid)
+      false -> false // sensible default. Applies only to locally saved itineraries
+    }
+  }
+
+  private suspend fun checkIfItineraryIsLikedOnline(
+      userUid: String,
+      itineraryUid: String
+  ): Boolean {
     val isLiked = suspendCancellableCoroutine { continuation ->
       usersCollection
           .document(userUid)

@@ -24,6 +24,7 @@ import com.github.wanderwise_inc.app.data.ProfileRepository
 import com.github.wanderwise_inc.app.data.ProfileRepositoryImpl
 import com.github.wanderwise_inc.app.data.SignInLauncher
 import com.github.wanderwise_inc.app.disk.SavedItinerariesSerializer
+import com.github.wanderwise_inc.app.isNetworkAvailable
 import com.github.wanderwise_inc.app.network.DirectionsApiServiceFactory
 import com.github.wanderwise_inc.app.network.LocationsApiServiceFactory
 import com.github.wanderwise_inc.app.proto.location.SavedItineraries
@@ -85,7 +86,9 @@ class AppModule(
     LocationsRepositoryImpl(LocationsApiServiceFactory.createLocationsApiService())
   }
 
-  val profileRepository: ProfileRepository by lazy { ProfileRepositoryImpl(firestore) }
+  val profileRepository: ProfileRepository by lazy {
+    ProfileRepositoryImpl(firestore, activity.applicationContext)
+  }
 
   val bottomNavigationViewModel: BottomNavigationViewModel by lazy { BottomNavigationViewModel() }
 
@@ -105,7 +108,9 @@ class AppModule(
         LocationServices.getFusedLocationProviderClient(activity.applicationContext))
   }
 
-  val loginViewModel: LoginViewModel by lazy { LoginViewModel(signInLauncher) }
+  val loginViewModel: LoginViewModel by lazy {
+    LoginViewModel(signInLauncher, activity.applicationContext.isNetworkAvailable())
+  }
 
   private val signInLauncher: SignInLauncher by lazy {
     GoogleSignInLauncher(activityResultLauncher)

@@ -117,7 +117,7 @@ object FakeItinerary {
 
   val SWITZERLAND =
       Itinerary(
-            uid = "fake_itinerary_switzerland_uid",
+          uid = "fake_itinerary_switzerland_uid",
           userUid = "Liam Bennett",
           locations =
               listOf(

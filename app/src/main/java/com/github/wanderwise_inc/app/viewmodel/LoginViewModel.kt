@@ -1,5 +1,6 @@
 package com.github.wanderwise_inc.app.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,13 +9,20 @@ import com.github.wanderwise_inc.app.model.profile.DEFAULT_OFFLINE_PROFILE
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.first
 
-class LoginViewModel(private val signInLauncher: SignInLauncher) : ViewModel() {
+class LoginViewModel(
+    private val signInLauncher: SignInLauncher,
+    private val isNetworkAvailable: Boolean,
+) : ViewModel() {
   private val _signInState = MutableLiveData(SignInState.NONE)
   val signInState: LiveData<SignInState>
     get() = _signInState
 
   fun signIn() {
-    signInLauncher.signIn()
+    if (isNetworkAvailable) signInLauncher.signIn()
+    else {
+      Log.d("LoginViewModel", "Network unavailable")
+      _signInState.value = SignInState.OFFLINE
+    }
   }
 
   suspend fun handleSignInResult(
@@ -50,5 +58,6 @@ class LoginViewModel(private val signInLauncher: SignInLauncher) : ViewModel() {
 enum class SignInState {
   NONE,
   SUCCESS,
-  FAILURE
+  FAILURE,
+  OFFLINE,
 }

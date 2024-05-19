@@ -27,7 +27,12 @@ object CreationPreviewOptions {
   const val PREVIEW_ITINERARY = "Itinerary"
 }
 
-sealed class Destination(val route: String, val icon: Int, @StringRes val textId: Int, val testTag: String) {
+sealed class Destination(
+    val route: String,
+    val icon: Int,
+    @StringRes val textId: Int,
+    val testTag: String
+) {
   sealed class TopLevelDestination(route: String, icon: Int, textId: Int, testTag: String) :
       Destination(route, icon, textId, testTag) {
     data object Overview :
@@ -49,12 +54,14 @@ sealed class Destination(val route: String, val icon: Int, @StringRes val textId
             route = TopLevelRoute.CREATION,
             icon = R.drawable.add_icon,
             textId = R.string.creation_string,
-            testTag = TestTags.BOTTOM_NAV_CREATION
-        )
+            testTag = TestTags.BOTTOM_NAV_CREATION)
 
     data object Map :
         TopLevelDestination(
-            route = TopLevelRoute.MAP, icon = R.drawable.map_icon, textId = R.string.map_string, testTag = TestTags.BOTTOM_NAV_MAP)
+            route = TopLevelRoute.MAP,
+            icon = R.drawable.map_icon,
+            textId = R.string.map_string,
+            testTag = TestTags.BOTTOM_NAV_MAP)
 
     data object Profile :
         TopLevelDestination(
@@ -85,8 +92,7 @@ sealed class Destination(val route: String, val icon: Int, @StringRes val textId
             route = CreationStepsRoute.TAGS,
             icon = R.drawable.tag_icon,
             textId = R.string.tags_string,
-            testTag = TestTags.ITINERARY_CREATION_BAR_TAGS
-        )
+            testTag = TestTags.ITINERARY_CREATION_BAR_TAGS)
 
     data object Preview :
         CreationStepsDestinations(
@@ -96,8 +102,12 @@ sealed class Destination(val route: String, val icon: Int, @StringRes val textId
             testTag = TestTags.ITINERARY_CREATION_BAR_PREVIEW)
   }
 
-  sealed class CreationPreviewOptionsDestinations(route: String, icon: Int, textId: Int, testTag: String) :
-      Destination("Creation/Preview/$route", icon, textId, testTag) {
+  sealed class CreationPreviewOptionsDestinations(
+      route: String,
+      icon: Int,
+      textId: Int,
+      testTag: String
+  ) : Destination("Creation/Preview/$route", icon, textId, testTag) {
     data object PreviewBanner :
         CreationStepsDestinations(
             route = CreationPreviewOptions.PREVIEW_BANNER,

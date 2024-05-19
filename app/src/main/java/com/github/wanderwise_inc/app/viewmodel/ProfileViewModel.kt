@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.data.ProfileRepository
 import com.github.wanderwise_inc.app.model.location.Itinerary
+import com.github.wanderwise_inc.app.model.profile.DEFAULT_OFFLINE_PROFILE
 import com.github.wanderwise_inc.app.model.profile.Profile
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.Flow
@@ -49,16 +50,17 @@ class ProfileViewModel(
   }
 
   fun addLikedItinerary(userUid: String, itineraryUid: String) {
-    Log.d("ProfileViewModel", "adding liked itinerary")
+    if (userUid == DEFAULT_OFFLINE_PROFILE.userUid) return
     profileRepository.addItineraryToLiked(userUid, itineraryUid)
   }
 
   fun removeLikedItinerary(userUid: String, itineraryUid: String) {
+    if (userUid == DEFAULT_OFFLINE_PROFILE.userUid) return
     profileRepository.removeItineraryFromLiked(userUid, itineraryUid)
   }
 
   suspend fun checkIfItineraryIsLiked(userUid: String, itineraryUid: String): Boolean {
-    Log.d("ProfileViewModel", "checking if itinerary $itineraryUid is liked...")
+    if (userUid == DEFAULT_OFFLINE_PROFILE.userUid) return false
     return profileRepository.checkIfItineraryIsLiked(userUid, itineraryUid)
   }
 

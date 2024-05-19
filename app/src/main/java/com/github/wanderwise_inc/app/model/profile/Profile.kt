@@ -33,5 +33,4 @@ data class Profile(
 
 /** set in `ProfileViewModel` on sign-in failure and when no data is cached */
 val DEFAULT_OFFLINE_PROFILE =
-    Profile(
-        displayName = "Anonymous Wanderer", userUid = "-1", bio = "Wandering without connection")
+    Profile(displayName = "Offline Wanderer", userUid = "-1", bio = "Wandering without connection")
