@@ -24,6 +24,14 @@ class LocationTest {
     val actual = Location.fromLatLng(LatLng(epflLat, epflLon))
     assertEquals(epflLocation, actual)
   }
+  
+  @Test
+  fun placeLocationTest() {
+    val actual = Location.placeLocation(LatLng(epflLat, epflLon))
+    assertEquals("Placed marker", actual.title)
+    assertEquals("lat/lng: (${epflLat.toFloat()},${epflLon.toFloat()})", actual.address)
+    assertEquals(LatLng(epflLat, epflLon), actual.toLatLng())
+  }
 
   @Test
   fun toMapTest() {
