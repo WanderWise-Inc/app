@@ -1,5 +1,9 @@
 package com.github.wanderwise_inc.app.data
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkCapabilities
 import com.github.wanderwise_inc.app.model.profile.Profile
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
@@ -19,10 +23,12 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.Mockito.any
 import org.mockito.Mockito.anyString
+import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
@@ -41,6 +47,10 @@ class ProfileRepositoryTest {
   @Mock private lateinit var docSnap: DocumentSnapshot
   @Mock private lateinit var taskQuerySnap: Task<QuerySnapshot>
   @Mock private lateinit var querySnap: QuerySnapshot
+  @Mock private lateinit var context: Context
+  @Mock private lateinit var connectivityManager: ConnectivityManager
+  @Mock private lateinit var networkInfo: Network
+  @Mock private lateinit var networkCapabilities: NetworkCapabilities
 
   private lateinit var profileRepositoryTestImpl: ProfileRepository
   private lateinit var profileRepositoryImpl: ProfileRepository
@@ -50,10 +60,23 @@ class ProfileRepositoryTest {
   private lateinit var profiles: MutableList<Profile>
 
   @Before
-  fun setup() {
-    profileRepositoryTestImpl = ProfileRepositoryTestImpl()
+  fun `setup mocks`() {
+    context = mock()
+    connectivityManager = mock()
+    networkInfo = mock()
+    networkCapabilities = mock()
+
     `when`(db.collection(anyString())).thenReturn(userCollection)
-    profileRepositoryImpl = ProfileRepositoryImpl(db)
+    `when`(context.getSystemService(anyString())).thenReturn(connectivityManager)
+    `when`(connectivityManager.activeNetwork).thenReturn(networkInfo)
+    `when`(connectivityManager.getNetworkCapabilities(networkInfo)).thenReturn(networkCapabilities)
+    `when`(networkCapabilities.hasCapability(anyInt())).thenReturn(true)
+  }
+
+  @Before
+  fun `setup repositories and data`() {
+    profileRepositoryTestImpl = ProfileRepositoryTestImpl()
+    profileRepositoryImpl = ProfileRepositoryImpl(db, context)
     profile0 = Profile("0", "Profile0", "bio of Profile0")
     profile1 = Profile("1", "Profile1", "bio of Profile1")
     profile2 = Profile("2", "Profile2", "bio of Profile2")
