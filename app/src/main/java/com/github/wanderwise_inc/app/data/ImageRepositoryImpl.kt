@@ -19,7 +19,11 @@ class ImageRepositoryImpl(
     uri: Uri?
 ) : ImageRepository {
 
+  private var currentFileItinerary: Uri? = uri
+  private var currentFileProfile: Uri? = uri
+  private var isItineraryImage = false
   private var currentFile: Uri? = uri
+  private var onImageSelected: ((Uri?) -> Unit)? = null
 
   /**
    * Fetch image Function. This function will fetch the profile picture from the Storage at a given
@@ -27,19 +31,19 @@ class ImageRepositoryImpl(
    *
    * @return a flow of the bitMap representation of the profile picture
    */
-  override fun fetchImage(pathToProfilePic: String): Flow<Uri?> {
+  override fun fetchImage(fileName: String): Flow<Uri?> {
     Log.d("FETCH IMAGE COUNTER", "FETCHING IMAGE")
     return flow {
-          if (pathToProfilePic.isBlank()) {
+          if (fileName.isBlank()) {
             // the path is empty, there should be no profilePicture at this path
             emit(null)
           } else {
-            val profilePictureRef = imageReference.child("images/${pathToProfilePic}")
+            val pictureRef = imageReference.child("images/${fileName}")
 
             // the byte array that is at the given path (if any)
             val uriResult =
                 suspendCancellableCoroutine<Uri?> { continuation ->
-                  profilePictureRef.downloadUrl
+                  pictureRef.downloadUrl
                       .addOnSuccessListener { result ->
                         Log.d("FETCH IMAGE", "FETCH SUCCESS")
                         continuation.resume(result) // Resume with byte array
@@ -70,6 +74,7 @@ class ImageRepositoryImpl(
     }
     val result =
         suspendCancellableCoroutine<Boolean> { continuation ->
+          currentFile = if (isItineraryImage) currentFileItinerary else currentFileProfile
           currentFile?.let {
             imageReference
                 .child("images/${fileName}")
@@ -101,11 +106,45 @@ class ImageRepositoryImpl(
    *   currentFile
    */
   override fun setCurrentFile(uri: Uri?) {
-    currentFile = uri
+    if (isItineraryImage) {
+      Log.d("CURRENT FILE TYPE", "SET ITINERARY IMAGE")
+      currentFileItinerary = uri
+    } else {
+      Log.d("CURRENT FILE TYPE", "SET PROFILE IMAGE")
+      currentFileProfile = uri
+    }
+
+    onImageSelected?.invoke(uri)
+  }
+
+  override fun setOnImageSelectedListener(listener: (Uri?) -> Unit) {
+    onImageSelected = listener
   }
 
   /** @return the currentFile */
   override fun getCurrentFile(): Uri? {
-    return currentFile
+    return if (isItineraryImage) {
+      Log.d("CURRENT FILE TYPE", "GET ITINERARY IMAGE")
+      currentFileItinerary
+    } else {
+      Log.d("CURRENT FILE TYPE", "GET PROFILE IMAGE")
+      currentFileProfile
+    }
+  }
+
+  override fun getIsItineraryImage(): Boolean {
+    return isItineraryImage
+  }
+
+  override fun setIsItineraryImage(type: Boolean) {
+    isItineraryImage = type
+  }
+
+  override fun deleteImageFromStorage(fileName: String) {
+    imageReference
+        .child("images/${fileName}")
+        .delete()
+        .addOnSuccessListener { Log.d("DELETE IMAGE", "DELETE SUCCESS") }
+        .addOnFailureListener { error -> Log.w("DELETE IMAGE", error) }
   }
 }

@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.navigation.NavHostController
+import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.map.PreviewItineraryScreen
 import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
@@ -14,6 +15,7 @@ import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 @Composable
 fun CreationStepPreviewItinerary(
     createItineraryViewModel: CreateItineraryViewModel,
+    imageRepository: ImageRepository,
     profileViewModel: ProfileViewModel,
     navController: NavHostController
 ) {
@@ -22,6 +24,7 @@ fun CreationStepPreviewItinerary(
     PreviewItineraryScreen(
         itineraryViewModel = createItineraryViewModel,
         profileViewModel = profileViewModel,
+        imageRepository = imageRepository,
         navController)
   }
 }
