@@ -78,8 +78,6 @@ fun ItineraryImageBanner(
     imageRepository: ImageRepository
 ) {
   imageRepository.setIsItineraryImage(true)
-  // TODO: on click upload image using Context Drop Down Menu
-  // default image = Please Upload Image
   val coroutineScope = rememberCoroutineScope()
   var imageUploaded by remember { mutableStateOf<Uri?>(null) }
   imageRepository.setOnImageSelectedListener { uri -> imageUploaded = uri }
