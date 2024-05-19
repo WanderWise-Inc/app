@@ -95,11 +95,7 @@ fun CreateItineraryMapWithSelector(
         } else if (showLiveCreation.value) {
           CreateLiveItinerary(showLiveCreation, createItineraryViewModel, addLiveLocation)
         } else {
-          LocationSelector(
-              showLocationSelector,
-              locations,
-              resetLocations,
-              navController)
+          LocationSelector(showLocationSelector, locations, resetLocations, navController)
         }
       }) { innerPadding ->
         CreateItineraryMap(createItineraryViewModel, onMapClick, locations, innerPadding)
