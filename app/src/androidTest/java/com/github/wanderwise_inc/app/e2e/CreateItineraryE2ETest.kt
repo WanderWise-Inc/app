@@ -147,10 +147,10 @@ class CreateItineraryE2ETest {
     // verify that we have navigated to choose tags screen
     composeTestRule.onNodeWithTag(TestTags.CREATION_SCREEN_TAGS).assertIsDisplayed()
     composeTestRule
-        .onNodeWithTag(TestTags.ITINERARY_CREATION_PRICE_ESTIMATION)
+        .onNodeWithTag(TestTags.PRICE_SEARCH)
         .performTextInput("10")
-    composeTestRule.onNodeWithTag(TestTags.ITINERARY_CREATION_TIME_ESTIMATION).performTextInput("2")
-    composeTestRule.onNodeWithTag(TestTags.ITINERARY_CREATION_TAGS).performClick()
+    composeTestRule.onNodeWithTag(TestTags.TIME_SEARCH).performTextInput("2")
+    composeTestRule.onNodeWithTag(TestTags.CREATION_SCREEN_TAGS).performClick()
     composeTestRule
         .onNodeWithTag("${TestTags.ITINERARY_CREATION_TAGS}_${itinerary.tags.first()}")
         .performClick() // add adventure tag
