@@ -59,11 +59,14 @@ class LikeE2ETest {
         // Click on the first like button to like the itinerary
         firstLikeButton.assertIsDisplayed()
         firstLikeButton.performClick()
-        composeTestRule.waitForIdle()
+        composeTestRule.waitUntil { composeTestRule.onNodeWithTag(TestTags.OVERVIEW_SCREEN).isDisplayed() }
 
         // Click on the bottom navigation bar liked button to navigate to LikedScreen
-        composeTestRule.onNodeWithTag(TestTags.BOTTOM_NAV_LIKED).performClick()
-        composeTestRule.waitForIdle()
+        composeTestRule.onNodeWithTag(
+            testTag = TestTags.BOTTOM_NAV_LIKED,
+            useUnmergedTree = true
+        ).performClick()
+        composeTestRule.waitUntil { composeTestRule.onNodeWithTag(TestTags.LIKED_SCREEN).isDisplayed() }
 
         // Check if the liked itinerary banner is displayed
         composeTestRule
@@ -79,22 +82,27 @@ class LikeE2ETest {
 
         // Click on the liked itinerary banner like button to remove the like from the itinerary
         likedItineraryLikeButton.performClick()
-        composeTestRule.waitForIdle()
+        composeTestRule.waitUntil { composeTestRule.onNodeWithTag(TestTags.LIKED_SCREEN).isDisplayed() }
 
         // Click on the bottom navigation bar overview button to navigate back to OverviewScreen
-        composeTestRule.onNodeWithTag(TestTags.BOTTOM_NAV_OVERVIEW).performClick()
-        composeTestRule.waitForIdle()
+        composeTestRule.onNodeWithTag(
+            testTag = TestTags.BOTTOM_NAV_OVERVIEW,
+            useUnmergedTree = true
+        ).performClick()
+        composeTestRule.waitUntil { composeTestRule.onNodeWithTag(TestTags.OVERVIEW_SCREEN).isDisplayed() }
 
         // Click on the bottom navigation bar liked button to navigate to LikedScreen
-        composeTestRule.onNodeWithTag(TestTags.BOTTOM_NAV_LIKED).performClick()
-        composeTestRule.waitForIdle()
+        composeTestRule.onNodeWithTag(
+            testTag = TestTags.BOTTOM_NAV_LIKED,
+            useUnmergedTree = true
+        ).performClick()
+        composeTestRule.waitUntil { composeTestRule.onNodeWithTag(TestTags.LIKED_SCREEN).isDisplayed() }
 
         // Check if no itinerary banner is displayed
-        assertThrows(AssertionError::class.java) {
-            composeTestRule
-                .onAllNodes(hasSubTestTag(TestTags.ITINERARY_BANNER))
-                .onFirst()
-        }
+        composeTestRule
+            .onAllNodes(hasSubTestTag(TestTags.ITINERARY_BANNER))
+            .onFirst()
+            .assertDoesNotExist()
     }
 
     // Function to check if the node has a testTag which contains the given subTestTag
