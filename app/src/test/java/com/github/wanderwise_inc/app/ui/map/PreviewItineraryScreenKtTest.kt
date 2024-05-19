@@ -10,6 +10,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.lifecycle.MutableLiveData
+import androidx.navigation.NavHostController
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.wanderwise_inc.app.data.DirectionsRepository
 import com.github.wanderwise_inc.app.data.ImageRepository
@@ -57,7 +58,6 @@ class PreviewItineraryScreenKtTest {
   @Mock private lateinit var directionsRepository: DirectionsRepository
   @Mock private lateinit var locationsRepository: LocationsRepository
   @Mock private lateinit var locationClient: LocationClient
-  @Mock private lateinit var userLocationClient: UserLocationClient
   @Mock private lateinit var navController: NavHostController
 
   private lateinit var profileViewModel: ProfileViewModel
