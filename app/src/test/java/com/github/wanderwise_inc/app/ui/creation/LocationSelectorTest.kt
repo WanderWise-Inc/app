@@ -121,7 +121,9 @@ class CreateItineraryMapUITest {
 
   @Test
   fun testBackButton() {
-    composeTestRule.setContent { CreateLiveItinerary(showLiveCreation, createItineraryViewModel, {}) }
+    composeTestRule.setContent {
+      CreateLiveItinerary(showLiveCreation, createItineraryViewModel, {})
+    }
 
     composeTestRule.onNodeWithTag(TestTags.BACK_BUTTON).assertIsDisplayed()
   }
@@ -149,7 +151,9 @@ class CreateItineraryMapUITest {
 
   @Test
   fun testStartButton() {
-    composeTestRule.setContent { CreateLiveItinerary(showLiveCreation, createItineraryViewModel, {}) }
+    composeTestRule.setContent {
+      CreateLiveItinerary(showLiveCreation, createItineraryViewModel, {})
+    }
 
     // Assert that the Start button is initially enabled
     composeTestRule.onNodeWithTag(TestTags.START_BUTTON).assertIsEnabled()
@@ -163,7 +167,9 @@ class CreateItineraryMapUITest {
 
   @Test
   fun testStopButton() {
-    composeTestRule.setContent { CreateLiveItinerary(showLiveCreation, createItineraryViewModel, {}) }
+    composeTestRule.setContent {
+      CreateLiveItinerary(showLiveCreation, createItineraryViewModel, {})
+    }
 
     // Assert that the Stop button is initially disabled
     composeTestRule.onNodeWithTag(TestTags.STOP_BUTTON).assertIsNotEnabled()

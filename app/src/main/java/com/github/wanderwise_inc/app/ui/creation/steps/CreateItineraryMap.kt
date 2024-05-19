@@ -46,7 +46,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.Location
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.popup.HintPopup
@@ -59,7 +58,6 @@ import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
-import kotlinx.coroutines.flow.Flow
 
 @Composable
 fun CreateItineraryMapWithSelector(
@@ -82,14 +80,13 @@ fun CreateItineraryMapWithSelector(
     locations += Location.fromLatLng(latLng)
   }
 
-  val resetLocations = {
-    //itineraryBuilder.resetLocations()
-    //locations = emptyList()
-  }
-    
-  val addLiveLocation = { location: Location ->
-      locations += location
-  }
+  val resetLocations =
+      {
+        // itineraryBuilder.resetLocations()
+        // locations = emptyList()
+      }
+
+  val addLiveLocation = { location: Location -> locations += location }
 
   Scaffold(
       bottomBar = {
@@ -131,9 +128,7 @@ fun CreateItineraryMap(
     }
     GoogleMap(
         modifier =
-        Modifier
-            .padding(paddingValues = innerPaddingValues)
-            .testTag(TestTags.MAP_GOOGLE_MAPS),
+            Modifier.padding(paddingValues = innerPaddingValues).testTag(TestTags.MAP_GOOGLE_MAPS),
         onMapClick = { onMapClick(it) },
         cameraPositionState = cameraPositionState) {
           userLocation?.let {
@@ -157,11 +152,10 @@ fun CreateItineraryMap(
   } else {
     Column(
         modifier =
-        Modifier
-            .testTag(TestTags.MAP_NULL_ITINERARY)
-            .fillMaxSize()
-            .padding(innerPaddingValues)
-            .background(MaterialTheme.colorScheme.background),
+            Modifier.testTag(TestTags.MAP_NULL_ITINERARY)
+                .fillMaxSize()
+                .padding(innerPaddingValues)
+                .background(MaterialTheme.colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center) {
           Text("Loading your location...", modifier = Modifier.testTag(TestTags.MAP_NULL_ITINERARY))
@@ -177,9 +171,7 @@ fun ChooseYourWayOfCreation(
 ) {
 
   BottomAppBar(
-      modifier = Modifier
-          .height(250.dp)
-          .fillMaxWidth(),
+      modifier = Modifier.height(250.dp).fillMaxWidth(),
       containerColor = MaterialTheme.colorScheme.primaryContainer,
       contentColor = MaterialTheme.colorScheme.primary,
   ) {
@@ -223,9 +215,7 @@ fun LocationSelector(
     navController: NavHostController,
 ) {
   BottomAppBar(
-      modifier = Modifier
-          .height(250.dp)
-          .fillMaxWidth(),
+      modifier = Modifier.height(250.dp).fillMaxWidth(),
       containerColor = MaterialTheme.colorScheme.primaryContainer,
       contentColor = MaterialTheme.colorScheme.primary,
   ) {
@@ -234,14 +224,10 @@ fun LocationSelector(
         Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Go back")
       }
 
-      Box(modifier = Modifier
-          .fillMaxWidth()
-          .height(128.dp)) {
+      Box(modifier = Modifier.fillMaxWidth().height(128.dp)) {
         if (locations.isEmpty()) {
           Text(
-              modifier = Modifier
-                  .fillMaxWidth()
-                  .padding(8.dp),
+              modifier = Modifier.fillMaxWidth().padding(8.dp),
               text = "You have no waypoints yet, try adding some")
         } else {
           LazyColumn(horizontalAlignment = Alignment.Start) {
@@ -249,14 +235,12 @@ fun LocationSelector(
               Row(
                   verticalAlignment = Alignment.CenterVertically,
                   modifier =
-                  Modifier
-                      .padding(4.dp)
-                      .fillMaxWidth()
-                      .border(
-                          1.dp,
-                          MaterialTheme.colorScheme.outline,
-                          shape = RoundedCornerShape(4.dp)
-                      )) {
+                      Modifier.padding(4.dp)
+                          .fillMaxWidth()
+                          .border(
+                              1.dp,
+                              MaterialTheme.colorScheme.outline,
+                              shape = RoundedCornerShape(4.dp))) {
                     Icon(
                         Icons.Filled.LocationOn,
                         contentDescription = "Location 2",
@@ -274,9 +258,7 @@ fun LocationSelector(
         }
       }
       Row(
-          modifier = Modifier
-              .fillMaxWidth()
-              .padding(8.dp),
+          modifier = Modifier.fillMaxWidth().padding(8.dp),
           horizontalArrangement = Arrangement.SpaceEvenly) {
             OutlinedButton(
                 onClick = { navController.navigate("ChooseLocationSearch") },
@@ -287,12 +269,12 @@ fun LocationSelector(
                   }
                 }
             OutlinedButton(
-                onClick = { 
-                    resetLocations()
+                onClick = {
+                  resetLocations()
 
-                    //Log.d("DEBUG_PRINT_LOCATION", "${itineraryBuilder.locations.toList()}")
-                    Log.d("DEBUG_PRINT_LOCATION", "$locations")
-                          },
+                  // Log.d("DEBUG_PRINT_LOCATION", "${itineraryBuilder.locations.toList()}")
+                  Log.d("DEBUG_PRINT_LOCATION", "$locations")
+                },
                 modifier = Modifier.testTag(TestTags.RESTART_ITINERARY_BUTTON)) {
                   Row {
                     Icon(imageVector = Icons.Filled.RestartAlt, contentDescription = null)
@@ -315,10 +297,7 @@ fun CreateLiveItinerary(
 
   var isStarted by remember { mutableStateOf(false) }
   BottomAppBar(
-      modifier = Modifier
-          .height(250.dp)
-          .fillMaxWidth()
-          .testTag(TestTags.LIVE_ITINERARY),
+      modifier = Modifier.height(250.dp).fillMaxWidth().testTag(TestTags.LIVE_ITINERARY),
       containerColor = MaterialTheme.colorScheme.primaryContainer,
       contentColor = MaterialTheme.colorScheme.primary,
   ) {
@@ -336,7 +315,8 @@ fun CreateLiveItinerary(
           Button(
               onClick = {
                 isStarted = true
-                createItineraryViewModel.startLocationTracking(LOCATION_UPDATE_INTERVAL_MILLIS, addLiveLocations)
+                createItineraryViewModel.startLocationTracking(
+                    LOCATION_UPDATE_INTERVAL_MILLIS, addLiveLocations)
                 Log.d("CreateLiveItinerary", "currently creating live itinerary")
               },
               enabled = !isStarted, // Button is disabled if isStarted is true
