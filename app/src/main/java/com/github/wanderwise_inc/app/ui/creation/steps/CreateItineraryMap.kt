@@ -80,11 +80,10 @@ fun CreateItineraryMapWithSelector(
     locations += Location.fromLatLng(latLng)
   }
 
-  val resetLocations =
-      {
-         itineraryBuilder.resetLocations()
-         locations = emptyList()
-      }
+  val resetLocations = {
+    itineraryBuilder.resetLocations()
+    locations = emptyList()
+  }
 
   val addLiveLocation = { location: Location -> locations += location }
 
@@ -97,7 +96,6 @@ fun CreateItineraryMapWithSelector(
           CreateLiveItinerary(showLiveCreation, createItineraryViewModel, addLiveLocation)
         } else {
           LocationSelector(
-              createItineraryViewModel,
               showLocationSelector,
               locations,
               resetLocations,
@@ -208,7 +206,6 @@ fun ChooseYourWayOfCreation(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LocationSelector(
-    createItineraryViewModel: CreateItineraryViewModel,
     showLocationSelector: MutableState<Boolean>,
     locations: List<Location>,
     resetLocations: () -> Unit,
@@ -269,12 +266,7 @@ fun LocationSelector(
                   }
                 }
             OutlinedButton(
-                onClick = {
-                  resetLocations()
-
-                  // Log.d("DEBUG_PRINT_LOCATION", "${itineraryBuilder.locations.toList()}")
-                  Log.d("DEBUG_PRINT_LOCATION", "$locations")
-                },
+                onClick = { resetLocations() },
                 modifier = Modifier.testTag(TestTags.RESTART_ITINERARY_BUTTON)) {
                   Row {
                     Icon(imageVector = Icons.Filled.RestartAlt, contentDescription = null)
