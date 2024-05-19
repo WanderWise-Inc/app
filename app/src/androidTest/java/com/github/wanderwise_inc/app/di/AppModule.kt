@@ -34,89 +34,114 @@ import com.github.wanderwise_inc.app.viewmodel.UserLocationClient
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 import com.google.firebase.storage.FirebaseStorage
+import io.mockk.every
+import io.mockk.mockk
 import kotlinx.coroutines.launch
 
 class AppModule(
     activity: MainActivity,
 ) {
-  init {
-    Log.d("ModuleProvider", "Using TestModule")
-  }
-
-  val firebaseAuth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
-
-  val firebaseStorage: FirebaseStorage by lazy { FirebaseStorage.getInstance() }
-
-  private val firestore: FirebaseFirestore by lazy { Firebase.firestore }
-
-  val directionsRepository by lazy {
-    DirectionsRepositoryImpl(DirectionsApiServiceFactory.createDirectionsApiService())
-  }
-
-  val imageRepository: ImageRepository by lazy {
-    ImageRepositoryImpl(imageLauncher, firebaseStorage.reference, null)
-  }
-
-  private val imageLauncher: ActivityResultLauncher<Intent> by lazy {
-    activity.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-      if (result.resultCode == Activity.RESULT_OK) {
-        result.data?.data?.let { imageRepository.setCurrentFile(it) }
-      }
+    init {
+        Log.d("ModuleProvider", "Using TestModule")
     }
-  }
 
-  val itineraryRepository: ItineraryRepository by lazy {
-    ItineraryRepositoryImpl(
-        firestore,
-        activity.applicationContext,
-        activity.applicationContext.savedItinerariesDataStore)
-  }
+    val firebaseAuth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
 
-  private val Context.savedItinerariesDataStore: DataStore<SavedItineraries> by
-      dataStore("saved_itineraries.pb", SavedItinerariesSerializer)
+    val firebaseStorage: FirebaseStorage by lazy { FirebaseStorage.getInstance() }
 
-  val locationsRepository by lazy {
-    LocationsRepositoryImpl(LocationsApiServiceFactory.createLocationsApiService())
-  }
+    private val firestore: FirebaseFirestore by lazy { Firebase.firestore }
 
-  val profileRepository by lazy { ProfileRepositoryImpl(firestore) }
-
-  val bottomNavigationViewModel: BottomNavigationViewModel by lazy { BottomNavigationViewModel() }
-
-  val createItineraryViewModel by lazy {
-    CreateItineraryViewModel(
-        itineraryRepository, directionsRepository, locationsRepository, locationClient)
-  }
-
-  val itineraryViewModel: ItineraryViewModel by lazy {
-    ItineraryViewModel(
-        itineraryRepository, directionsRepository, locationsRepository, locationClient)
-  }
-
-  private val locationClient: LocationClient by lazy {
-    UserLocationClient(
-        activity.applicationContext,
-        LocationServices.getFusedLocationProviderClient(activity.applicationContext))
-  }
-
-  val loginViewModel: LoginViewModel by lazy { LoginViewModel(signInLauncher) }
-
-  private val signInLauncher: SignInLauncher by lazy {
-    GoogleSignInLauncher(activityResultLauncher)
-  }
-
-  private val activityResultLauncher: ActivityResultLauncher<Intent> by lazy {
-    activity.registerForActivityResult(FirebaseAuthUIActivityResultContract()) { res ->
-      val user = if (res.resultCode == Activity.RESULT_OK) firebaseAuth.currentUser else null
-
-      activity.lifecycleScope.launch { loginViewModel.handleSignInResult(profileViewModel, user) }
+    val directionsRepository by lazy {
+        DirectionsRepositoryImpl(DirectionsApiServiceFactory.createDirectionsApiService())
     }
-  }
 
-  val profileViewModel: ProfileViewModel by lazy {
-    ProfileViewModel(profileRepository, imageRepository)
-  }
+    val imageRepository: ImageRepository by lazy {
+        ImageRepositoryImpl(imageLauncher, firebaseStorage.reference, null)
+    }
+
+    private val imageLauncher: ActivityResultLauncher<Intent> by lazy {
+        activity.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                result.data?.data?.let { imageRepository.setCurrentFile(it) }
+            }
+        }
+    }
+
+    val itineraryRepository: ItineraryRepository by lazy {
+        ItineraryRepositoryImpl(
+            firestore,
+            activity.applicationContext,
+            activity.applicationContext.savedItinerariesDataStore
+        )
+    }
+
+    private val Context.savedItinerariesDataStore: DataStore<SavedItineraries> by
+    dataStore("saved_itineraries.pb", SavedItinerariesSerializer)
+
+    val locationsRepository by lazy {
+        LocationsRepositoryImpl(LocationsApiServiceFactory.createLocationsApiService())
+    }
+
+    val profileRepository by lazy { ProfileRepositoryImpl(firestore) }
+
+    val bottomNavigationViewModel: BottomNavigationViewModel by lazy { BottomNavigationViewModel() }
+
+    val createItineraryViewModel by lazy {
+        CreateItineraryViewModel(
+            itineraryRepository, directionsRepository, locationsRepository, locationClient
+        )
+    }
+
+    val itineraryViewModel: ItineraryViewModel by lazy {
+        ItineraryViewModel(
+            itineraryRepository, directionsRepository, locationsRepository, locationClient
+        )
+    }
+
+    private val locationClient: LocationClient by lazy {
+        UserLocationClient(
+            activity.applicationContext,
+            LocationServices.getFusedLocationProviderClient(activity.applicationContext)
+        )
+    }
+
+    val loginViewModel: LoginViewModel by lazy { LoginViewModel(signInLauncher) }
+
+    private val signInLauncher: SignInLauncher by lazy {
+        val testUser = mockk<FirebaseUser>()
+        every { testUser.uid } returns "test_user_id"
+        every { testUser.displayName } returns "Test User"
+
+        object : SignInLauncher {
+            override fun signIn() {
+                activity.lifecycleScope.launch {
+                    loginViewModel.handleSignInResult(
+                        profileViewModel,
+                        testUser
+                    )
+                }
+            }
+        }
+    }
+
+    private val activityResultLauncher: ActivityResultLauncher<Intent> by lazy {
+        activity.registerForActivityResult(FirebaseAuthUIActivityResultContract()) { res ->
+            val user = if (res.resultCode == Activity.RESULT_OK) firebaseAuth.currentUser else null
+
+            activity.lifecycleScope.launch {
+                loginViewModel.handleSignInResult(
+                    profileViewModel,
+                    user
+                )
+            }
+        }
+    }
+
+    val profileViewModel: ProfileViewModel by lazy {
+        ProfileViewModel(profileRepository, imageRepository)
+    }
 }
