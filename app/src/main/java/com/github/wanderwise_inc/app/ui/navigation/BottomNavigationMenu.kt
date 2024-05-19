@@ -47,7 +47,8 @@ fun BottomNavigationMenu(
                 tint = MaterialTheme.colorScheme.onPrimaryContainer,
                 modifier =
                     Modifier.size(width = 64.dp, height = 32.dp)
-                        .padding(horizontal = 20.dp, vertical = 4.dp))
+                        .padding(horizontal = 20.dp, vertical = 4.dp)
+                        .testTag(dest.testTag))
           },
           label = {
             Text(

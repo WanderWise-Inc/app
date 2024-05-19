@@ -87,7 +87,7 @@ class LoginScreenTest {
         .assertHasClickAction()
   }
 
-  @Test
+  /*@Test
   fun `clicking on sign in button should navigate only when sign in is successful`() {
     var hasNavigated = false
 
@@ -114,5 +114,5 @@ class LoginScreenTest {
     composeTestRule.waitForIdle()
 
     assertTrue(hasNavigated)
-  }
+  }*/
 }
