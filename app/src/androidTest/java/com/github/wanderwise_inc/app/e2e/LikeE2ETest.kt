@@ -1,8 +1,5 @@
 package com.github.wanderwise_inc.app.e2e
 
-import androidx.compose.ui.semantics.SemanticsProperties
-import androidx.compose.ui.semantics.getOrNull
-import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -41,7 +38,9 @@ class LikeE2ETest {
 
     // Find first like button
     val firstLikeButton =
-        composeTestRule.onAllNodes(hasSubTestTag(TestTags.ITINERARY_BANNER_LIKE_BUTTON)).onFirst()
+        composeTestRule
+            .onAllNodes(E2EUtils.hasSubTestTag(TestTags.ITINERARY_BANNER_LIKE_BUTTON))
+            .onFirst()
 
     // Click on the first like button to like the itinerary
     firstLikeButton.assertIsDisplayed()
@@ -58,14 +57,14 @@ class LikeE2ETest {
 
     // Check if the liked itinerary banner is displayed
     composeTestRule
-        .onAllNodes(hasSubTestTag(TestTags.ITINERARY_BANNER))
+        .onAllNodes(E2EUtils.hasSubTestTag(TestTags.ITINERARY_BANNER))
         .onFirst()
         .assertIsDisplayed()
 
     // Check if the liked itinerary banner like button is displayed
     val likedItineraryLikeButton =
         composeTestRule
-            .onAllNodes(hasSubTestTag(TestTags.ITINERARY_BANNER_LIKE_BUTTON))
+            .onAllNodes(E2EUtils.hasSubTestTag(TestTags.ITINERARY_BANNER_LIKE_BUTTON))
             .onFirst()
             .assertIsDisplayed()
 
@@ -89,15 +88,8 @@ class LikeE2ETest {
 
     // Check if no itinerary banner is displayed
     composeTestRule
-        .onAllNodes(hasSubTestTag(TestTags.ITINERARY_BANNER))
+        .onAllNodes(E2EUtils.hasSubTestTag(TestTags.ITINERARY_BANNER))
         .onFirst()
         .assertDoesNotExist()
-  }
-
-  // Function to check if the node has a testTag which contains the given subTestTag
-  private fun hasSubTestTag(subTestTag: String): SemanticsMatcher {
-    return SemanticsMatcher("Node with subtag $subTestTag") { node ->
-      node.config.getOrNull(SemanticsProperties.TestTag)?.contains(subTestTag) == true
-    }
   }
 }
