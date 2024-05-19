@@ -128,39 +128,39 @@ fun CategorySelector(
     categoriesList: List<SearchCategory>,
     onCategorySelected: (Int) -> Unit
 ) {
-    TabRow(
-        selectedTabIndex = selectedIndex,
-        containerColor = MaterialTheme.colorScheme.surfaceVariant,
-    ) {
-        categoriesList.forEachIndexed { index, category ->
-            Tab(
-                selected = index == selectedIndex,
-                onClick = { onCategorySelected(index) },
-                text = {
-                    Text(
-                        text = category.title,
-                        modifier = Modifier.padding(0.dp, 2.dp),
-                        style =
-                        TextStyle(
-                            fontSize = 9.sp,
-                            lineHeight = 16.sp,
-                            // fontFamily = FontFamily(Font(R.font.roboto)),
-                            fontWeight = FontWeight(600),
-                            color = MaterialTheme.colorScheme.onPrimaryContainer,
-                            textAlign = TextAlign.Center,
-                            letterSpacing = 0.5.sp,
-                        ))
-                },
-                icon = {
-                    Icon(
-                        painter = painterResource(id = category.icon),
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                        modifier = Modifier.size(30.dp).padding(2.dp))
-                },
-                modifier = Modifier.testTag("${TestTags.CATEGORY_SELECTOR_TAB}_${index}"))
-        }
+  TabRow(
+      selectedTabIndex = selectedIndex,
+      containerColor = MaterialTheme.colorScheme.surfaceVariant,
+  ) {
+    categoriesList.forEachIndexed { index, category ->
+      Tab(
+          selected = index == selectedIndex,
+          onClick = { onCategorySelected(index) },
+          text = {
+            Text(
+                text = category.title,
+                modifier = Modifier.padding(0.dp, 2.dp),
+                style =
+                    TextStyle(
+                        fontSize = 9.sp,
+                        lineHeight = 16.sp,
+                        // fontFamily = FontFamily(Font(R.font.roboto)),
+                        fontWeight = FontWeight(600),
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        textAlign = TextAlign.Center,
+                        letterSpacing = 0.5.sp,
+                    ))
+          },
+          icon = {
+            Icon(
+                painter = painterResource(id = category.icon),
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                modifier = Modifier.size(30.dp).padding(2.dp))
+          },
+          modifier = Modifier.testTag("${TestTags.CATEGORY_SELECTOR_TAB}_${index}"))
     }
+  }
 }
 
 enum class ItineraryListParent {
