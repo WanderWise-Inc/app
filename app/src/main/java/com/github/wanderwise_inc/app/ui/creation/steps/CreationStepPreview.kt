@@ -95,6 +95,8 @@ fun CreationStepPreview(
                     createItineraryViewModel.uploadNewItinerary()
                     val itineraryUid = createItineraryViewModel.getCurrentUid()
                     imageRepository.uploadImageToStorage("itineraryPictures/$itineraryUid")
+                    imageRepository.setIsItineraryImage(true)
+                    imageRepository.setCurrentFile(null)
                     onFinished()
                   }
                 }
