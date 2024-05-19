@@ -76,8 +76,8 @@ fun CreateItineraryMapWithSelector(
   var locations by remember { mutableStateOf(itineraryBuilder.locations.toList()) }
 
   val onMapClick = { latLng: LatLng ->
-    itineraryBuilder.addLocation(Location.fromLatLng(latLng))
-    locations += Location.fromLatLng(latLng)
+    itineraryBuilder.addLocation(Location.placeLocation(latLng))
+    locations += Location.placeLocation(latLng)
   }
 
   val resetLocations = {
@@ -239,10 +239,7 @@ fun LocationSelector(
                         contentDescription = "Location 2",
                         modifier = Modifier.padding(start = 10.dp))
                     Text(
-                        text =
-                            "${loc.title ?: "Placed marker"}, ${
-                                    loc.address ?: "lat/lng: (${loc.lat.toFloat()},${loc.long.toFloat()})"
-                                }",
+                        text = "${loc.title}, ${loc.address}",
                         fontSize = 15.sp,
                         maxLines = 1)
                   }
