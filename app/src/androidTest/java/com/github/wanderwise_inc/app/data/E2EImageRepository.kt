@@ -18,11 +18,27 @@ class E2EImageRepository : ImageRepository {
     TODO("Not yet implemented")
   }
 
+  override fun setOnImageSelectedListener(listener: (Uri?) -> Unit) {
+    TODO("Not yet implemented")
+  }
+
   override fun setCurrentFile(uri: Uri?) {
     TODO("Not yet implemented")
   }
 
   override fun getCurrentFile(): Uri? {
+    TODO("Not yet implemented")
+  }
+
+  override fun getIsItineraryImage(): Boolean {
+    TODO("Not yet implemented")
+  }
+
+  override fun setIsItineraryImage(isItineraryImage: Boolean) {
+    TODO("Not yet implemented")
+  }
+
+  override fun deleteImageFromStorage(fileName: String) {
     TODO("Not yet implemented")
   }
 }

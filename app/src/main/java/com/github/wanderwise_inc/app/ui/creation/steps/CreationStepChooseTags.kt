@@ -1,6 +1,9 @@
 package com.github.wanderwise_inc.app.ui.creation.steps
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,22 +27,32 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.core.text.isDigitsOnly
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
+import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.model.location.Tag
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
+import kotlinx.coroutines.launch
 
 @Composable
-fun CreationStepChooseTagsScreen(createItineraryViewModel: CreateItineraryViewModel) {
+fun CreationStepChooseTagsScreen(
+    createItineraryViewModel: CreateItineraryViewModel,
+    imageRepository: ImageRepository
+) {
   Column(
       horizontalAlignment = Alignment.CenterHorizontally,
       modifier =
@@ -48,7 +61,9 @@ fun CreationStepChooseTagsScreen(createItineraryViewModel: CreateItineraryViewMo
               .background(MaterialTheme.colorScheme.primaryContainer),
       verticalArrangement = Arrangement.spacedBy(10.dp)) {
         ItineraryImageBanner(
-            createItineraryViewModel = createItineraryViewModel, Modifier.padding(all = 10.dp))
+            createItineraryViewModel = createItineraryViewModel,
+            Modifier.padding(all = 10.dp),
+            imageRepository)
         PriceEstimationTextBox(createItineraryViewModel)
         TimeDurationEstimation(createItineraryViewModel)
         RelevantTags(createItineraryViewModel)
@@ -59,20 +74,46 @@ fun CreationStepChooseTagsScreen(createItineraryViewModel: CreateItineraryViewMo
 @Composable
 fun ItineraryImageBanner(
     createItineraryViewModel: CreateItineraryViewModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    imageRepository: ImageRepository
 ) {
-  // TODO: on click upload image using Context Drop Down Menu
-  // default image = Please Upload Image
+  imageRepository.setIsItineraryImage(true)
+  val coroutineScope = rememberCoroutineScope()
+  var imageUploaded by remember { mutableStateOf<Uri?>(null) }
+  imageRepository.setOnImageSelectedListener { uri -> imageUploaded = uri }
 
   Box(
       modifier =
           Modifier.fillMaxWidth()
+              .testTag(TestTags.CREATION_SCREEN_IMAGE_BANNER_BOX)
               .padding(all = 10.dp)
               .height(120.dp)
               .clip(MaterialTheme.shapes.medium)
-              .background(MaterialTheme.colorScheme.surface),
+              .background(MaterialTheme.colorScheme.surface)
+              .clickable {
+                coroutineScope.launch {
+                  Intent(Intent.ACTION_GET_CONTENT).also {
+                    it.type = "image/*" // Set type to any image format.
+                    imageRepository.launchActivity(it) // Launch activity to select an image.
+                  }
+                }
+              },
       contentAlignment = Alignment.Center) {
-        Text("Itinerary Banner Please Upload Image")
+        imageUploaded = imageRepository.getCurrentFile()
+        if (imageUploaded != null) {
+          // display image
+          AsyncImage(
+              model =
+                  ImageRequest.Builder(LocalContext.current)
+                      .data(imageUploaded)
+                      .crossfade(500)
+                      .build(),
+              contentDescription = "itinerary_image",
+              contentScale = ContentScale.Crop,
+              modifier = Modifier.testTag(TestTags.CREATION_SCREEN_IMAGE_BANNER))
+        } else {
+          Text("Itinerary Banner Please Upload Image")
+        }
       }
 }
 
@@ -93,7 +134,7 @@ fun PriceEstimationTextBox(createItineraryViewModel: CreateItineraryViewModel) {
     TextField(
         label = { Text("Price Estimate") },
         value = priceEstimateDisplay,
-        modifier = Modifier.testTag(TestTags.ITINERARY_CREATION_PRICE_ESTIMATION),
+        modifier = Modifier.testTag(TestTags.PRICE_SEARCH),
         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
         onValueChange = { input ->
           // ensures that we can only set digits and points (and don't crash with input.toFloat())
@@ -140,7 +181,7 @@ fun TimeDurationEstimation(createItineraryViewModel: CreateItineraryViewModel) {
   TextField(
       label = { Text("Time Estimate (in hours)") },
       value = timeEstimateDisplay,
-      modifier = Modifier.testTag(TestTags.ITINERARY_CREATION_TIME_ESTIMATION),
+      modifier = Modifier.testTag(TestTags.TIME_SEARCH),
       keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
       onValueChange = { input ->
         if (input.isNotBlank() && input.isDigitsOnly())

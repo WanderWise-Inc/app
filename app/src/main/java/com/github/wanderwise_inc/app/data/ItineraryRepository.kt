@@ -33,4 +33,6 @@ interface ItineraryRepository {
 
   /** @brief writes itineraries to persistent storage */
   suspend fun writeItinerariesToDisk(itineraries: List<Itinerary>)
+
+  fun getNewId(): String
 }

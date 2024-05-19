@@ -1,5 +1,6 @@
 package com.github.wanderwise_inc.app.ui.list_itineraries
 
+import android.net.Uri
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.assertIsDisplayed
@@ -20,9 +21,11 @@ import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import kotlinx.coroutines.flow.flow
 import org.junit.Before
 import org.junit.Rule
@@ -40,6 +43,9 @@ class LikedScreenTest {
   @MockK private lateinit var firebaseAuth: FirebaseAuth
   @MockK private lateinit var imageRepository: ImageRepository
   private val profile = Profile(userUid = "0", displayName = "me", bio = "bio")
+  private val imageUri =
+      Uri.parse(
+          "https://firebasestorage.googleapis.com/v0/b/wanderwise-d8d36.appspot.com/o/images%2FitineraryPictures%2FdefaultItinerary.png?alt=media&token=b7170586-9168-445b-8784-8ad3ac5345bc")
 
   private var sliderPositionPriceState = mutableStateOf(0f..100f)
   private var sliderPositionTimeState = mutableStateOf(0f..24f)
@@ -52,7 +58,8 @@ class LikedScreenTest {
     MockKAnnotations.init(this)
     every { imageRepository.fetchImage(any()) } returns flow { emit(null) }
     every { profileViewModel.getProfile(any()) } returns flow { emit(profile) }
-    every { profileViewModel.setActiveProfileLikedItineraries(any()) } returns Unit
+    every { profileViewModel.setActiveProfileLikedItineraries(any()) } just Runs
+    every { imageRepository.getCurrentFile() } returns imageUri
 
     for (itinerary in testItineraries) {
       itinerary.uid = itinerary.title // set uid for testTags

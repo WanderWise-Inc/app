@@ -1,5 +1,6 @@
 package com.github.wanderwise_inc.app.ui.itinerary
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -17,6 +18,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -33,8 +35,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
@@ -42,6 +44,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImagePainter
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import com.github.wanderwise_inc.app.R
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.model.location.Itinerary
@@ -55,14 +60,34 @@ fun ItineraryBanner(
     onBannerClick: (Itinerary) -> Unit,
     isLikedInitially: Boolean = false,
     profileViewModel: ProfileViewModel,
-    imageRepository: ImageRepository
+    imageRepository: ImageRepository,
+    inCreation: Boolean = false
 ) {
-
-  val defaultImageId = R.drawable.underground
+  if (inCreation) imageRepository.setIsItineraryImage(true)
+  val currentImage = imageRepository.getCurrentFile()
   val imageFlow =
       remember(itinerary) { imageRepository.fetchImage("itineraryPictures/${itinerary.uid}") }
   val image by imageFlow.collectAsState(initial = null)
-  val painter: Painter = painterResource(id = defaultImageId)
+  val model =
+      if (inCreation) {
+        Log.d("ItineraryBanner", "In creation")
+        ImageRequest.Builder(LocalContext.current)
+            .data(currentImage)
+            .error(R.drawable.underground)
+            .crossfade(500)
+            .build()
+      } else {
+        ImageRequest.Builder(LocalContext.current)
+            .data(image)
+            .error(R.drawable.underground)
+            .crossfade(500)
+            .build()
+      }
+
+  val painter = rememberAsyncImagePainter(model = model)
+  if (painter.state is AsyncImagePainter.State.Loading) {
+    CircularProgressIndicator()
+  }
   var isLiked = isLikedInitially
   var numLikes by remember { mutableIntStateOf(itinerary.numLikes) }
   var prices by remember { mutableFloatStateOf(itinerary.price) }
@@ -84,8 +109,6 @@ fun ItineraryBanner(
                     .fillMaxWidth()
                     .aspectRatio(1.34f),
             horizontalAlignment = Alignment.CenterHorizontally) {
-
-              // Image of the itinerary
               Image(
                   painter = painter,
                   contentDescription = itinerary.description,
@@ -93,6 +116,7 @@ fun ItineraryBanner(
                       Modifier.fillMaxWidth().fillMaxHeight(0.55f).clip(RoundedCornerShape(13.dp)),
                   contentScale = ContentScale.Crop,
                   alignment = Alignment.TopCenter)
+              // Image of the itinerary
               // Primary Text Field
               Text(
                   text = itinerary.title,
