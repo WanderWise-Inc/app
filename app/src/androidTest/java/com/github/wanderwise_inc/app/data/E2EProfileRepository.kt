@@ -2,10 +2,20 @@ package com.github.wanderwise_inc.app.data
 
 import com.github.wanderwise_inc.app.model.profile.Profile
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class E2EProfileRepository : ProfileRepository {
+    private val repository = listOf(
+        Profile(
+            userUid = "e2e_test_user_uid",
+            displayName = "E2E Test User",
+            bio = "SIGMA E2E BIO",
+            likedItinerariesUid = mutableListOf()
+        )
+    )
     override fun getProfile(userUid: String): Flow<Profile?> {
-        TODO("Not yet implemented")
+        val profile = repository.find { it.userUid == userUid }
+        return flow { emit(profile) }
     }
 
     override fun getAllProfiles(): Flow<List<Profile>> {
