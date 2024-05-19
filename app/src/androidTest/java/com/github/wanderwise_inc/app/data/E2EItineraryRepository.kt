@@ -28,7 +28,7 @@ class E2EItineraryRepository : ItineraryRepository {
     }
 
     override suspend fun getItinerary(uid: String): Itinerary? {
-        TODO("Not yet implemented")
+        return repository.find { it.uid == uid }
     }
 
     override fun setItinerary(itinerary: Itinerary) {

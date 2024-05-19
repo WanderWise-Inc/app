@@ -1,5 +1,6 @@
 package com.github.wanderwise_inc.app.data
 
+import android.util.Log
 import com.github.wanderwise_inc.app.model.profile.Profile
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -31,18 +32,34 @@ class E2EProfileRepository : ProfileRepository {
     }
 
     override fun addItineraryToLiked(userUid: String, itineraryUid: String) {
-        TODO("Not yet implemented")
+        repository.find { it.userUid == userUid }.also {
+            it?.likedItinerariesUid?.add(itineraryUid)
+        }
     }
 
     override fun removeItineraryFromLiked(userUid: String, itineraryUid: String) {
-        TODO("Not yet implemented")
+        repository.find { it.userUid == userUid }.also {
+            it?.likedItinerariesUid?.remove(itineraryUid)
+        }
     }
 
     override suspend fun checkIfItineraryIsLiked(userUid: String, itineraryUid: String): Boolean {
-        TODO("Not yet implemented")
+        repository.find { it.userUid == userUid }.also {
+            it?.let { profile ->
+                return profile.likedItinerariesUid.contains(itineraryUid)
+            }
+        }
+
+        return false
     }
 
     override fun getLikedItineraries(userUid: String): Flow<List<String>> {
-        TODO("Not yet implemented")
+        repository.find { it.userUid == userUid }.also {
+            it?.let { profile ->
+                return flow { emit(profile.likedItinerariesUid) }
+            }
+        }
+
+        return flow { emit(emptyList()) }
     }
 }
