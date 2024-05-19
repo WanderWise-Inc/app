@@ -13,7 +13,7 @@ class ItineraryTagsTest {
     assertNotNull(ItineraryTags.CULTURAL)
     assertNotNull(ItineraryTags.FOOD)
     assertNotNull(ItineraryTags.FOODIE)
-    assertNotNull(ItineraryTags.LUXURY)
+    assertNotNull(ItineraryTags.SHOPPING)
     assertNotNull(ItineraryTags.NATURE)
     assertNotNull(ItineraryTags.PHOTOGRAPHY)
     assertNotNull(ItineraryTags.RELAXATION)

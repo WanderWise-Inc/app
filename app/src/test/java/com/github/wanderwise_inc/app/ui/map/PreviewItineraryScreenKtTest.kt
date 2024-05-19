@@ -57,6 +57,8 @@ class PreviewItineraryScreenKtTest {
   @Mock private lateinit var directionsRepository: DirectionsRepository
   @Mock private lateinit var locationsRepository: LocationsRepository
   @Mock private lateinit var locationClient: LocationClient
+  @Mock private lateinit var userLocationClient: UserLocationClient
+  @Mock private lateinit var navController: NavHostController
 
   private lateinit var profileViewModel: ProfileViewModel
 
@@ -100,7 +102,10 @@ class PreviewItineraryScreenKtTest {
 
   @Test
   fun `initial elements are displayed correctly`() {
-    composeTestRule.setContent { PreviewItineraryScreen(itineraryViewModel, profileViewModel) }
+    profileViewModel.setActiveProfile(Profile("uid"))
+    composeTestRule.setContent {
+      PreviewItineraryScreen(itineraryViewModel, profileViewModel, navController)
+    }
 
     composeTestRule.onNodeWithTag(TestTags.MAP_PREVIEW_ITINERARY_SCREEN).assertIsDisplayed()
     composeTestRule.onNodeWithTag(TestTags.MAP_MAXIMIZED_BANNER).assertIsDisplayed()
@@ -111,7 +116,10 @@ class PreviewItineraryScreenKtTest {
 
   @Test
   fun `pressing banner button should minimize and maximize the banner`() {
-    composeTestRule.setContent { PreviewItineraryScreen(itineraryViewModel, profileViewModel) }
+    profileViewModel.setActiveProfile(Profile("uid"))
+    composeTestRule.setContent {
+      PreviewItineraryScreen(itineraryViewModel, profileViewModel, navController)
+    }
 
     composeTestRule.onNodeWithTag(TestTags.MAP_MAXIMIZED_BANNER).assertIsDisplayed()
     composeTestRule.onNodeWithTag(TestTags.MAP_MINIMIZED_BANNER).assertIsNotDisplayed()
@@ -136,7 +144,9 @@ class PreviewItineraryScreenKtTest {
   @Test
   fun `NullItineraryScreen is displayed when focusedItinerary is null`() {
     itineraryViewModel.setFocusedItinerary(null)
-    composeTestRule.setContent { PreviewItineraryScreen(itineraryViewModel, profileViewModel) }
+    composeTestRule.setContent {
+      PreviewItineraryScreen(itineraryViewModel, profileViewModel, navController)
+    }
 
     composeTestRule.onNodeWithTag(TestTags.MAP_NULL_ITINERARY).assertIsDisplayed()
 
@@ -149,7 +159,10 @@ class PreviewItineraryScreenKtTest {
 
   @Test
   fun `Clicking on the Start Button should go to starting mode`() {
-    composeTestRule.setContent { PreviewItineraryScreen(itineraryViewModel, profileViewModel) }
+    profileViewModel.setActiveProfile(Profile("uid"))
+    composeTestRule.setContent {
+      PreviewItineraryScreen(itineraryViewModel, profileViewModel, navController)
+    }
 
     composeTestRule.onNodeWithTag(TestTags.START_NEW_ITINERARY_STARTING).assertIsDisplayed()
   }

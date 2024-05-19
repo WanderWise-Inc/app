@@ -4,6 +4,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.lifecycle.MutableLiveData
+import androidx.navigation.NavHostController
 import com.github.wanderwise_inc.app.data.DirectionsRepository
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.data.ItineraryRepository
@@ -29,6 +30,7 @@ import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers
 import org.mockito.Mock
 import org.mockito.Mockito
+import org.mockito.Mockito.anyString
 import org.mockito.Mockito.`when`
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
@@ -47,6 +49,7 @@ class CreationStepPreviewItineraryKtTest {
   @Mock private lateinit var directionsRepository: DirectionsRepository
   @Mock private lateinit var locationsRepository: LocationsRepository
   @Mock private lateinit var userLocationClient: UserLocationClient
+  @Mock private lateinit var navController: NavHostController
 
   private lateinit var profileViewModel: ProfileViewModel
 
@@ -107,9 +110,12 @@ class CreationStepPreviewItineraryKtTest {
 
   @Test
   fun `PreviewItineraryScreen is called`() {
+    profileViewModel.setActiveProfile(Profile("uid"))
     composeTestRule.setContent {
       PreviewItineraryScreen(
-          itineraryViewModel = createItineraryViewModel, profileViewModel = profileViewModel)
+          itineraryViewModel = createItineraryViewModel,
+          profileViewModel = profileViewModel,
+          navController = navController)
     }
 
     composeTestRule.onNodeWithTag(TestTags.MAP_PREVIEW_ITINERARY_SCREEN).assertIsDisplayed()
