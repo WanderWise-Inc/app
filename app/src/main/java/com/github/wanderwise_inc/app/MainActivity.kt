@@ -1,6 +1,7 @@
 package com.github.wanderwise_inc.app
 
 import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -82,11 +83,20 @@ class MainActivity : ComponentActivity() {
   }
 
   private fun requestPermissions() {
-    ActivityCompat.requestPermissions(
-        this,
+    val permissions =
         arrayOf(
-            Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION),
-        0)
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+        )
+
+    val notGrantedPermissions =
+        permissions.filter {
+          ActivityCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
+        }
+
+    if (notGrantedPermissions.isNotEmpty()) {
+      ActivityCompat.requestPermissions(this, notGrantedPermissions.toTypedArray(), 0)
+    }
   }
 
   private fun initializeRepositories() {
