@@ -2,6 +2,12 @@ package com.github.wanderwise_inc.app.ui.list_itineraries
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -15,6 +21,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.github.wanderwise_inc.app.R
 import com.github.wanderwise_inc.app.data.ImageRepository
@@ -22,6 +30,7 @@ import com.github.wanderwise_inc.app.model.location.ItineraryTags
 import com.github.wanderwise_inc.app.model.location.Tag
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.home.SearchBar
+import com.github.wanderwise_inc.app.ui.popup.HintPopup
 import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 
@@ -81,7 +90,6 @@ fun DisplayLikedItineraries(
       itineraryViewModel.getItineraryFromUids(itineraryUids).collectAsState(initial = emptyList())
 
   profileViewModel.setActiveProfileLikedItineraries(itineraries)
-  if (itineraries.isNotEmpty()) itineraryViewModel.saveItineraries(itineraries)
 
   Scaffold(
       topBar = {
@@ -98,6 +106,19 @@ fun DisplayLikedItineraries(
                   selectedIndex = selectedIndex,
                   categoriesList = categoriesList,
                   onCategorySelected = { selectedIndex = it })
+            }
+      },
+      floatingActionButton = {
+        Button(
+            onClick = { itineraryViewModel.saveItineraries(itineraries) },
+            colors =
+                ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.secondaryContainer)) {
+              Icon(
+                  painter = painterResource(R.drawable.floppy_disk),
+                  contentDescription = "Save Itineraries",
+                  tint = MaterialTheme.colorScheme.onSecondaryContainer,
+                  modifier = Modifier.size(30.dp).padding(2.dp))
             }
       },
       modifier = Modifier.testTag(TestTags.LIKED_SCREEN)) { innerPadding ->
@@ -130,4 +151,10 @@ fun DisplayLikedItineraries(
             parent = ItineraryListParent.LIKED,
             imageRepository = imageRepository)
       }
+  var isHintVisible by remember { mutableStateOf(true) }
+  if (isHintVisible) {
+    HintPopup(message = "Press the floppy disk button to save your liked itineraries for later!") {
+      isHintVisible = false
+    }
+  }
 }

@@ -155,7 +155,7 @@ class ItineraryRepositoryImpl(
   }
 
   private suspend fun getItineraryLocal(uid: String): Itinerary? {
-    Log.d("ItineraryRepositoryImpl", "Getting itinerary from disk")
+    Log.d("ItineraryRepositoryImpl", "Getting itinerary $uid from disk")
     return getSavedItineraries()
         .map { itineraryList ->
           Log.d("ItineraryRepositoryImpl", "Local itineraries = ${itineraryList.map{ it.uid }}")
