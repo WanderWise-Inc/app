@@ -109,6 +109,8 @@ class CreateItineraryViewModel(
         coroutineScope.launch {
           locationClient.getLocationUpdates(intervalMillis).collect { location ->
             newItineraryBuilder?.addLocation(location)
+            Log.d("CreateItineraryViewModel", "build = $newItineraryBuilder")
+            Log.d("CreateItineraryViewModel", "locations = ${newItineraryBuilder?.locations}")
           }
         }
   }
