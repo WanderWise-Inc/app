@@ -89,8 +89,6 @@ fun DisplayLikedItineraries(
   val itineraries by
       itineraryViewModel.getItineraryFromUids(itineraryUids).collectAsState(initial = emptyList())
 
-  profileViewModel.setActiveProfileLikedItineraries(itineraries)
-
   Scaffold(
       topBar = {
         Column(
