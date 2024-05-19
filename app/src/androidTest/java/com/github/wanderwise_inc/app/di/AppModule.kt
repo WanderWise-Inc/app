@@ -102,7 +102,7 @@ class AppModule(
         LocationServices.getFusedLocationProviderClient(activity.applicationContext))
   }
 
-  val loginViewModel: LoginViewModel by lazy { LoginViewModel(signInLauncher) }
+  val loginViewModel: LoginViewModel by lazy { LoginViewModel(signInLauncher, true) }
 
   private val signInLauncher: SignInLauncher by lazy {
     val testUser = mockk<FirebaseUser>()
