@@ -1,5 +1,6 @@
 package com.github.wanderwise_inc.app.ui.navigation
 
+import android.net.Uri
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsDisplayed
@@ -23,8 +24,10 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import kotlinx.coroutines.flow.flow
 import org.junit.Before
 import org.junit.Rule
@@ -43,6 +46,7 @@ class CreationPreviewNavigationTest {
   @MockK private lateinit var bottomNavigationViewModel: BottomNavigationViewModel
   @MockK private lateinit var firebaseAuth: FirebaseAuth
   private val profile = Profile(userUid = "0", displayName = "me", bio = "bio")
+  private val imageUri = Uri.parse("https://firebasestorage.googleapis.com/v0/b/wanderwise-d8d36.appspot.com/o/images%2FitineraryPictures%2FdefaultItinerary.png?alt=media&token=b7170586-9168-445b-8784-8ad3ac5345bc")
 
   private lateinit var onFinished: () -> Unit
 
@@ -93,6 +97,12 @@ class CreationPreviewNavigationTest {
       // listOf(mockItinerary) }
 
       every { bottomNavigationViewModel.setSelected(any()) } returns Unit
+
+      every { imageRepository.getCurrentFile() } returns imageUri
+      every { imageRepository.setCurrentFile(any()) } just Runs
+      every { imageRepository.setIsItineraryImage(any()) } just Runs
+      every { imageRepository.setOnImageSelectedListener(any()) } just Runs
+
       /*
       every { bottomNavigationViewModel.selected } returns liveData { 0 }
 

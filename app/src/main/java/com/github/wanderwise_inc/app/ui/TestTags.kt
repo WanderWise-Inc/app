@@ -2,6 +2,7 @@ package com.github.wanderwise_inc.app.ui
 
 /* helps us avoid typos / inconsistencies between the test files and this file */
 object TestTags {
+  const val MAP_DELETE_ITINERARY_BUTTON = "Delete Itinerary Button"
   const val MAP_SEARCH_LOCATION = "Map Search Location"
   const val BOTTOM_NAV = "Bottom navigation bar"
   const val SEARCH_DROPDOWN = "Search Dropdown"

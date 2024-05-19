@@ -9,6 +9,7 @@ import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavHostController
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -31,18 +32,32 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.CameraPositionState
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.rememberCameraPositionState
+import io.mockk.every
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.TestWatcher
+import org.junit.runner.Description
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.anyList
-import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mock
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
+import org.mockito.Mockito.any
+import org.mockito.Mockito.anyString
 
 @RunWith(AndroidJUnit4::class)
 class PreviewItineraryScreenKtTest {
@@ -68,7 +83,7 @@ class PreviewItineraryScreenKtTest {
   private val locations = PlacesReader(null).readFromString()
   private val itinerary =
       Itinerary(
-          userUid = "",
+          userUid = "uid",
           locations = locations,
           title = "San Francisco Bike Itinerary",
           tags = listOf(ItineraryTags.CULTURAL, ItineraryTags.NATURE, ItineraryTags.BUDGET),
@@ -104,7 +119,7 @@ class PreviewItineraryScreenKtTest {
   fun `initial elements are displayed correctly`() {
     profileViewModel.setActiveProfile(Profile("uid"))
     composeTestRule.setContent {
-      PreviewItineraryScreen(itineraryViewModel, profileViewModel, navController)
+      PreviewItineraryScreen(itineraryViewModel, profileViewModel, imageRepository, navController)
     }
 
     composeTestRule.onNodeWithTag(TestTags.MAP_PREVIEW_ITINERARY_SCREEN).assertIsDisplayed()
@@ -118,7 +133,7 @@ class PreviewItineraryScreenKtTest {
   fun `pressing banner button should minimize and maximize the banner`() {
     profileViewModel.setActiveProfile(Profile("uid"))
     composeTestRule.setContent {
-      PreviewItineraryScreen(itineraryViewModel, profileViewModel, navController)
+      PreviewItineraryScreen(itineraryViewModel, profileViewModel, imageRepository, navController)
     }
 
     composeTestRule.onNodeWithTag(TestTags.MAP_MAXIMIZED_BANNER).assertIsDisplayed()
@@ -145,7 +160,7 @@ class PreviewItineraryScreenKtTest {
   fun `NullItineraryScreen is displayed when focusedItinerary is null`() {
     itineraryViewModel.setFocusedItinerary(null)
     composeTestRule.setContent {
-      PreviewItineraryScreen(itineraryViewModel, profileViewModel, navController)
+      PreviewItineraryScreen(itineraryViewModel, profileViewModel, imageRepository, navController)
     }
 
     composeTestRule.onNodeWithTag(TestTags.MAP_NULL_ITINERARY).assertIsDisplayed()
@@ -161,7 +176,7 @@ class PreviewItineraryScreenKtTest {
   fun `Clicking on the Start Button should go to starting mode`() {
     profileViewModel.setActiveProfile(Profile("uid"))
     composeTestRule.setContent {
-      PreviewItineraryScreen(itineraryViewModel, profileViewModel, navController)
+      PreviewItineraryScreen(itineraryViewModel, profileViewModel, imageRepository,navController)
     }
 
     composeTestRule.onNodeWithTag(TestTags.START_NEW_ITINERARY_STARTING).assertIsDisplayed()
@@ -200,4 +215,47 @@ class PreviewItineraryScreenKtTest {
     }
     */
   }
+
+  @Test
+  fun `delete itinerary button should exist when user is the owner`() {
+    profileViewModel.setActiveProfile(Profile("uid"))
+    composeTestRule.setContent {
+      PreviewItineraryScreen(itineraryViewModel, profileViewModel, imageRepository, navController)
+    }
+
+    composeTestRule.onNodeWithTag(TestTags.MAP_DELETE_ITINERARY_BUTTON).assertExists()
+    composeTestRule.onNodeWithTag(TestTags.MAP_DELETE_ITINERARY_BUTTON).performScrollTo()
+    composeTestRule.onNodeWithTag(TestTags.MAP_DELETE_ITINERARY_BUTTON).assertIsDisplayed()
+  }
+
+  @Test
+  fun `delete itinerary button shouldn't exist when user isn't the owner`() {
+    profileViewModel.setActiveProfile(Profile("another_uid"))
+    composeTestRule.setContent {
+      PreviewItineraryScreen(itineraryViewModel, profileViewModel, imageRepository, navController)
+    }
+
+    composeTestRule.onNodeWithTag(TestTags.MAP_DELETE_ITINERARY_BUTTON).assertDoesNotExist()
+  }
+
+    @Test
+    fun `delete itinerary Button should correctly delete the itinerary`() = runTest {
+      val itineraryList = mutableListOf(itinerary)
+      `when`(imageRepository.deleteImageFromStorage(anyString())).thenAnswer {
+        Unit
+      }
+      `when`(itineraryViewModel.deleteItinerary(itinerary)).thenAnswer {
+        itineraryList.remove(itinerary)
+        Unit
+      }
+      profileViewModel.setActiveProfile(Profile("uid"))
+      composeTestRule.setContent {
+        PreviewItineraryScreen(itineraryViewModel, profileViewModel, imageRepository, navController)
+      }
+      composeTestRule.onNodeWithTag(TestTags.MAP_DELETE_ITINERARY_BUTTON).performScrollTo()
+      composeTestRule.onNodeWithTag(TestTags.MAP_DELETE_ITINERARY_BUTTON).assertExists()
+      composeTestRule.onNodeWithTag(TestTags.MAP_DELETE_ITINERARY_BUTTON).performClick()
+
+      assertTrue(itineraryList.isEmpty())
+    }
 }

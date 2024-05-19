@@ -115,7 +115,8 @@ class CreationStepPreviewItineraryKtTest {
       PreviewItineraryScreen(
           itineraryViewModel = createItineraryViewModel,
           profileViewModel = profileViewModel,
-          navController = navController)
+          navController = navController,
+          imageRepository = imageRepository)
     }
 
     composeTestRule.onNodeWithTag(TestTags.MAP_PREVIEW_ITINERARY_SCREEN).assertIsDisplayed()

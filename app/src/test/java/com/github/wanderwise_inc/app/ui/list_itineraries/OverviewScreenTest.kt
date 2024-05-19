@@ -1,5 +1,6 @@
 package com.github.wanderwise_inc.app.ui.list_itineraries
 
+import android.net.Uri
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.assertIsDisplayed
@@ -40,6 +41,8 @@ class OverviewScreenTest {
   @MockK private lateinit var firebaseAuth: FirebaseAuth
   @MockK private lateinit var imageRepository: ImageRepository
 
+  private val imageUri = Uri.parse("https://firebasestorage.googleapis.com/v0/b/wanderwise-d8d36.appspot.com/o/images%2FitineraryPictures%2FdefaultItinerary.png?alt=media&token=b7170586-9168-445b-8784-8ad3ac5345bc")
+
   private var sliderPositionPriceState = mutableStateOf(0f..100f)
   private var sliderPositionTimeState = mutableStateOf(0f..24f)
   private val profile = Profile(userUid = "0", displayName = "me", bio = "bio")
@@ -61,6 +64,7 @@ class OverviewScreenTest {
     coEvery { profileViewModel.checkIfItineraryIsLiked(any(), any()) } returns false
     every { profileViewModel.getUserUid() } returns "OverViewScreenTestUserUid"
     every { profileViewModel.getLikedItineraries(any()) } returns flow { emit(emptyList()) }
+    every { imageRepository.getCurrentFile() } returns imageUri
 
     every { itineraryViewModel.getAllPublicItineraries() } returns flow { emit(testItineraries) }
 

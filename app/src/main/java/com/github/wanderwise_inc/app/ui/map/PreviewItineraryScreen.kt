@@ -380,7 +380,6 @@ private fun PreviewItineraryBannerMaximized(
           Spacer(modifier = Modifier.height(20.dp))
           val coroutineScope = rememberCoroutineScope()
           val uid = profileViewModel.getUserUid()
-
           if (uid == itinerary.userUid) {
             Button(
                 onClick = {
@@ -394,6 +393,7 @@ private fun PreviewItineraryBannerMaximized(
                 colors =
                     ButtonDefaults.buttonColors(
                         backgroundColor = MaterialTheme.colorScheme.errorContainer),
+                modifier = Modifier.testTag(TestTags.MAP_DELETE_ITINERARY_BUTTON)
                 // contentColor = MaterialTheme.colorScheme.onErrorContainer
             ) {
               Text(text = "Delete Itinerary")

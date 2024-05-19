@@ -1,5 +1,6 @@
 package com.github.wanderwise_inc.app.ui.list_itineraries
 
+import android.net.Uri
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.assertIsDisplayed
@@ -43,6 +44,8 @@ class ScrollableItineraryListTest {
   @MockK private lateinit var imageRepository: ImageRepository
   private val profile = Profile(userUid = "TestUid", displayName = "me", bio = "bio")
 
+    private val imageUri = Uri.parse("https://firebasestorage.googleapis.com/v0/b/wanderwise-d8d36.appspot.com/o/images%2FitineraryPictures%2FdefaultItinerary.png?alt=media&token=b7170586-9168-445b-8784-8ad3ac5345bc")
+
   private val paddingValues: PaddingValues = PaddingValues(0.dp)
 
   private lateinit var testItineraries: List<Itinerary>
@@ -55,6 +58,7 @@ class ScrollableItineraryListTest {
     every { imageRepository.fetchImage(any()) } returns flow { emit(null) }
     every { profileViewModel.getProfile(any()) } returns flow { emit(profile) }
     every { profileViewModel.getLikedItineraries(any()) } returns flow { emit(emptyList()) }
+      every { imageRepository.getCurrentFile() } returns imageUri
   }
 
   @Test
