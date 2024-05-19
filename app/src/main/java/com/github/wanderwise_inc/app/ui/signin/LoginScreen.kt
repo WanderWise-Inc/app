@@ -1,34 +1,24 @@
 package com.github.wanderwise_inc.app.ui.signin
 
-import androidx.compose.foundation.BorderStroke
+import androidx.compose.animation.*
+import androidx.compose.animation.core.*
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -37,6 +27,7 @@ import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.navigation.graph.Graph
 import com.github.wanderwise_inc.app.viewmodel.LoginViewModel
 import com.github.wanderwise_inc.app.viewmodel.SignInState
+import kotlinx.coroutines.delay
 
 @Composable
 fun LoginScreen(loginViewModel: LoginViewModel, navController: NavController) {
@@ -47,44 +38,86 @@ fun LoginScreen(loginViewModel: LoginViewModel, navController: NavController) {
       navController.navigate(Graph.HOME)
     }
   }
+  val imageList =
+      listOf(
+          R.drawable.buddah,
+          R.drawable.street,
+          R.drawable.venice,
+          R.drawable.waterfall,
+          R.drawable.cathedral)
+  var currentImageIndex by remember { mutableStateOf(0) }
+  val infiniteTransition = rememberInfiniteTransition()
+  val alpha by
+      infiniteTransition.animateFloat(
+          initialValue = 0.6f,
+          targetValue = 0.6f,
+          animationSpec =
+              infiniteRepeatable(
+                  animation = tween(5000, easing = LinearEasing), repeatMode = RepeatMode.Reverse),
+          label = "")
 
-  Column(
-      horizontalAlignment = Alignment.CenterHorizontally,
-      verticalArrangement = Arrangement.SpaceBetween,
-      modifier = Modifier.fillMaxSize().background(Color.White).padding(16.dp)) {
-        Text(
-            text = "You can either wander dumb or,",
-            fontWeight = FontWeight.Normal,
-            textAlign = TextAlign.Center,
-            style =
-                TextStyle(
-                    fontSize = 22.sp, fontWeight = FontWeight.Medium, fontStyle = FontStyle.Italic),
-            modifier = Modifier.padding(top = 16.dp).offset(y = 60.dp))
+  LaunchedEffect(Unit) {
+    while (true) {
+      delay(5000) // Change the image every 5 seconds
+      currentImageIndex = (currentImageIndex + 1) % imageList.size
+    }
+  }
 
-        Text(
-            text = "WanderWise",
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center,
-            style = TextStyle(fontSize = 32.sp, fontWeight = FontWeight.Medium),
-            modifier = Modifier.padding(top = 8.dp).offset(y = 60.dp))
+  MaterialTheme(
+      colorScheme =
+          lightColorScheme(
+              primary = Color(0xFFB0E0E6), // seafoam Green
+              secondary = Color(0xFFF88379), // sunset Coral
+              onPrimary = Color.Black,
+              onSecondary = Color.White,
+              background = Color(0xFFE6E6FA), // pastel Lavender
+              surface = Color(0xFFE6CEA8), // warm Sand
+              onBackground = Color.DarkGray,
+              onSurface = Color.Black,
+          )) {
+        Box(modifier = Modifier.fillMaxSize()) {
+          Crossfade(
+              targetState = currentImageIndex,
+              animationSpec = tween(durationMillis = 2000),
+              label = "" // Adjust the duration to control the speed of the crossfade
+              ) { index ->
+                Image(
+                    painter = painterResource(id = imageList[index]),
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop,
+                    alpha = alpha)
+              }
 
-        Spacer(modifier = Modifier.weight(1f))
-
-        Image(
-            painter = painterResource(id = R.drawable.logo_swent),
-            contentDescription = "WanderWise logo",
-            modifier = Modifier.size(275.dp).align(Alignment.CenterHorizontally))
-
-        Spacer(modifier = Modifier.weight(1f))
-
-        Text(
-            text = "Start Wandering Now",
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center,
-            style = TextStyle(fontSize = 32.sp, fontWeight = FontWeight.Medium),
-            modifier = Modifier.offset(y = (-60).dp))
-
-        SignInButton(loginViewModel)
+          // Overlay surface for text and buttons
+          Surface(
+              modifier = Modifier.fillMaxSize(), color = Color.Transparent // Important for overlay
+              ) {
+                Column(
+                    modifier = Modifier.fillMaxSize().padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center) {
+                      Text(
+                          text = "WanderWise",
+                          color = MaterialTheme.colorScheme.onSurface,
+                          fontWeight = FontWeight.Bold,
+                          fontSize = 30.sp,
+                          fontFamily =
+                              FontFamily(
+                                  Font(R.font.dm_sans_regular, FontWeight.Normal),
+                                  Font(R.font.dm_sans_medium, FontWeight.Medium),
+                                  Font(R.font.dm_sans_bold, FontWeight.Bold)))
+                      Spacer(modifier = Modifier.height(8.dp))
+                      Text(
+                          text = "You can either wander dumb or wander wise",
+                          color = MaterialTheme.colorScheme.onBackground,
+                          fontSize = 16.sp,
+                      )
+                      Spacer(modifier = Modifier.height(450.dp))
+                      SignInButton(loginViewModel)
+                    }
+              }
+        }
       }
 }
 
@@ -93,8 +126,10 @@ fun SignInButton(loginViewModel: LoginViewModel) {
   Button(
       onClick = { loginViewModel.signIn() },
       shape = RoundedCornerShape(16.dp),
-      border = BorderStroke(1.dp, Color.Black),
-      colors = ButtonDefaults.buttonColors(Color.Transparent),
+      colors =
+          ButtonDefaults.buttonColors(
+              containerColor = MaterialTheme.colorScheme.background, // Ensuring high contrast
+              contentColor = MaterialTheme.colorScheme.onPrimary),
       modifier = Modifier.padding(bottom = 16.dp).testTag(TestTags.SIGN_IN_BUTTON)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
           Image(
@@ -107,7 +142,7 @@ fun SignInButton(loginViewModel: LoginViewModel) {
           Text(
               text = "Sign-In with Google",
               color = Color.Black,
-              style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.Medium))
+              style = MaterialTheme.typography.bodyLarge)
         }
       }
 }
