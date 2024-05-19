@@ -8,6 +8,7 @@ import com.github.wanderwise_inc.app.model.location.Location
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
+import com.google.android.gms.maps.model.LatLng
 import io.mockk.MockKAnnotations
 import io.mockk.clearAllMocks
 import io.mockk.every
@@ -49,7 +50,7 @@ class UserLocationClientTest {
   @Test
   fun `getLocationUpdates returns correct location`() = runBlocking {
     // Mock necessary dependencies and behavior
-    val location = Location(epflLat, epflLon)
+    val location = Location.placeLocation(LatLng(epflLat, epflLon))
 
     every { context.checkPermission(any(), any(), any()) } returns PackageManager.PERMISSION_GRANTED
 

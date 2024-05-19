@@ -85,6 +85,14 @@ data class Location(
     fun fromLatLng(latLng: LatLng): Location {
       return Location(latLng.latitude, latLng.longitude)
     }
+
+    fun placeLocation(latLng: LatLng): Location {
+      return Location(
+          title = "Placed marker",
+          address = "lat/lng: (${latLng.latitude.toFloat()},${latLng.longitude.toFloat()})",
+          lat = latLng.latitude,
+          long = latLng.longitude)
+    }
   }
 
   /** @brief no-argument constructor for firebase de-serialization */
