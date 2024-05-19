@@ -43,18 +43,10 @@ class LikeE2ETest {
         composeTestRule.onNodeWithTag(TestTags.SIGN_IN_BUTTON).performClick()
         composeTestRule.waitUntil { composeTestRule.onNodeWithTag(TestTags.OVERVIEW_SCREEN).isDisplayed() }
 
-        val firstLikeButton: SemanticsNodeInteraction
-
-        try {
-            // Check if there is any like button displayed
-            firstLikeButton = composeTestRule
-                .onAllNodesWithContentDescription("like button heart icon")
-                .onFirst()
-        }
-        catch (e: AssertionError) {
-            // If there is no like button displayed, return
-            return
-        }
+        // Find first like button
+        val firstLikeButton = composeTestRule
+            .onAllNodes(hasSubTestTag(TestTags.ITINERARY_BANNER_LIKE_BUTTON))
+            .onFirst()
 
         // Click on the first like button to like the itinerary
         firstLikeButton.assertIsDisplayed()
