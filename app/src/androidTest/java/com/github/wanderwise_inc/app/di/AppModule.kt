@@ -11,12 +11,17 @@ import androidx.datastore.dataStore
 import androidx.lifecycle.lifecycleScope
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.github.wanderwise_inc.app.MainActivity
+import com.github.wanderwise_inc.app.data.DirectionsRepository
 import com.github.wanderwise_inc.app.data.DirectionsRepositoryImpl
+import com.github.wanderwise_inc.app.data.E2EItineraryRepository
+import com.github.wanderwise_inc.app.data.E2EProfileRepository
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.data.ImageRepositoryImpl
 import com.github.wanderwise_inc.app.data.ItineraryRepository
 import com.github.wanderwise_inc.app.data.ItineraryRepositoryImpl
+import com.github.wanderwise_inc.app.data.LocationsRepository
 import com.github.wanderwise_inc.app.data.LocationsRepositoryImpl
+import com.github.wanderwise_inc.app.data.ProfileRepository
 import com.github.wanderwise_inc.app.data.ProfileRepositoryImpl
 import com.github.wanderwise_inc.app.data.SignInLauncher
 import com.github.wanderwise_inc.app.disk.SavedItinerariesSerializer
@@ -54,7 +59,7 @@ class AppModule(
 
   private val firestore: FirebaseFirestore by lazy { Firebase.firestore }
 
-  val directionsRepository by lazy {
+  val directionsRepository: DirectionsRepository by lazy {
     DirectionsRepositoryImpl(DirectionsApiServiceFactory.createDirectionsApiService())
   }
 
@@ -71,20 +76,17 @@ class AppModule(
   }
 
   val itineraryRepository: ItineraryRepository by lazy {
-    ItineraryRepositoryImpl(
-        firestore,
-        activity.applicationContext,
-        activity.applicationContext.savedItinerariesDataStore)
+    E2EItineraryRepository()
   }
 
   private val Context.savedItinerariesDataStore: DataStore<SavedItineraries> by
       dataStore("saved_itineraries.pb", SavedItinerariesSerializer)
 
-  val locationsRepository by lazy {
+  val locationsRepository: LocationsRepository by lazy {
     LocationsRepositoryImpl(LocationsApiServiceFactory.createLocationsApiService())
   }
 
-  val profileRepository by lazy { ProfileRepositoryImpl(firestore) }
+  val profileRepository: ProfileRepository by lazy { E2EProfileRepository() }
 
   val bottomNavigationViewModel: BottomNavigationViewModel by lazy { BottomNavigationViewModel() }
 
@@ -108,8 +110,8 @@ class AppModule(
 
   private val signInLauncher: SignInLauncher by lazy {
     val testUser = mockk<FirebaseUser>()
-    every { testUser.uid } returns "test_user_id"
-    every { testUser.displayName } returns "Test User"
+    every { testUser.uid } returns "e2e_test_user_uid"
+    every { testUser.displayName } returns "E2E Test User"
 
     object : SignInLauncher {
       override fun signIn() {

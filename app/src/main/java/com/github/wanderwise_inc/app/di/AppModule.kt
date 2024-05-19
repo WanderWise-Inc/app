@@ -11,13 +11,16 @@ import androidx.datastore.dataStore
 import androidx.lifecycle.lifecycleScope
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.github.wanderwise_inc.app.MainActivity
+import com.github.wanderwise_inc.app.data.DirectionsRepository
 import com.github.wanderwise_inc.app.data.DirectionsRepositoryImpl
 import com.github.wanderwise_inc.app.data.GoogleSignInLauncher
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.data.ImageRepositoryImpl
 import com.github.wanderwise_inc.app.data.ItineraryRepository
 import com.github.wanderwise_inc.app.data.ItineraryRepositoryImpl
+import com.github.wanderwise_inc.app.data.LocationsRepository
 import com.github.wanderwise_inc.app.data.LocationsRepositoryImpl
+import com.github.wanderwise_inc.app.data.ProfileRepository
 import com.github.wanderwise_inc.app.data.ProfileRepositoryImpl
 import com.github.wanderwise_inc.app.data.SignInLauncher
 import com.github.wanderwise_inc.app.disk.SavedItinerariesSerializer
@@ -52,7 +55,7 @@ class AppModule(
 
   private val firestore: FirebaseFirestore by lazy { Firebase.firestore }
 
-  val directionsRepository by lazy {
+  val directionsRepository: DirectionsRepository by lazy {
     DirectionsRepositoryImpl(DirectionsApiServiceFactory.createDirectionsApiService())
   }
 
@@ -78,11 +81,11 @@ class AppModule(
   private val Context.savedItinerariesDataStore: DataStore<SavedItineraries> by
       dataStore("saved_itineraries.pb", SavedItinerariesSerializer)
 
-  val locationsRepository by lazy {
+  val locationsRepository: LocationsRepository by lazy {
     LocationsRepositoryImpl(LocationsApiServiceFactory.createLocationsApiService())
   }
 
-  val profileRepository by lazy { ProfileRepositoryImpl(firestore) }
+  val profileRepository: ProfileRepository by lazy { ProfileRepositoryImpl(firestore) }
 
   val bottomNavigationViewModel: BottomNavigationViewModel by lazy { BottomNavigationViewModel() }
 

@@ -3,6 +3,7 @@ package com.github.wanderwise_inc.app.ui.signin
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.lifecycle.LiveData
@@ -56,27 +57,27 @@ class LoginScreenTest {
   @Test
   fun `initial elements are displayed correctly`() {
 
-    composeTestRule.onNodeWithText(text = "WanderWise").assertIsDisplayed()
-
     composeTestRule
-        .onNodeWithText(text = "You can either wander dumb or wander wise")
+        .onNodeWithText(text = "You can either wander dumb or,", useUnmergedTree = true)
         .assertIsDisplayed()
 
-    /* composeTestRule
+    composeTestRule.onNodeWithText(text = "WanderWise", useUnmergedTree = true).assertIsDisplayed()
+
+    composeTestRule
         .onNodeWithContentDescription(label = "WanderWise logo", useUnmergedTree = true)
         .assertIsDisplayed()
 
     composeTestRule
         .onNodeWithText(text = "Start Wandering Now", useUnmergedTree = true)
-        .assertIsDisplayed()*/
+        .assertIsDisplayed()
 
-    // composeTestRule
-    //  .onNodeWithContentDescription(label = "Google Logo", useUnmergedTree = true)
-    // .assertIsDisplayed()
+    composeTestRule
+        .onNodeWithContentDescription(label = "Google logo", useUnmergedTree = true)
+        .assertIsDisplayed()
 
-    // composeTestRule
-    //   .onNodeWithText(text = "Sign-In with Google", useUnmergedTree = true)
-    // .assertIsDisplayed()
+    composeTestRule
+        .onNodeWithText(text = "Sign-In with Google", useUnmergedTree = true)
+        .assertIsDisplayed()
 
     composeTestRule
         .onNodeWithTag(testTag = TestTags.SIGN_IN_BUTTON, useUnmergedTree = true)
