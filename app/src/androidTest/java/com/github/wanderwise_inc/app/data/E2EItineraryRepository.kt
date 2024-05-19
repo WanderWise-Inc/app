@@ -18,7 +18,7 @@ class E2EItineraryRepository : ItineraryRepository {
   }
 
   override fun getUserItineraries(userUid: String): Flow<List<Itinerary>> {
-    return flow{ emit(_repository.filter { iti -> iti.userUid == userUid }) }
+    return flow { emit(_repository.filter { iti -> iti.userUid == userUid }) }
   }
 
   override fun getItinerariesWithTags(tags: List<Tag>): Flow<List<Itinerary>> {

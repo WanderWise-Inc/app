@@ -182,8 +182,9 @@ fun RelevantTags(createItineraryViewModel: CreateItineraryViewModel) {
 
   Button(
       modifier = Modifier.testTag(TestTags.ITINERARY_CREATION_TAGS),
-      onClick = { isTagsDDM = true }
-  ) { Text("Add Tags") }
+      onClick = { isTagsDDM = true }) {
+        Text("Add Tags")
+      }
 
   DropdownMenu(expanded = isTagsDDM, onDismissRequest = { isTagsDDM = false }) {
     allTags.forEach { tag ->

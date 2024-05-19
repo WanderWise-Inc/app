@@ -122,9 +122,7 @@ fun CreateItineraryMap(
     }
     GoogleMap(
         modifier =
-        Modifier
-            .padding(paddingValues = innerPaddingValues)
-            .testTag(TestTags.MAP_GOOGLE_MAPS),
+            Modifier.padding(paddingValues = innerPaddingValues).testTag(TestTags.MAP_GOOGLE_MAPS),
         onMapClick = { onMapClick(it) },
         cameraPositionState = cameraPositionState) {
           userLocation?.let {
@@ -148,11 +146,10 @@ fun CreateItineraryMap(
   } else {
     Column(
         modifier =
-        Modifier
-            .testTag(TestTags.MAP_NULL_USER_LOCATION)
-            .fillMaxSize()
-            .padding(innerPaddingValues)
-            .background(MaterialTheme.colorScheme.background),
+            Modifier.testTag(TestTags.MAP_NULL_USER_LOCATION)
+                .fillMaxSize()
+                .padding(innerPaddingValues)
+                .background(MaterialTheme.colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center) {
           Text("Loading your location...", modifier = Modifier.testTag(TestTags.MAP_NULL_ITINERARY))
@@ -168,9 +165,7 @@ fun ChooseYourWayOfCreation(
 ) {
 
   BottomAppBar(
-      modifier = Modifier
-          .height(250.dp)
-          .fillMaxWidth(),
+      modifier = Modifier.height(250.dp).fillMaxWidth(),
       containerColor = MaterialTheme.colorScheme.primaryContainer,
       contentColor = MaterialTheme.colorScheme.primary,
   ) {
@@ -187,9 +182,9 @@ fun ChooseYourWayOfCreation(
                   createItineraryViewModel.createItineraryManually = true
                   showLocationSelector.value = true
                 },
-                modifier = Modifier
-                    .fillMaxWidth(0.5f)
-                    .testTag(TestTags.CREATE_ITINERARY_MANUALLY_BUTTON)) {
+                modifier =
+                    Modifier.fillMaxWidth(0.5f)
+                        .testTag(TestTags.CREATE_ITINERARY_MANUALLY_BUTTON)) {
                   Text("Create a known itinerary", textAlign = TextAlign.Center)
                 }
             Button(
@@ -197,9 +192,8 @@ fun ChooseYourWayOfCreation(
                   createItineraryViewModel.createItineraryManually = true
                   showLiveCreation.value = true
                 },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .testTag(TestTags.CREATE_ITINERARY_BY_TRACKING_BUTTON)) {
+                modifier =
+                    Modifier.fillMaxWidth().testTag(TestTags.CREATE_ITINERARY_BY_TRACKING_BUTTON)) {
                   Text("Create a live itinerary", textAlign = TextAlign.Center)
                 }
           }
@@ -217,76 +211,66 @@ fun LocationSelector(
     navController: NavHostController,
 ) {
   BottomAppBar(
-      modifier = Modifier
-          .height(250.dp)
-          .fillMaxWidth(),
+      modifier = Modifier.height(250.dp).fillMaxWidth(),
       containerColor = MaterialTheme.colorScheme.primaryContainer,
       contentColor = MaterialTheme.colorScheme.primary,
   ) {
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .testTag(TestTags.CREATE_ITINERARY_MANUALLY_SCREEN), verticalArrangement = Arrangement.SpaceBetween) {
-      Button(onClick = { showLocationSelector.value = false }) {
-        Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Go back")
-      }
+    Column(
+        modifier = Modifier.fillMaxSize().testTag(TestTags.CREATE_ITINERARY_MANUALLY_SCREEN),
+        verticalArrangement = Arrangement.SpaceBetween) {
+          Button(onClick = { showLocationSelector.value = false }) {
+            Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Go back")
+          }
 
-      Box(modifier = Modifier
-          .fillMaxWidth()
-          .height(128.dp)) {
-        if (locations.isEmpty()) {
-          Text(
-              modifier = Modifier
-                  .fillMaxWidth()
-                  .padding(8.dp),
-              text = "You have no waypoints yet, try adding some")
-        } else {
-          LazyColumn(horizontalAlignment = Alignment.Start) {
-            items(locations) { loc ->
-              Row(
-                  verticalAlignment = Alignment.CenterVertically,
-                  modifier =
-                  Modifier
-                      .padding(4.dp)
-                      .fillMaxWidth()
-                      .border(
-                          1.dp,
-                          MaterialTheme.colorScheme.outline,
-                          shape = RoundedCornerShape(4.dp)
-                      )
-                      .testTag("${TestTags.CREATE_ITINERARY_LOCATION}_${loc.title}")) {
-                    Icon(
-                        Icons.Filled.LocationOn,
-                        contentDescription = "Location 2",
-                        modifier = Modifier.padding(start = 10.dp))
-                    Text(text = "${loc.title}, ${loc.address}", fontSize = 15.sp, maxLines = 1)
-                  }
+          Box(modifier = Modifier.fillMaxWidth().height(128.dp)) {
+            if (locations.isEmpty()) {
+              Text(
+                  modifier = Modifier.fillMaxWidth().padding(8.dp),
+                  text = "You have no waypoints yet, try adding some")
+            } else {
+              LazyColumn(horizontalAlignment = Alignment.Start) {
+                items(locations) { loc ->
+                  Row(
+                      verticalAlignment = Alignment.CenterVertically,
+                      modifier =
+                          Modifier.padding(4.dp)
+                              .fillMaxWidth()
+                              .border(
+                                  1.dp,
+                                  MaterialTheme.colorScheme.outline,
+                                  shape = RoundedCornerShape(4.dp))
+                              .testTag("${TestTags.CREATE_ITINERARY_LOCATION}_${loc.title}")) {
+                        Icon(
+                            Icons.Filled.LocationOn,
+                            contentDescription = "Location 2",
+                            modifier = Modifier.padding(start = 10.dp))
+                        Text(text = "${loc.title}, ${loc.address}", fontSize = 15.sp, maxLines = 1)
+                      }
+                }
+              }
             }
           }
+          Row(
+              modifier = Modifier.fillMaxWidth().padding(8.dp),
+              horizontalArrangement = Arrangement.SpaceEvenly) {
+                OutlinedButton(
+                    onClick = { navController.navigate("ChooseLocationSearch") },
+                    modifier = Modifier.testTag(TestTags.ADD_LOCATION_BUTTON)) {
+                      Row {
+                        Icon(imageVector = Icons.Filled.Add, contentDescription = null)
+                        Text("Add Location")
+                      }
+                    }
+                OutlinedButton(
+                    onClick = { resetLocations() },
+                    modifier = Modifier.testTag(TestTags.RESTART_ITINERARY_BUTTON)) {
+                      Row {
+                        Icon(imageVector = Icons.Filled.RestartAlt, contentDescription = null)
+                        Text("Restart itinerary")
+                      }
+                    }
+              }
         }
-      }
-      Row(
-          modifier = Modifier
-              .fillMaxWidth()
-              .padding(8.dp),
-          horizontalArrangement = Arrangement.SpaceEvenly) {
-            OutlinedButton(
-                onClick = { navController.navigate("ChooseLocationSearch") },
-                modifier = Modifier.testTag(TestTags.ADD_LOCATION_BUTTON)) {
-                  Row {
-                    Icon(imageVector = Icons.Filled.Add, contentDescription = null)
-                    Text("Add Location")
-                  }
-                }
-            OutlinedButton(
-                onClick = { resetLocations() },
-                modifier = Modifier.testTag(TestTags.RESTART_ITINERARY_BUTTON)) {
-                  Row {
-                    Icon(imageVector = Icons.Filled.RestartAlt, contentDescription = null)
-                    Text("Restart itinerary")
-                  }
-                }
-          }
-    }
   }
 }
 
@@ -301,10 +285,10 @@ fun CreateLiveItinerary(
 
   var isStarted by remember { mutableStateOf(false) }
   BottomAppBar(
-      modifier = Modifier
-          .height(250.dp)
-          .fillMaxWidth()
-          .testTag(TestTags.CREATE_ITINERARY_BY_TRACKING_SCREEN),
+      modifier =
+          Modifier.height(250.dp)
+              .fillMaxWidth()
+              .testTag(TestTags.CREATE_ITINERARY_BY_TRACKING_SCREEN),
       containerColor = MaterialTheme.colorScheme.primaryContainer,
       contentColor = MaterialTheme.colorScheme.primary,
   ) {

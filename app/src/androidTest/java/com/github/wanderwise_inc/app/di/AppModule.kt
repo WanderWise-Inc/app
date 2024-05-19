@@ -1,5 +1,6 @@
 package com.github.wanderwise_inc.app.di
 
+// import com.github.wanderwise_inc.app.data.LocationsRepositoryImpl
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -14,18 +15,16 @@ import com.github.wanderwise_inc.app.MainActivity
 import com.github.wanderwise_inc.app.data.DirectionsRepository
 import com.github.wanderwise_inc.app.data.DirectionsRepositoryImpl
 import com.github.wanderwise_inc.app.data.E2EItineraryRepository
+import com.github.wanderwise_inc.app.data.E2ELocationsRepository
 import com.github.wanderwise_inc.app.data.E2EProfileRepository
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.data.ImageRepositoryImpl
 import com.github.wanderwise_inc.app.data.ItineraryRepository
 import com.github.wanderwise_inc.app.data.LocationsRepository
-import com.github.wanderwise_inc.app.data.E2ELocationsRepository
-//import com.github.wanderwise_inc.app.data.LocationsRepositoryImpl
 import com.github.wanderwise_inc.app.data.ProfileRepository
 import com.github.wanderwise_inc.app.data.SignInLauncher
 import com.github.wanderwise_inc.app.disk.SavedItinerariesSerializer
 import com.github.wanderwise_inc.app.network.DirectionsApiServiceFactory
-import com.github.wanderwise_inc.app.network.LocationsApiServiceFactory
 import com.github.wanderwise_inc.app.proto.location.SavedItineraries
 import com.github.wanderwise_inc.app.viewmodel.BottomNavigationViewModel
 import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
@@ -81,7 +80,7 @@ class AppModule(
 
   val locationsRepository: LocationsRepository by lazy {
     E2ELocationsRepository()
-    //LocationsRepositoryImpl(LocationsApiServiceFactory.createLocationsApiService())
+    // LocationsRepositoryImpl(LocationsApiServiceFactory.createLocationsApiService())
   }
 
   val profileRepository: ProfileRepository by lazy { E2EProfileRepository() }
