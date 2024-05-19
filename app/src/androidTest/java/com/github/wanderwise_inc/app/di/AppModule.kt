@@ -19,7 +19,8 @@ import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.data.ImageRepositoryImpl
 import com.github.wanderwise_inc.app.data.ItineraryRepository
 import com.github.wanderwise_inc.app.data.LocationsRepository
-import com.github.wanderwise_inc.app.data.LocationsRepositoryImpl
+import com.github.wanderwise_inc.app.data.E2ELocationsRepository
+//import com.github.wanderwise_inc.app.data.LocationsRepositoryImpl
 import com.github.wanderwise_inc.app.data.ProfileRepository
 import com.github.wanderwise_inc.app.data.SignInLauncher
 import com.github.wanderwise_inc.app.disk.SavedItinerariesSerializer
@@ -79,7 +80,8 @@ class AppModule(
       dataStore("saved_itineraries.pb", SavedItinerariesSerializer)
 
   val locationsRepository: LocationsRepository by lazy {
-    LocationsRepositoryImpl(LocationsApiServiceFactory.createLocationsApiService())
+    E2ELocationsRepository()
+    //LocationsRepositoryImpl(LocationsApiServiceFactory.createLocationsApiService())
   }
 
   val profileRepository: ProfileRepository by lazy { E2EProfileRepository() }

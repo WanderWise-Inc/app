@@ -18,7 +18,7 @@ class E2EItineraryRepository : ItineraryRepository {
   }
 
   override fun getUserItineraries(userUid: String): Flow<List<Itinerary>> {
-    TODO("Not yet implemented")
+    return flow{ emit(_repository.filter { iti -> iti.userUid == userUid }) }
   }
 
   override fun getItinerariesWithTags(tags: List<Tag>): Flow<List<Itinerary>> {
@@ -30,7 +30,7 @@ class E2EItineraryRepository : ItineraryRepository {
   }
 
   override fun setItinerary(itinerary: Itinerary) {
-    TODO("Not yet implemented")
+    _repository.add(itinerary)
   }
 
   override fun updateItinerary(oldUid: String, new: Itinerary) {
