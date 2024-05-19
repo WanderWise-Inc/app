@@ -13,13 +13,12 @@ val Typography =
     Typography(
         bodyLarge =
             TextStyle(
-                fontFamily = FontFamily(
-                    Font(R.font.dm_sans_regular, FontWeight.Normal),
-                    Font(R.font.dm_sans_medium, FontWeight.Medium),
-                    Font(R.font.dm_sans_bold, FontWeight.Bold)
-                ),
+                fontFamily =
+                    FontFamily(
+                        Font(R.font.dm_sans_regular, FontWeight.Normal),
+                        Font(R.font.dm_sans_medium, FontWeight.Medium),
+                        Font(R.font.dm_sans_bold, FontWeight.Bold)),
                 fontWeight = FontWeight.Normal,
                 fontSize = 16.sp,
                 lineHeight = 24.sp,
                 letterSpacing = 0.5.sp))
-
