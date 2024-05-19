@@ -20,7 +20,7 @@ interface ItineraryRepository {
    */
   fun getItinerariesWithTags(tags: List<Tag>): Flow<List<Itinerary>>
 
-  suspend fun getItinerary(uid: String): Itinerary
+  suspend fun getItinerary(uid: String): Itinerary?
 
   /** @brief sets an itinerary. If the itinerary has a blank UID, one will be generated */
   fun setItinerary(itinerary: Itinerary)

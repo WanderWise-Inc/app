@@ -205,7 +205,7 @@ data class Itinerary(
   fun toProto(): ItineraryProto {
     return ItineraryProto.newBuilder()
         .setUid(uid)
-        .setUid(userUid)
+        .setUserUid(userUid)
         .addAllLocations(locations.map { it.toProto() })
         .setTitle(title)
         .addAllTags(tags)
