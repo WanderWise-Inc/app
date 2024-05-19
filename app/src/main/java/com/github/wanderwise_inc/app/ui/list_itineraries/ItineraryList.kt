@@ -34,10 +34,12 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.model.location.Itinerary
+import com.github.wanderwise_inc.app.model.profile.DEFAULT_OFFLINE_PROFILE
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.itinerary.ItineraryBanner
 import com.github.wanderwise_inc.app.ui.navigation.Destination
 import com.github.wanderwise_inc.app.ui.navigation.NavigationActions
+import com.github.wanderwise_inc.app.ui.popup.HintPopup
 import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 
@@ -93,12 +95,15 @@ fun ItinerariesListScrollable(
             }
 
             val onLikeButtonClick = { it: Itinerary, isLiked: Boolean ->
-              if (isLiked) {
-                itineraryViewModel.decrementItineraryLikes(it)
-                profileViewModel.removeLikedItinerary(uid, it.uid)
-              } else {
-                itineraryViewModel.incrementItineraryLikes(it)
-                profileViewModel.addLikedItinerary(uid, it.uid)
+              // liking should have no effect for the offline profile!
+              if (profileViewModel.getUserUid() != DEFAULT_OFFLINE_PROFILE.userUid) {
+                if (isLiked) {
+                  itineraryViewModel.decrementItineraryLikes(it)
+                  profileViewModel.removeLikedItinerary(uid, it.uid)
+                } else {
+                  itineraryViewModel.incrementItineraryLikes(it)
+                  profileViewModel.addLikedItinerary(uid, it.uid)
+                }
               }
             }
             val navigationActions = NavigationActions(navController)
@@ -115,6 +120,12 @@ fun ItinerariesListScrollable(
                 imageRepository = imageRepository)
           }
         }
+  }
+  var offlineHintVisible by remember {
+    mutableStateOf(profileViewModel.getUserUid() == DEFAULT_OFFLINE_PROFILE.userUid)
+  }
+  if (offlineHintVisible) {
+    HintPopup(message = "You are currently offline!") { offlineHintVisible = false }
   }
 }
 
