@@ -1,5 +1,6 @@
 package com.github.wanderwise_inc.app.e2e
 
+import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -34,7 +35,7 @@ class CreateItineraryE2ETest {
   // approximate itinerary being created (correct up to waypoints added)
   val itinerary: Itinerary =
       Itinerary.Builder(
-              uid = "",
+              uid = "new_id",
               userUid = "0",
               title = "GooglePlex tour",
               tags = mutableListOf("Adventure"),
@@ -85,7 +86,7 @@ class CreateItineraryE2ETest {
     composeTestRule.onNodeWithTag(TestTags.CREATE_ITINERARY_BY_TRACKING_SCREEN).assertIsDisplayed()
     composeTestRule.onNodeWithTag(TestTags.START_BUTTON).performClick() // start tracking
     composeTestRule.waitForIdle()
-    Thread.sleep(10000) // track for 10 seconds
+    Thread.sleep(10000L) // track for 10 seconds
     composeTestRule.onNodeWithTag(TestTags.STOP_BUTTON).performClick()
     composeTestRule.waitForIdle()
     composeTestRule.onNodeWithTag(TestTags.BACK_BUTTON).performClick()
@@ -98,10 +99,8 @@ class CreateItineraryE2ETest {
 
     // verify that we have reached the UI for manually creating an itinerary
     composeTestRule.onNodeWithTag(TestTags.CREATE_ITINERARY_MANUALLY_SCREEN).assertIsDisplayed()
-    composeTestRule
-        .onAllNodesWithTag("${TestTags.CREATE_ITINERARY_LOCATION}_Placed marker")
-        .onFirst()
-        .assertExists()
+    composeTestRule.onAllNodes(E2EUtils.hasSubTestTag(TestTags.CREATE_ITINERARY_LOCATION)).onFirst().assertExists()
+    val markersPlacedByTracking = composeTestRule.onAllNodes(E2EUtils.hasSubTestTag(TestTags.CREATE_ITINERARY_LOCATION)).fetchSemanticsNodes().size // get number of markers placed during tracking (should be at least 1)
     composeTestRule.onNodeWithTag(TestTags.ADD_LOCATION_BUTTON).performClick()
     composeTestRule.waitForIdle()
 
@@ -110,13 +109,13 @@ class CreateItineraryE2ETest {
     composeTestRule.onNodeWithTag(TestTags.LOCATION_SEARCH_BAR).performTextInput(itinerary.title)
     composeTestRule.onNodeWithTag(TestTags.LOCATION_SEARCH_BAR).performImeAction()
     composeTestRule.waitForIdle()
-    Thread.sleep(2000L) // wait for result to arrive
 
     // verify that some results have been found
     composeTestRule.onNodeWithTag(TestTags.LOCATION_SEARCH_RESULTS).assertIsDisplayed()
     composeTestRule.onNodeWithTag(TestTags.LOCATION_SEARCH_RESULTS).performScrollToIndex(0)
     composeTestRule
-        .onNodeWithTag("${TestTags.LOCATION_SEARCH_RESULTS}_${location.title}")
+        .onAllNodes(E2EUtils.hasSubTestTag(TestTags.LOCATION_SEARCH_RESULTS))
+        .onFirst()
         .performClick()
     composeTestRule.waitForIdle()
 
@@ -127,6 +126,7 @@ class CreateItineraryE2ETest {
 
     // verify that we have navigated back to itinerary creation method screen
     composeTestRule.onNodeWithTag(TestTags.CREATE_ITINERARY_MANUALLY_SCREEN).assertIsDisplayed()
+    composeTestRule.onAllNodes(E2EUtils.hasSubTestTag(TestTags.CREATE_ITINERARY_LOCATION)).assertCountEquals(markersPlacedByTracking+1) // 1 additional marker placed
     composeTestRule
         .onNodeWithTag("${TestTags.CREATE_ITINERARY_LOCATION}_${location.title}")
         .assertExists()
@@ -146,11 +146,10 @@ class CreateItineraryE2ETest {
 
     // verify that we have navigated to choose tags screen
     composeTestRule.onNodeWithTag(TestTags.CREATION_SCREEN_TAGS).assertIsDisplayed()
-    composeTestRule
-        .onNodeWithTag(TestTags.PRICE_SEARCH)
-        .performTextInput("10")
+    composeTestRule.onNodeWithTag(TestTags.PRICE_SEARCH).performTextInput("10")
     composeTestRule.onNodeWithTag(TestTags.TIME_SEARCH).performTextInput("2")
-    composeTestRule.onNodeWithTag(TestTags.CREATION_SCREEN_TAGS).performClick()
+    composeTestRule.waitForIdle()
+    composeTestRule.onNodeWithTag(TestTags.ITINERARY_CREATION_TAGS).performClick()
     composeTestRule
         .onNodeWithTag("${TestTags.ITINERARY_CREATION_TAGS}_${itinerary.tags.first()}")
         .performClick() // add adventure tag

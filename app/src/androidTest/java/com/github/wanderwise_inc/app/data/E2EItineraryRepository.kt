@@ -47,6 +47,6 @@ class E2EItineraryRepository : ItineraryRepository {
   }
 
   override fun getNewId(): String {
-    TODO("Not yet implemented")
+    return "new_id"
   }
 }
