@@ -74,9 +74,6 @@ fun ItinerariesListScrollable(
               modifier = Modifier.padding(5.dp, 10.dp))
         }
   } else {
-    /* store liked itineraries in persistent storage */
-    if (parent == ItineraryListParent.LIKED && itineraries.isNotEmpty())
-        itineraryViewModel.saveItineraries(itineraries)
     val likedItineraries by
         profileViewModel
             .getLikedItineraries(profileViewModel.getUserUid())
@@ -85,7 +82,7 @@ fun ItinerariesListScrollable(
     LazyColumn(
         modifier = Modifier.padding(paddingValues).testTag(TestTags.ITINERARY_LIST_SCROLLABLE),
         verticalArrangement = spacedBy(15.dp)) {
-          this.items(itineraries, { (iti) -> iti }) { itinerary ->
+          this.items(itineraries, key = { it.uid }) { itinerary ->
             val uid = profileViewModel.getUserUid()
             var isLikedInitially by remember {
               mutableStateOf(likedItineraries.contains(itinerary.uid))

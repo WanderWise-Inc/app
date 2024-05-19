@@ -135,7 +135,8 @@ fun CreationStepPreviewNav(
         composable(route = CreationPreviewOptionsDestinations.PreviewItinerary.route) {
           CreationStepPreviewItinerary(
               createItineraryViewModel = createItineraryViewModel,
-              profileViewModel = profileViewModel)
+              profileViewModel = profileViewModel,
+              navController = navController)
         }
       }
 }

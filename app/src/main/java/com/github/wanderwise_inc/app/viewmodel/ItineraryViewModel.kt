@@ -15,15 +15,16 @@ import com.github.wanderwise_inc.app.model.location.Location
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 private const val DEBUG_TAG: String = "MAP_VIEWMODEL"
 /** @brief ViewModel class for providing `Location`s and `Itinerary`s to the map UI */
 open class ItineraryViewModel(
-    private val itineraryRepository: ItineraryRepository,
-    private val directionsRepository: DirectionsRepository,
-    private val locationsRepository: LocationsRepository,
-    private val locationClient: LocationClient,
+    protected val itineraryRepository: ItineraryRepository,
+    protected val directionsRepository: DirectionsRepository,
+    protected val locationsRepository: LocationsRepository,
+    protected val locationClient: LocationClient,
 ) : ViewModel() {
   private var focusedItinerary: Itinerary? = null
 
@@ -44,13 +45,15 @@ open class ItineraryViewModel(
 
   /** @return a flow of all `Itinerary`s associated to the currently logged in user */
   fun getUserItineraries(userUid: String): Flow<List<Itinerary>> {
-    return itineraryRepository.getUserItineraries(userUid)
+    val ret = itineraryRepository.getUserItineraries(userUid)
+    ret.map { Log.d("ItineraryViewModel", "UserItineraries: $it") }
+    return ret
   }
 
   /** @return the total number of likes from a list of itineraries */
   fun getItineraryLikes(itineraries: List<Itinerary>): Int {
 
-    var totalLikes: Int = 0
+    var totalLikes = 0
 
     for (itinerary in itineraries) totalLikes += itinerary.numLikes
     return totalLikes
@@ -89,7 +92,8 @@ open class ItineraryViewModel(
   /** @return list of itineraries queried based on their UIDs */
   fun getItineraryFromUids(uidList: List<String>): Flow<List<Itinerary>> {
     return flow {
-      val result = uidList.map { uid -> itineraryRepository.getItinerary(uid) }
+      val result = uidList.mapNotNull { uid -> itineraryRepository.getItinerary(uid) }
+      Log.d("ItineraryViewModel", "emitting $result")
       emit(result)
     }
   }

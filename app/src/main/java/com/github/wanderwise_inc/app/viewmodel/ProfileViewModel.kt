@@ -1,11 +1,13 @@
 package com.github.wanderwise_inc.app.viewmodel
 
-import android.graphics.Bitmap
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.data.ProfileRepository
+import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.profile.Profile
+import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.Flow
 
 class ProfileViewModel(
@@ -37,12 +39,12 @@ class ProfileViewModel(
   }
 
   /** @return the profile picture of a user as a bitmap flow for asynchronous drawing */
-  fun getProfilePicture(profile: Profile): Flow<Bitmap?> {
+  fun getProfilePicture(profile: Profile): Flow<Uri?> {
     return imageRepository.fetchImage("profilePicture/${profile.userUid}")
   }
 
   /** @return the default profile picture asset */
-  fun getDefaultProfilePicture(): Flow<Bitmap?> {
+  fun getDefaultProfilePicture(): Flow<Uri?> {
     return imageRepository.fetchImage("profilePicture/defaultProfilePicture.jpg")
   }
 
@@ -58,6 +60,12 @@ class ProfileViewModel(
   suspend fun checkIfItineraryIsLiked(userUid: String, itineraryUid: String): Boolean {
     Log.d("ProfileViewModel", "checking if itinerary $itineraryUid is liked...")
     return profileRepository.checkIfItineraryIsLiked(userUid, itineraryUid)
+  }
+
+  suspend fun checkIfItineraryIsLikedByActiveProfile(itineraryUid: String): Boolean {
+    return if (isSignInComplete)
+        profileRepository.checkIfItineraryIsLiked(getUserUid(), itineraryUid)
+    else false
   }
 
   /**
@@ -85,4 +93,22 @@ class ProfileViewModel(
 
   /** Returns the UID of the signed in profile */
   fun getUserUid(): String = activeProfile.userUid
+
+  /** Updates liked itineraries of active profile locally */
+  fun setActiveProfileLikedItineraries(itineraries: List<Itinerary>) {
+    if (itineraries.isNotEmpty()) {
+      Log.d("ProfileViewModel", "Updating active profile liked: ${itineraries.map { it.uid }}")
+      activeProfile.likedItinerariesUid.clear()
+      activeProfile.likedItinerariesUid.addAll(itineraries.map { it.uid })
+    }
+  }
+
+  /** Creates a profile from a Firebase user */
+  fun createProfileFromFirebaseUser(user: FirebaseUser): Profile {
+    val uid = user.uid
+    val displayName = user.displayName ?: ""
+    val bio = ""
+
+    return Profile(userUid = uid, displayName = displayName, bio = bio)
+  }
 }

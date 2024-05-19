@@ -22,9 +22,9 @@ typealias Kilometers = Double
 data class Location(
     val lat: Double,
     val long: Double,
-    val title: String? = null,
-    val address: String? = null,
-    val googleRating: Float? = null,
+    val title: String = "",
+    val address: String = "",
+    val googleRating: Float = 0f,
 ) {
   fun toLatLng(): LatLng {
     return LatLng(lat, long)

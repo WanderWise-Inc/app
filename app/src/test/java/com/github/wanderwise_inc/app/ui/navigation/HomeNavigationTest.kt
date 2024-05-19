@@ -66,6 +66,7 @@ class HomeNavigationTest {
       every { profileViewModel.getLikedItineraries(any()) } returns flow { emit(emptyList()) }
       every { profileViewModel.getDefaultProfilePicture() } returns flow { emit(null) }
       every { profileViewModel.getProfilePicture(any()) } returns flow { emit(null) }
+      every { profileViewModel.setActiveProfileLikedItineraries(any()) } returns Unit
 
       every { itineraryViewModel.setItinerary(any()) } returns Unit
       every { itineraryViewModel.incrementItineraryLikes(any()) } returns Unit

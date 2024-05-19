@@ -10,6 +10,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.lifecycle.MutableLiveData
+import androidx.navigation.NavHostController
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.wanderwise_inc.app.data.DirectionsRepository
 import com.github.wanderwise_inc.app.data.ImageRepository
@@ -23,8 +24,8 @@ import com.github.wanderwise_inc.app.model.location.PlacesReader
 import com.github.wanderwise_inc.app.model.profile.Profile
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
+import com.github.wanderwise_inc.app.viewmodel.LocationClient
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
-import com.github.wanderwise_inc.app.viewmodel.UserLocationClient
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.CameraPositionState
@@ -56,7 +57,8 @@ class PreviewItineraryScreenKtTest {
   @Mock private lateinit var imageRepository: ImageRepository
   @Mock private lateinit var directionsRepository: DirectionsRepository
   @Mock private lateinit var locationsRepository: LocationsRepository
-  @Mock private lateinit var userLocationClient: UserLocationClient
+  @Mock private lateinit var locationClient: LocationClient
+  @Mock private lateinit var navController: NavHostController
 
   private lateinit var profileViewModel: ProfileViewModel
 
@@ -83,11 +85,8 @@ class PreviewItineraryScreenKtTest {
             directionsRepository.getPolylineWayPoints(
                 anyString(), anyString(), anyList(), anyString()))
         .thenReturn(MutableLiveData(listOf(LatLng(epflLat, epflLon))))
-    `when`(userLocationClient.getLocationUpdates(1000)).thenReturn(flow { emit(epflLocation) })
+    `when`(locationClient.getLocationUpdates(1000)).thenReturn(flow { emit(epflLocation) })
     val itineraryRepository = mock(ItineraryRepository::class.java)
-
-    // `when`(itineraryViewModel.getUserLocation()).thenReturn(flow { emit(epflLocation) })
-    // `when`(itineraryViewModel.getPolylinePointsLiveData()).thenReturn(polylinePoints)
 
     val dummyProfile = Profile("-")
     `when`(profileRepository.getProfile(anyString())).thenReturn(flow { emit(dummyProfile) })
@@ -95,14 +94,18 @@ class PreviewItineraryScreenKtTest {
 
     itineraryViewModel =
         ItineraryViewModel(
-            itineraryRepository, directionsRepository, locationsRepository, userLocationClient)
+            itineraryRepository, directionsRepository, locationsRepository, locationClient)
+
     itineraryViewModel.setFocusedItinerary(itinerary)
     profileViewModel = ProfileViewModel(profileRepository, imageRepository)
   }
 
   @Test
   fun `initial elements are displayed correctly`() {
-    composeTestRule.setContent { PreviewItineraryScreen(itineraryViewModel, profileViewModel) }
+    profileViewModel.setActiveProfile(Profile("uid"))
+    composeTestRule.setContent {
+      PreviewItineraryScreen(itineraryViewModel, profileViewModel, navController)
+    }
 
     composeTestRule.onNodeWithTag(TestTags.MAP_PREVIEW_ITINERARY_SCREEN).assertIsDisplayed()
     composeTestRule.onNodeWithTag(TestTags.MAP_MAXIMIZED_BANNER).assertIsDisplayed()
@@ -113,7 +116,10 @@ class PreviewItineraryScreenKtTest {
 
   @Test
   fun `pressing banner button should minimize and maximize the banner`() {
-    composeTestRule.setContent { PreviewItineraryScreen(itineraryViewModel, profileViewModel) }
+    profileViewModel.setActiveProfile(Profile("uid"))
+    composeTestRule.setContent {
+      PreviewItineraryScreen(itineraryViewModel, profileViewModel, navController)
+    }
 
     composeTestRule.onNodeWithTag(TestTags.MAP_MAXIMIZED_BANNER).assertIsDisplayed()
     composeTestRule.onNodeWithTag(TestTags.MAP_MINIMIZED_BANNER).assertIsNotDisplayed()
@@ -138,7 +144,9 @@ class PreviewItineraryScreenKtTest {
   @Test
   fun `NullItineraryScreen is displayed when focusedItinerary is null`() {
     itineraryViewModel.setFocusedItinerary(null)
-    composeTestRule.setContent { PreviewItineraryScreen(itineraryViewModel, profileViewModel) }
+    composeTestRule.setContent {
+      PreviewItineraryScreen(itineraryViewModel, profileViewModel, navController)
+    }
 
     composeTestRule.onNodeWithTag(TestTags.MAP_NULL_ITINERARY).assertIsDisplayed()
 
@@ -151,7 +159,10 @@ class PreviewItineraryScreenKtTest {
 
   @Test
   fun `Clicking on the Start Button should go to starting mode`() {
-    composeTestRule.setContent { PreviewItineraryScreen(itineraryViewModel, profileViewModel) }
+    profileViewModel.setActiveProfile(Profile("uid"))
+    composeTestRule.setContent {
+      PreviewItineraryScreen(itineraryViewModel, profileViewModel, navController)
+    }
 
     composeTestRule.onNodeWithTag(TestTags.START_NEW_ITINERARY_STARTING).assertIsDisplayed()
   }

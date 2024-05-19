@@ -52,6 +52,7 @@ class LikedScreenTest {
     MockKAnnotations.init(this)
     every { imageRepository.fetchImage(any()) } returns flow { emit(null) }
     every { profileViewModel.getProfile(any()) } returns flow { emit(profile) }
+    every { profileViewModel.setActiveProfileLikedItineraries(any()) } returns Unit
 
     for (itinerary in testItineraries) {
       itinerary.uid = itinerary.title // set uid for testTags
