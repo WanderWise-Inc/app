@@ -96,7 +96,7 @@ fun NoNewItinerary(onClick: () -> Unit) {
                     text = "Press here to get started!",
                     color = MaterialTheme.colorScheme.onSecondary,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(5.dp, 10.dp))
+                    modifier = Modifier.padding(5.dp, 10.dp).testTag(TestTags.START_ITINERARY_CREATION_BUTTON))
               }
             }
       }
