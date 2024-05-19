@@ -5,6 +5,7 @@ import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onFirst
@@ -40,7 +41,7 @@ class LikeE2ETest {
     fun likeFlowTest() {
         // Click on the sign in button
         composeTestRule.onNodeWithTag(TestTags.SIGN_IN_BUTTON).performClick()
-        composeTestRule.waitForIdle()
+        composeTestRule.waitUntil { composeTestRule.onNodeWithTag(TestTags.OVERVIEW_SCREEN).isDisplayed() }
 
         val firstLikeButton: SemanticsNodeInteraction
 
