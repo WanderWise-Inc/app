@@ -6,6 +6,7 @@ import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import coil.request.ImageRequest
 import com.github.wanderwise_inc.app.data.ImageRepository
@@ -21,6 +22,7 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -93,5 +95,41 @@ class CreationStepChooseTagsTest {
         composeTestRule.onNodeWithTag(TestTags.CREATION_SCREEN_TAGS).assertIsDisplayed()
         composeTestRule.onNodeWithTag(TestTags.CREATION_SCREEN_IMAGE_BANNER_BOX).assertIsDisplayed()
         composeTestRule.onNodeWithTag(TestTags.CREATION_SCREEN_IMAGE_BANNER, useUnmergedTree = true).assertIsDisplayed()
+    }
+
+    @Test
+    fun `if the box is clicked, it should correctly launch an activity`() {
+        var isLaunched = false
+        every { imageRepository.launchActivity(any()) } answers { isLaunched = true }
+        every { imageRepository.getCurrentFile() } returns null
+        composeTestRule.setContent {
+            CreationStepChooseTagsScreen(createItineraryViewModel = createItineraryViewModel, imageRepository = imageRepository)
+        }
+        composeTestRule.onNodeWithTag(TestTags.CREATION_SCREEN_IMAGE_BANNER_BOX).assertIsDisplayed()
+        composeTestRule.onNodeWithTag(TestTags.CREATION_SCREEN_IMAGE_BANNER_BOX).performClick()
+        assertTrue(isLaunched)
+    }
+
+    @Test
+    fun `click to choose tags should display the tags`() {
+        val allTags =
+            listOf(
+                "Adventure",
+                "Food",
+                "Culture",
+                "Nature",
+                "History",
+                "Relaxation",
+                "Shopping",
+                "Nightlife")
+        every { imageRepository.getCurrentFile() } returns null
+        composeTestRule.setContent {
+            CreationStepChooseTagsScreen(createItineraryViewModel = createItineraryViewModel, imageRepository = imageRepository)
+        }
+        composeTestRule.onNodeWithTag("Tags Button").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("Tags Button").performClick()
+        for (tag in allTags) {
+            composeTestRule.onNodeWithText(tag).assertIsDisplayed()
+        }
     }
 }

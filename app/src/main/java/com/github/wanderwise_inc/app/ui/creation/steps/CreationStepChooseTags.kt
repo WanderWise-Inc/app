@@ -128,7 +128,7 @@ fun PriceEstimationTextBox(createItineraryViewModel: CreateItineraryViewModel) {
     TextField(
         label = { Text("Price Estimate") },
         value = priceEstimateDisplay,
-        modifier = Modifier,
+        modifier = Modifier.testTag(TestTags.PRICE_SEARCH),
         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
         onValueChange = { input ->
           // ensures that we can only set digits and points (and don't crash with input.toFloat())
@@ -215,7 +215,7 @@ fun RelevantTags(createItineraryViewModel: CreateItineraryViewModel) {
     }
   }
 
-  Button(onClick = { isTagsDDM = true }) { Text("Add Tags") }
+  Button(onClick = { isTagsDDM = true }, modifier = Modifier.testTag("Tags Button")) { Text("Add Tags") }
 
   DropdownMenu(expanded = isTagsDDM, onDismissRequest = { isTagsDDM = false }) {
     allTags.forEach { tag ->
