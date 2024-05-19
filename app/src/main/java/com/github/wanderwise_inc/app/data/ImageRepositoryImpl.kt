@@ -1,8 +1,6 @@
 package com.github.wanderwise_inc.app.data
 
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
@@ -29,7 +27,8 @@ class ImageRepositoryImpl(
    *
    * @return a flow of the bitMap representation of the profile picture
    */
-  override fun fetchImage(pathToProfilePic: String): Flow<Bitmap?> {
+  override fun fetchImage(pathToProfilePic: String): Flow<Uri?> {
+    Log.d("FETCH IMAGE COUNTER", "FETCHING IMAGE")
     return flow {
           if (pathToProfilePic.isBlank()) {
             // the path is empty, there should be no profilePicture at this path
@@ -38,22 +37,19 @@ class ImageRepositoryImpl(
             val profilePictureRef = imageReference.child("images/${pathToProfilePic}")
 
             // the byte array that is at the given path (if any)
-            val byteResult =
-                suspendCancellableCoroutine<ByteArray?> { continuation ->
-                  profilePictureRef
-                      .getBytes(2048 * 2048)
-                      .addOnSuccessListener { byteResult ->
+            val uriResult =
+                suspendCancellableCoroutine<Uri?> { continuation ->
+                  profilePictureRef.downloadUrl
+                      .addOnSuccessListener { result ->
                         Log.d("FETCH IMAGE", "FETCH SUCCESS")
-                        continuation.resume(byteResult) // Resume with byte array
+                        continuation.resume(result) // Resume with byte array
                       }
                       .addOnFailureListener { exception ->
                         Log.w("FETCH IMAGE", exception)
                         continuation.resumeWithException(exception) // Resume with exception
                       }
                 }
-            // Decode bitmap if byte are is not null
-            val bitmap = byteResult?.let { BitmapFactory.decodeByteArray(it, 0, it.size) }
-            emit(bitmap) // Emit bitmap
+            emit(uriResult) // Emit bitmap
           }
         }
         .catch {
@@ -68,29 +64,31 @@ class ImageRepositoryImpl(
    *
    * @param fileName the fileName (path) where we want to store the currentFile
    */
-  override fun uploadImageToStorage(fileName: String): Boolean {
+  override suspend fun uploadImageToStorage(fileName: String): Boolean {
     if (fileName == "") {
       throw Exception("fileName is empty")
     }
-
-    try {
-      // The currentFile is set with the "setCurrentFile()" function
-      // This will put the given file (the one selected by the user) to store in storage
-      currentFile?.let {
-        imageReference
-            .child("images/${fileName}")
-            .putFile(it)
-            .addOnSuccessListener { Log.d("STORE IMAGE", "STORE SUCCESS") }
-            .addOnFailureListener {
-              Log.w("STORE IMAGE", "STORE FAILED")
-              throw it
-            }
-      }
-      return currentFile != null
-    } catch (e: Exception) {
-      Log.w("STORE IMAGE", e)
-      return false
-    }
+    val result =
+        suspendCancellableCoroutine<Boolean> { continuation ->
+          currentFile?.let {
+            imageReference
+                .child("images/${fileName}")
+                .putFile(it)
+                .addOnSuccessListener {
+                  Log.d("STORE IMAGE", "STORE SUCCESS")
+                  continuation.resume(true)
+                }
+                .addOnFailureListener { error ->
+                  Log.w("STORE IMAGE", error)
+                  continuation.resume(false)
+                }
+          }
+              ?: run {
+                Log.w("STORE IMAGE", "currentFile is null")
+                continuation.resume(false)
+              }
+        }
+    return result
   }
 
   /** @brief used to launch the activity to open the photo gallery */
