@@ -85,9 +85,6 @@ fun ItineraryBanner(
       }
 
   val painter = rememberAsyncImagePainter(model = model)
-  if (painter.state is AsyncImagePainter.State.Loading) {
-    CircularProgressIndicator()
-  }
   var isLiked = isLikedInitially
   var numLikes by remember { mutableIntStateOf(itinerary.numLikes) }
   var prices by remember { mutableFloatStateOf(itinerary.price) }
@@ -116,6 +113,9 @@ fun ItineraryBanner(
                       Modifier.fillMaxWidth().fillMaxHeight(0.55f).clip(RoundedCornerShape(13.dp)),
                   contentScale = ContentScale.Crop,
                   alignment = Alignment.TopCenter)
+              if (painter.state is AsyncImagePainter.State.Loading) {
+                CircularProgressIndicator()
+              }
               // Image of the itinerary
               // Primary Text Field
               Text(
