@@ -11,6 +11,9 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performImeAction
 import androidx.compose.ui.test.performScrollToIndex
 import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.printToLog
+import androidx.compose.ui.test.swipeLeft
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
@@ -79,8 +82,12 @@ class CreateItineraryE2ETest {
     // verify that we have indeed started creating an itinerary
     composeTestRule.onNodeWithTag(TestTags.MAP_NULL_USER_LOCATION).assertIsDisplayed()
     composeTestRule.onNodeWithTag(TestTags.NEW_CREATION_SCREEN).assertIsDisplayed()
+      
+    // click on tracking button  
     composeTestRule.onNodeWithTag(TestTags.CREATE_ITINERARY_BY_TRACKING_BUTTON).performClick()
     composeTestRule.waitForIdle()
+    // wait for maps to be displayed
+    composeTestRule.waitUntil(10000) { composeTestRule.onNodeWithTag(TestTags.MAP_GOOGLE_MAPS).isDisplayed() }
 
     // verify that we have reached the UI for tracking the user
     composeTestRule.onNodeWithTag(TestTags.CREATE_ITINERARY_BY_TRACKING_SCREEN).assertIsDisplayed()
@@ -88,7 +95,6 @@ class CreateItineraryE2ETest {
     composeTestRule.waitForIdle()
     Thread.sleep(10000L) // track for 10 seconds
     composeTestRule.onNodeWithTag(TestTags.STOP_BUTTON).performClick()
-    composeTestRule.waitForIdle()
     composeTestRule.onNodeWithTag(TestTags.BACK_BUTTON).performClick()
     composeTestRule.waitForIdle()
 
@@ -101,6 +107,14 @@ class CreateItineraryE2ETest {
     composeTestRule.onNodeWithTag(TestTags.CREATE_ITINERARY_MANUALLY_SCREEN).assertIsDisplayed()
     composeTestRule.onAllNodes(E2EUtils.hasSubTestTag(TestTags.CREATE_ITINERARY_LOCATION)).onFirst().assertExists()
     val markersPlacedByTracking = composeTestRule.onAllNodes(E2EUtils.hasSubTestTag(TestTags.CREATE_ITINERARY_LOCATION)).fetchSemanticsNodes().size // get number of markers placed during tracking (should be at least 1)
+    
+    // add location by clicking on map  
+    composeTestRule.onNodeWithTag(TestTags.MAP_GOOGLE_MAPS).performTouchInput { swipeLeft((right - left)/2, (right - left)/4) } // swipe to new position
+    composeTestRule.onNodeWithTag(TestTags.MAP_GOOGLE_MAPS).performClick()
+    Thread.sleep(2000) // visualize new location
+    composeTestRule.onAllNodes(E2EUtils.hasSubTestTag(TestTags.CREATE_ITINERARY_LOCATION)).assertCountEquals(markersPlacedByTracking+1) // 1 additional marker placed
+
+      // add location by searching
     composeTestRule.onNodeWithTag(TestTags.ADD_LOCATION_BUTTON).performClick()
     composeTestRule.waitForIdle()
 
@@ -126,7 +140,7 @@ class CreateItineraryE2ETest {
 
     // verify that we have navigated back to itinerary creation method screen
     composeTestRule.onNodeWithTag(TestTags.CREATE_ITINERARY_MANUALLY_SCREEN).assertIsDisplayed()
-    composeTestRule.onAllNodes(E2EUtils.hasSubTestTag(TestTags.CREATE_ITINERARY_LOCATION)).assertCountEquals(markersPlacedByTracking+1) // 1 additional marker placed
+    composeTestRule.onAllNodes(E2EUtils.hasSubTestTag(TestTags.CREATE_ITINERARY_LOCATION)).assertCountEquals(markersPlacedByTracking+2) // 1 additional marker placed
     composeTestRule
         .onNodeWithTag("${TestTags.CREATE_ITINERARY_LOCATION}_${location.title}")
         .assertExists()
