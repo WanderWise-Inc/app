@@ -110,7 +110,7 @@ fun ItineraryImageBanner(
                       .build(),
               contentDescription = "itinerary_image",
               contentScale = ContentScale.Crop,
-              modifier = Modifier.testTag(TestTags.CREATION_SCREEN_IMAGE_BANNER))
+              modifier = Modifier.testTag(TestTags.CREATION_SCREEN_IMAGE_BANNER).fillMaxSize())
         } else {
           Text("Itinerary Banner Please Upload Image")
         }
