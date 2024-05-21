@@ -1,6 +1,10 @@
 package com.github.wanderwise_inc.app.viewmodel
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.util.Log
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -82,8 +86,8 @@ open class ItineraryViewModel(
 
   /** @return a sorted list of itineraries scored based on preferences */
   fun sortItinerariesFromPreferences(
-      itineraries: List<Itinerary>,
-      preferences: ItineraryPreferences
+    itineraries: List<Itinerary>,
+    preferences: ItineraryPreferences
   ): List<Itinerary> {
     // invert the sign so that the list is sorted in descending order
     return itineraries.sortedBy { -it.scoreFromPreferences(preferences) }
@@ -124,7 +128,8 @@ open class ItineraryViewModel(
 
   private val _polylinePointsLiveData = MutableLiveData<List<LatLng>>()
   private val polylinePointsLiveData: LiveData<List<LatLng>> =
-      _polylinePointsLiveData // gettable from view
+    _polylinePointsLiveData // gettable from view
+
   /**
    * fetches Polyline points encoded as `LatLng` and updates a `LiveData` variable observed by some
    * composable function
@@ -143,12 +148,13 @@ open class ItineraryViewModel(
     val key = BuildConfig.MAPS_API_KEY
     viewModelScope.launch {
       directionsRepository
-          .getPolylineWayPoints(
-              origin = originEncoded,
-              destination = destinationEncoded,
-              apiKey = key,
-              waypoints = waypoints)
-          .observeForever { response -> _polylinePointsLiveData.value = response ?: listOf() }
+        .getPolylineWayPoints(
+          origin = originEncoded,
+          destination = destinationEncoded,
+          apiKey = key,
+          waypoints = waypoints
+        )
+        .observeForever { response -> _polylinePointsLiveData.value = response ?: listOf() }
     }
   }
 
@@ -177,4 +183,23 @@ open class ItineraryViewModel(
   fun getUserLocation(): Flow<Location> {
     return locationClient.getLocationUpdates(1000)
   }
+
+  private fun getItineraryGoogleMapsURI(itinerary: Itinerary): Uri {
+    val locations = itinerary.locations.map {
+      "${it.lat},${it.long}"
+    }
+    val waypoints = locations.drop(1).dropLast(1).joinToString(",")
+    val uriString = "google.navigation:q=${locations.last()}&waypoints=${waypoints}&mode=w"
+    return Uri.parse(uriString)
+  }
+
+  fun FollowItineraryOnGoogleMaps(context: Context, itinerary: Itinerary) {
+    val uri = getItineraryGoogleMapsURI(itinerary)
+    val intent = Intent(Intent.ACTION_VIEW, uri)
+    intent.setPackage("com.google.android.apps.maps")
+    intent.resolveActivity(context.packageManager)?.let {
+      context.startActivity(intent)
+    }
+  }
+
 }
