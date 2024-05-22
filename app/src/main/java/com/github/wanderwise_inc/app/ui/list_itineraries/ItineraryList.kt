@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -82,8 +83,14 @@ fun ItinerariesListScrollable(
             .collectAsState(initial = emptyList())
 
     LazyColumn(
-        modifier = Modifier.padding(paddingValues).testTag(TestTags.ITINERARY_LIST_SCROLLABLE),
-        verticalArrangement = spacedBy(15.dp)) {
+        modifier =
+            Modifier.padding(
+                    start = 10.dp,
+                    top = paddingValues.calculateTopPadding() + 5.dp,
+                    end = 10.dp,
+                    bottom = paddingValues.calculateBottomPadding())
+                .testTag(TestTags.ITINERARY_LIST_SCROLLABLE),
+        verticalArrangement = spacedBy(8.dp)) {
           this.items(itineraries, key = { it.uid }) { itinerary ->
             val uid = profileViewModel.getUserUid()
             var isLikedInitially by remember {
@@ -119,6 +126,8 @@ fun ItinerariesListScrollable(
                 profileViewModel = profileViewModel,
                 imageRepository = imageRepository)
           }
+
+          item { Spacer(Modifier.padding(20.dp)) }
         }
   }
   var offlineHintVisible by remember {

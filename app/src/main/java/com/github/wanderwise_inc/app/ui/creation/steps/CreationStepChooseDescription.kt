@@ -39,24 +39,25 @@ fun CreationStepChooseDescriptionScreen(createItineraryViewModel: CreateItinerar
           Modifier.padding(top = 10.dp)
               .background(color = MaterialTheme.colorScheme.background)
               .testTag(TestTags.CREATION_SCREEN_DESCRIPTION_TITLE),
-      contentPadding = PaddingValues(24.dp),
-      verticalArrangement = Arrangement.Absolute.spacedBy(52.dp)) {
+      contentPadding = PaddingValues(10.dp),
+      verticalArrangement = Arrangement.Absolute.spacedBy(24.dp)) {
         item {
           OutlinedTextField(
               modifier = Modifier.fillMaxSize().testTag(TestTags.CREATION_SCREEN_TITLE),
               value = title,
               onValueChange = {
-                title = it
+                // cant add '\n' to titles
+                title = it.filter { c -> c != '\n' }
                 validTitle =
-                    if (createItineraryViewModel.validTitle(it)) {
-                      createItineraryViewModel.getNewItinerary()?.title(it)
+                    if (createItineraryViewModel.validTitle(title)) {
+                      createItineraryViewModel.getNewItinerary()?.title(title)
                       true
                     } else {
                       createItineraryViewModel.getNewItinerary()?.title(null)
                       false
                     }
               },
-              maxLines = 2,
+              maxLines = 3,
               textStyle =
                   TextStyle(
                       fontSize = 22.sp,
