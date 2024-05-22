@@ -155,16 +155,18 @@ fun CategorySelector(
   ScrollableTabRow(
       selectedTabIndex = selectedIndex,
       containerColor = MaterialTheme.colorScheme.surfaceVariant,
-      edgePadding = 0.dp,
+      edgePadding = (-90).dp, //this is my proudest coding moment!!!!
   ) {
 
-//    LazyRow(modifier = Modifier.background(MaterialTheme.colorScheme.surfaceVariant)){
     categoriesList.forEachIndexed { index, category ->
-//        item {
             Tab(
-                selected = index == selectedIndex,//useless...
+                selected = index == selectedIndex,
                 onClick = {
+                    if(index == selectedIndex) {
+                        onCategorySelected(0)
+                    } else {
                         onCategorySelected(index)
+                    }
                 },
                 text = {
                     Text(
@@ -195,8 +197,8 @@ fun CategorySelector(
                 modifier = Modifier.testTag("${TestTags.CATEGORY_SELECTOR_TAB}_${index}")
             )
         }
-//    }
-  }
+    }
+//  }
 }
 
 enum class ItineraryListParent {

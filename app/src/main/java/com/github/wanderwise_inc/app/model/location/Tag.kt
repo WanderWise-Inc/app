@@ -53,7 +53,7 @@ object ItineraryTags {
   const val WELLNESS    = "Wellness"//
   const val WILDLIFE    = "Wildlife"
 
-    const val DESELECT  = "deselect"
+    const val NO_FILTER  = "No filter"
 
   fun toList(): List<String>{
     return listOf(ACTIVE,
@@ -77,6 +77,8 @@ object ItineraryTags {
 
     fun toSearchCategoryList(): List<SearchCategory>{
         return listOf(
+            SearchCategory(NO_FILTER, Icons.Outlined.Cancel),
+
             SearchCategory(ADVENTURE, Icons.Outlined.Backpack),
             SearchCategory(SHOPPING, Icons.Outlined.ShoppingBag),
             SearchCategory(PHOTOGRAPHY, Icons.Outlined.PhotoCamera),
@@ -93,8 +95,6 @@ object ItineraryTags {
             SearchCategory(URBAN, Icons.Outlined.Apartment),
             SearchCategory(WELLNESS, Icons.Outlined.Spa),
             SearchCategory(WILDLIFE, Icons.Outlined.Pets),
-
-            SearchCategory(DESELECT, Icons.Outlined.Cancel)
         )
     }
 }
