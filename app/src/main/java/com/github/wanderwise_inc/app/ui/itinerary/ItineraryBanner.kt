@@ -36,6 +36,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.modifier.modifierLocalConsumer
@@ -96,7 +97,6 @@ fun ItineraryBanner(
   ElevatedCard(
       colors = CardDefaults.cardColors(
           containerColor = MaterialTheme.colorScheme.primaryContainer,
-          //containerColor = Color.Transparent
       ),
 
       elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
@@ -106,7 +106,7 @@ fun ItineraryBanner(
         Column(
             modifier =
             Modifier
-                .fillMaxWidth()
+                .fillMaxSize()
                 .aspectRatio(2f),
             horizontalAlignment = Alignment.CenterHorizontally) {
 
@@ -137,6 +137,7 @@ fun BannerImage(painter: AsyncImagePainter, itinerary : Itinerary){
         contentDescription = itinerary.description,
         modifier =
         Modifier.fillMaxSize(),
+            //.clip(RoundedCornerShape(16.dp)),
         contentScale = ContentScale.Crop,
         alignment = Alignment.TopCenter)
     if (painter.state is AsyncImagePainter.State.Loading) {
@@ -277,7 +278,7 @@ fun Likes(numLikes: Int){
 
 @Composable
 fun BannerLikeButton(modifier: Modifier, isLiked: Boolean, numLikes: Int,  itinerary: Itinerary, onClick: () -> Unit){
-        // Like Icon
+    // Like Icon
     Box(modifier = modifier.padding(5.dp)) {
         ElevatedCard(
             modifier = Modifier.size(35.dp, 35.dp),
@@ -301,13 +302,8 @@ fun BannerLikeButton(modifier: Modifier, isLiked: Boolean, numLikes: Int,  itine
                     .testTag(
                         "${TestTags.ITINERARY_BANNER_LIKE_BUTTON}_${itinerary.uid}"
                     )
-//                    .size(width = 30.dp, height = 30.dp)
                     .fillMaxSize()
                     .padding(7.dp)
-//                    .clickable(
-//                        onClick = {
-//                            onClick()
-//                        })
             )
         }
     }
