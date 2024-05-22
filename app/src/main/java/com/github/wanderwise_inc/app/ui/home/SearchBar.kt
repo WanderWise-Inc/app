@@ -90,7 +90,8 @@ fun SearchBar(
       onDismissRequest = { isDropdownOpen = false },
       modifier = Modifier
           .fillMaxWidth()
-          .padding(horizontal = 20.dp, vertical = 5.dp)) {
+          .padding(horizontal = 20.dp, vertical = 5.dp)
+  ) {
         Column() {
             PriceTab(sliderPositionPriceState)
             Spacer(Modifier.padding(10.dp))
@@ -99,9 +100,6 @@ fun SearchBar(
 //            Spacer(Modifier.padding(10.dp))
 //            TimeSlider(sliderPositionTimeState = sliderPositionTimeState)
         }
-
-
-
       }
 }
 

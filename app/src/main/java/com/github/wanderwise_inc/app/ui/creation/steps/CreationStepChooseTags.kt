@@ -43,6 +43,7 @@ import androidx.core.text.isDigitsOnly
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.github.wanderwise_inc.app.data.ImageRepository
+import com.github.wanderwise_inc.app.model.location.ItineraryTags
 import com.github.wanderwise_inc.app.model.location.Tag
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
@@ -121,16 +122,15 @@ fun ItineraryImageBanner(
 @Composable
 fun PriceEstimationTextBox(createItineraryViewModel: CreateItineraryViewModel) {
   // number text field to estimate price, give the option to choose currency
-  val currencies = listOf("USD", "EUR", "JPY", "GBP", "AUD", "CAD", "CHF", "CNY", "SEK", "NZD")
-  var isCurrenciesMenuExpanded by remember { mutableStateOf(false) }
-  var selectedCurrency by remember { mutableStateOf(currencies[0]) }
+  //val currencies = listOf("USD", "EUR", "JPY", "GBP", "AUD", "CAD", "CHF", "CNY", "SEK", "NZD")
+  //var isCurrenciesMenuExpanded by remember { mutableStateOf(false) }
+  //var selectedCurrency by remember { mutableStateOf(currencies[0]) }
   var priceEstimateDisplay by remember {
     mutableStateOf(createItineraryViewModel.getNewItinerary()!!.price?.toString() ?: "")
   }
 
   val regex = "^[0-9]+(\\.[0-9]{0,2})?$".toRegex()
 
-  Row(Modifier.fillMaxWidth().padding(all = 10.dp).clip(MaterialTheme.shapes.medium)) {
     TextField(
         label = { Text("Price Estimate") },
         value = priceEstimateDisplay,
@@ -144,33 +144,33 @@ fun PriceEstimationTextBox(createItineraryViewModel: CreateItineraryViewModel) {
           priceEstimateDisplay = input
         })
 
-    ExposedDropdownMenuBox(
-        expanded = isCurrenciesMenuExpanded,
-        onExpandedChange = { isCurrenciesMenuExpanded = it },
-        modifier = Modifier.clip(MaterialTheme.shapes.medium).shadow(5.dp)) {
-          TextField(
-              modifier = Modifier.menuAnchor(),
-              value = selectedCurrency,
-              onValueChange = {},
-              readOnly = true,
-              trailingIcon = {
-                ExposedDropdownMenuDefaults.TrailingIcon(expanded = isCurrenciesMenuExpanded)
-              })
+//    ExposedDropdownMenuBox(
+//        expanded = isCurrenciesMenuExpanded,
+//        onExpandedChange = { isCurrenciesMenuExpanded = it },
+//        modifier = Modifier.clip(MaterialTheme.shapes.medium).shadow(5.dp)) {
+//          TextField(
+//              modifier = Modifier.menuAnchor(),
+//              value = selectedCurrency,
+//              onValueChange = {},
+//              readOnly = true,
+//              trailingIcon = {
+//                ExposedDropdownMenuDefaults.TrailingIcon(expanded = isCurrenciesMenuExpanded)
+//              })
+//
+//          ExposedDropdownMenu(
+//              expanded = isCurrenciesMenuExpanded,
+//              onDismissRequest = { isCurrenciesMenuExpanded = false }) {
+//                currencies.forEachIndexed { index, text ->
+//                  DropdownMenuItem(
+//                      text = { Text(text) },
+//                      onClick = {
+//                        selectedCurrency = currencies[index]
+//                        isCurrenciesMenuExpanded = false
+//                      })
+//                }
+//              }
+//        }
 
-          ExposedDropdownMenu(
-              expanded = isCurrenciesMenuExpanded,
-              onDismissRequest = { isCurrenciesMenuExpanded = false }) {
-                currencies.forEachIndexed { index, text ->
-                  DropdownMenuItem(
-                      text = { Text(text) },
-                      onClick = {
-                        selectedCurrency = currencies[index]
-                        isCurrenciesMenuExpanded = false
-                      })
-                }
-              }
-        }
-  }
 }
 
 @Composable
@@ -192,16 +192,7 @@ fun TimeDurationEstimation(createItineraryViewModel: CreateItineraryViewModel) {
 
 @Composable
 fun RelevantTags(createItineraryViewModel: CreateItineraryViewModel) {
-  val allTags =
-      listOf(
-          "Adventure",
-          "Food",
-          "Culture",
-          "Nature",
-          "History",
-          "Relaxation",
-          "Shopping",
-          "Nightlife")
+  val allTags = ItineraryTags.toList()
   var isTagsDDM by remember { mutableStateOf(false) }
 
   var selectedTags = mutableListOf<Tag>()

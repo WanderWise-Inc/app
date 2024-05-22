@@ -12,7 +12,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Icon
+//import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
@@ -35,6 +37,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.model.location.Itinerary
+import com.github.wanderwise_inc.app.model.location.SearchCategory
 import com.github.wanderwise_inc.app.model.profile.DEFAULT_OFFLINE_PROFILE
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.itinerary.ItineraryBanner
@@ -145,9 +148,10 @@ fun CategorySelector(
     categoriesList: List<SearchCategory>,
     onCategorySelected: (Int) -> Unit
 ) {
-  TabRow(
+  ScrollableTabRow(
       selectedTabIndex = selectedIndex,
       containerColor = MaterialTheme.colorScheme.surfaceVariant,
+      edgePadding = 0.dp,
   ) {
     categoriesList.forEachIndexed { index, category ->
       Tab(
@@ -155,7 +159,7 @@ fun CategorySelector(
           onClick = { onCategorySelected(index) },
           text = {
             Text(
-                text = category.title,
+                text = category.tag,
                 modifier = Modifier.padding(0.dp, 2.dp),
                 style =
                     TextStyle(
@@ -170,7 +174,7 @@ fun CategorySelector(
           },
           icon = {
             Icon(
-                painter = painterResource(id = category.icon),
+                imageVector = category.icon,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onPrimaryContainer,
                 modifier = Modifier.size(30.dp).padding(2.dp))
