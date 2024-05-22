@@ -20,6 +20,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.HourglassEmpty
 import androidx.compose.material.icons.outlined.Payments
+import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
@@ -37,6 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
@@ -92,10 +94,11 @@ fun ItineraryBanner(
   val user by profileViewModel.getProfile(itinerary.userUid).collectAsState(initial = null)
 
   ElevatedCard(
-      colors =
-          CardDefaults.cardColors(
-              containerColor = MaterialTheme.colorScheme.primaryContainer,
-          ),
+      colors = CardDefaults.cardColors(
+          containerColor = MaterialTheme.colorScheme.primaryContainer,
+          //containerColor = Color.Transparent
+      ),
+
       elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
       shape = RoundedCornerShape(13.dp),
       modifier = Modifier.testTag("${TestTags.ITINERARY_BANNER}_${itinerary.uid}"),
@@ -103,7 +106,6 @@ fun ItineraryBanner(
         Column(
             modifier =
             Modifier
-                .background(MaterialTheme.colorScheme.primaryContainer)
                 .fillMaxWidth()
                 .aspectRatio(2f),
             horizontalAlignment = Alignment.CenterHorizontally) {
@@ -121,10 +123,9 @@ fun ItineraryBanner(
                         isLiked = !isLiked}
                     BannerTags(itinerary, Modifier.align(Alignment.BottomStart))
                 }
-
                 BannerTitle(itinerary)
-
                 BannerAttributes(itinerary, user, numLikes)
+
             }
       }
 }
@@ -154,6 +155,7 @@ fun BannerTags(itinerary: Itinerary, modifier: Modifier){
 
         for (tag in itinerary.tags) {
             OutlinedCard(
+                shape = CircleShape,
                 colors =
                 CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.secondaryContainer,
@@ -164,8 +166,9 @@ fun BannerTags(itinerary: Itinerary, modifier: Modifier){
                     textAlign = TextAlign.Center,
                     color = MaterialTheme.colorScheme.onSecondaryContainer,
                     fontFamily = FontFamily.Monospace,
-                    fontSize = 12.sp,
-                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp))
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 10.sp,
+                    modifier = Modifier.padding(horizontal = 6.dp, vertical = 0.dp))
             }
         }
     }
@@ -177,9 +180,9 @@ fun BannerTitle(itinerary: Itinerary){
         text = itinerary.title,
         color = MaterialTheme.colorScheme.onPrimaryContainer,
         fontFamily = FontFamily.Monospace,
-        fontSize = 16.sp,
+        fontSize = 14.sp,
         fontWeight = FontWeight.Bold,
-        modifier = Modifier.padding(2.dp))
+        modifier = Modifier)
 }
 
 @Composable
@@ -188,7 +191,7 @@ fun BannerAttributes(itinerary: Itinerary, user: Profile?, numLikes: Int){
         modifier =
         Modifier
             .fillMaxHeight(),
-        horizontalArrangement = Arrangement.SpaceAround) {
+        horizontalArrangement = Arrangement.SpaceBetween) {
         // Secondary indicator fields
         val textUser = user?.displayName ?: "-"
 
@@ -214,14 +217,14 @@ fun Time(time: Int){
             imageVector = Icons.Outlined.HourglassEmpty,
             contentDescription = "duration",
             tint = MaterialTheme.colorScheme.secondary,
-            modifier = Modifier.size(width = 20.dp, height = 20.dp))
+            modifier = Modifier.size(width = 16.dp, height = 16.dp))
         Text(
             text = "$time hours",
             color = MaterialTheme.colorScheme.secondary,
             fontFamily = MaterialTheme.typography.displayMedium.fontFamily,
-            fontSize = 14.sp,
+            fontSize = 12.sp,
             fontWeight = FontWeight.Normal,
-            modifier = Modifier.padding(3.dp),
+            modifier = Modifier.padding(start = 2.dp),
             textAlign = TextAlign.Center,
         )
     }
@@ -236,14 +239,14 @@ fun Price(price: Float){
             imageVector = Icons.Outlined.Payments,
             contentDescription = "price",
             tint = MaterialTheme.colorScheme.secondary,
-            modifier = Modifier.size(width = 20.dp, height = 20.dp))
+            modifier = Modifier.size(width = 16.dp, height = 16.dp))
         Text(
             text = "${price}$",
             color = MaterialTheme.colorScheme.secondary,
             fontFamily = MaterialTheme.typography.displayMedium.fontFamily,
-            fontSize = 14.sp,
+            fontSize = 12.sp,
             fontWeight = FontWeight.Normal,
-            modifier = Modifier.padding(3.dp),
+            modifier = Modifier.padding(start = 2.dp),
             textAlign = TextAlign.Center,
         )
     }
@@ -258,14 +261,14 @@ fun Likes(numLikes: Int){
             imageVector = Icons.Outlined.FavoriteBorder,
             contentDescription = "number of likes",
             tint = MaterialTheme.colorScheme.secondary,
-            modifier = Modifier.size(width = 20.dp, height = 20.dp))
+            modifier = Modifier.size(width = 16.dp, height = 16.dp))
         Text(
             text = "$numLikes likes",
             color = MaterialTheme.colorScheme.secondary,
             fontFamily = MaterialTheme.typography.displayMedium.fontFamily,
-            fontSize = 14.sp,
+            fontSize = 12.sp,
             fontWeight = FontWeight.Normal,
-            modifier = Modifier.padding(3.dp),
+            modifier = Modifier.padding(start = 2.dp),
             textAlign = TextAlign.Center,
         )
     }

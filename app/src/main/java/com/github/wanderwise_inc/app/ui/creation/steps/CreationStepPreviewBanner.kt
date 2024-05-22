@@ -39,10 +39,10 @@ fun CreationStepPreviewBanner(
   val onLikeButtonClick = { i: Itinerary, b: Boolean -> }
 
   Box(
-      modifier = Modifier.fillMaxSize().padding(horizontal = 10.dp, vertical = 0.dp),
+      modifier = Modifier.fillMaxSize().padding(horizontal = 10.dp, vertical = 5.dp),
       contentAlignment = Alignment.TopCenter) {
         LazyColumn(
-            verticalArrangement = spacedBy(15.dp),
+            verticalArrangement = spacedBy(8.dp),
             modifier = Modifier.testTag(TestTags.CREATION_SCREEN_PREVIEW_BANNER)) {
               item {
                 ItineraryBanner(
