@@ -1,8 +1,5 @@
 package com.github.wanderwise_inc.app.ui.map
 
-import android.content.Intent
-import android.net.Uri
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -60,7 +57,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavHostController
 import com.github.wanderwise_inc.app.R
 import com.github.wanderwise_inc.app.data.ImageRepository
@@ -152,7 +148,8 @@ fun PreviewItineraryScreen(
                 onClick = {
                   onMinimizedClick()
                   isClicked = !isClicked
-                  itineraryViewModel.FollowItineraryOnGoogleMaps(context, itinerary)        },
+                  itineraryViewModel.FollowItineraryOnGoogleMaps(context, itinerary)
+                },
                 icon = {
                   Icon(
                       Icons.AutoMirrored.Filled.DirectionsWalk,
