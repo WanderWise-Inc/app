@@ -63,7 +63,7 @@ fun DisplayOverviewItineraries(
   /* the categories that can be selected by the user during filtering */
     val categoriesList = ItineraryTags.toSearchCategoryList()
 
-  var selectedIndex by remember { mutableIntStateOf(0) }
+  var selectedIndex by remember { mutableIntStateOf(categoriesList.lastIndex) }
   var searchQuery by remember { mutableStateOf("") }
   var priceRange by remember { mutableStateOf(0f) }
 
@@ -88,7 +88,12 @@ fun DisplayOverviewItineraries(
       modifier = Modifier.testTag(TestTags.OVERVIEW_SCREEN)) { innerPadding ->
         val filtered =
             itineraries
-                .filter { itinerary -> itinerary.tags.contains(categoriesList[selectedIndex].tag) }
+                .filter { itinerary -> if(selectedIndex == categoriesList.lastIndex){
+                        true
+                    } else {
+                        itinerary.tags.contains(categoriesList[selectedIndex].tag)
+                    }
+                }
                 .filter { itinerary ->
                   searchQuery.isBlank() ||
                       itinerary.title.contains(searchQuery, ignoreCase = true) ||

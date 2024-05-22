@@ -6,6 +6,7 @@ import androidx.compose.material.icons.automirrored.filled.DirectionsRun
 import androidx.compose.material.icons.outlined.Agriculture
 import androidx.compose.material.icons.outlined.Apartment
 import androidx.compose.material.icons.outlined.Backpack
+import androidx.compose.material.icons.outlined.Cancel
 import androidx.compose.material.icons.outlined.Diversity3
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.FoodBank
@@ -52,6 +53,8 @@ object ItineraryTags {
   const val WELLNESS    = "Wellness"//
   const val WILDLIFE    = "Wildlife"
 
+    const val DESELECT  = "deselect"
+
   fun toList(): List<String>{
     return listOf(ACTIVE,
             ADVENTURE,
@@ -89,7 +92,9 @@ object ItineraryTags {
             SearchCategory(SOCIAL, Icons.Outlined.Diversity3),
             SearchCategory(URBAN, Icons.Outlined.Apartment),
             SearchCategory(WELLNESS, Icons.Outlined.Spa),
-            SearchCategory(WILDLIFE, Icons.Outlined.Pets)
+            SearchCategory(WILDLIFE, Icons.Outlined.Pets),
+
+            SearchCategory(DESELECT, Icons.Outlined.Cancel)
         )
     }
 }

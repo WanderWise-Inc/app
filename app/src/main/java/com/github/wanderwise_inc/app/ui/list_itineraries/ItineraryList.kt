@@ -1,6 +1,7 @@
 package com.github.wanderwise_inc.app.ui.list_itineraries
 
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Icon
 //import androidx.compose.material3.Icon
@@ -27,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -46,6 +49,7 @@ import com.github.wanderwise_inc.app.ui.navigation.NavigationActions
 import com.github.wanderwise_inc.app.ui.popup.HintPopup
 import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
+import com.google.firebase.database.collection.LLRBNode
 
 /** @brief reusable UI elements for displaying a list of itineraries */
 
@@ -153,34 +157,45 @@ fun CategorySelector(
       containerColor = MaterialTheme.colorScheme.surfaceVariant,
       edgePadding = 0.dp,
   ) {
+
+//    LazyRow(modifier = Modifier.background(MaterialTheme.colorScheme.surfaceVariant)){
     categoriesList.forEachIndexed { index, category ->
-      Tab(
-          selected = index == selectedIndex,
-          onClick = { onCategorySelected(index) },
-          text = {
-            Text(
-                text = category.tag,
-                modifier = Modifier.padding(0.dp, 2.dp),
-                style =
-                    TextStyle(
-                        fontSize = 9.sp,
-                        lineHeight = 16.sp,
-                        // fontFamily = FontFamily(Font(R.font.roboto)),
-                        fontWeight = FontWeight(600),
-                        color = MaterialTheme.colorScheme.onPrimaryContainer,
-                        textAlign = TextAlign.Center,
-                        letterSpacing = 0.5.sp,
-                    ))
-          },
-          icon = {
-            Icon(
-                imageVector = category.icon,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                modifier = Modifier.size(30.dp).padding(2.dp))
-          },
-          modifier = Modifier.testTag("${TestTags.CATEGORY_SELECTOR_TAB}_${index}"))
-    }
+//        item {
+            Tab(
+                selected = index == selectedIndex,//useless...
+                onClick = {
+                        onCategorySelected(index)
+                },
+                text = {
+                    Text(
+                        text = category.tag,
+                        modifier = Modifier.padding(0.dp, 2.dp),
+                        style =
+                        TextStyle(
+                            fontSize = 9.sp,
+                            lineHeight = 16.sp,
+                            // fontFamily = FontFamily(Font(R.font.roboto)),
+                            fontWeight = FontWeight(600),
+                            //color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            textAlign = TextAlign.Center,
+                            letterSpacing = 0.5.sp,
+                        )
+                    )
+                },
+                selectedContentColor = Color.Red,
+                unselectedContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                icon = {
+                    Icon(
+                        imageVector = category.icon,
+                        contentDescription = null,
+                        //tint = tint,
+                        modifier = Modifier.size(30.dp).padding(2.dp)
+                    )
+                },
+                modifier = Modifier.testTag("${TestTags.CATEGORY_SELECTOR_TAB}_${index}")
+            )
+        }
+//    }
   }
 }
 
