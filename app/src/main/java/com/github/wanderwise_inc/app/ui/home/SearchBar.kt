@@ -92,12 +92,12 @@ fun SearchBar(
           .fillMaxWidth()
           .padding(horizontal = 20.dp, vertical = 5.dp)) {
         Column() {
-//            PriceTab(sliderPositionPriceState)
-//            Spacer(Modifier.padding(10.dp))
-//            TimeTab()
-            PriceSlider(sliderPositionPriceState = sliderPositionPriceState)
+            PriceTab(sliderPositionPriceState)
             Spacer(Modifier.padding(10.dp))
-            TimeSlider(sliderPositionTimeState = sliderPositionTimeState)
+            TimeTab()
+//            PriceSlider(sliderPositionPriceState = sliderPositionPriceState)
+//            Spacer(Modifier.padding(10.dp))
+//            TimeSlider(sliderPositionTimeState = sliderPositionTimeState)
         }
 
 
@@ -169,25 +169,27 @@ fun PriceTab(sliderPositionPriceState: MutableState<ClosedFloatingPointRange<Flo
     }
 }
 
-fun onPriceChange(newPrice: String, minPrice: String, maxPrice: String, isMin: Boolean, sliderPositionPriceState: MutableState<ClosedFloatingPointRange<Float>>): Boolean{
-    var newMin = minPrice.toFloat()
-    var newMax = if(maxPrice == "-"){
+fun onPriceChange(newPrice: String, minPrice: String, maxPrice: String, isMin: Boolean, sliderPositionPriceState: MutableState<ClosedFloatingPointRange<Float>>): Boolean {
+    var newMin = minPrice.toFloatOrNull()?:0f
+    var newMax = if (maxPrice == "-") {
         MAX_PRICE
     } else {
-            maxPrice.toFloat()
+        maxPrice.toFloatOrNull()?:0f
     }
+
+    Log.d("test", "you are here : $newMin : $newMax")
 
     val regex = "^[0-9]+(\\.[0-9]{0,2})?$".toRegex()
 
     // "-" means maximum value
-    if(newPrice == "-" && !isMin){
+    if (newPrice == "-" && !isMin) {
         newMax = MAX_PRICE
-    //matches legal values
+        //matches legal values
     } else if (newPrice.isBlank() || newPrice.matches(regex)){
         if(isMin){
-            newMin = newPrice.toFloat()
+            newMin = newPrice.toFloatOrNull()?:0f
         } else {
-            newMax = newPrice.toFloat()
+            newMax = newPrice.toFloatOrNull()?:0f
         }
     } else {
         return false
@@ -197,6 +199,7 @@ fun onPriceChange(newPrice: String, minPrice: String, maxPrice: String, isMin: B
     if(newMin > newMax){
         return false
     }
+
 
     sliderPositionPriceState.value =  newMin..newMax
     return true
