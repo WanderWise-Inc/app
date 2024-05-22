@@ -83,7 +83,13 @@ fun ItinerariesListScrollable(
             .collectAsState(initial = emptyList())
 
     LazyColumn(
-        modifier = Modifier.padding(start = 10.dp, top = paddingValues.calculateTopPadding() + 5.dp, end = 10.dp, bottom = paddingValues.calculateBottomPadding()).testTag(TestTags.ITINERARY_LIST_SCROLLABLE),
+        modifier =
+            Modifier.padding(
+                    start = 10.dp,
+                    top = paddingValues.calculateTopPadding() + 5.dp,
+                    end = 10.dp,
+                    bottom = paddingValues.calculateBottomPadding())
+                .testTag(TestTags.ITINERARY_LIST_SCROLLABLE),
         verticalArrangement = spacedBy(8.dp)) {
           this.items(itineraries, key = { it.uid }) { itinerary ->
             val uid = profileViewModel.getUserUid()
@@ -121,7 +127,7 @@ fun ItinerariesListScrollable(
                 imageRepository = imageRepository)
           }
 
-            item {Spacer(Modifier.padding(20.dp))}
+          item { Spacer(Modifier.padding(20.dp)) }
         }
   }
   var offlineHintVisible by remember {

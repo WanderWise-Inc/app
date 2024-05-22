@@ -385,7 +385,7 @@ private fun PreviewItineraryBannerMaximized(
                 onClick = {
                   coroutineScope.launch {
                     imageRepository.deleteImageFromStorage("itineraryPictures/${itinerary.uid}")
-                      itineraryViewModel.setFocusedItinerary(null)
+                    itineraryViewModel.setFocusedItinerary(null)
                     itineraryViewModel.deleteItinerary(itinerary)
                   }
                   NavigationActions(navController)

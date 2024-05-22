@@ -46,7 +46,7 @@ fun CreationStepChooseDescriptionScreen(createItineraryViewModel: CreateItinerar
               modifier = Modifier.fillMaxSize().testTag(TestTags.CREATION_SCREEN_TITLE),
               value = title,
               onValueChange = {
-                  //cant add '\n' to titles
+                // cant add '\n' to titles
                 title = it.filter { c -> c != '\n' }
                 validTitle =
                     if (createItineraryViewModel.validTitle(title)) {
