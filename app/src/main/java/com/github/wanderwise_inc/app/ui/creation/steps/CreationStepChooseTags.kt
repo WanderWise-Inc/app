@@ -128,7 +128,7 @@ fun PriceEstimationTextBox(createItineraryViewModel: CreateItineraryViewModel) {
     mutableStateOf(createItineraryViewModel.getNewItinerary()!!.price?.toString() ?: "")
   }
 
-  val regex = "^[0-9]*\\.?[0-9]{2}$".toRegex()
+  val regex = "^[0-9]+(\\.[0-9]{0,2})?$".toRegex()
 
   Row(Modifier.fillMaxWidth().padding(all = 10.dp).clip(MaterialTheme.shapes.medium)) {
     TextField(

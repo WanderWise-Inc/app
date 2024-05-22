@@ -20,6 +20,8 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.HourglassEmpty
 import androidx.compose.material.icons.outlined.Payments
 import androidx.compose.material3.CardDefaults
@@ -34,6 +36,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -93,8 +96,6 @@ fun ItineraryBanner(
   val painter = rememberAsyncImagePainter(model = model)
   var isLiked = isLikedInitially
   var numLikes by remember { mutableIntStateOf(itinerary.numLikes) }
-//  var prices by remember { mutableFloatStateOf(itinerary.price) }
-//  var times by remember { mutableIntStateOf(itinerary.time) }
   val user by profileViewModel.getProfile(itinerary.userUid).collectAsState(initial = null)
 
   ElevatedCard(
@@ -111,70 +112,26 @@ fun ItineraryBanner(
             Modifier
                 .background(MaterialTheme.colorScheme.primaryContainer)
                 .fillMaxWidth()
-                .aspectRatio(1.34f),
+                .aspectRatio(2f),
             horizontalAlignment = Alignment.CenterHorizontally) {
 
                 Box(modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.55f)
-                    .clip(RoundedCornerShape(13.dp))){
+                    .fillMaxHeight(0.73f)
+                    //.clip(RoundedCornerShape(13.dp))
+                ){
                     BannerImage(painter, itinerary)
-                    BannerTags(itinerary, Modifier.align(Alignment.BottomCenter))
+
+                    BannerLikeButton(modifier = Modifier.align(Alignment.TopEnd), isLiked = isLiked, numLikes = numLikes, itinerary = itinerary){
+                        if (isLiked) numLikes-- else numLikes++
+                        onLikeButtonClick(itinerary, isLiked)
+                        isLiked = !isLiked}
+                    BannerTags(itinerary, Modifier.align(Alignment.BottomStart))
                 }
 
                 BannerTitle(itinerary)
 
-                Spacer(Modifier.padding(5.dp))
-
-              Row(modifier = Modifier.fillMaxSize()) {
-
-                  BannerAttributes(itinerary, user)
-
-                Column(
-                    modifier = Modifier
-                        .weight(0.3f)
-                        .fillMaxSize()
-                        .padding(4.dp, 2.dp, 10.dp, 2.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.SpaceBetween,
-                ) {
-
-                  Column(
-                      modifier = Modifier
-                          .fillMaxWidth()
-                          .weight(0.5f),
-                      horizontalAlignment = Alignment.CenterHorizontally) {
-                        // Like Icon
-                        Icon(
-                            painter =
-                                painterResource(
-                                    id =
-                                        if (isLiked) R.drawable.liked_icon_full
-                                        else R.drawable.liked_icon),
-                            contentDescription = "like button heart icon",
-                            tint = if (isLiked) Color.Red else MaterialTheme.colorScheme.secondary,
-                            modifier =
-                            Modifier
-                                .testTag(
-                                    "${TestTags.ITINERARY_BANNER_LIKE_BUTTON}_${itinerary.uid}"
-                                )
-                                .size(width = 40.dp, height = 40.dp)
-                                .clickable(
-                                    onClick = {
-                                        if (isLiked) numLikes-- else numLikes++
-                                        onLikeButtonClick(itinerary, isLiked)
-                                        isLiked = !isLiked
-                                    }))
-
-                        Text(
-                            text = "$numLikes Likes",
-                            color = MaterialTheme.colorScheme.primary,
-                            fontFamily = FontFamily.Monospace,
-                            fontSize = 12.sp,
-                            modifier = Modifier.padding(2.dp))
-                      }
-                }
-              }
+                BannerAttributes(itinerary, user, numLikes)
             }
       }
 }
@@ -233,29 +190,15 @@ fun BannerTitle(itinerary: Itinerary){
 }
 
 @Composable
-fun BannerAttributes(itinerary: Itinerary, user: Profile?){
+fun BannerAttributes(itinerary: Itinerary, user: Profile?, numLikes: Int){
     Row(
         modifier =
         Modifier
             .fillMaxHeight()
-            .padding(10.dp, 4.dp, 4.dp, 15.dp),
+            .padding(0.dp, 0.dp, 0.dp, 0.dp),
         horizontalArrangement = Arrangement.SpaceAround) {
         // Secondary indicator fields
         val textUser = user?.displayName ?: "-"
-//        Text(
-//            text = "Wandered by $textUser",
-//            color = MaterialTheme.colorScheme.secondary,
-//            fontFamily = FontFamily.Monospace,
-//            fontSize = 12.sp,
-//            modifier = Modifier.padding(4.dp, 0.dp))
-
-//        Text(
-//            text = "Estimated time: ${itinerary.time} hours",
-//            color = MaterialTheme.colorScheme.secondary,
-//            fontFamily = FontFamily.Monospace,
-//            fontSize = 12.sp,
-//            modifier = Modifier.padding(4.dp, 0.dp))
-        Spacer(Modifier.padding(10.dp))
 
         Time(itinerary.time)
         
@@ -263,12 +206,10 @@ fun BannerAttributes(itinerary: Itinerary, user: Profile?){
 
         Price(itinerary.price)
 
-//        Text(
-//            text = "Average Expense: ${itinerary.price}",
-//            color = MaterialTheme.colorScheme.secondary,
-//            fontFamily = FontFamily.Monospace,
-//            fontSize = 16.sp,
-//            modifier = Modifier.padding(4.dp, 0.dp))
+        Spacer(modifier = Modifier.padding(10.dp))
+
+        Likes(numLikes = numLikes)
+
     }
 }
 
@@ -281,12 +222,12 @@ fun Time(time: Int){
             imageVector = Icons.Outlined.HourglassEmpty,
             contentDescription = "duration",
             tint = MaterialTheme.colorScheme.secondary,
-            modifier = Modifier.size(width = 25.dp, height = 25.dp))
+            modifier = Modifier.size(width = 20.dp, height = 20.dp))
         Text(
             text = "$time hours",
             color = MaterialTheme.colorScheme.secondary,
             fontFamily = MaterialTheme.typography.displayMedium.fontFamily,
-            fontSize = 16.sp,
+            fontSize = 14.sp,
             fontWeight = FontWeight.Normal,
             modifier = Modifier.padding(3.dp),
             textAlign = TextAlign.Center,
@@ -303,15 +244,65 @@ fun Price(price: Float){
             imageVector = Icons.Outlined.Payments,
             contentDescription = "price",
             tint = MaterialTheme.colorScheme.secondary,
-            modifier = Modifier.size(width = 25.dp, height = 25.dp))
+            modifier = Modifier.size(width = 20.dp, height = 20.dp))
         Text(
             text = "${price}$",
             color = MaterialTheme.colorScheme.secondary,
             fontFamily = MaterialTheme.typography.displayMedium.fontFamily,
-            fontSize = 16.sp,
+            fontSize = 14.sp,
             fontWeight = FontWeight.Normal,
             modifier = Modifier.padding(3.dp),
             textAlign = TextAlign.Center,
+        )
+    }
+}
+
+@Composable
+fun Likes(numLikes: Int){
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically) {
+        Icon(
+            imageVector = Icons.Outlined.FavoriteBorder,
+            contentDescription = "number of likes",
+            tint = MaterialTheme.colorScheme.secondary,
+            modifier = Modifier.size(width = 20.dp, height = 20.dp))
+        Text(
+            text = "$numLikes likes",
+            color = MaterialTheme.colorScheme.secondary,
+            fontFamily = MaterialTheme.typography.displayMedium.fontFamily,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Normal,
+            modifier = Modifier.padding(3.dp),
+            textAlign = TextAlign.Center,
+        )
+    }
+}
+
+
+@Composable
+fun BannerLikeButton(modifier: Modifier, isLiked: Boolean, numLikes: Int,  itinerary: Itinerary, onClick: () -> Unit){
+        // Like Icon
+    Box(modifier = modifier.padding(5.dp)) {
+        Icon(
+            painter =
+            painterResource(
+                id =
+                if (isLiked) R.drawable.liked_icon_full
+                else R.drawable.liked_icon
+            ),
+            contentDescription = "like button heart icon",
+            tint = if (isLiked) Color.Red else MaterialTheme.colorScheme.secondary,
+            modifier =
+            Modifier
+                .testTag(
+                    "${TestTags.ITINERARY_BANNER_LIKE_BUTTON}_${itinerary.uid}"
+                )
+                .size(width = 40.dp, height = 40.dp)
+                .clickable(
+                    onClick = {
+                        onClick()
+                    })
         )
     }
 }
