@@ -3,11 +3,9 @@ package com.github.wanderwise_inc.app.ui.itinerary
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -16,11 +14,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.HourglassEmpty
 import androidx.compose.material.icons.outlined.Payments
@@ -34,14 +30,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -194,8 +187,7 @@ fun BannerAttributes(itinerary: Itinerary, user: Profile?, numLikes: Int){
     Row(
         modifier =
         Modifier
-            .fillMaxHeight()
-            .padding(0.dp, 0.dp, 0.dp, 0.dp),
+            .fillMaxHeight(),
         horizontalArrangement = Arrangement.SpaceAround) {
         // Secondary indicator fields
         val textUser = user?.displayName ?: "-"
@@ -284,25 +276,36 @@ fun Likes(numLikes: Int){
 fun BannerLikeButton(modifier: Modifier, isLiked: Boolean, numLikes: Int,  itinerary: Itinerary, onClick: () -> Unit){
         // Like Icon
     Box(modifier = modifier.padding(5.dp)) {
-        Icon(
-            painter =
-            painterResource(
-                id =
-                if (isLiked) R.drawable.liked_icon_full
-                else R.drawable.liked_icon
-            ),
-            contentDescription = "like button heart icon",
-            tint = if (isLiked) Color.Red else MaterialTheme.colorScheme.secondary,
-            modifier =
-            Modifier
-                .testTag(
-                    "${TestTags.ITINERARY_BANNER_LIKE_BUTTON}_${itinerary.uid}"
-                )
-                .size(width = 40.dp, height = 40.dp)
-                .clickable(
-                    onClick = {
-                        onClick()
-                    })
-        )
+        ElevatedCard(
+            modifier = Modifier.size(35.dp, 35.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.primaryContainer,),
+            shape = CircleShape,
+            onClick = {onClick()}
+            ) {
+            Icon(
+                painter =
+                painterResource(
+                    id =
+                    if (isLiked) R.drawable.liked_icon_full
+                    else R.drawable.liked_icon
+                ),
+                contentDescription = "like button heart icon",
+                tint = if (isLiked) Color.Red else MaterialTheme.colorScheme.secondary,
+                modifier =
+                Modifier
+                    .testTag(
+                        "${TestTags.ITINERARY_BANNER_LIKE_BUTTON}_${itinerary.uid}"
+                    )
+//                    .size(width = 30.dp, height = 30.dp)
+                    .fillMaxSize()
+                    .padding(7.dp)
+//                    .clickable(
+//                        onClick = {
+//                            onClick()
+//                        })
+            )
+        }
     }
 }
