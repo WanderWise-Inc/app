@@ -181,13 +181,13 @@ fun BannerAttributes(itinerary: Itinerary, user: Profile?, numLikes: Int) {
 
     Time(itinerary.time)
 
-    Spacer(modifier = Modifier.padding(10.dp))
+    Spacer(Modifier.padding(10.dp))
 
     Price(itinerary.price)
 
-    Spacer(modifier = Modifier.padding(10.dp))
+    Spacer(Modifier.padding(10.dp))
 
-    Likes(numLikes = numLikes)
+    Likes(numLikes)
   }
 }
 
@@ -220,7 +220,7 @@ fun Price(price: Float) {
         tint = MaterialTheme.colorScheme.secondary,
         modifier = Modifier.size(width = 16.dp, height = 16.dp))
     Text(
-        text = "${price}$",
+        text = "${price}",
         color = MaterialTheme.colorScheme.secondary,
         fontFamily = MaterialTheme.typography.displayMedium.fontFamily,
         fontSize = 12.sp,
@@ -255,7 +255,7 @@ fun Likes(numLikes: Int) {
 fun BannerLikeButton(
     modifier: Modifier,
     isLiked: Boolean,
-    numLikes: Int,
+    numLikes: Int, // an argument is needed to be sent on change for it to recompose.
     itinerary: Itinerary,
     onClick: () -> Unit
 ) {
