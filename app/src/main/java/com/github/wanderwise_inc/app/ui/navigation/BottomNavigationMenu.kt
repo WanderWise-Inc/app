@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -12,6 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -32,7 +34,7 @@ fun BottomNavigationMenu(
   val _selectedIndex by bottomNavigationViewModel.selected.observeAsState()
   val selectedIndex = _selectedIndex ?: 0
 
-  NavigationBar(modifier = Modifier.testTag(TestTags.BOTTOM_NAV)) {
+  NavigationBar(modifier = Modifier.testTag(TestTags.BOTTOM_NAV), containerColor = Color(0xFFE0E0E0)) {
     TOP_LEVEL_DESTINATIONS.forEachIndexed { index, dest ->
       NavigationBarItem(
           selected = index == selectedIndex,
@@ -44,7 +46,7 @@ fun BottomNavigationMenu(
             Icon(
                 painter = painterResource(id = dest.icon),
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                tint = Color(Color.Black.value),
                 modifier =
                     Modifier.size(width = 64.dp, height = 32.dp)
                         .padding(horizontal = 20.dp, vertical = 4.dp)
@@ -60,12 +62,13 @@ fun BottomNavigationMenu(
                         lineHeight = 16.sp,
                         // fontFamily = FontFamily(Font(R.font.roboto)),
                         fontWeight = FontWeight(600),
-                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        color = Color(0xFF000000),
                         textAlign = TextAlign.Center,
                         letterSpacing = 0.5.sp,
                     ))
           },
-          modifier = Modifier.testTag(dest.route))
+          modifier = Modifier.testTag(dest.route),
+          )
     }
   }
 }

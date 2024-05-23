@@ -9,61 +9,29 @@ import androidx.compose.ui.graphics.Color
 
 val LightColorPalette =
     lightColorScheme(
-        primary = Blue40,
-        onPrimary = Color.White,
-        primaryContainer = Blue90,
-        onPrimaryContainer = Blue10,
-        inversePrimary = Blue80,
-        secondary = DarkBlue40,
-        onSecondary = Color.White,
-        secondaryContainer = DarkBlue90,
-        onSecondaryContainer = DarkBlue10,
-        tertiary = Violet40,
-        onTertiary = Color.White,
-        tertiaryContainer = Violet90,
-        onTertiaryContainer = Violet10,
-        error = Red40,
-        onError = Color.White,
-        errorContainer = Red90,
-        onErrorContainer = Red10,
-        background = Grey99,
-        onBackground = Grey10,
-        surface = BlueGrey90,
-        onSurface = BlueGrey30,
-        inverseSurface = Grey20,
-        inverseOnSurface = Grey95,
-        surfaceVariant = BlueGrey90,
-        onSurfaceVariant = BlueGrey30,
-        outline = BlueGrey50)
+        primary = Maroon,
+        onPrimary = Color.Black,
+        primaryContainer = LightTaupe,
+        secondary = Color.Black,
+        onSecondary = Color.Black,
+        background = White,
+        onBackground = Color.Black,
+        surface = OffWhite,
+        onSurface = Color.Black,
+        )
 
 val DarkColorPalette =
     darkColorScheme(
-        primary = Blue80,
-        onPrimary = Blue20,
-        primaryContainer = Blue30,
-        onPrimaryContainer = Blue90,
-        inversePrimary = Blue40,
-        secondary = DarkBlue80,
-        onSecondary = DarkBlue20,
-        secondaryContainer = DarkBlue30,
-        onSecondaryContainer = DarkBlue90,
-        tertiary = Violet80,
-        onTertiary = Violet20,
-        tertiaryContainer = Violet30,
-        onTertiaryContainer = Violet90,
-        error = Red80,
-        onError = Red20,
-        errorContainer = Red30,
-        onErrorContainer = Red90,
-        background = Grey10,
-        onBackground = Grey90,
-        surface = BlueGrey30,
-        onSurface = BlueGrey80,
-        inverseSurface = Grey90,
-        inverseOnSurface = Grey10,
-        surfaceVariant = BlueGrey30,
-        onSurfaceVariant = BlueGrey80,
-        outline = BlueGrey80)
+        primary = Maroon,
+        onPrimary = Color.White,
+        primaryContainer = Taupe,
+        secondary = LightMaroon,
+        onSecondary = Color.White,
+        background = DarkGray,
+        onBackground = Color.White,
+        surface = LightGray,
+        onSurface = Color.White,
+    )
 
 @Composable
 fun WanderWiseTheme(
@@ -78,3 +46,4 @@ fun WanderWiseTheme(
       }
   MaterialTheme(colorScheme = colors, typography = Typography, content = content)
 }
+

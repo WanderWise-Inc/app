@@ -53,13 +53,13 @@ fun SearchBar(
             modifier =
                 Modifier.clickable { isDropdownOpen = true }
                     .padding(2.dp)
-                    .size(30.dp)
+                    .size(20.dp)
                     .testTag(TestTags.SEARCH_ICON))
       },
       singleLine = true,
       shape = RoundedCornerShape(30.dp),
       modifier =
-          Modifier.background(MaterialTheme.colorScheme.primaryContainer)
+          Modifier.background(Color(0xFFE0E0E0))
               .fillMaxWidth()
               .padding(5.dp)
               .testTag(TestTags.SEARCH_BAR))

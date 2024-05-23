@@ -24,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -138,7 +139,7 @@ fun CategorySelector(
 ) {
   TabRow(
       selectedTabIndex = selectedIndex,
-      containerColor = MaterialTheme.colorScheme.surfaceVariant,
+      containerColor = Color(0xFFE0E0E0),
   ) {
     categoriesList.forEachIndexed { index, category ->
       Tab(
