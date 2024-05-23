@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
@@ -98,25 +99,49 @@ class OverviewScreenTest {
   }
 
   @Test
+  fun `when opening all itineraries should be displayed`() {
+    testExpectedItinerariesDisplayed(testItineraries)
+  }
+
+  @Test
+  fun `selecting a tag then reselecting it should deselect the tag`() {
+    composeTestRule.onNodeWithTag("${TestTags.CATEGORY_SELECTOR_TAB}_${1}").performClick()
+
+    composeTestRule
+        .onNodeWithTag("${TestTags.ITINERARY_BANNER}_${FakeItinerary.TOKYO.uid}")
+        .assertIsNotDisplayed()
+
+    composeTestRule.onNodeWithTag("${TestTags.CATEGORY_SELECTOR_TAB}_${0}").performClick()
+
+    composeTestRule.onNodeWithTag(TestTags.ITINERARY_LIST_SCROLLABLE).performScrollToIndex(2)
+
+    composeTestRule
+        .onNodeWithTag("${TestTags.ITINERARY_BANNER}_${FakeItinerary.TOKYO.uid}")
+        .assertIsDisplayed()
+  }
+
+  @Test
   fun `category tags filter itineraries correctly`() {
     // basic tag is Adventure, which eliminates Tokyo
-    testExpectedItinerariesDisplayed(listOf(FakeItinerary.SWITZERLAND, FakeItinerary.SAN_FRANCISCO))
+    testExpectedItinerariesDisplayed(
+        listOf(FakeItinerary.SWITZERLAND, FakeItinerary.SAN_FRANCISCO), selectedTagIndex = 1)
 
     // Tag Luxury should eliminate all Itineraries
-    testExpectedItinerariesDisplayed(listOf(), selectedTagIndex = 1)
+    testExpectedItinerariesDisplayed(listOf(), selectedTagIndex = 2)
 
     // Tag Photography should result in only Tokyo
-    testExpectedItinerariesDisplayed(listOf(FakeItinerary.TOKYO), selectedTagIndex = 2)
+    testExpectedItinerariesDisplayed(listOf(FakeItinerary.TOKYO), selectedTagIndex = 3)
   }
 
   @Test
   fun `search query filters itineraries correctly`() { // basic tag is Adventure, which eliminates
     // Tokyo
     // SF and Switzerland itineraries should be displayed
-    testExpectedItinerariesDisplayed(listOf(FakeItinerary.SWITZERLAND, FakeItinerary.SAN_FRANCISCO))
+    testExpectedItinerariesDisplayed(
+        listOf(FakeItinerary.SWITZERLAND, FakeItinerary.SAN_FRANCISCO), selectedTagIndex = 1)
 
     // no itineraries should be displayed
-    testExpectedItinerariesDisplayed(listOf(), textInput = "Tokyo")
+    testExpectedItinerariesDisplayed(listOf(), textInput = "Korea")
 
     // should only correspond to SF and Switzerland itineraries
     testExpectedItinerariesDisplayed(listOf(FakeItinerary.SWITZERLAND), textInput = "Switzerland")
@@ -131,11 +156,14 @@ class OverviewScreenTest {
     sliderPositionPriceState.value = 0f..100f
 
     // SF and Switzerland itineraries should be displayed
-    testExpectedItinerariesDisplayed(listOf(FakeItinerary.SWITZERLAND, FakeItinerary.SAN_FRANCISCO))
+    testExpectedItinerariesDisplayed(
+        listOf(FakeItinerary.SWITZERLAND, FakeItinerary.SAN_FRANCISCO), selectedTagIndex = 1)
 
-    testExpectedItinerariesDisplayed(listOf(FakeItinerary.SWITZERLAND), priceRange = 40f..100f)
+    testExpectedItinerariesDisplayed(
+        listOf(FakeItinerary.SWITZERLAND), priceRange = 40f..100f, selectedTagIndex = 1)
 
-    testExpectedItinerariesDisplayed(listOf(FakeItinerary.SAN_FRANCISCO), priceRange = 0f..30f)
+    testExpectedItinerariesDisplayed(
+        listOf(FakeItinerary.SAN_FRANCISCO), priceRange = 0f..30f, selectedTagIndex = 1)
   }
 
   @Test
@@ -144,11 +172,14 @@ class OverviewScreenTest {
     // SF -> 3h, Switzerland -> 10h, Tokyo -> 4h
 
     // SF and Switzerland itineraries should be displayed
-    testExpectedItinerariesDisplayed(listOf(FakeItinerary.SWITZERLAND, FakeItinerary.SAN_FRANCISCO))
+    testExpectedItinerariesDisplayed(
+        listOf(FakeItinerary.SWITZERLAND, FakeItinerary.SAN_FRANCISCO), selectedTagIndex = 1)
 
-    testExpectedItinerariesDisplayed(listOf(FakeItinerary.SWITZERLAND), timeRange = 5f..12f)
+    testExpectedItinerariesDisplayed(
+        listOf(FakeItinerary.SWITZERLAND), timeRange = 5f..12f, selectedTagIndex = 1)
 
-    testExpectedItinerariesDisplayed(listOf(FakeItinerary.SAN_FRANCISCO), timeRange = 1f..3.5f)
+    testExpectedItinerariesDisplayed(
+        listOf(FakeItinerary.SAN_FRANCISCO), timeRange = 1f..3.5f, selectedTagIndex = 1)
   }
 
   private fun testExpectedItinerariesDisplayed(

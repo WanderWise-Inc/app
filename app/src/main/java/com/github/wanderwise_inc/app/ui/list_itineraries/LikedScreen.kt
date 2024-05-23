@@ -106,11 +106,11 @@ fun DisplayLikedItineraries(
         val filtered =
             itineraries
                 .filter { itinerary ->
-                    if (selectedIndex == 0) {
-                        true
-                    } else {
-                        itinerary.tags.contains(categoriesList[selectedIndex].tag)
-                    }
+                  if (selectedIndex == 0) {
+                    true
+                  } else {
+                    itinerary.tags.contains(categoriesList[selectedIndex].tag)
+                  }
                 }
                 .filter { itinerary ->
                   searchQuery.isBlank() ||

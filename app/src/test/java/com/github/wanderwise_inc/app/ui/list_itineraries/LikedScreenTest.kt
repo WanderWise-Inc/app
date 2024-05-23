@@ -7,7 +7,6 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToIndex
 import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
@@ -105,25 +104,32 @@ class LikedScreenTest {
   }
 
   @Test
+  fun `applying all filters should display all itineraries`() {
+    testExpectedItinerariesDisplayed(testItineraries)
+  }
+
+  @Test
   fun `category tags filter itineraries correctly`() {
     // basic tag is Adventure, which eliminates Tokyo
-    testExpectedItinerariesDisplayed(listOf(FakeItinerary.SWITZERLAND, FakeItinerary.SAN_FRANCISCO))
+    testExpectedItinerariesDisplayed(
+        listOf(FakeItinerary.SWITZERLAND, FakeItinerary.SAN_FRANCISCO), selectedTagIndex = 1)
 
     // Tag Luxury should eliminate all Itineraries
-    testExpectedItinerariesDisplayed(listOf(), selectedTagIndex = 1)
+    testExpectedItinerariesDisplayed(listOf(), selectedTagIndex = 2)
 
     // Tag Photography should result in only Tokyo
-    testExpectedItinerariesDisplayed(listOf(FakeItinerary.TOKYO), selectedTagIndex = 2)
+    testExpectedItinerariesDisplayed(listOf(FakeItinerary.TOKYO), selectedTagIndex = 3)
   }
 
   @Test
   fun `search query filters itineraries correctly`() { // basic tag is Adventure, which eliminates
     // Tokyo
     // SF and Switzerland itineraries should be displayed
-    testExpectedItinerariesDisplayed(listOf(FakeItinerary.SWITZERLAND, FakeItinerary.SAN_FRANCISCO))
+    testExpectedItinerariesDisplayed(
+        listOf(FakeItinerary.SWITZERLAND, FakeItinerary.SAN_FRANCISCO), selectedTagIndex = 1)
 
     // no itineraries should be displayed
-    testExpectedItinerariesDisplayed(listOf(), textInput = "Tokyo")
+    testExpectedItinerariesDisplayed(listOf(), textInput = "Korea", selectedTagIndex = 0)
 
     // should only correspond to SF and Switzerland itineraries
     testExpectedItinerariesDisplayed(listOf(FakeItinerary.SWITZERLAND), textInput = "Switzerland")
@@ -138,11 +144,13 @@ class LikedScreenTest {
     sliderPositionPriceState.value = 0f..100f
 
     // SF and Switzerland itineraries should be displayed
-    testExpectedItinerariesDisplayed(listOf(FakeItinerary.SWITZERLAND, FakeItinerary.SAN_FRANCISCO))
+    testExpectedItinerariesDisplayed(
+        listOf(FakeItinerary.SWITZERLAND, FakeItinerary.SAN_FRANCISCO), selectedTagIndex = 1)
 
     testExpectedItinerariesDisplayed(listOf(FakeItinerary.SWITZERLAND), priceRange = 40f..100f)
 
-    testExpectedItinerariesDisplayed(listOf(FakeItinerary.SAN_FRANCISCO), priceRange = 0f..30f)
+    testExpectedItinerariesDisplayed(
+        listOf(FakeItinerary.SAN_FRANCISCO), priceRange = 0f..30f, selectedTagIndex = 1)
   }
 
   @Test
@@ -151,7 +159,8 @@ class LikedScreenTest {
     // SF -> 3h, Switzerland -> 10h, Tokyo -> 4h
 
     // SF and Switzerland itineraries should be displayed
-    testExpectedItinerariesDisplayed(listOf(FakeItinerary.SWITZERLAND, FakeItinerary.SAN_FRANCISCO))
+    testExpectedItinerariesDisplayed(
+        listOf(FakeItinerary.SWITZERLAND, FakeItinerary.SAN_FRANCISCO), selectedTagIndex = 1)
 
     testExpectedItinerariesDisplayed(listOf(FakeItinerary.SWITZERLAND), timeRange = 5f..12f)
 
