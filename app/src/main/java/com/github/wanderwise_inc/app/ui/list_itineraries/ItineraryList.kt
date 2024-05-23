@@ -26,7 +26,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -88,11 +87,15 @@ fun ItinerariesListScrollable(
         modifier =
             Modifier.padding(
                     start = 10.dp,
-                    top = paddingValues.calculateTopPadding() + 5.dp,
+                    top = paddingValues.calculateTopPadding(),
                     end = 10.dp,
                     bottom = paddingValues.calculateBottomPadding())
                 .testTag(TestTags.ITINERARY_LIST_SCROLLABLE),
         verticalArrangement = spacedBy(8.dp)) {
+
+          // simply adding the spacer with zero padding creates a large gap
+          item { Spacer(Modifier.padding(0.dp)) }
+
           this.items(itineraries, key = { it.uid }) { itinerary ->
             val uid = profileViewModel.getUserUid()
             var isLikedInitially by remember {
@@ -177,7 +180,7 @@ fun CategorySelector(
                         letterSpacing = 0.5.sp,
                     ))
           },
-          selectedContentColor = Color.Red,
+          selectedContentColor = MaterialTheme.colorScheme.outline,
           unselectedContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
           icon = {
             Icon(

@@ -60,7 +60,7 @@ fun SearchBar(
         query = s
         onSearchChange(s)
       },
-      trailingIcon = {
+      leadingIcon = {
         Icon(
             imageVector = Icons.Outlined.Tune,
             contentDescription = "search icon",
@@ -70,6 +70,12 @@ fun SearchBar(
                     .padding(horizontal = 10.dp, vertical = 2.dp)
                     .size(25.dp)
                     .testTag(TestTags.SEARCH_ICON))
+      },
+      placeholder = {
+        Text(
+            text = "Wander where?",
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
+        )
       },
       singleLine = true,
       shape = RoundedCornerShape(16.dp),

@@ -4,11 +4,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.DirectionsRun
 import androidx.compose.material.icons.outlined.Agriculture
 import androidx.compose.material.icons.outlined.Apartment
-import androidx.compose.material.icons.outlined.Backpack
 import androidx.compose.material.icons.outlined.Diversity3
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.FoodBank
 import androidx.compose.material.icons.outlined.Forest
+import androidx.compose.material.icons.outlined.Hiking
 import androidx.compose.material.icons.outlined.Museum
 import androidx.compose.material.icons.outlined.Pets
 import androidx.compose.material.icons.outlined.PhotoCamera
@@ -75,7 +75,7 @@ object ItineraryTags {
   fun toSearchCategoryList(): List<SearchCategory> {
     return listOf(
         SearchCategory(ALL, Icons.Outlined.Public),
-        SearchCategory(ADVENTURE, Icons.Outlined.Backpack),
+        SearchCategory(ADVENTURE, Icons.Outlined.Hiking),
         SearchCategory(SHOPPING, Icons.Outlined.ShoppingBag),
         SearchCategory(PHOTOGRAPHY, Icons.Outlined.PhotoCamera),
         SearchCategory(FOODIE, Icons.Outlined.Restaurant),
