@@ -298,4 +298,14 @@ class ItineraryViewModelTest {
     itineraryViewModel.saveItinerary(itineraryZero)
     itineraryViewModel.saveItineraries(listOf(itineraryOne, itineraryTwo))
   }
+
+  @Test
+  fun `geting the itineraries' google maps URI behaves correctly`() = runTest {
+    val itinerary = FakeItinerary.SAN_FRANCISCO
+
+    val uri = itineraryViewModel.getItineraryGoogleMapsURI(itinerary)
+    assertEquals(
+        "google.navigation:q=37.7665228,-122.4532875&waypoints=37.80764569999999,-122.4195251|37.7757292,-122.4119508|37.8060487,-122.4206076|37.7809098,-122.4117142&mode=w",
+        uri)
+  }
 }

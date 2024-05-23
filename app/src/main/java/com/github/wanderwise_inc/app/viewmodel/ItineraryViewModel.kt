@@ -182,15 +182,15 @@ open class ItineraryViewModel(
     return locationClient.getLocationUpdates(1000)
   }
 
-  private fun getItineraryGoogleMapsURI(itinerary: Itinerary): Uri {
+  fun getItineraryGoogleMapsURI(itinerary: Itinerary): String {
     val locations = itinerary.locations.map { "${it.lat},${it.long}" }
     val waypoints = locations.dropLast(1).joinToString("|")
     val uriString = "google.navigation:q=${locations.last()}&waypoints=${waypoints}&mode=w"
-    return Uri.parse(uriString)
+    return uriString
   }
 
   fun FollowItineraryOnGoogleMaps(context: Context, itinerary: Itinerary) {
-    val uri = getItineraryGoogleMapsURI(itinerary)
+    val uri = Uri.parse(getItineraryGoogleMapsURI(itinerary))
     val intent = Intent(Intent.ACTION_VIEW, uri)
     intent.setPackage("com.google.android.apps.maps")
     intent.resolveActivity(context.packageManager)?.let { context.startActivity(intent) }
