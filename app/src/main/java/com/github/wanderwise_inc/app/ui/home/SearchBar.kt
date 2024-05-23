@@ -93,9 +93,9 @@ fun SearchBar(
           .padding(horizontal = 20.dp, vertical = 5.dp)
   ) {
         Column() {
-            PriceTab(sliderPositionPriceState)
-            Spacer(Modifier.padding(10.dp))
-            TimeTab()
+            PriceFilter(sliderPositionPriceState)
+//            Spacer(Modifier.padding(10.dp))
+//            TimeTab()
 //            PriceSlider(sliderPositionPriceState = sliderPositionPriceState)
 //            Spacer(Modifier.padding(10.dp))
 //            TimeSlider(sliderPositionTimeState = sliderPositionTimeState)
@@ -104,11 +104,23 @@ fun SearchBar(
 }
 
 @Composable
+fun PriceFilter(sliderPositionPriceState: MutableState<ClosedFloatingPointRange<Float>>){
+    Text("How much do I want to spend ?")
+
+    Column(){
+        //PriceSlider(sliderPositionPriceState)
+        PriceTab(sliderPositionPriceState)
+    }
+
+
+}
+
+@Composable
 fun PriceTab(sliderPositionPriceState: MutableState<ClosedFloatingPointRange<Float>>){
     var minPrice by remember{ mutableStateOf(MIN_PRICE.toString())}
     var maxPrice by remember{ mutableStateOf("-")}
 
-    Text("How much do I want to spend ?")
+    //Text("How much do I want to spend ?")
 
     Row(modifier = Modifier.fillMaxSize().padding(10.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -198,7 +210,6 @@ fun onPriceChange(newPrice: String, minPrice: String, maxPrice: String, isMin: B
         return false
     }
 
-
     sliderPositionPriceState.value =  newMin..newMax
     return true
 }
@@ -261,8 +272,8 @@ fun TimeTab(){
 
 @Composable
 fun PriceSlider(sliderPositionPriceState:  MutableState<ClosedFloatingPointRange<Float>>,){
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text("How much do I want to spend ?")
+//    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+//        Text("How much do I want to spend ?")
 
         RangeSlider(
             value = sliderPositionPriceState.value,
@@ -282,7 +293,6 @@ fun PriceSlider(sliderPositionPriceState:  MutableState<ClosedFloatingPointRange
                 sliderPositionPriceState.value.endInclusive
             )
         )
-    }
 }
 
 @Composable

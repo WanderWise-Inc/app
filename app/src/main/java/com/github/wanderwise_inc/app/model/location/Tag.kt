@@ -14,6 +14,7 @@ import androidx.compose.material.icons.outlined.Forest
 import androidx.compose.material.icons.outlined.Museum
 import androidx.compose.material.icons.outlined.Pets
 import androidx.compose.material.icons.outlined.PhotoCamera
+import androidx.compose.material.icons.outlined.Public
 import androidx.compose.material.icons.outlined.Restaurant
 import androidx.compose.material.icons.outlined.Savings
 import androidx.compose.material.icons.outlined.SelfImprovement
@@ -36,24 +37,24 @@ data class SearchCategory(
  * String representations should consist of a single word and start with a Capital letter
  */
 object ItineraryTags {
-  const val ACTIVE      = "Active" //
-  const val ADVENTURE   = "Adventure" //
-  const val BUDGET      = "Budget"//
-  const val CULTURAL    = "Cultural"//
-  const val FOOD        = "Food"//
-  const val FOODIE      = "Foodie"//
-  const val SHOPPING    = "Shopping"//
-  const val NATURE      = "Nature"//
-  const val PHOTOGRAPHY = "Photography"//
-  const val RELAXATION  = "Relaxation"//
-  const val ROMANCE     = "Romance"//
-  const val RURAL       = "Rural"//
-  const val SOCIAL      = "Social"//
-  const val URBAN       = "Urban"//
-  const val WELLNESS    = "Wellness"//
+  const val ACTIVE      = "Active"
+  const val ADVENTURE   = "Adventure"
+  const val BUDGET      = "Budget"
+  const val CULTURAL    = "Cultural"
+  const val FOOD        = "Food"
+  const val FOODIE      = "Foodie"
+  const val SHOPPING    = "Shopping"
+  const val NATURE      = "Nature"
+  const val PHOTOGRAPHY = "Photography"
+  const val RELAXATION  = "Relaxation"
+  const val ROMANCE     = "Romance"
+  const val RURAL       = "Rural"
+  const val SOCIAL      = "Social"
+  const val URBAN       = "Urban"
+  const val WELLNESS    = "Wellness"
   const val WILDLIFE    = "Wildlife"
 
-    const val NO_FILTER  = "No filter"
+    const val ALL  = "All"
 
   fun toList(): List<String>{
     return listOf(ACTIVE,
@@ -77,7 +78,7 @@ object ItineraryTags {
 
     fun toSearchCategoryList(): List<SearchCategory>{
         return listOf(
-            SearchCategory(NO_FILTER, Icons.Outlined.Cancel),
+            SearchCategory(ALL, Icons.Outlined.Public),
 
             SearchCategory(ADVENTURE, Icons.Outlined.Backpack),
             SearchCategory(SHOPPING, Icons.Outlined.ShoppingBag),

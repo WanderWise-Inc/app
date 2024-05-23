@@ -155,7 +155,7 @@ fun CategorySelector(
   ScrollableTabRow(
       selectedTabIndex = selectedIndex,
       containerColor = MaterialTheme.colorScheme.surfaceVariant,
-      edgePadding = (-90).dp, //this is my proudest coding moment!!!!
+      edgePadding = (-90).dp,
   ) {
 
     categoriesList.forEachIndexed { index, category ->
