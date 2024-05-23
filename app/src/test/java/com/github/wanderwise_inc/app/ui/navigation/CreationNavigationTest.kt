@@ -115,7 +115,7 @@ class CreationNavigationTest {
 
   @Test
   fun `perform click on description navigates to description`() {
-    composeTestRule.onNodeWithTag("Creation/${CreationStepsRoute.DESCRIPTION}").performClick()
+    composeTestRule.onNodeWithTag(TestTags.ITINERARY_CREATION_BAR_DESCRIPTION).performClick()
 
     composeTestRule.onNodeWithTag(TestTags.CREATION_SCREEN_DESCRIPTION_TITLE).assertIsDisplayed()
 
@@ -125,7 +125,7 @@ class CreationNavigationTest {
 
   @Test
   fun `perform click on tags navigates to tags`() {
-    composeTestRule.onNodeWithTag("Creation/${CreationStepsRoute.TAGS}").performClick()
+    composeTestRule.onNodeWithTag(TestTags.ITINERARY_CREATION_BAR_TAGS).performClick()
 
     composeTestRule.onNodeWithTag(TestTags.CREATION_SCREEN_TAGS).assertIsDisplayed()
 
@@ -135,7 +135,7 @@ class CreationNavigationTest {
 
   @Test
   fun `perform click on preview navigates to preview`() {
-    composeTestRule.onNodeWithTag("Creation/${CreationStepsRoute.PREVIEW}").performClick()
+    composeTestRule.onNodeWithTag(TestTags.ITINERARY_CREATION_BAR_PREVIEW).performClick()
 
     composeTestRule.onNodeWithTag(TestTags.CREATION_SCREEN_PREVIEW).assertIsDisplayed()
 

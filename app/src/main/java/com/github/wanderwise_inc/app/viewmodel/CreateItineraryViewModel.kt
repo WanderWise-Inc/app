@@ -14,7 +14,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
-const val TITLE_MAX_LENGTH = 80
+const val TITLE_MAX_LENGTH = 43
 
 class CreateItineraryViewModel(
     itineraryRepository: ItineraryRepository,
