@@ -117,10 +117,6 @@ fun ItineraryImageBanner(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PriceEstimationTextBox(createItineraryViewModel: CreateItineraryViewModel) {
-  // number text field to estimate price, give the option to choose currency
-  // val currencies = listOf("USD", "EUR", "JPY", "GBP", "AUD", "CAD", "CHF", "CNY", "SEK", "NZD")
-  // var isCurrenciesMenuExpanded by remember { mutableStateOf(false) }
-  // var selectedCurrency by remember { mutableStateOf(currencies[0]) }
   var priceEstimateDisplay by remember {
     mutableStateOf(createItineraryViewModel.getNewItinerary()!!.price?.toString() ?: "")
   }
@@ -139,34 +135,6 @@ fun PriceEstimationTextBox(createItineraryViewModel: CreateItineraryViewModel) {
         }
         priceEstimateDisplay = input
       })
-
-  //    ExposedDropdownMenuBox(
-  //        expanded = isCurrenciesMenuExpanded,
-  //        onExpandedChange = { isCurrenciesMenuExpanded = it },
-  //        modifier = Modifier.clip(MaterialTheme.shapes.medium).shadow(5.dp)) {
-  //          TextField(
-  //              modifier = Modifier.menuAnchor(),
-  //              value = selectedCurrency,
-  //              onValueChange = {},
-  //              readOnly = true,
-  //              trailingIcon = {
-  //                ExposedDropdownMenuDefaults.TrailingIcon(expanded = isCurrenciesMenuExpanded)
-  //              })
-  //
-  //          ExposedDropdownMenu(
-  //              expanded = isCurrenciesMenuExpanded,
-  //              onDismissRequest = { isCurrenciesMenuExpanded = false }) {
-  //                currencies.forEachIndexed { index, text ->
-  //                  DropdownMenuItem(
-  //                      text = { Text(text) },
-  //                      onClick = {
-  //                        selectedCurrency = currencies[index]
-  //                        isCurrenciesMenuExpanded = false
-  //                      })
-  //                }
-  //              }
-  //        }
-
 }
 
 @Composable

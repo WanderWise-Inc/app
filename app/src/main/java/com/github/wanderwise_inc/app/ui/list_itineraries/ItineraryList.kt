@@ -153,7 +153,7 @@ fun CategorySelector(
   ScrollableTabRow(
       selectedTabIndex = selectedIndex,
       containerColor = MaterialTheme.colorScheme.surfaceVariant,
-      edgePadding = (0).dp, // set to -90.dp to hide "all" tags.
+      edgePadding = (0).dp, // set to -90.dp to hide "all" tag.
   ) {
     categoriesList.forEachIndexed { index, category ->
       Tab(
@@ -173,9 +173,7 @@ fun CategorySelector(
                     TextStyle(
                         fontSize = 9.sp,
                         lineHeight = 16.sp,
-                        // fontFamily = FontFamily(Font(R.font.roboto)),
                         fontWeight = FontWeight(600),
-                        // color = MaterialTheme.colorScheme.onPrimaryContainer,
                         textAlign = TextAlign.Center,
                         letterSpacing = 0.5.sp,
                     ))
@@ -191,7 +189,6 @@ fun CategorySelector(
           modifier = Modifier.testTag("${TestTags.CATEGORY_SELECTOR_TAB}_${index}"))
     }
   }
-  //  }
 }
 
 enum class ItineraryListParent {

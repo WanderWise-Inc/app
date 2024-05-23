@@ -106,7 +106,6 @@ fun PriceSlider(
   Column() {
     RangeSlider(
         value = sliderPriceLocal,
-        // steps = 50,
         onValueChange = { range ->
           if (range.endInclusive >= MAX_SLIDER_PRICE - 1E-2) {
             sliderPositionPriceState.value = range.start..MAX_PRICE
@@ -115,9 +114,6 @@ fun PriceSlider(
           }
         },
         valueRange = MIN_PRICE..MAX_SLIDER_PRICE, // Adjust this range according to your needs
-        onValueChangeFinished = {
-          // launch something
-        },
         modifier = Modifier.testTag(TestTags.FILTER_PRICE_RANGE))
     Text(
         text =
@@ -141,7 +137,7 @@ fun TimeSlider(sliderPositionTimeState: MutableState<ClosedFloatingPointRange<Fl
 
   val sliderPriceLocal = minSliderTime..maxSliderTime
 
-  Text("How Long do I want to wander ?")
+  Text("How long do I want to wander ?")
 
   Column() {
     RangeSlider(
@@ -154,9 +150,6 @@ fun TimeSlider(sliderPositionTimeState: MutableState<ClosedFloatingPointRange<Fl
           }
         },
         valueRange = MIN_TIME..MAX_SLIDER_TIME, // Adjust this range according to your needs
-        onValueChangeFinished = {
-          // launch something
-        },
         modifier = Modifier.testTag(TestTags.FILTER_TIME_RANGE))
     Text(
         text =
