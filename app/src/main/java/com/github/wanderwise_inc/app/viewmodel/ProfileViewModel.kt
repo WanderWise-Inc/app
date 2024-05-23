@@ -20,7 +20,7 @@ class ProfileViewModel(
 
   /** @return flow of a user profile */
   fun getProfile(userUid: String): Flow<Profile?> {
-    Log.d("USER SIGN IN", "CALLING GET PROFILE")
+    Log.d("ProfileViewModel", "Fetching profile for user: $userUid")
     return profileRepository.getProfile(userUid)
   }
 

@@ -83,8 +83,8 @@ fun CreationStepPreview(
             }
       },
       modifier = Modifier.testTag(TestTags.CREATION_SCREEN_PREVIEW)) { padding ->
-        Box() {
-          CreationStepPreviewNav(
+        Box {
+          CreationStepPreviewNavGraph(
               navController, padding, createItineraryViewModel, profileViewModel, imageRepository)
 
           ExtendedFloatingActionButton(
@@ -92,7 +92,6 @@ fun CreationStepPreview(
                 coroutineScope.launch {
                   notSetValues = createItineraryViewModel.notSetValues()
                   if (notSetValues.isEmpty()) {
-                    createItineraryViewModel.uploadNewItinerary()
                     val itineraryUid = createItineraryViewModel.getCurrentUid()
                     imageRepository.uploadImageToStorage("itineraryPictures/$itineraryUid")
                     imageRepository.setIsItineraryImage(true)
@@ -123,7 +122,7 @@ fun CreationStepPreview(
 }
 
 @Composable
-fun CreationStepPreviewNav(
+fun CreationStepPreviewNavGraph(
     navController: NavHostController,
     padding: PaddingValues,
     createItineraryViewModel: CreateItineraryViewModel,

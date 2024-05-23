@@ -128,7 +128,7 @@ fun ProfileScreen(
                   itineraryViewModel = itineraryViewModel,
                   profileViewModel = profileViewModel,
                   navController = navHostController,
-                  paddingValues = PaddingValues(8.dp),
+                  paddingValues = PaddingValues(0.dp),
                   parent = ItineraryListParent.PROFILE,
                   imageRepository = imageRepository)
             }
