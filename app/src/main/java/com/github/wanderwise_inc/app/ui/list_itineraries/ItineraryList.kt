@@ -186,7 +186,6 @@ fun CategorySelector(
             Icon(
                 imageVector = category.icon,
                 contentDescription = null,
-                // tint = tint,
                 modifier = Modifier.size(30.dp).padding(2.dp))
           },
           modifier = Modifier.testTag("${TestTags.CATEGORY_SELECTOR_TAB}_${index}"))
