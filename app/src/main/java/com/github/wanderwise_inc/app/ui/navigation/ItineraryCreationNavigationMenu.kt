@@ -60,7 +60,7 @@ fun ItineraryCreationNavigationMenu(
                 tint = MaterialTheme.colorScheme.onPrimaryContainer,
                 modifier = Modifier.size(30.dp).padding(2.dp))
           },
-          modifier = Modifier.testTag(dest.route) // Keep to mock input click
+          modifier = Modifier.testTag(dest.testTag) // Keep to mock input click
           )
     }
   }
