@@ -37,9 +37,7 @@ class LocationsRepositoryImplTest {
     @Test
     fun locationsRepositoryTest() {
         val response = locationsApi.getLocation("Empire State Building", key)
-        response.
         val gson: Gson = GsonBuilder().create()
-        val json = gson.toJson(placeList)
     }
 
     @After
