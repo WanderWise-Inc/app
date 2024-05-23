@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.github.wanderwise_inc.app.data.SignInLauncher
-import com.github.wanderwise_inc.app.model.profile.DEFAULT_OFFLINE_PROFILE
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.first
 
@@ -29,11 +28,10 @@ class LoginViewModel(
       profileViewModel: ProfileViewModel,
       user: FirebaseUser?,
   ) {
-    user?.let { signInSucceeded(profileViewModel, it) } ?: signInFailed(profileViewModel)
+    user?.let { signInSucceeded(profileViewModel, it) } ?: signInFailed()
   }
 
-  private fun signInFailed(profileViewModel: ProfileViewModel) {
-    profileViewModel.setActiveProfile(DEFAULT_OFFLINE_PROFILE)
+  private fun signInFailed() {
     _signInState.value = SignInState.FAILURE
   }
 

@@ -11,7 +11,7 @@ class E2EImageRepository : ImageRepository {
   }
 
   override suspend fun uploadImageToStorage(fileName: String): Boolean {
-    TODO("Not yet implemented")
+    return true
   }
 
   override fun launchActivity(it: Intent) {
