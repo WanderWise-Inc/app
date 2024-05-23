@@ -1,6 +1,5 @@
 package com.github.wanderwise_inc.app.ui.list_itineraries
 
-// import androidx.compose.material3.Icon
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
 import androidx.compose.foundation.layout.Box
