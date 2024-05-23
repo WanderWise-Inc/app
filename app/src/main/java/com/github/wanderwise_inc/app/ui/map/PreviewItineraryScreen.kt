@@ -93,9 +93,13 @@ fun PreviewItineraryScreen(
   if (itinerary == null) {
     NullItinerary(userLocation)
   } else {
-    val cameraPositionState = rememberCameraPositionState {
-      position = CameraPosition.fromLatLngZoom(itinerary.computeCenterOfGravity().toLatLng(), 13f)
-    }
+    val cameraPositionState =
+        rememberCameraPositionState(key = itinerary.toString()) {
+          position =
+              CameraPosition.fromLatLngZoom(
+                  itinerary.computeCenterOfGravity().toLatLng(),
+                  itinerary.computeOptimalZoomLevel())
+        }
 
     LaunchedEffect(Unit) { itineraryViewModel.fetchPolylineLocations(itinerary) }
     val polylinePoints by itineraryViewModel.getPolylinePointsLiveData().observeAsState()
