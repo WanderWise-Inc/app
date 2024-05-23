@@ -24,22 +24,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.github.wanderwise_inc.app.R
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
-import com.github.wanderwise_inc.app.model.location.Tag
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.home.SearchBar
 import com.github.wanderwise_inc.app.ui.popup.HintPopup
 import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
-
-/** @brief Search categories displayed on the top bar. */
-data class SearchCategory(
-    val tag: Tag,
-    val icon: Int,
-    val title: String,
-)
 
 @Composable
 fun LikedScreen(
@@ -71,13 +62,7 @@ fun DisplayLikedItineraries(
 ) {
 
   /* the categories that can be selected by the user during filtering */
-  val categoriesList =
-      listOf(
-          SearchCategory(ItineraryTags.ADVENTURE, R.drawable.adventure_icon, "Adventure"),
-          SearchCategory(ItineraryTags.SHOPPING, R.drawable.shopping_icon, "Shopping"),
-          SearchCategory(ItineraryTags.PHOTOGRAPHY, R.drawable.sight_seeing_icon, "Sight Seeing"),
-          SearchCategory(ItineraryTags.FOODIE, R.drawable.drinks_icon, "Drinks"),
-      )
+  val categoriesList = ItineraryTags.toSearchCategoryList()
 
   val uid = profileViewModel.getUserUid()
   var selectedIndex by remember { mutableIntStateOf(0) }
@@ -120,7 +105,13 @@ fun DisplayLikedItineraries(
       modifier = Modifier.testTag(TestTags.LIKED_SCREEN)) { innerPadding ->
         val filtered =
             itineraries
-                .filter { itinerary -> itinerary.tags.contains(categoriesList[selectedIndex].tag) }
+                .filter { itinerary ->
+                  if (selectedIndex == 0) {
+                    true
+                  } else {
+                    itinerary.tags.contains(categoriesList[selectedIndex].tag)
+                  }
+                }
                 .filter { itinerary ->
                   searchQuery.isBlank() ||
                       itinerary.title.contains(searchQuery, ignoreCase = true) ||
