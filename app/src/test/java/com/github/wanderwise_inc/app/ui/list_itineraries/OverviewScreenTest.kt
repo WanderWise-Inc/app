@@ -104,7 +104,7 @@ class OverviewScreenTest {
   }
 
   @Test
-  fun `selecting a tag then reselecting it should deselect the tag`() {
+  fun `selecting a tag then selecting it again should deselect the tag`() {
     composeTestRule.onNodeWithTag("${TestTags.CATEGORY_SELECTOR_TAB}_${1}").performClick()
 
     composeTestRule
