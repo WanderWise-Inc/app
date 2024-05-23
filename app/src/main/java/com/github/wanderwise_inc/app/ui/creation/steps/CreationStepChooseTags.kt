@@ -145,7 +145,7 @@ fun TimeDurationEstimation(createItineraryViewModel: CreateItineraryViewModel) {
   TextField(
       label = { Text("Time Estimate (in hours)") },
       value = timeEstimateDisplay,
-      modifier = Modifier,
+      modifier = Modifier.testTag(TestTags.TIME_SEARCH),
       keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
       onValueChange = { input ->
         if (input.isNotBlank() && input.isDigitsOnly())
@@ -176,14 +176,17 @@ fun RelevantTags(createItineraryViewModel: CreateItineraryViewModel) {
     }
   }
 
-  Button(onClick = { isTagsDDM = true }, modifier = Modifier.testTag("Tags Button")) {
-    Text("Add Tags")
-  }
+  Button(
+      modifier = Modifier.testTag(TestTags.ITINERARY_CREATION_TAGS),
+      onClick = { isTagsDDM = true }) {
+        Text("Add Tags")
+      }
 
   DropdownMenu(expanded = isTagsDDM, onDismissRequest = { isTagsDDM = false }) {
     allTags.forEach { tag ->
       DropdownMenuItem(
           text = { Text(tag) },
+          modifier = Modifier.testTag("${TestTags.ITINERARY_CREATION_TAGS}_$tag"),
           onClick = {
             isTagsDDM = false
             if (!selectedTags.contains(tag) && selectedTags.size < 3) {

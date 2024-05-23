@@ -3,9 +3,13 @@ package com.github.wanderwise_inc.app.model.location
 import android.util.Log
 import com.github.wanderwise_inc.app.proto.location.ItineraryProto
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
+import com.google.maps.android.SphericalUtil
 import java.io.InvalidObjectException
+import kotlin.math.ln
 
 const val MAX_TAGS: Int = 3 // maximum number of tags allowed for an itinerary
+const val DEFAULT_ZOOM_LEVEL = 13f
 
 /** @brief labels for accessing itinerary information from a hashmap representation */
 object ItineraryLabels {
@@ -259,6 +263,26 @@ data class Itinerary(
     avgLat /= locations.size
     avgLon /= locations.size
     return Location(avgLat, avgLon)
+  }
+
+  fun getLatLngBounds(): LatLngBounds {
+    val builder = LatLngBounds.builder()
+    for (location in locations) {
+      builder.include(location.toLatLng())
+    }
+    return builder.build()
+  }
+
+  /** @return the optimal zoom level for an `Itinerary`'s locations */
+  fun computeOptimalZoomLevel(): Float {
+    if (locations.size < 2) return DEFAULT_ZOOM_LEVEL
+
+    val latLngBounds = getLatLngBounds()
+    val distance =
+        SphericalUtil.computeDistanceBetween(latLngBounds.northeast, latLngBounds.southwest)
+    val scale = distance / 500
+
+    return (16 - ln(scale) / ln(2.0)).toFloat()
   }
 
   /** @brief no-argument constructor for firebase de-serialization */

@@ -130,12 +130,12 @@ class CreationStepChooseTagsTest {
       CreationStepChooseTagsScreen(
           createItineraryViewModel = createItineraryViewModel, imageRepository = imageRepository)
     }
-    composeTestRule.onNodeWithTag("Tags Button").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("Tags Button").performClick()
+    composeTestRule.onNodeWithTag(TestTags.ITINERARY_CREATION_TAGS).assertIsDisplayed()
+    composeTestRule.onNodeWithTag(TestTags.ITINERARY_CREATION_TAGS).performClick()
     for (tag in allTags) {
       composeTestRule.onNodeWithText(tag).assertIsDisplayed()
       composeTestRule.onNodeWithText(tag).performClick()
-      composeTestRule.onNodeWithTag("Tags Button").performClick()
+      composeTestRule.onNodeWithTag(TestTags.ITINERARY_CREATION_TAGS).performClick()
     }
   }
 }
