@@ -2,13 +2,6 @@ package com.github.wanderwise_inc.app.ui.list_itineraries
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.DirectionsRun
-import androidx.compose.material.icons.outlined.Backpack
-import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.material.icons.outlined.PhotoCamera
-import androidx.compose.material.icons.outlined.Restaurant
-import androidx.compose.material.icons.outlined.ShoppingBag
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -22,7 +15,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.navigation.NavHostController
-import com.github.wanderwise_inc.app.R
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
 import com.github.wanderwise_inc.app.ui.TestTags
@@ -61,7 +53,7 @@ fun DisplayOverviewItineraries(
 ) {
 
   /* the categories that can be selected by the user during filtering */
-    val categoriesList = ItineraryTags.toSearchCategoryList()
+  val categoriesList = ItineraryTags.toSearchCategoryList()
 
   var selectedIndex by remember { mutableIntStateOf(0) }
   var searchQuery by remember { mutableStateOf("") }
@@ -88,11 +80,12 @@ fun DisplayOverviewItineraries(
       modifier = Modifier.testTag(TestTags.OVERVIEW_SCREEN)) { innerPadding ->
         val filtered =
             itineraries
-                .filter { itinerary -> if(selectedIndex == 0){
-                        true
-                    } else {
-                        itinerary.tags.contains(categoriesList[selectedIndex].tag)
-                    }
+                .filter { itinerary ->
+                  if (selectedIndex == 0) {
+                    true
+                  } else {
+                    itinerary.tags.contains(categoriesList[selectedIndex].tag)
+                  }
                 }
                 .filter { itinerary ->
                   searchQuery.isBlank() ||

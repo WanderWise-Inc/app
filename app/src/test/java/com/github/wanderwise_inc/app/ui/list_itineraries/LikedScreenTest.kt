@@ -7,6 +7,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToIndex
 import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
@@ -15,6 +16,7 @@ import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.model.location.FakeItinerary
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.profile.Profile
+import com.github.wanderwise_inc.app.printToLog
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
@@ -182,6 +184,7 @@ class LikedScreenTest {
     } else {
       // composeTestRule.onRoot(useUnmergedTree = true).printToLog()
       for (i in expectedItineraries.indices) {
+        composeTestRule.onNodeWithTag(TestTags.ITINERARY_LIST_SCROLLABLE).printToLog()
         composeTestRule
             .onNodeWithTag(TestTags.ITINERARY_LIST_SCROLLABLE)
             .performScrollToIndex(i) // scroll to correct position

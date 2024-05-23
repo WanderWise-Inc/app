@@ -1,7 +1,7 @@
 package com.github.wanderwise_inc.app.ui.list_itineraries
 
+// import androidx.compose.material3.Icon
 import android.util.Log
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -11,14 +11,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Icon
-//import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -31,7 +28,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -49,7 +45,6 @@ import com.github.wanderwise_inc.app.ui.navigation.NavigationActions
 import com.github.wanderwise_inc.app.ui.popup.HintPopup
 import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
-import com.google.firebase.database.collection.LLRBNode
 
 /** @brief reusable UI elements for displaying a list of itineraries */
 
@@ -155,50 +150,46 @@ fun CategorySelector(
   ScrollableTabRow(
       selectedTabIndex = selectedIndex,
       containerColor = MaterialTheme.colorScheme.surfaceVariant,
-      edgePadding = (-90).dp,
+      edgePadding = (0).dp, //set to -90.dp to hide "all" tags.
   ) {
-
     categoriesList.forEachIndexed { index, category ->
-            Tab(
-                selected = index == selectedIndex,
-                onClick = {
-                    if(index == selectedIndex) {
-                        onCategorySelected(0)
-                    } else {
-                        onCategorySelected(index)
-                    }
-                },
-                text = {
-                    Text(
-                        text = category.tag,
-                        modifier = Modifier.padding(0.dp, 2.dp),
-                        style =
-                        TextStyle(
-                            fontSize = 9.sp,
-                            lineHeight = 16.sp,
-                            // fontFamily = FontFamily(Font(R.font.roboto)),
-                            fontWeight = FontWeight(600),
-                            //color = MaterialTheme.colorScheme.onPrimaryContainer,
-                            textAlign = TextAlign.Center,
-                            letterSpacing = 0.5.sp,
-                        )
-                    )
-                },
-                selectedContentColor = Color.Red,
-                unselectedContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                icon = {
-                    Icon(
-                        imageVector = category.icon,
-                        contentDescription = null,
-                        //tint = tint,
-                        modifier = Modifier.size(30.dp).padding(2.dp)
-                    )
-                },
-                modifier = Modifier.testTag("${TestTags.CATEGORY_SELECTOR_TAB}_${index}")
-            )
-        }
+      Tab(
+          selected = index == selectedIndex,
+          onClick = {
+            if (index == selectedIndex) {
+              onCategorySelected(0)
+            } else {
+              onCategorySelected(index)
+            }
+          },
+          text = {
+            Text(
+                text = category.tag,
+                modifier = Modifier.padding(0.dp, 2.dp),
+                style =
+                    TextStyle(
+                        fontSize = 9.sp,
+                        lineHeight = 16.sp,
+                        // fontFamily = FontFamily(Font(R.font.roboto)),
+                        fontWeight = FontWeight(600),
+                        // color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        textAlign = TextAlign.Center,
+                        letterSpacing = 0.5.sp,
+                    ))
+          },
+          selectedContentColor = Color.Red,
+          unselectedContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+          icon = {
+            Icon(
+                imageVector = category.icon,
+                contentDescription = null,
+                // tint = tint,
+                modifier = Modifier.size(30.dp).padding(2.dp))
+          },
+          modifier = Modifier.testTag("${TestTags.CATEGORY_SELECTOR_TAB}_${index}"))
     }
-//  }
+  }
+  //  }
 }
 
 enum class ItineraryListParent {

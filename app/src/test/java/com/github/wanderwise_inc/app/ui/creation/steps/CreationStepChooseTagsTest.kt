@@ -116,14 +116,15 @@ class CreationStepChooseTagsTest {
   fun `click to choose tags should display the tags`() {
     val allTags =
         listOf(
-            "Adventure",
-            "Food",
-            "Culture",
-            "Nature",
-            "History",
-            "Relaxation",
-            "Shopping",
-            "Nightlife")
+            ItineraryTags.ACTIVE,
+            ItineraryTags.ADVENTURE,
+            ItineraryTags.BUDGET,
+            ItineraryTags.CULTURAL,
+            ItineraryTags.FOOD,
+            ItineraryTags.FOODIE,
+            ItineraryTags.SHOPPING,
+            ItineraryTags.NATURE,
+        )
     every { imageRepository.getCurrentFile() } returns null
     composeTestRule.setContent {
       CreationStepChooseTagsScreen(

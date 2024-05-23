@@ -5,17 +5,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.DirectionsRun
-import androidx.compose.material.icons.filled.DirectionsRun
-import androidx.compose.material.icons.outlined.Backpack
-import androidx.compose.material.icons.outlined.DirectionsRun
-import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.material.icons.outlined.PhotoCamera
-import androidx.compose.material.icons.outlined.Restaurant
 import androidx.compose.material.icons.outlined.Save
-import androidx.compose.material.icons.outlined.ShoppingBag
-import androidx.compose.material.icons.outlined.SportsBar
-import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -31,15 +21,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.github.wanderwise_inc.app.R
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
-import com.github.wanderwise_inc.app.model.location.SearchCategory
-import com.github.wanderwise_inc.app.model.location.Tag
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.home.SearchBar
 import com.github.wanderwise_inc.app.ui.popup.HintPopup
@@ -119,7 +105,13 @@ fun DisplayLikedItineraries(
       modifier = Modifier.testTag(TestTags.LIKED_SCREEN)) { innerPadding ->
         val filtered =
             itineraries
-                .filter { itinerary -> itinerary.tags.contains(categoriesList[selectedIndex].tag) }
+                .filter { itinerary ->
+                    if (selectedIndex == 0) {
+                        true
+                    } else {
+                        itinerary.tags.contains(categoriesList[selectedIndex].tag)
+                    }
+                }
                 .filter { itinerary ->
                   searchQuery.isBlank() ||
                       itinerary.title.contains(searchQuery, ignoreCase = true) ||
