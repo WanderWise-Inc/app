@@ -22,11 +22,9 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.DirectionsWalk
-import androidx.compose.material.icons.filled.DirectionsWalk
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Place
-import androidx.compose.material.icons.outlined.DirectionsWalk
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExtendedFloatingActionButton
@@ -50,6 +48,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -89,6 +88,7 @@ fun PreviewItineraryScreen(
 ) {
   val userLocation by itineraryViewModel.getUserLocation().collectAsState(null)
   val itinerary = itineraryViewModel.getFocusedItinerary()
+  val context = LocalContext.current
 
   if (itinerary == null) {
     NullItinerary(userLocation)
@@ -150,6 +150,7 @@ fun PreviewItineraryScreen(
                 onClick = {
                   onMinimizedClick()
                   isClicked = !isClicked
+                  itineraryViewModel.followItineraryOnGoogleMaps(context, itinerary)
                 },
                 icon = {
                   Icon(

@@ -1,5 +1,8 @@
 package com.github.wanderwise_inc.app.viewmodel
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -125,6 +128,7 @@ open class ItineraryViewModel(
   private val _polylinePointsLiveData = MutableLiveData<List<LatLng>>()
   private val polylinePointsLiveData: LiveData<List<LatLng>> =
       _polylinePointsLiveData // gettable from view
+
   /**
    * fetches Polyline points encoded as `LatLng` and updates a `LiveData` variable observed by some
    * composable function
@@ -176,5 +180,19 @@ open class ItineraryViewModel(
   /** @brief get a Flow of the user location updated every second */
   fun getUserLocation(): Flow<Location> {
     return locationClient.getLocationUpdates(1000)
+  }
+
+  fun getItineraryGoogleMapsURI(itinerary: Itinerary): String {
+    val locations = itinerary.locations.map { "${it.lat},${it.long}" }
+    val waypoints = locations.dropLast(1).joinToString("|")
+    val uriString = "google.navigation:q=${locations.last()}&waypoints=${waypoints}&mode=w"
+    return uriString
+  }
+
+  fun followItineraryOnGoogleMaps(context: Context, itinerary: Itinerary) {
+    val uri = Uri.parse(getItineraryGoogleMapsURI(itinerary))
+    val intent = Intent(Intent.ACTION_VIEW, uri)
+    intent.setPackage("com.google.android.apps.maps")
+    intent.resolveActivity(context.packageManager)?.let { context.startActivity(intent) }
   }
 }
