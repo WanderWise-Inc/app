@@ -3,9 +3,7 @@ package com.github.wanderwise_inc.app.ui.navigation
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,41 +32,42 @@ fun BottomNavigationMenu(
   val _selectedIndex by bottomNavigationViewModel.selected.observeAsState()
   val selectedIndex = _selectedIndex ?: 0
 
-  NavigationBar(modifier = Modifier.testTag(TestTags.BOTTOM_NAV), containerColor = Color(0xFFE0E0E0)) {
-    TOP_LEVEL_DESTINATIONS.forEachIndexed { index, dest ->
-      NavigationBarItem(
-          selected = index == selectedIndex,
-          onClick = {
-            // bottomNavigationViewModel.setSelected(index)
-            navigationActions.navigateTo(dest)
-          },
-          icon = {
-            Icon(
-                painter = painterResource(id = dest.icon),
-                contentDescription = null,
-                tint = Color(Color.Black.value),
-                modifier =
-                    Modifier.size(width = 64.dp, height = 32.dp)
-                        .padding(horizontal = 20.dp, vertical = 4.dp)
-                        .testTag(dest.testTag))
-          },
-          label = {
-            Text(
-                text = stringResource(id = dest.textId),
-                modifier = Modifier.padding(1.dp),
-                style =
-                    TextStyle(
-                        fontSize = 12.sp,
-                        lineHeight = 16.sp,
-                        // fontFamily = FontFamily(Font(R.font.roboto)),
-                        fontWeight = FontWeight(600),
-                        color = Color(0xFF000000),
-                        textAlign = TextAlign.Center,
-                        letterSpacing = 0.5.sp,
-                    ))
-          },
-          modifier = Modifier.testTag(dest.route),
+  NavigationBar(
+      modifier = Modifier.testTag(TestTags.BOTTOM_NAV), containerColor = Color(0xFFE0E0E0)) {
+        TOP_LEVEL_DESTINATIONS.forEachIndexed { index, dest ->
+          NavigationBarItem(
+              selected = index == selectedIndex,
+              onClick = {
+                // bottomNavigationViewModel.setSelected(index)
+                navigationActions.navigateTo(dest)
+              },
+              icon = {
+                Icon(
+                    painter = painterResource(id = dest.icon),
+                    contentDescription = null,
+                    tint = Color(Color.Black.value),
+                    modifier =
+                        Modifier.size(width = 64.dp, height = 32.dp)
+                            .padding(horizontal = 20.dp, vertical = 4.dp)
+                            .testTag(dest.testTag))
+              },
+              label = {
+                Text(
+                    text = stringResource(id = dest.textId),
+                    modifier = Modifier.padding(1.dp),
+                    style =
+                        TextStyle(
+                            fontSize = 12.sp,
+                            lineHeight = 16.sp,
+                            // fontFamily = FontFamily(Font(R.font.roboto)),
+                            fontWeight = FontWeight(600),
+                            color = Color(0xFF000000),
+                            textAlign = TextAlign.Center,
+                            letterSpacing = 0.5.sp,
+                        ))
+              },
+              modifier = Modifier.testTag(dest.route),
           )
-    }
-  }
+        }
+      }
 }

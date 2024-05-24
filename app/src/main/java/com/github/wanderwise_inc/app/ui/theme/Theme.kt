@@ -11,14 +11,15 @@ val LightColorPalette =
     lightColorScheme(
         primary = Maroon,
         onPrimary = Color.Black,
-        primaryContainer = LightTaupe,
+        primaryContainer = Taupe,
+        secondaryContainer = OffWhite,
         secondary = Color.Black,
         onSecondary = Color.Black,
         background = White,
         onBackground = Color.Black,
         surface = OffWhite,
         onSurface = Color.Black,
-        )
+    )
 
 val DarkColorPalette =
     darkColorScheme(
@@ -46,4 +47,3 @@ fun WanderWiseTheme(
       }
   MaterialTheme(colorScheme = colors, typography = Typography, content = content)
 }
-
