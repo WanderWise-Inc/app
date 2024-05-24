@@ -27,6 +27,7 @@ import org.junit.runner.RunWith
 class CreateItineraryE2ETest {
   @get:Rule val activityRule = ActivityScenarioRule(MainActivity::class.java)
   @get:Rule val composeTestRule = createAndroidComposeRule(MainActivity::class.java)
+
   @get:Rule
   val grantPermissionRule: GrantPermissionRule =
       GrantPermissionRule.grant(
@@ -34,7 +35,7 @@ class CreateItineraryE2ETest {
           android.Manifest.permission.ACCESS_COARSE_LOCATION)
 
   // approximate itinerary being created (correct up to waypoints added)
-  val itinerary: Itinerary =
+  private val itinerary: Itinerary =
       Itinerary.Builder(
               uid = "new_id",
               userUid = "0",
@@ -46,7 +47,7 @@ class CreateItineraryE2ETest {
           .build()
 
   // location returned by search
-  val location: Location =
+  private val location: Location =
       Location(
           lat = 37.419000999999994,
           long = -122.08237596053958,
@@ -85,7 +86,7 @@ class CreateItineraryE2ETest {
     composeTestRule.onNodeWithTag(TestTags.CREATE_ITINERARY_BY_TRACKING_BUTTON).performClick()
     composeTestRule.waitForIdle()
     // wait for maps to be displayed
-    composeTestRule.waitUntil(10000) {
+    composeTestRule.waitUntil(10000L) {
       composeTestRule.onNodeWithTag(TestTags.MAP_GOOGLE_MAPS).isDisplayed()
     }
 
@@ -120,7 +121,7 @@ class CreateItineraryE2ETest {
       swipeLeft((right - left) / 2, (right - left) / 4)
     } // swipe to new position
     composeTestRule.onNodeWithTag(TestTags.MAP_GOOGLE_MAPS).performClick()
-    Thread.sleep(2000) // visualize new location
+    Thread.sleep(2000L) // visualize new location
     composeTestRule
         .onAllNodes(E2EUtils.hasSubTestTag(TestTags.CREATE_ITINERARY_LOCATION))
         .assertCountEquals(markersPlacedByTracking + 1) // 1 additional marker placed

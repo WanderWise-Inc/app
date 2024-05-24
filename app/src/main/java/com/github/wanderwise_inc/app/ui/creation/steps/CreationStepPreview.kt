@@ -83,7 +83,7 @@ fun CreationStepPreview(
             }
       },
       modifier = Modifier.testTag(TestTags.CREATION_SCREEN_PREVIEW)) { padding ->
-        Box() {
+        Box {
           CreationStepPreviewNavGraph(
               navController, padding, createItineraryViewModel, profileViewModel, imageRepository)
 
@@ -92,7 +92,6 @@ fun CreationStepPreview(
                 coroutineScope.launch {
                   notSetValues = createItineraryViewModel.notSetValues()
                   if (notSetValues.isEmpty()) {
-                    createItineraryViewModel.uploadNewItinerary()
                     val itineraryUid = createItineraryViewModel.getCurrentUid()
                     imageRepository.uploadImageToStorage("itineraryPictures/$itineraryUid")
                     imageRepository.setIsItineraryImage(true)
