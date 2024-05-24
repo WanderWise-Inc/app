@@ -25,10 +25,31 @@ class LocationsRepositoryImplTest {
     private lateinit var locationsRepository: LocationsRepositoryImpl
 
     // geocode response to query "Empire State Building"
-    private val response: String =
-        "[{\"place_id\":78934259,\"licence\":\"Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright\",\"osm_type\":\"relation\",\"osm_id\":1685097,\"boundingbox\":[\"46.5879671\",\"46.6128698\",\"6.5272448\",\"6.5540055\"],\"lat\":\"46.597822\",\"lon\":\"6.540398\",\"display_name\":\"Penthaz, District du Gros-de-Vaud, Vaud, 1303, Switzerland\",\"class\":\"boundary\",\"type\":\"administrative\",\"importance\":0.475454806200153}]"
+    private val places = listOf(
+        Place(
+            78934259,
+            "Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright",
+            "relation",
+            1685097,
+            listOf("46.5879671", "46.6128698", "6.5272448", "6.5540055"),
+            46.597822,
+            6.540398,
+            "Penthaz, District du Gros-de-Vaud, Vaud, 1303, Switzerland",
+            "boundary",
+            "administrative",
+            0.4754548f
+        )
+    )
+    private val response: String = GsonBuilder().create().toJson(places)
     private val expectedLocations = listOf(
         Location(
+            lat = 46.597822,
+            long = 6.540398,
+            title = "Penthaz",
+            address = "District du Gros-de-Vaud, Vaud, 1303, Switzerland",
+            googleRating = 2.377274f
+        )
+    /*Location(
             lat = 40.74844205,
             long = -73.98565890160751,
             title = "Empire State Building",
@@ -62,7 +83,7 @@ class LocationsRepositoryImplTest {
             title = "Empire state building",
             address = "Footpath surrounding sports area, North Guwahati (Pt), Kamrup Metropolitan District, Assam, 781039, India",
             googleRating = 1.50005f
-        )
+        )*/
     )
 
     private val key = BuildConfig.GEOCODE_API_KEY
@@ -74,7 +95,7 @@ class LocationsRepositoryImplTest {
             MockResponse()
                 .setHeader("content-type", "application/json; charset=UTF-8")
                 .setHeader("content-length", response.length)
-                .setBody(GsonBuilder().create().toJson(response)))
+                .setBody(response))
         server.start()
         val serverUrl = server.url("/")
         locationsApi = LocationsApiServiceFactory.createLocationsApiService(serverUrl)
@@ -83,13 +104,13 @@ class LocationsRepositoryImplTest {
 
     @Test
     fun locationsRepositoryTest() {
-        val response = locationsRepository.getPlaces("Empire State Building", 5, key)
+        val actual = locationsRepository.getPlaces("Empire State Building", 5, key)
         val request = server.takeRequest()
         assertEquals("GET", request.method)
         println(request.requestUrl)
         //assertEquals("", request.)
-        assertNotNull(response.value)
-        assertEquals(expectedLocations, response.value)
+        assertNotNull(actual.value)
+        assertEquals(expectedLocations, actual.value)
     }
 
     @After
