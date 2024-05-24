@@ -189,7 +189,7 @@ open class ItineraryViewModel(
     return uriString
   }
 
-  fun FollowItineraryOnGoogleMaps(context: Context, itinerary: Itinerary) {
+  fun followItineraryOnGoogleMaps(context: Context, itinerary: Itinerary) {
     val uri = Uri.parse(getItineraryGoogleMapsURI(itinerary))
     val intent = Intent(Intent.ACTION_VIEW, uri)
     intent.setPackage("com.google.android.apps.maps")

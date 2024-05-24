@@ -22,11 +22,9 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.DirectionsWalk
-import androidx.compose.material.icons.filled.DirectionsWalk
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Place
-import androidx.compose.material.icons.outlined.DirectionsWalk
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExtendedFloatingActionButton
@@ -152,7 +150,7 @@ fun PreviewItineraryScreen(
                 onClick = {
                   onMinimizedClick()
                   isClicked = !isClicked
-                  itineraryViewModel.FollowItineraryOnGoogleMaps(context, itinerary)
+                  itineraryViewModel.followItineraryOnGoogleMaps(context, itinerary)
                 },
                 icon = {
                   Icon(
