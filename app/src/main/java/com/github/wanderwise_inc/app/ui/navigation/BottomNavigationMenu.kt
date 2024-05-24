@@ -3,6 +3,7 @@ package com.github.wanderwise_inc.app.ui.navigation
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
@@ -33,7 +34,7 @@ fun BottomNavigationMenu(
   val selectedIndex = _selectedIndex ?: 0
 
   NavigationBar(
-      modifier = Modifier.testTag(TestTags.BOTTOM_NAV), containerColor = Color(0xFFE0E0E0)) {
+      modifier = Modifier.testTag(TestTags.BOTTOM_NAV)) {
         TOP_LEVEL_DESTINATIONS.forEachIndexed { index, dest ->
           NavigationBarItem(
               selected = index == selectedIndex,
@@ -45,7 +46,7 @@ fun BottomNavigationMenu(
                 Icon(
                     painter = painterResource(id = dest.icon),
                     contentDescription = null,
-                    tint = Color(Color.Black.value),
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
                     modifier =
                         Modifier.size(width = 64.dp, height = 32.dp)
                             .padding(horizontal = 20.dp, vertical = 4.dp)
@@ -61,7 +62,7 @@ fun BottomNavigationMenu(
                             lineHeight = 16.sp,
                             // fontFamily = FontFamily(Font(R.font.roboto)),
                             fontWeight = FontWeight(600),
-                            color = Color(0xFF000000),
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
                             textAlign = TextAlign.Center,
                             letterSpacing = 0.5.sp,
                         ))

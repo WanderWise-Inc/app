@@ -67,13 +67,13 @@ fun SearchBar(
       placeholder = {
         Text(
             text = "Wander where?",
-            color = MaterialTheme.colorScheme.onPrimaryContainer,
+            color = MaterialTheme.colorScheme.onSecondaryContainer,
         )
       },
       singleLine = true,
       shape = RoundedCornerShape(16.dp),
       modifier =
-          Modifier.background(Color(0xFFE0E0E0))
+          Modifier.background(MaterialTheme.colorScheme.primaryContainer)
               .fillMaxWidth()
               .padding(5.dp)
               .testTag(TestTags.SEARCH_BAR))

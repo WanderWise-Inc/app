@@ -41,6 +41,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -165,7 +166,7 @@ fun ChooseYourWayOfCreation(
 ) {
 
   BottomAppBar(
-      modifier = Modifier.height(250.dp).fillMaxWidth(),
+      modifier = Modifier.height(200.dp).fillMaxWidth(),
       containerColor = MaterialTheme.colorScheme.primaryContainer,
       contentColor = MaterialTheme.colorScheme.primary,
   ) {
@@ -211,7 +212,7 @@ fun LocationSelector(
     navController: NavHostController,
 ) {
   BottomAppBar(
-      modifier = Modifier.height(250.dp).fillMaxWidth(),
+      modifier = Modifier.height(250.dp),
       containerColor = MaterialTheme.colorScheme.primaryContainer,
       contentColor = MaterialTheme.colorScheme.primary,
   ) {
