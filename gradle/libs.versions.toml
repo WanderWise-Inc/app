@@ -65,6 +65,9 @@ gson = "2.10.1"
 # Coil
 coil = "2.6.0"
 
+# Awaitility
+awaitility = "4.2.1"
+
 # Protobuf
 protobufJavalite = "3.23.0"
 protobufKotlinLite = "3.23.0"
@@ -146,6 +149,7 @@ protobuf-javalite = { module = "com.google.protobuf:protobuf-javalite", version.
 protobuf-kotlin-lite = { module = "com.google.protobuf:protobuf-kotlin-lite", version.ref = "protobufKotlinLite" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
+awaitility = { module = "org.awaitility:awaitility-kotlin", version.ref = "awaitility"}
 androidx-navigation-runtime-ktx = { group = "androidx.navigation", name = "navigation-runtime-ktx", version.ref = "navigationRuntimeKtx" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 androidx-navigation-testing = { group = "androidx.navigation", name = "navigation-testing", version.ref = "navigationTesting" }

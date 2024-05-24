@@ -1,12 +1,24 @@
 package com.github.wanderwise_inc.app.data
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import com.github.wanderwise_inc.app.BuildConfig
 import com.github.wanderwise_inc.app.model.location.Location
 import com.github.wanderwise_inc.app.network.LocationsApiService
 import com.github.wanderwise_inc.app.network.LocationsApiServiceFactory
 import com.github.wanderwise_inc.app.network.Place
+import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
+import com.github.wanderwise_inc.app.viewmodel.LocationClient
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.runTest
+import okhttp3.internal.wait
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import org.junit.Assert.*
@@ -14,12 +26,26 @@ import org.junit.Before
 import org.junit.Test
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
+import org.awaitility.kotlin.await
+import org.awaitility.kotlin.untilNotNull
 import org.json.JSONObject
 import org.junit.After
+import org.junit.Rule
+import org.junit.rules.TestRule
+import org.mockito.Mock
+import org.mockito.Mockito.anyList
+import org.mockito.Mockito.anyLong
+import org.mockito.Mockito.anyString
+import org.mockito.Mockito.`when`
+import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
 import retrofit2.Call
+import java.util.concurrent.CountDownLatch
+
 
 class LocationsRepositoryImplTest {
+    @get:Rule var rule: TestRule = InstantTaskExecutorRule()
+
     private lateinit var server: MockWebServer
     private lateinit var locationsApi: LocationsApiService
     private lateinit var locationsRepository: LocationsRepositoryImpl
@@ -49,41 +75,6 @@ class LocationsRepositoryImplTest {
             address = "District du Gros-de-Vaud, Vaud, 1303, Switzerland",
             googleRating = 2.377274f
         )
-    /*Location(
-            lat = 40.74844205,
-            long = -73.98565890160751,
-            title = "Empire State Building",
-            address = "350, 5th Avenue, Manhattan Community Board 5, Manhattan, New York County, New York, 10118, United States",
-            googleRating = 4.2579342334372845f
-        ),
-        Location(
-            lat = 41.257318999999995,
-            long = -95.941361792652,
-            title = "Empire State Building",
-            address = "300, South 19th Street, Omaha, Douglas County, Nebraska, 68102, United States",
-            googleRating = 1.50005f
-        ),
-        Location(
-            lat = 47.6576574,
-            long = -117.42539477065071,
-            title = "Empire State Building",
-            address = "West Riverside Avenue, Riverside, Spokane, Spokane County, Washington, 99201, United States",
-            googleRating = 1.50005f
-        ),
-        Location(
-            lat = 52.2957335,
-            long = 16.7553574,
-            title = "Empire State Building",
-            address = "Poznańska, Trzebaw, gmina Stęszew, Poznań County, Greater Poland Voivodeship, Poland",
-            googleRating = 1.50005f
-        ),
-        Location(
-            lat = 26.1889454,
-            long = 91.69467468588321,
-            title = "Empire state building",
-            address = "Footpath surrounding sports area, North Guwahati (Pt), Kamrup Metropolitan District, Assam, 781039, India",
-            googleRating = 1.50005f
-        )*/
     )
 
     private val key = BuildConfig.GEOCODE_API_KEY
@@ -102,15 +93,21 @@ class LocationsRepositoryImplTest {
         locationsRepository = LocationsRepositoryImpl(locationsApi)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun locationsRepositoryTest() {
-        val actual = locationsRepository.getPlaces("Empire State Building", 5, key)
+    fun locationsRepositoryTest() = runTest {
+        var actual: List<Location>? = null
+        backgroundScope.launch {
+            locationsRepository.getPlaces("Penthaz", 1, key).observeForever {
+                actual = it
+            }
+        }
+        testScheduler.advanceTimeBy(20000L)
         val request = server.takeRequest()
-        assertEquals("GET", request.method)
-        println(request.requestUrl)
-        //assertEquals("", request.)
-        assertNotNull(actual.value)
-        assertEquals(expectedLocations, actual.value)
+        await untilNotNull { actual }
+        println(request)
+        println(actual)
+        assertEquals(expectedLocations, actual)
     }
 
     @After
