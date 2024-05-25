@@ -43,7 +43,7 @@ import retrofit2.Call
 import java.util.concurrent.CountDownLatch
 
 
-class LocationsRepositoryTest {
+class DirectionsRepositoryTest {
     @get:Rule var rule: TestRule = InstantTaskExecutorRule()
 
     private lateinit var server: MockWebServer

@@ -2,6 +2,7 @@ package com.github.wanderwise_inc.app.network
 
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.annotations.SerializedName
+import okhttp3.HttpUrl
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -48,12 +49,18 @@ data class DirectionsResponseBody(val routes: List<Route>) {
 
 /** Factory for creating `ApiService` design patterns for Directions API uwu */
 object DirectionsApiServiceFactory {
-  private const val BASE_URL = "https://maps.googleapis.com/maps/api/directions/"
+  private val BASE_URL = HttpUrl.Builder()
+      .scheme("https")
+      .host("maps.googleapis.com")
+      .addPathSegment("maps")
+      .addPathSegment("api")
+      .addPathSegment("directions")
+      .build()
 
-  fun createDirectionsApiService(): DirectionsApiService {
+  fun createDirectionsApiService(baseUrl: HttpUrl = BASE_URL): DirectionsApiService {
     val retrofit =
         Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
