@@ -13,8 +13,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -26,7 +26,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -35,6 +34,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.model.location.Itinerary
+import com.github.wanderwise_inc.app.model.location.SearchCategory
 import com.github.wanderwise_inc.app.model.profile.DEFAULT_OFFLINE_PROFILE
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.itinerary.ItineraryBanner
@@ -86,11 +86,15 @@ fun ItinerariesListScrollable(
         modifier =
             Modifier.padding(
                     start = 10.dp,
-                    top = paddingValues.calculateTopPadding() + 5.dp,
+                    top = paddingValues.calculateTopPadding(),
                     end = 10.dp,
                     bottom = paddingValues.calculateBottomPadding())
                 .testTag(TestTags.ITINERARY_LIST_SCROLLABLE),
         verticalArrangement = spacedBy(8.dp)) {
+
+          // simply adding the spacer with zero padding creates a large gap
+          item { Spacer(Modifier.padding(0.dp)) }
+
           this.items(itineraries, key = { it.uid }) { itinerary ->
             val uid = profileViewModel.getUserUid()
             var isLikedInitially by remember {
@@ -145,34 +149,40 @@ fun CategorySelector(
     categoriesList: List<SearchCategory>,
     onCategorySelected: (Int) -> Unit
 ) {
-  TabRow(
+  ScrollableTabRow(
       selectedTabIndex = selectedIndex,
       containerColor = MaterialTheme.colorScheme.surfaceVariant,
+      edgePadding = (0).dp, // set to -90.dp to hide "all" tag.
   ) {
     categoriesList.forEachIndexed { index, category ->
       Tab(
           selected = index == selectedIndex,
-          onClick = { onCategorySelected(index) },
+          onClick = {
+            if (index == selectedIndex) {
+              onCategorySelected(0)
+            } else {
+              onCategorySelected(index)
+            }
+          },
           text = {
             Text(
-                text = category.title,
+                text = category.tag,
                 modifier = Modifier.padding(0.dp, 2.dp),
                 style =
                     TextStyle(
                         fontSize = 9.sp,
                         lineHeight = 16.sp,
-                        // fontFamily = FontFamily(Font(R.font.roboto)),
                         fontWeight = FontWeight(600),
-                        color = MaterialTheme.colorScheme.onPrimaryContainer,
                         textAlign = TextAlign.Center,
                         letterSpacing = 0.5.sp,
                     ))
           },
+          selectedContentColor = MaterialTheme.colorScheme.outline,
+          unselectedContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
           icon = {
             Icon(
-                painter = painterResource(id = category.icon),
+                imageVector = category.icon,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.onPrimaryContainer,
                 modifier = Modifier.size(30.dp).padding(2.dp))
           },
           modifier = Modifier.testTag("${TestTags.CATEGORY_SELECTOR_TAB}_${index}"))

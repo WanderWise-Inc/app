@@ -96,7 +96,7 @@ fun ItineraryBanner(
               containerColor = MaterialTheme.colorScheme.primaryContainer,
           ),
       elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
-      shape = RoundedCornerShape(13.dp),
+      shape = RoundedCornerShape(9.dp),
       modifier = Modifier.testTag("${TestTags.ITINERARY_BANNER}_${itinerary.uid}"),
       onClick = { onBannerClick(itinerary) }) {
         Column(
