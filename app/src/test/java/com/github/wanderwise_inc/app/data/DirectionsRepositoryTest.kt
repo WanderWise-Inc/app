@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.github.wanderwise_inc.app.BuildConfig
 import com.github.wanderwise_inc.app.model.location.Location
+import com.github.wanderwise_inc.app.network.DirectionsResponseBody
 import com.github.wanderwise_inc.app.network.LocationsApiService
 import com.github.wanderwise_inc.app.network.LocationsApiServiceFactory
 import com.github.wanderwise_inc.app.network.Place
@@ -50,30 +51,13 @@ class DirectionsRepositoryTest {
     private lateinit var locationsApi: LocationsApiService
     private lateinit var locationsRepository: LocationsRepositoryImpl
 
-    // geocode response to query "Empire State Building"
-    private val places = listOf(
-        Place(
-            78934259,
-            "Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright",
-            "relation",
-            1685097,
-            listOf("46.5879671", "46.6128698", "6.5272448", "6.5540055"),
-            46.597822,
-            6.540398,
-            "Penthaz, District du Gros-de-Vaud, Vaud, 1303, Switzerland",
-            "boundary",
-            "administrative",
-            0.4754548f
-        )
-    )
-    private val response: String = GsonBuilder().create().toJson(places)
-    private val expectedLocations = listOf(
-        Location(
-            lat = 46.597822,
-            long = 6.540398,
-            title = "Penthaz",
-            address = "District du Gros-de-Vaud, Vaud, 1303, Switzerland",
-            googleRating = 2.377274f
+    private val query: String = ""
+    // google directions api response to above query
+    private val directions: String = ""
+    private val response: String = GsonBuilder().create().toJson(directions)
+    private val expectedDirections = DirectionsResponseBody(
+        listOf(
+            DirectionsResponseBody.Route()
         )
     )
 

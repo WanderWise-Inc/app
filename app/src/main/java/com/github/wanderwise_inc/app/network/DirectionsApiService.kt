@@ -55,6 +55,7 @@ object DirectionsApiServiceFactory {
       .addPathSegment("maps")
       .addPathSegment("api")
       .addPathSegment("directions")
+      .addPathSegment("") // add this to get final / at end of url
       .build()
 
   fun createDirectionsApiService(baseUrl: HttpUrl = BASE_URL): DirectionsApiService {
