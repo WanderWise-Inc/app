@@ -36,6 +36,7 @@ class DirectionsRepositoryImpl(private val directionsApiService: DirectionsApiSe
                   call: Call<DirectionsResponseBody>,
                   response: Response<DirectionsResponseBody>
               ) {
+                Log.d(DEBUG_TAG, response.body().toString())
                 if (response.isSuccessful) {
                   Log.d(DEBUG_TAG, "Response was successful!")
                   val directionsResponse = response.body()

@@ -1,5 +1,6 @@
 package com.github.wanderwise_inc.app.network
 
+import android.util.Log
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.annotations.SerializedName
 import okhttp3.HttpUrl
@@ -43,6 +44,7 @@ data class DirectionsResponseBody(val routes: List<Route>) {
         }
       }
     }
+    Log.d("TO_LAT_LNG", out.toString())
     return out
   }
 }
