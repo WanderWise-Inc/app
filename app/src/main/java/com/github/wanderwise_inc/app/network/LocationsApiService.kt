@@ -31,17 +31,15 @@ data class Place(
 
 /** Factory for creating `ApiService` design patterns for Locations uwu */
 object LocationsApiServiceFactory {
-    private val BASE_URL = HttpUrl.Builder()
-        .scheme("https")
-        .host("geocode.maps.co")
-        .build()
+  private val BASE_URL = HttpUrl.Builder().scheme("https").host("geocode.maps.co").build()
 
-    fun createLocationsApiService(baseUrl: HttpUrl = BASE_URL): LocationsApiService {
-        val retrofit = Retrofit.Builder()
+  fun createLocationsApiService(baseUrl: HttpUrl = BASE_URL): LocationsApiService {
+    val retrofit =
+        Retrofit.Builder()
             .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-        return retrofit.create(LocationsApiService::class.java)
-    }
+    return retrofit.create(LocationsApiService::class.java)
+  }
 }

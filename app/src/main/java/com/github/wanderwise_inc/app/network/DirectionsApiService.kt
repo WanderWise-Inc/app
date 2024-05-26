@@ -51,14 +51,15 @@ data class DirectionsResponseBody(val routes: List<Route>) {
 
 /** Factory for creating `ApiService` design patterns for Directions API uwu */
 object DirectionsApiServiceFactory {
-  private val BASE_URL = HttpUrl.Builder()
-      .scheme("https")
-      .host("maps.googleapis.com")
-      .addPathSegment("maps")
-      .addPathSegment("api")
-      .addPathSegment("directions")
-      .addPathSegment("") // add this to get final / at end of url
-      .build()
+  private val BASE_URL =
+      HttpUrl.Builder()
+          .scheme("https")
+          .host("maps.googleapis.com")
+          .addPathSegment("maps")
+          .addPathSegment("api")
+          .addPathSegment("directions")
+          .addPathSegment("") // add this to get final / at end of url
+          .build()
 
   fun createDirectionsApiService(baseUrl: HttpUrl = BASE_URL): DirectionsApiService {
     val retrofit =

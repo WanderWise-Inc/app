@@ -146,7 +146,9 @@ open class ItineraryViewModel(
 
     val key = BuildConfig.MAPS_API_KEY
     viewModelScope.launch {
-      Log.d(DEBUG_TAG, "origin:$originEncoded :: destination:$destinationEncoded :: waypoints:$waypoints")
+      Log.d(
+          DEBUG_TAG,
+          "origin:$originEncoded :: destination:$destinationEncoded :: waypoints:$waypoints")
       directionsRepository
           .getPolylineWayPoints(
               origin = originEncoded,
