@@ -2,6 +2,7 @@ package com.github.wanderwise_inc.app.data
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.github.wanderwise_inc.app.BuildConfig
+import com.github.wanderwise_inc.app.model.location.Location
 import com.github.wanderwise_inc.app.network.DirectionsApiService
 import com.github.wanderwise_inc.app.network.DirectionsApiServiceFactory
 import com.github.wanderwise_inc.app.network.DirectionsResponseBody
@@ -28,15 +29,116 @@ class DirectionsRepositoryTest {
     private lateinit var directionsApi: DirectionsApiService
     private lateinit var directionsRepository: DirectionsRepository
 
-    private val query: String = ""
+    private val query = listOf(
+        "37.41528948098993, -122.09922440350056",
+        "37.40438128839703, -122.07692451775073"
+    )
     // google directions api response to above query
-    private val directions: String = ""
+    private val directions = DirectionsResponseBody(
+        routes = listOf(
+            DirectionsResponseBody.Route(
+                legs = listOf(
+                    DirectionsResponseBody.Route.Leg(
+                        steps = listOf(
+                            DirectionsResponseBody.Route.Leg.Step(
+                                startLocation = DirectionsResponseBody.Route.Leg.RespLocation(
+                                    lat = 37.41528479999999,
+                                    lng = -122.0991067
+                                ),
+                                endLocation = DirectionsResponseBody.Route.Leg.RespLocation(
+                                    lat = 37.41500690000001,
+                                    lng = -122.0991245
+                                )
+                            ),
+                            DirectionsResponseBody.Route.Leg.Step(
+                                startLocation = DirectionsResponseBody.Route.Leg.RespLocation(
+                                    lat = 37.41500690000001,
+                                    lng = -122.0991245
+                                ),
+                                endLocation = DirectionsResponseBody.Route.Leg.RespLocation(
+                                    lat = 37.4146274,
+                                    lng = -122.0925773
+                                )
+                            ),
+                            DirectionsResponseBody.Route.Leg.Step(
+                                startLocation = DirectionsResponseBody.Route.Leg.RespLocation(
+                                    lat = 37.4146274,
+                                    lng = -122.0925773
+                                ),
+                                endLocation = DirectionsResponseBody.Route.Leg.RespLocation(
+                                    lat = 37.4114544,
+                                    lng = -122.0924344
+                                )
+                            ),
+                            DirectionsResponseBody.Route.Leg.Step(
+                                startLocation = DirectionsResponseBody.Route.Leg.RespLocation(
+                                    lat = 37.4114544,
+                                    lng = -122.0924344
+                                ),
+                                endLocation = DirectionsResponseBody.Route.Leg.RespLocation(
+                                    lat = 37.4058869,
+                                    lng = -122.0778857
+                                )
+                            ),
+                            DirectionsResponseBody.Route.Leg.Step(
+                                startLocation = DirectionsResponseBody.Route.Leg.RespLocation(
+                                    lat = 37.4058869,
+                                    lng = -122.0778857
+                                ),
+                                endLocation = DirectionsResponseBody.Route.Leg.RespLocation(
+                                    lat = 37.4058452,
+                                    lng = -122.0779829
+                                )
+                            ),
+                            DirectionsResponseBody.Route.Leg.Step(
+                                startLocation = DirectionsResponseBody.Route.Leg.RespLocation(
+                                    lat = 37.4058452,
+                                    lng = -122.0779829
+                                ),
+                                endLocation = DirectionsResponseBody.Route.Leg.RespLocation(
+                                    lat = 37.4046563,
+                                    lng = -122.0779898
+                                )
+                            ),
+                            DirectionsResponseBody.Route.Leg.Step(
+                                startLocation = DirectionsResponseBody.Route.Leg.RespLocation(
+                                    lat = 37.4046563,
+                                    lng = -122.0779898
+                                ),
+                                endLocation = DirectionsResponseBody.Route.Leg.RespLocation(
+                                    lat = 37.4041406,
+                                    lng = -122.0769676
+                                )
+                            ),
+                            DirectionsResponseBody.Route.Leg.Step(
+                                startLocation = DirectionsResponseBody.Route.Leg.RespLocation(
+                                    lat = 37.4041406,
+                                    lng = -122.0769676
+                                ),
+                                endLocation = DirectionsResponseBody.Route.Leg.RespLocation(
+                                    lat = 37.4043308,
+                                    lng = -122.0768208
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        )
+    )
     private val response: String = GsonBuilder().create().toJson(directions)
     private val expectedLatLngList = listOf(
-        LatLng(0.0, 0.0)
+        LatLng(37.41500690000001, -122.0991245),
+        LatLng(37.4146274, -122.0925773),
+        LatLng(37.4114544, -122.0924344),
+        LatLng(37.4058869, -122.0778857),
+        LatLng(37.4058452, -122.0779829),
+        LatLng(37.4046563, -122.0779898),
+        LatLng(37.4041406, -122.0769676),
+        LatLng(37.4043308, -122.0768208)
     )
 
-    private val key = BuildConfig.GEOCODE_API_KEY
+    private val key = BuildConfig.MAPS_API_KEY
 
     @Before
     fun setup() {
@@ -58,13 +160,13 @@ class DirectionsRepositoryTest {
         var actual: List<LatLng>? = null
         backgroundScope.launch {
             directionsRepository.getPolylineWayPoints(
-                origin = "",
-                destination = "",
-                waypoints = listOf(),
+                origin = query.first(),
+                destination = query.last(),
+                waypoints = query.drop(1).dropLast(1),
                 apiKey = key
             ).observeForever {
-                    actual = it
-                }
+                actual = it
+            }
         }
         testScheduler.advanceTimeBy(20000L)
         val request = server.takeRequest()
