@@ -156,7 +156,7 @@ class DirectionsRepositoryTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun locationsRepositoryTest() = runTest {
+    fun directionsRepositoryTest() = runTest {
         var actual: List<LatLng>? = null
         backgroundScope.launch {
             directionsRepository.getPolylineWayPoints(
