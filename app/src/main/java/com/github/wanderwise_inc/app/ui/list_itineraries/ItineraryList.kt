@@ -151,7 +151,7 @@ fun CategorySelector(
 ) {
   ScrollableTabRow(
       selectedTabIndex = selectedIndex,
-      containerColor = MaterialTheme.colorScheme.surfaceVariant,
+      containerColor = MaterialTheme.colorScheme.primaryContainer,
       edgePadding = (0).dp, // set to -90.dp to hide "all" tag.
   ) {
     categoriesList.forEachIndexed { index, category ->

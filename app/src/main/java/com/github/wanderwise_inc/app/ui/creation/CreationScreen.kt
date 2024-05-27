@@ -1,5 +1,8 @@
 package com.github.wanderwise_inc.app.ui.creation
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -78,28 +81,35 @@ fun NoNewItinerary(onClick: () -> Unit) {
               .testTag(TestTags.NO_NEW_CREATION_SCREEN)
               .fillMaxWidth()
               .height(100.dp)) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center) {
-              Text(
-                  text = "You aren't currently creating an itinerary...",
-                  color = MaterialTheme.colorScheme.primary,
-                  textAlign = TextAlign.Center,
-                  modifier = Modifier.padding(5.dp, 10.dp))
+        AnimatedVisibility(
+            visible = true,
+            enter =
+                slideInVertically(
+                    initialOffsetY = { fullHeight -> fullHeight },
+                    animationSpec = tween(durationMillis = 5000))) {
+              Column(
+                  horizontalAlignment = Alignment.CenterHorizontally,
+                  verticalArrangement = Arrangement.Center) {
+                    Text(
+                        text = "You aren't currently creating an itinerary...",
+                        color = MaterialTheme.colorScheme.primary,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(5.dp, 10.dp))
 
-              Spacer(modifier = Modifier.height(10.dp))
+                    Spacer(modifier = Modifier.height(10.dp))
 
-              Button(
-                  onClick = onClick,
-              ) {
-                Text(
-                    text = "Press here to get started!",
-                    color = MaterialTheme.colorScheme.onSecondary,
-                    textAlign = TextAlign.Center,
-                    modifier =
-                        Modifier.padding(5.dp, 10.dp)
-                            .testTag(TestTags.START_ITINERARY_CREATION_BUTTON))
-              }
+                    Button(
+                        onClick = onClick,
+                    ) {
+                      Text(
+                          text = "Press here to get started!",
+                          color = MaterialTheme.colorScheme.onSecondary,
+                          textAlign = TextAlign.Center,
+                          modifier =
+                              Modifier.padding(5.dp, 10.dp)
+                                  .testTag(TestTags.START_ITINERARY_CREATION_BUTTON))
+                    }
+                  }
             }
       }
 }

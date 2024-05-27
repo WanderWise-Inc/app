@@ -26,46 +26,45 @@ import com.github.wanderwise_inc.app.viewmodel.BottomNavigationViewModel
 @Composable
 fun BottomNavigationMenu(
     navigationActions: NavigationActions,
-    bottomNavigationViewModel: BottomNavigationViewModel
+    bottomNavigationViewModel: BottomNavigationViewModel,
 ) {
 
   val _selectedIndex by bottomNavigationViewModel.selected.observeAsState()
   val selectedIndex = _selectedIndex ?: 0
 
-  NavigationBar(modifier = Modifier.testTag(TestTags.BOTTOM_NAV)) {
-    TOP_LEVEL_DESTINATIONS.forEachIndexed { index, dest ->
-      NavigationBarItem(
-          selected = index == selectedIndex,
-          onClick = {
-            // bottomNavigationViewModel.setSelected(index)
-            navigationActions.navigateTo(dest)
-          },
-          icon = {
-            Icon(
-                painter = painterResource(id = dest.icon),
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                modifier =
-                    Modifier.size(width = 64.dp, height = 32.dp)
-                        .padding(horizontal = 20.dp, vertical = 4.dp)
-                        .testTag(dest.testTag))
-          },
-          label = {
-            Text(
-                text = stringResource(id = dest.textId),
-                modifier = Modifier.padding(1.dp),
-                style =
-                    TextStyle(
-                        fontSize = 12.sp,
-                        lineHeight = 16.sp,
-                        // fontFamily = FontFamily(Font(R.font.roboto)),
-                        fontWeight = FontWeight(600),
-                        color = MaterialTheme.colorScheme.onPrimaryContainer,
-                        textAlign = TextAlign.Center,
-                        letterSpacing = 0.5.sp,
-                    ))
-          },
-          modifier = Modifier.testTag(dest.route))
-    }
-  }
+  NavigationBar(
+      modifier = Modifier.testTag(TestTags.BOTTOM_NAV),
+      containerColor = MaterialTheme.colorScheme.primaryContainer) {
+        TOP_LEVEL_DESTINATIONS.forEachIndexed { index, dest ->
+          NavigationBarItem(
+              selected = index == selectedIndex,
+              onClick = { navigationActions.navigateTo(dest) },
+              icon = {
+                Icon(
+                    painter = painterResource(id = dest.icon),
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                    modifier =
+                        Modifier.size(width = 64.dp, height = 32.dp)
+                            .padding(horizontal = 20.dp, vertical = 4.dp)
+                            .testTag(dest.testTag))
+              },
+              label = {
+                Text(
+                    text = stringResource(id = dest.textId),
+                    modifier = Modifier.padding(1.dp),
+                    style =
+                        TextStyle(
+                            fontSize = 12.sp,
+                            lineHeight = 16.sp,
+                            fontWeight = FontWeight(600),
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            textAlign = TextAlign.Center,
+                            letterSpacing = 0.5.sp,
+                        ))
+              },
+              modifier = Modifier.testTag(dest.route),
+          )
+        }
+      }
 }
