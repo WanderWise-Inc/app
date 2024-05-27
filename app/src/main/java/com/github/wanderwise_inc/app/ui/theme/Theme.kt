@@ -21,6 +21,7 @@ val LightColorPalette =
         onSurface = Color.Black,
         tertiary = LightTaupe,
         onTertiary = LightGray,
+        error = Color.Red,
     )
 
 val DarkColorPalette =
@@ -34,6 +35,7 @@ val DarkColorPalette =
         onBackground = Color.White,
         surface = LightGray,
         onSurface = Color.White,
+        error = Color.Red,
     )
 
 @Composable
