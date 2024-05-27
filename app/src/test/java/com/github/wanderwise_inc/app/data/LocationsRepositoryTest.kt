@@ -70,10 +70,13 @@ class LocationsRepositoryTest {
   fun `locationsRepository test on failure`() = runTest {
     var actual: List<Location>? = null
     backgroundScope.launch {
-        locationsRepository.getPlaces("Penthaz", 1, key).observeForever { actual = it }
+      locationsRepository.getPlaces("Penthaz", 1, key).observeForever { actual = it }
     }
     testScheduler.advanceTimeBy(20000L)
-    await untilNotNull { actual } // this should throw a ConditionTimeoutException as actual will never be not null
+    await untilNotNull
+        {
+          actual
+        } // this should throw a ConditionTimeoutException as actual will never be not null
     assertNull(actual)
   }
 
@@ -81,16 +84,17 @@ class LocationsRepositoryTest {
   @Test(expected = ConditionTimeoutException::class)
   fun `locationsRepository test on unsuccessful response`() = runTest {
     server.enqueue( // enqueue unsuccessful response
-      MockResponse()
-          .setResponseCode(400)
-    )
+        MockResponse().setResponseCode(400))
 
     var actual: List<Location>? = null
     backgroundScope.launch {
       locationsRepository.getPlaces("Penthaz", 1, key).observeForever { actual = it }
     }
     testScheduler.advanceTimeBy(20000L)
-    await untilNotNull { actual } // this should throw a ConditionTimeoutException as actual will never be not null
+    await untilNotNull
+        {
+          actual
+        } // this should throw a ConditionTimeoutException as actual will never be not null
     assertNull(actual)
   }
 
@@ -98,16 +102,15 @@ class LocationsRepositoryTest {
   @Test
   fun `locationsRepository test on successful response`() = runTest {
     server.enqueue( // enqueue successful response
-      MockResponse()
-          .setResponseCode(200) // Successful response code
-          .setHeader("content-type", "application/json; charset=UTF-8")
-          .setHeader("content-length", response.length)
-          .setBody(response)
-    )
+        MockResponse()
+            .setResponseCode(200) // Successful response code
+            .setHeader("content-type", "application/json; charset=UTF-8")
+            .setHeader("content-length", response.length)
+            .setBody(response))
 
     var actual: List<Location>? = null
     backgroundScope.launch {
-        locationsRepository.getPlaces("Penthaz", 1, key).observeForever { actual = it }
+      locationsRepository.getPlaces("Penthaz", 1, key).observeForever { actual = it }
     }
 
     // assert the correct query was sent to the server

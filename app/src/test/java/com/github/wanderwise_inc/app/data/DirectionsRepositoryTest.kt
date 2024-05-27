@@ -7,13 +7,11 @@ import com.github.wanderwise_inc.app.network.DirectionsApiServiceFactory
 import com.github.wanderwise_inc.app.network.DirectionsResponseBody
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.GsonBuilder
-import com.google.protobuf.kotlin.toByteStringUtf8
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
-import okio.ByteString.Companion.encodeUtf8
 import org.awaitility.core.ConditionTimeoutException
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.untilNotNull
@@ -123,70 +121,72 @@ class DirectionsRepositoryTest {
     directionsRepository = DirectionsRepositoryImpl(directionsApi)
   }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    @Test(expected = ConditionTimeoutException::class)
-    fun `directionsRepository test on failure`() = runTest {
-        // no response created should result in a failure
-        var actual: List<LatLng>? = null
-        backgroundScope.launch {
-            directionsRepository
-                .getPolylineWayPoints(
-                    origin = query.first(),
-                    destination = query.last(),
-                    waypoints = query.drop(1).dropLast(1),
-                    apiKey = key
-                )
-                .observeForever { actual = it }
-        }
-        testScheduler.advanceTimeBy(20000L)
-        await untilNotNull { actual } // this should throw a ConditionTimeoutException as actual will always be null
-        assertNull(actual)
+  @OptIn(ExperimentalCoroutinesApi::class)
+  @Test(expected = ConditionTimeoutException::class)
+  fun `directionsRepository test on failure`() = runTest {
+    // no response created should result in a failure
+    var actual: List<LatLng>? = null
+    backgroundScope.launch {
+      directionsRepository
+          .getPolylineWayPoints(
+              origin = query.first(),
+              destination = query.last(),
+              waypoints = query.drop(1).dropLast(1),
+              apiKey = key)
+          .observeForever { actual = it }
     }
+    testScheduler.advanceTimeBy(20000L)
+    await untilNotNull
+        {
+          actual
+        } // this should throw a ConditionTimeoutException as actual will always be null
+    assertNull(actual)
+  }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    @Test(expected = ConditionTimeoutException::class)
-    fun `directionsRepository test on unsuccessful response`() = runTest {
-        server.enqueue(
-            MockResponse()
-                .setResponseCode(400) // unsuccessful response
+  @OptIn(ExperimentalCoroutinesApi::class)
+  @Test(expected = ConditionTimeoutException::class)
+  fun `directionsRepository test on unsuccessful response`() = runTest {
+    server.enqueue(
+        MockResponse().setResponseCode(400) // unsuccessful response
         )
 
-        var actual: List<LatLng>? = null
-        backgroundScope.launch {
-            directionsRepository
-                .getPolylineWayPoints(
-                    origin = query.first(),
-                    destination = query.last(),
-                    waypoints = query.drop(1).dropLast(1),
-                    apiKey = key
-                )
-                .observeForever { actual = it }
-        }
-        testScheduler.advanceTimeBy(20000L)
-        await untilNotNull { actual } // this should throw a ConditionTimeoutException as actual will always be null
-        assertNull(actual)
+    var actual: List<LatLng>? = null
+    backgroundScope.launch {
+      directionsRepository
+          .getPolylineWayPoints(
+              origin = query.first(),
+              destination = query.last(),
+              waypoints = query.drop(1).dropLast(1),
+              apiKey = key)
+          .observeForever { actual = it }
     }
+    testScheduler.advanceTimeBy(20000L)
+    await untilNotNull
+        {
+          actual
+        } // this should throw a ConditionTimeoutException as actual will always be null
+    assertNull(actual)
+  }
 
   @OptIn(ExperimentalCoroutinesApi::class)
   @Test
   fun `directionsRepository test on successful response`() = runTest {
     server.enqueue(
-      MockResponse()
-          .setResponseCode(200) // successful response
-          .setHeader("content-type", "application/json; charset=UTF-8")
-          .setHeader("content-length", response.length)
-          .setBody(response))
+        MockResponse()
+            .setResponseCode(200) // successful response
+            .setHeader("content-type", "application/json; charset=UTF-8")
+            .setHeader("content-length", response.length)
+            .setBody(response))
 
     var actual: List<LatLng>? = null
     backgroundScope.launch {
-        directionsRepository
-            .getPolylineWayPoints(
-                origin = query.first(),
-                destination = query.last(),
-                waypoints = query.drop(1).dropLast(1),
-                apiKey = key
-            )
-            .observeForever { actual = it }
+      directionsRepository
+          .getPolylineWayPoints(
+              origin = query.first(),
+              destination = query.last(),
+              waypoints = query.drop(1).dropLast(1),
+              apiKey = key)
+          .observeForever { actual = it }
     }
     testScheduler.advanceTimeBy(20000L)
     await untilNotNull { actual }
