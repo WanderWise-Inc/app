@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
+import org.awaitility.core.ConditionTimeoutException
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.untilNotNull
 import org.junit.After
@@ -58,11 +59,6 @@ class LocationsRepositoryTest {
   @Before
   fun setup() {
     server = MockWebServer()
-    server.enqueue(
-        MockResponse()
-            .setHeader("content-type", "application/json; charset=UTF-8")
-            .setHeader("content-length", response.length)
-            .setBody(response))
     server.start()
     val serverUrl = server.url("/")
     locationsApi = LocationsApiServiceFactory.createLocationsApiService(serverUrl)
@@ -70,17 +66,56 @@ class LocationsRepositoryTest {
   }
 
   @OptIn(ExperimentalCoroutinesApi::class)
-  @Test
-  fun locationsRepositoryTest() = runTest {
+  @Test(expected = ConditionTimeoutException::class)
+  fun `locationsRepository test on failure`() = runTest {
+    var actual: List<Location>? = null
+    backgroundScope.launch {
+        locationsRepository.getPlaces("Penthaz", 1, key).observeForever { actual = it }
+    }
+    testScheduler.advanceTimeBy(20000L)
+    await untilNotNull { actual } // this should throw a ConditionTimeoutException as actual will never be not null
+    assertNull(actual)
+  }
+
+  @OptIn(ExperimentalCoroutinesApi::class)
+  @Test(expected = ConditionTimeoutException::class)
+  fun `locationsRepository test on unsuccessful response`() = runTest {
+    server.enqueue( // enqueue unsuccessful response
+      MockResponse()
+          .setResponseCode(400)
+    )
+
     var actual: List<Location>? = null
     backgroundScope.launch {
       locationsRepository.getPlaces("Penthaz", 1, key).observeForever { actual = it }
     }
     testScheduler.advanceTimeBy(20000L)
+    await untilNotNull { actual } // this should throw a ConditionTimeoutException as actual will never be not null
+    assertNull(actual)
+  }
+
+  @OptIn(ExperimentalCoroutinesApi::class)
+  @Test
+  fun `locationsRepository test on successful response`() = runTest {
+    server.enqueue( // enqueue successful response
+      MockResponse()
+          .setResponseCode(200) // Successful response code
+          .setHeader("content-type", "application/json; charset=UTF-8")
+          .setHeader("content-length", response.length)
+          .setBody(response)
+    )
+
+    var actual: List<Location>? = null
+    backgroundScope.launch {
+        locationsRepository.getPlaces("Penthaz", 1, key).observeForever { actual = it }
+    }
+
+    // assert the correct query was sent to the server
     val request = server.takeRequest()
+    assertEquals("/search?q=Penthaz&api_key=$key", request.path)
+
+    testScheduler.advanceTimeBy(20000L)
     await untilNotNull { actual }
-    println(request)
-    println(actual)
     assertEquals(expectedLocations, actual)
   }
 

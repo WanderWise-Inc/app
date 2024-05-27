@@ -28,7 +28,6 @@ class LocationsRepositoryImpl(private val locationsApiService: LocationsApiServi
         .enqueue(
             object : Callback<List<Place>> {
               override fun onResponse(call: Call<List<Place>>, response: Response<List<Place>>) {
-                println("response: ${response.body()}")
                 if (response.isSuccessful) {
                   Log.d(DEBUG_TAG, "Response was successful!")
                   val locationsResponse = response.body()
@@ -42,7 +41,6 @@ class LocationsRepositoryImpl(private val locationsApiService: LocationsApiServi
               }
 
               override fun onFailure(call: Call<List<Place>>, t: Throwable) {
-                println("request failed! ${t.message}")
                 Log.d(DEBUG_TAG, "request failed! ${t.message}")
                 resultLiveData.value = null // or any other value that represents a network error
               }
