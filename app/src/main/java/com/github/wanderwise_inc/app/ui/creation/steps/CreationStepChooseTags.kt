@@ -7,11 +7,15 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -71,7 +75,7 @@ fun CreationStepChooseTagsScreen(
       Modifier
           .fillMaxSize()
           .testTag(TestTags.CREATION_SCREEN_TAGS)
-          .background(MaterialTheme.colorScheme.primaryContainer),
+          .background(MaterialTheme.colorScheme.background),
       verticalArrangement = Arrangement.spacedBy(10.dp)) {
         ItineraryImageBanner(
             createItineraryViewModel = createItineraryViewModel,
@@ -197,7 +201,7 @@ fun RelevantTags(createItineraryViewModel: CreateItineraryViewModel) {
 
   Button(
       modifier = Modifier.testTag(TestTags.ITINERARY_CREATION_TAGS),
-      onClick = { isTagsDDM = true }) {
+      onClick = { isTagsDDM = true}) {
         Text("Add Tags")
       }
 
@@ -207,11 +211,13 @@ fun RelevantTags(createItineraryViewModel: CreateItineraryViewModel) {
             onDismissRequest = {isTagsDDM = false}
         ){
             OutlinedCard(
-                modifier = Modifier.padding(16.dp).size(400.dp, 500.dp),
+                modifier = Modifier
+                    .padding(8.dp)
+                    .wrapContentSize(),
 //                elevation = 8.dp,
                 shape = MaterialTheme.shapes.medium
             ){
-                TagSelector(searchCategoryList = allTags, selectedTags = dispTags)
+                TagSelector(searchCategoryList = allTags, selectedTags = dispTags, createItineraryViewModel = createItineraryViewModel)
             }
         }
     }
@@ -255,34 +261,46 @@ fun IsPublicSwitchButton(createItineraryViewModel: CreateItineraryViewModel) {
   }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun TagSelector(searchCategoryList: List<SearchCategory>, selectedTags: MutableList<Tag>){
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = Modifier.padding(16.dp)
+fun TagSelector(searchCategoryList: List<SearchCategory>, selectedTags: MutableList<Tag>, createItineraryViewModel: CreateItineraryViewModel){
+    Column {
+        Box(Modifier.fillMaxWidth().padding(6.dp)) {
+            Text("Please select up to $MAX_TAGS tags", Modifier.align(Alignment.Center))
+        }
+        FlowRow(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(0.dp)
         ) {
-        items(searchCategoryList) { sc ->
-            TagsButton(searchCategory = sc, selectedTags = selectedTags)
-
+            for (sc in searchCategoryList) {
+                TagsButton(
+                    searchCategory = sc,
+                    selectedTags = selectedTags,
+                    createItineraryViewModel = createItineraryViewModel
+                )
+            }
         }
     }
 }
 
 @Composable
-fun TagsButton(searchCategory: SearchCategory, selectedTags: MutableList<Tag>){
+fun TagsButton(searchCategory: SearchCategory, selectedTags: MutableList<Tag>, createItineraryViewModel: CreateItineraryViewModel){
     var selected by  remember{ mutableStateOf(selectedTags.contains(searchCategory.tag))}
     FilterChip(
-        modifier = Modifier.height(40.dp),
+        modifier = Modifier.wrapContentSize(),
         selected = selected,
         onClick = {
             if(selected){
                 selectedTags.remove(searchCategory.tag)
+                createItineraryViewModel.getNewItinerary()!!.tags.remove(searchCategory.tag)
                 selected = false
             } else if(selectedTags.size < MAX_TAGS){
-            selected = true
-            selectedTags.add(searchCategory.tag)
+                selectedTags.add(searchCategory.tag)
+                createItineraryViewModel.getNewItinerary()!!.tags.add(searchCategory.tag)
+                selected = true
             } },
         label = { Text(searchCategory.tag) },
         leadingIcon = {
@@ -294,7 +312,7 @@ fun TagsButton(searchCategory: SearchCategory, selectedTags: MutableList<Tag>){
             iconColor = MaterialTheme.colorScheme.onSecondaryContainer,
             selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
             selectedLabelColor = MaterialTheme.colorScheme.onPrimaryContainer,
-            selectedLeadingIconColor = MaterialTheme.colorScheme.onPrimaryContainer)
+            selectedLeadingIconColor = MaterialTheme.colorScheme.onPrimaryContainer,)
     )
 
 }
