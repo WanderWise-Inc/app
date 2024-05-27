@@ -19,7 +19,8 @@ val LightColorPalette =
         onBackground = Color.Black,
         surface = OffWhite,
         onSurface = Color.Black,
-        tertiary = DarkTaupe,
+        tertiary = LightTaupe,
+        onTertiary = LightGray,
     )
 
 val DarkColorPalette =

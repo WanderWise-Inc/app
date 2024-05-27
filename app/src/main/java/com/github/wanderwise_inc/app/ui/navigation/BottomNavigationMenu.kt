@@ -27,7 +27,8 @@ import com.github.wanderwise_inc.app.viewmodel.BottomNavigationViewModel
 @Composable
 fun BottomNavigationMenu(
     navigationActions: NavigationActions,
-    bottomNavigationViewModel: BottomNavigationViewModel
+    bottomNavigationViewModel: BottomNavigationViewModel,
+
 ) {
 
   val _selectedIndex by bottomNavigationViewModel.selected.observeAsState()
