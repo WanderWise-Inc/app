@@ -27,7 +27,7 @@ val DarkColorPalette =
     darkColorScheme(
         primary = Maroon,
         onPrimary = Color.White,
-        primaryContainer = Taupe,
+        primaryContainer = DarkGray,
         secondary = LightMaroon,
         onSecondary = Color.White,
         background = DarkGray,

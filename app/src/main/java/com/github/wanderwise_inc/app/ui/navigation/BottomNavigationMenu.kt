@@ -12,7 +12,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -28,14 +27,14 @@ import com.github.wanderwise_inc.app.viewmodel.BottomNavigationViewModel
 fun BottomNavigationMenu(
     navigationActions: NavigationActions,
     bottomNavigationViewModel: BottomNavigationViewModel,
-
 ) {
 
   val _selectedIndex by bottomNavigationViewModel.selected.observeAsState()
   val selectedIndex = _selectedIndex ?: 0
 
   NavigationBar(
-      modifier = Modifier.testTag(TestTags.BOTTOM_NAV)) {
+      modifier = Modifier.testTag(TestTags.BOTTOM_NAV),
+      containerColor = MaterialTheme.colorScheme.primaryContainer) {
         TOP_LEVEL_DESTINATIONS.forEachIndexed { index, dest ->
           NavigationBarItem(
               selected = index == selectedIndex,
