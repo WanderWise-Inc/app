@@ -38,10 +38,7 @@ fun BottomNavigationMenu(
         TOP_LEVEL_DESTINATIONS.forEachIndexed { index, dest ->
           NavigationBarItem(
               selected = index == selectedIndex,
-              onClick = {
-                // bottomNavigationViewModel.setSelected(index)
-                navigationActions.navigateTo(dest)
-              },
+              onClick = { navigationActions.navigateTo(dest) },
               icon = {
                 Icon(
                     painter = painterResource(id = dest.icon),
@@ -60,7 +57,6 @@ fun BottomNavigationMenu(
                         TextStyle(
                             fontSize = 12.sp,
                             lineHeight = 16.sp,
-                            // fontFamily = FontFamily(Font(R.font.roboto)),
                             fontWeight = FontWeight(600),
                             color = MaterialTheme.colorScheme.onPrimaryContainer,
                             textAlign = TextAlign.Center,

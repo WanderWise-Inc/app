@@ -28,10 +28,8 @@ fun HomeScreen(
   val navigationActions = NavigationActions(navController)
   Scaffold(
       topBar = {},
-      bottomBar = {
-        BottomNavigationMenu(navigationActions, bottomNavigationViewModel)
-      }) { // MaterialTheme.colorScheme.primaryContainer
-  innerPadding ->
+      bottomBar = { BottomNavigationMenu(navigationActions, bottomNavigationViewModel) }) {
+          innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
           HomeNavGraph(
               navController,
