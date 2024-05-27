@@ -93,7 +93,7 @@ fun ItineraryBanner(
   ElevatedCard(
       colors =
           CardDefaults.cardColors(
-              containerColor = MaterialTheme.colorScheme.primaryContainer,
+              containerColor = MaterialTheme.colorScheme.onTertiary,
           ),
       elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
       shape = RoundedCornerShape(9.dp),

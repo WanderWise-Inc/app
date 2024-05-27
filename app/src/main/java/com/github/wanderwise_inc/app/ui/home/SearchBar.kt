@@ -67,7 +67,7 @@ fun SearchBar(
       placeholder = {
         Text(
             text = "Wander where?",
-            color = MaterialTheme.colorScheme.onPrimaryContainer,
+            color = MaterialTheme.colorScheme.onSecondaryContainer,
         )
       },
       singleLine = true,
