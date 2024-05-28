@@ -1,6 +1,5 @@
 package com.github.wanderwise_inc.app.ui.map
 
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -24,7 +23,6 @@ import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.LocationClient
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
-import com.google.android.gms.maps.MapsInitializer
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runTest
