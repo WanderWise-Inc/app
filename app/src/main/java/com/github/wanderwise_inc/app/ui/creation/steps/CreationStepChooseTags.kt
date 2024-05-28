@@ -13,9 +13,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
@@ -27,6 +29,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -63,9 +66,10 @@ fun CreationStepChooseTagsScreen(
   Column(
       horizontalAlignment = Alignment.CenterHorizontally,
       modifier =
-          Modifier.fillMaxSize()
-              .testTag(TestTags.CREATION_SCREEN_TAGS)
-              .background(MaterialTheme.colorScheme.background),
+      Modifier
+          .fillMaxSize()
+          .testTag(TestTags.CREATION_SCREEN_TAGS)
+          .background(MaterialTheme.colorScheme.background),
       verticalArrangement = Arrangement.spacedBy(10.dp)) {
         ItineraryImageBanner(
             createItineraryViewModel = createItineraryViewModel,
@@ -91,20 +95,21 @@ fun ItineraryImageBanner(
 
   Box(
       modifier =
-          Modifier.fillMaxWidth()
-              .testTag(TestTags.CREATION_SCREEN_IMAGE_BANNER_BOX)
-              .padding(all = 10.dp)
-              .height(120.dp)
-              .clip(MaterialTheme.shapes.medium)
-              .background(MaterialTheme.colorScheme.surface)
-              .clickable {
-                coroutineScope.launch {
+      Modifier
+          .fillMaxWidth()
+          .testTag(TestTags.CREATION_SCREEN_IMAGE_BANNER_BOX)
+          .padding(all = 10.dp)
+          .height(120.dp)
+          .clip(MaterialTheme.shapes.medium)
+          .background(MaterialTheme.colorScheme.surface)
+          .clickable {
+              coroutineScope.launch {
                   Intent(Intent.ACTION_GET_CONTENT).also {
-                    it.type = "image/*" // Set type to any image format.
-                    imageRepository.launchActivity(it) // Launch activity to select an image.
+                      it.type = "image/*" // Set type to any image format.
+                      imageRepository.launchActivity(it) // Launch activity to select an image.
                   }
-                }
-              },
+              }
+          },
       contentAlignment = Alignment.Center) {
         imageUploaded = imageRepository.getCurrentFile()
         if (imageUploaded != null) {
@@ -117,14 +122,15 @@ fun ItineraryImageBanner(
                       .build(),
               contentDescription = "itinerary_image",
               contentScale = ContentScale.Crop,
-              modifier = Modifier.testTag(TestTags.CREATION_SCREEN_IMAGE_BANNER).fillMaxSize())
+              modifier = Modifier
+                  .testTag(TestTags.CREATION_SCREEN_IMAGE_BANNER)
+                  .fillMaxSize())
         } else {
           Text("Itinerary Banner Please Upload Image")
         }
       }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PriceEstimationTextBox(createItineraryViewModel: CreateItineraryViewModel) {
   var priceEstimateDisplay by remember {
@@ -164,6 +170,7 @@ fun TimeDurationEstimation(createItineraryViewModel: CreateItineraryViewModel) {
       })
 }
 
+/** @brief takes care of the tags parameters */
 @Composable
 fun RelevantTags(createItineraryViewModel: CreateItineraryViewModel) {
   val allTags = ItineraryTags.toSearchCategoryList()
@@ -174,18 +181,12 @@ fun RelevantTags(createItineraryViewModel: CreateItineraryViewModel) {
     selectedTags.add(tag)
   }
   val dispTags by remember(selectedTags) { mutableStateOf(selectedTags) }
-  var triedToAddMoreThan3Tags by remember { mutableStateOf(false) }
 
   Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
     Text("Selected Tags: ${dispTags.joinToString(", ")}")
-    if (triedToAddMoreThan3Tags) {
-      Text(
-          "You can only select up to 3 tags",
-          color = MaterialTheme.colorScheme.error,
-          modifier = Modifier.padding(top = 50.dp))
-    }
   }
 
+    // clickable button to open dropdown menu
   Button(
       modifier = Modifier.testTag(TestTags.ITINERARY_CREATION_TAGS),
       onClick = { isTagsDDM = true }) {
@@ -193,9 +194,12 @@ fun RelevantTags(createItineraryViewModel: CreateItineraryViewModel) {
       }
 
   if (isTagsDDM) {
+      // if drop down menu is set to "true" opens popup where we can select tags
     Popup(alignment = Alignment.Center, onDismissRequest = { isTagsDDM = false }) {
       OutlinedCard(
-          modifier = Modifier.padding(8.dp).wrapContentSize(),
+          modifier = Modifier
+              .padding(8.dp)
+              .wrapContentSize(),
           shape = MaterialTheme.shapes.medium) {
             TagSelector(
                 searchCategoryList = allTags,
@@ -226,6 +230,7 @@ fun IsPublicSwitchButton(createItineraryViewModel: CreateItineraryViewModel) {
   }
 }
 
+/** @brief arranges the tags is a grid like manner */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun TagSelector(
@@ -234,32 +239,40 @@ fun TagSelector(
     createItineraryViewModel: CreateItineraryViewModel
 ) {
   Column {
-    Box(Modifier.fillMaxWidth().padding(6.dp)) {
-      Text("Please select up to $MAX_TAGS tags", Modifier.align(Alignment.Center))
+    Box(
+        Modifier
+            .fillMaxWidth()
+            .padding(6.dp)) {
+      Text(text = "Please select up to $MAX_TAGS tags", modifier = Modifier.align(Alignment.Center), fontWeight = FontWeight.Bold)
     }
     FlowRow(
-        modifier = Modifier.fillMaxWidth().padding(12.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalArrangement = Arrangement.spacedBy(0.dp)) {
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(12.dp)
+            .testTag(TestTags.POPUP_TAG_SELECTION),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),) {
           for (sc in searchCategoryList) {
             TagsButton(
                 searchCategory = sc,
                 selectedTags = selectedTags,
-                createItineraryViewModel = createItineraryViewModel)
+                createItineraryViewModel = createItineraryViewModel,)
           }
         }
   }
 }
 
+/** @brief takes care of composing the clickable tags*/
 @Composable
 fun TagsButton(
     searchCategory: SearchCategory,
     selectedTags: MutableList<Tag>,
-    createItineraryViewModel: CreateItineraryViewModel
+    createItineraryViewModel: CreateItineraryViewModel,
 ) {
   var selected by remember { mutableStateOf(selectedTags.contains(searchCategory.tag)) }
   FilterChip(
-      modifier = Modifier.wrapContentSize(),
+      modifier = Modifier
+          .wrapContentSize()
+          .testTag("${TestTags.TAG_CHIP}_${searchCategory.tag}"),
       selected = selected,
       onClick = {
         if (selected) {
@@ -274,13 +287,19 @@ fun TagsButton(
       },
       label = { Text(searchCategory.tag) },
       leadingIcon = { Icon(imageVector = searchCategory.icon, searchCategory.tag) },
+      trailingIcon = { if (selected) {
+          Icon(imageVector = Icons.Outlined.Check , "added")
+        } else {
+          Icon(imageVector = Icons.Outlined.Add , "add")
+      }
+                     },
       colors =
           FilterChipDefaults.filterChipColors(
               containerColor = MaterialTheme.colorScheme.secondaryContainer,
               labelColor = MaterialTheme.colorScheme.onSecondaryContainer,
               iconColor = MaterialTheme.colorScheme.onSecondaryContainer,
-              selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
-              selectedLabelColor = MaterialTheme.colorScheme.onPrimaryContainer,
-              selectedLeadingIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
+              selectedContainerColor = MaterialTheme.colorScheme.primary,
+              selectedLabelColor = MaterialTheme.colorScheme.onPrimary,
+              selectedLeadingIconColor = MaterialTheme.colorScheme.onPrimary,
           ))
 }

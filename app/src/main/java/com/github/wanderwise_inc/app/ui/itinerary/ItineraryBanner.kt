@@ -117,11 +117,16 @@ fun ItineraryBanner(
                 BannerTags(itinerary, Modifier.align(Alignment.BottomStart))
               }
               BannerTitle(itinerary)
-              BannerAttributes(itinerary, user, numLikes)
+              BannerAttributes(itinerary, numLikes)
             }
       }
 }
 
+/**
+ * @brief composes the image of the banner
+ * @param painter: the image to be drawn
+ * @param itinerary: the itinerary of the banner for image description
+ */
 @Composable
 fun BannerImage(painter: AsyncImagePainter, itinerary: Itinerary) {
   Image(
@@ -135,6 +140,11 @@ fun BannerImage(painter: AsyncImagePainter, itinerary: Itinerary) {
   }
 }
 
+/**
+ * @brief composes the tags of the itinerary
+ * @param itinerary: for getting the tags
+ * @param modifier: for the placement of the tags on the banner image
+ */
 @Composable
 fun BannerTags(itinerary: Itinerary, modifier: Modifier) {
   Row(
@@ -162,6 +172,10 @@ fun BannerTags(itinerary: Itinerary, modifier: Modifier) {
       }
 }
 
+/**
+ * @brief writes the title of the image
+ * @param itinerary: for fetching the title of the image
+ */
 @Composable
 fun BannerTitle(itinerary: Itinerary) {
   Text(
@@ -173,12 +187,14 @@ fun BannerTitle(itinerary: Itinerary) {
       modifier = Modifier)
 }
 
+/**
+ * @brief writes the attribute of the itinerary
+ * @param itinerary: for "price" and "time"
+ * @param numLikes: for the number of likes
+ */
 @Composable
-fun BannerAttributes(itinerary: Itinerary, user: Profile?, numLikes: Int) {
+fun BannerAttributes(itinerary: Itinerary, numLikes: Int) {
   Row(modifier = Modifier.fillMaxHeight(), horizontalArrangement = Arrangement.SpaceBetween) {
-    // Secondary indicator fields
-    val textUser = user?.displayName ?: "-"
-
     Time(itinerary.time)
 
     Spacer(Modifier.padding(10.dp))
@@ -191,6 +207,10 @@ fun BannerAttributes(itinerary: Itinerary, user: Profile?, numLikes: Int) {
   }
 }
 
+
+/**
+ * @brief write the style of the time attribute
+ */
 @Composable
 fun Time(time: Int) {
   Row(horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
@@ -210,7 +230,9 @@ fun Time(time: Int) {
     )
   }
 }
-
+/**
+ * @brief write the style of the price attribute
+ */
 @Composable
 fun Price(price: Float) {
   Row(horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
@@ -231,6 +253,9 @@ fun Price(price: Float) {
   }
 }
 
+/**
+ * @brief write the style of the likes attribute
+ */
 @Composable
 fun Likes(numLikes: Int) {
   Row(horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
@@ -251,6 +276,14 @@ fun Likes(numLikes: Int) {
   }
 }
 
+/**
+ * @brief the clickable like button to like an itinerary
+ * @param modifier: for positioning the button on the Box composable
+ * @param isLiked: a boolean that holds if the value is liked or not
+ * @param numLikes: needed to have a parameter to be listened in order to recompose
+ * @param itinerary: for the testTag
+ * @param onClick: a lambda holding the like logic
+ */
 @Composable
 fun BannerLikeButton(
     modifier: Modifier,
