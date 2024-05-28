@@ -132,32 +132,30 @@ class CreationStepChooseTagsTest {
     }
     composeTestRule.onNodeWithTag(TestTags.ITINERARY_CREATION_TAGS).assertIsDisplayed()
     composeTestRule.onNodeWithTag(TestTags.ITINERARY_CREATION_TAGS).performClick()
-      composeTestRule.onNodeWithTag(TestTags.POPUP_TAG_SELECTION).assertIsDisplayed()
+    composeTestRule.onNodeWithTag(TestTags.POPUP_TAG_SELECTION).assertIsDisplayed()
     for (tag in allTags) {
       composeTestRule.onNodeWithTag("${TestTags.TAG_CHIP}_$tag").assertIsDisplayed()
       composeTestRule.onNodeWithText(tag).performClick()
-      //composeTestRule.onNodeWithTag(TestTags.ITINERARY_CREATION_TAGS).performClick()
+      // composeTestRule.onNodeWithTag(TestTags.ITINERARY_CREATION_TAGS).performClick()
     }
   }
 
-    @Test
-    fun `clicking on a tag two times deselects it`(){
-        every { imageRepository.getCurrentFile() } returns null
-        composeTestRule.setContent {
-            CreationStepChooseTagsScreen(
-                createItineraryViewModel = createItineraryViewModel, imageRepository = imageRepository)
-        }
-        composeTestRule.onNodeWithTag(TestTags.ITINERARY_CREATION_TAGS).assertIsDisplayed()
-        composeTestRule.onNodeWithTag(TestTags.ITINERARY_CREATION_TAGS).performClick()
-
-        //deselection
-        composeTestRule.onNodeWithTag("${TestTags.TAG_CHIP}_${ItineraryTags.NATURE}").performClick()
-        assert(!createItineraryViewModel.getNewItinerary()!!.tags.contains(ItineraryTags.NATURE))
-
-        //reselection
-        composeTestRule.onNodeWithTag("${TestTags.TAG_CHIP}_${ItineraryTags.NATURE}").performClick()
-        assert(createItineraryViewModel.getNewItinerary()!!.tags.contains(ItineraryTags.NATURE))
-
-
+  @Test
+  fun `clicking on a tag two times deselects it`() {
+    every { imageRepository.getCurrentFile() } returns null
+    composeTestRule.setContent {
+      CreationStepChooseTagsScreen(
+          createItineraryViewModel = createItineraryViewModel, imageRepository = imageRepository)
     }
+    composeTestRule.onNodeWithTag(TestTags.ITINERARY_CREATION_TAGS).assertIsDisplayed()
+    composeTestRule.onNodeWithTag(TestTags.ITINERARY_CREATION_TAGS).performClick()
+
+    // deselection
+    composeTestRule.onNodeWithTag("${TestTags.TAG_CHIP}_${ItineraryTags.NATURE}").performClick()
+    assert(!createItineraryViewModel.getNewItinerary()!!.tags.contains(ItineraryTags.NATURE))
+
+    // reselection
+    composeTestRule.onNodeWithTag("${TestTags.TAG_CHIP}_${ItineraryTags.NATURE}").performClick()
+    assert(createItineraryViewModel.getNewItinerary()!!.tags.contains(ItineraryTags.NATURE))
+  }
 }

@@ -50,7 +50,6 @@ import coil.request.ImageRequest
 import com.github.wanderwise_inc.app.R
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.model.location.Itinerary
-import com.github.wanderwise_inc.app.model.profile.Profile
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 
@@ -123,9 +122,9 @@ fun ItineraryBanner(
 }
 
 /**
- * @brief composes the image of the banner
  * @param painter: the image to be drawn
  * @param itinerary: the itinerary of the banner for image description
+ * @brief composes the image of the banner
  */
 @Composable
 fun BannerImage(painter: AsyncImagePainter, itinerary: Itinerary) {
@@ -141,9 +140,9 @@ fun BannerImage(painter: AsyncImagePainter, itinerary: Itinerary) {
 }
 
 /**
- * @brief composes the tags of the itinerary
  * @param itinerary: for getting the tags
  * @param modifier: for the placement of the tags on the banner image
+ * @brief composes the tags of the itinerary
  */
 @Composable
 fun BannerTags(itinerary: Itinerary, modifier: Modifier) {
@@ -173,8 +172,8 @@ fun BannerTags(itinerary: Itinerary, modifier: Modifier) {
 }
 
 /**
- * @brief writes the title of the image
  * @param itinerary: for fetching the title of the image
+ * @brief writes the title of the image
  */
 @Composable
 fun BannerTitle(itinerary: Itinerary) {
@@ -188,9 +187,9 @@ fun BannerTitle(itinerary: Itinerary) {
 }
 
 /**
- * @brief writes the attribute of the itinerary
  * @param itinerary: for "price" and "time"
  * @param numLikes: for the number of likes
+ * @brief writes the attribute of the itinerary
  */
 @Composable
 fun BannerAttributes(itinerary: Itinerary, numLikes: Int) {
@@ -207,10 +206,7 @@ fun BannerAttributes(itinerary: Itinerary, numLikes: Int) {
   }
 }
 
-
-/**
- * @brief write the style of the time attribute
- */
+/** @brief write the style of the time attribute */
 @Composable
 fun Time(time: Int) {
   Row(horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
@@ -230,9 +226,7 @@ fun Time(time: Int) {
     )
   }
 }
-/**
- * @brief write the style of the price attribute
- */
+/** @brief write the style of the price attribute */
 @Composable
 fun Price(price: Float) {
   Row(horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
@@ -253,9 +247,7 @@ fun Price(price: Float) {
   }
 }
 
-/**
- * @brief write the style of the likes attribute
- */
+/** @brief write the style of the likes attribute */
 @Composable
 fun Likes(numLikes: Int) {
   Row(horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
@@ -277,12 +269,12 @@ fun Likes(numLikes: Int) {
 }
 
 /**
- * @brief the clickable like button to like an itinerary
  * @param modifier: for positioning the button on the Box composable
  * @param isLiked: a boolean that holds if the value is liked or not
  * @param numLikes: needed to have a parameter to be listened in order to recompose
  * @param itinerary: for the testTag
  * @param onClick: a lambda holding the like logic
+ * @brief the clickable like button to like an itinerary
  */
 @Composable
 fun BannerLikeButton(
