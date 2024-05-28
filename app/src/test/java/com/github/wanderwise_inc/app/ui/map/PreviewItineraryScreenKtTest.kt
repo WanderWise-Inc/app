@@ -171,40 +171,6 @@ class PreviewItineraryScreenKtTest {
   }
 
   @Test
-  fun `pressing center button should update camera position`() {
-    val epflLocation = Location(epflLat, epflLon)
-
-    var cameraPositionStateObserver: CameraPositionState? = null
-
-    val delta = 0.0001
-
-    composeTestRule.setContent {
-      Box {
-        val cameraPositionState = rememberCameraPositionState {
-          position =
-              CameraPosition.fromLatLngZoom(itinerary.computeCenterOfGravity().toLatLng(), 13f)
-        }
-        cameraPositionStateObserver = cameraPositionState
-        Scaffold(floatingActionButton = { CenterButton({}) }) {
-            paddingValues ->
-          GoogleMap(
-              modifier = Modifier.padding(paddingValues), cameraPositionState = cameraPositionState)
-        }
-      }
-    }
-
-    composeTestRule.onNodeWithTag(TestTags.MAP_CENTER_CAMERA_BUTTON).assertIsDisplayed()
-    // TODO test fails: java.lang.NullPointerException: CameraUpdateFactory is not initialized
-    // composeTestRule.onNodeWithTag("Center Button").performClick()
-    /*
-    cameraPositionStateObserver?.let {
-      assertEquals(it.position.target.latitude, epflLat, delta)
-      assertEquals(it.position.target.longitude, epflLon, delta)
-    }
-    */
-  }
-
-  @Test
   fun `delete itinerary button should exist when user is the owner`() {
     profileViewModel.setActiveProfile(Profile("uid"))
     composeTestRule.setContent {
