@@ -167,7 +167,7 @@ dependencies {
     debugImplementation(libs.compose.tooling)
     globalTestImplementation(libs.compose.test.junit)
     debugImplementation(libs.compose.test.manifest)
-    implementation("androidx.compose.ui:ui:1.7.0-beta01")
+    implementation(libs.androidx.ui)
 
 // ------------------- Material -------------------
     implementation(libs.androidx.material.icons.extended)
