@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScopeInstance.align
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -174,7 +173,10 @@ fun PreviewItineraryScreen(
                       }
                   }
               }
-              FollowItineraryButton(followItinerary)
+              FollowItineraryButton(
+                  followItinerary,
+                  Modifier.align(Alignment.TopCenter) // this parameter allows alignment wrt containing Box composable
+              )
           }
         }
   }
@@ -184,7 +186,7 @@ fun PreviewItineraryScreen(
  * @brief: Button which launches google maps with specified itinerary once pressed
  */
 @Composable
-fun FollowItineraryButton(followItinerary: () -> Unit) {
+fun FollowItineraryButton(followItinerary: () -> Unit, modifier: Modifier) {
     ExtendedFloatingActionButton(
         onClick = { followItinerary() },
         icon = {
@@ -198,9 +200,7 @@ fun FollowItineraryButton(followItinerary: () -> Unit) {
         },
         containerColor = MaterialTheme.colorScheme.secondaryContainer,
         contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
-        modifier =
-        Modifier
-            .align(Alignment.TopCenter)
+        modifier = modifier
             .padding(12.dp)
             .testTag(TestTags.START_NEW_ITINERARY_STARTING))
 }
