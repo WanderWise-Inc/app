@@ -65,10 +65,9 @@ fun CreationStepChooseTagsScreen(
   Column(
       horizontalAlignment = Alignment.CenterHorizontally,
       modifier =
-      Modifier
-          .fillMaxSize()
-          .testTag(TestTags.CREATION_SCREEN_TAGS)
-          .background(MaterialTheme.colorScheme.background),
+          Modifier.fillMaxSize()
+              .testTag(TestTags.CREATION_SCREEN_TAGS)
+              .background(MaterialTheme.colorScheme.background),
       verticalArrangement = Arrangement.spacedBy(10.dp)) {
         ItineraryImageBanner(
             createItineraryViewModel = createItineraryViewModel,
@@ -94,21 +93,20 @@ fun ItineraryImageBanner(
 
   Box(
       modifier =
-      Modifier
-          .fillMaxWidth()
-          .testTag(TestTags.CREATION_SCREEN_IMAGE_BANNER_BOX)
-          .padding(all = 10.dp)
-          .height(120.dp)
-          .clip(MaterialTheme.shapes.medium)
-          .background(MaterialTheme.colorScheme.surface)
-          .clickable {
-              coroutineScope.launch {
+          Modifier.fillMaxWidth()
+              .testTag(TestTags.CREATION_SCREEN_IMAGE_BANNER_BOX)
+              .padding(all = 10.dp)
+              .height(120.dp)
+              .clip(MaterialTheme.shapes.medium)
+              .background(MaterialTheme.colorScheme.surface)
+              .clickable {
+                coroutineScope.launch {
                   Intent(Intent.ACTION_GET_CONTENT).also {
-                      it.type = "image/*" // Set type to any image format.
-                      imageRepository.launchActivity(it) // Launch activity to select an image.
+                    it.type = "image/*" // Set type to any image format.
+                    imageRepository.launchActivity(it) // Launch activity to select an image.
                   }
-              }
-          },
+                }
+              },
       contentAlignment = Alignment.Center) {
         imageUploaded = imageRepository.getCurrentFile()
         if (imageUploaded != null) {
@@ -121,9 +119,7 @@ fun ItineraryImageBanner(
                       .build(),
               contentDescription = "itinerary_image",
               contentScale = ContentScale.Crop,
-              modifier = Modifier
-                  .testTag(TestTags.CREATION_SCREEN_IMAGE_BANNER)
-                  .fillMaxSize())
+              modifier = Modifier.testTag(TestTags.CREATION_SCREEN_IMAGE_BANNER).fillMaxSize())
         } else {
           Text("Itinerary Banner Please Upload Image")
         }
@@ -197,9 +193,7 @@ fun RelevantTags(createItineraryViewModel: CreateItineraryViewModel) {
     // if drop down menu is set to "true" opens popup where we can select tags
     Popup(alignment = Alignment.Center, onDismissRequest = { isTagsDDM = false }) {
       OutlinedCard(
-          modifier = Modifier
-              .padding(8.dp)
-              .wrapContentSize(),
+          modifier = Modifier.padding(8.dp).wrapContentSize(),
           shape = MaterialTheme.shapes.medium) {
             TagSelector(
                 searchCategoryList = allTags,
@@ -238,32 +232,31 @@ fun TagSelector(
     selectedTags: MutableList<Tag>,
     newItinerary: Itinerary.Builder
 ) {
-    var mtt by remember { mutableStateOf(false)}
+  var mtt by remember { mutableStateOf(false) }
   Column(horizontalAlignment = Alignment.CenterHorizontally) {
-
-      Text(
-          text = "Please select up to $MAX_TAGS tags",
-          modifier = Modifier.padding(top = 12.dp),
-          fontWeight = FontWeight.Bold)
+    Text(
+        text = "Please select up to $MAX_TAGS tags",
+        modifier = Modifier.padding(top = 12.dp),
+        fontWeight = FontWeight.Bold)
 
     FlowRow(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(12.dp)
-            .testTag(TestTags.POPUP_TAG_SELECTION),
+        modifier = Modifier.fillMaxWidth().padding(12.dp).testTag(TestTags.POPUP_TAG_SELECTION),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
       for (sc in searchCategoryList) {
-        TagsButton(
-            searchCategory = sc,
-            selectedTags = selectedTags,
-            newItinerary = newItinerary
-        ){ b : Boolean -> mtt = b}
+        TagsButton(searchCategory = sc, selectedTags = selectedTags, newItinerary = newItinerary) {
+            b: Boolean ->
+          mtt = b
+        }
       }
     }
-      if(mtt){
-          Text(text = "Cannot add more than $MAX_TAGS", color = MaterialTheme.colorScheme.error, modifier = Modifier.padding(bottom = 12.dp).testTag(TestTags.ERROR_MORE_THAN_ALLOWED_TAGS))
-      }
+    if (mtt) {
+      Text(
+          text = "Cannot add more than $MAX_TAGS",
+          color = MaterialTheme.colorScheme.error,
+          modifier =
+              Modifier.padding(bottom = 12.dp).testTag(TestTags.ERROR_MORE_THAN_ALLOWED_TAGS))
+    }
   }
 }
 
@@ -278,23 +271,21 @@ fun TagsButton(
   var selected by remember { mutableStateOf(selectedTags.contains(searchCategory.tag)) }
 
   FilterChip(
-      modifier = Modifier
-          .wrapContentSize()
-          .testTag("${TestTags.TAG_CHIP}_${searchCategory.tag}"),
+      modifier = Modifier.wrapContentSize().testTag("${TestTags.TAG_CHIP}_${searchCategory.tag}"),
       selected = selected,
       onClick = {
         if (selected) {
           selectedTags.remove(searchCategory.tag)
           newItinerary.tags.remove(searchCategory.tag)
           selected = false
-            mtt(false)
+          mtt(false)
         } else if (selectedTags.size < MAX_TAGS) {
           selectedTags.add(searchCategory.tag)
           newItinerary.tags.add(searchCategory.tag)
           selected = true
-            mtt(false)
+          mtt(false)
         } else {
-            mtt(true)
+          mtt(true)
         }
       },
       label = { Text(searchCategory.tag) },
