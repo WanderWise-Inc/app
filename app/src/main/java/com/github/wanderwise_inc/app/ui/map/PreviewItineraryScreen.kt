@@ -132,12 +132,7 @@ fun PreviewItineraryScreen(
               navController)
         },
         modifier = Modifier.testTag(TestTags.MAP_PREVIEW_ITINERARY_SCREEN),
-        floatingActionButton = {
-          CenterButton(
-              /*cameraPositionState = cameraPositionState, currentLocation = userLocation*/ {
-            centeredOnUser = !centeredOnUser
-          })
-        },
+        floatingActionButton = { CenterButton { centeredOnUser = !centeredOnUser } },
         floatingActionButtonPosition = FabPosition.Start) { paddingValues ->
           Box {
             GoogleMap(
