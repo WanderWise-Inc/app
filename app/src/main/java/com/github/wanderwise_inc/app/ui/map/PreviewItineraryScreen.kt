@@ -139,56 +139,67 @@ fun PreviewItineraryScreen(
         },
         floatingActionButtonPosition = FabPosition.Start) { paddingValues ->
           Box {
-            GoogleMap(
-                modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues)
-                    .testTag(TestTags.MAP_GOOGLE_MAPS),
-                cameraPositionState = cameraPositionState) {
+              GoogleMap(
+                  modifier =
+                  Modifier
+                      .fillMaxSize()
+                      .padding(paddingValues)
+                      .testTag(TestTags.MAP_GOOGLE_MAPS),
+                  cameraPositionState = cameraPositionState
+              ) {
                   userLocation?.let {
-                    Marker(
-                        tag = TestTags.MAP_USER_LOCATION,
-                        state = MarkerState(position = it.toLatLng()),
-                        icon =
-                            BitmapDescriptorFactory.defaultMarker(
-                                BitmapDescriptorFactory.HUE_AZURE))
+                      Marker(
+                          tag = TestTags.MAP_USER_LOCATION,
+                          state = MarkerState(position = it.toLatLng()),
+                          icon =
+                          BitmapDescriptorFactory.defaultMarker(
+                              BitmapDescriptorFactory.HUE_AZURE
+                          )
+                      )
                   }
                   itinerary.locations.map { location ->
-                    AdvancedMarker(
-                        state = MarkerState(position = location.toLatLng()),
-                        title = location.title,
-                    )
-                    if (polylinePoints != null) {
-                      Polyline(points = polylinePoints!!, color = MaterialTheme.colorScheme.primary)
-                    }
+                      AdvancedMarker(
+                          state = MarkerState(position = location.toLatLng()),
+                          title = location.title,
+                      )
+                      if (polylinePoints != null) {
+                          Polyline(
+                              points = polylinePoints!!,
+                              color = MaterialTheme.colorScheme.primary
+                          )
+                      }
                   }
-                }
-            ExtendedFloatingActionButton(
-                onClick = {
-                  onMinimizedClick()
-                  isClicked = !isClicked
-                  itineraryViewModel.followItineraryOnGoogleMaps(context, itinerary)
-                },
-                icon = {
-                  Icon(
-                      Icons.AutoMirrored.Filled.DirectionsWalk,
-                      contentDescription = "follow",
-                      modifier = Modifier.size(32.dp))
-                },
-                text = {
-                  Text(text = if (isClicked) "Following..." else "Follow", color = Color.DarkGray)
-                },
-                containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                modifier =
-                Modifier
-                    .align(Alignment.TopCenter)
-                    .padding(12.dp)
-                    .testTag(TestTags.START_NEW_ITINERARY_STARTING))
+              }
+              FollowItineraryButton()
           }
         }
   }
+}
+
+@Composable
+fun FollowItineraryButton() {
+    ExtendedFloatingActionButton(
+        onClick = {
+            onMinimizedClick()
+            isClicked = !isClicked
+            itineraryViewModel.followItineraryOnGoogleMaps(context, itinerary)
+        },
+        icon = {
+            Icon(
+                Icons.AutoMirrored.Filled.DirectionsWalk,
+                contentDescription = "follow",
+                modifier = Modifier.size(32.dp))
+        },
+        text = {
+            Text(text = if (isClicked) "Following..." else "Follow", color = Color.DarkGray)
+        },
+        containerColor = MaterialTheme.colorScheme.secondaryContainer,
+        contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+        modifier =
+        Modifier
+            .align(Alignment.TopCenter)
+            .padding(12.dp)
+            .testTag(TestTags.START_NEW_ITINERARY_STARTING))
 }
 
 /**
@@ -229,7 +240,7 @@ private fun PreviewItineraryBannerMaximized(
 ) {
   val titleFontSize = 32.sp
   val innerFontSize = 16.sp
-  var ctr = remember { mutableIntStateOf(0) }
+  val ctr = remember { mutableIntStateOf(0) }
 
   val profilePictureModifier =
       Modifier
