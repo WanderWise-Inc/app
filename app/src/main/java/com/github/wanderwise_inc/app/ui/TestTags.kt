@@ -64,6 +64,7 @@ object TestTags {
 
   const val POPUP_TAG_SELECTION = "Popup Tag Selection"
   const val TAG_CHIP = "Tag Chip"
+  const val ERROR_MORE_THAN_ALLOWED_TAGS = "More than allowed tags"
 
   const val PRICE_SEARCH = "Price Search"
   const val TIME_SEARCH = "Time Search"
