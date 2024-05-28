@@ -179,7 +179,7 @@ class CreateItineraryE2ETest {
     composeTestRule.waitForIdle()
     composeTestRule.onNodeWithTag(TestTags.ITINERARY_CREATION_TAGS).performClick()
     composeTestRule
-        .onNodeWithTag("${TestTags.ITINERARY_CREATION_TAGS}_${itinerary.tags.first()}")
+        .onNodeWithTag("${TestTags.TAG_CHIP}_${itinerary.tags.first()}")
         .performClick() // add adventure tag
 
     // click on next step of itinerary creation
