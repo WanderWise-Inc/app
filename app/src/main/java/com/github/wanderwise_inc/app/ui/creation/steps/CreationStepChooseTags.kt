@@ -232,7 +232,7 @@ fun TagSelector(
     selectedTags: MutableList<Tag>,
     newItinerary: Itinerary.Builder
 ) {
-  var mtt by remember { mutableStateOf(false) }
+  var moreThanAllowedTags by remember { mutableStateOf(false) }
   Column(horizontalAlignment = Alignment.CenterHorizontally) {
     Text(
         text = "Please select up to $MAX_TAGS tags",
@@ -246,11 +246,11 @@ fun TagSelector(
       for (sc in searchCategoryList) {
         TagsButton(searchCategory = sc, selectedTags = selectedTags, newItinerary = newItinerary) {
             b: Boolean ->
-          mtt = b
+          moreThanAllowedTags = b
         }
       }
     }
-    if (mtt) {
+    if (moreThanAllowedTags) {
       Text(
           text = "Cannot add more than $MAX_TAGS",
           color = MaterialTheme.colorScheme.error,
@@ -266,7 +266,7 @@ fun TagsButton(
     searchCategory: SearchCategory,
     selectedTags: MutableList<Tag>,
     newItinerary: Itinerary.Builder,
-    mtt: (Boolean) -> Unit
+    moreThanAllowedTags: (Boolean) -> Unit
 ) {
   var selected by remember { mutableStateOf(selectedTags.contains(searchCategory.tag)) }
 
@@ -278,14 +278,14 @@ fun TagsButton(
           selectedTags.remove(searchCategory.tag)
           newItinerary.tags.remove(searchCategory.tag)
           selected = false
-          mtt(false)
+          moreThanAllowedTags(false)
         } else if (selectedTags.size < MAX_TAGS) {
           selectedTags.add(searchCategory.tag)
           newItinerary.tags.add(searchCategory.tag)
           selected = true
-          mtt(false)
+          moreThanAllowedTags(false)
         } else {
-          mtt(true)
+          moreThanAllowedTags(true)
         }
       },
       label = { Text(searchCategory.tag) },
