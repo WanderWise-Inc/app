@@ -57,6 +57,10 @@ import com.github.wanderwise_inc.app.model.location.Tag
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 
+const val DUMMY_IS_LIKED = false
+const val DUMMY_NUM_LIKES = 0
+const val DUMMY_ATTRIBUTES = "-"
+
 @Composable
 fun ItineraryBanner(
     itinerary: Itinerary,
@@ -94,7 +98,7 @@ fun ItineraryBanner(
   ElevatedCard(
       colors =
           CardDefaults.cardColors(
-              containerColor = MaterialTheme.colorScheme.onTertiary,
+              containerColor = MaterialTheme.colorScheme.tertiary,
           ),
       elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
       shape = RoundedCornerShape(9.dp),
@@ -316,7 +320,7 @@ fun DummyBanner(uid: String){
     Card(
         colors =
         CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.onTertiary,
+            containerColor = MaterialTheme.colorScheme.tertiary,
         ),
         shape = RoundedCornerShape(9.dp),
         modifier = Modifier.testTag("${TestTags.DUMMY_BANNER}_${uid}"),
@@ -329,20 +333,20 @@ fun DummyBanner(uid: String){
 
                 BannerLikeButton(
                     modifier = Modifier.align(Alignment.TopEnd),
-                    isLiked = false,
-                    numLikes = 0,
+                    isLiked = DUMMY_IS_LIKED,
+                    numLikes = DUMMY_NUM_LIKES,
                     itinerary = Itinerary.Builder().build()) {}
 
                 BannerTags(listOf("Dummy", "Itinerary"), Modifier.align(Alignment.BottomStart))
             }
             BannerTitle("Dummy creation preview itinerary")
-            BannerAttributes("-", "-", "-")
+            BannerAttributes(DUMMY_ATTRIBUTES, DUMMY_ATTRIBUTES, DUMMY_ATTRIBUTES)
         }
     }
 }
 
 @Composable
 fun DummyBannerImage(){
-    Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.secondaryContainer){}
+    Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.onTertiary){}
 }
 

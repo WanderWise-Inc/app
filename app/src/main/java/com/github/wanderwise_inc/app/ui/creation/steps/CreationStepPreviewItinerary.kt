@@ -25,6 +25,7 @@ fun CreationStepPreviewItinerary(
         itineraryViewModel = createItineraryViewModel,
         profileViewModel = profileViewModel,
         imageRepository = imageRepository,
-        navController)
+        navController = navController,
+        creationMode = true)
   }
 }

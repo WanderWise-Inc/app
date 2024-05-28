@@ -19,8 +19,8 @@ val LightColorPalette =
         onBackground = Color.Black,
         surface = OffWhite,
         onSurface = Color.Black,
-        tertiary = LightTaupe,
-        onTertiary = LightGray,
+        tertiary = LightGray,
+        onTertiary = LightTaupe,
         error = Color.Red,
     )
 

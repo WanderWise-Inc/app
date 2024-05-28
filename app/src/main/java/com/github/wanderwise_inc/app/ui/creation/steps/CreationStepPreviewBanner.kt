@@ -2,6 +2,7 @@ package com.github.wanderwise_inc.app.ui.creation.steps
 
 import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -33,11 +34,14 @@ fun CreationStepPreviewBanner(
   Box(
       modifier = Modifier
           .fillMaxSize()
-          .padding(horizontal = 10.dp, vertical = 5.dp),
+          .padding(horizontal = 10.dp),
       contentAlignment = Alignment.TopCenter) {
         LazyColumn(
             verticalArrangement = spacedBy(8.dp),
             modifier = Modifier.testTag(TestTags.CREATION_SCREEN_PREVIEW_BANNER)) {
+            item{
+                Spacer(Modifier)
+            }
                 item{
                     DummyBanner("0")
                 }
@@ -54,6 +58,9 @@ fun CreationStepPreviewBanner(
             }
             item{
                 DummyBanner("2")
+            }
+            item{
+                Spacer(Modifier.padding(5.dp))
             }
             }
       }
