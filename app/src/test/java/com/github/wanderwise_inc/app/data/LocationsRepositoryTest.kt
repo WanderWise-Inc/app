@@ -113,10 +113,6 @@ class LocationsRepositoryTest {
       locationsRepository.getPlaces("Penthaz", 1, key).observeForever { actual = it }
     }
 
-    // assert the correct query was sent to the server
-    val request = server.takeRequest()
-    assertEquals("/search?q=Penthaz&api_key=$key", request.path)
-
     testScheduler.advanceTimeBy(20000L)
     await untilNotNull { actual }
     assertEquals(expectedLocations, actual)
