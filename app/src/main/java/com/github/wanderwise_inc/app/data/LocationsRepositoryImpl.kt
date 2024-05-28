@@ -32,8 +32,9 @@ class LocationsRepositoryImpl(private val locationsApiService: LocationsApiServi
                   Log.d(DEBUG_TAG, "Response was successful!")
                   val locationsResponse = response.body()
                   Log.d(DEBUG_TAG, locationsResponse.toString())
-                  Log.d(DEBUG_TAG, "num elements = ${locationsResponse.extractLocations().size}")
-                  resultLiveData.value = locationsResponse.extractLocations().take(limit)
+                  val locations = locationsResponse.extractLocations()
+                  Log.d(DEBUG_TAG, "num elements = ${locations.size}")
+                  resultLiveData.value = locations.take(limit)
                 } else {
                   resultLiveData.value = null // or any other value that represents a network error
                 }
@@ -57,7 +58,7 @@ private fun List<Place>?.extractLocations(): List<Location> {
     else if (place.lat == null || place.lng == null) throw NullPointerException("lat-lng are null")
     else if (place.importance == null) throw NullPointerException("importance is null")
     else {
-      val displayNameSplit = place.displayName.split(",", limit = 2)
+      val displayNameSplit = place.displayName.split(", ", limit = 2)
       assert(displayNameSplit.size == 2)
       out.add(
           Location(

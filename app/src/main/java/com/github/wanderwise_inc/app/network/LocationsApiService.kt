@@ -1,6 +1,7 @@
 package com.github.wanderwise_inc.app.network
 
 import com.google.gson.annotations.SerializedName
+import okhttp3.HttpUrl
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -30,12 +31,12 @@ data class Place(
 
 /** Factory for creating `ApiService` design patterns for Locations uwu */
 object LocationsApiServiceFactory {
-  private const val BASE_URL = "https://geocode.maps.co/"
+  private val BASE_URL = HttpUrl.Builder().scheme("https").host("geocode.maps.co").build()
 
-  fun createLocationsApiService(): LocationsApiService {
+  fun createLocationsApiService(baseUrl: HttpUrl = BASE_URL): LocationsApiService {
     val retrofit =
         Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
