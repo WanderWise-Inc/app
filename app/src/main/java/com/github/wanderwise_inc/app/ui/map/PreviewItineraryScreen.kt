@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScopeInstance.align
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -90,6 +91,10 @@ fun PreviewItineraryScreen(
   val itinerary = itineraryViewModel.getFocusedItinerary()
   val context = LocalContext.current
 
+  val followItinerary = {
+      itineraryViewModel.followItineraryOnGoogleMaps(context, itinerary!!)
+  }
+
   if (itinerary == null) {
     NullItinerary(userLocation)
   } else {
@@ -120,7 +125,6 @@ fun PreviewItineraryScreen(
     val polylinePoints by itineraryViewModel.getPolylinePointsLiveData().observeAsState()
     var isMinimized by remember { mutableStateOf(false) }
     val onMinimizedClick = { isMinimized = !isMinimized }
-    var isClicked by remember { mutableStateOf(false) }
 
     Scaffold(
         bottomBar = {
@@ -170,20 +174,19 @@ fun PreviewItineraryScreen(
                       }
                   }
               }
-              FollowItineraryButton()
+              FollowItineraryButton(followItinerary)
           }
         }
   }
 }
 
+/**
+ * @brief: Button which launches google maps with specified itinerary once pressed
+ */
 @Composable
-fun FollowItineraryButton() {
+fun FollowItineraryButton(followItinerary: () -> Unit) {
     ExtendedFloatingActionButton(
-        onClick = {
-            onMinimizedClick()
-            isClicked = !isClicked
-            itineraryViewModel.followItineraryOnGoogleMaps(context, itinerary)
-        },
+        onClick = { followItinerary() },
         icon = {
             Icon(
                 Icons.AutoMirrored.Filled.DirectionsWalk,
@@ -191,7 +194,7 @@ fun FollowItineraryButton() {
                 modifier = Modifier.size(32.dp))
         },
         text = {
-            Text(text = if (isClicked) "Following..." else "Follow", color = Color.DarkGray)
+            Text(text = "Follow", color = Color.DarkGray)
         },
         containerColor = MaterialTheme.colorScheme.secondaryContainer,
         contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
