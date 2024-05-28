@@ -47,6 +47,7 @@ import androidx.core.text.isDigitsOnly
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.github.wanderwise_inc.app.data.ImageRepository
+import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
 import com.github.wanderwise_inc.app.model.location.SearchCategory
 import com.github.wanderwise_inc.app.model.location.Tag
@@ -197,7 +198,7 @@ fun RelevantTags(createItineraryViewModel: CreateItineraryViewModel) {
             TagSelector(
                 searchCategoryList = allTags,
                 selectedTags = dispTags,
-                createItineraryViewModel = createItineraryViewModel)
+                newItinerary = createItineraryViewModel.getNewItinerary()!!)
           }
     }
   }
@@ -229,7 +230,7 @@ fun IsPublicSwitchButton(createItineraryViewModel: CreateItineraryViewModel) {
 fun TagSelector(
     searchCategoryList: List<SearchCategory>,
     selectedTags: MutableList<Tag>,
-    createItineraryViewModel: CreateItineraryViewModel
+    newItinerary: Itinerary.Builder
 ) {
   Column {
     Box(Modifier.fillMaxWidth().padding(6.dp)) {
@@ -246,7 +247,7 @@ fun TagSelector(
         TagsButton(
             searchCategory = sc,
             selectedTags = selectedTags,
-            createItineraryViewModel = createItineraryViewModel,
+            newItinerary = newItinerary
         )
       }
     }
@@ -258,7 +259,7 @@ fun TagSelector(
 fun TagsButton(
     searchCategory: SearchCategory,
     selectedTags: MutableList<Tag>,
-    createItineraryViewModel: CreateItineraryViewModel,
+    newItinerary: Itinerary.Builder,
 ) {
   var selected by remember { mutableStateOf(selectedTags.contains(searchCategory.tag)) }
   FilterChip(
@@ -267,11 +268,11 @@ fun TagsButton(
       onClick = {
         if (selected) {
           selectedTags.remove(searchCategory.tag)
-          createItineraryViewModel.getNewItinerary()!!.tags.remove(searchCategory.tag)
+          newItinerary.tags.remove(searchCategory.tag)
           selected = false
         } else if (selectedTags.size < MAX_TAGS) {
           selectedTags.add(searchCategory.tag)
-          createItineraryViewModel.getNewItinerary()!!.tags.add(searchCategory.tag)
+          newItinerary.tags.add(searchCategory.tag)
           selected = true
         }
       },
