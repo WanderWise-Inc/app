@@ -185,7 +185,7 @@ class PreviewItineraryScreenKtTest {
               CameraPosition.fromLatLngZoom(itinerary.computeCenterOfGravity().toLatLng(), 13f)
         }
         cameraPositionStateObserver = cameraPositionState
-        Scaffold(floatingActionButton = { CenterButton(cameraPositionState, epflLocation) }) {
+        Scaffold(floatingActionButton = { CenterButton({}) }) {
             paddingValues ->
           GoogleMap(
               modifier = Modifier.padding(paddingValues), cameraPositionState = cameraPositionState)

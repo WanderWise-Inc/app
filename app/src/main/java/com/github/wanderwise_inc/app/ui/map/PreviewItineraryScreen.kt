@@ -70,7 +70,6 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.maps.android.compose.AdvancedMarker
-import com.google.maps.android.compose.CameraPositionState
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
@@ -90,9 +89,7 @@ fun PreviewItineraryScreen(
   val itinerary = itineraryViewModel.getFocusedItinerary()
   val context = LocalContext.current
 
-  val followItinerary = {
-      itineraryViewModel.followItineraryOnGoogleMaps(context, itinerary!!)
-  }
+  val followItinerary = { itineraryViewModel.followItineraryOnGoogleMaps(context, itinerary!!) }
 
   if (itinerary == null) {
     NullItinerary(userLocation)
@@ -108,16 +105,14 @@ fun PreviewItineraryScreen(
 
     // pressing on center button changed centerOnUser variable which launches camera movement
     LaunchedEffect(centeredOnUser) {
-        cameraPositionState.move(
-            if (centeredOnUser && userLocation!= null) {
-                val latLng = userLocation!!.toLatLng()
-                CameraUpdateFactory.newLatLngZoom(latLng, 13f)
-            } else {
-                CameraUpdateFactory.newLatLngZoom(
-                    itinerary.computeCenterOfGravity().toLatLng(),
-                    itinerary.computeOptimalZoomLevel())
-            }
-        )
+      cameraPositionState.move(
+          if (centeredOnUser && userLocation != null) {
+            val latLng = userLocation!!.toLatLng()
+            CameraUpdateFactory.newLatLngZoom(latLng, 13f)
+          } else {
+            CameraUpdateFactory.newLatLngZoom(
+                itinerary.computeCenterOfGravity().toLatLng(), itinerary.computeOptimalZoomLevel())
+          })
     }
 
     LaunchedEffect(Unit) { itineraryViewModel.fetchPolylineLocations(itinerary) }
@@ -138,71 +133,61 @@ fun PreviewItineraryScreen(
         },
         modifier = Modifier.testTag(TestTags.MAP_PREVIEW_ITINERARY_SCREEN),
         floatingActionButton = {
-          CenterButton(/*cameraPositionState = cameraPositionState, currentLocation = userLocation*/ {centeredOnUser = !centeredOnUser})
+          CenterButton(
+              /*cameraPositionState = cameraPositionState, currentLocation = userLocation*/ {
+            centeredOnUser = !centeredOnUser
+          })
         },
         floatingActionButtonPosition = FabPosition.Start) { paddingValues ->
           Box {
-              GoogleMap(
-                  modifier =
-                  Modifier
-                      .fillMaxSize()
-                      .padding(paddingValues)
-                      .testTag(TestTags.MAP_GOOGLE_MAPS),
-                  cameraPositionState = cameraPositionState
-              ) {
+            GoogleMap(
+                modifier =
+                    Modifier.fillMaxSize().padding(paddingValues).testTag(TestTags.MAP_GOOGLE_MAPS),
+                cameraPositionState = cameraPositionState) {
                   userLocation?.let {
-                      Marker(
-                          tag = TestTags.MAP_USER_LOCATION,
-                          state = MarkerState(position = it.toLatLng()),
-                          icon =
-                          BitmapDescriptorFactory.defaultMarker(
-                              BitmapDescriptorFactory.HUE_AZURE
-                          )
-                      )
+                    Marker(
+                        tag = TestTags.MAP_USER_LOCATION,
+                        state = MarkerState(position = it.toLatLng()),
+                        icon =
+                            BitmapDescriptorFactory.defaultMarker(
+                                BitmapDescriptorFactory.HUE_AZURE))
                   }
                   itinerary.locations.map { location ->
-                      AdvancedMarker(
-                          state = MarkerState(position = location.toLatLng()),
-                          title = location.title,
-                      )
-                      if (polylinePoints != null) {
-                          Polyline(
-                              points = polylinePoints!!,
-                              color = MaterialTheme.colorScheme.primary
-                          )
-                      }
+                    AdvancedMarker(
+                        state = MarkerState(position = location.toLatLng()),
+                        title = location.title,
+                    )
+                    if (polylinePoints != null) {
+                      Polyline(points = polylinePoints!!, color = MaterialTheme.colorScheme.primary)
+                    }
                   }
-              }
-              FollowItineraryButton(
-                  followItinerary,
-                  Modifier.align(Alignment.TopCenter) // this parameter allows alignment wrt containing Box composable
-              )
+                }
+            FollowItineraryButton(
+                followItinerary,
+                Modifier.align(
+                    Alignment
+                        .TopCenter) // this parameter allows alignment wrt containing Box composable
+                )
           }
         }
   }
 }
 
-/**
- * @brief: Button which launches google maps with specified itinerary once pressed
- */
+/** @brief: Button which launches google maps with specified itinerary once pressed */
 @Composable
 fun FollowItineraryButton(followItinerary: () -> Unit, modifier: Modifier) {
-    ExtendedFloatingActionButton(
-        onClick = { followItinerary() },
-        icon = {
-            Icon(
-                Icons.AutoMirrored.Filled.DirectionsWalk,
-                contentDescription = "follow",
-                modifier = Modifier.size(32.dp))
-        },
-        text = {
-            Text(text = "Follow", color = Color.DarkGray)
-        },
-        containerColor = MaterialTheme.colorScheme.secondaryContainer,
-        contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
-        modifier = modifier
-            .padding(12.dp)
-            .testTag(TestTags.START_NEW_ITINERARY_STARTING))
+  ExtendedFloatingActionButton(
+      onClick = { followItinerary() },
+      icon = {
+        Icon(
+            Icons.AutoMirrored.Filled.DirectionsWalk,
+            contentDescription = "follow",
+            modifier = Modifier.size(32.dp))
+      },
+      text = { Text(text = "Follow", color = Color.DarkGray) },
+      containerColor = MaterialTheme.colorScheme.secondaryContainer,
+      contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+      modifier = modifier.padding(12.dp).testTag(TestTags.START_NEW_ITINERARY_STARTING))
 }
 
 /**
@@ -246,10 +231,7 @@ private fun PreviewItineraryBannerMaximized(
   val ctr = remember { mutableIntStateOf(0) }
 
   val profilePictureModifier =
-      Modifier
-          .clip(RoundedCornerShape(5.dp))
-          .size(50.dp)
-          .testTag(TestTags.MAP_PROFILE_PIC)
+      Modifier.clip(RoundedCornerShape(5.dp)).size(50.dp).testTag(TestTags.MAP_PROFILE_PIC)
 
   val profile by profileViewModel.getProfile(itinerary.userUid).collectAsState(initial = null)
 
@@ -262,12 +244,11 @@ private fun PreviewItineraryBannerMaximized(
         val scrollState = rememberScrollState()
         Column(
             modifier =
-            Modifier
-                .background(MaterialTheme.colorScheme.primaryContainer)
-                .fillMaxWidth()
-                .aspectRatio(1.2f)
-                .padding(30.dp)
-                .verticalScroll(scrollState),
+                Modifier.background(MaterialTheme.colorScheme.primaryContainer)
+                    .fillMaxWidth()
+                    .aspectRatio(1.2f)
+                    .padding(30.dp)
+                    .verticalScroll(scrollState),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top,
         ) {
@@ -277,9 +258,7 @@ private fun PreviewItineraryBannerMaximized(
                 imageVector = Icons.Filled.KeyboardArrowDown,
                 contentDescription = "minimize_button",
                 modifier =
-                Modifier
-                    .clickable { onMinimizedClick() }
-                    .testTag(TestTags.MAP_BANNER_BUTTON))
+                    Modifier.clickable { onMinimizedClick() }.testTag(TestTags.MAP_BANNER_BUTTON))
             // Itinerary Title
             Text(
                 text = itinerary.title,
@@ -287,9 +266,7 @@ private fun PreviewItineraryBannerMaximized(
                 fontFamily = MaterialTheme.typography.displayLarge.fontFamily,
                 fontSize = titleFontSize,
                 fontWeight = FontWeight.Normal,
-                modifier = Modifier
-                    .padding(2.dp)
-                    .testTag(TestTags.MAP_ITINERARY_TITLE),
+                modifier = Modifier.padding(2.dp).testTag(TestTags.MAP_ITINERARY_TITLE),
                 textAlign = TextAlign.Center)
           }
 
@@ -401,9 +378,7 @@ private fun PreviewItineraryBannerMaximized(
                   fontFamily = MaterialTheme.typography.displayMedium.fontFamily,
                   fontSize = innerFontSize,
                   fontWeight = FontWeight.Light,
-                  modifier = Modifier
-                      .padding(2.dp)
-                      .fillMaxHeight(),
+                  modifier = Modifier.padding(2.dp).fillMaxHeight(),
                   textAlign = TextAlign.Center,
               )
             }
@@ -422,9 +397,7 @@ private fun PreviewItineraryBannerMaximized(
                 fontFamily = MaterialTheme.typography.displayMedium.fontFamily,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Normal,
-                modifier = Modifier
-                    .padding(2.dp)
-                    .testTag(TestTags.MAP_ITINERARY_DESCRIPTION),
+                modifier = Modifier.padding(2.dp).testTag(TestTags.MAP_ITINERARY_DESCRIPTION),
                 textAlign = TextAlign.Center)
           }
           Spacer(modifier = Modifier.height(20.dp))
@@ -466,11 +439,10 @@ private fun PreviewItineraryBannerMinimized(onMinimizedClick: () -> Unit, itiner
       modifier = Modifier.testTag(TestTags.MAP_MINIMIZED_BANNER)) {
         Column(
             modifier =
-            Modifier
-                .background(MaterialTheme.colorScheme.primaryContainer)
-                .fillMaxWidth()
-                .aspectRatio(3f)
-                .padding(30.dp),
+                Modifier.background(MaterialTheme.colorScheme.primaryContainer)
+                    .fillMaxWidth()
+                    .aspectRatio(3f)
+                    .padding(30.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
           Row {
@@ -479,9 +451,7 @@ private fun PreviewItineraryBannerMinimized(onMinimizedClick: () -> Unit, itiner
                 imageVector = Icons.Filled.KeyboardArrowUp,
                 contentDescription = "minimize_button",
                 modifier =
-                Modifier
-                    .clickable { onMinimizedClick() }
-                    .testTag(TestTags.MAP_BANNER_BUTTON))
+                    Modifier.clickable { onMinimizedClick() }.testTag(TestTags.MAP_BANNER_BUTTON))
             // Itinerary Title
             Text(
                 text = itinerary.title,
@@ -489,9 +459,7 @@ private fun PreviewItineraryBannerMinimized(onMinimizedClick: () -> Unit, itiner
                 fontFamily = MaterialTheme.typography.displayLarge.fontFamily,
                 fontSize = titleFontSize,
                 fontWeight = FontWeight.Normal,
-                modifier = Modifier
-                    .padding(2.dp)
-                    .testTag(TestTags.MAP_ITINERARY_TITLE),
+                modifier = Modifier.padding(2.dp).testTag(TestTags.MAP_ITINERARY_TITLE),
                 textAlign = TextAlign.Center)
           }
         }
@@ -500,11 +468,11 @@ private fun PreviewItineraryBannerMinimized(onMinimizedClick: () -> Unit, itiner
 
 /**
  * @brief: Button which switches back and forth between centered on user and centered on itinerary
- * */
+ */
 @Composable
 fun CenterButton(center: () -> Unit) {
   FloatingActionButton(
-      onClick = {center()},
+      onClick = { center() },
       modifier = Modifier.testTag(TestTags.MAP_CENTER_CAMERA_BUTTON),
       containerColor = MaterialTheme.colorScheme.surfaceContainer) {
         Icon(
@@ -520,10 +488,9 @@ fun NullItinerary(userLocation: Location?) {
   if (userLocation == null) {
     Column(
         modifier =
-        Modifier
-            .testTag(TestTags.MAP_NULL_ITINERARY)
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background),
+            Modifier.testTag(TestTags.MAP_NULL_ITINERARY)
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center) {
           Text("Loading...", modifier = Modifier.testTag(TestTags.MAP_NULL_ITINERARY))
@@ -534,9 +501,7 @@ fun NullItinerary(userLocation: Location?) {
       position = CameraPosition.fromLatLngZoom(userLocationLatLng, 13f)
     }
     GoogleMap(
-        modifier = Modifier
-            .fillMaxSize()
-            .testTag(TestTags.MAP_NULL_ITINERARY),
+        modifier = Modifier.fillMaxSize().testTag(TestTags.MAP_NULL_ITINERARY),
         cameraPositionState = cameraPositionState) {
           Marker(
               tag = TestTags.MAP_USER_LOCATION,
