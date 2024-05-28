@@ -19,12 +19,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.HourglassEmpty
 import androidx.compose.material.icons.outlined.Payments
+import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -42,6 +44,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImagePainter
@@ -50,6 +53,7 @@ import coil.request.ImageRequest
 import com.github.wanderwise_inc.app.R
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.model.location.Itinerary
+import com.github.wanderwise_inc.app.model.location.Tag
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 
@@ -59,7 +63,6 @@ fun ItineraryBanner(
     onLikeButtonClick: (Itinerary, Boolean) -> Unit,
     onBannerClick: (Itinerary) -> Unit,
     isLikedInitially: Boolean = false,
-    profileViewModel: ProfileViewModel,
     imageRepository: ImageRepository,
     inCreation: Boolean = false
 ) {
@@ -87,7 +90,6 @@ fun ItineraryBanner(
   val painter = rememberAsyncImagePainter(model = model)
   var isLiked = isLikedInitially
   var numLikes by remember { mutableIntStateOf(itinerary.numLikes) }
-  val user by profileViewModel.getProfile(itinerary.userUid).collectAsState(initial = null)
 
   ElevatedCard(
       colors =
@@ -113,10 +115,10 @@ fun ItineraryBanner(
                       onLikeButtonClick(itinerary, isLiked)
                       isLiked = !isLiked
                     }
-                BannerTags(itinerary, Modifier.align(Alignment.BottomStart))
+                BannerTags(itinerary.tags, Modifier.align(Alignment.BottomStart))
               }
-              BannerTitle(itinerary)
-              BannerAttributes(itinerary, numLikes)
+              BannerTitle(itinerary.title)
+              BannerAttributes(itinerary.time.toString(),itinerary.price.toString(), numLikes.toString())
             }
       }
 }
@@ -140,17 +142,17 @@ fun BannerImage(painter: AsyncImagePainter, itinerary: Itinerary) {
 }
 
 /**
- * @param itinerary: for getting the tags
+ * @param tags: tags of the itinerary
  * @param modifier: for the placement of the tags on the banner image
  * @brief composes the tags of the itinerary
  */
 @Composable
-fun BannerTags(itinerary: Itinerary, modifier: Modifier) {
+fun BannerTags(tags: List<Tag>, modifier: Modifier) {
   Row(
       modifier = modifier.fillMaxWidth().padding(10.dp),
       horizontalArrangement = Arrangement.spacedBy(10.dp),
       verticalAlignment = Alignment.Bottom) {
-        for (tag in itinerary.tags) {
+        for (tag in tags) {
           OutlinedCard(
               shape = CircleShape,
               colors =
@@ -176,9 +178,9 @@ fun BannerTags(itinerary: Itinerary, modifier: Modifier) {
  * @brief writes the title of the image
  */
 @Composable
-fun BannerTitle(itinerary: Itinerary) {
+fun BannerTitle(title: String) {
   Text(
-      text = itinerary.title,
+      text = title,
       color = MaterialTheme.colorScheme.onPrimaryContainer,
       fontFamily = FontFamily.Monospace,
       fontSize = 14.sp,
@@ -187,18 +189,19 @@ fun BannerTitle(itinerary: Itinerary) {
 }
 
 /**
- * @param itinerary: for "price" and "time"
- * @param numLikes: for the number of likes
  * @brief writes the attribute of the itinerary
+ * @param price: price of the itinerary
+ * @param time: time of the itinerary
+ * @param numLikes: number of likes of the itinerary
  */
 @Composable
-fun BannerAttributes(itinerary: Itinerary, numLikes: Int) {
+fun BannerAttributes(price: String, time: String, numLikes: String) {
   Row(modifier = Modifier.fillMaxHeight(), horizontalArrangement = Arrangement.SpaceBetween) {
-    Time(itinerary.time)
+    Time(time)
 
     Spacer(Modifier.padding(10.dp))
 
-    Price(itinerary.price)
+    Price(price)
 
     Spacer(Modifier.padding(10.dp))
 
@@ -208,7 +211,7 @@ fun BannerAttributes(itinerary: Itinerary, numLikes: Int) {
 
 /** @brief write the style of the time attribute */
 @Composable
-fun Time(time: Int) {
+fun Time(time: String) {
   Row(horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
     Icon(
         imageVector = Icons.Outlined.HourglassEmpty,
@@ -228,7 +231,7 @@ fun Time(time: Int) {
 }
 /** @brief write the style of the price attribute */
 @Composable
-fun Price(price: Float) {
+fun Price(price: String) {
   Row(horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
     Icon(
         imageVector = Icons.Outlined.Payments,
@@ -236,7 +239,7 @@ fun Price(price: Float) {
         tint = MaterialTheme.colorScheme.secondary,
         modifier = Modifier.size(width = 16.dp, height = 16.dp))
     Text(
-        text = "${price}",
+        text = price,
         color = MaterialTheme.colorScheme.secondary,
         fontFamily = MaterialTheme.typography.displayMedium.fontFamily,
         fontSize = 12.sp,
@@ -249,7 +252,7 @@ fun Price(price: Float) {
 
 /** @brief write the style of the likes attribute */
 @Composable
-fun Likes(numLikes: Int) {
+fun Likes(numLikes: String) {
   Row(horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
     Icon(
         imageVector = Icons.Outlined.FavoriteBorder,
@@ -307,3 +310,39 @@ fun BannerLikeButton(
         }
   }
 }
+
+@Composable
+fun DummyBanner(uid: String){
+    Card(
+        colors =
+        CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.onTertiary,
+        ),
+        shape = RoundedCornerShape(9.dp),
+        modifier = Modifier.testTag("${TestTags.DUMMY_BANNER}_${uid}"),
+        onClick = {}) {
+        Column(
+            modifier = Modifier.fillMaxSize().aspectRatio(2f),
+            horizontalAlignment = Alignment.CenterHorizontally) {
+            Box(modifier = Modifier.fillMaxWidth().fillMaxHeight(0.73f)) {
+                DummyBannerImage()
+
+                BannerLikeButton(
+                    modifier = Modifier.align(Alignment.TopEnd),
+                    isLiked = false,
+                    numLikes = 0,
+                    itinerary = Itinerary.Builder().build()) {}
+
+                BannerTags(listOf("Dummy", "Itinerary"), Modifier.align(Alignment.BottomStart))
+            }
+            BannerTitle("Dummy creation preview itinerary")
+            BannerAttributes("-", "-", "-")
+        }
+    }
+}
+
+@Composable
+fun DummyBannerImage(){
+    Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.secondaryContainer){}
+}
+

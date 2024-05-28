@@ -84,7 +84,8 @@ fun PreviewItineraryScreen(
     itineraryViewModel: ItineraryViewModel,
     profileViewModel: ProfileViewModel,
     imageRepository: ImageRepository,
-    navController: NavHostController
+    navController: NavHostController,
+    creationMode: Boolean = false
 ) {
   val userLocation by itineraryViewModel.getUserLocation().collectAsState(null)
   val itinerary = itineraryViewModel.getFocusedItinerary()
@@ -116,7 +117,8 @@ fun PreviewItineraryScreen(
               itineraryViewModel,
               profileViewModel,
               imageRepository,
-              navController)
+              navController,
+              creationMode)
         },
         modifier = Modifier.testTag(TestTags.MAP_PREVIEW_ITINERARY_SCREEN),
         floatingActionButton = {
@@ -184,7 +186,8 @@ fun PreviewItineraryBanner(
     itineraryViewModel: ItineraryViewModel,
     profileViewModel: ProfileViewModel,
     imageRepository: ImageRepository,
-    navController: NavHostController
+    navController: NavHostController,
+    creationMode: Boolean
 ) {
 
   if (isMinimized)
@@ -196,7 +199,8 @@ fun PreviewItineraryBanner(
           itineraryViewModel = itineraryViewModel,
           profileViewModel = profileViewModel,
           imageRepository = imageRepository,
-          navController = navController)
+          navController = navController,
+          creationMode = creationMode)
 }
 
 @Composable
@@ -206,7 +210,8 @@ private fun PreviewItineraryBannerMaximized(
     itineraryViewModel: ItineraryViewModel,
     profileViewModel: ProfileViewModel,
     imageRepository: ImageRepository,
-    navController: NavHostController
+    navController: NavHostController,
+    creationMode: Boolean
 ) {
   val titleFontSize = 32.sp
   val innerFontSize = 16.sp
@@ -385,7 +390,7 @@ private fun PreviewItineraryBannerMaximized(
           Spacer(modifier = Modifier.height(20.dp))
           val coroutineScope = rememberCoroutineScope()
           val uid = profileViewModel.getUserUid()
-          if (uid == itinerary.userUid) {
+          if (uid == itinerary.userUid && !creationMode) {
             Button(
                 onClick = {
                   coroutineScope.launch {

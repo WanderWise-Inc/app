@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.ui.TestTags
+import com.github.wanderwise_inc.app.ui.itinerary.DummyBanner
 import com.github.wanderwise_inc.app.ui.itinerary.ItineraryBanner
 import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
@@ -23,36 +24,37 @@ fun CreationStepPreviewBanner(
     profileViewModel: ProfileViewModel,
     imageRepository: ImageRepository
 ) {
-  val dummyItinerary =
-      Itinerary(
-          "1",
-          "",
-          emptyList(),
-          "Dummy itinerary",
-          emptyList(),
-          "",
-          true,
-      )
+
 
   // function that do nothing
-  val onBannerClick = { i: Itinerary -> }
-  val onLikeButtonClick = { i: Itinerary, b: Boolean -> }
+  val onBannerClick = { _: Itinerary -> }
+  val onLikeButtonClick = { _: Itinerary, _: Boolean -> }
 
   Box(
-      modifier = Modifier.fillMaxSize().padding(horizontal = 10.dp, vertical = 5.dp),
+      modifier = Modifier
+          .fillMaxSize()
+          .padding(horizontal = 10.dp, vertical = 5.dp),
       contentAlignment = Alignment.TopCenter) {
         LazyColumn(
             verticalArrangement = spacedBy(8.dp),
             modifier = Modifier.testTag(TestTags.CREATION_SCREEN_PREVIEW_BANNER)) {
+                item{
+                    DummyBanner("0")
+                }
               item {
                 ItineraryBanner(
-                    itinerary = createItineraryViewModel.getFocusedItinerary() ?: dummyItinerary,
+                    itinerary = createItineraryViewModel.getFocusedItinerary()!!,
                     onLikeButtonClick = onLikeButtonClick,
                     onBannerClick = onBannerClick,
-                    profileViewModel = profileViewModel,
                     imageRepository = imageRepository,
                     inCreation = true)
               }
+            item{
+                DummyBanner("1")
+            }
+            item{
+                DummyBanner("2")
+            }
             }
       }
 }
