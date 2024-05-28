@@ -165,7 +165,7 @@ fun ChooseYourWayOfCreation(
 ) {
 
   BottomAppBar(
-      modifier = Modifier.height(250.dp).fillMaxWidth(),
+      modifier = Modifier.height(200.dp).fillMaxWidth(),
       containerColor = MaterialTheme.colorScheme.primaryContainer,
       contentColor = MaterialTheme.colorScheme.primary,
   ) {
@@ -211,7 +211,7 @@ fun LocationSelector(
     navController: NavHostController,
 ) {
   BottomAppBar(
-      modifier = Modifier.height(250.dp).fillMaxWidth(),
+      modifier = Modifier.height(250.dp),
       containerColor = MaterialTheme.colorScheme.primaryContainer,
       contentColor = MaterialTheme.colorScheme.primary,
   ) {

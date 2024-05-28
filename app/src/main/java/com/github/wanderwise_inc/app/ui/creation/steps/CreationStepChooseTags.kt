@@ -7,16 +7,23 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material3.Button
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -35,15 +42,20 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Popup
 import androidx.core.text.isDigitsOnly
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.github.wanderwise_inc.app.data.ImageRepository
+import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.ItineraryTags
+import com.github.wanderwise_inc.app.model.location.SearchCategory
 import com.github.wanderwise_inc.app.model.location.Tag
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
 import kotlinx.coroutines.launch
+
+const val MAX_TAGS = 3
 
 @Composable
 fun CreationStepChooseTagsScreen(
@@ -55,7 +67,7 @@ fun CreationStepChooseTagsScreen(
       modifier =
           Modifier.fillMaxSize()
               .testTag(TestTags.CREATION_SCREEN_TAGS)
-              .background(MaterialTheme.colorScheme.primaryContainer),
+              .background(MaterialTheme.colorScheme.background),
       verticalArrangement = Arrangement.spacedBy(10.dp)) {
         ItineraryImageBanner(
             createItineraryViewModel = createItineraryViewModel,
@@ -114,7 +126,6 @@ fun ItineraryImageBanner(
       }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PriceEstimationTextBox(createItineraryViewModel: CreateItineraryViewModel) {
   var priceEstimateDisplay by remember {
@@ -154,9 +165,11 @@ fun TimeDurationEstimation(createItineraryViewModel: CreateItineraryViewModel) {
       })
 }
 
+/** @brief takes care of the tags parameters */
 @Composable
 fun RelevantTags(createItineraryViewModel: CreateItineraryViewModel) {
-  val allTags = ItineraryTags.toList()
+  // first tag is All, we don't want it to be selectable
+  val allTags = ItineraryTags.toSearchCategoryList().drop(1)
   var isTagsDDM by remember { mutableStateOf(false) }
 
   var selectedTags = mutableListOf<Tag>()
@@ -164,39 +177,29 @@ fun RelevantTags(createItineraryViewModel: CreateItineraryViewModel) {
     selectedTags.add(tag)
   }
   val dispTags by remember(selectedTags) { mutableStateOf(selectedTags) }
-  var triedToAddMoreThan3Tags by remember { mutableStateOf(false) }
 
   Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
     Text("Selected Tags: ${dispTags.joinToString(", ")}")
-    if (triedToAddMoreThan3Tags) {
-      Text(
-          "You can only select up to 3 tags",
-          color = MaterialTheme.colorScheme.error,
-          modifier = Modifier.padding(top = 50.dp))
-    }
   }
 
+  // clickable button to open dropdown menu
   Button(
       modifier = Modifier.testTag(TestTags.ITINERARY_CREATION_TAGS),
       onClick = { isTagsDDM = true }) {
         Text("Add Tags")
       }
 
-  DropdownMenu(expanded = isTagsDDM, onDismissRequest = { isTagsDDM = false }) {
-    allTags.forEach { tag ->
-      DropdownMenuItem(
-          text = { Text(tag) },
-          modifier = Modifier.testTag("${TestTags.ITINERARY_CREATION_TAGS}_$tag"),
-          onClick = {
-            isTagsDDM = false
-            if (!selectedTags.contains(tag) && selectedTags.size < 3) {
-              selectedTags.add(tag)
-              createItineraryViewModel.getNewItinerary()!!.tags.clear()
-              createItineraryViewModel.getNewItinerary()!!.tags.addAll(selectedTags)
-            } else if (selectedTags.size >= 3) {
-              triedToAddMoreThan3Tags = true
-            }
-          })
+  if (isTagsDDM) {
+    // if drop down menu is set to "true" opens popup where we can select tags
+    Popup(alignment = Alignment.Center, onDismissRequest = { isTagsDDM = false }) {
+      OutlinedCard(
+          modifier = Modifier.padding(8.dp).wrapContentSize(),
+          shape = MaterialTheme.shapes.medium) {
+            TagSelector(
+                searchCategoryList = allTags,
+                selectedTags = dispTags,
+                newItinerary = createItineraryViewModel.getNewItinerary()!!)
+          }
     }
   }
 }
@@ -219,4 +222,89 @@ fun IsPublicSwitchButton(createItineraryViewModel: CreateItineraryViewModel) {
   } else {
     Text("This itinerary is private", fontWeight = FontWeight.Bold)
   }
+}
+
+/** @brief arranges the tags is a grid like manner */
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+fun TagSelector(
+    searchCategoryList: List<SearchCategory>,
+    selectedTags: MutableList<Tag>,
+    newItinerary: Itinerary.Builder
+) {
+  var moreThanAllowedTags by remember { mutableStateOf(false) }
+  Column(horizontalAlignment = Alignment.CenterHorizontally) {
+    Text(
+        text = "Please select up to $MAX_TAGS tags",
+        modifier = Modifier.padding(top = 12.dp),
+        fontWeight = FontWeight.Bold)
+
+    FlowRow(
+        modifier = Modifier.fillMaxWidth().padding(12.dp).testTag(TestTags.POPUP_TAG_SELECTION),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+      for (sc in searchCategoryList) {
+        TagsButton(searchCategory = sc, selectedTags = selectedTags, newItinerary = newItinerary) {
+            b: Boolean ->
+          moreThanAllowedTags = b
+        }
+      }
+    }
+    if (moreThanAllowedTags) {
+      Text(
+          text = "Cannot add more than $MAX_TAGS",
+          color = MaterialTheme.colorScheme.error,
+          modifier =
+              Modifier.padding(bottom = 12.dp).testTag(TestTags.ERROR_MORE_THAN_ALLOWED_TAGS))
+    }
+  }
+}
+
+/** @brief takes care of composing the clickable tags */
+@Composable
+fun TagsButton(
+    searchCategory: SearchCategory,
+    selectedTags: MutableList<Tag>,
+    newItinerary: Itinerary.Builder,
+    moreThanAllowedTags: (Boolean) -> Unit
+) {
+  var selected by remember { mutableStateOf(selectedTags.contains(searchCategory.tag)) }
+
+  FilterChip(
+      modifier = Modifier.wrapContentSize().testTag("${TestTags.TAG_CHIP}_${searchCategory.tag}"),
+      selected = selected,
+      onClick = {
+        if (selected) {
+          selectedTags.remove(searchCategory.tag)
+          newItinerary.tags.remove(searchCategory.tag)
+          selected = false
+          moreThanAllowedTags(false)
+        } else if (selectedTags.size < MAX_TAGS) {
+          selectedTags.add(searchCategory.tag)
+          newItinerary.tags.add(searchCategory.tag)
+          selected = true
+          moreThanAllowedTags(false)
+        } else {
+          moreThanAllowedTags(true)
+        }
+      },
+      label = { Text(searchCategory.tag) },
+      leadingIcon = { Icon(imageVector = searchCategory.icon, searchCategory.tag) },
+      trailingIcon = {
+        if (selected) {
+          Icon(imageVector = Icons.Outlined.Check, "added")
+        } else {
+          Icon(imageVector = Icons.Outlined.Add, "add")
+        }
+      },
+      colors =
+          FilterChipDefaults.filterChipColors(
+              containerColor = MaterialTheme.colorScheme.secondaryContainer,
+              labelColor = MaterialTheme.colorScheme.onSecondaryContainer,
+              iconColor = MaterialTheme.colorScheme.onSecondaryContainer,
+              selectedContainerColor = MaterialTheme.colorScheme.primary,
+              selectedLabelColor = MaterialTheme.colorScheme.onPrimary,
+              selectedLeadingIconColor = MaterialTheme.colorScheme.onPrimary,
+              selectedTrailingIconColor = MaterialTheme.colorScheme.onPrimary,
+          ))
 }

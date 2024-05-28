@@ -2,6 +2,7 @@ package com.github.wanderwise_inc.app.ui.creation.steps
 
 import android.net.Uri
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -132,10 +133,47 @@ class CreationStepChooseTagsTest {
     }
     composeTestRule.onNodeWithTag(TestTags.ITINERARY_CREATION_TAGS).assertIsDisplayed()
     composeTestRule.onNodeWithTag(TestTags.ITINERARY_CREATION_TAGS).performClick()
+    composeTestRule.onNodeWithTag(TestTags.POPUP_TAG_SELECTION).assertIsDisplayed()
     for (tag in allTags) {
-      composeTestRule.onNodeWithText(tag).assertIsDisplayed()
+      composeTestRule.onNodeWithTag("${TestTags.TAG_CHIP}_$tag").assertIsDisplayed()
       composeTestRule.onNodeWithText(tag).performClick()
-      composeTestRule.onNodeWithTag(TestTags.ITINERARY_CREATION_TAGS).performClick()
+      // composeTestRule.onNodeWithTag(TestTags.ITINERARY_CREATION_TAGS).performClick()
     }
+  }
+
+  @Test
+  fun `clicking on a tag two times deselects it`() {
+    every { imageRepository.getCurrentFile() } returns null
+    composeTestRule.setContent {
+      CreationStepChooseTagsScreen(
+          createItineraryViewModel = createItineraryViewModel, imageRepository = imageRepository)
+    }
+    composeTestRule.onNodeWithTag(TestTags.ITINERARY_CREATION_TAGS).assertIsDisplayed()
+    composeTestRule.onNodeWithTag(TestTags.ITINERARY_CREATION_TAGS).performClick()
+
+    // deselection
+    composeTestRule.onNodeWithTag("${TestTags.TAG_CHIP}_${ItineraryTags.NATURE}").performClick()
+    assert(!createItineraryViewModel.getNewItinerary()!!.tags.contains(ItineraryTags.NATURE))
+
+    // reselection
+    composeTestRule.onNodeWithTag("${TestTags.TAG_CHIP}_${ItineraryTags.NATURE}").performClick()
+    assert(createItineraryViewModel.getNewItinerary()!!.tags.contains(ItineraryTags.NATURE))
+  }
+
+  @Test
+  fun `error when adding more than allowed tags (3)`() {
+    every { imageRepository.getCurrentFile() } returns null
+    composeTestRule.setContent {
+      CreationStepChooseTagsScreen(
+          createItineraryViewModel = createItineraryViewModel, imageRepository = imageRepository)
+    }
+    composeTestRule.onNodeWithTag(TestTags.ITINERARY_CREATION_TAGS).performClick()
+    // already has 3 tags, cant add more
+    composeTestRule.onNodeWithTag("${TestTags.TAG_CHIP}_${ItineraryTags.SHOPPING}").performClick()
+    composeTestRule.onNodeWithTag(TestTags.ERROR_MORE_THAN_ALLOWED_TAGS).assertIsDisplayed()
+
+    // removing a tag gets rid of the error message
+    composeTestRule.onNodeWithTag("${TestTags.TAG_CHIP}_${ItineraryTags.NATURE}").performClick()
+    composeTestRule.onNodeWithTag(TestTags.ERROR_MORE_THAN_ALLOWED_TAGS).assertIsNotDisplayed()
   }
 }
