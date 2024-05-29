@@ -167,6 +167,7 @@ dependencies {
     debugImplementation(libs.compose.tooling)
     globalTestImplementation(libs.compose.test.junit)
     debugImplementation(libs.compose.test.manifest)
+    implementation(libs.androidx.ui)
 
 // ------------------- Material -------------------
     implementation(libs.androidx.material.icons.extended)
@@ -227,6 +228,8 @@ dependencies {
     testImplementation(libs.mockito.core)
     testImplementation(libs.mockk)
     testImplementation(libs.androidx.core.testing)
+    testImplementation(libs.mockwebserver)
+    testImplementation(libs.awaitility)
 
 // ------------------- Kaspresso test framework ----------
     globalTestImplementation(libs.kaspresso)

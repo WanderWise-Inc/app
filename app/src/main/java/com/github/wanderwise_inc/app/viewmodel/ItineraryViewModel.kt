@@ -21,7 +21,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
-private const val DEBUG_TAG: String = "MAP_VIEWMODEL"
+private const val DEBUG_TAG: String = "ITINERARY_VIEWMODEL"
 /** @brief ViewModel class for providing `Location`s and `Itinerary`s to the map UI */
 open class ItineraryViewModel(
     protected val itineraryRepository: ItineraryRepository,
@@ -145,6 +145,9 @@ open class ItineraryViewModel(
 
     val key = BuildConfig.MAPS_API_KEY
     viewModelScope.launch {
+      Log.d(
+          DEBUG_TAG,
+          "origin:$originEncoded :: destination:$destinationEncoded :: waypoints:$waypoints")
       directionsRepository
           .getPolylineWayPoints(
               origin = originEncoded,

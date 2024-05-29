@@ -94,7 +94,7 @@ class CreateItineraryE2ETest {
     composeTestRule.onNodeWithTag(TestTags.CREATE_ITINERARY_BY_TRACKING_SCREEN).assertIsDisplayed()
     composeTestRule.onNodeWithTag(TestTags.START_BUTTON).performClick() // start tracking
     composeTestRule.waitForIdle()
-    Thread.sleep(10000L) // track for 10 seconds
+    Thread.sleep(5000L) // track for 5 seconds
     composeTestRule.onNodeWithTag(TestTags.STOP_BUTTON).performClick()
     composeTestRule.onNodeWithTag(TestTags.BACK_BUTTON).performClick()
     composeTestRule.waitForIdle()
@@ -179,7 +179,7 @@ class CreateItineraryE2ETest {
     composeTestRule.waitForIdle()
     composeTestRule.onNodeWithTag(TestTags.ITINERARY_CREATION_TAGS).performClick()
     composeTestRule
-        .onNodeWithTag("${TestTags.ITINERARY_CREATION_TAGS}_${itinerary.tags.first()}")
+        .onNodeWithTag("${TestTags.TAG_CHIP}_${itinerary.tags.first()}")
         .performClick() // add adventure tag
 
     // click on next step of itinerary creation
