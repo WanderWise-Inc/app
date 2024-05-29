@@ -49,7 +49,6 @@ open class ItineraryViewModel(
   /** @return a flow of all `Itinerary`s associated to the currently logged in user */
   fun getUserItineraries(userUid: String): Flow<List<Itinerary>> {
     val ret = itineraryRepository.getUserItineraries(userUid)
-    ret.map { Log.d("ItineraryViewModel", "UserItineraries: $it") }
     return ret
   }
 
