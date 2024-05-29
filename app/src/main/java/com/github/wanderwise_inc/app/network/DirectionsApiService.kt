@@ -10,6 +10,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 
+/** Retrofit interface for sending Google Directions API requests and parsing the responses */
 interface DirectionsApiService {
   @GET("json?")
   fun getPolylineWayPoints(
@@ -34,7 +35,7 @@ data class DirectionsResponseBody(val routes: List<Route>) {
     }
   }
 
-  /** returns the parsed response waypoints as a list of `LatLng` */
+  /** @return the parsed response waypoints as a list of `LatLng` */
   fun toLatLngList(): List<LatLng> {
     var out: List<LatLng> = listOf()
     for (route in routes) {

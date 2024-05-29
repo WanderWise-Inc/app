@@ -99,6 +99,7 @@ class ItineraryRepositoryImpl(
         .catch { emit(listOf()) }
   }
 
+  /** @return a list of `Itineraries` containing at least one matching tag with `tags` */
   override fun getItinerariesWithTags(tags: List<Tag>): Flow<List<Itinerary>> {
     return when (context.isNetworkAvailable()) {
       true -> getItinerariesWithTagsFirebase(tags)
@@ -109,7 +110,7 @@ class ItineraryRepositoryImpl(
     }
   }
 
-  fun getItinerariesWithTagsFirebase(tags: List<Tag>): Flow<List<Itinerary>> {
+  private fun getItinerariesWithTagsFirebase(tags: List<Tag>): Flow<List<Itinerary>> {
     return flow {
           val itineraries = suspendCancellableCoroutine { continuation ->
             itinerariesCollection
@@ -131,6 +132,10 @@ class ItineraryRepositoryImpl(
         .catch { emit(listOf()) }
   }
 
+  /**
+   * @return the `Itinerary` with uid `uid` from firebase (when connection is available) or
+   *   persistent storage (when connection isn't available) or `null` if it isn't found
+   */
   override suspend fun getItinerary(uid: String): Itinerary? {
     return when (context.isNetworkAvailable()) {
       true -> getItineraryFirebase(uid)
@@ -164,6 +169,11 @@ class ItineraryRepositoryImpl(
         .first()
   }
 
+  /**
+   * Sets an itinerary on firebase.
+   * - This itinerary is created if it doesn't exist yet
+   * - if `Itinerary.uid` is empty, a fresh one will be generated
+   */
   override fun setItinerary(itinerary: Itinerary) {
     if (itinerary.uid.isBlank()) {
       itinerary.uid = itinerariesCollection.document().id
@@ -179,6 +189,7 @@ class ItineraryRepositoryImpl(
         }
   }
 
+  /** updates the fields of the `Itinerary` with uid `oldUid` */
   override fun updateItinerary(oldUid: String, new: Itinerary) {
     if (oldUid != new.uid) {
       throw Exception("UIDs do not match")
@@ -194,6 +205,7 @@ class ItineraryRepositoryImpl(
         }
   }
 
+  /** deletes an itinerary on firestore */
   override fun deleteItinerary(itinerary: Itinerary) {
     itinerariesCollection
         .document(itinerary.uid)

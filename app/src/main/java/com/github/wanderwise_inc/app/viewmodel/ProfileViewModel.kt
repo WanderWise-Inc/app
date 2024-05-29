@@ -16,7 +16,8 @@ class ProfileViewModel(
     private val imageRepository: ImageRepository
 ) : ViewModel() {
   private var isSignInComplete = false // set on sign-in success
-  private lateinit var activeProfile: Profile // set on sign-in
+  /** The `Profile` of the currently signed-in user. Set on sign-in */
+  private lateinit var activeProfile: Profile
 
   /** @return flow of a user profile */
   fun getProfile(userUid: String): Flow<Profile?> {
@@ -49,21 +50,34 @@ class ProfileViewModel(
     return imageRepository.fetchImage("profilePicture/defaultProfilePicture.jpg")
   }
 
+  /**
+   * Adds a liked `Itinerary` to the `Profile` with user-uid `userUid` except if this is the default
+   * offline profile, in which case this call has no effect
+   */
   fun addLikedItinerary(userUid: String, itineraryUid: String) {
     if (userUid == DEFAULT_OFFLINE_PROFILE.userUid) return
     profileRepository.addItineraryToLiked(userUid, itineraryUid)
   }
 
+  /**
+   * Removes a liked `Itinerary` from the `Profile` with user-uid `userUid` except if this is the
+   * default offline profile, in which case this call has no effect
+   */
   fun removeLikedItinerary(userUid: String, itineraryUid: String) {
     if (userUid == DEFAULT_OFFLINE_PROFILE.userUid) return
     profileRepository.removeItineraryFromLiked(userUid, itineraryUid)
   }
 
+  /**
+   * @return `true` iff the itinerary with uid `itineraryUid` is liked by the profile with user-uid
+   *   `userUid`
+   */
   suspend fun checkIfItineraryIsLiked(userUid: String, itineraryUid: String): Boolean {
     if (userUid == DEFAULT_OFFLINE_PROFILE.userUid) return false
     return profileRepository.checkIfItineraryIsLiked(userUid, itineraryUid)
   }
 
+  /** @return `true` iff the itinerary with uid `itineraryUid` is liked by the active profile */
   suspend fun checkIfItineraryIsLikedByActiveProfile(itineraryUid: String): Boolean {
     return if (isSignInComplete)
         profileRepository.checkIfItineraryIsLiked(getUserUid(), itineraryUid)
@@ -88,12 +102,12 @@ class ProfileViewModel(
   }
 
   /**
-   * Returns the profile of the active user, as initialized at sign-in. If sign-in in was
-   * unsuccessful, this will return `DEFAULT_OFFLINE_PROFILE` as defined in `Profile.kt`
+   * @return the profile of the active user, as initialized at sign-in. If sign-in in was
+   *   unsuccessful, this will return `DEFAULT_OFFLINE_PROFILE` as defined in `Profile.kt`
    */
   fun getActiveProfile(): Profile = activeProfile
 
-  /** Returns the UID of the signed in profile */
+  /** @return the UID of the signed in profile */
   fun getUserUid(): String = activeProfile.userUid
 
   /** Updates liked itineraries of active profile locally */

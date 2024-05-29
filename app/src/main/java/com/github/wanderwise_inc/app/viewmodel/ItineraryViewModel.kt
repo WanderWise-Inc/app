@@ -22,7 +22,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 private const val DEBUG_TAG: String = "ITINERARY_VIEWMODEL"
-/** @brief ViewModel class for providing `Location`s and `Itinerary`s to the map UI */
+/** @brief ViewModel class for providing `Location`s and `Itinerary`s and related logic */
 open class ItineraryViewModel(
     protected val itineraryRepository: ItineraryRepository,
     protected val directionsRepository: DirectionsRepository,
@@ -159,6 +159,7 @@ open class ItineraryViewModel(
     }
   }
 
+  /** trivial getter */
   fun getPolylinePointsLiveData(): LiveData<List<LatLng>> {
     return polylinePointsLiveData
   }

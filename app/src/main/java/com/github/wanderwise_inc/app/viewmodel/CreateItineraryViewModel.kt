@@ -16,6 +16,10 @@ import kotlinx.coroutines.launch
 
 const val TITLE_MAX_LENGTH = 43
 
+/**
+ * Extension of `ItineraryViewModel` with additional parameters needed for the creation process of
+ * an `Itinerary`
+ */
 class CreateItineraryViewModel(
     itineraryRepository: ItineraryRepository,
     directionsRepository: DirectionsRepository,
