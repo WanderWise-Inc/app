@@ -18,7 +18,6 @@ import com.github.wanderwise_inc.app.model.location.Location
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 private const val DEBUG_TAG: String = "ITINERARY_VIEWMODEL"
