@@ -468,19 +468,19 @@ fun CenterButton(
 
   // pressing on center button changes centerOnUser variable which launches camera movement
   LaunchedEffect(centeredOnUser) {
-      try {
-        cameraPositionState.move(
-            if (centeredOnUser && userLocation != null) {
-              val latLng = userLocation.toLatLng()
-              CameraUpdateFactory.newLatLngZoom(latLng, 13f)
-            } else {
-              CameraUpdateFactory.newLatLngZoom(
-                  itinerary.computeCenterOfGravity().toLatLng(),
-                  itinerary.computeOptimalZoomLevel())
-            })
-      } catch (_: NullPointerException) { // This is used when testing, the CameraUpdateFactory is null
-        /* Do nothing */
-      }
+    try {
+      cameraPositionState.move(
+          if (centeredOnUser && userLocation != null) {
+            val latLng = userLocation.toLatLng()
+            CameraUpdateFactory.newLatLngZoom(latLng, 13f)
+          } else {
+            CameraUpdateFactory.newLatLngZoom(
+                itinerary.computeCenterOfGravity().toLatLng(), itinerary.computeOptimalZoomLevel())
+          })
+    } catch (
+        _: NullPointerException) { // This is used when testing, the CameraUpdateFactory is null
+      /* Do nothing */
+    }
   }
 
   FloatingActionButton(
