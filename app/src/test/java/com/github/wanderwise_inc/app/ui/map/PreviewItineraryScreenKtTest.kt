@@ -1,9 +1,5 @@
 package com.github.wanderwise_inc.app.ui.map
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -27,11 +23,7 @@ import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.viewmodel.ItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.LocationClient
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
-import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
-import com.google.maps.android.compose.CameraPositionState
-import com.google.maps.android.compose.GoogleMap
-import com.google.maps.android.compose.rememberCameraPositionState
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertTrue
@@ -168,40 +160,6 @@ class PreviewItineraryScreenKtTest {
     }
 
     composeTestRule.onNodeWithTag(TestTags.START_NEW_ITINERARY_STARTING).assertIsDisplayed()
-  }
-
-  @Test
-  fun `pressing center button should update camera position`() {
-    val epflLocation = Location(epflLat, epflLon)
-
-    var cameraPositionStateObserver: CameraPositionState? = null
-
-    val delta = 0.0001
-
-    composeTestRule.setContent {
-      Box {
-        val cameraPositionState = rememberCameraPositionState {
-          position =
-              CameraPosition.fromLatLngZoom(itinerary.computeCenterOfGravity().toLatLng(), 13f)
-        }
-        cameraPositionStateObserver = cameraPositionState
-        Scaffold(floatingActionButton = { CenterButton(cameraPositionState, epflLocation) }) {
-            paddingValues ->
-          GoogleMap(
-              modifier = Modifier.padding(paddingValues), cameraPositionState = cameraPositionState)
-        }
-      }
-    }
-
-    composeTestRule.onNodeWithTag(TestTags.MAP_CENTER_CAMERA_BUTTON).assertIsDisplayed()
-    // TODO test fails: java.lang.NullPointerException: CameraUpdateFactory is not initialized
-    // composeTestRule.onNodeWithTag("Center Button").performClick()
-    /*
-    cameraPositionStateObserver?.let {
-      assertEquals(it.position.target.latitude, epflLat, delta)
-      assertEquals(it.position.target.longitude, epflLon, delta)
-    }
-    */
   }
 
   @Test

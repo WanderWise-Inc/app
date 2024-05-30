@@ -18,7 +18,6 @@ import com.github.wanderwise_inc.app.model.location.Location
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 private const val DEBUG_TAG: String = "ITINERARY_VIEWMODEL"
@@ -49,7 +48,6 @@ open class ItineraryViewModel(
   /** @return a flow of all `Itinerary`s associated to the currently logged in user */
   fun getUserItineraries(userUid: String): Flow<List<Itinerary>> {
     val ret = itineraryRepository.getUserItineraries(userUid)
-    ret.map { Log.d("ItineraryViewModel", "UserItineraries: $it") }
     return ret
   }
 
