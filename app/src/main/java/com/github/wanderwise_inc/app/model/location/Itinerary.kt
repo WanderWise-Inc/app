@@ -205,6 +205,7 @@ data class Itinerary(
         ItineraryLabels.TIME to time,
         ItineraryLabels.NUM_LIKES to numLikes)
   }
+
   /** Conversion method for converting to protobuf */
   fun toProto(): ItineraryProto {
     return ItineraryProto.newBuilder()
@@ -265,7 +266,8 @@ data class Itinerary(
     return Location(avgLat, avgLon)
   }
 
-  fun getLatLngBounds(): LatLngBounds {
+  /** @return `LatLngBounds` from an itinerary's locations. Needed for computing zoom level */
+  private fun getLatLngBounds(): LatLngBounds {
     val builder = LatLngBounds.builder()
     for (location in locations) {
       builder.include(location.toLatLng())

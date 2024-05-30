@@ -7,6 +7,7 @@ import com.google.protobuf.InvalidProtocolBufferException
 import java.io.InputStream
 import java.io.OutputStream
 
+/** Serializer for the `SavedItineraries` protobuf. */
 object SavedItinerariesSerializer : Serializer<SavedItineraries> {
   override val defaultValue: SavedItineraries = SavedItineraries.getDefaultInstance()
 
