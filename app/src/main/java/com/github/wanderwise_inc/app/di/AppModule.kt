@@ -138,9 +138,7 @@ class AppModule(
   }
 
   /** The `SignInLauncher` instance used for launching the sign-in flow. */
-  private val signInLauncher: SignInLauncher by lazy {
-    GoogleSignInLauncher(signInResultLauncher)
-  }
+  private val signInLauncher: SignInLauncher by lazy { GoogleSignInLauncher(signInResultLauncher) }
 
   /** The `ActivityResultLauncher` used for launching the sign-in flow. */
   private val signInResultLauncher: ActivityResultLauncher<Intent> by lazy {
