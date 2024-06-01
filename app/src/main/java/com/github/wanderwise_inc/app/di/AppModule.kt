@@ -139,11 +139,11 @@ class AppModule(
 
   /** The `SignInLauncher` instance used for launching the sign-in flow. */
   private val signInLauncher: SignInLauncher by lazy {
-    GoogleSignInLauncher(activityResultLauncher)
+    GoogleSignInLauncher(signInResultLauncher)
   }
 
   /** The `ActivityResultLauncher` used for launching the sign-in flow. */
-  private val activityResultLauncher: ActivityResultLauncher<Intent> by lazy {
+  private val signInResultLauncher: ActivityResultLauncher<Intent> by lazy {
     activity.registerForActivityResult(FirebaseAuthUIActivityResultContract()) { res ->
       val user = if (res.resultCode == Activity.RESULT_OK) firebaseAuth.currentUser else null
 
