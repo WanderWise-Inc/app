@@ -28,109 +28,95 @@ import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 
-/**
- * Main activity of the application.
- */
+/** Main activity of the application. */
 class MainActivity : ComponentActivity() {
 
-    private val appModule by lazy { AppModule(this) }
+  private val appModule by lazy { AppModule(this) }
 
-    private lateinit var firebaseAuth: FirebaseAuth
-    private lateinit var firebaseStorage: FirebaseStorage
+  private lateinit var firebaseAuth: FirebaseAuth
+  private lateinit var firebaseStorage: FirebaseStorage
 
-    private lateinit var imageRepository: ImageRepository
-    private lateinit var itineraryRepository: ItineraryRepository
-    private lateinit var profileRepository: ProfileRepository
-    private lateinit var directionsRepository: DirectionsRepository
-    private lateinit var locationsRepository: LocationsRepository
+  private lateinit var imageRepository: ImageRepository
+  private lateinit var itineraryRepository: ItineraryRepository
+  private lateinit var profileRepository: ProfileRepository
+  private lateinit var directionsRepository: DirectionsRepository
+  private lateinit var locationsRepository: LocationsRepository
 
-    private lateinit var bottomNavigationViewModel: BottomNavigationViewModel
-    private lateinit var createItineraryViewModel: CreateItineraryViewModel
-    private lateinit var itineraryViewModel: ItineraryViewModel
-    private lateinit var loginViewModel: LoginViewModel
-    private lateinit var profileViewModel: ProfileViewModel
+  private lateinit var bottomNavigationViewModel: BottomNavigationViewModel
+  private lateinit var createItineraryViewModel: CreateItineraryViewModel
+  private lateinit var itineraryViewModel: ItineraryViewModel
+  private lateinit var loginViewModel: LoginViewModel
+  private lateinit var profileViewModel: ProfileViewModel
 
-    private lateinit var navController: NavHostController
+  private lateinit var navController: NavHostController
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
 
-        init()
+    init()
 
-        setContent {
-            WanderWiseTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    navController = rememberNavController()
-                    RootNavigationGraph(
-                        profileViewModel,
-                        itineraryViewModel,
-                        createItineraryViewModel,
-                        bottomNavigationViewModel,
-                        loginViewModel,
-                        imageRepository,
-                        navController
-                    )
-                }
-            }
+    setContent {
+      WanderWiseTheme {
+        Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
+          navController = rememberNavController()
+          RootNavigationGraph(
+              profileViewModel,
+              itineraryViewModel,
+              createItineraryViewModel,
+              bottomNavigationViewModel,
+              loginViewModel,
+              imageRepository,
+              navController)
         }
+      }
     }
+  }
 
-    /**
-     * Initialize the application dependencies.
-     */
-    private fun init() {
-        requestPermissions()
+  /** Initialize the application dependencies. */
+  private fun init() {
+    requestPermissions()
 
-        firebaseAuth = appModule.firebaseAuth
-        firebaseStorage = appModule.firebaseStorage
+    firebaseAuth = appModule.firebaseAuth
+    firebaseStorage = appModule.firebaseStorage
 
-        initializeRepositories()
+    initializeRepositories()
 
-        initializeViewModels()
-    }
+    initializeViewModels()
+  }
 
-    /**
-     * Request permissions for the application if not already given.
-     */
-    private fun requestPermissions() {
-        val permissions =
-            arrayOf(
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-            )
+  /** Request permissions for the application if not already given. */
+  private fun requestPermissions() {
+    val permissions =
+        arrayOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+        )
 
-        val notGrantedPermissions =
-            permissions.filter {
-                ActivityCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
-            }
-
-        if (notGrantedPermissions.isNotEmpty()) {
-            ActivityCompat.requestPermissions(this, notGrantedPermissions.toTypedArray(), 0)
+    val notGrantedPermissions =
+        permissions.filter {
+          ActivityCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
         }
-    }
 
-    /**
-     * Initialize repositories.
-     */
-    private fun initializeRepositories() {
-        directionsRepository = appModule.directionsRepository
-        imageRepository = appModule.imageRepository
-        itineraryRepository = appModule.itineraryRepository
-        locationsRepository = appModule.locationsRepository
-        profileRepository = appModule.profileRepository
+    if (notGrantedPermissions.isNotEmpty()) {
+      ActivityCompat.requestPermissions(this, notGrantedPermissions.toTypedArray(), 0)
     }
+  }
 
-    /**
-     * Initialize view models.
-     */
-    private fun initializeViewModels() {
-        bottomNavigationViewModel = appModule.bottomNavigationViewModel
-        createItineraryViewModel = appModule.createItineraryViewModel
-        itineraryViewModel = appModule.itineraryViewModel
-        loginViewModel = appModule.loginViewModel
-        profileViewModel = appModule.profileViewModel
-    }
+  /** Initialize repositories. */
+  private fun initializeRepositories() {
+    directionsRepository = appModule.directionsRepository
+    imageRepository = appModule.imageRepository
+    itineraryRepository = appModule.itineraryRepository
+    locationsRepository = appModule.locationsRepository
+    profileRepository = appModule.profileRepository
+  }
+
+  /** Initialize view models. */
+  private fun initializeViewModels() {
+    bottomNavigationViewModel = appModule.bottomNavigationViewModel
+    createItineraryViewModel = appModule.createItineraryViewModel
+    itineraryViewModel = appModule.itineraryViewModel
+    loginViewModel = appModule.loginViewModel
+    profileViewModel = appModule.profileViewModel
+  }
 }
