@@ -11,8 +11,8 @@ import com.firebase.ui.auth.AuthUI
  * This class is responsible for initiating the sign-in process using Google as the identity
  * provider.
  *
- * @property activityResultLauncher The `ActivityResultLauncher` that is used to launch the sign-in
  * @constructor Creates a `GoogleSignInLauncher` with the specified `activityResultLauncher`.
+ * @property activityResultLauncher The `ActivityResultLauncher` that is used to launch the sign-in
  */
 class GoogleSignInLauncher(
     private val activityResultLauncher: ActivityResultLauncher<Intent>,
