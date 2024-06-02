@@ -17,9 +17,15 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 
 const val PROFILE_DB_PATH = "profiles"
 
+/** @brief Implementation of the ProfileRepository interface */
 class ProfileRepositoryImpl(db: FirebaseFirestore, val context: Context) : ProfileRepository {
   private val usersCollection = db.collection(PROFILE_DB_PATH)
 
+  /**
+   * @param userUid the uid of a user
+   * @return a flow of a queried profile
+   * @brief Queries a profile from the database
+   */
   override fun getProfile(userUid: String): Flow<Profile?> {
     return flow {
           val document =
@@ -28,6 +34,7 @@ class ProfileRepositoryImpl(db: FirebaseFirestore, val context: Context) : Profi
                     .document(userUid)
                     .get()
                     .addOnSuccessListener { documentSnapshot ->
+                      Log.d("ProfileRepositoryImpl", "Successfully got profile")
                       continuation.resume(documentSnapshot)
                     }
                     .addOnFailureListener { exception ->
@@ -48,6 +55,10 @@ class ProfileRepositoryImpl(db: FirebaseFirestore, val context: Context) : Profi
         }
   }
 
+  /**
+   * @return a flow of all profiles
+   * @brief Queries all profiles from the database
+   */
   override fun getAllProfiles(): Flow<List<Profile>> {
     return flow {
           val allProfiles = suspendCancellableCoroutine { continuation ->
@@ -72,6 +83,10 @@ class ProfileRepositoryImpl(db: FirebaseFirestore, val context: Context) : Profi
         }
   }
 
+  /**
+   * @param profile the profile to set
+   * @brief Sets a user profile to Firestore
+   */
   override fun setProfile(profile: Profile) {
     val userMap = profile.toMap()
     usersCollection
@@ -84,6 +99,10 @@ class ProfileRepositoryImpl(db: FirebaseFirestore, val context: Context) : Profi
         }
   }
 
+  /**
+   * @param profile the profile to delete
+   * @brief Deletes a user profile from Firestore
+   */
   override fun deleteProfile(profile: Profile) {
     usersCollection
         .document(profile.userUid)
@@ -95,6 +114,11 @@ class ProfileRepositoryImpl(db: FirebaseFirestore, val context: Context) : Profi
         }
   }
 
+  /**
+   * @param userUid the uid of a user
+   * @param itineraryUid the uid of an itinerary
+   * @brief Adds an itinerary to the user's liked itineraries
+   */
   override fun addItineraryToLiked(userUid: String, itineraryUid: String) {
     usersCollection
         .document(userUid)
@@ -108,10 +132,12 @@ class ProfileRepositoryImpl(db: FirebaseFirestore, val context: Context) : Profi
         }
   }
 
+  /**
+   * @param userUid the uid of a user
+   * @param itineraryUid the uid of an itinerary
+   * @brief Removes an itinerary from the user's liked itineraries
+   */
   override fun removeItineraryFromLiked(userUid: String, itineraryUid: String) {
-    Log.d("ProfileRepositoryImplREMOVE", "Removing itinerary from liked")
-    Log.d("ProfileRepositoryImplREMOVE", "User: $userUid")
-    Log.d("ProfileRepositoryImplREMOVE", "Itinerary: $itineraryUid")
     usersCollection
         .document(userUid)
         .update(ProfileLabels.LIKED_ITINERARIES, FieldValue.arrayRemove(itineraryUid))
@@ -124,6 +150,12 @@ class ProfileRepositoryImpl(db: FirebaseFirestore, val context: Context) : Profi
         }
   }
 
+  /**
+   * @param userUid the uid of a user
+   * @param itineraryUid the uid of an itinerary
+   * @return true if the itinerary is liked, false otherwise
+   * @brief Checks if the given itinerary is contained in the user's liked itineraries
+   */
   override suspend fun checkIfItineraryIsLiked(userUid: String, itineraryUid: String): Boolean {
     return when (context.isNetworkAvailable()) {
       true -> checkIfItineraryIsLikedOnline(userUid, itineraryUid)
@@ -131,6 +163,12 @@ class ProfileRepositoryImpl(db: FirebaseFirestore, val context: Context) : Profi
     }
   }
 
+  /**
+   * @param userUid the uid of a user
+   * @param itineraryUid the uid of an itinerary
+   * @return true if the itinerary is liked, false otherwise
+   * @brief Checks if the given itinerary is contained in the user's liked itineraries (online mode)
+   */
   private suspend fun checkIfItineraryIsLikedOnline(
       userUid: String,
       itineraryUid: String
@@ -152,6 +190,10 @@ class ProfileRepositoryImpl(db: FirebaseFirestore, val context: Context) : Profi
     return isLiked
   }
 
+  /**
+   * @param userUid the uid of a user
+   * @brief Returns a list of user's liked itineraries in form of a Flow of List<String>
+   */
   override fun getLikedItineraries(userUid: String): Flow<List<String>> {
     return flow {
           val likedItineraries = suspendCancellableCoroutine { continuation ->

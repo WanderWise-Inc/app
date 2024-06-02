@@ -26,38 +26,38 @@ class ImageRepositoryImpl(
   private var onImageSelected: ((Uri?) -> Unit)? = null
 
   /**
-   * Fetch image Function. This function will fetch the profile picture from the Storage at a given
-   * path
+   * Fetch image Function. This function will fetch the picture from the Storage at a given path
    *
-   * @return a flow of the bitMap representation of the profile picture
+   * @param fileName the path of the picture in the storage
+   * @return a flow of the Uri representation of the picture
    */
   override fun fetchImage(fileName: String): Flow<Uri?> {
-    Log.d("FETCH IMAGE COUNTER", "FETCHING IMAGE")
     return flow {
           if (fileName.isBlank()) {
-            // the path is empty, there should be no profilePicture at this path
+            // the path is empty, there should be no picture at this path
             emit(null)
           } else {
             val pictureRef = imageReference.child("images/${fileName}")
 
-            // the byte array that is at the given path (if any)
+            // Get the Uri from storage
             val uriResult =
                 suspendCancellableCoroutine<Uri?> { continuation ->
                   pictureRef.downloadUrl
                       .addOnSuccessListener { result ->
-                        Log.d("FETCH IMAGE", "FETCH SUCCESS")
-                        continuation.resume(result) // Resume with byte array
+                        Log.d("FETCH IMAGE", "Download Success")
+                        continuation.resume(result)
                       }
                       .addOnFailureListener { exception ->
                         Log.w("FETCH IMAGE", exception)
-                        continuation.resumeWithException(exception) // Resume with exception
+                        continuation.resumeWithException(exception)
                       }
                 }
-            emit(uriResult) // Emit bitmap
+            emit(uriResult)
           }
         }
         .catch {
-          Log.w("FETCH IMAGE", it)
+          // If there is an error, we emit null
+          Log.d("FETCH IMAGE", "Error fetching image")
           emit(null)
         }
   }
@@ -67,6 +67,7 @@ class ImageRepositoryImpl(
    * selected by the user in the photo gallery)
    *
    * @param fileName the fileName (path) where we want to store the currentFile
+   * @return true if the upload was successful, false otherwise
    */
   override suspend fun uploadImageToStorage(fileName: String): Boolean {
     if (fileName == "") {
@@ -74,49 +75,59 @@ class ImageRepositoryImpl(
     }
     val result =
         suspendCancellableCoroutine<Boolean> { continuation ->
+          // choose the currentFile to upload between the itinerary image and the profile image
           currentFile = if (isItineraryImage) currentFileItinerary else currentFileProfile
           currentFile?.let {
             imageReference
                 .child("images/${fileName}")
                 .putFile(it)
                 .addOnSuccessListener {
-                  Log.d("STORE IMAGE", "STORE SUCCESS")
+                  Log.d("UPLOAD IMAGE", "Upload Success")
                   continuation.resume(true)
                 }
                 .addOnFailureListener { error ->
-                  Log.w("STORE IMAGE", error)
+                  Log.w("UPLOAD IMAGE", error)
                   continuation.resume(false)
                 }
           }
+              // If there is no currentFile, then we can't upload anything
               ?: run {
-                Log.w("STORE IMAGE", "currentFile is null")
+                Log.d("UPLOAD IMAGE", "No image to upload")
                 continuation.resume(false)
               }
         }
     return result
   }
 
-  /** @brief used to launch the activity to open the photo gallery */
+  /**
+   * @param it the intent to launch the activity
+   * @brief used to launch the activity to open the photo gallery
+   */
   override fun launchActivity(it: Intent) {
     activityLauncher.launch(it)
   }
 
   /**
+   * @param uri the uri of the currentFile
    * @brief set the currentFile to this the Uri given, useful for other functions that will use the
    *   currentFile
    */
   override fun setCurrentFile(uri: Uri?) {
+    // Choice between the itinerary image and the profile image
     if (isItineraryImage) {
-      Log.d("CURRENT FILE TYPE", "SET ITINERARY IMAGE")
       currentFileItinerary = uri
     } else {
-      Log.d("CURRENT FILE TYPE", "SET PROFILE IMAGE")
       currentFileProfile = uri
     }
 
+    // Call the onImageSelected listener to notify that the currentFile has been set
     onImageSelected?.invoke(uri)
   }
 
+  /**
+   * @param listener the listener to set the currentFile
+   * @brief set the onImageSelected listener that will be used when setting the current file
+   */
   override fun setOnImageSelectedListener(listener: (Uri?) -> Unit) {
     onImageSelected = listener
   }
@@ -124,22 +135,30 @@ class ImageRepositoryImpl(
   /** @return the currentFile */
   override fun getCurrentFile(): Uri? {
     return if (isItineraryImage) {
-      Log.d("CURRENT FILE TYPE", "GET ITINERARY IMAGE")
       currentFileItinerary
     } else {
-      Log.d("CURRENT FILE TYPE", "GET PROFILE IMAGE")
       currentFileProfile
     }
   }
 
+  /** @return true if the currentFile is an itinerary image, false if it is a profile image */
   override fun getIsItineraryImage(): Boolean {
     return isItineraryImage
   }
 
-  override fun setIsItineraryImage(type: Boolean) {
-    isItineraryImage = type
+  /**
+   * @param isItineraryImageType true if the currentFile is an itinerary image, false if it is a
+   *   profile image
+   * @brief set the currentFile to be an itinerary image or a profile image
+   */
+  override fun setIsItineraryImage(isItineraryImageType: Boolean) {
+    isItineraryImage = isItineraryImageType
   }
 
+  /**
+   * @param fileName the path of the image to delete
+   * @brief delete the image at fileName path from the storage Firebase
+   */
   override fun deleteImageFromStorage(fileName: String) {
     imageReference
         .child("images/${fileName}")
