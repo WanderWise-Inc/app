@@ -7,6 +7,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.github.wanderwise_inc.app.BuildConfig
 import com.github.wanderwise_inc.app.data.DirectionsRepository
@@ -21,6 +22,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 
 private const val DEBUG_TAG: String = "ITINERARY_VIEWMODEL"
+
 /** @brief ViewModel class for providing `Location`s and `Itinerary`s and related logic */
 open class ItineraryViewModel(
     protected val itineraryRepository: ItineraryRepository,
@@ -196,5 +198,23 @@ open class ItineraryViewModel(
     val intent = Intent(Intent.ACTION_VIEW, uri)
     intent.setPackage("com.google.android.apps.maps")
     intent.resolveActivity(context.packageManager)?.let { context.startActivity(intent) }
+  }
+
+  /** Factory for creating a `ItineraryViewModel`. */
+  class Factory(
+      private val itineraryRepository: ItineraryRepository,
+      private val directionsRepository: DirectionsRepository,
+      private val locationsRepository: LocationsRepository,
+      private val locationClient: LocationClient,
+  ) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+      if (modelClass.isAssignableFrom(ItineraryViewModel::class.java)) {
+        @Suppress("UNCHECKED_CAST")
+        return ItineraryViewModel(
+            itineraryRepository, directionsRepository, locationsRepository, locationClient)
+            as T
+      }
+      throw IllegalArgumentException("Unknown ViewModel class")
+    }
   }
 }

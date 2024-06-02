@@ -3,6 +3,7 @@ package com.github.wanderwise_inc.app.viewmodel
 import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.data.ProfileRepository
 import com.github.wanderwise_inc.app.model.location.Itinerary
@@ -16,8 +17,13 @@ class ProfileViewModel(
     private val imageRepository: ImageRepository
 ) : ViewModel() {
   private var isSignInComplete = false // set on sign-in success
+
   /** The `Profile` of the currently signed-in user. Set on sign-in */
   private lateinit var activeProfile: Profile
+
+  init {
+    Log.d("ProfileViewModel", "ProfileViewModel created")
+  }
 
   /** @return flow of a user profile */
   fun getProfile(userUid: String): Flow<Profile?> {
@@ -95,7 +101,6 @@ class ProfileViewModel(
   /** Sets the active profile. Called on sign-in and only called once */
   fun setActiveProfile(profile: Profile) {
     if (!isSignInComplete) {
-      Log.d("ProfileViewModel", "Setting active profile to: $profile")
       activeProfile = profile
       isSignInComplete = true
     }
@@ -126,5 +131,18 @@ class ProfileViewModel(
     val bio = ""
 
     return Profile(userUid = uid, displayName = displayName, bio = bio)
+  }
+
+  /** Factory for creating a `ProfileViewModel` */
+  class Factory(
+      private val profileRepository: ProfileRepository,
+      private val imageRepository: ImageRepository
+  ) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+      if (modelClass.isAssignableFrom(ProfileViewModel::class.java)) {
+        @Suppress("UNCHECKED_CAST") return ProfileViewModel(profileRepository, imageRepository) as T
+      }
+      throw IllegalArgumentException("Unknown ViewModel class")
+    }
   }
 }

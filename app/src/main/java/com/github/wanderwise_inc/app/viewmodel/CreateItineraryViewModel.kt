@@ -1,6 +1,8 @@
 package com.github.wanderwise_inc.app.viewmodel
 
 import android.util.Log
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.github.wanderwise_inc.app.data.DirectionsRepository
 import com.github.wanderwise_inc.app.data.ItineraryRepository
 import com.github.wanderwise_inc.app.data.LocationsRepository
@@ -227,5 +229,23 @@ class CreateItineraryViewModel(
 
     // return the notSetValues (empty if everything has been set)
     return notSetValues
+  }
+
+  /** Factory for creating a `CreateItineraryViewModel`. */
+  class Factory(
+      private val itineraryRepository: ItineraryRepository,
+      private val directionsRepository: DirectionsRepository,
+      private val locationsRepository: LocationsRepository,
+      private val locationClient: LocationClient,
+  ) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+      if (modelClass.isAssignableFrom(CreateItineraryViewModel::class.java)) {
+        @Suppress("UNCHECKED_CAST")
+        return CreateItineraryViewModel(
+            itineraryRepository, directionsRepository, locationsRepository, locationClient)
+            as T
+      }
+      throw IllegalArgumentException("Unknown ViewModel class")
+    }
   }
 }

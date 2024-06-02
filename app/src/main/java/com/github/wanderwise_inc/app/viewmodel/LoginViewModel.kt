@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.github.wanderwise_inc.app.data.SignInLauncher
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.first
@@ -72,6 +73,19 @@ class LoginViewModel(
     }
 
     _signInState.value = SignInState.SUCCESS
+  }
+
+  /** Factory for creating a `LoginViewModel`. */
+  class Factory(
+      private val signInLauncher: SignInLauncher,
+      private val isNetworkAvailable: Boolean,
+  ) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+      if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
+        @Suppress("UNCHECKED_CAST") return LoginViewModel(signInLauncher, isNetworkAvailable) as T
+      }
+      throw IllegalArgumentException("Unknown ViewModel class")
+    }
   }
 }
 

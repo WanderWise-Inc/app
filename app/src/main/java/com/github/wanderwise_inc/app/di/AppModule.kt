@@ -6,6 +6,7 @@ import android.content.Intent
 import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.datastore.core.DataStore
 import androidx.datastore.dataStore
 import androidx.lifecycle.lifecycleScope
@@ -111,19 +112,21 @@ class AppModule(
   }
 
   /** The `BottomNavigationViewModel` instance used for managing the bottom navigation bar. */
-  val bottomNavigationViewModel: BottomNavigationViewModel by lazy { BottomNavigationViewModel() }
+  val bottomNavigationViewModel: BottomNavigationViewModel by activity.viewModels()
 
   /** The `CreateItineraryViewModel` instance used for creating itineraries. */
-  val createItineraryViewModel by lazy {
-    CreateItineraryViewModel(
-        itineraryRepository, directionsRepository, locationsRepository, locationClient)
-  }
+  val createItineraryViewModel: CreateItineraryViewModel by
+      activity.viewModels {
+        CreateItineraryViewModel.Factory(
+            itineraryRepository, directionsRepository, locationsRepository, locationClient)
+      }
 
   /** The `ItineraryViewModel` instance used for managing itineraries. */
-  val itineraryViewModel: ItineraryViewModel by lazy {
-    ItineraryViewModel(
-        itineraryRepository, directionsRepository, locationsRepository, locationClient)
-  }
+  val itineraryViewModel: ItineraryViewModel by
+      activity.viewModels {
+        ItineraryViewModel.Factory(
+            itineraryRepository, directionsRepository, locationsRepository, locationClient)
+      }
 
   /** The `LocationClient` instance used for fetching user locations. */
   private val locationClient: LocationClient by lazy {
@@ -133,9 +136,10 @@ class AppModule(
   }
 
   /** The `LoginViewModel` instance used for managing user authentication. */
-  val loginViewModel: LoginViewModel by lazy {
-    LoginViewModel(signInLauncher, activity.applicationContext.isNetworkAvailable())
-  }
+  val loginViewModel: LoginViewModel by
+      activity.viewModels {
+        LoginViewModel.Factory(signInLauncher, activity.applicationContext.isNetworkAvailable())
+      }
 
   /** The `SignInLauncher` instance used for launching the sign-in flow. */
   private val signInLauncher: SignInLauncher by lazy { GoogleSignInLauncher(signInResultLauncher) }
@@ -150,7 +154,6 @@ class AppModule(
   }
 
   /** The `ProfileViewModel` instance used for managing user profiles. */
-  val profileViewModel: ProfileViewModel by lazy {
-    ProfileViewModel(profileRepository, imageRepository)
-  }
+  val profileViewModel: ProfileViewModel by
+      activity.viewModels { ProfileViewModel.Factory(profileRepository, imageRepository) }
 }
