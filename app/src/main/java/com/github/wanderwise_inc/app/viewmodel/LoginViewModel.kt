@@ -8,14 +8,23 @@ import com.github.wanderwise_inc.app.data.SignInLauncher
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.first
 
+/**
+ * ViewModel for the login screen.
+ *
+ * @param signInLauncher The launcher for the sign-in flow.
+ * @param isNetworkAvailable Whether the network is available.
+ * @constructor Creates a new instance of LoginViewModel.
+ */
 class LoginViewModel(
     private val signInLauncher: SignInLauncher,
     private val isNetworkAvailable: Boolean,
 ) : ViewModel() {
+  // The state of the sign-in process
   private val _signInState = MutableLiveData(SignInState.NONE)
   val signInState: LiveData<SignInState>
     get() = _signInState
 
+  /** Launches the sign-in process. */
   fun signIn() {
     if (isNetworkAvailable) signInLauncher.signIn()
     else {
@@ -24,6 +33,12 @@ class LoginViewModel(
     }
   }
 
+  /**
+   * Handles the result of the sign-in process.
+   *
+   * @param profileViewModel The profile view model.
+   * @param user The signed-in user.
+   */
   suspend fun handleSignInResult(
       profileViewModel: ProfileViewModel,
       user: FirebaseUser?,
@@ -31,10 +46,17 @@ class LoginViewModel(
     user?.let { signInSucceeded(profileViewModel, it) } ?: signInFailed()
   }
 
+  /** Sets the sign-in state to [SignInState.FAILURE]. */
   private fun signInFailed() {
     _signInState.value = SignInState.FAILURE
   }
 
+  /**
+   * Sets the sign-in state to [SignInState.SUCCESS] and updates the active profile.
+   *
+   * @param profileViewModel The profile view model.
+   * @param user The signed-in user.
+   */
   private suspend fun signInSucceeded(profileViewModel: ProfileViewModel, user: FirebaseUser) {
     // Get the user from database
     val currentProfile = profileViewModel.getProfile(user.uid).first()
@@ -53,6 +75,7 @@ class LoginViewModel(
   }
 }
 
+/** The state of the sign-in process. */
 enum class SignInState {
   NONE,
   SUCCESS,
