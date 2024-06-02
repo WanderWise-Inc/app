@@ -20,19 +20,32 @@ interface ItineraryRepository {
    */
   fun getItinerariesWithTags(tags: List<Tag>): Flow<List<Itinerary>>
 
+    /** @brief gets an itinerary by its UID
+     * @param uid the UID of the itinerary
+     * */
   suspend fun getItinerary(uid: String): Itinerary?
 
-  /** @brief sets an itinerary. If the itinerary has a blank UID, one will be generated */
+  /** @brief sets an itinerary. If the itinerary has a blank UID, one will be generated
+   * @param itinerary the itinerary to set
+   * */
   fun setItinerary(itinerary: Itinerary)
 
-  /** @brief update and itinerary. */
+  /** @brief update and itinerary.
+   * @param oldUid the UID of the itinerary to update
+   * @param new the new itinerary to set
+   * */
   fun updateItinerary(oldUid: String, new: Itinerary)
 
-  /** @brief deletes an itinerary */
+  /** @brief deletes an itinerary
+   * @param itinerary the itinerary to delete
+   * */
   fun deleteItinerary(itinerary: Itinerary)
 
-  /** @brief writes itineraries to persistent storage */
+  /** @brief writes itineraries to persistent storage
+   * @param itineraries the itineraries to write to disk
+   * */
   suspend fun writeItinerariesToDisk(itineraries: List<Itinerary>)
 
+    /** @return a new random Id for the itinerary */
   fun getNewId(): String
 }
