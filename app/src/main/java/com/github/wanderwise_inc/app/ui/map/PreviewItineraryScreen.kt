@@ -84,11 +84,14 @@ fun PreviewItineraryScreen(
     itineraryViewModel: ItineraryViewModel,
     profileViewModel: ProfileViewModel,
     imageRepository: ImageRepository,
-    navController: NavHostController
+    navController: NavHostController,
+    creationMode: Boolean = false
 ) {
   val userLocation by itineraryViewModel.getUserLocation().collectAsState(null)
   val itinerary = itineraryViewModel.getFocusedItinerary()
   val context = LocalContext.current
+
+  val followItinerary = { itineraryViewModel.followItineraryOnGoogleMaps(context, itinerary!!) }
 
   if (itinerary == null) {
     NullItinerary(userLocation)
@@ -105,7 +108,6 @@ fun PreviewItineraryScreen(
     val polylinePoints by itineraryViewModel.getPolylinePointsLiveData().observeAsState()
     var isMinimized by remember { mutableStateOf(false) }
     val onMinimizedClick = { isMinimized = !isMinimized }
-    var isClicked by remember { mutableStateOf(false) }
 
     Scaffold(
         bottomBar = {
@@ -116,11 +118,16 @@ fun PreviewItineraryScreen(
               itineraryViewModel,
               profileViewModel,
               imageRepository,
-              navController)
+              navController,
+              creationMode)
         },
         modifier = Modifier.testTag(TestTags.MAP_PREVIEW_ITINERARY_SCREEN),
         floatingActionButton = {
-          CenterButton(cameraPositionState = cameraPositionState, currentLocation = userLocation)
+          CenterButton(
+              cameraPositionState,
+              userLocation,
+              itinerary,
+          )
         },
         floatingActionButtonPosition = FabPosition.Start) { paddingValues ->
           Box {
@@ -139,37 +146,39 @@ fun PreviewItineraryScreen(
                   itinerary.locations.map { location ->
                     AdvancedMarker(
                         state = MarkerState(position = location.toLatLng()),
-                        title = location.title ?: "",
+                        title = location.title,
                     )
                     if (polylinePoints != null) {
                       Polyline(points = polylinePoints!!, color = MaterialTheme.colorScheme.primary)
                     }
                   }
                 }
-            ExtendedFloatingActionButton(
-                onClick = {
-                  onMinimizedClick()
-                  isClicked = !isClicked
-                  itineraryViewModel.followItineraryOnGoogleMaps(context, itinerary)
-                },
-                icon = {
-                  Icon(
-                      Icons.AutoMirrored.Filled.DirectionsWalk,
-                      contentDescription = "follow",
-                      modifier = Modifier.size(32.dp))
-                },
-                text = {
-                  Text(text = if (isClicked) "Following..." else "Follow", color = Color.DarkGray)
-                },
-                containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                modifier =
-                    Modifier.align(Alignment.TopCenter)
-                        .padding(12.dp)
-                        .testTag(TestTags.START_NEW_ITINERARY_STARTING))
+            FollowItineraryButton(
+                followItinerary,
+                Modifier.align(
+                    Alignment
+                        .TopCenter) // this parameter allows alignment wrt containing Box composable
+                )
           }
         }
   }
+}
+
+/** @brief: Button which launches google maps with specified itinerary once pressed */
+@Composable
+fun FollowItineraryButton(followItinerary: () -> Unit, modifier: Modifier) {
+  ExtendedFloatingActionButton(
+      onClick = { followItinerary() },
+      icon = {
+        Icon(
+            Icons.AutoMirrored.Filled.DirectionsWalk,
+            contentDescription = "follow",
+            modifier = Modifier.size(32.dp))
+      },
+      text = { Text(text = "Follow", color = Color.DarkGray) },
+      containerColor = MaterialTheme.colorScheme.secondaryContainer,
+      contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+      modifier = modifier.padding(12.dp).testTag(TestTags.START_NEW_ITINERARY_STARTING))
 }
 
 /**
@@ -184,7 +193,8 @@ fun PreviewItineraryBanner(
     itineraryViewModel: ItineraryViewModel,
     profileViewModel: ProfileViewModel,
     imageRepository: ImageRepository,
-    navController: NavHostController
+    navController: NavHostController,
+    creationMode: Boolean
 ) {
 
   if (isMinimized)
@@ -196,7 +206,8 @@ fun PreviewItineraryBanner(
           itineraryViewModel = itineraryViewModel,
           profileViewModel = profileViewModel,
           imageRepository = imageRepository,
-          navController = navController)
+          navController = navController,
+          creationMode = creationMode)
 }
 
 @Composable
@@ -206,11 +217,12 @@ private fun PreviewItineraryBannerMaximized(
     itineraryViewModel: ItineraryViewModel,
     profileViewModel: ProfileViewModel,
     imageRepository: ImageRepository,
-    navController: NavHostController
+    navController: NavHostController,
+    creationMode: Boolean
 ) {
   val titleFontSize = 32.sp
   val innerFontSize = 16.sp
-  var ctr = remember { mutableIntStateOf(0) }
+  val ctr = remember { mutableIntStateOf(0) }
 
   val profilePictureModifier =
       Modifier.clip(RoundedCornerShape(5.dp)).size(50.dp).testTag(TestTags.MAP_PROFILE_PIC)
@@ -385,7 +397,7 @@ private fun PreviewItineraryBannerMaximized(
           Spacer(modifier = Modifier.height(20.dp))
           val coroutineScope = rememberCoroutineScope()
           val uid = profileViewModel.getUserUid()
-          if (uid == itinerary.userUid) {
+          if (uid == itinerary.userUid && !creationMode) {
             Button(
                 onClick = {
                   coroutineScope.launch {
@@ -448,15 +460,36 @@ private fun PreviewItineraryBannerMinimized(onMinimizedClick: () -> Unit, itiner
       }
 }
 
+/**
+ * @brief: Button which switches back and forth between centered on user and centered on itinerary
+ */
 @Composable
-fun CenterButton(cameraPositionState: CameraPositionState, currentLocation: Location?) {
+fun CenterButton(
+    cameraPositionState: CameraPositionState,
+    userLocation: Location?,
+    itinerary: Itinerary
+) {
+  var centeredOnUser by remember { mutableStateOf(false) }
+
+  // pressing on center button changes centerOnUser variable which launches camera movement
+  LaunchedEffect(centeredOnUser) {
+    try {
+      cameraPositionState.move(
+          if (centeredOnUser && userLocation != null) {
+            val latLng = userLocation.toLatLng()
+            CameraUpdateFactory.newLatLngZoom(latLng, 13f)
+          } else {
+            CameraUpdateFactory.newLatLngZoom(
+                itinerary.computeCenterOfGravity().toLatLng(), itinerary.computeOptimalZoomLevel())
+          })
+    } catch (
+        _: NullPointerException) { // This is used when testing, the CameraUpdateFactory is null
+      /* Do nothing */
+    }
+  }
+
   FloatingActionButton(
-      onClick = {
-        currentLocation?.let {
-          val latLng = it.toLatLng()
-          cameraPositionState.move(CameraUpdateFactory.newLatLngZoom(latLng, 13f))
-        }
-      },
+      onClick = { centeredOnUser = !centeredOnUser },
       modifier = Modifier.testTag(TestTags.MAP_CENTER_CAMERA_BUTTON),
       containerColor = MaterialTheme.colorScheme.surfaceContainer) {
         Icon(

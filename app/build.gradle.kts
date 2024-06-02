@@ -228,6 +228,8 @@ dependencies {
     testImplementation(libs.mockito.core)
     testImplementation(libs.mockk)
     testImplementation(libs.androidx.core.testing)
+    testImplementation(libs.mockwebserver)
+    testImplementation(libs.awaitility)
 
 // ------------------- Kaspresso test framework ----------
     globalTestImplementation(libs.kaspresso)

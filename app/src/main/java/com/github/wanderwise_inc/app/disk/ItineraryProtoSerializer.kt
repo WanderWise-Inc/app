@@ -10,7 +10,10 @@ import com.google.protobuf.InvalidProtocolBufferException
 import java.io.InputStream
 import java.io.OutputStream
 
-/** Serializer for the `ItineraryProto` protobuf */
+/**
+ * Serializer for the `ItineraryProto` protobuf. Called implicitly by protobuf when parsing on-disk
+ * itineraries
+ */
 object ItineraryProtoSerializer : Serializer<ItineraryProto> {
   override val defaultValue: ItineraryProto = ItineraryProto.getDefaultInstance()
 

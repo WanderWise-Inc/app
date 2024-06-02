@@ -17,10 +17,12 @@ val LightColorPalette =
         onSecondary = Color.Black,
         background = White,
         onBackground = Color.Black,
-        surface = OffWhite,
+        surface = LightTaupe,
+        surfaceVariant = LightMaroon,
         onSurface = Color.Black,
-        tertiary = LightTaupe,
-        onTertiary = LightGray,
+        tertiary = LightGray,
+        onTertiary = Color.Black,
+        onTertiaryContainer = DarkGray,
         error = Color.Red,
     )
 
@@ -34,6 +36,7 @@ val DarkColorPalette =
         background = DarkGray,
         onBackground = Color.White,
         surface = LightGray,
+        surfaceVariant = LightMaroon,
         onSurface = Color.White,
         error = Color.Red,
     )

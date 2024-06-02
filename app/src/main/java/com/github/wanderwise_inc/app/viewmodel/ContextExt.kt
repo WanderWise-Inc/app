@@ -6,8 +6,9 @@ import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
 
 /**
- * @return `true` if the permissions have been granted else `false`
- * @brief check if the permissions for tracking the user's location have been granted
+ * Check if the app has location permissions.
+ *
+ * @return true if the app has location permissions, false otherwise.
  */
 fun Context.hasLocationPermission(): Boolean {
   val coarseLocationPermission =
