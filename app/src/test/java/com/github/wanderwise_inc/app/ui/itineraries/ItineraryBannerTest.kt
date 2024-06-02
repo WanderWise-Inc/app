@@ -60,7 +60,7 @@ class ItineraryBannerTest {
           onLikeButtonClick = { _, _ -> },
           onBannerClick = {},
           imageRepository = imageRepository,
-          profileViewModel = profileViewModel)
+      )
     }
   }
 
