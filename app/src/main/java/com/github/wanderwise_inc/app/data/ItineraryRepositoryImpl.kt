@@ -77,10 +77,10 @@ class ItineraryRepositoryImpl(
     }
   }
 
-    /**
-     * @param userUid acts as a foreign key to user table
-     * @return all itineraries created by user with uid `userUid`
-     */
+  /**
+   * @param userUid acts as a foreign key to user table
+   * @return all itineraries created by user with uid `userUid`
+   */
   private fun getUserItinerariesFireBase(userUid: String): Flow<List<Itinerary>> {
     return flow {
           val itineraries = suspendCancellableCoroutine { continuation ->
@@ -105,7 +105,8 @@ class ItineraryRepositoryImpl(
 
   /**
    * @param tags the list of tags to match
-   * @return a list of `Itineraries` containing at least one matching tag with `tags` */
+   * @return a list of `Itineraries` containing at least one matching tag with `tags`
+   */
   override fun getItinerariesWithTags(tags: List<Tag>): Flow<List<Itinerary>> {
     return when (context.isNetworkAvailable()) {
       true -> getItinerariesWithTagsFirebase(tags)
@@ -116,10 +117,10 @@ class ItineraryRepositoryImpl(
     }
   }
 
-    /**
-     * @param tags the list of tags to match
-     * @return all itineraries with at least one matching tag with `tags`
-     */
+  /**
+   * @param tags the list of tags to match
+   * @return all itineraries with at least one matching tag with `tags`
+   */
   private fun getItinerariesWithTagsFirebase(tags: List<Tag>): Flow<List<Itinerary>> {
     return flow {
           val itineraries = suspendCancellableCoroutine { continuation ->
@@ -154,11 +155,12 @@ class ItineraryRepositoryImpl(
     }
   }
 
-    /**
-     * gets an itinerary by its UID from firebase
-     * @param uid the UID of the itinerary
-     * @return the `Itinerary` with uid `uid` from firebase
-     * */
+  /**
+   * gets an itinerary by its UID from firebase
+   *
+   * @param uid the UID of the itinerary
+   * @return the `Itinerary` with uid `uid` from firebase
+   */
   private suspend fun getItineraryFirebase(uid: String): Itinerary? {
     val document =
         suspendCancellableCoroutine<DocumentSnapshot> { continuation ->
@@ -175,10 +177,12 @@ class ItineraryRepositoryImpl(
     }
   }
 
-    /** gets an itinerary by its UID from local storage
-     * @param uid the UID of the itinerary
-     * @return the `Itinerary` with uid `uid` from disk
-     * */
+  /**
+   * gets an itinerary by its UID from local storage
+   *
+   * @param uid the UID of the itinerary
+   * @return the `Itinerary` with uid `uid` from disk
+   */
   private suspend fun getItineraryLocal(uid: String): Itinerary? {
     Log.d("ItineraryRepositoryImpl", "Getting itinerary $uid from disk")
     return getSavedItineraries()
@@ -193,6 +197,7 @@ class ItineraryRepositoryImpl(
    * Sets an itinerary on firebase.
    * - This itinerary is created if it doesn't exist yet
    * - if `Itinerary.uid` is empty, a fresh one will be generated
+   *
    * @param itinerary the itinerary to set
    */
   override fun setItinerary(itinerary: Itinerary) {
@@ -210,10 +215,12 @@ class ItineraryRepositoryImpl(
         }
   }
 
-  /** updates the fields of the `Itinerary` with uid `oldUid`
+  /**
+   * updates the fields of the `Itinerary` with uid `oldUid`
+   *
    * @param oldUid the UID of the itinerary to update
    * @param new the new itinerary to set
-   * */
+   */
   override fun updateItinerary(oldUid: String, new: Itinerary) {
     if (oldUid != new.uid) {
       throw Exception("UIDs do not match")
@@ -229,9 +236,11 @@ class ItineraryRepositoryImpl(
         }
   }
 
-  /** deletes an itinerary on firestore
+  /**
+   * deletes an itinerary on firestore
+   *
    * @param itinerary the itinerary to delete
-   * */
+   */
   override fun deleteItinerary(itinerary: Itinerary) {
     itinerariesCollection
         .document(itinerary.uid)
@@ -260,7 +269,7 @@ class ItineraryRepositoryImpl(
     withContext(Dispatchers.IO) { datastore.updateData { savedItineraries } }
   }
 
-    /** @return a new random Id for the itinerary */
+  /** @return a new random Id for the itinerary */
   override fun getNewId(): String {
     return itinerariesCollection.document().id
   }
