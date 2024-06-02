@@ -26,8 +26,7 @@ class ImageRepositoryImpl(
   private var onImageSelected: ((Uri?) -> Unit)? = null
 
   /**
-   * Fetch image Function. This function will fetch the picture from the Storage at a given
-   * path
+   * Fetch image Function. This function will fetch the picture from the Storage at a given path
    *
    * @return a flow of the Uri representation of the picture
    */
@@ -39,16 +38,16 @@ class ImageRepositoryImpl(
           } else {
             val pictureRef = imageReference.child("images/${fileName}")
 
-              // Get the Uri from storage
+            // Get the Uri from storage
             val uriResult =
                 suspendCancellableCoroutine<Uri?> { continuation ->
                   pictureRef.downloadUrl
                       .addOnSuccessListener { result ->
-                            Log.d("FETCH IMAGE", "Download Success")
+                        Log.d("FETCH IMAGE", "Download Success")
                         continuation.resume(result)
                       }
                       .addOnFailureListener { exception ->
-                          Log.w("FETCH IMAGE", exception)
+                        Log.w("FETCH IMAGE", exception)
                         continuation.resumeWithException(exception)
                       }
                 }
@@ -56,8 +55,8 @@ class ImageRepositoryImpl(
           }
         }
         .catch {
-            // If there is an error, we emit null
-            Log.d("FETCH IMAGE", "Error fetching image")
+          // If there is an error, we emit null
+          Log.d("FETCH IMAGE", "Error fetching image")
           emit(null)
         }
   }
@@ -74,24 +73,24 @@ class ImageRepositoryImpl(
     }
     val result =
         suspendCancellableCoroutine<Boolean> { continuation ->
-            // choose the currentFile to upload between the itinerary image and the profile image
+          // choose the currentFile to upload between the itinerary image and the profile image
           currentFile = if (isItineraryImage) currentFileItinerary else currentFileProfile
           currentFile?.let {
             imageReference
                 .child("images/${fileName}")
                 .putFile(it)
                 .addOnSuccessListener {
-                    Log.d("UPLOAD IMAGE", "Upload Success")
+                  Log.d("UPLOAD IMAGE", "Upload Success")
                   continuation.resume(true)
                 }
                 .addOnFailureListener { error ->
-                    Log.w("UPLOAD IMAGE", error)
+                  Log.w("UPLOAD IMAGE", error)
                   continuation.resume(false)
                 }
           }
               // If there is no currentFile, then we can't upload anything
               ?: run {
-                  Log.d("UPLOAD IMAGE", "No image to upload")
+                Log.d("UPLOAD IMAGE", "No image to upload")
                 continuation.resume(false)
               }
         }
@@ -108,18 +107,18 @@ class ImageRepositoryImpl(
    *   currentFile
    */
   override fun setCurrentFile(uri: Uri?) {
-      // Choice between the itinerary image and the profile image
+    // Choice between the itinerary image and the profile image
     if (isItineraryImage) {
       currentFileItinerary = uri
     } else {
       currentFileProfile = uri
     }
 
-      // Call the onImageSelected listener to notify that the currentFile has been set
+    // Call the onImageSelected listener to notify that the currentFile has been set
     onImageSelected?.invoke(uri)
   }
 
-    /** @brief set the onImageSelected listener that will be used when setting the current file */
+  /** @brief set the onImageSelected listener that will be used when setting the current file */
   override fun setOnImageSelectedListener(listener: (Uri?) -> Unit) {
     onImageSelected = listener
   }
@@ -133,23 +132,17 @@ class ImageRepositoryImpl(
     }
   }
 
-    /**
-     * @return true if the currentFile is an itinerary image, false if it is a profile image
-     */
+  /** @return true if the currentFile is an itinerary image, false if it is a profile image */
   override fun getIsItineraryImage(): Boolean {
     return isItineraryImage
   }
 
-    /**
-     * @brief set the currentFile to be an itinerary image or a profile image
-     */
+  /** @brief set the currentFile to be an itinerary image or a profile image */
   override fun setIsItineraryImage(isItineraryImageType: Boolean) {
     isItineraryImage = isItineraryImageType
   }
 
-    /**
-     * @brief delete the image at fileName path from the storage Firebase
-     */
+  /** @brief delete the image at fileName path from the storage Firebase */
   override fun deleteImageFromStorage(fileName: String) {
     imageReference
         .child("images/${fileName}")

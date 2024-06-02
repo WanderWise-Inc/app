@@ -24,21 +24,15 @@ interface ImageRepository {
    */
   fun setCurrentFile(uri: Uri?)
 
-    /** @return the currentFile */
+  /** @return the currentFile */
   fun getCurrentFile(): Uri?
 
-    /**
-     * @return true if the currentFile is an itinerary image, false if it is a profile image
-     */
+  /** @return true if the currentFile is an itinerary image, false if it is a profile image */
   fun getIsItineraryImage(): Boolean
 
-    /**
-     * @brief set the currentFile to be an itinerary image or a profile image
-     */
+  /** @brief set the currentFile to be an itinerary image or a profile image */
   fun setIsItineraryImage(isItineraryImage: Boolean)
 
-    /**
-     * @brief delete the image at fileName path from the storage Firebase
-     */
+  /** @brief delete the image at fileName path from the storage Firebase */
   fun deleteImageFromStorage(fileName: String)
 }
