@@ -27,7 +27,7 @@ class ImageRepositoryImpl(
 
   /**
    * Fetch image Function. This function will fetch the picture from the Storage at a given path
-   *
+   * @param fileName the path of the picture in the storage
    * @return a flow of the Uri representation of the picture
    */
   override fun fetchImage(fileName: String): Flow<Uri?> {
@@ -64,8 +64,8 @@ class ImageRepositoryImpl(
   /**
    * Upload to the storage. This function will upload the currentFile (which will be the one
    * selected by the user in the photo gallery)
-   *
    * @param fileName the fileName (path) where we want to store the currentFile
+   * @return true if the upload was successful, false otherwise
    */
   override suspend fun uploadImageToStorage(fileName: String): Boolean {
     if (fileName == "") {
@@ -97,7 +97,9 @@ class ImageRepositoryImpl(
     return result
   }
 
-  /** @brief used to launch the activity to open the photo gallery */
+  /** @brief used to launch the activity to open the photo gallery
+   * @param it the intent to launch the activity
+   * */
   override fun launchActivity(it: Intent) {
     activityLauncher.launch(it)
   }
@@ -105,6 +107,7 @@ class ImageRepositoryImpl(
   /**
    * @brief set the currentFile to this the Uri given, useful for other functions that will use the
    *   currentFile
+   *   @param uri the uri of the currentFile
    */
   override fun setCurrentFile(uri: Uri?) {
     // Choice between the itinerary image and the profile image
@@ -118,7 +121,9 @@ class ImageRepositoryImpl(
     onImageSelected?.invoke(uri)
   }
 
-  /** @brief set the onImageSelected listener that will be used when setting the current file */
+  /** @brief set the onImageSelected listener that will be used when setting the current file
+   * @param listener the listener to set the currentFile
+   * */
   override fun setOnImageSelectedListener(listener: (Uri?) -> Unit) {
     onImageSelected = listener
   }
@@ -137,12 +142,16 @@ class ImageRepositoryImpl(
     return isItineraryImage
   }
 
-  /** @brief set the currentFile to be an itinerary image or a profile image */
+  /** @brief set the currentFile to be an itinerary image or a profile image
+   * @param isItineraryImageType true if the currentFile is an itinerary image, false if it is a profile image
+   * */
   override fun setIsItineraryImage(isItineraryImageType: Boolean) {
     isItineraryImage = isItineraryImageType
   }
 
-  /** @brief delete the image at fileName path from the storage Firebase */
+  /** @brief delete the image at fileName path from the storage Firebase
+   * @param fileName the path of the image to delete
+   * */
   override fun deleteImageFromStorage(fileName: String) {
     imageReference
         .child("images/${fileName}")
