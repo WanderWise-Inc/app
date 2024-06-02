@@ -3,7 +3,7 @@ package com.github.wanderwise_inc.app.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 
-// not nice to use in the class
+/** Enum representing the items in the bottom navigation bar. */
 enum class NavigationItem {
   OVERVIEW,
   LIKED,
@@ -12,24 +12,30 @@ enum class NavigationItem {
   PROFILE
 }
 
+/** ViewModel for managing the state of the bottom navigation bar. */
 class BottomNavigationViewModel {
-  //    private var selected: Int = 0;
-  //
-  //    fun setSelected(index : Int){
-  //        selected = index
-  //    }
-  //
-  //    fun getSelected(): Int {
-  //        return selected
-  //    }
+  /** LiveData for the selected navigation item index. */
   private val _selected = MutableLiveData<Int>()
+
+  /**
+   * Publicly exposed LiveData for the selected navigation item index.
+   *
+   * @return the LiveData containing the index of the selected navigation item.
+   */
   public val selected: LiveData<Int>
     get() = _selected
 
+  /** Initializes the ViewModel with a default selected navigation item index. */
   init {
-    _selected.value = 0 // Initialize with default value
+    _selected.value = 0
+    // Initialize with default value
   }
 
+  /**
+   * Sets the selected navigation item index.
+   *
+   * @param index the index of the navigation item to select.
+   */
   fun setSelected(index: Int) {
     _selected.value = index
   }
