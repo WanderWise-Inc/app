@@ -5,8 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.github.wanderwise_inc.app.data.ImageRepository
-import com.github.wanderwise_inc.app.data.ProfileRepository
 import com.github.wanderwise_inc.app.data.SignInLauncher
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.first
