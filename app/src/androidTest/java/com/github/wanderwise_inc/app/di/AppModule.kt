@@ -1,12 +1,12 @@
 package com.github.wanderwise_inc.app.di
 
-// import com.github.wanderwise_inc.app.data.LocationsRepositoryImpl
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.datastore.core.DataStore
 import androidx.datastore.dataStore
 import androidx.lifecycle.lifecycleScope
@@ -85,17 +85,19 @@ class AppModule(
 
   val profileRepository: ProfileRepository by lazy { E2EProfileRepository() }
 
-  val bottomNavigationViewModel: BottomNavigationViewModel by lazy { BottomNavigationViewModel() }
+  val bottomNavigationViewModel: BottomNavigationViewModel by activity.viewModels()
 
-  val createItineraryViewModel by lazy {
-    CreateItineraryViewModel(
-        itineraryRepository, directionsRepository, locationsRepository, locationClient)
-  }
+  val createItineraryViewModel: CreateItineraryViewModel by
+      activity.viewModels {
+        CreateItineraryViewModel.Factory(
+            itineraryRepository, directionsRepository, locationsRepository, locationClient)
+      }
 
-  val itineraryViewModel: ItineraryViewModel by lazy {
-    ItineraryViewModel(
-        itineraryRepository, directionsRepository, locationsRepository, locationClient)
-  }
+  val itineraryViewModel: ItineraryViewModel by
+      activity.viewModels {
+        ItineraryViewModel.Factory(
+            itineraryRepository, directionsRepository, locationsRepository, locationClient)
+      }
 
   private val locationClient: LocationClient by lazy {
     UserLocationClient(
@@ -103,7 +105,8 @@ class AppModule(
         LocationServices.getFusedLocationProviderClient(activity.applicationContext))
   }
 
-  val loginViewModel: LoginViewModel by lazy { LoginViewModel(signInLauncher, true) }
+  val loginViewModel: LoginViewModel by
+      activity.viewModels { LoginViewModel.Factory(signInLauncher, true) }
 
   private val signInLauncher: SignInLauncher by lazy {
     val testUser = mockk<FirebaseUser>()
@@ -127,7 +130,6 @@ class AppModule(
     }
   }
 
-  val profileViewModel: ProfileViewModel by lazy {
-    ProfileViewModel(profileRepository, imageRepository)
-  }
+  val profileViewModel: ProfileViewModel by
+      activity.viewModels { ProfileViewModel.Factory(profileRepository, imageRepository) }
 }
