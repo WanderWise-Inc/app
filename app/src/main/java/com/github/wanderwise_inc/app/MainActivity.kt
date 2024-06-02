@@ -28,6 +28,7 @@ import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 
+/** Main activity of the application. */
 class MainActivity : ComponentActivity() {
 
   private val appModule by lazy { AppModule(this) }
@@ -71,6 +72,7 @@ class MainActivity : ComponentActivity() {
     }
   }
 
+  /** Initialize the application dependencies. */
   private fun init() {
     requestPermissions()
 
@@ -82,6 +84,7 @@ class MainActivity : ComponentActivity() {
     initializeViewModels()
   }
 
+  /** Request permissions for the application if not already given. */
   private fun requestPermissions() {
     val permissions =
         arrayOf(
@@ -99,6 +102,7 @@ class MainActivity : ComponentActivity() {
     }
   }
 
+  /** Initialize repositories. */
   private fun initializeRepositories() {
     directionsRepository = appModule.directionsRepository
     imageRepository = appModule.imageRepository
@@ -107,6 +111,7 @@ class MainActivity : ComponentActivity() {
     profileRepository = appModule.profileRepository
   }
 
+  /** Initialize view models. */
   private fun initializeViewModels() {
     bottomNavigationViewModel = appModule.bottomNavigationViewModel
     createItineraryViewModel = appModule.createItineraryViewModel
