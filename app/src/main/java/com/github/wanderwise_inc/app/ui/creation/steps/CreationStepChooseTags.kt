@@ -56,7 +56,16 @@ import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
 import kotlinx.coroutines.launch
 
 const val MAX_TAGS = 3
-
+/**
+ * Displays the screen for choosing tags during the creation of an itinerary.
+ *
+ * This composable function sets up a user interface that allows users to choose tags for their itinerary.
+ * The screen includes components for displaying an itinerary image banner, price estimation, time duration
+ * estimation, relevant tags, and a switch to mark the itinerary as public or private.
+ *
+ * @param createItineraryViewModel The ViewModel that manages the state and logic for creating an itinerary.
+ * @param imageRepository The repository responsible for handling image operations.
+ */
 @Composable
 fun CreationStepChooseTagsScreen(
     createItineraryViewModel: CreateItineraryViewModel,
@@ -80,6 +89,16 @@ fun CreationStepChooseTagsScreen(
       }
 }
 
+/**
+ * Displays a banner for the itinerary image with functionality to upload an image.
+ *
+ * This composable function creates a banner that allows users to upload an image for their itinerary.
+ * It sets up the UI elements and handles the logic for selecting and displaying an image.
+ *
+ * @param createItineraryViewModel The ViewModel that manages the state and logic for creating an itinerary.
+ * @param modifier The modifier to be applied to the layout. Defaults to an empty modifier.
+ * @param imageRepository The repository responsible for handling image operations, including setting the image and launching the image selection activity.
+ */
 @Composable
 fun ItineraryImageBanner(
     createItineraryViewModel: CreateItineraryViewModel,
@@ -126,6 +145,14 @@ fun ItineraryImageBanner(
       }
 }
 
+/**
+ * Displays a text box for inputting and displaying the price estimate of the itinerary.
+ *
+ * This composable function creates a text field where users can input a price estimate for their itinerary.
+ * It ensures that the input is a valid number, updates the ViewModel with the new price, and displays the current price estimate.
+ *
+ * @param createItineraryViewModel The ViewModel that manages the state and logic for creating an itinerary, including the price estimation.
+ */
 @Composable
 fun PriceEstimationTextBox(createItineraryViewModel: CreateItineraryViewModel) {
   var priceEstimateDisplay by remember {
@@ -148,6 +175,14 @@ fun PriceEstimationTextBox(createItineraryViewModel: CreateItineraryViewModel) {
       })
 }
 
+/**
+ * Displays a text box for inputting and displaying the time duration estimate of the itinerary.
+ *
+ * This function creates a text field where users can input a time estimate for their itinerary in hours.
+ * It ensures that the input is a valid number, updates the ViewModel with the new time estimate, and displays the current time estimate.
+ *
+ * @param createItineraryViewModel The ViewModel that manages the state and logic for creating an itinerary, including the time duration estimation.
+ */
 @Composable
 fun TimeDurationEstimation(createItineraryViewModel: CreateItineraryViewModel) {
   var timeEstimateDisplay by remember {
@@ -164,8 +199,14 @@ fun TimeDurationEstimation(createItineraryViewModel: CreateItineraryViewModel) {
         timeEstimateDisplay = input
       })
 }
-
-/** @brief takes care of the tags parameters */
+/**
+ * Displays a UI for selecting relevant tags for the itinerary.
+ *
+ * This composable function creates a user interface that allows users to select tags relevant to their itinerary.
+ * It includes a button to open a dropdown menu for tag selection and displays the currently selected tags.
+ *
+ * @param createItineraryViewModel The ViewModel that manages the state and logic for creating an itinerary, including tag selection.
+ */
 @Composable
 fun RelevantTags(createItineraryViewModel: CreateItineraryViewModel) {
   // first tag is All, we don't want it to be selectable
@@ -204,6 +245,14 @@ fun RelevantTags(createItineraryViewModel: CreateItineraryViewModel) {
   }
 }
 
+/**
+ * Displays a switch button to toggle the visibility of the itinerary between public and private.
+ *
+ * This composable function creates a switch button that allows users to set the visibility of their itinerary.
+ * It updates the ViewModel with the current visibility state and displays a text indicating whether the itinerary is public or private.
+ *
+ * @param createItineraryViewModel The ViewModel that manages the state and logic for creating an itinerary, including visibility settings.
+ */
 @Composable
 fun IsPublicSwitchButton(createItineraryViewModel: CreateItineraryViewModel) {
   var isVisible by remember {
