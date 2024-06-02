@@ -3,6 +3,7 @@ syntax = "proto3";
 option java_package = "com.github.wanderwise_inc.app.proto.location";
 option java_multiple_files = true;
 
+// protobuf definitions for `Itinerary` and `Location`
 message LocationProto {
   double lat = 1;
   double long = 2;
@@ -23,6 +24,7 @@ message ItineraryProto {
   int32 time = 9;
 }
 
+// Corresponds to a list of `Itineraries` that are saved on-disk
 message SavedItineraries {
   repeated ItineraryProto itineraries = 1;
 }
