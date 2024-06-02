@@ -132,8 +132,6 @@ fun LoginScreen(
 
 @Composable
 fun SignInButton(loginViewModel: LoginViewModel) {
-  var signInState = loginViewModel.signInState.observeAsState()
-
   Button(
       onClick = { loginViewModel.signIn() },
       shape = RoundedCornerShape(16.dp),
