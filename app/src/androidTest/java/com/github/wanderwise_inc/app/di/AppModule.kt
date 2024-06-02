@@ -88,16 +88,16 @@ class AppModule(
   val bottomNavigationViewModel: BottomNavigationViewModel by activity.viewModels()
 
   val createItineraryViewModel: CreateItineraryViewModel by
-  activity.viewModels {
-    CreateItineraryViewModel.Factory(
-      itineraryRepository, directionsRepository, locationsRepository, locationClient)
-  }
+      activity.viewModels {
+        CreateItineraryViewModel.Factory(
+            itineraryRepository, directionsRepository, locationsRepository, locationClient)
+      }
 
   val itineraryViewModel: ItineraryViewModel by
-  activity.viewModels {
-    ItineraryViewModel.Factory(
-      itineraryRepository, directionsRepository, locationsRepository, locationClient)
-  }
+      activity.viewModels {
+        ItineraryViewModel.Factory(
+            itineraryRepository, directionsRepository, locationsRepository, locationClient)
+      }
 
   private val locationClient: LocationClient by lazy {
     UserLocationClient(
@@ -106,9 +106,7 @@ class AppModule(
   }
 
   val loginViewModel: LoginViewModel by
-  activity.viewModels {
-    LoginViewModel.Factory(signInLauncher, true)
-  }
+      activity.viewModels { LoginViewModel.Factory(signInLauncher, true) }
 
   private val signInLauncher: SignInLauncher by lazy {
     val testUser = mockk<FirebaseUser>()
@@ -133,5 +131,5 @@ class AppModule(
   }
 
   val profileViewModel: ProfileViewModel by
-  activity.viewModels { ProfileViewModel.Factory(profileRepository, imageRepository) }
+      activity.viewModels { ProfileViewModel.Factory(profileRepository, imageRepository) }
 }
