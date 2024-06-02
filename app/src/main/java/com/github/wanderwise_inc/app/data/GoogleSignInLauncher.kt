@@ -5,7 +5,7 @@ import androidx.activity.result.ActivityResultLauncher
 import com.firebase.ui.auth.AuthUI
 
 class GoogleSignInLauncher(
-    private val activityResultLauncher: ActivityResultLauncher<Intent>,
+    private val signInResultLauncher: ActivityResultLauncher<Intent>,
 ) : SignInLauncher {
   private val providers by lazy { listOf(AuthUI.IdpConfig.GoogleBuilder().build()) }
 
@@ -14,6 +14,6 @@ class GoogleSignInLauncher(
   }
 
   override fun signIn() {
-    activityResultLauncher.launch(signInIntent)
+    signInResultLauncher.launch(signInIntent)
   }
 }
