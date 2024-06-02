@@ -36,7 +36,17 @@ const val MAX_PRICE = Float.MAX_VALUE - 1
 const val MIN_TIME = 0f
 const val MAX_SLIDER_TIME = 24f
 const val MAX_TIME = Float.MAX_VALUE - 1
-
+/**
+ * This function displays a search bar with a dropdown menu for price and time filters. The search
+ * bar allows the user to input a query, and the dropdown menu provides sliders for price and time.
+ *
+ * @param onSearchChange Function to handle changes in the search query.
+ * @param onPriceChange Function to handle changes in the price filter.
+ * @param sliderPositionPriceState MutableState<ClosedFloatingPointRange<Float>> to control the
+ *   position of the price slider.
+ * @param sliderPositionTimeState MutableState<ClosedFloatingPointRange<Float>> to control the
+ *   position of the time slider.
+ */
 @Composable
 fun SearchBar(
     onSearchChange: (String) -> Unit,
@@ -90,6 +100,13 @@ fun SearchBar(
       }
 }
 
+/**
+ * This function displays a slider for the user to select a price range. The slider allows the user
+ * to select a minimum and maximum price.
+ *
+ * @param sliderPositionPriceState MutableState<ClosedFloatingPointRange<Float>> to control the
+ *   position of the price slider.
+ */
 @Composable
 fun PriceSlider(
     sliderPositionPriceState: MutableState<ClosedFloatingPointRange<Float>>,
@@ -127,7 +144,13 @@ fun PriceSlider(
             })
   }
 }
-
+/**
+ * This function displays a slider for the user to select a time range. The slider allows the user
+ * to select a minimum and maximum time.
+ *
+ * @param sliderPositionTimeState MutableState<ClosedFloatingPointRange<Float>> to control the
+ *   position of the time slider.
+ */
 @Composable
 fun TimeSlider(sliderPositionTimeState: MutableState<ClosedFloatingPointRange<Float>>) {
   val minSliderTime = sliderPositionTimeState.value.start
