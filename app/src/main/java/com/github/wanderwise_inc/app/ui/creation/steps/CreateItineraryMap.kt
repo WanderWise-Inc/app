@@ -1,6 +1,7 @@
 package com.github.wanderwise_inc.app.ui.creation.steps
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -41,6 +42,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -50,6 +52,7 @@ import com.github.wanderwise_inc.app.model.location.Location
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.popup.HintPopup
 import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
+import com.github.wanderwise_inc.app.viewmodel.LocationService
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -156,7 +159,14 @@ fun CreateItineraryMap(
         }
   }
 }
-
+/**
+ * This function provides the user with two options for creating an itinerary. The user can either
+ * create a known itinerary or create a live itinerary.
+ *
+ * @param createItineraryViewModel ViewModel for creating an itinerary.
+ * @param showLocationSelector MutableState<Boolean> to show the location selector.
+ * @param showLiveCreation MutableState<Boolean> to show the live creation.
+ */
 @Composable
 fun ChooseYourWayOfCreation(
     createItineraryViewModel: CreateItineraryViewModel,
@@ -202,6 +212,16 @@ fun ChooseYourWayOfCreation(
   }
 }
 
+/**
+ * This function displays a bottom bar with options to add a location or restart the itinerary. It
+ * also displays a list of locations added by the user.
+ *
+ * @param showLocationSelector MutableState<Boolean> to control the visibility of the location
+ *   selector.
+ * @param locations List<Location> containing the locations added by the user.
+ * @param resetLocations Function to reset the locations.
+ * @param navController NavHostController for navigation.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LocationSelector(
@@ -275,7 +295,14 @@ fun LocationSelector(
 }
 
 const val LOCATION_UPDATE_INTERVAL_MILLIS: Long = 1_000 // 1 second
-
+/**
+ * This function provides the user with the ability to create a live itinerary. It starts tracking
+ * the user's location and adds it to the itinerary as the user moves.
+ *
+ * @param showLiveCreation MutableState<Boolean> to control the visibility of the live creation.
+ * @param createItineraryViewModel ViewModel for creating an itinerary.
+ * @param addLiveLocations Function to add live locations to the itinerary.
+ */
 @Composable
 fun CreateLiveItinerary(
     showLiveCreation: MutableState<Boolean>,
@@ -301,6 +328,8 @@ fun CreateLiveItinerary(
 
       // Center the Row within the BottomAppBar
       Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+        val context = LocalContext.current
+
         Row {
           // Button to start
           Button(
@@ -308,6 +337,10 @@ fun CreateLiveItinerary(
                 isStarted = true
                 createItineraryViewModel.startLocationTracking(
                     LOCATION_UPDATE_INTERVAL_MILLIS, addLiveLocations)
+                Intent(context, LocationService::class.java).apply {
+                  action = LocationService.ACTION_START
+                  context.startService(this)
+                }
                 Log.d("CreateLiveItinerary", "currently creating live itinerary")
               },
               enabled = !isStarted, // Button is disabled if isStarted is true
@@ -325,6 +358,10 @@ fun CreateLiveItinerary(
               onClick = {
                 isStarted = false
                 createItineraryViewModel.stopLocationTracking()
+                Intent(context, LocationService::class.java).apply {
+                  action = LocationService.ACTION_STOP
+                  context.startService(this)
+                }
                 Log.d("CreateLiveItinerary", "currently stopping live itinerary")
               },
               enabled = isStarted, // Button is disabled if isStarted is false

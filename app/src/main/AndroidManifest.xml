@@ -5,14 +5,11 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-<!--    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />-->
-
-<!--    <uses-permission-->
-<!--        android:name="android.permission.WRITE_EXTERNAL_STORAGE" />-->
-<!--    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>-->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
+        android:name=".LocationApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -22,6 +19,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.WanderWise"
         tools:targetApi="31">
+        
+        <service android:name=".viewmodel.LocationService" android:foregroundServiceType="location" />
+        
         <activity
             android:name=".MainActivity"
             android:exported="true"

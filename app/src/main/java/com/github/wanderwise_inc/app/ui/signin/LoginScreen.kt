@@ -31,6 +31,14 @@ import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 import com.github.wanderwise_inc.app.viewmodel.SignInState
 import kotlinx.coroutines.delay
 
+/**
+ * This function displays the login screen for the application. It provides the user with the
+ * ability to sign in using Google.
+ *
+ * @param loginViewModel ViewModel for handling login operations.
+ * @param profileViewModel ViewModel for handling profile operations.
+ * @param navController NavController for navigation.
+ */
 @Composable
 fun LoginScreen(
     loginViewModel: LoginViewModel,
@@ -129,7 +137,12 @@ fun LoginScreen(
         }
       }
 }
-
+/**
+ * This function displays a sign-in button for the application. It provides the user with the
+ * ability to sign in using Google.
+ *
+ * @param loginViewModel ViewModel for handling login operations.
+ */
 @Composable
 fun SignInButton(loginViewModel: LoginViewModel) {
   Button(

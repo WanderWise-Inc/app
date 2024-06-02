@@ -12,7 +12,7 @@ import com.firebase.ui.auth.AuthUI
  * provider.
  *
  * @constructor Creates a `GoogleSignInLauncher` with the specified `activityResultLauncher`.
- * @property activityResultLauncher The `ActivityResultLauncher` that is used to launch the sign-in
+ * @property signInResultLauncher The `ActivityResultLauncher` that is used to launch the sign-in
  */
 class GoogleSignInLauncher(
     private val signInResultLauncher: ActivityResultLauncher<Intent>,
