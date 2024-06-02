@@ -44,9 +44,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.graphics.alpha
+import androidx.core.graphics.blue
+import androidx.core.graphics.green
+import androidx.core.graphics.red
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
@@ -55,7 +58,7 @@ import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.model.location.Itinerary
 import com.github.wanderwise_inc.app.model.location.Tag
 import com.github.wanderwise_inc.app.ui.TestTags
-import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
+import kotlin.random.Random
 
 const val DUMMY_IS_LIKED = false
 const val DUMMY_NUM_LIKES = 0
@@ -122,7 +125,8 @@ fun ItineraryBanner(
                 BannerTags(itinerary.tags, Modifier.align(Alignment.BottomStart))
               }
               BannerTitle(itinerary.title)
-              BannerAttributes(itinerary.time.toString(),itinerary.price.toString(), numLikes.toString())
+              BannerAttributes(
+                  itinerary.time.toString(), itinerary.price.toString(), numLikes.toString())
             }
       }
 }
@@ -178,14 +182,14 @@ fun BannerTags(tags: List<Tag>, modifier: Modifier) {
 }
 
 /**
- * @param itinerary: for fetching the title of the image
+ * @param title: the title of the itinerary
  * @brief writes the title of the image
  */
 @Composable
 fun BannerTitle(title: String) {
   Text(
       text = title,
-      color = MaterialTheme.colorScheme.onPrimaryContainer,
+      color = MaterialTheme.colorScheme.onTertiary,
       fontFamily = FontFamily.Monospace,
       fontSize = 14.sp,
       fontWeight = FontWeight.Bold,
@@ -193,10 +197,10 @@ fun BannerTitle(title: String) {
 }
 
 /**
- * @brief writes the attribute of the itinerary
  * @param price: price of the itinerary
  * @param time: time of the itinerary
  * @param numLikes: number of likes of the itinerary
+ * @brief writes the attribute of the itinerary
  */
 @Composable
 fun BannerAttributes(price: String, time: String, numLikes: String) {
@@ -220,11 +224,11 @@ fun Time(time: String) {
     Icon(
         imageVector = Icons.Outlined.HourglassEmpty,
         contentDescription = "duration",
-        tint = MaterialTheme.colorScheme.secondary,
+        tint = MaterialTheme.colorScheme.onTertiaryContainer,
         modifier = Modifier.size(width = 16.dp, height = 16.dp))
     Text(
         text = "$time hours",
-        color = MaterialTheme.colorScheme.secondary,
+        color = MaterialTheme.colorScheme.onTertiaryContainer,
         fontFamily = MaterialTheme.typography.displayMedium.fontFamily,
         fontSize = 12.sp,
         fontWeight = FontWeight.Normal,
@@ -240,11 +244,11 @@ fun Price(price: String) {
     Icon(
         imageVector = Icons.Outlined.Payments,
         contentDescription = "price",
-        tint = MaterialTheme.colorScheme.secondary,
+        tint = MaterialTheme.colorScheme.onTertiaryContainer,
         modifier = Modifier.size(width = 16.dp, height = 16.dp))
     Text(
         text = price,
-        color = MaterialTheme.colorScheme.secondary,
+        color = MaterialTheme.colorScheme.onTertiaryContainer,
         fontFamily = MaterialTheme.typography.displayMedium.fontFamily,
         fontSize = 12.sp,
         fontWeight = FontWeight.Normal,
@@ -261,11 +265,11 @@ fun Likes(numLikes: String) {
     Icon(
         imageVector = Icons.Outlined.FavoriteBorder,
         contentDescription = "number of likes",
-        tint = MaterialTheme.colorScheme.secondary,
+        tint = MaterialTheme.colorScheme.onTertiaryContainer,
         modifier = Modifier.size(width = 16.dp, height = 16.dp))
     Text(
         text = "$numLikes likes",
-        color = MaterialTheme.colorScheme.secondary,
+        color = MaterialTheme.colorScheme.onTertiaryContainer,
         fontFamily = MaterialTheme.typography.displayMedium.fontFamily,
         fontSize = 12.sp,
         fontWeight = FontWeight.Normal,
@@ -315,38 +319,46 @@ fun BannerLikeButton(
   }
 }
 
+/**
+ * @param uid: usefull for testing purpose
+ * @brief dummy itineary banners for preview screen
+ */
 @Composable
-fun DummyBanner(uid: String){
-    Card(
-        colors =
-        CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.tertiary,
-        ),
-        shape = RoundedCornerShape(9.dp),
-        modifier = Modifier.testTag("${TestTags.DUMMY_BANNER}_${uid}"),
-        onClick = {}) {
+fun DummyBanner(uid: String) {
+  val space: String = " "
+  val tag1 = space.repeat(Random.nextInt(5, 11))
+  val tag2 = space.repeat(Random.nextInt(5, 11))
+  Card(
+      colors =
+          CardDefaults.cardColors(
+              containerColor = decreaseAlpha(MaterialTheme.colorScheme.tertiary, 2f),
+          ),
+      shape = RoundedCornerShape(9.dp),
+      modifier = Modifier.testTag("${TestTags.DUMMY_BANNER}_${uid}"),
+      onClick = {}) {
         Column(
             modifier = Modifier.fillMaxSize().aspectRatio(2f),
             horizontalAlignment = Alignment.CenterHorizontally) {
-            Box(modifier = Modifier.fillMaxWidth().fillMaxHeight(0.73f)) {
+              Box(modifier = Modifier.fillMaxWidth().fillMaxHeight(0.73f)) {
                 DummyBannerImage()
 
-                BannerLikeButton(
-                    modifier = Modifier.align(Alignment.TopEnd),
-                    isLiked = DUMMY_IS_LIKED,
-                    numLikes = DUMMY_NUM_LIKES,
-                    itinerary = Itinerary.Builder().build()) {}
-
-                BannerTags(listOf("Dummy", "Itinerary"), Modifier.align(Alignment.BottomStart))
+                BannerTags(listOf(tag1, tag2), Modifier.align(Alignment.BottomStart))
+              }
             }
-            BannerTitle("Dummy creation preview itinerary")
-            BannerAttributes(DUMMY_ATTRIBUTES, DUMMY_ATTRIBUTES, DUMMY_ATTRIBUTES)
-        }
-    }
+      }
 }
 
+/** @brief static color for image banner */
 @Composable
-fun DummyBannerImage(){
-    Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.onTertiary){}
+fun DummyBannerImage() {
+  Surface(
+      modifier = Modifier.fillMaxSize(),
+      color = decreaseAlpha(MaterialTheme.colorScheme.surfaceVariant, 2f)) {}
 }
 
+/** @brief divided the color alpha by alphaDecrease, returns a new Color */
+fun decreaseAlpha(color: Color, alphaDecrease: Float): Color {
+  val originalAlpha = color.alpha
+  val newAlpha = (originalAlpha / alphaDecrease).coerceIn(0f, 1f)
+  return Color(color.red, color.green, color.blue, newAlpha)
+}

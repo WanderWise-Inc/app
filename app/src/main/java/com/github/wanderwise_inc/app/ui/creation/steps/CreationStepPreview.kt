@@ -137,7 +137,6 @@ fun CreationStepPreviewNavGraph(
         composable(route = CreationPreviewOptionsDestinations.PreviewBanner.route) {
           CreationStepPreviewBanner(
               createItineraryViewModel = createItineraryViewModel,
-              profileViewModel = profileViewModel,
               imageRepository = imageRepository)
         }
         composable(route = CreationPreviewOptionsDestinations.PreviewItinerary.route) {

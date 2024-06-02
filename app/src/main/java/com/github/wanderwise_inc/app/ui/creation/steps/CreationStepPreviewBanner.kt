@@ -17,51 +17,37 @@ import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.ui.itinerary.DummyBanner
 import com.github.wanderwise_inc.app.ui.itinerary.ItineraryBanner
 import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
-import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 
+/** @brief screen for previewing the created itinerary inside the feed */
 @Composable
 fun CreationStepPreviewBanner(
     createItineraryViewModel: CreateItineraryViewModel,
-    profileViewModel: ProfileViewModel,
     imageRepository: ImageRepository
 ) {
-
-
   // function that do nothing
   val onBannerClick = { _: Itinerary -> }
   val onLikeButtonClick = { _: Itinerary, _: Boolean -> }
 
   Box(
-      modifier = Modifier
-          .fillMaxSize()
-          .padding(horizontal = 10.dp),
+      modifier = Modifier.fillMaxSize().padding(horizontal = 10.dp),
       contentAlignment = Alignment.TopCenter) {
         LazyColumn(
             verticalArrangement = spacedBy(8.dp),
             modifier = Modifier.testTag(TestTags.CREATION_SCREEN_PREVIEW_BANNER)) {
-            item{
-                Spacer(Modifier)
-            }
-                item{
-                    DummyBanner("0")
-                }
+              item { DummyBanner("0") }
               item {
                 ItineraryBanner(
-                    itinerary = createItineraryViewModel.getFocusedItinerary()!!,
+                    itinerary =
+                        createItineraryViewModel.getFocusedItinerary()
+                            ?: Itinerary.Builder().build(),
                     onLikeButtonClick = onLikeButtonClick,
                     onBannerClick = onBannerClick,
                     imageRepository = imageRepository,
                     inCreation = true)
               }
-            item{
-                DummyBanner("1")
-            }
-            item{
-                DummyBanner("2")
-            }
-            item{
-                Spacer(Modifier.padding(5.dp))
-            }
+              item { DummyBanner("1") }
+              item { DummyBanner("2") }
+              item { Spacer(Modifier.padding(5.dp)) }
             }
       }
 }

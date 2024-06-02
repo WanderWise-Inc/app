@@ -24,7 +24,6 @@ import androidx.compose.ui.unit.sp
 import com.github.wanderwise_inc.app.ui.TestTags
 import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
 
-// @Preview(showBackground = true)
 @Composable
 fun CreationStepChooseDescriptionScreen(createItineraryViewModel: CreateItineraryViewModel) {
   var title by remember { mutableStateOf(createItineraryViewModel.getNewItinerary()?.title ?: "") }
