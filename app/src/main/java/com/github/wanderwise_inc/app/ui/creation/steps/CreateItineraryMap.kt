@@ -156,7 +156,14 @@ fun CreateItineraryMap(
         }
   }
 }
-
+/**
+ * This function provides the user with two options for creating an itinerary. The user can either
+ * create a known itinerary or create a live itinerary.
+ *
+ * @param createItineraryViewModel ViewModel for creating an itinerary.
+ * @param showLocationSelector MutableState<Boolean> to show the location selector.
+ * @param showLiveCreation MutableState<Boolean> to show the live creation.
+ */
 @Composable
 fun ChooseYourWayOfCreation(
     createItineraryViewModel: CreateItineraryViewModel,
@@ -202,6 +209,16 @@ fun ChooseYourWayOfCreation(
   }
 }
 
+/**
+ * This function displays a bottom bar with options to add a location or restart the itinerary. It
+ * also displays a list of locations added by the user.
+ *
+ * @param showLocationSelector MutableState<Boolean> to control the visibility of the location
+ *   selector.
+ * @param locations List<Location> containing the locations added by the user.
+ * @param resetLocations Function to reset the locations.
+ * @param navController NavHostController for navigation.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LocationSelector(
@@ -275,7 +292,14 @@ fun LocationSelector(
 }
 
 const val LOCATION_UPDATE_INTERVAL_MILLIS: Long = 1_000 // 1 second
-
+/**
+ * This function provides the user with the ability to create a live itinerary. It starts tracking
+ * the user's location and adds it to the itinerary as the user moves.
+ *
+ * @param showLiveCreation MutableState<Boolean> to control the visibility of the live creation.
+ * @param createItineraryViewModel ViewModel for creating an itinerary.
+ * @param addLiveLocations Function to add live locations to the itinerary.
+ */
 @Composable
 fun CreateLiveItinerary(
     showLiveCreation: MutableState<Boolean>,

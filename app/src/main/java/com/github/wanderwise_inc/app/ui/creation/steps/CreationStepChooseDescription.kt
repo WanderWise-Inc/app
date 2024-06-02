@@ -35,119 +35,98 @@ import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
 
 @Composable
 fun CreationStepChooseDescriptionScreen(createItineraryViewModel: CreateItineraryViewModel) {
-    var title by remember { mutableStateOf(createItineraryViewModel.getNewItinerary()?.title ?: "") }
-    var description by remember {
-        mutableStateOf(createItineraryViewModel.getNewItinerary()?.description ?: "")
-    }
+  var title by remember { mutableStateOf(createItineraryViewModel.getNewItinerary()?.title ?: "") }
+  var description by remember {
+    mutableStateOf(createItineraryViewModel.getNewItinerary()?.description ?: "")
+  }
 
-    var validTitle by remember { mutableStateOf(true) }
-    Column {
-        Text(
-            text = "Add your itinerary title and description",
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Bold,
-            fontStyle = FontStyle.Italic,
-            softWrap = true,
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.padding(bottom = 20.dp, top = 20.dp, start = 16.dp)
-        )
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Box(modifier = Modifier.width(350.dp)
-                .shadow(elevation = 6.dp, shape = RoundedCornerShape(4.dp))) {
-                Divider(color = Color.Gray, thickness = 3.dp)
-            }
-        }
+  var validTitle by remember { mutableStateOf(true) }
+  Column {
+    Text(
+        text = "Add your itinerary title and description",
+        fontSize = 18.sp,
+        fontWeight = FontWeight.Bold,
+        fontStyle = FontStyle.Italic,
+        softWrap = true,
+        color = MaterialTheme.colorScheme.primary,
+        modifier = Modifier.padding(bottom = 20.dp, top = 20.dp, start = 16.dp))
+    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+      Box(
+          modifier =
+              Modifier.width(350.dp).shadow(elevation = 6.dp, shape = RoundedCornerShape(4.dp))) {
+            Divider(color = Color.Gray, thickness = 3.dp)
+          }
+    }
     LazyColumn(
-        modifier = Modifier
-            .padding(16.dp)
-            .background(color = MaterialTheme.colorScheme.background)
-
-            .testTag(TestTags.CREATION_SCREEN_DESCRIPTION_TITLE),
+        modifier =
+            Modifier.padding(16.dp)
+                .background(color = MaterialTheme.colorScheme.background)
+                .testTag(TestTags.CREATION_SCREEN_DESCRIPTION_TITLE),
         contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(24.dp)
-    ) {
-        item {
+        verticalArrangement = Arrangement.spacedBy(24.dp)) {
+          item {
             Column(modifier = Modifier.padding(8.dp)) {
-                OutlinedTextField(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .testTag(TestTags.CREATION_SCREEN_TITLE),
-                    value = title,
-                    onValueChange = {
-                        // can't add '\n' to titles
-                        title = it.filter { c -> c != '\n' }
-                        validTitle = if (createItineraryViewModel.validTitle(title)) {
-                            createItineraryViewModel.getNewItinerary()?.title(title)
-                            true
+              OutlinedTextField(
+                  modifier = Modifier.fillMaxSize().testTag(TestTags.CREATION_SCREEN_TITLE),
+                  value = title,
+                  onValueChange = {
+                    // can't add '\n' to titles
+                    title = it.filter { c -> c != '\n' }
+                    validTitle =
+                        if (createItineraryViewModel.validTitle(title)) {
+                          createItineraryViewModel.getNewItinerary()?.title(title)
+                          true
                         } else {
-                            createItineraryViewModel.getNewItinerary()?.title(null)
-                            false
+                          createItineraryViewModel.getNewItinerary()?.title(null)
+                          false
                         }
-                    },
-                    maxLines = 3,
-                    textStyle = TextStyle(fontSize = 22.sp),
-                    label = {
-                        Text(
-                            text = "Title",
-                            fontSize = 22.sp,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(bottom = 8.dp)
-                        )
-                    },
-                    placeholder = {
-                        Text(
-                            text = "Enter itinerary title",
-                            fontSize = 18.sp,
-                            color = Color.Gray
-                        )
-                    },
-                    shape = RoundedCornerShape(10.dp)
-
-                )
-                if (!validTitle) {
+                  },
+                  maxLines = 3,
+                  textStyle = TextStyle(fontSize = 22.sp),
+                  label = {
                     Text(
-                        text = createItineraryViewModel.invalidTitleMessage(),
-                        color = Color.Red,
-                        modifier = Modifier.testTag(TestTags.INVALID_INPUT)
-                    )
-                }
-            }
-        }
+                        text = "Title",
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(bottom = 8.dp))
+                  },
+                  placeholder = {
+                    Text(text = "Enter itinerary title", fontSize = 18.sp, color = Color.Gray)
+                  },
+                  shape = RoundedCornerShape(10.dp))
 
-        item {
-            Column(modifier = Modifier.padding(8.dp)) {
-                OutlinedTextField(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .testTag(TestTags.CREATION_SCREEN_DESCRIPTION),
-                    value = description,
-                    onValueChange = {
-                        description = it
-                        createItineraryViewModel.getNewItinerary()?.description(it)
-                    },
-                    textStyle = TextStyle(fontSize = 22.sp),
-                    label = {
-                        Text(
-                            text = "Description",
-                            fontSize = 22.sp,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(bottom = 6.dp)
-                        )
-                    },
-                    placeholder = {
-                        Text(
-                            text = "Describe your itinerary",
-                            fontSize = 18.sp,
-                            color = Color.Gray
-                        )
-                    },
-                    shape = RoundedCornerShape(10.dp)
-                )
+              if (!validTitle) {
+                Text(
+                    text = createItineraryViewModel.invalidTitleMessage(),
+                    color = Color.Red,
+                    modifier = Modifier.testTag(TestTags.INVALID_INPUT))
+              }
             }
+          }
+
+          item {
+            Column(modifier = Modifier.padding(8.dp)) {
+              OutlinedTextField(
+                  modifier = Modifier.fillMaxSize().testTag(TestTags.CREATION_SCREEN_DESCRIPTION),
+                  value = description,
+                  onValueChange = {
+                    description = it
+                    createItineraryViewModel.getNewItinerary()?.description(it)
+                  },
+                  textStyle = TextStyle(fontSize = 22.sp),
+                  label = {
+                    Text(
+                        text = "Description",
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(bottom = 6.dp))
+                  },
+                  placeholder = {
+                    Text(text = "Describe your itinerary", fontSize = 18.sp, color = Color.Gray)
+                  },
+                  shape = RoundedCornerShape(10.dp))
+            }
+          }
         }
-    }
-    }
+  }
 }
