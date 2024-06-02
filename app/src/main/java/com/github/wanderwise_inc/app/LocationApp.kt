@@ -17,7 +17,7 @@ class LocationApp : Application() {
             "Location", // The user-visible name of the channel.
             NotificationManager
                 .IMPORTANCE_LOW // The importance of the channel. This controls how interruptive
-                                // notifications posted to this channel are.
+            // notifications posted to this channel are.
             )
 
     // Get the notification manager
