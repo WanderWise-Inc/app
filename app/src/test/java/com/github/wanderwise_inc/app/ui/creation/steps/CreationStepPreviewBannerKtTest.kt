@@ -4,6 +4,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performScrollToIndex
 import com.github.wanderwise_inc.app.data.ImageRepository
 import com.github.wanderwise_inc.app.model.location.FakeItinerary
 import com.github.wanderwise_inc.app.model.profile.Profile
@@ -38,7 +39,6 @@ class CreationStepPreviewBannerKtTest {
   private val profile = Profile(userUid = "0", displayName = "me", bio = "bio")
 
   val title = FakeItinerary.SWITZERLAND.title
-  // val itineraryBuilder = Itinerary.Builder(uid = "0", userUid = "me", title = title)
 
   @Before
   fun setup() {
@@ -55,7 +55,7 @@ class CreationStepPreviewBannerKtTest {
       CreationStepPreviewBanner(
           createItineraryViewModel = createItineraryViewModelTest,
           imageRepository = imageRepository,
-          profileViewModel = profileViewModel)
+      )
     }
     composeTestRule.onNodeWithTag(TestTags.CREATION_SCREEN_PREVIEW_BANNER).assertIsDisplayed()
   }
@@ -68,19 +68,23 @@ class CreationStepPreviewBannerKtTest {
       CreationStepPreviewBanner(
           createItineraryViewModel = createItineraryViewModelTest,
           imageRepository = imageRepository,
-          profileViewModel = profileViewModel)
+      )
     }
     composeTestRule.onNodeWithText(title).assertIsDisplayed()
   }
 
-  // makes the code stupid
-  //    @Test
-  //    fun `null itinerary displays 3 dummys`(){
-  //        composeTestRule.setContent {
-  //            every { createItineraryViewModelTest.getNewItinerary() } returns null
-  //
-  //            CreationStepPreviewBanner(createItineraryViewModel = createItineraryViewModelTest)
-  //        }
-  //    }
-
+  @Test
+  fun `dummy Itinerary banners are displayed`() {
+    composeTestRule.setContent {
+      every { createItineraryViewModelTest.getFocusedItinerary() } returns FakeItinerary.SWITZERLAND
+      CreationStepPreviewBanner(
+          createItineraryViewModel = createItineraryViewModelTest,
+          imageRepository = imageRepository,
+      )
+    }
+    for (i in listOf(0, 1, 2)) {
+      composeTestRule.onNodeWithTag(TestTags.CREATION_SCREEN_PREVIEW_BANNER).performScrollToIndex(i)
+      composeTestRule.onNodeWithTag("${TestTags.DUMMY_BANNER}_$i")
+    }
+  }
 }

@@ -127,7 +127,6 @@ fun ItinerariesListScrollable(
                 onLikeButtonClick = onLikeButtonClick,
                 onBannerClick = onBannerClick,
                 isLikedInitially = isLikedInitially,
-                profileViewModel = profileViewModel,
                 imageRepository = imageRepository)
           }
 

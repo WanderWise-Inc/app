@@ -25,7 +25,7 @@ fun ItineraryCreationNavigationMenu(
 
   TabRow(
       selectedTabIndex = selectedIndex,
-      backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
+      backgroundColor = MaterialTheme.colorScheme.primaryContainer,
       modifier = Modifier.testTag(TestTags.CREATION_SCREEN_NAV_BAR),
   ) {
     CREATION_STEPS_DESTINATIONS.forEachIndexed { index, dest ->
@@ -35,24 +35,6 @@ fun ItineraryCreationNavigationMenu(
             selectedIndex = index
             navigationActions.navigateTo(dest)
           },
-          /*text = {
-           */
-          /*Text(
-          text = stringResource(id = dest.textId),
-          modifier = Modifier
-              .padding(0.dp, 2.dp),
-          style = TextStyle(
-              fontSize = 9.sp,
-              lineHeight = 16.sp,
-              //fontFamily = FontFamily(Font(R.font.roboto)),
-              fontWeight = FontWeight(600),
-              color = MaterialTheme.colorScheme.primary,
-
-              textAlign = TextAlign.Center,
-              letterSpacing = 0.5.sp,
-          ))*/
-          /*
-          },*/
           icon = {
             Icon(
                 painter = painterResource(id = dest.icon),

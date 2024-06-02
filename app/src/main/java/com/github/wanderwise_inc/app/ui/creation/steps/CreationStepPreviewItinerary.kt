@@ -12,6 +12,7 @@ import com.github.wanderwise_inc.app.ui.map.PreviewItineraryScreen
 import com.github.wanderwise_inc.app.viewmodel.CreateItineraryViewModel
 import com.github.wanderwise_inc.app.viewmodel.ProfileViewModel
 
+/** @brief preview the itinerary with the map */
 @Composable
 fun CreationStepPreviewItinerary(
     createItineraryViewModel: CreateItineraryViewModel,
@@ -25,6 +26,7 @@ fun CreationStepPreviewItinerary(
         itineraryViewModel = createItineraryViewModel,
         profileViewModel = profileViewModel,
         imageRepository = imageRepository,
-        navController)
+        navController = navController,
+        creationMode = true)
   }
 }

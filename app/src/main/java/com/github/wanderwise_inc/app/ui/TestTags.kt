@@ -23,6 +23,7 @@ object TestTags {
   const val ITINERARY_LIST_SCROLLABLE = "Itinerary Scrollable List With Itineraries"
   const val ITINERARY_LIST_NULL = "Itinerary Scrollable List No Itineraries"
   const val ITINERARY_BANNER = "itinerary_banner"
+  const val DUMMY_BANNER = "Dummy Banner"
   const val ITINERARY_BANNER_LIKE_BUTTON = "itinerary_banner_like_button"
   const val FILTER_PRICE_RANGE = "Filter Price Range"
   const val FILTER_TIME_RANGE = "Filter Time Range"
